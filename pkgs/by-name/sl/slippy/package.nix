@@ -27,11 +27,19 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Markdown slideshows in Rust";
     homepage = "https://github.com/axodotdev/slippy";
     changelog = "https://github.com/axodotdev/slippy/releases/tag/${src.rev}";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Markdown slideshows in Rust";
+    homepage = "https://github.com/axodotdev/slippy";
+    changelog = "https://github.com/axodotdev/slippy/releases/tag/${src.rev}";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       mit
     ];

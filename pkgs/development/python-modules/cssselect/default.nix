@@ -29,11 +29,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cssselect" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CSS Selectors for Python";
     homepage = "https://cssselect.readthedocs.io/";
     changelog = "https://github.com/scrapy/cssselect/v${version}//CHANGES";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "CSS Selectors for Python";
+    homepage = "https://cssselect.readthedocs.io/";
+    changelog = "https://github.com/scrapy/cssselect/v${version}//CHANGES";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

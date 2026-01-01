@@ -7,6 +7,7 @@
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "local-audio-yomichan";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-10";
   src = fetchFromGitHub {
     owner = "yomidevs";
@@ -14,6 +15,15 @@ anki-utils.buildAnkiAddon (finalAttrs: {
     rev = "2cbabbc75b4195b75033adf059d2a5ff037f60a6";
     sparseCheckout = [ "plugin" ];
     hash = "sha256-bsvxossIkZb8SuaNUzQX/xll3yb173TigXnrg5GA390=";
+=======
+  version = "0-unstable-2025-04-26";
+  src = fetchFromGitHub {
+    owner = "yomidevs";
+    repo = "local-audio-yomichan";
+    rev = "34750f1d8ca1cb473128fea7976a4d981e5e78a4";
+    sparseCheckout = [ "plugin" ];
+    hash = "sha256-2gyggcvxParay+1B7Sg2COKyocoxaRO1WTz+ymdRp4w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   sourceRoot = "${finalAttrs.src.name}/plugin";
   processUserFiles = ''

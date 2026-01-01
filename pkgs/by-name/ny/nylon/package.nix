@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libevent ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://monkey.org/~marius/nylon";
     description = "Proxy server, supporting SOCKS 4 and 5, as well as a mirror mode";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://monkey.org/~marius/nylon";
+    description = "Proxy server, supporting SOCKS 4 and 5, as well as a mirror mode";
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ edwtjo ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nylon";
   };
 }

@@ -44,7 +44,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Port of Nanosaur, a 1998 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
       Nanosaur is a 1998 Macintosh game by Pangea Software.
@@ -52,9 +56,16 @@ stdenv.mkDerivation {
       And you get to shoot at T-Rexes with nukes.
     '';
     homepage = "https://github.com/jorio/Nanosaur";
+<<<<<<< HEAD
     license = lib.licenses.cc-by-sa-40;
     mainProgram = "Nanosaur";
     maintainers = with lib.maintainers; [ lux ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.cc-by-sa-40;
+    mainProgram = "Nanosaur";
+    maintainers = with maintainers; [ lux ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

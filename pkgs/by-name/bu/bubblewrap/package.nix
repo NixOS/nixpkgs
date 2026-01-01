@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   # incompatible with Nix sandbox
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/containers/bubblewrap/releases/tag/${src.rev}";
     description = "Unprivileged sandboxing tool";
@@ -57,6 +58,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/containers/bubblewrap/releases/tag/${src.rev}";
+    description = "Unprivileged sandboxing tool";
+    homepage = "https://github.com/containers/bubblewrap";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bwrap";
   };
 }

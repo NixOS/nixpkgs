@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     cp -v README.rst "$docdir"
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://git.pengutronix.de/cgit/genimage";
@@ -41,6 +42,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    homepage = "https://git.pengutronix.de/cgit/genimage";
+    description = "Generate filesystem images from directory trees";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "genimage";
   };
 }

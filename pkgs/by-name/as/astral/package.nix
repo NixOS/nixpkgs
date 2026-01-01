@@ -66,6 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/smirarab/ASTRAL";
     description = "Tool for estimating an unrooted species tree given a set of unrooted gene trees";
@@ -76,6 +77,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/smirarab/ASTRAL";
+    description = "Tool for estimating an unrooted species tree given a set of unrooted gene trees";
+    mainProgram = "astral";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bzizou
       tomasajt
     ];

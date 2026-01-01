@@ -46,16 +46,29 @@ stdenvNoCC.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.gerritcodereview.com/index.md";
     license = lib.licenses.asl20;
     description = "Web based code review and repository management for the git version control system";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://www.gerritcodereview.com/index.md";
+    license = licenses.asl20;
+    description = "Web based code review and repository management for the git version control system";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       flokli
       zimbatm
       felixsinger
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

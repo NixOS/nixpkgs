@@ -40,10 +40,17 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Linux kernel vendor specific hardware reset module";
     homepage = "https://github.com/gnif/vendor-reset";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Linux kernel vendor specific hardware reset module";
+    homepage = "https://github.com/gnif/vendor-reset";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     broken = kernel.kernelOlder "4.19";

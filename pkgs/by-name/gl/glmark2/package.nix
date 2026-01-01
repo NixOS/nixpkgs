@@ -59,15 +59,27 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "OpenGL (ES) 2.0 benchmark";
     homepage = "https://github.com/glmark2/glmark2";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "OpenGL (ES) 2.0 benchmark";
+    homepage = "https://github.com/glmark2/glmark2";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of
       the OpenGL 2.0 API that is compatible with OpenGL ES 2.0.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.wmertens ];
+=======
+    platforms = platforms.linux;
+    maintainers = [ maintainers.wmertens ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

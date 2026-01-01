@@ -48,9 +48,16 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ stdlib ];
 
+<<<<<<< HEAD
   meta = {
     description = "Floating-point formalization for the Coq system";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ jwiegley ];
+=======
+  meta = with lib; {
+    description = "Floating-point formalization for the Coq system";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ jwiegley ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

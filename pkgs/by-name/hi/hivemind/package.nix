@@ -22,11 +22,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-KweFhT8Zueg45Q/vw3kNET35hB+0WbUPfz0FYaAiIA8=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/DarthSim/";
     description = "Process manager for Procfile-based applications";
     license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.sveitser ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/DarthSim/";
+    description = "Process manager for Procfile-based applications";
+    license = with licenses; [ mit ];
+    maintainers = [ maintainers.sveitser ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hivemind";
   };
 }

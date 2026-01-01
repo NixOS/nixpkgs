@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Proxmox VM migrator: migrates VMs between different Proxmox VE clusters";
     mainProgram = "proxmove";
@@ -44,5 +45,14 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ AngryAnt ];
+=======
+  meta = with lib; {
+    description = "Proxmox VM migrator: migrates VMs between different Proxmox VE clusters";
+    mainProgram = "proxmove";
+    homepage = "https://github.com/ossobv/proxmove";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ AngryAnt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

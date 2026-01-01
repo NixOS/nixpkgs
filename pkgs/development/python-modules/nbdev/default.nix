@@ -48,11 +48,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbdev" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/fastai/nbdev";
     description = "Create delightful software with Jupyter Notebooks";
     changelog = "https://github.com/fastai/nbdev/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rxiao ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/fastai/nbdev";
+    description = "Create delightful software with Jupyter Notebooks";
+    changelog = "https://github.com/fastai/nbdev/blob/${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rxiao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

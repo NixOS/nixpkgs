@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ocifs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Oracle Cloud Infrastructure Object Storage fsspec implementation";
     homepage = "https://ocifs.readthedocs.io";
     changelog = "https://github.com/oracle/ocifs/releases/tag/v${version}";
     license = lib.licenses.upl;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Oracle Cloud Infrastructure Object Storage fsspec implementation";
+    homepage = "https://ocifs.readthedocs.io";
+    changelog = "https://github.com/oracle/ocifs/releases/tag/v${version}";
+    license = licenses.upl;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

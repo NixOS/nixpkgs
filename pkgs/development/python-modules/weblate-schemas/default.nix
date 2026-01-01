@@ -40,12 +40,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weblate_schemas" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Schemas used by Weblate";
     homepage = "https://github.com/WeblateOrg/weblate_schemas";
     changelog = "https://github.com/WeblateOrg/weblate_schemas/blob/${version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Schemas used by Weblate";
+    homepage = "https://github.com/WeblateOrg/weblate_schemas";
+    changelog = "https://github.com/WeblateOrg/weblate_schemas/blob/${version}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

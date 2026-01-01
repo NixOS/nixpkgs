@@ -29,6 +29,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
+<<<<<<< HEAD
   meta = {
     broken = kernel.kernelAtLeast "5.16";
     description = "Kernel module for ISO-TP (ISO 15765-2)";
@@ -36,5 +37,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.evck ];
+=======
+  meta = with lib; {
+    broken = kernel.kernelAtLeast "5.16";
+    description = "Kernel module for ISO-TP (ISO 15765-2)";
+    homepage = "https://github.com/hartkopp/can-isotp";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.evck ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

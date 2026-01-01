@@ -32,12 +32,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.servicemanagement" ];
 
+<<<<<<< HEAD
   meta = {
     description = "This is the Microsoft Azure Service Management Legacy Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-servicemanagement-legacy";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-servicemanagement-legacy_${version}/sdk/core/azure-servicemanagement-legacy/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "This is the Microsoft Azure Service Management Legacy Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-servicemanagement-legacy";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-servicemanagement-legacy_${version}/sdk/core/azure-servicemanagement-legacy/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       olcai
       maxwilson
     ];

@@ -53,12 +53,20 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://gobby.0x539.de/";
     description = "GTK-based collaborative editor supporting multiple documents in one session and a multi-user chat";
     mainProgram = "gobby-0.5";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

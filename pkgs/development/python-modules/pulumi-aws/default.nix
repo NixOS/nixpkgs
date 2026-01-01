@@ -39,11 +39,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pulumi_aws" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pulumi python amazon web services provider";
     homepage = "https://github.com/pulumi/pulumi-aws";
     changelog = "https://github.com/pulumi/pulumi-aws/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Pulumi python amazon web services provider";
+    homepage = "https://github.com/pulumi/pulumi-aws";
+    changelog = "https://github.com/pulumi/pulumi-aws/releases/tag/${src.tag}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

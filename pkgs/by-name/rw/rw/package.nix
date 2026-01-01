@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://sortix.org/rw";
     description = "Block device and byte copying program similar to dd";
     longDescription = ''
@@ -24,8 +28,13 @@ stdenv.mkDerivation rec {
       or byte streams. The rw command is designed to be a replacement for
       dd with standard style command line flags.
     '';
+<<<<<<< HEAD
     license = lib.licenses.isc;
     maintainers = [ ];
+=======
+    license = licenses.isc;
+    maintainers = with maintainers; [ dtzWill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rw";
   };
 }

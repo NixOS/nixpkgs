@@ -93,7 +93,11 @@ stdenv.mkDerivation rec {
     stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
   ) "--undefined-version";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Trivial database";
     longDescription = ''
       TDB is a Trivial Database. In concept, it is very much like GDBM,
@@ -102,7 +106,12 @@ stdenv.mkDerivation rec {
       other. TDB is also extremely small.
     '';
     homepage = "https://tdb.samba.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
+=======
+    license = licenses.lgpl3Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

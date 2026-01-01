@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpagentparser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to extract OS, Browser, etc. information from http user agent string";
     homepage = "https://github.com/shon/httpagentparser";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Module to extract OS, Browser, etc. information from http user agent string";
+    homepage = "https://github.com/shon/httpagentparser";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

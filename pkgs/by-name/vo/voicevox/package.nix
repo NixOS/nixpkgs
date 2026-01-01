@@ -11,35 +11,56 @@
   makeWrapper,
   moreutils,
   nodejs,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
+=======
+  pnpm_9,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   _7zz,
   electron,
   voicevox-engine,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox";
   version = "0.25.0";
+=======
+let
+  pnpm = pnpm_9;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "voicevox";
+  version = "0.24.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-s8+uHwqxK9my/850C52VT5kshlGrHOOHtopUlsowNeI=";
+=======
+    hash = "sha256-ploFrzxIseyUD7LINnFmshrg3QJV8KUkdbvDoJ/VkRk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
+<<<<<<< HEAD
       electron_path = lib.getExe electron;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sevenzip_path = lib.getExe _7zz;
       voicevox_engine_path = lib.getExe voicevox-engine;
     })
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     # don't fail if node version doesn't fit the constraint
     substituteInPlace .npmrc \
       --replace-fail "engine-strict=true" ""
@@ -50,6 +71,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pnpmDeps = fetchPnpmDeps {
+=======
+    # unlock the overly specific pnpm package version pin
+    jq 'del(.packageManager)' package.json | sponge package.json
+
+    substituteInPlace package.json \
+      --replace-fail "999.999.999" "$version" \
+      --replace-fail ' && electron-builder --config electron-builder.config.cjs --publish never' ""
+  '';
+
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
@@ -65,8 +97,13 @@ stdenv.mkDerivation (finalAttrs: {
       moreutils
     ];
 
+<<<<<<< HEAD
     fetcherVersion = 2;
     hash = "sha256-U1hW6j1WRyuh2rUgMxwF8LCRk7wgSlV6cqapBoXvAdU=";
+=======
+    fetcherVersion = 1;
+    hash = "sha256-RKgqFmHQnjHS7yeUIbH9awpNozDOCCHplc/bmfxmMyg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -75,8 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     moreutils
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
@@ -98,11 +139,19 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w electron-dist
 
     # note: we patched out the call to electron-builder in postPatch
+<<<<<<< HEAD
     pnpm run electron:build:compile
 
     pnpm exec electron-builder \
       --dir \
       --config ./build/electronBuilderConfigLoader.cjs \
+=======
+    pnpm run electron:build
+
+    pnpm exec electron-builder \
+      --dir \
+      --config electron-builder.config.cjs \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 

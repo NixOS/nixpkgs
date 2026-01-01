@@ -3,6 +3,7 @@
 let
   user = "alice"; # from ./common/user-account.nix
   password = "foobar"; # from ./common/user-account.nix
+<<<<<<< HEAD
 
   # A minimal Cockpit plugin that runs `hello` and displays the output
   # This tests that the cockpitPath mechanism works correctly
@@ -60,6 +61,8 @@ let
     // {
       passthru.cockpitPath = [ pkgs.hello ];
     };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 {
   name = "cockpit";
@@ -79,7 +82,10 @@ in
           enable = true;
           port = 7890;
           openFirewall = true;
+<<<<<<< HEAD
           plugins = [ helloPlugin ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           allowed-origins = [
             "https://server:${toString config.services.cockpit.port}"
           ];
@@ -187,6 +193,7 @@ in
                   assert '/nonexistent' not in driver.page_source
                   assert len(driver.find_elements(By.CSS_SELECTOR, '#machine-reconnect')) == 0
 
+<<<<<<< HEAD
                   log("Checking plugin path")
                   driver.get("https://server:7890/hello-test")
                   sleep(2)
@@ -198,6 +205,8 @@ in
                   sleep(1)
                   assert "SUCCESS: Hello, world!" in text, f"Plugin failed: {text}"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                   driver.close()
                 '';
           in

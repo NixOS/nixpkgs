@@ -27,10 +27,18 @@ buildPythonPackage rec {
     "test_all_versions_match"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for parsing Dockerfile files";
     homepage = "https://github.com/DBuildService/dockerfile-parse";
     changelog = "https://github.com/containerbuildsystem/dockerfile-parse/releases/tag/${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Library for parsing Dockerfile files";
+    homepage = "https://github.com/DBuildService/dockerfile-parse";
+    changelog = "https://github.com/containerbuildsystem/dockerfile-parse/releases/tag/${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

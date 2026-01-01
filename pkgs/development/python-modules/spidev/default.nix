@@ -23,6 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spidev" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/doceme/py-spidev/releases/tag/${src.tag}";
     homepage = "https://github.com/doceme/py-spidev";
@@ -30,5 +31,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/doceme/py-spidev/releases/tag/${src.tag}";
+    homepage = "https://github.com/doceme/py-spidev";
+    description = "Python bindings for Linux SPI access through spidev";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

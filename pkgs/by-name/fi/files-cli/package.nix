@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "files-cli";
+<<<<<<< HEAD
   version = "2.15.177";
+=======
+  version = "2.15.152";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     repo = "files-cli";
     owner = "files-com";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-czc6CZL28Gws7h6CjGg0Ml2+X2GjIGBykbZL0qe66us=";
   };
 
   vendorHash = "sha256-PsPaRbC9j4zfLfdS6LodkSxmJNt9K9Ig1XpLBmR3SMQ=";
+=======
+    hash = "sha256-0rXDVLr1V54+nXiqzhRsQJhF1JSreyQC9GcW3Sj2IcM=";
+  };
+
+  vendorHash = "sha256-BijznllCTXFgjADT/OZrgNYRM4aRXhxsIQu+jZngcFM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"
@@ -43,11 +54,19 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Files.com Command Line App for Windows, Linux, and macOS";
     homepage = "https://developers.files.com";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kashw2 ];
+=======
+  meta = with lib; {
+    description = "Files.com Command Line App for Windows, Linux, and macOS";
+    homepage = "https://developers.files.com";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kashw2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "files-cli";
   };
 

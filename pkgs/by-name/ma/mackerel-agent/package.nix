@@ -39,11 +39,20 @@ buildGoModule rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "System monitoring service for mackerel.io";
     mainProgram = "mackerel-agent";
     homepage = "https://github.com/mackerelio/mackerel-agent";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ midchildan ];
+=======
+  meta = with lib; {
+    description = "System monitoring service for mackerel.io";
+    mainProgram = "mackerel-agent";
+    homepage = "https://github.com/mackerelio/mackerel-agent";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ midchildan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

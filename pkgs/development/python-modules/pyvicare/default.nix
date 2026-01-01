@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyViCare" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/openviess/PyViCare/releases/tag/${src.tag}";
     description = "Python Library to access Viessmann ViCare API";
     homepage = "https://github.com/somm15/PyViCare";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/openviess/PyViCare/releases/tag/${src.tag}";
+    description = "Python Library to access Viessmann ViCare API";
+    homepage = "https://github.com/somm15/PyViCare";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

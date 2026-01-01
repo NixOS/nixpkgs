@@ -56,7 +56,11 @@ buildPythonPackage rec {
   # Tests require a running MySQL instance
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and
@@ -64,8 +68,13 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
     changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       neosimsim
     ];
   };

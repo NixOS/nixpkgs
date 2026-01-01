@@ -14,18 +14,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "your_spotify_server";
+<<<<<<< HEAD
   version = "1.15.0";
+=======
+  version = "1.14.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Yooooomi";
     repo = "your_spotify";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-i/R5tvt+9DD/ZUPLBq6EOJjuyHSv5zljTWuLwo+JBYA=";
+=======
+    hash = "sha256-yz+IVrvnNt67TQCNNqpS+jSAEevsi+0cVGBTZNMcZbk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
+<<<<<<< HEAD
     hash = "sha256-2Z5bOiPenlDTzOAMrIt73k4pi0v3SAN7HXXJDoOo8Qc=";
+=======
+    hash = "sha256-N70gsVnlzRQMRK16aeqHQeBAg9A2Fvh9CuivyBNPPDA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

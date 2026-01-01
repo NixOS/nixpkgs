@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hurry.filesize" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple Python library for human readable file sizes (or anything sized in bytes)";
     homepage = "https://pypi.org/project/hurry.filesize/";
     license = lib.licenses.zpl21;
     maintainers = with lib.maintainers; [ vizid ];
+=======
+  meta = with lib; {
+    description = "Simple Python library for human readable file sizes (or anything sized in bytes)";
+    homepage = "https://pypi.org/project/hurry.filesize/";
+    license = licenses.zpl21;
+    maintainers = with maintainers; [ vizid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -51,13 +51,21 @@
 
 stdenv.mkDerivation rec {
   pname = "mixxx";
+<<<<<<< HEAD
   version = "2.5.4";
+=======
+  version = "2.5.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-D/+ys7VE2/xHUiDG80/voc1BFxwp9M0V89gPWy57XA0=";
+=======
+    hash = "sha256-WmYoblIVygLnjNaFnRoEHmfnQcaBtIVOBZicEwD4NMw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Should be removed when bumping to 2.6.x

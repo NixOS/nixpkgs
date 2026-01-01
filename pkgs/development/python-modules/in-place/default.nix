@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "in_place" ];
 
+<<<<<<< HEAD
   meta = {
     description = "In-place file processing";
     homepage = "https://github.com/jwodder/inplace";
     changelog = "https://github.com/jwodder/inplace/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
+=======
+  meta = with lib; {
+    description = "In-place file processing";
+    homepage = "https://github.com/jwodder/inplace";
+    changelog = "https://github.com/jwodder/inplace/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ samuela ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

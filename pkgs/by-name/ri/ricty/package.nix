@@ -40,10 +40,18 @@ stdenv.mkDerivation rec {
     install -m644 --target $out/share/fonts/truetype/ricty -D Ricty-*.ttf
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "High-quality Japanese font based on Inconsolata and Migu 1M";
     homepage = "https://rictyfonts.github.io";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.mikoim ];
+=======
+  meta = with lib; {
+    description = "High-quality Japanese font based on Inconsolata and Migu 1M";
+    homepage = "https://rictyfonts.github.io";
+    license = licenses.unfree;
+    maintainers = [ maintainers.mikoim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

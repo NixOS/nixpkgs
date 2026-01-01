@@ -6,7 +6,11 @@ GEM
       json
     hue-lib (0.7.4)
       json
+<<<<<<< HEAD
     json (2.16.0)
+=======
+    json (2.2.0)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 PLATFORMS
   ruby
@@ -15,4 +19,8 @@ DEPENDENCIES
   hue-cli
 
 BUNDLED WITH
+<<<<<<< HEAD
    2.6.6
+=======
+   2.1.4
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

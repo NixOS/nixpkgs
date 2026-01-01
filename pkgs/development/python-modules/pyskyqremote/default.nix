@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyskyqremote" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for accessing SkyQ boxes";
     homepage = "https://github.com/RogerSelwyn/skyq_remote";
     changelog = "https://github.com/RogerSelwyn/skyq_remote/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for accessing SkyQ boxes";
+    homepage = "https://github.com/RogerSelwyn/skyq_remote";
+    changelog = "https://github.com/RogerSelwyn/skyq_remote/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

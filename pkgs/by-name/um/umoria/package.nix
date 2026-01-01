@@ -95,7 +95,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://umoria.org/";
     description = "Dungeons of Moria - the original roguelike";
     mainProgram = "umoria";
@@ -105,6 +109,7 @@ stdenv.mkDerivation rec {
       The game was originally developed using VMS Pascal before being ported to the C
       language by James E. Wilson in 1988, and released a Umoria.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     badPlatforms = [ "aarch64-darwin" ];
     maintainers = with lib.maintainers; [
@@ -112,5 +117,14 @@ stdenv.mkDerivation rec {
       kenran
     ];
     license = lib.licenses.gpl3Plus;
+=======
+    platforms = platforms.unix;
+    badPlatforms = [ "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      aciceri
+      kenran
+    ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

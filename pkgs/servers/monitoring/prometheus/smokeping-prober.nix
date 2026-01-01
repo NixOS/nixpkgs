@@ -39,11 +39,20 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) smokeping; };
 
+<<<<<<< HEAD
   meta = {
     description = "Prometheus exporter for sending continual ICMP/UDP pings";
     mainProgram = "smokeping_prober";
     homepage = "https://github.com/SuperQ/smokeping_prober";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lukegb ];
+=======
+  meta = with lib; {
+    description = "Prometheus exporter for sending continual ICMP/UDP pings";
+    mainProgram = "smokeping_prober";
+    homepage = "https://github.com/SuperQ/smokeping_prober";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ lukegb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

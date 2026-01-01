@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
         '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tree ldd with an option to bundle dependencies into a single folder";
     mainProgram = "libtree";
@@ -52,6 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tree ldd with an option to bundle dependencies into a single folder";
+    mainProgram = "libtree";
+    homepage = "https://github.com/haampie/libtree";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       prusnak
       rardiol
     ];

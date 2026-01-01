@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     install -m 644 -D man/zfs-prune-snapshots.1 $out/share/man/man1/zfs-prune-snapshots.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Remove snapshots from one or more zpools that match given criteria";
     mainProgram = "zfs-prune-snapshots";
@@ -32,5 +33,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ymarkus ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Remove snapshots from one or more zpools that match given criteria";
+    mainProgram = "zfs-prune-snapshots";
+    homepage = "https://github.com/bahamas10/zfs-prune-snapshots";
+    license = licenses.mit;
+    maintainers = [ maintainers.ymarkus ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

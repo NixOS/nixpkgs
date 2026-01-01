@@ -34,11 +34,16 @@ in
 stdenv.mkDerivation {
   inherit pname version src;
 
+<<<<<<< HEAD
   env = {
     PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "out"}/share/gir-1.0";
     PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
   };
 
+=======
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "out"}/share/gir-1.0";
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [
     glib
     libsndfile

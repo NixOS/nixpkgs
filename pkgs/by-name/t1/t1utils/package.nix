@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "YYd5NbGYcETd/0u5CgUgDKcWRnijVeFwv18aVVbMnyk=";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Collection of simple Type 1 font manipulation programs";
     longDescription = ''
       t1utils is a collection of simple type-1 font manipulation programs.
@@ -30,7 +34,12 @@ stdenv.mkDerivation rec {
       free = true;
       redistributable = true;
     };
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

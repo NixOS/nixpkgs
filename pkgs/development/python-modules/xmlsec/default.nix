@@ -55,11 +55,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xmlsec" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the XML Security Library";
     homepage = "https://github.com/mehcode/python-xmlsec";
     changelog = "https://github.com/xmlsec/python-xmlsec/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
+=======
+  meta = with lib; {
+    description = "Python bindings for the XML Security Library";
+    homepage = "https://github.com/mehcode/python-xmlsec";
+    changelog = "https://github.com/xmlsec/python-xmlsec/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zhaofengli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

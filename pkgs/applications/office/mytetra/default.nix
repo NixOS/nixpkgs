@@ -46,6 +46,7 @@ mkDerivation rec {
       --suffix PATH : ${xdg-utils}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Smart manager for information collecting";
     mainProgram = "mytetra";
@@ -53,5 +54,14 @@ mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Smart manager for information collecting";
+    mainProgram = "mytetra";
+    homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
+    license = licenses.gpl3;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

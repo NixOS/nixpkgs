@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${gcc}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Programming language for the analysis and transformation of computer languages";
     mainProgram = "colm";
@@ -43,5 +44,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "Programming language for the analysis and transformation of computer languages";
+    mainProgram = "colm";
+    homepage = "http://www.colm.net/open-source/colm";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

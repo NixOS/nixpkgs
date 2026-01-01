@@ -24,11 +24,17 @@
   vips,
   at-spi2-core,
   autoPatchelfHook,
+<<<<<<< HEAD
   writeShellScript,
   makeShellWrapper,
   wrapGAppsHook3,
   commandLineArgs ? "",
   disableAutoUpdate ? true,
+=======
+  makeShellWrapper,
+  wrapGAppsHook3,
+  commandLineArgs ? "",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -123,6 +129,7 @@ else
       libkrb5
     ];
 
+<<<<<<< HEAD
     installPhase =
       let
         versionConfigScript = writeShellScript "qq-version-config.sh" ''
@@ -216,4 +223,43 @@ else
 
         runHook postInstall
       '';
+=======
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin
+      cp -r opt $out/opt
+      cp -r usr/share $out/share
+      substituteInPlace $out/share/applications/qq.desktop \
+        --replace-fail "/opt/QQ/qq" "$out/bin/qq" \
+        --replace-fail "/usr/share" "$out/share"
+      makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+        --prefix LD_PRELOAD : "${lib.makeLibraryPath [ libssh2 ]}/libssh2.so.1" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libGL
+            libuuid
+          ]
+        }" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+        --add-flags ${lib.escapeShellArg commandLineArgs} \
+        "''${gappsWrapperArgs[@]}"
+
+      # Remove bundled libraries
+      rm -r $out/opt/QQ/resources/app/sharp-lib
+
+      # https://aur.archlinux.org/cgit/aur.git/commit/?h=linuxqq&id=f7644776ee62fa20e5eb30d0b1ba832513c77793
+      rm -r $out/opt/QQ/resources/app/libssh2.so.1
+
+      # https://github.com/microcai/gentoo-zh/commit/06ad5e702327adfe5604c276635ae8a373f7d29e
+      ln -s ${libayatana-appindicator}/lib/libayatana-appindicator3.so \
+        $out/opt/QQ/libappindicator3.so
+
+      ln -s ${libnotify}/lib/libnotify.so \
+        $out/opt/QQ/libnotify.so
+
+      runHook postInstall
+    '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   }

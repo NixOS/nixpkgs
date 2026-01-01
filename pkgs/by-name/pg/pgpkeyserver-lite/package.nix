@@ -20,10 +20,18 @@ stdenv.mkDerivation {
     cp -R 404.html assets favicon.ico index.html robots.txt $out
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mattrude/pgpkeyserver-lite";
     description = "Lightweight static front-end for a sks keyserver";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ calbrecht ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mattrude/pgpkeyserver-lite";
+    description = "Lightweight static front-end for a sks keyserver";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ calbrecht ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

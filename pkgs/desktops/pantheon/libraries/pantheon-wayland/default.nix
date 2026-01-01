@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pantheon-wayland";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "pantheon-wayland";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-Wfulo/fXsb51ShT7E2wTg56TULAK1chB59L/ggGh2EY=";
+=======
+    hash = "sha256-UKGgz3G960dPmcDaFwLjDy55x+mDPdQQv2Ejs7BujLg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [

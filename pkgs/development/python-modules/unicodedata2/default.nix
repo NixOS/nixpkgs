@@ -22,11 +22,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unicodedata2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Backport and updates for the unicodedata module";
     homepage = "https://github.com/mikekap/unicodedata2";
     changelog = "https://github.com/fonttools/unicodedata2/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Backport and updates for the unicodedata module";
+    homepage = "https://github.com/mikekap/unicodedata2";
+    changelog = "https://github.com/fonttools/unicodedata2/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

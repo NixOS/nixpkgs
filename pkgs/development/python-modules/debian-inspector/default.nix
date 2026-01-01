@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debian_inspector" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities to parse Debian package, copyright and control files";
     homepage = "https://github.com/nexB/debian-inspector";
     changelog = "https://github.com/aboutcode-org/debian-inspector/blob/v${version}/CHANGELOG.rst";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Utilities to parse Debian package, copyright and control files";
+    homepage = "https://github.com/nexB/debian-inspector";
+    changelog = "https://github.com/aboutcode-org/debian-inspector/blob/v${version}/CHANGELOG.rst";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       bsd3
       mit

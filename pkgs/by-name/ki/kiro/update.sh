@@ -42,7 +42,11 @@ for platform in "${!PLATFORM_URLS[@]}"; do
 
     # Extract file URL and version from metadata
     file_url=$(echo "$response" | jq -r '
+<<<<<<< HEAD
         .releases[].updateTo
+=======
+        .releases[0].updateTo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         | select(.url | test("\\.(tar|dmg)(\\.|$)"))
         | .url' | head -1)
 

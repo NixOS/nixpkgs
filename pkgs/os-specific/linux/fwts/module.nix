@@ -28,10 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     inherit (fwts.meta) homepage license;
     description = fwts.meta.description + "(efi-runtime kernel module)";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    inherit (fwts.meta) homepage license;
+    description = fwts.meta.description + "(efi-runtime kernel module)";
+    maintainers = with maintainers; [ dtzWill ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

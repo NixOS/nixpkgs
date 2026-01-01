@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyspark" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for Apache Spark";
     homepage = "https://github.com/apache/spark/tree/master/python";
@@ -66,5 +67,16 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shlevy ];
+=======
+  meta = with lib; {
+    description = "Python bindings for Apache Spark";
+    homepage = "https://github.com/apache/spark/tree/master/python";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ shlevy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

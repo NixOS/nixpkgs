@@ -71,12 +71,20 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python modules for implementing LDAP clients";
     downloadPage = "https://github.com/python-ldap/python-ldap";
     homepage = "https://www.python-ldap.org/";
     changelog = "https://github.com/python-ldap/python-ldap/releases/tag/python-ldap-${version}";
+<<<<<<< HEAD
     license = lib.licenses.psfl;
+=======
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

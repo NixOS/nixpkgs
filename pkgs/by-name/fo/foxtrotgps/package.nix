@@ -84,7 +84,11 @@ stdenv.mkDerivation {
     intltoolize --automake --copy --force
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GPS/GIS application optimized for small screens";
     longDescription = ''
       An easy to use, free & open-source GPS/GIS application that works well on
@@ -93,8 +97,14 @@ stdenv.mkDerivation {
       innovation.
     '';
     homepage = "https://www.foxtrotgps.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wucke13 ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wucke13 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

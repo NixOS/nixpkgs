@@ -2,7 +2,11 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   jdk21_headless,
+=======
+  jdk21,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeWrapper,
   git,
   gnused,
@@ -13,11 +17,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "copybara";
+<<<<<<< HEAD
   version = "20251222";
 
   src = fetchurl {
     url = "https://github.com/google/copybara/releases/download/v${finalAttrs.version}/copybara_deploy.jar";
     hash = "sha256-QRr/3McBxf88T2eO0DH+Ka/i6j4/HV6wgS+fLkw07sE=";
+=======
+  version = "20251117";
+
+  src = fetchurl {
+    url = "https://github.com/google/copybara/releases/download/v${finalAttrs.version}/copybara_deploy.jar";
+    hash = "sha256-QbmBrkkqLtB/5ZS9o+Z4KKbogFv5lccEGgLZsuVuPrg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -25,7 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     jdk21_headless
+=======
+    jdk21
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   runtimeDeps = [
@@ -45,7 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/java/copybara.jar
 
     mkdir -p $out/bin
+<<<<<<< HEAD
     makeWrapper ${jdk21_headless}/bin/java $out/bin/copybara \
+=======
+    makeWrapper ${jdk21}/bin/java $out/bin/copybara \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       --add-flags "-jar $out/share/java/copybara.jar" \
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
 

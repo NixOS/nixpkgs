@@ -20,10 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+<<<<<<< HEAD
     substituteInPlace src/igprof \
       --replace-fail libigprof.so $out/lib/libigprof.so
     substituteInPlace CMakeLists.txt \
       --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
+=======
+    substituteInPlace src/igprof --replace libigprof.so $out/lib/libigprof.so
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   buildInputs = [

@@ -29,12 +29,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Geometric sans serif font with extended latin support (Regular, Alternates, Subrayada)";
     homepage = "https://www.fontspace.com/julieta-ulanovsky/montserrat";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Geometric sans serif font with extended latin support (Regular, Alternates, Subrayada)";
+    homepage = "https://www.fontspace.com/julieta-ulanovsky/montserrat";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       scolobb
       jk
     ];

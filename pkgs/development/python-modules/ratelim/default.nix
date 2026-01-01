@@ -22,10 +22,18 @@ buildPythonPackage rec {
   # package has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/themiurgo/ratelim";
     description = "Simple Python library that limits the number of times a function can be called during a time interval";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dgliwka ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/themiurgo/ratelim";
+    description = "Simple Python library that limits the number of times a function can be called during a time interval";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dgliwka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

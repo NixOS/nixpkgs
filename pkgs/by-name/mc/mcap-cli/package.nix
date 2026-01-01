@@ -74,11 +74,19 @@ buildGoModule {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "MCAP CLI tool to inspect and fix MCAP files";
     homepage = "https://github.com/foxglove/mcap";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "MCAP CLI tool to inspect and fix MCAP files";
+    homepage = "https://github.com/foxglove/mcap";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       squalus
       therishidesai
     ];

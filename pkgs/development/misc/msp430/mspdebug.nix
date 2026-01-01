@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "UNAME_S=$(unameS)" ] ++ lib.optional (!enableReadline) "WITHOUT_READLINE=1";
   unameS = lib.optionalString stdenv.hostPlatform.isDarwin "Darwin";
 
+<<<<<<< HEAD
   meta = {
     description = "Free programmer, debugger, and gdb proxy for MSP430 MCUs";
     mainProgram = "mspdebug";
@@ -67,5 +68,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ aerialx ];
+=======
+  meta = with lib; {
+    description = "Free programmer, debugger, and gdb proxy for MSP430 MCUs";
+    mainProgram = "mspdebug";
+    homepage = "https://dlbeer.co.nz/mspdebug/";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ aerialx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

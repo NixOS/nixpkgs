@@ -25,13 +25,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pwsafe";
+<<<<<<< HEAD
   version = "1.23.0"; # do NOT update to 3.x Windows releases
+=======
+  version = "1.22.0fp"; # do NOT update to 3.x Windows releases
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "pwsafe";
     repo = "pwsafe";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-54cwQZi93p32JxxLc2Mql2XbJPvwqA2Rfne5G+5i6eU=";
+=======
+    hash = "sha256-oVhpdJPpGNMqL1y67Kv3osa1Cx5YM8SyaNuRWeMfd9g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;
@@ -100,7 +108,11 @@ stdenv.mkDerivation rec {
     url = src.gitRepoUrl;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Password database utility";
     longDescription = ''
       Password Safe is a password database utility. Like many other
@@ -110,11 +122,20 @@ stdenv.mkDerivation rec {
       username/password combinations that you use.
     '';
     homepage = "https://pwsafe.org/";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       c0bw3b
       pjones
     ];
     platforms = lib.platforms.unix;
     license = lib.licenses.artistic2;
+=======
+    maintainers = with maintainers; [
+      c0bw3b
+      pjones
+    ];
+    platforms = platforms.unix;
+    license = licenses.artistic2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

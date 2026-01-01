@@ -48,6 +48,7 @@ stdenv.mkDerivation {
       [[ $result = "Hello, World!" ]]
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source programming language for the cloud";
     mainProgram = "bal";
@@ -55,5 +56,14 @@ stdenv.mkDerivation {
     platforms = openjdk.meta.platforms;
     maintainers = with lib.maintainers; [ eigengrau ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+=======
+  meta = with lib; {
+    description = "Open-source programming language for the cloud";
+    mainProgram = "bal";
+    license = licenses.asl20;
+    platforms = openjdk.meta.platforms;
+    maintainers = with maintainers; [ eigengrau ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -8,6 +8,7 @@
 let
   cfg = config.services.angrr;
   direnvCfg = config.programs.direnv.angrr;
+<<<<<<< HEAD
   toml = pkgs.formats.toml { };
   exampleSettings = {
     temporary-root-policies = {
@@ -240,10 +241,41 @@ in
     (lib.mkRemovedOptionModule [ "services" "angrr" "removeRoot" ] configFileMigrationMsg)
     (lib.mkRemovedOptionModule [ "services" "angrr" "ownedOnly" ] configFileMigrationMsg)
   ];
+=======
+in
+{
+  meta.maintainers = pkgs.angrr.meta.maintainers;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   options = {
     services.angrr = {
       enable = lib.mkEnableOption "angrr";
       package = lib.mkPackageOption pkgs "angrr" { };
+<<<<<<< HEAD
+=======
+      period = lib.mkOption {
+        type = lib.types.str;
+        default = "7d";
+        example = "2weeks";
+        description = ''
+          The retention period of auto GC roots.
+        '';
+      };
+      removeRoot = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to pass the `--remove-root` option to angrr.
+        '';
+      };
+      ownedOnly = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Control the `--remove-root=<true|false>` option of angrr.
+        '';
+        apply = b: if b then "true" else "false";
+      };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       logLevel = lib.mkOption {
         type =
           with lib.types;
@@ -267,6 +299,7 @@ in
           Extra command-line arguments pass to angrr.
         '';
       };
+<<<<<<< HEAD
       settings = lib.mkOption {
         type = lib.types.submodule settingsOptions;
         example = exampleSettings;
@@ -289,6 +322,12 @@ in
         type = lib.types.bool;
         description = ''
           Whether to enable nix-gc.service integration.
+=======
+      enableNixGcIntegration = lib.mkOption {
+        type = lib.types.bool;
+        description = ''
+          Whether to enable nix-gc.service integration
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         '';
       };
       timer = {
@@ -331,17 +370,28 @@ in
       }
 
       {
+<<<<<<< HEAD
         environment.etc."angrr/config.toml".source = cfg.configFile;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         systemd.services.angrr = {
           description = "Auto Nix GC Roots Retention";
           script = ''
             ${lib.getExe cfg.package} run \
               --log-level "${cfg.logLevel}" \
+<<<<<<< HEAD
               --no-prompt \
               ${lib.escapeShellArgs cfg.extraArgs}
           '';
           environment.ANGRR_LOG_STYLE = "systemd";
+=======
+              --period "${cfg.period}" \
+              ${lib.optionalString cfg.removeRoot "--remove-root"} \
+              --owned-only="${cfg.ownedOnly}" \
+              --no-prompt ${lib.escapeShellArgs cfg.extraArgs}
+          '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           serviceConfig = {
             Type = "oneshot";
           };
@@ -369,7 +419,11 @@ in
       (lib.mkIf (config.programs.direnv.enable && direnvCfg.enable) {
         environment.etc."direnv/lib/angrr.sh".source = "${cfg.package}/share/direnv/lib/angrr.sh";
         programs.direnv.direnvrcExtra = lib.mkIf direnvCfg.autoUse ''
+<<<<<<< HEAD
           _angrr_auto_use "$@"
+=======
+          use angrr
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         '';
       })
     ]

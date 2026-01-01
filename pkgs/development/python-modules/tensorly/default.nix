@@ -59,11 +59,20 @@ buildPythonPackage rec {
     "test_svd_time"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tensor learning in Python";
     homepage = "https://tensorly.org/";
     changelog = "https://github.com/tensorly/tensorly/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Tensor learning in Python";
+    homepage = "https://tensorly.org/";
+    changelog = "https://github.com/tensorly/tensorly/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

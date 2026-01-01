@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynisher" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module intended to limit a functions resources";
     homepage = "https://github.com/automl/pynisher";
     changelog = "https://github.com/automl/pynisher/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
+=======
+  meta = with lib; {
+    description = "Module intended to limit a functions resources";
+    homepage = "https://github.com/automl/pynisher";
+    changelog = "https://github.com/automl/pynisher/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ psyanticy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

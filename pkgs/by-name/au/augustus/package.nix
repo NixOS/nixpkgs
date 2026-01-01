@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open source re-implementation of Caesar III. Fork of Julius incorporating gameplay changes";
     mainProgram = "augustus";
@@ -53,6 +54,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Open source re-implementation of Caesar III. Fork of Julius incorporating gameplay changes";
+    mainProgram = "augustus";
+    homepage = "https://github.com/Keriew/augustus";
+    license = licenses.agpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       Thra11
       matteopacini
     ];

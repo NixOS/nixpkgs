@@ -24,10 +24,18 @@ stdenv.mkDerivation {
     scripts = [ "grep.py" ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Search in Weechat buffers and logs (for Weechat 0.3.*)";
     homepage = "https://github.com/weechat/scripts/blob/master/python/grep.py";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ flokli ];
+=======
+  meta = with lib; {
+    description = "Search in Weechat buffers and logs (for Weechat 0.3.*)";
+    homepage = "https://github.com/weechat/scripts/blob/master/python/grep.py";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

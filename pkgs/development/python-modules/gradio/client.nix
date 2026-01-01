@@ -3,7 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   gitUpdater,
+=======
+  nix-update-script,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   hatchling,
@@ -31,7 +35,11 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
+<<<<<<< HEAD
   version = "2.0.1";
+=======
+  version = "1.12.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   # no tests on pypi
@@ -39,6 +47,7 @@ buildPythonPackage rec {
     owner = "gradio-app";
     repo = "gradio";
     # not to be confused with @gradio/client@${version}
+<<<<<<< HEAD
     # tag = "gradio_client@${version}";
     # TODO: switch back to a tag next release, if they tag it.
     rev = "7a8894d7249ee20c2f7a896237e290e99661fd43"; # 2.0.1
@@ -47,10 +56,16 @@ buildPythonPackage rec {
       "gradio/media_assets"
     ];
     hash = "sha256-p3okK48DJjjyvUzedNR60r5P8aKUxjE+ocb3EplZ6Uk=";
+=======
+    tag = "gradio_client@${version}";
+    sparseCheckout = [ "client/python" ];
+    hash = "sha256-Q0sEn7trWVVWh2XNZam10axuQBiPZvq//qTIR5WJn+4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/client/python";
 
+<<<<<<< HEAD
   postPatch = ''
     # Because we set sourceRoot above, the folders "client/python"
     # don't exist, as far as this is concerned.
@@ -58,6 +73,8 @@ buildPythonPackage rec {
       --replace-fail 'from client.python.test import media_data' 'import media_data'
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # upstream adds upper constraints because they can, not because the need to
   # https://github.com/gradio-app/gradio/pull/4885
   pythonRelaxDeps = [
@@ -93,11 +110,14 @@ buildPythonPackage rec {
   # ensuring we don't propagate this intermediate build
   disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
+<<<<<<< HEAD
   postInstall = ''
     mkdir -p $out/lib/gradio
     cp -r ../../gradio/media_assets $out/lib/gradio
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
@@ -127,9 +147,17 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     rev-prefix = "gradio_client@";
     ignoredVersions = ".*-(beta|dev).*";
+=======
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "gradio_client@(.*)"
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   meta = {

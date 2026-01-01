@@ -33,12 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ppft" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Distributed and parallel Python";
     mainProgram = "ppserver";
     homepage = "https://ppft.readthedocs.io/";
     changelog = "https://github.com/uqfoundation/ppft/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -21,12 +21,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fish shell like syntax highlighting for Zsh";
     homepage = "https://github.com/zsh-users/zsh-syntax-highlighting";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fish shell like syntax highlighting for Zsh";
+    homepage = "https://github.com/zsh-users/zsh-syntax-highlighting";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gepbird
       loskutov
     ];

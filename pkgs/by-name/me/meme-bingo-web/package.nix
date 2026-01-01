@@ -33,11 +33,20 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Play meme bingo using this neat web app";
     mainProgram = "meme-bingo-web";
     homepage = "https://codeberg.org/annaaurora/meme-bingo-web";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ annaaurora ];
+=======
+  meta = with lib; {
+    description = "Play meme bingo using this neat web app";
+    mainProgram = "meme-bingo-web";
+    homepage = "https://codeberg.org/annaaurora/meme-bingo-web";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ annaaurora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

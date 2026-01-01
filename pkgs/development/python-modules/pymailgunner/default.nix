@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymailgunner" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for interacting with Mailgun e-mail service";
     homepage = "https://github.com/pschmitt/pymailgunner";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for interacting with Mailgun e-mail service";
+    homepage = "https://github.com/pschmitt/pymailgunner";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

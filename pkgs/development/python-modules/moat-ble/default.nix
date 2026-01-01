@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "moat_ble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Moat BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/moat-ble";
     changelog = "https://github.com/Bluetooth-Devices/moat-ble/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Moat BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/moat-ble";
+    changelog = "https://github.com/Bluetooth-Devices/moat-ble/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

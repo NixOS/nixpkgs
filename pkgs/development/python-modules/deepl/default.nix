@@ -29,12 +29,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deepl" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Language translation API that allows other computer programs to send texts and documents to DeepL's servers and receive high-quality translations";
     mainProgram = "deepl";
     homepage = "https://github.com/DeepLcom/deepl-python";
     changelog = "https://github.com/DeepLcom/deepl-python/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MaskedBelgian ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ MaskedBelgian ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

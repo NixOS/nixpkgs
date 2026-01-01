@@ -74,11 +74,21 @@ stdenv.mkDerivation {
     rm -rf lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and elegant cross-platform IRC client";
     mainProgram = "communi";
     homepage = "https://github.com/communi/communi-desktop";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Simple and elegant cross-platform IRC client";
+    mainProgram = "communi";
+    homepage = "https://github.com/communi/communi-desktop";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ hrdinka ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

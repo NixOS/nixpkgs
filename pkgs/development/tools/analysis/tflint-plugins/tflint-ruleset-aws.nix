@@ -41,11 +41,20 @@ buildGoModule rec {
     rm -R $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/terraform-linters/tflint-ruleset-aws";
     changelog = "https://github.com/terraform-linters/tflint-ruleset-aws/blob/v${version}/CHANGELOG.md";
     description = "TFLint ruleset plugin for Terraform AWS Provider";
     maintainers = with lib.maintainers; [ flokli ];
     license = with lib.licenses; [ mpl20 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/terraform-linters/tflint-ruleset-aws";
+    changelog = "https://github.com/terraform-linters/tflint-ruleset-aws/blob/v${version}/CHANGELOG.md";
+    description = "TFLint ruleset plugin for Terraform AWS Provider";
+    maintainers = with maintainers; [ flokli ];
+    license = with licenses; [ mpl20 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

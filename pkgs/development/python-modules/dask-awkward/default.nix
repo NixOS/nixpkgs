@@ -60,7 +60,11 @@ buildPythonPackage rec {
     pytestCheckHook
     uproot
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "dask_awkward" ];
 

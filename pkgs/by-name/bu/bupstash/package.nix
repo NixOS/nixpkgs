@@ -35,11 +35,19 @@ rustPlatform.buildRustPackage rec {
     installManPage doc/man/*.[1-9]
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Easy and efficient encrypted backups";
     homepage = "https://bupstash.io";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Easy and efficient encrypted backups";
+    homepage = "https://bupstash.io";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "bupstash";
   };

@@ -25,14 +25,22 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
+<<<<<<< HEAD
   version = "25.3.0";
+=======
+  version = "25.1.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-attrs";
     repo = "cattrs";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-6oQblSanvSZOMD5ossCP7fNjyxF54SRbU1cQrW1I5Ps=";
+=======
+    hash = "sha256-kaB/UJcd4E4PUkz6mD53lXtmj4Z4P+Tuu7bSljYVOO4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

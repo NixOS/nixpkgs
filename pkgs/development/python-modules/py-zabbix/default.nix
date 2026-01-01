@@ -43,11 +43,20 @@ buildPythonPackage rec {
     "config"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to interact with Zabbix";
     homepage = "https://github.com/adubkov/py-zabbix";
     changelog = "https://github.com/adubkov/py-zabbix/releases/tag/${version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to interact with Zabbix";
+    homepage = "https://github.com/adubkov/py-zabbix";
+    changelog = "https://github.com/adubkov/py-zabbix/releases/tag/${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

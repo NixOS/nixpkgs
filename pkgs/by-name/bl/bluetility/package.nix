@@ -27,6 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bluetooth Low Energy browse";
     homepage = "https://github.com/jnross/Bluetility";
@@ -34,5 +35,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Bluetooth Low Energy browse";
+    homepage = "https://github.com/jnross/Bluetility";
+    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

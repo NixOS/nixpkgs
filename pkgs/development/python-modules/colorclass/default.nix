@@ -17,9 +17,15 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Robpol86/colorclass";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Robpol86/colorclass";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Automatic support for console colors";
   };
 }

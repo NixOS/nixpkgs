@@ -46,11 +46,19 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/raphaelm/python-fints/";
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/raphaelm/python-fints/";
+    description = "Pure-python FinTS (formerly known as HBCI) implementation";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dotlambda
     ];
   };

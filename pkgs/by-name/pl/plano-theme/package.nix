@@ -38,11 +38,20 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flat theme for GNOME and Xfce";
     homepage = "https://github.com/lassekongo83/plano-theme";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Flat theme for GNOME and Xfce";
+    homepage = "https://github.com/lassekongo83/plano-theme";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

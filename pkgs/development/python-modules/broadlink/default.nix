@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "broadlink" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for controlling Broadlink IR controllers";
     homepage = "https://github.com/mjg59/python-broadlink";
     changelog = "https://github.com/mjg59/python-broadlink/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API for controlling Broadlink IR controllers";
+    homepage = "https://github.com/mjg59/python-broadlink";
+    changelog = "https://github.com/mjg59/python-broadlink/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,10 +33,17 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
     homepage = "https://github.com/sphinx-contrib/plantuml/";
     license = with lib.licenses; [ bsd2 ];
+=======
+  meta = with lib; {
+    description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
+    homepage = "https://github.com/sphinx-contrib/plantuml/";
+    license = with licenses; [ bsd2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

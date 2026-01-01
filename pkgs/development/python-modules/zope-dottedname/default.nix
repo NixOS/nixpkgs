@@ -1,13 +1,18 @@
 {
   lib,
   buildPythonPackage,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchPypi,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-dottedname";
+<<<<<<< HEAD
   version = "7.0";
   pyproject = true;
 
@@ -23,6 +28,17 @@ buildPythonPackage rec {
       --replace-fail "setuptools ==" "setuptools >="
   '';
 
+=======
+  version = "6.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "zope.dottedname";
+    inherit version;
+    hash = "sha256-28S4W/vzSx74jasWJSrG7xbZBDnyIjstCiYs9Bnq6QI=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];

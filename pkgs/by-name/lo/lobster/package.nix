@@ -44,7 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://strlen.com/lobster/";
     description = "Lobster programming language";
@@ -54,8 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
       very static typing and memory management with a very lightweight,
       friendly and terse syntax, by doing most of the heavy lifting for you.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -122,15 +122,27 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
     changelog = "https://github.com/cupy/cupy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "NumPy-compatible matrix library accelerated by CUDA";
+    homepage = "https://cupy.chainer.org/";
+    changelog = "https://github.com/cupy/cupy/releases/tag/${src.tag}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with maintainers; [ hyphon81 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

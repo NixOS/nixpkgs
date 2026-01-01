@@ -53,6 +53,7 @@ let
       done
     '';
   };
+<<<<<<< HEAD
   libnet' = libnet.overrideAttrs { dontDisableStatic = true; };
   net = symlinkJoin {
     inherit (libnet') name;
@@ -60,6 +61,11 @@ let
       (lib.getLib libnet')
       (lib.getDev libnet')
     ];
+=======
+  net = symlinkJoin {
+    inherit (libnet) name;
+    paths = [ (libnet.overrideAttrs { dontDisableStatic = true; }) ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     postBuild = ''
       # prevent dynamic linking, now that we have a static library
       rm $out/lib/*.so*
@@ -118,15 +124,26 @@ stdenv.mkDerivation rec {
     "--with-openssl=${ssl}"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Collection of tools for network auditing and penetration testing";
     longDescription = ''
       dsniff, filesnarf, mailsnarf, msgsnarf, urlsnarf, and webspy passively monitor a network for interesting data (passwords, e-mail, files, etc.). arpspoof, dnsspoof, and macof facilitate the interception of network traffic normally unavailable to an attacker (e.g, due to layer-2 switching). sshmitm and webmitm implement active monkey-in-the-middle attacks against redirected SSH and HTTPS sessions by exploiting weak bindings in ad-hoc PKI.
     '';
     homepage = "https://www.monkey.org/~dugsong/dsniff/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.symphorien ];
     # bsd and solaris should work as well
     platforms = lib.platforms.linux;
+=======
+    license = licenses.bsd3;
+    maintainers = [ maintainers.symphorien ];
+    # bsd and solaris should work as well
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

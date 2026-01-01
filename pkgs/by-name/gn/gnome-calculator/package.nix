@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://apps.gnome.org/Calculator/";
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
@@ -80,5 +81,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://apps.gnome.org/Calculator/";
+    description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
+    mainProgram = "gnome-calculator";
+    teams = [ teams.gnome ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

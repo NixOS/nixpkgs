@@ -22,7 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple tool for generating self signed certificates";
     mainProgram = "minica";
     longDescription = ''
@@ -33,7 +37,12 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jsha/minica/";
     changelog = "https://github.com/jsha/minica/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ m1cr0man ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ m1cr0man ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

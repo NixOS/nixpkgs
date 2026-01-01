@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -D $src $out/share/lib/${pname}-${version}/${pname}-${version}.jar";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/SeleniumHQ/htmlunit-driver";
     description = "WebDriver server for running Selenium tests on the HtmlUnit headless browser";
@@ -27,5 +28,17 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/SeleniumHQ/htmlunit-driver";
+    description = "WebDriver server for running Selenium tests on the HtmlUnit headless browser";
+    maintainers = with maintainers; [
+      coconnor
+      offline
+    ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

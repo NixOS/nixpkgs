@@ -16,16 +16,28 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool ];
 
+<<<<<<< HEAD
   meta = {
     description = "Freedesktop reference sound theme";
     homepage = "http://freedesktop.org/wiki/Specifications/sound-theme-spec";
     # See http://cgit.freedesktop.org/sound-theme-freedesktop/tree/CREDITS:
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Freedesktop reference sound theme";
+    homepage = "http://freedesktop.org/wiki/Specifications/sound-theme-spec";
+    # See http://cgit.freedesktop.org/sound-theme-freedesktop/tree/CREDITS:
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cc-by-30
       cc-by-sa-25
       gpl2
       gpl2Plus
     ];
+<<<<<<< HEAD
     platforms = with lib.platforms; unix;
+=======
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

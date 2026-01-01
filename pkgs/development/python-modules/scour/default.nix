@@ -20,11 +20,20 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "SVG Optimizer / Cleaner";
     mainProgram = "scour";
     homepage = "https://github.com/scour-project/scour";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ worldofpeace ];
+=======
+  meta = with lib; {
+    description = "SVG Optimizer / Cleaner";
+    mainProgram = "scour";
+    homepage = "https://github.com/scour-project/scour";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ worldofpeace ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

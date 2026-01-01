@@ -21,11 +21,19 @@ stdenv.mkDerivation rec {
     cp * $out/include/${pname}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast XML DOM-style parser in C++";
     homepage = "https://rapidxml.sourceforge.net/";
     license = lib.licenses.boost;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Fast XML DOM-style parser in C++";
+    homepage = "https://rapidxml.sourceforge.net/";
+    license = licenses.boost;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

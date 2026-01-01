@@ -13,13 +13,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgns";
+<<<<<<< HEAD
   version = "4.5.1";
+=======
+  version = "4.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cgns";
     repo = "cgns";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-9i44GJesbZ2kV+ZSpYPYEhH873W8DxD1/aYzD19eAJ8=";
+=======
+    hash = "sha256-lPbXIC+O4hTtacxUcyNjZUWpEwo081MjEWhfIH3MWus=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

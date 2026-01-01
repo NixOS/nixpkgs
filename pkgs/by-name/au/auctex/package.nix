@@ -44,11 +44,19 @@ let
       "--with-texmf-dir=\${tex}"
     ];
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://www.gnu.org/software/auctex";
       description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      homepage = "https://www.gnu.org/software/auctex";
+      description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
+      license = licenses.gpl3Plus;
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

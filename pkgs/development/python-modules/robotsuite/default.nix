@@ -26,9 +26,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python unittest test suite for Robot Framework";
     homepage = "https://github.com/collective/robotsuite/";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Python unittest test suite for Robot Framework";
+    homepage = "https://github.com/collective/robotsuite/";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

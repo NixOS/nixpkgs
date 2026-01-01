@@ -79,16 +79,26 @@ stdenv.mkDerivation {
       --replace "pantheon-greeter" "$out/bin/pantheon-greeter"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       A fork of pantheon greeter that positions elements in a central and
       vertigal manner and adds a blur effect to the background
     '';
     mainProgram = "pantheon-greeter";
     homepage = "https://github.com/nick92/Enso-OS";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       eadwu
     ];
   };

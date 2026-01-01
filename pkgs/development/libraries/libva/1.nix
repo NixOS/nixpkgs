@@ -63,11 +63,20 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/vaapi/";
     license = lib.licenses.mit;
     description = "VAAPI library: Video Acceleration API";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    homepage = "https://www.freedesktop.org/wiki/Software/vaapi/";
+    license = licenses.mit;
+    description = "VAAPI library: Video Acceleration API";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

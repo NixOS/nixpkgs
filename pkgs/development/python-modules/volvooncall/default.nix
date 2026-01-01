@@ -60,6 +60,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "volvooncall" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Retrieve information from the Volvo On Call web service";
     homepage = "https://github.com/molobrakos/volvooncall";
@@ -67,5 +68,14 @@ buildPythonPackage rec {
     license = lib.licenses.unlicense;
     mainProgram = "voc";
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Retrieve information from the Volvo On Call web service";
+    homepage = "https://github.com/molobrakos/volvooncall";
+    changelog = "https://github.com/molobrakos/volvooncall/releases/tag/v${version}";
+    license = licenses.unlicense;
+    mainProgram = "voc";
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

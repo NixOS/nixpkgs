@@ -18,12 +18,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "CPU, RAM, and load monitor for use with tmux";
     homepage = "https://github.com/thewtex/tmux-mem-cpu-load";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thomasjm ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "CPU, RAM, and load monitor for use with tmux";
+    homepage = "https://github.com/thewtex/tmux-mem-cpu-load";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ thomasjm ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tmux-mem-cpu-load";
   };
 }

@@ -46,6 +46,10 @@ rustPlatform.buildRustPackage {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Tool to prepare a Proxmox installation ISO for automated installations";

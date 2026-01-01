@@ -29,6 +29,7 @@ let
 
     installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
     meta = {
       description = "SVG-flatten SVG downconverter";
       homepage = "https://github.com/jaseg/gerbolyze";
@@ -36,6 +37,15 @@ let
       maintainers = with lib.maintainers; [ wulfsta ];
       mainProgram = "svg-flatten";
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      description = "SVG-flatten SVG downconverter";
+      homepage = "https://github.com/jaseg/gerbolyze";
+      license = with licenses; [ agpl3Plus ];
+      maintainers = with maintainers; [ wulfsta ];
+      mainProgram = "svg-flatten";
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in
@@ -93,6 +103,7 @@ python3Packages.buildPythonApplication rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Directly render SVG overlays into Gerber and Excellon files";
     homepage = "https://github.com/jaseg/gerbolyze";
@@ -100,5 +111,14 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ wulfsta ];
     mainProgram = "gerbolyze";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Directly render SVG overlays into Gerber and Excellon files";
+    homepage = "https://github.com/jaseg/gerbolyze";
+    license = with licenses; [ agpl3Plus ];
+    maintainers = with maintainers; [ wulfsta ];
+    mainProgram = "gerbolyze";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

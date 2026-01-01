@@ -28,10 +28,17 @@ python3.pkgs.buildPythonPackage rec {
 
   pythonImportsCheck = [ "rst2html5" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Converts ReSTructuredText to (X)HTML5";
     homepage = "https://rst2html5.readthedocs.io/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Converts ReSTructuredText to (X)HTML5";
+    homepage = "https://rst2html5.readthedocs.io/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "rst2html5";
   };

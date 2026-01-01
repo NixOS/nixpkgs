@@ -25,11 +25,19 @@ buildGoModule rec {
 
   subPackages = [ "cmd/git-chglog" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CHANGELOG generator implemented in Go (Golang)";
     homepage = "https://github.com/git-chglog/git-chglog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ldenefle ];
+=======
+  meta = with lib; {
+    description = "CHANGELOG generator implemented in Go (Golang)";
+    homepage = "https://github.com/git-chglog/git-chglog";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ldenefle ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-chglog";
   };
 }

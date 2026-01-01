@@ -100,13 +100,22 @@ rustPlatform.buildRustPackage rec {
       makeWrapper "$out/Applications/SquirrelDisk.app/Contents/MacOS/SquirrelDisk" "$out/bin/squirrel-disk"
     '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # webkitgtk_4_0 was removed
     broken = true;
     description = "Cross-platform disk usage analysis tool";
     homepage = "https://www.squirreldisk.com/";
+<<<<<<< HEAD
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ peret ];
+=======
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ peret ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "squirrel-disk";
   };
 }

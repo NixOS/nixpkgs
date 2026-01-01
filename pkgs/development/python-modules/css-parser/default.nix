@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "css_parser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/ebook-utils/css-parser";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ jethro ];
+=======
+  meta = with lib; {
+    description = "CSS Cascading Style Sheets library for Python";
+    homepage = "https://github.com/ebook-utils/css-parser";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ jethro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

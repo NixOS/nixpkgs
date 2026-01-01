@@ -1,6 +1,10 @@
 {
   stdenv,
+<<<<<<< HEAD
   fetchzip,
+=======
+  fetchFromGitHub,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   openssl,
   lib,
 }:
@@ -9,9 +13,16 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hashpump";
   version = "1.2.0";
 
+<<<<<<< HEAD
   # Github repository got removed
   src = fetchzip {
     url = "https://web.archive.org/web/20201018005212/https://github.com/bwall/HashPump/archive/v1.20.tar.gz";
+=======
+  src = fetchFromGitHub {
+    owner = "bwall";
+    repo = "HashPump";
+    rev = "v${finalAttrs.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-xL/1os17agwFtdq0snS3ZJzwJhk22ujxfWLH65IMMEM=";
   };
 

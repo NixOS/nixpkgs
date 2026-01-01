@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dnslib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple library to encode/decode DNS wire-format packets";
     homepage = "https://github.com/paulc/dnslib";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Simple library to encode/decode DNS wire-format packets";
+    homepage = "https://github.com/paulc/dnslib";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

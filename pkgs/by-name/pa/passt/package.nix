@@ -42,7 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://passt.top/passt/about/";
     description = "Plug A Simple Socket Transport";
     longDescription = ''
@@ -58,10 +62,17 @@ stdenv.mkDerivation (finalAttrs: {
       privileges.
     '';
     license = [
+<<<<<<< HEAD
       lib.licenses.bsd3 # and
       lib.licenses.gpl2Plus
     ];
     platforms = lib.platforms.linux;
+=======
+      licenses.bsd3 # and
+      licenses.gpl2Plus
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "passt";
   };
 })

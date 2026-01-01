@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
     musl = pkgsCross.musl64.npth;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "New GNU Portable Threads Library";
     longDescription = ''
       This is a library to provide the GNU Pth API and thus a non-preemptive
@@ -35,7 +39,12 @@ stdenv.mkDerivation rec {
       that this is a solid way to provide a co-routine based framework.
     '';
     homepage = "http://www.gnupg.org";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.all;
+=======
+    license = licenses.lgpl3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

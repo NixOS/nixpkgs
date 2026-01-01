@@ -194,6 +194,10 @@ buildDotnetModule {
     changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      edwtjo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       purcell
       nyanloutre
     ];

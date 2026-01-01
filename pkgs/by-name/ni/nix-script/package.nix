@@ -37,11 +37,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Shebang for running inside nix-shell";
     homepage = "https://github.com/bennofs/nix-script";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Shebang for running inside nix-shell";
+    homepage = "https://github.com/bennofs/nix-script";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bennofs
       rnhmjoj
     ];

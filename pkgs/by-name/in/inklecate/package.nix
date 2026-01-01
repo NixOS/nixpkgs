@@ -27,7 +27,11 @@ buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Compiler for ink, inkle's scripting language";
     mainProgram = "inklecate";
     longDescription = ''
@@ -36,9 +40,16 @@ buildDotnetModule rec {
     '';
     homepage = "https://www.inklestudios.com/ink/";
     downloadPage = "https://github.com/inkle/ink/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.aarch64;
     maintainers = with lib.maintainers; [ shreerammodi ];
+=======
+    license = licenses.mit;
+    platforms = platforms.unix;
+    badPlatforms = platforms.aarch64;
+    maintainers = with maintainers; [ shreerammodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

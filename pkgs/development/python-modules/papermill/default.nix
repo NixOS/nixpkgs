@@ -88,6 +88,10 @@ buildPythonPackage rec {
   ++ optional-dependencies.azure
   ++ optional-dependencies.s3
   ++ optional-dependencies.gcs;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "papermill" ];
 

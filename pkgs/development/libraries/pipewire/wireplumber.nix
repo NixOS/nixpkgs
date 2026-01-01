@@ -25,7 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wireplumber";
+<<<<<<< HEAD
   version = "0.5.13";
+=======
+  version = "0.5.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -38,7 +42,11 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-iQpMT01mRroaA48spA11zdb47L5AcVmigE4nJuJRaUo=";
+=======
+    hash = "sha256-3LdERBiPXal+OF7tgguJcVXrqycBSmD3psFzn4z5krY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -85,11 +93,20 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Modular session / policy manager for PipeWire";
     homepage = "https://pipewire.org";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ k900 ];
+=======
+  meta = with lib; {
+    description = "Modular session / policy manager for PipeWire";
+    homepage = "https://pipewire.org";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ k900 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

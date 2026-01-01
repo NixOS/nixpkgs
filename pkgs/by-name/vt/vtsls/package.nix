@@ -6,6 +6,7 @@
   gitMinimal,
   gitSetupHook,
   pnpm_8,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
@@ -13,6 +14,11 @@
 let
   pnpm' = pnpm_8.override { nodejs = nodejs_22; };
 in
+=======
+  nix-update-script,
+}:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
   version = "0.2.9";
@@ -30,22 +36,33 @@ stdenv.mkDerivation (finalAttrs: {
     # patches are applied with git during build
     gitMinimal
     gitSetupHook
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm'
+=======
+    pnpm_8.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [ nodejs_22 ];
 
   pnpmWorkspaces = [ "@vtsls/language-server" ];
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm_8.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pnpmWorkspaces
       pname
       src
       version
       ;
+<<<<<<< HEAD
     pnpm = pnpm';
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
   };

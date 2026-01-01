@@ -56,7 +56,11 @@ stdenv.mkDerivation rec {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Keep the tempo";
     longDescription = ''
       Metronome beats the rhythm for you, you simply
@@ -65,9 +69,16 @@ stdenv.mkDerivation rec {
       application guess the required beats per minute.
     '';
     homepage = "https://gitlab.gnome.org/World/metronome";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     mainProgram = "metronome";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    mainProgram = "metronome";
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -15,12 +15,21 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -D ctmg.sh $out/bin/ctmg";
 
+<<<<<<< HEAD
   meta = {
     description = "Encrypted container manager for Linux using cryptsetup";
     homepage = "https://git.zx2c4.com/ctmg/about/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ mrVanDalo ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Encrypted container manager for Linux using cryptsetup";
+    homepage = "https://git.zx2c4.com/ctmg/about/";
+    license = licenses.isc;
+    maintainers = with maintainers; [ mrVanDalo ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ctmg";
   };
 }

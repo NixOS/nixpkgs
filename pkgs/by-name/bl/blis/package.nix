@@ -58,11 +58,19 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "BLAS-compatible linear algebra library";
     homepage = "https://github.com/flame/blis";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ stephen-huan ];
+=======
+  meta = with lib; {
+    description = "BLAS-compatible linear algebra library";
+    homepage = "https://github.com/flame/blis";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ stephen-huan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

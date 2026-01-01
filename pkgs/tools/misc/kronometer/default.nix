@@ -26,11 +26,19 @@ mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://kde.org/applications/utilities/kronometer/";
     description = "Stopwatch application";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    homepage = "https://kde.org/applications/utilities/kronometer/";
+    description = "Stopwatch application";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kronometer";
   };
   nativeBuildInputs = [

@@ -17,12 +17,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-RiM9d/aOCnV0t13QQO1fdw+QPGMoF/EjIDA2uttjXcQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Simple output management tool for wlroots based compositors implementing";
     homepage = "https://git.sr.ht/~shinyzenith/wayout";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ onny ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Simple output management tool for wlroots based compositors implementing";
+    homepage = "https://git.sr.ht/~shinyzenith/wayout";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ onny ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wayout";
   };
 

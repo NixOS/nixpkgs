@@ -74,12 +74,21 @@ buildPythonPackage rec {
     "test_should_invoke_main"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/audreyr/cookiecutter";
     changelog = "https://github.com/cookiecutter/cookiecutter/blob/${version}/HISTORY.md";
     description = "Command-line utility that creates projects from project templates";
     mainProgram = "cookiecutter";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kragniz ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ kragniz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

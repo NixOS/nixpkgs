@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unicurses" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unified Curses Wrapper for Python";
     homepage = "https://github.com/unicurses/unicurses";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ michaelBelsanti ];
+=======
+  meta = with lib; {
+    description = "Unified Curses Wrapper for Python";
+    homepage = "https://github.com/unicurses/unicurses";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ michaelBelsanti ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

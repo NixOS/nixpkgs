@@ -24,14 +24,22 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
+<<<<<<< HEAD
   version = "0.4.11";
+=======
+  version = "0.4.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
+<<<<<<< HEAD
     hash = "sha256-sr3AtcrG9V0c5UBdSXyaX3bCxzrSONpY28L5jlomZuM=";
+=======
+    hash = "sha256-VvxY5fXK/f1aCdIB0XPGTsWgEe/cA797kK6eLmb0vtg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/libs/cli";
@@ -56,7 +64,11 @@ buildPythonPackage rec {
     pytestCheckHook
     docker-compose
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   enabledTestPaths = [ "tests/unit_tests" ];
 

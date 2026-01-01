@@ -56,6 +56,7 @@ stdenv.mkDerivation {
     inherit (nixosTests) darling-dmg;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.darlinghq.org/";
     description = "FUSE module for .dmg files (containing an HFS+ filesystem)";
@@ -63,5 +64,14 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    homepage = "https://www.darlinghq.org/";
+    description = "FUSE module for .dmg files (containing an HFS+ filesystem)";
+    mainProgram = "darling-dmg";
+    platforms = platforms.unix;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

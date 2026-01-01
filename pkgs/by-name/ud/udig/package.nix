@@ -25,6 +25,7 @@ let
   src =
     srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
+<<<<<<< HEAD
   meta = {
     description = "User-friendly Desktop Internet GIS";
     homepage = "http://udig.refractions.net/";
@@ -34,6 +35,17 @@ let
       bsd3
     ];
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "User-friendly Desktop Internet GIS";
+    homepage = "http://udig.refractions.net/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = with licenses; [
+      epl10
+      bsd3
+    ];
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = builtins.attrNames srcs;
     mainProgram = "udig";
   };

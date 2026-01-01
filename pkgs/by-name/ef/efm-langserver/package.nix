@@ -18,11 +18,20 @@ buildGoModule rec {
   vendorHash = "sha256-FOAKxKqhrUpfXkoasSd7v3kKAqV11p5ieZaMPni5Hx4=";
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "General purpose Language Server";
     mainProgram = "efm-langserver";
     maintainers = with lib.maintainers; [ Philipp-M ];
     homepage = "https://github.com/mattn/efm-langserver";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "General purpose Language Server";
+    mainProgram = "efm-langserver";
+    maintainers = with maintainers; [ Philipp-M ];
+    homepage = "https://github.com/mattn/efm-langserver";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

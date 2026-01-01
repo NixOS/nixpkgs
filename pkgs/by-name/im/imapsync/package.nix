@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mail folder synchronizer between IMAP servers";
     mainProgram = "imapsync";
@@ -72,5 +73,17 @@ stdenv.mkDerivation (finalAttrs: {
       motiejus
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Mail folder synchronizer between IMAP servers";
+    mainProgram = "imapsync";
+    homepage = "https://imapsync.lamiral.info/";
+    license = licenses.nlpl;
+    maintainers = with maintainers; [
+      pSub
+      motiejus
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -17,11 +17,19 @@ buildGoModule {
 
   vendorHash = "sha256-Q+aFgi7GCAn3AxDuGtRG4DdPhI7gQKEo7A9iu1YcTsQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Ping over TCP instead of ICMP, written in Go";
     homepage = "https://github.com/cloverstd/tcping";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Ping over TCP instead of ICMP, written in Go";
+    homepage = "https://github.com/cloverstd/tcping";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tcping";
   };
 }

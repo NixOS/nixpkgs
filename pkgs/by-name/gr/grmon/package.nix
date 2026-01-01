@@ -24,15 +24,25 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line monitoring for goroutines";
     longDescription = ''
       To use it, instrument your Go code following the
       [usage description of the project](https://github.com/bcicen/grmon?tab=readme-ov-file#usage).
     '';
     homepage = "https://github.com/bcicen/grmon";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     mainProgram = "grmon";
     maintainers = with lib.maintainers; [ katexochen ];
+=======
+    license = licenses.mit;
+    mainProgram = "grmon";
+    maintainers = with maintainers; [ katexochen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

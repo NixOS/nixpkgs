@@ -74,12 +74,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyxnat" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://pyxnat.github.io/pyxnat";
     description = "Python API to XNAT";
     mainProgram = "sessionmirror.py";
     changelog = "https://github.com/pyxnat/pyxnat/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

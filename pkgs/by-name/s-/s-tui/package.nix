@@ -32,11 +32,19 @@ python3Packages.buildPythonPackage rec {
     tests = testers.testVersion { package = s-tui; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://amanusk.github.io/s-tui/";
     description = "Stress-Terminal UI monitoring tool";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lilacious ];
+=======
+  meta = with lib; {
+    homepage = "https://amanusk.github.io/s-tui/";
+    description = "Stress-Terminal UI monitoring tool";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lilacious ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/amanusk/s-tui/issues/49
     mainProgram = "s-tui";
   };

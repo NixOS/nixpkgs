@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colorama" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform colored terminal text";
     homepage = "https://github.com/tartley/colorama";
     changelog = "https://github.com/tartley/colorama/raw/${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Cross-platform colored terminal text";
+    homepage = "https://github.com/tartley/colorama";
+    changelog = "https://github.com/tartley/colorama/raw/${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

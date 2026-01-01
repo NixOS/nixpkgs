@@ -1,6 +1,7 @@
 { pkgs, lib, ... }:
 let
   track = pkgs.fetchurl {
+<<<<<<< HEAD
     # Sourced from https://freemusicarchive.org/music/Jazz_at_Mladost_Club/Jazz_Night/Blue_bossa/
 
     name = "Blue bossa - Jazz at Miadost Club.mp3";
@@ -13,6 +14,30 @@ let
     user = "mpd";
     group = "mpd";
     dataDir = "/var/lib/mpd";
+=======
+    # Sourced from http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in
+
+    name = "Blue_Wave_Theory-Skyhawk_Beach.mp3";
+    url = "https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3";
+    hash = "sha256-91VDWwrcP6Cw4rk72VHvZ8RGfRBrpRE8xo/02dcJhHc=";
+    meta.license = lib.licenses.cc-by-sa-40;
+  };
+
+  defaultCfg = rec {
+    user = "mpd";
+    group = "mpd";
+    dataDir = "/var/lib/mpd";
+    musicDirectory = "${dataDir}/music";
+  };
+
+  defaultMpdCfg = {
+    inherit (defaultCfg)
+      dataDir
+      musicDirectory
+      user
+      group
+      ;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     enable = true;
   };
 
@@ -20,7 +45,11 @@ let
     {
       user,
       group,
+<<<<<<< HEAD
       dataDir,
+=======
+      musicDirectory,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }:
     {
       description = "Sets up the music file(s) for MPD to use.";
@@ -28,7 +57,11 @@ let
       after = [ "mpd.service" ];
       wantedBy = [ "default.target" ];
       script = ''
+<<<<<<< HEAD
         cp ${track} ${dataDir}/music
+=======
+        cp ${track} ${musicDirectory}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       '';
       serviceConfig = {
         User = user;
@@ -47,10 +80,14 @@ in
 {
   name = "mpd";
   meta = {
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       emmanuelrosa
       doronbehar
     ];
+=======
+    maintainers = with lib.maintainers; [ emmanuelrosa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes = {
@@ -61,6 +98,7 @@ in
       lib.mkMerge [
         (mkServer {
           mpd = defaultMpdCfg // {
+<<<<<<< HEAD
             settings = {
               bind_to_address = "any";
               audio_output = [
@@ -75,6 +113,20 @@ in
           };
           musicService = musicService { inherit (defaultMpdCfg) user group dataDir; };
         })
+=======
+            network.listenAddress = "any";
+            extraConfig = ''
+              audio_output {
+                type "alsa"
+                name "ALSA"
+                mixer_type "null"
+              }
+            '';
+          };
+          musicService = musicService { inherit (defaultMpdCfg) user group musicDirectory; };
+        })
+        { networking.firewall.allowedTCPPorts = [ 6600 ]; }
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
 
     serverPulseAudio =
@@ -82,6 +134,7 @@ in
       lib.mkMerge [
         (mkServer {
           mpd = defaultMpdCfg // {
+<<<<<<< HEAD
             settings.audio_output = [
               {
                 type = "pulse";
@@ -91,6 +144,17 @@ in
           };
 
           musicService = musicService { inherit (defaultMpdCfg) user group dataDir; };
+=======
+            extraConfig = ''
+              audio_output {
+                type "pulse"
+                name "The Pulse"
+              }
+            '';
+          };
+
+          musicService = musicService { inherit (defaultMpdCfg) user group musicDirectory; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         })
         {
           services.pulseaudio = {
@@ -139,8 +203,11 @@ in
     # The PulseAudio-based server is configured not to accept external client connections
     # to perform the following test:
     client.fail(f"{mpc} -h serverPulseAudio status")
+<<<<<<< HEAD
     # For inspecting these files
     serverALSA.copy_from_vm("/run/mpd/mpd.conf", "ALSA")
     serverPulseAudio.copy_from_vm("/run/mpd/mpd.conf", "PulseAudio")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 }

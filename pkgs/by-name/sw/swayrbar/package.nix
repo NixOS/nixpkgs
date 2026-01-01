@@ -34,11 +34,19 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "$out/bin:${lib.makeBinPath [ pulseaudio ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Status command for sway's swaybar implementing the swaybar-protocol";
     homepage = "https://git.sr.ht/~tsdh/swayr#a-idswayrbarswayrbara";
     license = with lib.licenses; [ gpl3Plus ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Status command for sway's swaybar implementing the swaybar-protocol";
+    homepage = "https://git.sr.ht/~tsdh/swayr#a-idswayrbarswayrbara";
+    license = with licenses; [ gpl3Plus ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "swayrbar";
   };

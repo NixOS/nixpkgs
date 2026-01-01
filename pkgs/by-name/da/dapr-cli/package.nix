@@ -43,11 +43,19 @@ buildGoModule rec {
       --zsh <($out/bin/dapr completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for managing Dapr, the distributed application runtime";
     homepage = "https://dapr.io";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "CLI for managing Dapr, the distributed application runtime";
+    homepage = "https://dapr.io";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       joshvanl
       lucperkins
     ];

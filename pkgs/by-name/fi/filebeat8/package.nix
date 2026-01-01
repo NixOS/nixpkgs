@@ -31,7 +31,11 @@ buildGoModule rec {
   doInstallCheck = true;
 
   passthru = {
+<<<<<<< HEAD
     updateScript = nix-update-script { extraArgs = [ "--version-regex=v(8\\..*)" ]; };
+=======
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=v(8\..*)" ]; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   meta = {

@@ -1,8 +1,13 @@
 { pkgs, ... }:
 {
   name = "trickster";
+<<<<<<< HEAD
   meta = {
     maintainers = with pkgs.lib.maintainers; [ _1000101 ];
+=======
+  meta = with pkgs.lib; {
+    maintainers = with maintainers; [ _1000101 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes = {

@@ -2,13 +2,21 @@
   config,
   lib,
   pkgs,
+<<<<<<< HEAD
   utils,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ...
 }:
 let
   cfg = config.services.glance;
 
   inherit (lib)
+<<<<<<< HEAD
+=======
+    catAttrs
+    concatMapStrings
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     getExe
     mkEnableOption
     mkIf
@@ -17,8 +25,22 @@ let
     types
     ;
 
+<<<<<<< HEAD
   settingsFormat = pkgs.formats.yaml { };
   settingsFile = "/run/glance/glance.yaml";
+=======
+  inherit (builtins)
+    concatLists
+    isAttrs
+    isList
+    attrNames
+    getAttr
+    ;
+
+  settingsFormat = pkgs.formats.yaml { };
+  settingsFile = settingsFormat.generate "glance.yaml" cfg.settings;
+  mergedSettingsFile = "/run/glance/glance.yaml";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 {
   options.services.glance = {
@@ -170,6 +192,7 @@ in
       requires = [
         "nss-user-lookup.target"
       ];
+<<<<<<< HEAD
 
       serviceConfig = {
         ExecStartPre =
@@ -180,6 +203,43 @@ in
             chown $USER ${settingsFile}
           '';
         ExecStart = "${getExe cfg.package} --config ${settingsFile}";
+=======
+      path = [ pkgs.replace-secret ];
+
+      serviceConfig = {
+        ExecStartPre =
+          let
+            findSecrets =
+              data:
+              if isAttrs data then
+                if data ? _secret then
+                  [ data ]
+                else
+                  concatLists (map (attr: findSecrets (getAttr attr data)) (attrNames data))
+              else if isList data then
+                concatLists (map findSecrets data)
+              else
+                [ ];
+            secretPaths = catAttrs "_secret" (findSecrets cfg.settings);
+            mkSecretReplacement = secretPath: ''
+              replace-secret ${
+                lib.escapeShellArgs [
+                  "_secret: ${secretPath}"
+                  secretPath
+                  mergedSettingsFile
+                ]
+              }
+            '';
+            secretReplacements = concatMapStrings mkSecretReplacement secretPaths;
+          in
+          # Use "+" to run as root because the secrets may not be accessible to glance
+          "+"
+          + pkgs.writeShellScript "glance-start-pre" ''
+            install -m 600 -o $USER ${settingsFile} ${mergedSettingsFile}
+            ${secretReplacements}
+          '';
+        ExecStart = "${getExe cfg.package} --config ${mergedSettingsFile}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         Restart = "on-failure";
         WorkingDirectory = "/var/lib/glance";
         EnvironmentFile = cfg.environmentFile;
@@ -210,7 +270,11 @@ in
   };
 
   meta.doc = ./glance.md;
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [
     gepbird
   ];
+=======
+  meta.maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

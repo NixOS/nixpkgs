@@ -21,6 +21,10 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "kubectl plugin to list allocations (cpu, memory, gpu,... X utilization, requested, limit, allocatable,...)";

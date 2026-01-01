@@ -26,10 +26,17 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple header-only C++ argument parser library";
     homepage = "https://github.com/Taywee/args";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple header-only C++ argument parser library";
+    homepage = "https://github.com/Taywee/args";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Store OpenPGP or GnuPG on paper";
     mainProgram = "paperkey";
     longDescription = ''
@@ -32,9 +36,15 @@ stdenv.mkDerivation rec {
       are generally used to back up computer data.
     '';
     homepage = "https://www.jabberwocky.com/software/paperkey/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       peterhoeg
     ];
   };

@@ -128,6 +128,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mapnik.org";
     changelog = "https://github.com/mapnik/mapnik/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      hrdinka
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hummeltech
     ];
     teams = [ lib.teams.geospatial ];

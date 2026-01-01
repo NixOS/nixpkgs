@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/bin";
   createFindlibDestdir = true;
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     license = lib.licenses.boost;
     inherit (ocaml.meta) platforms;
     description = "Natively-compiled OCaml scripts";
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    license = licenses.boost;
+    inherit (ocaml.meta) platforms;
+    description = "Natively-compiled OCaml scripts";
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ocamlscript";
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };

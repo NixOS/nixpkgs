@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://fuse-emulator.sourceforge.net/";
     description = "ZX Spectrum emulator";
@@ -54,5 +55,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://fuse-emulator.sourceforge.net/";
+    description = "ZX Spectrum emulator";
+    mainProgram = "fuse";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

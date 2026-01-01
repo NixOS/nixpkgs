@@ -27,11 +27,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clintermission" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Non-fullscreen command-line selection menu";
     homepage = "https://github.com/sebageek/clintermission";
     changelog = "https://github.com/sebageek/clintermission/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Non-fullscreen command-line selection menu";
+    homepage = "https://github.com/sebageek/clintermission";
+    changelog = "https://github.com/sebageek/clintermission/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -68,7 +68,11 @@ stdenv.mkDerivation {
     $out/bin/ecppack $out/share/trellis/misc/basecfgs/empty_lfe5u-85f.config /tmp/test.bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Documentation and bitstream tools for Lattice ECP5 FPGAs";
     longDescription = ''
       Project Trellis documents the Lattice ECP5 architecture
@@ -77,12 +81,21 @@ stdenv.mkDerivation {
       open Verilog to bitstream toolchain for these devices.
     '';
     homepage = "https://github.com/YosysHQ/prjtrellis";
+<<<<<<< HEAD
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.isc;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       q3k
       thoughtpolice
       rowanG077
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

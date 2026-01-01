@@ -17,12 +17,21 @@ buildGoModule rec {
 
   vendorHash = "sha256-w7I8PDQQeICDPln2Naf6whOg9qqOniTH/xs1/9luIVc=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/timewarrior-synchronize/timew-sync-server";
     description = "Server component of timewarrior synchronization application";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.joachimschmidt557 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/timewarrior-synchronize/timew-sync-server";
+    description = "Server component of timewarrior synchronization application";
+    license = licenses.mit;
+    maintainers = [ maintainers.joachimschmidt557 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "timew-sync-server";
   };
 }

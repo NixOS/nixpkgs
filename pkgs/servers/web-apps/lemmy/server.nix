@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
+<<<<<<< HEAD
   env = {
     # Using OPENSSL_NO_VENDOR is not an option on darwin
     # As of version 0.10.35 rust-openssl looks for openssl on darwin
@@ -50,6 +51,17 @@ rustPlatform.buildRustPackage rec {
     PROTOC = "${protobuf}/bin/protoc";
     PROTOC_INCLUDE = "${protobuf}/include";
   };
+=======
+  # Using OPENSSL_NO_VENDOR is not an option on darwin
+  # As of version 0.10.35 rust-openssl looks for openssl on darwin
+  # with a hardcoded path to /usr/lib/libssl.x.x.x.dylib
+  # https://github.com/sfackler/rust-openssl/blob/master/openssl-sys/build/find_normal.rs#L115
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+  OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
+
+  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC_INCLUDE = "${protobuf}/include";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     protobuf
     rustfmt
@@ -67,11 +79,19 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-server = nixosTests.lemmy;
 
+<<<<<<< HEAD
   meta = {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "🐀 Building a federated alternative to reddit in rust";
+    homepage = "https://join-lemmy.org/";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       happysalada
       billewanick
       georgyo

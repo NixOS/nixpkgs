@@ -87,7 +87,11 @@ makeScopeWithSplicing' {
       };
       qcoro = callPackage ../development/libraries/qcoro { };
       qcustomplot = callPackage ../development/libraries/qcustomplot { };
+<<<<<<< HEAD
       qgpgme = callPackage ../development/libraries/qgpgme { };
+=======
+      qgpgme = callPackage ../development/libraries/gpgme { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       qhotkey = callPackage ../development/libraries/qhotkey { };
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
@@ -138,7 +142,10 @@ makeScopeWithSplicing' {
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
 
+<<<<<<< HEAD
       sddm-unwrapped = kdePackages.callPackage ../applications/display-managers/sddm/unwrapped.nix { };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
 
       sierra-breeze-enhanced =

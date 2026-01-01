@@ -30,12 +30,21 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft EMF to SVG conversion library";
     mainProgram = "emf2svg-conv";
     homepage = "https://github.com/kakwa/libemf2svg";
     maintainers = with lib.maintainers; [ erdnaxe ];
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Microsoft EMF to SVG conversion library";
+    mainProgram = "emf2svg-conv";
+    homepage = "https://github.com/kakwa/libemf2svg";
+    maintainers = with maintainers; [ erdnaxe ];
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

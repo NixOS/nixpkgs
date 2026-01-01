@@ -31,6 +31,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Tool for API and OWASP attack simulation";
     homepage = "https://github.com/wallarm/gotestwaf";

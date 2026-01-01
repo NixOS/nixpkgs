@@ -15,14 +15,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
+<<<<<<< HEAD
   version = "3.8.0";
+=======
+  version = "3.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "pmbootstrap";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-PbaWqtBcAXnVmB2a2DflQhayvuT3qNBCHaXuDfdrtrY=";
+=======
+    hash = "sha256-sO042kmozpGbiojkivs4xbYDgVV4nVbiWkfxnbJFOJg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     domain = "gitlab.postmarketos.org";
   };
 
@@ -62,6 +70,11 @@ python3Packages.buildPythonApplication rec {
     "test_valid_chroots"
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeWrapperArgs = [
     "--prefix PATH : ${
       lib.makeBinPath [
@@ -82,7 +95,10 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       onny
       lucasew
+<<<<<<< HEAD
       ungeskriptet
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "pmbootstrap";
   };

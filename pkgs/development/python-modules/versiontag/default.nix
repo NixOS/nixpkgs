@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "versiontag" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library designed to make accessing the current version number of your software easy";
     homepage = "https://github.com/thelabnyc/python-versiontag";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ MaskedBelgian ];
+=======
+  meta = with lib; {
+    description = "Python library designed to make accessing the current version number of your software easy";
+    homepage = "https://github.com/thelabnyc/python-versiontag";
+    license = licenses.isc;
+    maintainers = with maintainers; [ MaskedBelgian ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

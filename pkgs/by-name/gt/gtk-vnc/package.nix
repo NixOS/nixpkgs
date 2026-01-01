@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GTK VNC widget";
     homepage = "https://gitlab.gnome.org/GNOME/gtk-vnc";
@@ -92,6 +93,17 @@ stdenv.mkDerivation (finalAttrs: {
       offline
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "GTK VNC widget";
+    homepage = "https://gitlab.gnome.org/GNOME/gtk-vnc";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [
+      raskin
+      offline
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gvnccapture";
   };
 })

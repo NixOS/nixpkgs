@@ -33,11 +33,19 @@ stdenv.mkDerivation {
     camlp-streams
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://pauillac.inria.fr/~ddr/ledit/";
     description = "Line editor, allowing to use shell commands with control characters like in emacs";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.delta ];
+=======
+  meta = with lib; {
+    homepage = "http://pauillac.inria.fr/~ddr/ledit/";
+    description = "Line editor, allowing to use shell commands with control characters like in emacs";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.delta ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ledit";
   };
 }

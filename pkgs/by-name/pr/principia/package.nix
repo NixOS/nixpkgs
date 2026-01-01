@@ -57,7 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://principia-web.se/wiki/Changelog#${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
@@ -65,8 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "principia";
     homepage = "https://principia-web.se/";
     downloadPage = "https://principia-web.se/download";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.fgaz ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.bsd3;
+    maintainers = [ maintainers.fgaz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

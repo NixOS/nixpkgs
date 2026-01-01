@@ -44,12 +44,21 @@ mkCoqDerivation {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Extended “Standard Library” for Coq";
     license = lib.licenses.bsd3;
     maintainers = [
       lib.maintainers.vbgl
       lib.maintainers.ineol
+=======
+  meta = with lib; {
+    description = "Extended “Standard Library” for Coq";
+    license = licenses.bsd3;
+    maintainers = [
+      maintainers.vbgl
+      maintainers.ineol
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

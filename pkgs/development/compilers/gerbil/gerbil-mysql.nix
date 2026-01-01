@@ -25,12 +25,21 @@
     sha256 = "01506r0ivgp6cxvwracmg7pwr735ngb7899ga3lxy181lzkp6b2c";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "MySQL bindings for Gerbil";
     homepage = "https://github.com/mighty-gerbils/gerbil-mysql";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "MySQL bindings for Gerbil";
+    homepage = "https://github.com/mighty-gerbils/gerbil-mysql";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # "-L${mariadb-connector-c}/lib/mariadb"

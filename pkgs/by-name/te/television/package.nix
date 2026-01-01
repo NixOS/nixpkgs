@@ -5,7 +5,10 @@
   fetchFromGitHub,
   callPackage,
   installShellFiles,
+<<<<<<< HEAD
   writableTmpDirAsHomeHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
   testers,
   targetPackages,
@@ -20,21 +23,35 @@ let
   television = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "television";
 
+<<<<<<< HEAD
     version = "0.14.3";
+=======
+    version = "0.13.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = fetchFromGitHub {
       owner = "alexpasmantier";
       repo = "television";
       tag = finalAttrs.version;
+<<<<<<< HEAD
       hash = "sha256-z+ztj21JJaMuqTaN44JVAyAzSmOzUgjo9t23lTnehyI=";
     };
 
     cargoHash = "sha256-TAj6QgQK/ZOcUMeIePD2tzBKav4BJSeOjaSSaO5eD6o=";
+=======
+      hash = "sha256-zAaTVKSE0OBcrpg/XKXC8aY3NXawe9RbC4i6pPJK1Nw=";
+    };
+
+    cargoHash = "sha256-ZUaaVVGZzxVDPltZ4B5UHQFU7lyuzRzoQ/2upwS7njQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     strictDeps = true;
     nativeBuildInputs = [
       installShellFiles
+<<<<<<< HEAD
       writableTmpDirAsHomeHook
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
@@ -44,6 +61,7 @@ let
     postInstall = ''
       installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1
 
+<<<<<<< HEAD
       # These are actually shell integrations with keybindings
       install -Dm644 television/utils/shell/completion.* -t $out/share/television/
     ''
@@ -53,6 +71,13 @@ let
         --fish <($out/bin/tv init fish) \
         --zsh <($out/bin/tv init zsh) \
         --nushell <($out/bin/tv init nu)
+=======
+      installShellCompletion --cmd tv \
+        television/utils/shell/completion.bash \
+        television/utils/shell/completion.fish \
+        television/utils/shell/completion.nu \
+        television/utils/shell/completion.zsh
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '';
 
     passthru = {

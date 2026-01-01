@@ -50,11 +50,19 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/opt" "$pythonPath"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Desktop App for managing SumoRobots";
     mainProgram = "sumorobot-manager";
     homepage = "https://www.robokoding.com/kits/sumorobot/sumomanager/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Desktop App for managing SumoRobots";
+    mainProgram = "sumorobot-manager";
+    homepage = "https://www.robokoding.com/kits/sumorobot/sumomanager/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

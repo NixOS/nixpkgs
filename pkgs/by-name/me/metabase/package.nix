@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Business Intelligence and Embedded Analytics tool";
     homepage = "https://metabase.com";
@@ -36,6 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Business Intelligence and Embedded Analytics tool";
+    homepage = "https://metabase.com";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.agpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       mmahut
     ];

@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meteoclimatic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper around the Meteoclimatic service";
     homepage = "https://github.com/adrianmo/pymeteoclimatic";
     changelog = "https://github.com/adrianmo/pymeteoclimatic/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper around the Meteoclimatic service";
+    homepage = "https://github.com/adrianmo/pymeteoclimatic";
+    changelog = "https://github.com/adrianmo/pymeteoclimatic/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

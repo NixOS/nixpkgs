@@ -33,11 +33,19 @@ rustPlatform.buildRustPackage rec {
     installManPage $releaseDir/../man/*
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tmux session manager";
     homepage = "https://github.com/edeneast/tuxmux";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ edeneast ];
+=======
+  meta = with lib; {
+    description = "Tmux session manager";
+    homepage = "https://github.com/edeneast/tuxmux";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ edeneast ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tux";
   };
 }

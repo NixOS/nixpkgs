@@ -52,11 +52,20 @@ stdenv.mkDerivation rec {
     cp -r stochas_artefacts/Release/VST3/Stochas.vst3 $out/lib/vst3
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Probabilistic polyrhythmic sequencer plugin";
     homepage = "https://stochas.org/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Probabilistic polyrhythmic sequencer plugin";
+    homepage = "https://stochas.org/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

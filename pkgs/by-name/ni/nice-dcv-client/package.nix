@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     ln -s ${lib.getLib libffi}/lib/libffi.so $out/lib64/libffi.so.6
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "High-performance remote display protocol";
     homepage = "https://aws.amazon.com/hpc/dcv/";
@@ -86,5 +87,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rmcgibbo ];
+=======
+  meta = with lib; {
+    description = "High-performance remote display protocol";
+    homepage = "https://aws.amazon.com/hpc/dcv/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ rmcgibbo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

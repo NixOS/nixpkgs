@@ -3,7 +3,10 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+<<<<<<< HEAD
   gitMinimal,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitLab,
   glfw,
   glm,
@@ -37,8 +40,13 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
+<<<<<<< HEAD
       rev = "49623d0c4e1af3c680845191948d10f6d3e92f8a";
       hash = "sha256-jmPPyOHNP8Lrk5BKMhWW6KzizLF4dJB3txqOi2zBW40=";
+=======
+      rev = "4033cfcc1dd45b3cdf7285afd93556f2cfbe9425";
+      hash = "sha256-E1jfbHldIQOwonHvMn0feQiLI9zq3zB8Q9a0ufw1HuY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -87,7 +95,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
+<<<<<<< HEAD
   version = "3.4.0";
+=======
+  version = "3.3.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -95,16 +107,24 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-mW1AZKRo5rC3q7VARNI3HNKYGXxnAX6R1AfmY8J1D/Q=";
+=======
+    hash = "sha256-qetgQDgXtaDAuAo/PakZJEsevnvZFJB5EYXPMWeaEqo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     cmake
     # git is needed to apply patches to ccd-src and qhull-src (see below)
     gitMinimal
   ];
+=======
+  nativeBuildInputs = [ cmake ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = [
     glm
@@ -125,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p build/_deps
     ln -s ${pin.abseil-cpp} build/_deps/abseil-cpp-src
     ln -s ${pin.benchmark} build/_deps/benchmark-src
+<<<<<<< HEAD
   ''
   # cccd is patched by mujoco's cmake and thus needs to be writable
   # https://github.com/google-deepmind/mujoco/blob/3.4.0/cmake/MujocoDependencies.cmake#L232-L235
@@ -144,6 +165,13 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R +w build/_deps/qhull-src
   ''
   + ''
+=======
+    ln -s ${pin.ccd} build/_deps/ccd-src
+    ln -s ${pin.eigen3} build/_deps/eigen3-src
+    ln -s ${pin.googletest} build/_deps/googletest-src
+    ln -s ${pin.lodepng} build/_deps/lodepng-src
+    ln -s ${pin.qhull} build/_deps/qhull-src
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src
     ln -s ${pin.tinyxml2} build/_deps/tinyxml2-src
   ''

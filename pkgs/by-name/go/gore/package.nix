@@ -19,11 +19,20 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Yet another Go REPL that works nicely";
     mainProgram = "gore";
     homepage = "https://github.com/motemen/gore";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ offline ];
+=======
+  meta = with lib; {
+    description = "Yet another Go REPL that works nicely";
+    mainProgram = "gore";
+    homepage = "https://github.com/motemen/gore";
+    license = licenses.mit;
+    maintainers = with maintainers; [ offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

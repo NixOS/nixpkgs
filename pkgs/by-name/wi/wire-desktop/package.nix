@@ -44,7 +44,11 @@ let
     }
     .${system} or throwSystem;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Modern, secure messenger for everyone";
     longDescription = ''
       Wire Personal is a secure, privacy-friendly messenger. It combines useful
@@ -59,6 +63,7 @@ let
     '';
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -66,6 +71,15 @@ let
       toonn
     ];
     platforms = lib.platforms.darwin ++ [
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      arianvp
+      toonn
+    ];
+    platforms = platforms.darwin ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "x86_64-linux"
     ];
     hydraPlatforms = [ ];

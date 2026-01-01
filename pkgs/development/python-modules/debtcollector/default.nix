@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debtcollector" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of Python deprecation patterns and strategies that help you collect your technical debt in a non-destructive manner";
     homepage = "https://github.com/openstack/debtcollector";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Collection of Python deprecation patterns and strategies that help you collect your technical debt in a non-destructive manner";
+    homepage = "https://github.com/openstack/debtcollector";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

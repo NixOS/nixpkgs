@@ -34,10 +34,18 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/cucumber/tag-expressions";
     description = "Provides tag-expression parser for cucumber/behave";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxxk ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/cucumber/tag-expressions";
+    description = "Provides tag-expression parser for cucumber/behave";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maxxk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

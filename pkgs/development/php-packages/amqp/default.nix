@@ -23,11 +23,20 @@ buildPecl {
 
   AMQP_DIR = rabbitmq-c;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/php-amqp/php-amqp/releases/tag/v${version}";
     description = "PHP extension to communicate with any AMQP compliant server";
     license = lib.licenses.php301;
     homepage = "https://github.com/php-amqp/php-amqp";
     teams = [ lib.teams.php ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/php-amqp/php-amqp/releases/tag/v${version}";
+    description = "PHP extension to communicate with any AMQP compliant server";
+    license = licenses.php301;
+    homepage = "https://github.com/php-amqp/php-amqp";
+    teams = [ teams.php ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

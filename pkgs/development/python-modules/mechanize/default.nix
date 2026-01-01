@@ -49,11 +49,19 @@ buildPythonPackage rec {
     "test_password_manager"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stateful programmatic web browsing in Python";
     homepage = "https://github.com/python-mechanize/mechanize";
     changelog = "https://github.com/python-mechanize/mechanize/blob/v${version}/ChangeLog";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Stateful programmatic web browsing in Python";
+    homepage = "https://github.com/python-mechanize/mechanize";
+    changelog = "https://github.com/python-mechanize/mechanize/blob/v${version}/ChangeLog";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

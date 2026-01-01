@@ -68,11 +68,19 @@ buildPythonPackage rec {
     rm -v $out/share/doc/pysvn-${version}/generate_cpp_docs_from_html_docs.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for Subversion";
     homepage = "https://pysvn.sourceforge.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python bindings for Subversion";
+    homepage = "https://pysvn.sourceforge.io/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # g++: command not found
     broken = stdenv.hostPlatform.isDarwin;
   };

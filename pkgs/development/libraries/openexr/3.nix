@@ -85,11 +85,20 @@ stdenv.mkDerivation rec {
     musl = pkgsCross.musl64.openexr;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ paperdigits ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "High dynamic-range (HDR) image file format";
+    homepage = "https://www.openexr.com";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ paperdigits ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

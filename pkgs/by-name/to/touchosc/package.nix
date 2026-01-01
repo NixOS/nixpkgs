@@ -101,11 +101,19 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://hexler.net/touchosc";
     description = "Next generation modular control surface";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    homepage = "https://hexler.net/touchosc";
+    description = "Next generation modular control surface";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [
       "aarch64-linux"

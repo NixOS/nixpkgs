@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C/C++ VOMS server, client and APIs v2.x";
     homepage = "https://italiangrid.github.io/voms/";
@@ -93,5 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
       ShamrockLee
       veprbl
     ];
+=======
+  meta = with lib; {
+    description = "C/C++ VOMS server, client and APIs v2.x";
+    homepage = "https://italiangrid.github.io/voms/";
+    changelog = "https://github.com/italiangrid/voms/blob/master/ChangeLog";
+    license = licenses.asl20;
+    platforms = platforms.linux; # gsoap is currently Linux-only in Nixpkgs
+    maintainers = with maintainers; [ ShamrockLee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

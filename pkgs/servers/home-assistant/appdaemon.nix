@@ -47,12 +47,21 @@ python3Packages.buildPythonApplication rec {
     $out/bin/appdaemon -v | grep -q "${version}"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
     mainProgram = "appdaemon";
     homepage = "https://github.com/AppDaemon/appdaemon";
     changelog = "https://github.com/AppDaemon/appdaemon/blob/${version}/docs/HISTORY.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     teams = [ lib.teams.home-assistant ];
+=======
+    license = licenses.mit;
+    teams = [ teams.home-assistant ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

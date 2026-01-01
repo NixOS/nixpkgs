@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_autobuild" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rebuild Sphinx documentation on changes, with live-reload in the browser";
     mainProgram = "sphinx-autobuild";
     homepage = "https://github.com/sphinx-doc/sphinx-autobuild";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ holgerpeters ];
+=======
+  meta = with lib; {
+    description = "Rebuild Sphinx documentation on changes, with live-reload in the browser";
+    mainProgram = "sphinx-autobuild";
+    homepage = "https://github.com/sphinx-doc/sphinx-autobuild";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ holgerpeters ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frontmatter" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/eyeseast/python-frontmatter";
     description = "Parse and manage posts with YAML (or other) frontmatter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/eyeseast/python-frontmatter";
+    description = "Parse and manage posts with YAML (or other) frontmatter";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

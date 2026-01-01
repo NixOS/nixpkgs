@@ -44,11 +44,20 @@ buildPythonPackage {
     "uasiren.client"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/PaulAnnekov/uasiren/releases/tag/v${version}";
     description = "Implements siren.pp.ua API - public wrapper for api.ukrainealarm.com API that returns info about Ukraine air-raid alarms";
     homepage = "https://github.com/PaulAnnekov/uasiren";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/PaulAnnekov/uasiren/releases/tag/v${version}";
+    description = "Implements siren.pp.ua API - public wrapper for api.ukrainealarm.com API that returns info about Ukraine air-raid alarms";
+    homepage = "https://github.com/PaulAnnekov/uasiren";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

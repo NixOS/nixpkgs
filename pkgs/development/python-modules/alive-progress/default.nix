@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "alive_progress" ];
 
+<<<<<<< HEAD
   meta = {
     description = "New kind of Progress Bar, with real-time throughput, ETA, and very cool animations";
     homepage = "https://github.com/rsalmei/alive-progress";
     changelog = "https://github.com/rsalmei/alive-progress/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thiagokokada ];
+=======
+  meta = with lib; {
+    description = "New kind of Progress Bar, with real-time throughput, ETA, and very cool animations";
+    homepage = "https://github.com/rsalmei/alive-progress";
+    changelog = "https://github.com/rsalmei/alive-progress/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ thiagokokada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

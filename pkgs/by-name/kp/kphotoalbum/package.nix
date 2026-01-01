@@ -47,11 +47,19 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Efficient image organization and indexing";
     homepage = "https://www.kphotoalbum.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Efficient image organization and indexing";
+    homepage = "https://www.kphotoalbum.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (kdePackages.kconfig.meta) platforms;
   };
 })

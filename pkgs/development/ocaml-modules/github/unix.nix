@@ -1,6 +1,9 @@
 {
   buildDunePackage,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   github,
   cohttp,
   cohttp-lwt-unix,
@@ -13,6 +16,7 @@ buildDunePackage {
   pname = "github-unix";
   inherit (github) version src;
 
+<<<<<<< HEAD
   patches = [
     # Compatibility with yojson 3.0
     (fetchpatch {
@@ -21,6 +25,8 @@ buildDunePackage {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     substituteInPlace unix/dune --replace 'github bytes' 'github'
   '';

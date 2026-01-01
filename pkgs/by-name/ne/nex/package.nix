@@ -28,11 +28,20 @@ buildGoModule {
   # Checks failed on master before, but buildGoPackage had checks disabled.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Lexer for Go";
     mainProgram = "nex";
     homepage = "https://github.com/blynn/nex";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ urandom ];
+=======
+  meta = with lib; {
+    description = "Lexer for Go";
+    mainProgram = "nex";
+    homepage = "https://github.com/blynn/nex";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ urandom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

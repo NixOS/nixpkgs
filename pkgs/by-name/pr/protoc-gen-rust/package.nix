@@ -24,11 +24,20 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ protobuf ];
 
+<<<<<<< HEAD
   meta = {
     description = "Protobuf plugin for generating Rust code";
     mainProgram = "protoc-gen-rust";
     homepage = "https://github.com/stepancheg/rust-protobuf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lucperkins ];
+=======
+  meta = with lib; {
+    description = "Protobuf plugin for generating Rust code";
+    mainProgram = "protoc-gen-rust";
+    homepage = "https://github.com/stepancheg/rust-protobuf";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lucperkins ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_error_for_skips" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to treat skipped tests a test failures";
     homepage = "https://github.com/jankatins/pytest-error-for-skips";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin to treat skipped tests a test failures";
+    homepage = "https://github.com/jankatins/pytest-error-for-skips";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

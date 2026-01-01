@@ -19,10 +19,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy_legacy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Legacy registered functions for spaCy backwards compatibility";
     homepage = "https://github.com/explosion/spacy-legacy";
     changelog = "https://github.com/explosion/spacy-legacy/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Legacy registered functions for spaCy backwards compatibility";
+    homepage = "https://github.com/explosion/spacy-legacy";
+    changelog = "https://github.com/explosion/spacy-legacy/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ melling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

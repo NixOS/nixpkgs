@@ -61,10 +61,17 @@ buildPythonPackage rec {
   # It's surfaced as a Cairo "out of memory" error in tests.
   __impureHostDeps = [ "/System/Library/Fonts" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";
     homepage = "https://github.com/SimonSapin/cairocffi";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";
+    homepage = "https://github.com/SimonSapin/cairocffi";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     description = "cffi-based cairo bindings for Python";
   };

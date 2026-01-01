@@ -31,11 +31,19 @@ buildGoModule rec {
       --zsh <($out/bin/hof completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/hofstadter-io/hof";
     description = "Framework that joins data models, schemas, code generation, and a task engine. Language and technology agnostic";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jfvillablanca ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/hofstadter-io/hof";
+    description = "Framework that joins data models, schemas, code generation, and a task engine. Language and technology agnostic";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jfvillablanca ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hof";
     # Broken on darwin for Go toolchain > 1.22, with error:
     # 'panic: open /etc/protocols: operation not permitted'

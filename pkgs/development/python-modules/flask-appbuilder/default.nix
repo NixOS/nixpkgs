@@ -76,11 +76,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_appbuilder" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     changelog = "https://github.com/dpgaspar/Flask-AppBuilder/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Application development framework, built on top of Flask";
+    homepage = "https://github.com/dpgaspar/flask-appbuilder/";
+    changelog = "https://github.com/dpgaspar/Flask-AppBuilder/blob/v${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     # Support for flask-sqlalchemy >= 3.0 is missing, https://github.com/dpgaspar/Flask-AppBuilder/pull/1940
     broken = true;

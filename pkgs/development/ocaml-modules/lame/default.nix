@@ -24,10 +24,18 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ lame ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savonet/ocaml-lame";
     description = "Bindings for the lame library which provides functions for encoding mp3 files";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savonet/ocaml-lame";
+    description = "Bindings for the lame library which provides functions for encoding mp3 files";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

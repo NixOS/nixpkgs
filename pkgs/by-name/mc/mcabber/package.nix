@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://mcabber.com/";
     description = "Small Jabber console client";
@@ -56,6 +57,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    homepage = "http://mcabber.com/";
+    description = "Small Jabber console client";
+    mainProgram = "mcabber";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "http://mcabber.com/files/";
   };
 }

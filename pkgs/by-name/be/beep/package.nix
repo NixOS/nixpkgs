@@ -23,11 +23,19 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced PC speaker beeper";
     homepage = "https://github.com/spkr-beep/beep";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Advanced PC speaker beeper";
+    homepage = "https://github.com/spkr-beep/beep";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "beep";
   };
 }

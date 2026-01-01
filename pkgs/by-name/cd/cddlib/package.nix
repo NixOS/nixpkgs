@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
   # No actual checks yet (2018-05-05), but maybe one day.
   # Requested here: https://github.com/cddlib/cddlib/issues/25
   doCheck = true;
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the Double Description Method for generating all vertices of a convex polyhedron";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Implementation of the Double Description Method for generating all vertices of a convex polyhedron";
+    license = licenses.gpl2Plus;
+    teams = [ teams.sage ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html";
   };
 }

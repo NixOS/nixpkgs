@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     ./test.bash
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Finds problems in C++ source that slow development of large code bases";
     mainProgram = "cppclean";
@@ -35,5 +36,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nthorne ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Finds problems in C++ source that slow development of large code bases";
+    mainProgram = "cppclean";
+    homepage = "https://github.com/myint/cppclean";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nthorne ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

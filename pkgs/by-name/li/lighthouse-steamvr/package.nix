@@ -23,11 +23,19 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ dbus ];
 
+<<<<<<< HEAD
   meta = {
     description = "VR Lighthouse power state management";
     homepage = "https://github.com/ShayBox/Lighthouse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bddvlpr ];
+=======
+  meta = with lib; {
+    description = "VR Lighthouse power state management";
+    homepage = "https://github.com/ShayBox/Lighthouse";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bddvlpr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lighthouse";
   };
 }

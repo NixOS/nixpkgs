@@ -52,11 +52,20 @@ stdenv.mkDerivation {
     moveToOutput lib "$lib"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Set of cuda-enabled texture tools and compressors";
     homepage = "https://github.com/castano/nvidia-texture-tools";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Set of cuda-enabled texture tools and compressors";
+    homepage = "https://github.com/castano/nvidia-texture-tools";
+    license = licenses.mit;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

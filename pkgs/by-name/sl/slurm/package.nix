@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   runCommand,
   config,
   pkg-config,
@@ -36,13 +39,20 @@
   enableX11 ? true,
   enableNVML ? config.cudaSupport,
   cudaPackages,
+<<<<<<< HEAD
   symlinkJoin,
   s2n-tls,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
+<<<<<<< HEAD
   version = "25.11.1.1";
+=======
+  version = "25.05.3.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -51,7 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Hv0rqogwZH5GafwlELghAbKLwurd8x30u9DJZylBQP0=";
+=======
+    hash = "sha256-W/q9eN4Ov3pxp2qyr3b7G4ayDaNtFUPQeAcOHCB23Q8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -59,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+<<<<<<< HEAD
   patches = [
     # upstream patch; remove with next upgrade.
     (fetchpatch {
@@ -68,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   prePatch = ''
     substituteInPlace src/common/env.c \
         --replace "/bin/echo" "${lib.getExe' coreutils "echo"}"
@@ -117,7 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libbpf
     http-parser
+<<<<<<< HEAD
     s2n-tls
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals enableX11 [ xauth ]
   ++ lib.optionals enableNVML [
@@ -141,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc/slurm"
     "--with-pmix=${lib.getDev pmix}"
     "--with-bpf=${libbpf}"
+<<<<<<< HEAD
     "--with-s2n=${
       symlinkJoin {
         name = s2n-tls.name;
@@ -150,6 +171,8 @@ stdenv.mkDerivation (finalAttrs: {
         ];
       }
     }"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "--without-rpath" # Required for configure to pick up the right dlopen path
   ]
   ++ (lib.optional (!enableX11) "--disable-x11")
@@ -174,6 +197,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      jagajaga
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       markuskowa
     ];
   };

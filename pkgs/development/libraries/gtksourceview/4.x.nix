@@ -126,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Source code editing widget for GTK";
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
@@ -133,5 +134,14 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "Source code editing widget for GTK";
+    homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
+    pkgConfigModules = [ "gtksourceview-4" ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21Plus;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

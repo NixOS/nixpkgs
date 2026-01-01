@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     libGL
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for scientific data visualization";
     homepage = "https://mathgl.sourceforge.net/";
@@ -35,6 +36,17 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.GabrielDougherty ];
+=======
+  meta = with lib; {
+    description = "Library for scientific data visualization";
+    homepage = "https://mathgl.sourceforge.net/";
+    license = with licenses; [
+      gpl3
+      lgpl3
+    ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.GabrielDougherty ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # build tool make_bin is built for host
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };

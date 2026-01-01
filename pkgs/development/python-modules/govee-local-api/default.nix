@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "govee-local-api";
+<<<<<<< HEAD
   version = "2.3.0";
+=======
+  version = "2.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "Galorhallen";
     repo = "govee-local-api";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-kAzV9zchgxB2CmdWOa1vRuhRDSE0qTon9sVvmo9AeB0=";
+=======
+    hash = "sha256-DjerH/51ta0Q3by47+Xo0Fp3nk4igum00mSZeoswYxM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -33,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "govee_local_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to communicate with Govee local API";
     homepage = "https://github.com/Galorhallen/govee-local-api";
     changelog = "https://github.com/Galorhallen/govee-local-api/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to communicate with Govee local API";
+    homepage = "https://github.com/Galorhallen/govee-local-api";
+    changelog = "https://github.com/Galorhallen/govee-local-api/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

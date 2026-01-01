@@ -55,11 +55,20 @@ buildGoModule rec {
     version = "twitch-cli/${version}";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Official Twitch CLI to make developing on Twitch easier";
     mainProgram = "twitch-cli";
     homepage = "https://github.com/twitchdev/twitch-cli";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ benediktbroich ];
+=======
+  meta = with lib; {
+    description = "Official Twitch CLI to make developing on Twitch easier";
+    mainProgram = "twitch-cli";
+    homepage = "https://github.com/twitchdev/twitch-cli";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ benediktbroich ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

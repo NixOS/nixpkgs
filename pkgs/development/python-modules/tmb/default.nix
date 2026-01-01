@@ -29,10 +29,18 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python library that interacts with TMB API";
     homepage = "https://github.com/alemuro/tmb";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library that interacts with TMB API";
+    homepage = "https://github.com/alemuro/tmb";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

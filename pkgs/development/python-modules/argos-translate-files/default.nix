@@ -40,10 +40,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argostranslatefiles" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Translate files using Argos Translate";
     homepage = "https://www.argosopentech.com";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ misuzu ];
+=======
+  meta = with lib; {
+    description = "Translate files using Argos Translate";
+    homepage = "https://www.argosopentech.com";
+    license = licenses.mit;
+    maintainers = with maintainers; [ misuzu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

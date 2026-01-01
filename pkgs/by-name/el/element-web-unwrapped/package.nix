@@ -11,7 +11,11 @@
 
 let
   pinData = import ./element-web-pin.nix;
+<<<<<<< HEAD
   inherit (pinData.hashes) webSrcHash webYarnHash webSharedComponentsYarnHash;
+=======
+  inherit (pinData.hashes) webSrcHash webYarnHash;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
   };
@@ -35,6 +39,7 @@ stdenv.mkDerivation (
       hash = webSrcHash;
     };
 
+<<<<<<< HEAD
     # https://github.com/element-hq/element-web/commit/e883b05206129857aa00ca726252e10a0eb05cf9
     # introduced a link: dependency that we need to fetch as well
     offlineCacheSharedComponents = fetchYarnDeps {
@@ -42,6 +47,8 @@ stdenv.mkDerivation (
       sha256 = webSharedComponentsYarnHash;
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     offlineCache = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/yarn.lock";
       sha256 = webYarnHash;
@@ -57,12 +64,15 @@ stdenv.mkDerivation (
       runHook preBuild
 
       export VERSION=${finalAttrs.version}
+<<<<<<< HEAD
 
       pushd packages/shared-components
       yarnOfflineCache=${finalAttrs.offlineCacheSharedComponents} yarnConfigHook
       popd
       yarn --offline --cwd packages/shared-components prepare
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       yarn --offline build:res
       yarn --offline build:module_system
       yarn --offline build:bundle

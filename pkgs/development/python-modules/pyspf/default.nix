@@ -22,10 +22,18 @@ buildPythonPackage rec {
   # requires /etc/resolv.conf to exist
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://bmsi.com/python/milter.html";
     description = "Python API for Sendmail Milters (SPF)";
     maintainers = [ ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "http://bmsi.com/python/milter.html";
+    description = "Python API for Sendmail Milters (SPF)";
+    maintainers = [ ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

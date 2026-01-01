@@ -1,5 +1,6 @@
 {
   lib,
+<<<<<<< HEAD
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -7,16 +8,33 @@
 buildGoModule rec {
   pname = "vuls";
   version = "0.37.0";
+=======
+  buildGo124Module,
+  fetchFromGitHub,
+}:
+
+buildGo124Module rec {
+  pname = "vuls";
+  version = "0.36.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "future-architect";
     repo = "vuls";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-BkFFFo0+5f2OmxlleUaqsoX8gesytXGHuSwLTnTJnV0=";
     fetchSubmodules = true;
   };
 
   vendorHash = "sha256-fyuY0GbdZpBw7nbPIZqLakRwOCHQLaEeuihtkIGOzzU=";
+=======
+    hash = "sha256-z6hNC8VDsz5gzzA6VP9PFAJAE7dzrZnxHD/TlBu/uxI=";
+    fetchSubmodules = true;
+  };
+
+  vendorHash = "sha256-JO3W8VUQiypQ8AGXTtCIHTNu6PO0kJCPp7LDu+xDqOk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"

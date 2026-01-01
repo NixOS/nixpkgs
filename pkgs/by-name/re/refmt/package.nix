@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-MiYUDEF9W0VAiOX6uE8doXtGAekIrA1cfA8A2a7xd2I=";
 
+<<<<<<< HEAD
   meta = {
     description = "Reformat HCL <-> JSON <-> YAML";
     mainProgram = "refmt";
     homepage = "https://github.com/rjeczalik/refmt";
     license = lib.licenses.agpl3Only;
+=======
+  meta = with lib; {
+    description = "Reformat HCL <-> JSON <-> YAML";
+    mainProgram = "refmt";
+    homepage = "https://github.com/rjeczalik/refmt";
+    license = licenses.agpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ deemp ];
   };
 }

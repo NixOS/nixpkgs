@@ -38,11 +38,20 @@ python3.pkgs.buildPythonApplication rec {
     "awslogs"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "AWS CloudWatch logs for Humans";
     mainProgram = "awslogs";
     homepage = "https://github.com/jorgebastida/awslogs";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dbrock ];
+=======
+  meta = with lib; {
+    description = "AWS CloudWatch logs for Humans";
+    mainProgram = "awslogs";
+    homepage = "https://github.com/jorgebastida/awslogs";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dbrock ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

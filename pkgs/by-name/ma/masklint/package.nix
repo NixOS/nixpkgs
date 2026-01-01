@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+<<<<<<< HEAD
   makeWrapper,
   withShell ? true,
   shellcheck,
@@ -9,11 +10,17 @@
   ruff,
   withRuby ? true,
   rubocop,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
 }:
 
 let
+<<<<<<< HEAD
   version = "0.4.1";
+=======
+  version = "0.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 rustPlatform.buildRustPackage {
   pname = "masklint";
@@ -23,6 +30,7 @@ rustPlatform.buildRustPackage {
     owner = "brumhard";
     repo = "masklint";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-PhhSJwzLTMFmisrdmsRjxWDBkBr+NjIkENHjdkTeviM=";
   };
 
@@ -51,6 +59,12 @@ rustPlatform.buildRustPackage {
     else
       ""
   );
+=======
+    hash = "sha256-Dku2pDUCblopHtoj6viUqHVpVH5GDApp+QLjor38j7g=";
+  };
+
+  cargoHash = "sha256-TDk7hEZ628iUnKI0LMBtsSAVNF6BGukHwB8kh70eo4U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script { };
 

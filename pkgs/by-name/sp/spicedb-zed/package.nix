@@ -34,7 +34,11 @@ buildGoModule rec {
       --zsh <($out/bin/zed completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/authzed/zed/releases/tag/${src.tag}";
     description = "Command line for managing SpiceDB";
     mainProgram = "zed";
@@ -43,8 +47,13 @@ buildGoModule rec {
       Google Zanzibar. zed is the command line client for SpiceDB.
     '';
     homepage = "https://authzed.com/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       squat
       thoughtpolice
     ];

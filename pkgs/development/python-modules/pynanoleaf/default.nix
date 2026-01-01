@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynanoleaf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python3 wrapper for the Nanoleaf API, capable of controlling both Nanoleaf Aurora and Nanoleaf Canvas";
     homepage = "https://github.com/Oro/pynanoleaf";
     changelog = "https://github.com/Oro/pynanoleaf/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oro ];
+=======
+  meta = with lib; {
+    description = "Python3 wrapper for the Nanoleaf API, capable of controlling both Nanoleaf Aurora and Nanoleaf Canvas";
+    homepage = "https://github.com/Oro/pynanoleaf";
+    changelog = "https://github.com/Oro/pynanoleaf/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ oro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

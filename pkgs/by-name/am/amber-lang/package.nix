@@ -69,6 +69,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Programming language compiled to bash";
     homepage = "https://amber-lang.com";
@@ -79,5 +80,17 @@ rustPlatform.buildRustPackage rec {
       aleksana
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Programming language compiled to bash";
+    homepage = "https://amber-lang.com";
+    license = licenses.gpl3Plus;
+    mainProgram = "amber";
+    maintainers = with maintainers; [
+      cafkafk
+      aleksana
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

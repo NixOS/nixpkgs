@@ -8,12 +8,16 @@
 let
   inherit (lib)
     mkIf
+<<<<<<< HEAD
     mkDefault
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     getExe
     maintainers
     mkEnableOption
     mkOption
     mkPackageOption
+<<<<<<< HEAD
     boolToString
     escapeXML
     nameValuePair
@@ -82,6 +86,11 @@ let
         ) list
       );
     };
+=======
+    ;
+  inherit (lib.types) str path bool;
+  cfg = config.services.jellyfin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 {
   options = {
@@ -114,7 +123,11 @@ in
       configDir = mkOption {
         type = path;
         default = "${cfg.dataDir}/config";
+<<<<<<< HEAD
         defaultText = literalExpression ''"''${cfg.dataDir}/config"'';
+=======
+        defaultText = "\${cfg.dataDir}/config";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = ''
           Directory containing the server configuration files,
           passed with `--configdir` see [configuration-directory](https://jellyfin.org/docs/general/administration/configuration/#configuration-directory)
@@ -133,7 +146,11 @@ in
       logDir = mkOption {
         type = path;
         default = "${cfg.dataDir}/log";
+<<<<<<< HEAD
         defaultText = literalExpression ''"''${cfg.dataDir}/log"'';
+=======
+        defaultText = "\${cfg.dataDir}/log";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = ''
           Directory where the Jellyfin logs will be stored,
           passed with `--logdir` see [#log-directory](https://jellyfin.org/docs/general/administration/configuration/#log-directory)
@@ -149,6 +166,7 @@ in
           only be used if they are unchanged, see [Port Bindings](https://jellyfin.org/docs/general/networking/#port-bindings).
         '';
       };
+<<<<<<< HEAD
 
       hardwareAcceleration = {
         enable = mkEnableOption "hardware acceleration for video transcoding";
@@ -348,10 +366,13 @@ in
           '';
         };
       };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   config = mkIf cfg.enable {
+<<<<<<< HEAD
     assertions = [
       {
         assertion = cfg.hardwareAcceleration.enable -> cfg.hardwareAcceleration.device != null;
@@ -359,6 +380,8 @@ in
       }
     ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     systemd = {
       tmpfiles.settings.jellyfinDirs = {
         "${cfg.dataDir}"."d" = {
@@ -384,6 +407,7 @@ in
         wants = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
 
+<<<<<<< HEAD
         preStart = mkIf cfg.hardwareAcceleration.enable (
           ''
             configDir=${escapeShellArg cfg.configDir}
@@ -425,6 +449,8 @@ in
           )
         );
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         # This is mostly follows: https://github.com/jellyfin/jellyfin/blob/master/fedora/jellyfin.service
         # Upstream also disable some hardenings when running in LXC, we do the same with the isContainer option
         serviceConfig = {
@@ -442,7 +468,10 @@ in
           ];
 
           # Security options:
+<<<<<<< HEAD
           CapabilityBoundingSet = [ "" ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           NoNewPrivileges = true;
           SystemCallArchitectures = "native";
           # AF_NETLINK needed because Jellyfin monitors the network connection
@@ -455,13 +484,18 @@ in
           RestrictNamespaces = !config.boot.isContainer;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
+<<<<<<< HEAD
           ProcSubset = "pid";
           ProtectControlGroups = !config.boot.isContainer;
           ProtectClock = true;
+=======
+          ProtectControlGroups = !config.boot.isContainer;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ProtectHostname = true;
           ProtectKernelLogs = !config.boot.isContainer;
           ProtectKernelModules = !config.boot.isContainer;
           ProtectKernelTunables = !config.boot.isContainer;
+<<<<<<< HEAD
           ProtectProc = "invisible";
           ProtectSystem = true;
           LockPersonality = true;
@@ -471,12 +505,36 @@ in
           # hardware acceleration set up outside of NixOS configuration
           PrivateDevices = mkDefault false;
           DeviceAllow = mkIf cfg.hardwareAcceleration.enable [ "${cfg.hardwareAcceleration.device} rw" ];
+=======
+          LockPersonality = true;
+          PrivateTmp = !config.boot.isContainer;
+          # needed for hardware acceleration
+          PrivateDevices = false;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           PrivateUsers = true;
           RemoveIPC = true;
 
           SystemCallFilter = [
+<<<<<<< HEAD
             "@system-service"
             "~@privileged"
+=======
+            "~@clock"
+            "~@aio"
+            "~@chown"
+            "~@cpu-emulation"
+            "~@debug"
+            "~@keyring"
+            "~@memlock"
+            "~@module"
+            "~@mount"
+            "~@obsolete"
+            "~@privileged"
+            "~@raw-io"
+            "~@reboot"
+            "~@setuid"
+            "~@swap"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ];
           SystemCallErrorNumber = "EPERM";
         };

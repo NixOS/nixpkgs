@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "garminconnect_aio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to interact with Garmin Connect";
     homepage = "https://github.com/cyberjunky/python-garminconnect-aio";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to interact with Garmin Connect";
+    homepage = "https://github.com/cyberjunky/python-garminconnect-aio";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

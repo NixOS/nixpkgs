@@ -34,10 +34,18 @@ buildGoModule {
   # somehow the tests get stuck
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "CI/CD Redefined";
     homepage = "https://agola.io";
     maintainers = with lib.maintainers; [ happysalada ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "CI/CD Redefined";
+    homepage = "https://agola.io";
+    maintainers = with maintainers; [ happysalada ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

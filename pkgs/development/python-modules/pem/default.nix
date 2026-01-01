@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pem" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easy PEM file parsing in Python";
     homepage = "https://pem.readthedocs.io/";
     changelog = "https://github.com/hynek/pem/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanotech ];
+=======
+  meta = with lib; {
+    description = "Easy PEM file parsing in Python";
+    homepage = "https://pem.readthedocs.io/";
+    changelog = "https://github.com/hynek/pem/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nyanotech ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

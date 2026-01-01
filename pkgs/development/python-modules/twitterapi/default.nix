@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "TwitterAPI" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for Twitter's REST and Streaming APIs";
     homepage = "https://github.com/geduldig/TwitterAPI";
     changelog = "https://github.com/geduldig/TwitterAPI/blob/v${version}/CHANGE.log";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for Twitter's REST and Streaming APIs";
+    homepage = "https://github.com/geduldig/TwitterAPI";
+    changelog = "https://github.com/geduldig/TwitterAPI/blob/v${version}/CHANGE.log";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

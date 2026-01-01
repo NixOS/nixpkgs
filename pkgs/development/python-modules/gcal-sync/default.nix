@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gcal_sync" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for syncing Google Calendar to local storage";
     homepage = "https://github.com/allenporter/gcal_sync";
     changelog = "https://github.com/allenporter/gcal_sync/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Library for syncing Google Calendar to local storage";
+    homepage = "https://github.com/allenporter/gcal_sync";
+    changelog = "https://github.com/allenporter/gcal_sync/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

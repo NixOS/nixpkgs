@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.batch" ];
 
+<<<<<<< HEAD
   meta = {
     description = "This is the Microsoft Azure Batch Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/batch/azure-mgmt-batch";
     changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-batch_${version}/sdk/batch/azure-mgmt-batch";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
+=======
+  meta = with lib; {
+    description = "This is the Microsoft Azure Batch Management Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/batch/azure-mgmt-batch";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-batch_${version}/sdk/batch/azure-mgmt-batch";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maxwilson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

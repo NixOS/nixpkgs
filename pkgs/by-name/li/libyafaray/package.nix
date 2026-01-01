@@ -49,12 +49,21 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional withPython python3;
 
+<<<<<<< HEAD
   meta = {
     description = "Free, open source raytracer";
     downloadPage = "https://github.com/YafaRay/libYafaRay";
     homepage = "http://www.yafaray.org";
     maintainers = with lib.maintainers; [ hodapp ];
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    description = "Free, open source raytracer";
+    downloadPage = "https://github.com/YafaRay/libYafaRay";
+    homepage = "http://www.yafaray.org";
+    maintainers = with maintainers; [ hodapp ];
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

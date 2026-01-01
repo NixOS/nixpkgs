@@ -80,13 +80,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notifypy" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Cross-platform desktop notification library for Python";
     mainProgram = "notifypy";
     homepage = "https://github.com/ms7m/notify-py";
     changelog = "https://github.com/ms7m/notify-py/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       austinbutler
       dotlambda
     ];

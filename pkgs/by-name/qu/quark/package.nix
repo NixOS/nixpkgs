@@ -21,6 +21,7 @@ stdenv.mkDerivation {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extremely small and simple HTTP GET/HEAD-only web server for static content";
     mainProgram = "quark";
@@ -28,5 +29,14 @@ stdenv.mkDerivation {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Extremely small and simple HTTP GET/HEAD-only web server for static content";
+    mainProgram = "quark";
+    homepage = "http://tools.suckless.org/quark";
+    license = licenses.isc;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

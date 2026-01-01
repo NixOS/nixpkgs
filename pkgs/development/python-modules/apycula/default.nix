@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apycula" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open Source tools for Gowin FPGAs";
     homepage = "https://github.com/YosysHQ/apicula";
     changelog = "https://github.com/YosysHQ/apicula/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ newam ];
+=======
+  meta = with lib; {
+    description = "Open Source tools for Gowin FPGAs";
+    homepage = "https://github.com/YosysHQ/apicula";
+    changelog = "https://github.com/YosysHQ/apicula/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ newam ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -25,11 +25,20 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "AU_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interface to all AMD AOCL libraries to access CPU features";
     homepage = "https://github.com/amd/aocl-utils";
     license = lib.licenses.bsd3;
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.markuskowa ];
+=======
+  meta = with lib; {
+    description = "Interface to all AMD AOCL libraries to access CPU features";
+    homepage = "https://github.com/amd/aocl-utils";
+    license = licenses.bsd3;
+    platforms = [ "x86_64-linux" ];
+    maintainers = [ maintainers.markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

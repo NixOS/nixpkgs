@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Manipulating CPC dsk images and files";
     homepage = "https://github.com/cpcsdk/idsk";
@@ -44,5 +45,15 @@ stdenv.mkDerivation rec {
     mainProgram = "iDSK";
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Manipulating CPC dsk images and files";
+    homepage = "https://github.com/cpcsdk/idsk";
+    changelog = "https://github.com/cpcsdk/idsk/releases/tag/${src.rev}";
+    license = licenses.mit;
+    mainProgram = "iDSK";
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

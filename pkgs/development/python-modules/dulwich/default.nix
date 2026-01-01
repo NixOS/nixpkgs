@@ -79,7 +79,11 @@ buildPythonPackage rec {
     glibcLocales
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   enabledTestPaths = [ "tests" ];
 
@@ -105,7 +109,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dulwich" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Implementation of the Git file formats and protocols";
     longDescription = ''
       Dulwich is a Python implementation of the Git file formats and protocols, which
@@ -113,10 +121,18 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.dulwich.io/";
     changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${src.tag}/NEWS";
+<<<<<<< HEAD
     license = with lib.licenses; [
       asl20
       gpl2Plus
     ];
     maintainers = with lib.maintainers; [ koral ];
+=======
+    license = with licenses; [
+      asl20
+      gpl2Plus
+    ];
+    maintainers = with maintainers; [ koral ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -15,6 +15,7 @@ python3Packages.buildPythonApplication rec {
 
   format = "other";
 
+<<<<<<< HEAD
   meta = {
     description = "Heuristics-driven menu generator for several window managers";
     mainProgram = "mmaker";
@@ -22,5 +23,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Heuristics-driven menu generator for several window managers";
+    mainProgram = "mmaker";
+    homepage = "https://menumaker.sourceforge.net";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

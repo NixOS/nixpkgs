@@ -84,7 +84,11 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast, file-based build system";
     mainProgram = "tup";
     longDescription = ''
@@ -96,8 +100,13 @@ stdenv.mkDerivation rec {
       your project rather than on your build system.
     '';
     homepage = "https://gittup.org/tup/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

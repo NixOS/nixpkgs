@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mvp/uhubctl";
     description = "Utility to control USB power per-port on smart USB hubs";
@@ -36,6 +37,17 @@ stdenv.mkDerivation rec {
       carlossless
     ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mvp/uhubctl";
+    description = "Utility to control USB power per-port on smart USB hubs";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      prusnak
+      carlossless
+    ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "uhubctl";
   };
 }

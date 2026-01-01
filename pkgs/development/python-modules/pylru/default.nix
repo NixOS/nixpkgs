@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylru" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Least recently used (LRU) cache implementation";
     homepage = "https://github.com/jlhutch/pylru";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Least recently used (LRU) cache implementation";
+    homepage = "https://github.com/jlhutch/pylru";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

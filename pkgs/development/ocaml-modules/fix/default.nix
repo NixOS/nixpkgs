@@ -18,10 +18,18 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.03";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.inria.fr/fpottier/fix/";
     description = "Simple OCaml module for computing the least solution of a system of monotone equations";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.inria.fr/fpottier/fix/";
+    description = "Simple OCaml module for computing the least solution of a system of monotone equations";
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

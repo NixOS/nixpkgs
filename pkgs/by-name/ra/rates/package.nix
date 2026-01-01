@@ -22,6 +22,11 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "CLI tool that brings currency exchange rates right into your terminal";
     homepage = "https://github.com/lunush/rates";

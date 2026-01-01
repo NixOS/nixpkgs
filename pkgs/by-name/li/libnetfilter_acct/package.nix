@@ -18,10 +18,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.netfilter.org/projects/libnetfilter_acct/";
     description = "Userspace library providing interface to extended accounting infrastructure";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.netfilter.org/projects/libnetfilter_acct/";
+    description = "Userspace library providing interface to extended accounting infrastructure";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,11 +31,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://aajohan.deviantart.com/art/Comfortaa-font-105395949";
     description = "Clean and modern font suitable for headings and logos";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
+=======
+  meta = with lib; {
+    homepage = "http://aajohan.deviantart.com/art/Comfortaa-font-105395949";
+    description = "Clean and modern font suitable for headings and logos";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.rycee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

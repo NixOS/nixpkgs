@@ -20,11 +20,19 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tabbed plugin for rxvt-unicode with many enhancements (mina86's fork)";
     homepage = "https://github.com/mina86/urxvt-tabbedex";
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Tabbed plugin for rxvt-unicode with many enhancements (mina86's fork)";
+    homepage = "https://github.com/mina86/urxvt-tabbedex";
+    maintainers = [ ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl3Plus;
   };
 }

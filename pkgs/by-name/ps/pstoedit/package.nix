@@ -54,12 +54,21 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ ghostscript ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Translates PostScript and PDF graphics into other vector formats";
     homepage = "https://sourceforge.net/projects/pstoedit/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Translates PostScript and PDF graphics into other vector formats";
+    homepage = "https://sourceforge.net/projects/pstoedit/";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pstoedit";
   };
 }

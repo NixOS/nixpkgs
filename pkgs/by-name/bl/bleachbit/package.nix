@@ -60,12 +60,21 @@ python3Packages.buildPythonApplication rec {
 
   strictDeps = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://bleachbit.sourceforge.net";
     description = "Program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://bleachbit.sourceforge.net";
+    description = "Program to clean your computer";
+    longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       leonardoce
       mbprtpmnr
     ];

@@ -38,11 +38,19 @@ buildPythonPackage rec {
 
   doCheck = false; # tests are not included in the PyPi tarball
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure";
     description = "OpenCensus Azure Monitor Exporter";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/census-instrumentation/opencensus-python/tree/master/contrib/opencensus-ext-azure";
+    description = "OpenCensus Azure Monitor Exporter";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       billhuang
       evilmav
     ];

@@ -45,14 +45,22 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "CLI tool to check a server's TLS/SSL capabilities";
     longDescription = ''
       CLI tool which checks a server's service on any port for the support of
       TLS/SSL ciphers, protocols as well as recent cryptographic flaws and more.
     '';
     homepage = "https://testssl.sh/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
+=======
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "testssl.sh";
   };

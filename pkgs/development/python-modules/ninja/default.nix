@@ -34,7 +34,11 @@ buildPythonPackage {
     "ninja.ninja_syntax"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Small build system with a focus on speed";
     mainProgram = "ninja";
     longDescription = ''
@@ -42,9 +46,16 @@ buildPythonPackage {
       provided by nixpkgs instead of downloading ninja from the web.
     '';
     homepage = "https://github.com/scikit-build/ninja-python-distributions";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _999eagle
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      _999eagle
+      tjni
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

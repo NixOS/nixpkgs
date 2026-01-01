@@ -37,11 +37,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.extendedlocation" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Extendedlocation Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/extendedlocation/azure-mgmt-extendedlocation";
     changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-extendedlocation_${version}/sdk/extendedlocation/azure-mgmt-extendedlocation";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Extendedlocation Management Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/extendedlocation/azure-mgmt-extendedlocation";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-mgmt-extendedlocation_${version}/sdk/extendedlocation/azure-mgmt-extendedlocation";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

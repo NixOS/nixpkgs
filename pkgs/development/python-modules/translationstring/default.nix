@@ -14,10 +14,17 @@ buildPythonPackage rec {
     sha256 = "bf947538d76e69ba12ab17283b10355a9ecfbc078e6123443f43f2107f6376f3";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pylonsproject.org/";
     description = "Utility library for i18n relied on by various Repoze and Pyramid packages";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    homepage = "https://pylonsproject.org/";
+    description = "Utility library for i18n relied on by various Repoze and Pyramid packages";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -21,10 +21,18 @@ rustPlatform.buildRustPackage rec {
   # create and build Cargo workspaces.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo subcommand for optimizing Rust binaries/libraries with PGO and BOLT";
     homepage = "https://github.com/kobzol/cargo-pgo";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ dannixon ];
+=======
+  meta = with lib; {
+    description = "Cargo subcommand for optimizing Rust binaries/libraries with PGO and BOLT";
+    homepage = "https://github.com/kobzol/cargo-pgo";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ dannixon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

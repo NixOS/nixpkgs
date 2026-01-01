@@ -252,6 +252,7 @@ resholve.mkDerivation rec {
     inherit kikit;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bats-core/bats-core";
     description = "Bash Automated Testing System";
@@ -259,5 +260,14 @@ resholve.mkDerivation rec {
     maintainers = with lib.maintainers; [ abathur ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bats-core/bats-core";
+    description = "Bash Automated Testing System";
+    mainProgram = "bats";
+    maintainers = with maintainers; [ abathur ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

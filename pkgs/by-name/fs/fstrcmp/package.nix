@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Make fuzzy comparisons of strings and byte arrays";
     mainProgram = "fstrcmp";
     longDescription = ''
@@ -46,8 +50,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://fstrcmp.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/fstrcmp/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.sephalon ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3;
+    maintainers = [ maintainers.sephalon ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

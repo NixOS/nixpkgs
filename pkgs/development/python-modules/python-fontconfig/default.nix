@@ -1,7 +1,11 @@
 {
   lib,
   buildPythonPackage,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchPypi,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   cython,
@@ -22,6 +26,7 @@ let
 in
 buildPythonPackage rec {
   pname = "python-fontconfig";
+<<<<<<< HEAD
   version = "0.6.2";
   pyproject = true;
 
@@ -30,6 +35,15 @@ buildPythonPackage rec {
     repo = "python-fontconfig";
     tag = "v${version}";
     hash = "sha256-4qxl5a9oKmhrF8O2OjA8X1wsHyEHL4ViRt20IcU/ANw=";
+=======
+  version = "0.6.1";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "python_fontconfig";
+    inherit version;
+    sha256 = "sha256-qka4KksXW9LPn+Grmyng3kyrhwIEG7UEpVDeKfX89zM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -47,6 +61,10 @@ buildPythonPackage rec {
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontsConf};
+<<<<<<< HEAD
+=======
+    export HOME=$TMPDIR
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   checkPhase = ''
@@ -55,12 +73,19 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   pythonImportsCheck = [ "fontconfig" ];
 
   meta = {
     homepage = "https://github.com/Vayn/python-fontconfig";
     description = "Python binding for Fontconfig";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = {
+    homepage = "https://github.com/Vayn/python-fontconfig";
+    description = "Python binding for Fontconfig";
+    license = lib.licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
     maintainers = [ ];
   };

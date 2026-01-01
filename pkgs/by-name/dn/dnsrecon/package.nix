@@ -6,14 +6,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
+<<<<<<< HEAD
   version = "1.5.2";
+=======
+  version = "1.5.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darkoperator";
     repo = "dnsrecon";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-FFe421hB1V8EQd3Uyl/3PvWwgn3YcRtz6k+umpiwfW4=";
+=======
+    hash = "sha256-RX7A/vF19wTcvm+kP4ynarzGY+pUIj84zQJIM3tO/2M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = true;

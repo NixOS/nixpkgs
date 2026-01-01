@@ -27,6 +27,7 @@
 }:
 
 let
+<<<<<<< HEAD
   buildNum = "2025-10-29-1732";
 in
 stdenv.mkDerivation {
@@ -36,6 +37,17 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://gpuopen.com/download/RadeonDeveloperToolSuite-${buildNum}.tgz";
     hash = "sha256-iqdfVAG0ARPfjkJEtX7v2hpDnf3k60nAvQ+AZzcFnBM=";
+=======
+  buildNum = "2025-06-12-1681";
+in
+stdenv.mkDerivation {
+  pname = "rgp";
+  version = "2.5";
+
+  src = fetchurl {
+    url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
+    hash = "sha256-e7IxoaZi77klrihRO6vDh1o2Clj5lNsVlzQ7btgLsu4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -86,6 +98,7 @@ stdenv.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool from AMD that allows for deep inspection of GPU workloads";
     homepage = "https://gpuopen.com/rgp/";
@@ -93,5 +106,14 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ Flakebi ];
+=======
+  meta = with lib; {
+    description = "Tool from AMD that allows for deep inspection of GPU workloads";
+    homepage = "https://gpuopen.com/rgp/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ Flakebi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

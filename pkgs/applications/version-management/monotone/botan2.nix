@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Cryptographic algorithms library";
     homepage = "https://botan.randombit.net";
@@ -97,6 +98,17 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Cryptographic algorithms library";
+    homepage = "https://botan.randombit.net";
+    mainProgram = "botan";
+    maintainers = with maintainers; [
+      raskin
+    ];
+    platforms = platforms.unix;
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     knownVulnerabilities = lib.optional (
       !enableForMonotone
     ) "Botan2 is EOL and its full interface surface contains unpatched vulnerabilities";

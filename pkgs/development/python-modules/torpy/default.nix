@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cryptography" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure python Tor client";
     homepage = "https://github.com/torpyorg/torpy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ larsr ];
+=======
+  meta = with lib; {
+    description = "Pure python Tor client";
+    homepage = "https://github.com/torpyorg/torpy";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ larsr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

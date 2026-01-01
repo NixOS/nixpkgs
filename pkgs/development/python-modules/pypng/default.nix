@@ -15,7 +15,11 @@ buildPythonPackage rec {
     owner = "drj11";
     repo = "pypng";
     tag = "pypng-${version}";
+<<<<<<< HEAD
     hash = "sha256-xNUI3yGfwmaccCxgljIZzgJ6YgNxcuOzCXDE7RFJP2I=";
+=======
+    hash = "sha256-tTnsGCAmHexDWm/T5xpHpcBaQcBEqMfTFaoOAeC+pDs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -38,10 +42,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python library for PNG image encoding/decoding";
     homepage = "https://gitlab.com/drj11/pypng";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Pure Python library for PNG image encoding/decoding";
+    homepage = "https://gitlab.com/drj11/pypng";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

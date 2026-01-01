@@ -40,11 +40,19 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional enableGist qtbase;
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.mit;
     homepage = "https://www.gecode.org";
     description = "Toolkit for developing constraint-based systems";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    license = licenses.mit;
+    homepage = "https://www.gecode.org";
+    description = "Toolkit for developing constraint-based systems";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

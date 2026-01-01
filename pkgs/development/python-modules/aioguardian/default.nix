@@ -64,7 +64,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioguardian" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library to interact with Elexa Guardian devices";
     longDescription = ''
       aioguardian is an asyncio-focused library for interacting with the
@@ -72,7 +76,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bachya/aioguardian";
     changelog = "https://github.com/bachya/aioguardian/releases/tag/${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

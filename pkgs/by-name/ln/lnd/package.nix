@@ -41,11 +41,19 @@ buildGoModule rec {
 
   inherit tags;
 
+<<<<<<< HEAD
   meta = {
     description = "Lightning Network Daemon";
     homepage = "https://github.com/lightningnetwork/lnd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Lightning Network Daemon";
+    homepage = "https://github.com/lightningnetwork/lnd";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bleetube
       cypherpunk2140
       prusnak

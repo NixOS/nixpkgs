@@ -11,14 +11,23 @@
 
 python3Packages.buildPythonApplication {
   pname = "chirp";
+<<<<<<< HEAD
   version = "0.4.0-unstable-2025-12-30";
+=======
+  version = "0.4.0-unstable-2025-11-20";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "chirp";
+<<<<<<< HEAD
     rev = "412685c82eecd3b05d43ffbd09b34466238d3e6e";
     hash = "sha256-bYpJrYQHP+/pXzikBJ0ZxQYThLeGo4UE88leJKbzVNo=";
+=======
+    rev = "eb01134af3704ee883124e4f0fb2f139abbe74f4";
+    hash = "sha256-Yi7MmHgp4UXLhp9e07SQn310uQJSyStL3WrvVDxgsZI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

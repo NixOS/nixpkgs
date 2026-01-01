@@ -108,14 +108,24 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Small, fast, portable implementation of TLS/SSL for embedded devices";
     mainProgram = "wolfssl-config";
     homepage = "https://www.wolfssl.com/";
     changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${finalAttrs.version}-stable";
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fab
       vifino
     ];

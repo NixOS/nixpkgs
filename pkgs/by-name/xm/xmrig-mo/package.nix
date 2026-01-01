@@ -15,6 +15,7 @@ xmrig.overrideAttrs (oldAttrs: rec {
     hash = "sha256-l3dN1lKn+Vt2JPmBm452kRe39UCnW3TIhUbHXkHXBrM=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Fork of the XMRig CPU miner with support for algorithm switching";
     homepage = "https://github.com/MoneroOcean/xmrig";
@@ -22,6 +23,15 @@ xmrig.overrideAttrs (oldAttrs: rec {
     mainProgram = "xmrig";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fork of the XMRig CPU miner with support for algorithm switching";
+    homepage = "https://github.com/MoneroOcean/xmrig";
+    license = licenses.gpl3Plus;
+    mainProgram = "xmrig";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       j0hax
       redhawk
     ];

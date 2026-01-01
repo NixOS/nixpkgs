@@ -24,10 +24,19 @@ stdenv.mkDerivation rec {
     "PERL=${perl}/bin/perl"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Programs for dealing with numbers from the command line";
     homepage = "https://suso.suso.org/xulu/Num-utils";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Programs for dealing with numbers from the command line";
+    homepage = "https://suso.suso.org/xulu/Num-utils";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

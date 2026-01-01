@@ -10,10 +10,17 @@ let
   pname = "mbrola";
   version = "3.3-unstable-2024-01-29";
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ davidak ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ davidak ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Speech synthesizer based on the concatenation of diphones";
     homepage = "https://github.com/numediart/MBROLA";
   };

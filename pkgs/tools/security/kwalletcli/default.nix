@@ -62,10 +62,18 @@ mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command-Line Interface to the KDE Wallet";
     homepage = "https://www.mirbsd.org/kwalletcli.htm";
     license = lib.licenses.miros;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Command-Line Interface to the KDE Wallet";
+    homepage = "https://www.mirbsd.org/kwalletcli.htm";
+    license = licenses.miros;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

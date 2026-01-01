@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert JSON to HCL, and vice versa";
     mainProgram = "json2hcl";
     homepage = "https://github.com/kvz/json2hcl";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Convert JSON to HCL, and vice versa";
+    mainProgram = "json2hcl";
+    homepage = "https://github.com/kvz/json2hcl";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

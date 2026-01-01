@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "commandparse" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to parse command based CLI application";
     homepage = "https://github.com/flgy/commandparse";
     license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.fab ];
+=======
+  meta = with lib; {
+    description = "Python module to parse command based CLI application";
+    homepage = "https://github.com/flgy/commandparse";
+    license = with licenses; [ mit ];
+    maintainers = [ maintainers.fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

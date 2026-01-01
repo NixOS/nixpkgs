@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.cmakeBool "USE_QT5" false)
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rlancaste/stellarsolver";
     description = "Astrometric plate solving library";
@@ -44,5 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
       returntoreality
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rlancaste/stellarsolver";
+    description = "Astrometric plate solving library";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      returntoreality
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -36,10 +36,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy_pkuseg" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Toolkit for multi-domain Chinese word segmentation (spaCy fork)";
     homepage = "https://github.com/explosion/spacy-pkuseg";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Toolkit for multi-domain Chinese word segmentation (spaCy fork)";
+    homepage = "https://github.com/explosion/spacy-pkuseg";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -144,12 +144,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.luanti.org/";
     description = "Open source voxel game engine (formerly Minetest)";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://www.luanti.org/";
+    description = "Open source voxel game engine (formerly Minetest)";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fpletz
       fgaz
       jk

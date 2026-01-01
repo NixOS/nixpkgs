@@ -47,11 +47,20 @@ stdenv.mkDerivation rec {
     "--disable-owexternal"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "1-Wire File System full library";
     homepage = "https://owfs.org/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ disserman ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "1-Wire File System full library";
+    homepage = "https://owfs.org/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ disserman ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

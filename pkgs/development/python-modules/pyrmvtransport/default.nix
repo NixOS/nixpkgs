@@ -57,10 +57,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "RMVtransport" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/cgtobi/PyRMVtransport";
     description = "Get transport information from opendata.rmv.de";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/cgtobi/PyRMVtransport";
+    description = "Get transport information from opendata.rmv.de";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -25,12 +25,21 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "adidnsdump" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Active Directory Integrated DNS dumping by any authenticated user";
     homepage = "https://github.com/dirkjanm/adidnsdump";
     changelog = "https://github.com/dirkjanm/adidnsdump/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Active Directory Integrated DNS dumping by any authenticated user";
+    homepage = "https://github.com/dirkjanm/adidnsdump";
+    changelog = "https://github.com/dirkjanm/adidnsdump/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "adidnsdump";
   };
 }

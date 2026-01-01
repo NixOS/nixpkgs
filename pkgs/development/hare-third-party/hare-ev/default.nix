@@ -25,11 +25,19 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Event loop for Hare programs";
     homepage = "https://sr.ht/~sircmpwn/hare-ev";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ colinsane ];
+=======
+  meta = with lib; {
+    description = "Event loop for Hare programs";
+    homepage = "https://sr.ht/~sircmpwn/hare-ev";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ colinsane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (hareHook.meta) platforms badPlatforms;
   };
 }

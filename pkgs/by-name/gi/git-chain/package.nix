@@ -29,11 +29,20 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for rebasing a chain of local git branches";
     homepage = "https://github.com/dashed/git-chain";
     license = lib.licenses.mit;
     mainProgram = "git-chain";
     maintainers = with lib.maintainers; [ bcyran ];
+=======
+  meta = with lib; {
+    description = "Tool for rebasing a chain of local git branches";
+    homepage = "https://github.com/dashed/git-chain";
+    license = licenses.mit;
+    mainProgram = "git-chain";
+    maintainers = with maintainers; [ bcyran ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

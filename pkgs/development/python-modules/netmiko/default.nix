@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netmiko" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-vendor library to simplify Paramiko SSH connections to network devices";
     homepage = "https://github.com/ktbyers/netmiko/";
     changelog = "https://github.com/ktbyers/netmiko/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.astro ];
+=======
+  meta = with lib; {
+    description = "Multi-vendor library to simplify Paramiko SSH connections to network devices";
+    homepage = "https://github.com/ktbyers/netmiko/";
+    changelog = "https://github.com/ktbyers/netmiko/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = [ maintainers.astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

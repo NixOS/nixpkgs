@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mattgodbolt/seasocks";
     description = "Tiny embeddable C++ HTTP and WebSocket server";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ fredeb ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mattgodbolt/seasocks";
+    description = "Tiny embeddable C++ HTTP and WebSocket server";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fredeb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

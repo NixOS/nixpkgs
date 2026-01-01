@@ -31,12 +31,21 @@ rustPlatform.buildRustPackage {
     $out/bin/catfs --help > /dev/null
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Caching filesystem written in Rust";
     mainProgram = "catfs";
     homepage = "https://github.com/kahing/catfs";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Caching filesystem written in Rust";
+    mainProgram = "catfs";
+    homepage = "https://github.com/kahing/catfs";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

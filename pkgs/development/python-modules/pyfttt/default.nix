@@ -20,11 +20,20 @@ buildPythonPackage rec {
   # tests need a server to run against
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Package for sending events to the IFTTT Webhooks Channel";
     mainProgram = "pyfttt";
     homepage = "https://github.com/briandconnelly/pyfttt";
     maintainers = with lib.maintainers; [ peterhoeg ];
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Package for sending events to the IFTTT Webhooks Channel";
+    mainProgram = "pyfttt";
+    homepage = "https://github.com/briandconnelly/pyfttt";
+    maintainers = with maintainers; [ peterhoeg ];
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

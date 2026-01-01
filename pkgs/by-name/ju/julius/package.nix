@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bvschaik/julius";
     description = "Open source re-implementation of Caesar III";
@@ -61,5 +62,17 @@ stdenv.mkDerivation rec {
       matteopacini
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bvschaik/julius";
+    description = "Open source re-implementation of Caesar III";
+    mainProgram = "julius";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+      Thra11
+      matteopacini
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

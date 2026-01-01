@@ -25,6 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mount server and cloud storage as a disk on macOS and Windows";
     homepage = "https://mountainduck.io";
@@ -32,5 +33,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Mount server and cloud storage as a disk on macOS and Windows";
+    homepage = "https://mountainduck.io";
+    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

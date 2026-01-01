@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stl" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to make reading, writing and modifying both binary and ascii STL files easy";
     homepage = "https://github.com/WoLpH/numpy-stl/";
     changelog = "https://github.com/wolph/numpy-stl/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Library to make reading, writing and modifying both binary and ascii STL files easy";
+    homepage = "https://github.com/WoLpH/numpy-stl/";
+    changelog = "https://github.com/wolph/numpy-stl/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

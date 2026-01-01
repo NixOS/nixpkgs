@@ -65,10 +65,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   preferLocalBuild = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Quake 3 high-resolution textures";
     license = lib.licenses.cc0;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ rvolosatovs ];
+=======
+  meta = with lib; {
+    description = "Quake 3 high-resolution textures";
+    license = licenses.cc0;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ rvolosatovs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

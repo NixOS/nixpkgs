@@ -126,5 +126,11 @@ with haskellLib;
   # Test failure because of GHC bug:
   #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
   #   https://github.com/sol/interpolate/issues/20
+<<<<<<< HEAD
   interpolate = dontCheckIf (lib.versionOlder self.ghc.version "9.12.3") super.interpolate;
+=======
+  interpolate =
+    assert super.ghc.version == "9.12.2";
+    dontCheck super.interpolate;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

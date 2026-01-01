@@ -48,11 +48,14 @@ buildPythonPackage rec {
     hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/mkdocs/mkdocs/pull/4065
     ./click-8.3.0-compat.patch
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     hatchling
     # babel, setuptools required as "build hooks"
@@ -96,7 +99,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${version}";
     description = "Project documentation with Markdown / static website generator";
     mainProgram = "mkdocs";
@@ -109,8 +116,14 @@ buildPythonPackage rec {
       MkDocs can also be used to generate general-purpose websites.
     '';
     homepage = "http://mkdocs.org/";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ rkoe ];
+=======
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ rkoe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

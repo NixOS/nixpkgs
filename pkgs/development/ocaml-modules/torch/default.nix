@@ -60,11 +60,19 @@ buildDunePackage rec {
 
   doCheck = !stdenv.hostPlatform.isAarch64;
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Ocaml bindings to Pytorch";
     maintainers = [ lib.maintainers.bcdarwin ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Ocaml bindings to Pytorch";
+    maintainers = [ maintainers.bcdarwin ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = true; # Not compatible with libtorch ≥ 2.3.0
   };
 }

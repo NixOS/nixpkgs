@@ -27,14 +27,22 @@
 
 buildPythonPackage rec {
   pname = "scikit-survival";
+<<<<<<< HEAD
   version = "0.26.0";
+=======
+  version = "0.25.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sebp";
     repo = "scikit-survival";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-xtrGFNRHF8bL8Q82gIQLayuCSDFMrBBkQ63F+Nmbdes=";
+=======
+    hash = "sha256-OvdmZ2vDptYB2tq7OtokIQzjKzhQBWwnXZLW0m6FqlI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

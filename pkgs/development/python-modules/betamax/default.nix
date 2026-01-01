@@ -38,11 +38,20 @@ buildPythonPackage rec {
     "tests/regression/test_requests_2_11_body_matcher.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "VCR imitation for requests";
     homepage = "https://betamax.readthedocs.org/";
     changelog = "https://github.com/betamaxpy/betamax/blob/${version}/HISTORY.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "VCR imitation for requests";
+    homepage = "https://betamax.readthedocs.org/";
+    changelog = "https://github.com/betamaxpy/betamax/blob/${version}/HISTORY.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

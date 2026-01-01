@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Wrapper generator for Guile";
     mainProgram = "g-wrap-config";
     longDescription = ''
@@ -43,8 +47,14 @@ stdenv.mkDerivation rec {
       wrappers for C functions.
     '';
     homepage = "https://www.nongnu.org/g-wrap/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.lgpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,11 +39,19 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "JFFS2 filesystem extraction tool";
     homepage = "https://github.com/onekey-sec/jefferson";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "JFFS2 filesystem extraction tool";
+    homepage = "https://github.com/onekey-sec/jefferson";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tnias
       vlaci
     ];

@@ -26,12 +26,20 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Language-agnostic \"shebang interpreter\" that enables you to write scripts in compiled languages";
     mainProgram = "scriptisto";
     homepage = "https://github.com/igor-petruk/scriptisto";
     changelog = "https://github.com/igor-petruk/scriptisto/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

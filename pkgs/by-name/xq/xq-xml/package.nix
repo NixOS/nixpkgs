@@ -32,12 +32,20 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command-line XML and HTML beautifier and content extractor";
     mainProgram = "xq";
     homepage = "https://github.com/sibprogrammer/xq";
     changelog = "https://github.com/sibprogrammer/xq/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

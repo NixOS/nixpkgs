@@ -23,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Like jq but for Markdown: find specific elements in a md doc";

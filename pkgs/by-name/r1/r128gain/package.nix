@@ -48,6 +48,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Fast audio loudness scanner & tagger (ReplayGain v2 / R128)";
     mainProgram = "r128gain";
@@ -55,5 +56,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Fast audio loudness scanner & tagger (ReplayGain v2 / R128)";
+    mainProgram = "r128gain";
+    homepage = "https://github.com/desbma/r128gain";
+    license = licenses.lgpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

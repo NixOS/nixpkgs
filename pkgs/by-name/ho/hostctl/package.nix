@@ -35,14 +35,22 @@ buildGoModule rec {
       --zsh <($out/bin/hostctl completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "CLI tool to manage the /etc/hosts file";
     longDescription = ''
       This tool gives you more control over the use of your hosts file.
       You can have multiple profiles and switch them on/off as you need.
     '';
     homepage = "https://guumaster.github.io/hostctl/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "hostctl";
   };

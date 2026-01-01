@@ -16,11 +16,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
+<<<<<<< HEAD
   version = "2.4.129";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
     hash = "sha256-WXgYP5eNaX4mpQugZhdJZO+wq5fKoeyqG4Yfvl3fd9w=";
+=======
+  version = "2.4.128";
+
+  src = fetchurl {
+    url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-O7NduHAMKgtWnyxnKaU/VJV4aFazEIVMjeV3gqIr3aw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -65,7 +73,11 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.freedesktop.org/mesa/drm";
     downloadPage = "https://dri.freedesktop.org/libdrm/";
     description = "Direct Rendering Manager library and headers";
@@ -81,8 +93,13 @@ stdenv.mkDerivation rec {
       libdrm is a low-level library, typically used by graphics drivers such as
       the Mesa drivers, the X drivers, libva and similar projects.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
+=======
+    license = licenses.mit;
+    platforms = lib.subtractLists platforms.darwin platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -54,12 +54,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     changelog = "https://gitlab.gnome.org/World/OpenPaperwork/pyocr/-/blob/${version}/ChangeLog";
     description = "Python wrapper for Tesseract and Cuneiform";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    changelog = "https://gitlab.gnome.org/World/OpenPaperwork/pyocr/-/blob/${version}/ChangeLog";
+    description = "Python wrapper for Tesseract and Cuneiform";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       symphorien
       tomodachi94
     ];

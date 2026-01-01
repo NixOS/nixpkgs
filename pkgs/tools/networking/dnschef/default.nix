@@ -23,11 +23,20 @@ buildPythonApplication {
 
   propagatedBuildInputs = [ dnslib ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/iphelix/dnschef";
     description = "Highly configurable DNS proxy for penetration testers and malware analysts";
     mainProgram = "dnschef";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.gfrascadorio ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/iphelix/dnschef";
+    description = "Highly configurable DNS proxy for penetration testers and malware analysts";
+    mainProgram = "dnschef";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.gfrascadorio ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

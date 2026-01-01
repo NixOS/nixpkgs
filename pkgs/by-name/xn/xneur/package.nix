@@ -66,6 +66,7 @@ stdenv.mkDerivation {
     sed -e 's@for xosd_dir in@for xosd_dir in ${xosd} @' -i configure.ac
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for switching between keyboard layouts";
     mainProgram = "xneur";
@@ -73,5 +74,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Utility for switching between keyboard layouts";
+    mainProgram = "xneur";
+    homepage = "https://xneur.ru";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

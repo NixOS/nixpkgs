@@ -143,11 +143,19 @@ lib.makeScope pkgs.newScope (
 
       installTargets = [ "install-admin" ];
 
+<<<<<<< HEAD
       meta = {
         broken = gimp.majorVersion != "2.0";
         description = "Batch Image Manipulation Plugin for GIMP";
         homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
         license = lib.licenses.gpl2Plus;
+=======
+      meta = with lib; {
+        broken = gimp.majorVersion != "2.0";
+        description = "Batch Image Manipulation Plugin for GIMP";
+        homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
+        license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         maintainers = [ ];
       };
     };
@@ -207,11 +215,19 @@ lib.makeScope pkgs.newScope (
         runHook postInstall
       '';
 
+<<<<<<< HEAD
       meta = {
         broken = gimp.majorVersion != "2.0";
         description = "GIMP plug-in to do the fourier transform";
         homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
         license = with lib.licenses; [ gpl3Plus ];
+=======
+      meta = with lib; {
+        broken = gimp.majorVersion != "2.0";
+        description = "GIMP plug-in to do the fourier transform";
+        homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
+        license = with licenses; [ gpl3Plus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 
@@ -227,16 +243,23 @@ lib.makeScope pkgs.newScope (
         Filters/Render/Texture...
       */
       pname = "resynthesizer";
+<<<<<<< HEAD
       version = "3.0";
       buildInputs = with pkgs; [ fftw ];
       nativeBuildInputs = with pkgs; [
         meson
         ninja
       ];
+=======
+      version = "2.0.3";
+      buildInputs = with pkgs; [ fftw ];
+      nativeBuildInputs = with pkgs; [ autoreconfHook ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/${gimp.targetLibDir}" ];
       src = fetchFromGitHub {
         owner = "bootchk";
         repo = "resynthesizer";
+<<<<<<< HEAD
         tag = "v${version}";
         hash = "sha256-/Py5R1RxiftTR0z++mQzgTn/J9v4p8efuGZSfhe6FfA=";
       };
@@ -246,6 +269,14 @@ lib.makeScope pkgs.newScope (
         description = "Suite of gimp plugins for texture synthesis";
         homepage = "https://github.com/bootchk/resynthesizer";
         license = [ lib.licenses.gpl3Plus ];
+=======
+        rev = "v${version}";
+        sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
+      };
+
+      meta = {
+        broken = gimp.majorVersion != "2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 

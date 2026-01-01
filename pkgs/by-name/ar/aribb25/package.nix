@@ -48,6 +48,7 @@ stdenv.mkDerivation {
       })
     ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sample implementation of the ARIB STD-B25 standard";
     homepage = "https://code.videolan.org/videolan/aribb25";
@@ -55,5 +56,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ midchildan ];
     mainProgram = "b25";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Sample implementation of the ARIB STD-B25 standard";
+    homepage = "https://code.videolan.org/videolan/aribb25";
+    license = licenses.isc;
+    maintainers = with maintainers; [ midchildan ];
+    mainProgram = "b25";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

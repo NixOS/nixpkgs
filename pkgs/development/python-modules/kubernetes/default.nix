@@ -61,17 +61,30 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: <class 'urllib3.poolmanager.ProxyManager'> != <class 'urllib3.poolmanager.Poolmanager'>
     "test_rest_proxycare"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
     changelog = "https://github.com/kubernetes-client/python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Kubernetes Python client";
+    homepage = "https://github.com/kubernetes-client/python";
+    changelog = "https://github.com/kubernetes-client/python/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ lsix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

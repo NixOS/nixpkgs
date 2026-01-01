@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-CkFJHW7yrIJi/KMGJgyhnLTMkrxnDwO3X4M1aml9cuM=";
 
+<<<<<<< HEAD
   meta = {
     description = "Creates a bootable disk image from a Rust OS kernel";
     homepage = "https://github.com/rust-osdev/bootimage";
@@ -25,5 +26,15 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ dbeckwith ];
+=======
+  meta = with lib; {
+    description = "Creates a bootable disk image from a Rust OS kernel";
+    homepage = "https://github.com/rust-osdev/bootimage";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ dbeckwith ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

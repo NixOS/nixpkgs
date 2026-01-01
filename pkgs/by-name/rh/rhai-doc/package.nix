@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Lk/vbYxBcK676qusl6mWO38RAkCuiyHwZLcJpcHrdO4=";
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to auto-generate documentation for Rhai source code";
     homepage = "https://github.com/rhaiscript/rhai-doc";
@@ -26,6 +27,17 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Tool to auto-generate documentation for Rhai source code";
+    homepage = "https://github.com/rhaiscript/rhai-doc";
+    changelog = "https://github.com/rhaiscript/rhai-doc/releases/tag/${src.rev}";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rhai-doc";
   };
 }

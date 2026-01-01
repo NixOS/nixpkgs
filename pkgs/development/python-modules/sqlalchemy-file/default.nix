@@ -68,11 +68,20 @@ buildPythonPackage rec {
     "sqlalchemy_file.helpers"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SQLAlchemy extension for attaching files to SQLAlchemy model and uploading them to various storage with Apache Libcloud";
     homepage = "https://github.com/jowilf/sqlalchemy-file";
     changelog = "https://github.com/jowilf/sqlalchemy-file/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+  meta = with lib; {
+    description = "SQLAlchemy extension for attaching files to SQLAlchemy model and uploading them to various storage with Apache Libcloud";
+    homepage = "https://github.com/jowilf/sqlalchemy-file";
+    changelog = "https://github.com/jowilf/sqlalchemy-file/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

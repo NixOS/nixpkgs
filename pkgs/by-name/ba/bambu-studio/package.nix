@@ -3,7 +3,10 @@
   lib,
   binutils,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   ninja,
   pkg-config,
@@ -122,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/no-cereal.patch
     # Cmake 4 support
     ./patches/cmake.patch
+<<<<<<< HEAD
     # Fix build with gcc15
     # https://github.com/bambulab/BambuStudio/pull/8555
     (fetchpatch {
@@ -129,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/bambulab/BambuStudio/commit/434752bf643933f22348d78335abe7f60550e736.patch";
       hash = "sha256-vWqTM6IHL/gBncLk6gZHw+dFe0sdVuPdUqYeVJUbTis=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   doCheck = true;

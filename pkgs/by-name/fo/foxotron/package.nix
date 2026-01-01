@@ -101,16 +101,26 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "General purpose model viewer";
     longDescription = ''
       ASSIMP based general purpose model viewer ("turntable") created for the
       Revision 2021 3D Graphics Competition.
     '';
     homepage = "https://github.com/Gargaj/Foxotron";
+<<<<<<< HEAD
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "Foxotron";
   };
 }

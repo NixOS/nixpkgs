@@ -23,7 +23,11 @@ buildGoModule rec {
     "-X main.AppVersion=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fetcher for Javascript files";
     mainProgram = "subjs";
     longDescription = ''
@@ -32,7 +36,12 @@ buildGoModule rec {
       secrets and more.
     '';
     homepage = "https://github.com/lc/subjs";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

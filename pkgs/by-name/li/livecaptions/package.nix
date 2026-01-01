@@ -69,12 +69,21 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux Desktop application that provides live captioning";
     homepage = "https://github.com/abb128/LiveCaptions";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Scrumplex ];
+=======
+  meta = with lib; {
+    description = "Linux Desktop application that provides live captioning";
+    homepage = "https://github.com/abb128/LiveCaptions";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Scrumplex ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "livecaptions";
   };
 })

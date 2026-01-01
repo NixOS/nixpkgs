@@ -49,10 +49,17 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, zero-configuration HTTP server CLI for serving static files";
     homepage = "https://github.com/eliben/static-server";
     license = lib.licenses.unlicense;
+=======
+  meta = with lib; {
+    description = "Simple, zero-configuration HTTP server CLI for serving static files";
+    homepage = "https://github.com/eliben/static-server";
+    license = licenses.unlicense;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "static-server";
   };

@@ -80,6 +80,7 @@ stdenv.mkDerivation {
 
   passthru.driverPath = "/lib/libfprint-2/tod-1";
 
+<<<<<<< HEAD
   meta = {
     description = "Broadcom driver module for libfprint-2-tod Touch OEM Driver (from Dell)";
     homepage = "http://dell.archive.canonical.com/updates/pool/public/libf/libfprint-2-tod1-broadcom/";
@@ -87,5 +88,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ pitkling ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "Broadcom driver module for libfprint-2-tod Touch OEM Driver (from Dell)";
+    homepage = "http://dell.archive.canonical.com/updates/pool/public/libf/libfprint-2-tod1-broadcom/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ pitkling ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

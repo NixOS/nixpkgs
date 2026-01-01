@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     cp htdocs/index.html nuweb.w nuweb.pdf nuwebdoc.pdf README $out/share/doc/${pname}-${version}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple literate programming tool";
     mainProgram = "nuweb";
@@ -46,6 +47,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple literate programming tool";
+    mainProgram = "nuweb";
+    homepage = "https://nuweb.sourceforge.net";
+    license = licenses.free;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 # TODO: nuweb.el Emacs integration

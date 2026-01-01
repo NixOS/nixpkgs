@@ -36,7 +36,11 @@ rustPlatform.buildRustPackage rec {
     command = "little_boxes --version";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Add boxes are input text";
     longDescription = ''
       little_boxes is a small program that takes input from stdin or a file
@@ -51,8 +55,13 @@ rustPlatform.buildRustPackage rec {
       ┗━━━━━━━━━━━━━┛
     '';
     homepage = "https://github.com/giodamelio/little_boxes";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ giodamelio ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ giodamelio ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "little_boxes";
   };
 }

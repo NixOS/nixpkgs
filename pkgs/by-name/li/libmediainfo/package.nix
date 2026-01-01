@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     install -vD -m 644 libmediainfo.pc "$out/lib/pkgconfig/libmediainfo.pc"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Shared library for mediainfo";
     homepage = "https://mediaarea.net/";
@@ -55,5 +56,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.devhell ];
+=======
+  meta = with lib; {
+    description = "Shared library for mediainfo";
+    homepage = "https://mediaarea.net/";
+    changelog = "https://mediaarea.net/MediaInfo/ChangeLog";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.devhell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "KDAB's Dock Widget Framework for Qt";
     homepage = "https://www.kdab.com/development-resources/qt-tools/kddockwidgets";
@@ -43,6 +44,16 @@ stdenv.mkDerivation rec {
       gpl3Only
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "KDAB's Dock Widget Framework for Qt";
+    homepage = "https://www.kdab.com/development-resources/qt-tools/kddockwidgets";
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       _1000teslas
       tmarkus
     ];

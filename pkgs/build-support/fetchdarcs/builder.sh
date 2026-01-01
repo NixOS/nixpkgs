@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 runHook preFetch
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 tagtext=""
 tagflags=""
 # Darcs hashes are sha1 (120 bits, 40-character hex)
@@ -14,6 +17,7 @@ elif test -n "$context"; then
     tagflags="--context=$context"
 fi
 
+<<<<<<< HEAD
 # Repository list may contain ?. No glob expansion for that.
 set -o noglob
 
@@ -36,3 +40,10 @@ if [ -z "$success" ]; then
 fi
 
 runHook postFetch
+=======
+echo "Cloning $url $partial ${tagtext} into $out"
+
+darcs clone --lazy $tagflags "$url" "$out"
+# remove metadata, because it can change
+rm -rf "$out/_darcs"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

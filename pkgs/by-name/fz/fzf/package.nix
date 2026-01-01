@@ -85,6 +85,10 @@ buildGoModule rec {
     homepage = "https://github.com/junegunn/fzf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ma27
       zowoq
     ];

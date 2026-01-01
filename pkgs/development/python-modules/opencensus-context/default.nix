@@ -18,10 +18,18 @@ buildPythonPackage rec {
 
   doCheck = false; # No tests in archive
 
+<<<<<<< HEAD
   meta = {
     description = "OpenCensus Runtime Context";
     homepage = "https://github.com/census-instrumentation/opencensus-python/tree/master/context/opencensus-context";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
+=======
+  meta = with lib; {
+    description = "OpenCensus Runtime Context";
+    homepage = "https://github.com/census-instrumentation/opencensus-python/tree/master/context/opencensus-context";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ billhuang ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

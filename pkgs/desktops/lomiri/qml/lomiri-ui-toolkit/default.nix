@@ -45,13 +45,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
+<<<<<<< HEAD
   version = "1.3.5902";
+=======
+  version = "1.3.5110";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-sNOWDx7pyYuO+Pi7YsPRbT1ChU/EhfHBuGW92H3EEKI=";
+=======
+    hash = "sha256-j2Fowwj+ArdfJacqBSWksPk+wXRoTpL/Jrgme2tUSC8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -178,8 +186,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${qtPluginPaths}
     export XDG_DATA_DIRS=${suru-icon-theme}/share
 
+<<<<<<< HEAD
     export UITK_BUILD_ROOT=$PWD
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     tests/xvfb.sh make check ''${enableParallelChecking:+-j''${NIX_BUILD_CORES}}
 
     runHook postCheck

@@ -102,6 +102,7 @@ python3Packages.buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Ear training program";
     homepage = "https://www.gnu.org/software/solfege/";
@@ -109,6 +110,16 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       bjornfor
+=======
+  meta = with lib; {
+    description = "Ear training program";
+    homepage = "https://www.gnu.org/software/solfege/";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      bjornfor
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       anthonyroussel
     ];
     mainProgram = "solfege";

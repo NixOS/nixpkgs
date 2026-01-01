@@ -243,10 +243,17 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
+<<<<<<< HEAD
       sha256 = "1s7v9w357bc5xb89an4kclqmfjv2j6p9gnvsf7s2mnrgg482j76v";
       type = "gem";
     };
     version = "0.35.0";
+=======
+      sha256 = "16k60qxp2lw8l4ny21rk0m6vx3lipdhxp0lslmwn7gqi8wyw6ra8";
+      type = "gem";
+    };
+    version = "0.34.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   oxidized-script = {
     dependencies = [
@@ -278,10 +285,17 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
+<<<<<<< HEAD
       sha256 = "19sz075liiqim98jvnb3jawxdpd8kk146bwvqzwvmimbgdzf8xfr";
       type = "gem";
     };
     version = "0.18.0";
+=======
+      sha256 = "1kcc7qlz3w530ssfnc7rgqhcwc4f4k3lbgayffwhnzl73s8mdld9";
+      type = "gem";
+    };
+    version = "0.17.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   psych = {
     dependencies = [

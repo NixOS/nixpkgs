@@ -100,7 +100,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.tcl;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://domination.sourceforge.net/";
     downloadPage = "https://domination.sourceforge.net/download.shtml";
     description = "Game that is a bit like the board game Risk or RisiKo";
@@ -110,6 +114,7 @@ stdenv.mkDerivation {
       It includes a map editor, a simple map format, multiplayer network play,
       single player, hotseat, 5 user interfaces and many more features.
     '';
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
@@ -118,5 +123,15 @@ stdenv.mkDerivation {
     mainProgram = "domination";
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+    ];
+    license = licenses.gpl3Plus;
+    mainProgram = "domination";
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bubop" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bergercookie's Useful Bits Of Python; helper libraries for Bergercookie's programs";
     homepage = "https://github.com/bergercookie/bubop";
     changelog = "https://github.com/bergercookie/bubop/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raitobezarius ];
+=======
+  meta = with lib; {
+    description = "Bergercookie's Useful Bits Of Python; helper libraries for Bergercookie's programs";
+    homepage = "https://github.com/bergercookie/bubop";
+    changelog = "https://github.com/bergercookie/bubop/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ raitobezarius ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

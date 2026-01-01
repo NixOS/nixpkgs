@@ -23,11 +23,20 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "nyx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line monitor for Tor";
     mainProgram = "nyx";
     homepage = "https://nyx.torproject.org/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ offline ];
+=======
+  meta = with lib; {
+    description = "Command-line monitor for Tor";
+    mainProgram = "nyx";
+    homepage = "https://nyx.torproject.org/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

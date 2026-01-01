@@ -22,11 +22,19 @@ buildGoModule rec {
       --replace /usr/bin/lifecycled $out/bin/lifecycled
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Daemon for responding to AWS AutoScaling Lifecycle Hooks";
     homepage = "https://github.com/buildkite/lifecycled/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Daemon for responding to AWS AutoScaling Lifecycle Hooks";
+    homepage = "https://github.com/buildkite/lifecycled/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cole-h
       grahamc
     ];

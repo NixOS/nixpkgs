@@ -98,14 +98,24 @@ stdenv.mkDerivation (finalAttrs: {
     { $out/bin/sepolgen-ifgen-attr-helper test /dev/null 2>&1 || true; } | grep -Fm1 'error(s) encountered' >/dev/null
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "SELinux policy core utilities written in Python";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "SELinux policy core utilities written in Python";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://selinuxproject.org";
     maintainers = with lib.maintainers; [
       RossComputerGuy
       numinit
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

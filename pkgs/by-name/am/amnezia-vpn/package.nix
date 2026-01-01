@@ -175,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Amnezia VPN Client";
     downloadPage = "https://amnezia.org/en/downloads";
@@ -183,5 +184,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "AmneziaVPN";
     maintainers = with lib.maintainers; [ sund3RRR ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Amnezia VPN Client";
+    downloadPage = "https://amnezia.org/en/downloads";
+    homepage = "https://github.com/amnezia-vpn/amnezia-client";
+    license = licenses.gpl3;
+    mainProgram = "AmneziaVPN";
+    maintainers = with maintainers; [ sund3RRR ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

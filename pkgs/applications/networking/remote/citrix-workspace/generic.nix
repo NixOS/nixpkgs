@@ -312,6 +312,7 @@ stdenv.mkDerivation rec {
     $out/opt/citrix-icaclient/util/ctx_rehash
   '';
 
+<<<<<<< HEAD
   meta = {
     # webkitgtk_4_0 was removed
     broken = true;
@@ -320,6 +321,16 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ] ++ lib.optional (lib.versionOlder version "24") "i686-linux";
     maintainers = with lib.maintainers; [ flacks ];
+=======
+  meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
+    license = licenses.unfree;
+    description = "Citrix Workspace";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = [ "x86_64-linux" ] ++ optional (versionOlder version "24") "i686-linux";
+    maintainers = with maintainers; [ flacks ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit homepage;
   };
 }

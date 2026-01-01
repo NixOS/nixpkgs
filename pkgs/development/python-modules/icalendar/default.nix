@@ -67,12 +67,21 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "src/icalendar" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";
     description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ olcai ];
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ olcai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rf/aBxuiv6c0cUJcFTCYoQPIEwCfhQQZqVSk0BxSzfQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Simplified Find command made with Rust";
     homepage = "https://github.com/LyonSyonII/hunt-rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Simplified Find command made with Rust";
+    homepage = "https://github.com/LyonSyonII/hunt-rs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hunt";
   };
 }

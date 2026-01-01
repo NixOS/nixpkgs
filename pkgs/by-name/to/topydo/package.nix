@@ -49,12 +49,20 @@ python3.pkgs.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Cli todo application compatible with the todo.txt format";
     mainProgram = "topydo";
     homepage = "https://github.com/topydo/topydo";
     changelog = "https://github.com/topydo/topydo/blob/${src.rev}/CHANGES.md";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
+=======
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

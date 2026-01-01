@@ -22,10 +22,17 @@ buildGoModule rec {
     "rice"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Go package that makes working with resources such as html, js, css, images, templates very easy";
     homepage = "https://github.com/GeertJohan/go.rice";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Go package that makes working with resources such as html, js, css, images, templates very easy";
+    homepage = "https://github.com/GeertJohan/go.rice";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "rice";
   };

@@ -101,6 +101,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Handy tool to trash your metadata";

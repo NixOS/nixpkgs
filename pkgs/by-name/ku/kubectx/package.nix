@@ -30,10 +30,18 @@ buildGoModule rec {
     installShellCompletion completion/*
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast way to switch between clusters and namespaces in kubectl";
     license = lib.licenses.asl20;
     homepage = "https://github.com/ahmetb/kubectx";
     maintainers = with lib.maintainers; [ jlesquembre ];
+=======
+  meta = with lib; {
+    description = "Fast way to switch between clusters and namespaces in kubectl";
+    license = licenses.asl20;
+    homepage = "https://github.com/ahmetb/kubectx";
+    maintainers = with maintainers; [ jlesquembre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

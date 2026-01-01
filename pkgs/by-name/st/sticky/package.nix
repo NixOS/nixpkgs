@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sticky";
+<<<<<<< HEAD
   version = "1.29";
+=======
+  version = "1.28";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "sticky";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-5KDjvohmdw8j5G8V+uFXPzRSRo/C2HgeRodWfguQjYg=";
+=======
+    hash = "sha256-6CRkeJ2xuUs3viyYxnrgGFUIakK7ANyVpPZuwU486NM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -67,6 +75,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Sticky notes app for the Linux desktop";
     mainProgram = "sticky";
@@ -74,6 +83,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Sticky notes app for the Linux desktop";
+    mainProgram = "sticky";
+    homepage = "https://github.com/linuxmint/sticky";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       linsui
       bobby285271
     ];

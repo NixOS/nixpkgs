@@ -1,6 +1,12 @@
 { pkgs, ... }:
 {
   name = "xterm";
+<<<<<<< HEAD
+=======
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ nequissimus ];
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nodes.machine = {
     imports = [ ./common/x11.nix ];

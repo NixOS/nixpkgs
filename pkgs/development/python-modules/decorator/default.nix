@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   enabledTestPaths = [ "tests/test.py" ];
 
   meta = {
@@ -31,6 +32,15 @@ buildPythonPackage rec {
     homepage = "https://github.com/micheles/decorator";
     description = "Better living through Python with decorators";
     license = lib.licenses.bsd2;
+=======
+  enabledTestPaths = [ "tests/test.py " ];
+
+  meta = with lib; {
+    changelog = "https://github.com/micheles/decorator/blob/${src.tag}/CHANGES.md";
+    homepage = "https://github.com/micheles/decorator";
+    description = "Better living through Python with decorators";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

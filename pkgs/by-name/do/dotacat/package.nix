@@ -18,11 +18,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-Q8jhbSfVY/8SsB8OZpOsSYZ5sRI3FjzIev3LYYpyXeM=";
 
+<<<<<<< HEAD
   meta = {
     description = "Like lolcat, but fast";
     homepage = "https://gitlab.scd31.com/stephen/dotacat";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ traxys ];
+=======
+  meta = with lib; {
+    description = "Like lolcat, but fast";
+    homepage = "https://gitlab.scd31.com/stephen/dotacat";
+    license = licenses.mit;
+    maintainers = with maintainers; [ traxys ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dotacat";
   };
 }

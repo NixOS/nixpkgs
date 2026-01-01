@@ -23,6 +23,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) portunus; };
 
+<<<<<<< HEAD
   meta = {
     description = "Self-contained user/group management and authentication service";
     homepage = "https://github.com/majewsky/portunus";
@@ -30,5 +31,14 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ majewsky ];
     teams = [ lib.teams.c3d2 ];
+=======
+  meta = with lib; {
+    description = "Self-contained user/group management and authentication service";
+    homepage = "https://github.com/majewsky/portunus";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ majewsky ];
+    teams = [ teams.c3d2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

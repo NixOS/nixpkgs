@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colored_traceback" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/staticshock/colored-traceback.py";
     description = "Automatically color Python's uncaught exception tracebacks";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ pamplemousse ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/staticshock/colored-traceback.py";
+    description = "Automatically color Python's uncaught exception tracebacks";
+    license = licenses.isc;
+    maintainers = with maintainers; [ pamplemousse ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

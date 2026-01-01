@@ -66,11 +66,20 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
 
     passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
     meta = {
       description = "Flat colorful design icon theme";
       homepage = "https://github.com/vinceliuice/Qogir-icon-theme";
       license = with lib.licenses; [ gpl3Only ];
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ romildo ];
+=======
+    meta = with lib; {
+      description = "Flat colorful design icon theme";
+      homepage = "https://github.com/vinceliuice/Qogir-icon-theme";
+      license = with licenses; [ gpl3Only ];
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }

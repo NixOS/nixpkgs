@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 # Tests in: nixos/tests/ec2-image.nix
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 # This module defines a systemd service that sets the SSH host key and
 # authorized client key and host name of virtual machines running on
 # Amazon EC2, Eucalyptus and OpenStack Compute (Nova).
@@ -87,17 +90,21 @@ with lib;
         # Print the host public key on the console so that the user
         # can obtain it securely by parsing the output of
         # ec2-get-console-output.
+<<<<<<< HEAD
         #
         # Format follows cloud-init conventions. The delimiters are based on:
         # - cloud-init write-ssh-key-fingerprints tool:
         #   https://github.com/canonical/cloud-init/blob/main/tools/write-ssh-key-fingerprints
         #
         # FINGERPRINTS section: for pre-26.05 tooling and human interactive consumption
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         echo "-----BEGIN SSH HOST KEY FINGERPRINTS-----" > /dev/console
         for i in /etc/ssh/ssh_host_*_key.pub; do
             ${config.programs.ssh.package}/bin/ssh-keygen -l -f "$i" > /dev/console || true
         done
         echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
+<<<<<<< HEAD
 
         # KEYS section: full public keys for provisioning tools
         # Keys can be converted directly into SSH known_hosts files
@@ -106,6 +113,8 @@ with lib;
             cat "$i" > /dev/console
         done
         echo "-----END SSH HOST KEY KEYS-----" > /dev/console
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       '';
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;

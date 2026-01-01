@@ -34,12 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyperf" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python module to generate and modify perf";
     mainProgram = "pyperf";
     homepage = "https://pyperf.readthedocs.io/";
     changelog = "https://github.com/psf/pyperf/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

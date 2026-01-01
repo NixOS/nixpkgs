@@ -34,7 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_option_group" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Option groups missing in Click";
     longDescription = ''
       Option groups are convenient mechanism for logical structuring
@@ -44,7 +48,12 @@ buildPythonPackage rec {
       functionality out of the box.
     '';
     homepage = "https://github.com/click-contrib/click-option-group/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

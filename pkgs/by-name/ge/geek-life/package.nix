@@ -21,11 +21,19 @@ buildGoModule rec {
     mv $out/bin/app $out/bin/geek-life
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ajaxray/geek-life";
     description = "Todo List / Task Manager for Geeks in command line";
     maintainers = with lib.maintainers; [ noisersup ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ajaxray/geek-life";
+    description = "Todo List / Task Manager for Geeks in command line";
+    maintainers = with maintainers; [ noisersup ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "geek-life";
   };
 }

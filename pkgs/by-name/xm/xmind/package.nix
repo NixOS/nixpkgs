@@ -25,11 +25,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmind";
+<<<<<<< HEAD
   version = "26.01.03145-202510170359";
 
   src = fetchurl {
     url = "https://dl3.xmind.app/Xmind-for-Linux-amd64bit-${finalAttrs.version}.deb";
     hash = "sha256-h7qxDf219+t8oAk8IABs7MyasNd3K/PAM6a79kyaLdw=";
+=======
+  version = "25.07.03033-202507241842";
+
+  src = fetchurl {
+    url = "https://dl3.xmind.app/Xmind-for-Linux-amd64bit-${finalAttrs.version}.deb";
+    hash = "sha256-ZD5sFILeMgyO+jV+oArGqqDogW33JE8y49KkclEUHzE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -95,7 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "xmind";
     license = lib.licenses.unfree;
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" ];
+=======
+    platforms = lib.platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ michalrus ];
   };
 })

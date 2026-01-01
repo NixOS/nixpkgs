@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sveint/flask-swagger-ui";
     license = lib.licenses.mit;
     description = "Swagger UI blueprint for Flask";
     maintainers = with lib.maintainers; [ vanschelven ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sveint/flask-swagger-ui";
+    license = licenses.mit;
+    description = "Swagger UI blueprint for Flask";
+    maintainers = with maintainers; [ vanschelven ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

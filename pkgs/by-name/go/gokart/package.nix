@@ -20,11 +20,20 @@ buildGoModule rec {
   # Would need files to scan which are not shipped by the project
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Static analysis tool for securing Go code";
     mainProgram = "gokart";
     homepage = "https://github.com/praetorian-inc/gokart";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Static analysis tool for securing Go code";
+    mainProgram = "gokart";
+    homepage = "https://github.com/praetorian-inc/gokart";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,11 +32,19 @@ stdenv.mkDerivation rec {
     modemmanager
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://source.puri.sm/Librem5/purple-mm-sms";
     description = "Libpurple plugin for sending and receiving SMS via Modemmanager";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://source.puri.sm/Librem5/purple-mm-sms";
+    description = "Libpurple plugin for sending and receiving SMS via Modemmanager";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

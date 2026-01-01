@@ -31,10 +31,17 @@ buildGoModule rec {
       --zsh <($out/bin/onmetal-image completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Onmetal OCI Image Specification, Library and Tooling";
     homepage = "https://github.com/onmetal/onmetal-image";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Onmetal OCI Image Specification, Library and Tooling";
+    homepage = "https://github.com/onmetal/onmetal-image";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "onmetal-image";
   };

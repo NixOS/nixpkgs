@@ -79,11 +79,19 @@ stdenv.mkDerivation {
   #       __D2rt6config16rt_envvarsOptionFNbNiAyaMDFNbNiQkZQnZQq in libphobos2.a(config_99a_6c3.o)
   dontStrip = hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Digital Mars D Compiler Package";
     # As of 2.075 all sources and binaries use the boost license
     license = lib.licenses.boost;
     maintainers = [ lib.maintainers.lionello ];
+=======
+  meta = with lib; {
+    description = "Digital Mars D Compiler Package";
+    # As of 2.075 all sources and binaries use the boost license
+    license = licenses.boost;
+    maintainers = [ maintainers.lionello ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://dlang.org/";
     platforms = [
       "x86_64-darwin"

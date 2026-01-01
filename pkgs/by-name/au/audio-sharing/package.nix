@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/World/AudioSharing";
     description = "Automatically share the current audio playback in the form of an RTSP stream";
@@ -76,5 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/World/AudioSharing";
+    description = "Automatically share the current audio playback in the form of an RTSP stream";
+    mainProgram = "audio-sharing";
+    maintainers = with maintainers; [ benediktbroich ];
+    teams = [ teams.gnome-circle ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -5,7 +5,11 @@
   runCommand,
   buildNpmPackage,
   clang,
+<<<<<<< HEAD
   go_1_24,
+=======
+  go,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libsForQt5,
   qt6,
   udevCheckHook,
@@ -21,14 +25,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bitbox";
+<<<<<<< HEAD
   version = "4.49.0";
+=======
+  version = "4.48.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
     tag = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-pl7vtRQCxRwG58bBnT8iAi2qfsdeJrHbzDeHJsYwjnQ=";
+=======
+    hash = "sha256-qNcwBaJywWMo/Bb1QkOM9FQ76Sf2DqULUr+W583ufAk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -43,7 +55,11 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit src;
     sourceRoot = "${src.name}/frontends/web";
+<<<<<<< HEAD
     npmDepsHash = "sha256-J3jT286MZGTHgmRXKiXj7lod9wgoEVQrCfOGCtSyG/s=";
+=======
+    npmDepsHash = "sha256-9NS85U4L5sLX3n/uN4p4CB5vfpWMMcnf6wESlFdQPlI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     installPhase = "cp -r build $out";
   };
 
@@ -72,7 +88,11 @@ stdenv.mkDerivation rec {
     cp frontends/qt/build/BitBox $out/bin/bitbox
     cp frontends/qt/build/assets.rcc $out/bin
     cp frontends/qt/server/libserver.so $out/lib
+<<<<<<< HEAD
     install -m 644 -Dt $out/lib/udev/rules.d ${./rules.d}/*
+=======
+    install -Dt $out/lib/udev/rules.d ${./rules.d}/*
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     runHook postInstall
   '';
@@ -81,7 +101,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     clang
+<<<<<<< HEAD
     go_1_24
+=======
+    go
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     qt6.wrapQtAppsHook
     rcc
     udevCheckHook

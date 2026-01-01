@@ -39,11 +39,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cached_ipaddress" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cache construction of ipaddress objects";
     homepage = "https://github.com/bdraco/cached-ipaddress";
     changelog = "https://github.com/bdraco/cached-ipaddress/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Cache construction of ipaddress objects";
+    homepage = "https://github.com/bdraco/cached-ipaddress";
+    changelog = "https://github.com/bdraco/cached-ipaddress/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

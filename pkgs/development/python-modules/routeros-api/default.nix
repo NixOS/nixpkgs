@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "routeros_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API to RouterBoard devices produced by MikroTik";
     homepage = "https://github.com/socialwifi/RouterOS-api";
     changelog = "https://github.com/socialwifi/RouterOS-api/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ quentin ];
+=======
+  meta = with lib; {
+    description = "Python API to RouterBoard devices produced by MikroTik";
+    homepage = "https://github.com/socialwifi/RouterOS-api";
+    changelog = "https://github.com/socialwifi/RouterOS-api/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ quentin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     doc = sagedoc;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
     mainProgram = "sage";
@@ -65,5 +66,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
+=======
+  meta = with lib; {
+    description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
+    mainProgram = "sage";
+    homepage = "https://www.sagemath.org";
+    license = licenses.gpl2Plus;
+    teams = [ teams.sage ];
+    platforms = platforms.linux ++ [ "aarch64-darwin" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

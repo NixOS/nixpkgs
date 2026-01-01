@@ -41,12 +41,21 @@ stdenv.mkDerivation {
     install -D ${./99-flirc.rules} $out/lib/udev/rules.d/99-flirc.rules
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://flirc.tv/more/flirc-usb";
     description = "Use any Remote with your Media Center";
     maintainers = with lib.maintainers; [ aanderse ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    homepage = "https://flirc.tv/more/flirc-usb";
+    description = "Use any Remote with your Media Center";
+    maintainers = with maintainers; [ aanderse ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "Flirc";
     platforms = [ "x86_64-linux" ];
   };

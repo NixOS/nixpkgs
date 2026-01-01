@@ -22,6 +22,7 @@ let
           --add-flags "-hogdir ${assets}/share/games/descent${toString ver}"
       '';
 
+<<<<<<< HEAD
       meta = {
         description = "Descent ${toString ver} using the DXX-Rebirth project engine and game assets from GOG";
         homepage = "https://www.dxx-rebirth.com/";
@@ -31,6 +32,17 @@ let
         ];
         maintainers = with lib.maintainers; [ peterhoeg ];
         platforms = with lib.platforms; linux;
+=======
+      meta = with lib; {
+        description = "Descent ${toString ver} using the DXX-Rebirth project engine and game assets from GOG";
+        homepage = "https://www.dxx-rebirth.com/";
+        license = with licenses; [
+          free
+          unfree
+        ];
+        maintainers = with maintainers; [ peterhoeg ];
+        platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         hydraPlatforms = [ ];
       };
     };

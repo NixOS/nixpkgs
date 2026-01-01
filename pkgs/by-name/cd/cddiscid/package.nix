@@ -18,10 +18,17 @@ stdenv.mkDerivation rec {
     "INSTALL=install"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://linukz.org/cd-discid.shtml";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://linukz.org/cd-discid.shtml";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command-line utility to get CDDB discid information from a CD-ROM disc";
     mainProgram = "cd-discid";
 

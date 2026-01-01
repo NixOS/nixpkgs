@@ -182,11 +182,20 @@ stdenv.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.argyllcms.com/";
     description = "Color management system (compatible with ICC)";
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.argyllcms.com/";
+    description = "Color management system (compatible with ICC)";
+    license = licenses.gpl3;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

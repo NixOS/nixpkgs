@@ -39,10 +39,17 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "rest_polymorphic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Polymorphic serializers for Django REST Framework";
     homepage = "https://github.com/apirobot/django-rest-polymorphic";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Polymorphic serializers for Django REST Framework";
+    homepage = "https://github.com/apirobot/django-rest-polymorphic";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

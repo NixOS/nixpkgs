@@ -33,11 +33,19 @@ gccStdenv.mkDerivation {
     mkdir -p $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open, trustable and efficient SMT-solver";
     homepage = "https://verit.loria.fr/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Open, trustable and efficient SMT-solver";
+    homepage = "https://verit.loria.fr/";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

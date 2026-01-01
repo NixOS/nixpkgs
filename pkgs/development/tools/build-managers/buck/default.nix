@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
       }"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://buck.build/";
     description = "High-performance build tool";
@@ -63,6 +64,15 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.jgertm ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://buck.build/";
+    description = "High-performance build tool";
+    mainProgram = "buck";
+    maintainers = [ maintainers.jgertm ];
+    license = licenses.asl20;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # https://github.com/facebook/buck/issues/2666
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };

@@ -24,13 +24,21 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
+<<<<<<< HEAD
   version = "1.4.335";
+=======
+  version = "1.4.328.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
+<<<<<<< HEAD
     hash = "sha256-C/wzLLiG7DrLyP3YRKhjawNoEOCCogXkrFeBczeVZR0=";
+=======
+    hash = "sha256-QoqlHrhgaV1SRLAxmYUXaKxH1IdbnxqkcJklDy20ORg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./wayland-scanner.patch ];
@@ -84,7 +92,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_CUBE=OFF"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Khronos official Vulkan Tools and Utilities";
     longDescription = ''
       This project provides Vulkan tools and utilities that can assist
@@ -92,8 +104,14 @@ stdenv.mkDerivation rec {
       use of the Vulkan API.
     '';
     homepage = "https://github.com/KhronosGroup/Vulkan-Tools";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ralith ];
+=======
+    platforms = platforms.unix;
+    license = licenses.asl20;
+    maintainers = [ maintainers.ralith ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

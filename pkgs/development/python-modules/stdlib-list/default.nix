@@ -23,11 +23,19 @@ buildPythonPackage rec {
   # tests see mismatches to our standard library
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "List of Python Standard Libraries";
     homepage = "https://github.com/jackmaney/python-stdlib-list";
     changelog = "https://github.com/pypi/stdlib-list/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "List of Python Standard Libraries";
+    homepage = "https://github.com/jackmaney/python-stdlib-list";
+    changelog = "https://github.com/pypi/stdlib-list/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

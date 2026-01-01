@@ -67,7 +67,13 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/design/emblem";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [
+      foo-dogsquared
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     teams = [ lib.teams.gnome-circle ];
   };
 }

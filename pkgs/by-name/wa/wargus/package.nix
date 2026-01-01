@@ -84,11 +84,20 @@ stdenv.mkDerivation rec {
     ln -s $out/share/games/stratagus/wargus/{contrib/black_title.png,graphics/ui/black_title.png}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Importer and scripts for Warcraft II: Tides of Darkness, the expansion Beyond the Dark Portal, and Aleonas Tales";
     homepage = "https://wargus.github.io/";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.astro ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Importer and scripts for Warcraft II: Tides of Darkness, the expansion Beyond the Dark Portal, and Aleonas Tales";
+    homepage = "https://wargus.github.io/";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.astro ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

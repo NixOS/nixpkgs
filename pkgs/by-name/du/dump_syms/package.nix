@@ -39,16 +39,24 @@ rustPlatform.buildRustPackage {
   checkFlags = [
     # Disable tests that require network access
     # ConnectError("dns error", Custom { kind: Uncategorized, error: "failed to lookup address information: Temporary failure in name resolution" })) }', src/windows/pdb.rs:725:56
+<<<<<<< HEAD
     "--skip=windows::pdb::tests::test_ntdll"
     "--skip=windows::pdb::tests::test_oleaut32"
+=======
+    "--skip windows::pdb::tests::test_ntdll"
+    "--skip windows::pdb::tests::test_oleaut32"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   passthru.tests = {
     inherit firefox-esr-unwrapped firefox-unwrapped thunderbird-unwrapped;
   };
 
+<<<<<<< HEAD
   __structuredAttrs = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     changelog = "https://github.com/mozilla/dump_syms/blob/v${version}/CHANGELOG.md";
     description = "Command-line utility for parsing the debugging information the compiler provides in ELF or stand-alone PDB files";

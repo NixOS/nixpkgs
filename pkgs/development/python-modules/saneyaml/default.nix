@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "saneyaml" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PyYaml wrapper with sane behaviour to read and write readable YAML safely";
     homepage = "https://github.com/nexB/saneyaml";
     changelog = "https://github.com/aboutcode-org/saneyaml/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "PyYaml wrapper with sane behaviour to read and write readable YAML safely";
+    homepage = "https://github.com/nexB/saneyaml";
+    changelog = "https://github.com/aboutcode-org/saneyaml/blob/v${version}/CHANGELOG.rst";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

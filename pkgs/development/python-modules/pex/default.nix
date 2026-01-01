@@ -59,11 +59,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pex" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library and tool for generating .pex (Python EXecutable) files";
     homepage = "https://github.com/pantsbuild/pex";
     changelog = "https://github.com/pantsbuild/pex/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python library and tool for generating .pex (Python EXecutable) files";
+    homepage = "https://github.com/pantsbuild/pex";
+    changelog = "https://github.com/pantsbuild/pex/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

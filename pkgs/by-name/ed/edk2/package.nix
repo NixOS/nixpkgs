@@ -33,14 +33,22 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edk2";
+<<<<<<< HEAD
   version = "202511";
+=======
+  version = "202508.01";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     tag = "edk2-stable${finalAttrs.version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-R/rgz8dWcDYVoiM67K2UGuq0xXbjjJYBPtJ1FmfGIaU=";
+=======
+    hash = "sha256-BgNNKA+YFeaZDm1mLzBN3VA7RAwNT9MXV3JX5ZLrFOo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   src = applyPatches {
@@ -55,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       })
 
       ./fix-cross-compilation-antlr-dlg.patch
+<<<<<<< HEAD
 
       # fix compatibility with nasm 3.01 (https://github.com/tianocore/edk2/pull/11691)
       # TODO: remove when updating beyond 202511
@@ -63,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/tianocore/edk2/commit/9ccf8751a74f26142e584c7b7c7572a182b67997.patch";
         hash = "sha256-0aqpuQDxLdbSJMBXzY/57GzL2wLn0m8dkT7X6uXtKMg=";
       })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     # FIXME: unvendor OpenSSL again once upstream updates
@@ -85,7 +96,14 @@ stdenv.mkDerivation (finalAttrs: {
   depsHostHost = [ libuuid ];
   strictDeps = true;
 
+<<<<<<< HEAD
   makeFlags = [ "--directory=BaseTools" ];
+=======
+  # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
+  ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
+
+  makeFlags = [ "-C BaseTools" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env = {
     NIX_CFLAGS_COMPILE =
@@ -93,9 +111,12 @@ stdenv.mkDerivation (finalAttrs: {
       + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation"
       + lib.optionalString (stdenv.hostPlatform.isDarwin) " -Wno-error=macro-redefined";
     PYTHON_COMMAND = lib.getExe pythonEnv;
+<<<<<<< HEAD
     # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
     ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   hardeningDisable = [

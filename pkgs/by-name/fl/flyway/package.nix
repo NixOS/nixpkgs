@@ -9,10 +9,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";
+<<<<<<< HEAD
   version = "11.19.1";
   src = fetchurl {
     url = "https://github.com/flyway/flyway/releases/download/flyway-${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-nI3eiVcCcMT9FF8gUCTzmOwjltUCGFwduEgreHCYpL4=";
+=======
+  version = "11.14.1";
+  src = fetchurl {
+    url = "https://github.com/flyway/flyway/releases/download/flyway-${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-NWxt7qOiANk847cHbs916jNaZlUZynRlrVP321MkqOs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;
@@ -32,7 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Evolve your Database Schema easily and reliably across all your instances";
     longDescription = ''
       The Flyway command-line tool is a standalone Flyway distribution.
@@ -45,9 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/flyway/flyway";
     homepage = "https://flywaydb.org/";
     changelog = "https://documentation.red-gate.com/fd/release-notes-for-flyway-engine-179732572.html";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.cmcdragonkai ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.cmcdragonkai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

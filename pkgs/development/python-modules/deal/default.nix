@@ -91,7 +91,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deal" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library for design by contract (DbC) and checking values, exceptions, and side-effects";
     longDescription = ''
       In a nutshell, deal empowers you to write bug-free code.
@@ -100,7 +104,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/life4/deal";
     changelog = "https://github.com/life4/deal/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

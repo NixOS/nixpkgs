@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgenerate-shell-completions=disabled"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/enkore/j4-dmenu-desktop/blob/${finalAttrs.src.rev}/CHANGELOG";
     description = "Wrapper for dmenu that recognizes .desktop files";
@@ -52,5 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "j4-dmenu-desktop";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/enkore/j4-dmenu-desktop/blob/${finalAttrs.src.rev}/CHANGELOG";
+    description = "Wrapper for dmenu that recognizes .desktop files";
+    homepage = "https://github.com/enkore/j4-dmenu-desktop";
+    license = licenses.gpl3Only;
+    mainProgram = "j4-dmenu-desktop";
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

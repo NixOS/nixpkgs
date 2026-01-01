@@ -50,15 +50,27 @@ stdenvNoCC.mkDerivation {
     jdupes -l -r $out/share/icons
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Icon theme designed with a minimal flat style using simple geometry and bright colours";
     homepage = "https://snwh.org/moka";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Icon theme designed with a minimal flat style using simple geometry and bright colours";
+    homepage = "https://snwh.org/moka";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cc-by-sa-40
       gpl3Only
     ];
     # darwin cannot deal with file names differing only in case
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

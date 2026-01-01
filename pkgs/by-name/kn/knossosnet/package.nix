@@ -44,11 +44,20 @@ buildDotnetModule rec {
     install -Dm644 $src/packaging/linux/knossos-512.png $out/share/icons/hicolor/512x512/apps/knossos.png
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/KnossosNET/Knossos.NET";
     description = "Multi-platform launcher for Freespace 2 Open";
     license = lib.licenses.gpl3Only;
     mainProgram = "Knossos.NET";
     maintainers = with lib.maintainers; [ cdombroski ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/KnossosNET/Knossos.NET";
+    description = "Multi-platform launcher for Freespace 2 Open";
+    license = licenses.gpl3Only;
+    mainProgram = "Knossos.NET";
+    maintainers = with maintainers; [ cdombroski ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

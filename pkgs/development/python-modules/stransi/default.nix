@@ -31,11 +31,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stransi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight Python parser library for ANSI escape code sequences";
     homepage = "https://github.com/getcuia/stransi";
     changelog = "https://github.com/getcuia/stransi/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Lightweight Python parser library for ANSI escape code sequences";
+    homepage = "https://github.com/getcuia/stransi";
+    changelog = "https://github.com/getcuia/stransi/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

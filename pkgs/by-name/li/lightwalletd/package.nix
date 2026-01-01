@@ -40,11 +40,19 @@ buildGoModule rec {
     version = "v${lightwalletd.version}";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Backend service that provides a bandwidth-efficient interface to the Zcash blockchain";
     homepage = "https://github.com/zcash/lightwalletd";
     maintainers = with lib.maintainers; [ centromere ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Backend service that provides a bandwidth-efficient interface to the Zcash blockchain";
+    homepage = "https://github.com/zcash/lightwalletd";
+    maintainers = with maintainers; [ centromere ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lightwalletd";
   };
 }

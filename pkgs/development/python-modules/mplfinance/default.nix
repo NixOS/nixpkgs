@@ -27,9 +27,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mplfinance" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Matplotlib utilities for the visualization, and visual analysis, of financial data";
     homepage = "https://github.com/matplotlib/mplfinance";
     license = [ lib.licenses.bsd3 ];
+=======
+  meta = with lib; {
+    description = "Matplotlib utilities for the visualization, and visual analysis, of financial data";
+    homepage = "https://github.com/matplotlib/mplfinance";
+    license = [ licenses.bsd3 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

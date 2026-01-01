@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
         $out/Write/Write
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.styluslabs.com/";
     description = "Write is a word processor for handwriting";
@@ -72,6 +73,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "http://www.styluslabs.com/";
+    description = "Write is a word processor for handwriting";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       oyren
       lukts30
       atemu

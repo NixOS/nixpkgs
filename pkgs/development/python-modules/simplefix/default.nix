@@ -29,10 +29,19 @@ buildPythonPackage rec {
     "test"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple FIX Protocol implementation for Python";
     homepage = "https://github.com/da4089/simplefix";
     changelog = "https://github.com/da4089/simplefix/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple FIX Protocol implementation for Python";
+    homepage = "https://github.com/da4089/simplefix";
+    changelog = "https://github.com/da4089/simplefix/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

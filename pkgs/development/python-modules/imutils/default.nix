@@ -28,11 +28,19 @@ buildPythonPackage rec {
     "imutils.face_utils"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jrosebr1/imutils";
     description = "Series of convenience functions to make basic image processing functions";
     mainProgram = "range-detector";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jrosebr1/imutils";
+    description = "Series of convenience functions to make basic image processing functions";
+    mainProgram = "range-detector";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

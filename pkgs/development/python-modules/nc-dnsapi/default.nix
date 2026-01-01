@@ -24,11 +24,19 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "API wrapper for the netcup DNS api";
     homepage = "https://github.com/nbuchwitz/nc_dnsapi";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "API wrapper for the netcup DNS api";
+    homepage = "https://github.com/nbuchwitz/nc_dnsapi";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       veehaitch
       trundle
     ];

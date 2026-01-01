@@ -34,6 +34,7 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${executableName}'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.mendeley.com";
     description = "Reference manager and academic social network";
@@ -41,6 +42,15 @@ appimageTools.wrapType2 {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ atila ];
+=======
+  meta = with lib; {
+    homepage = "https://www.mendeley.com";
+    description = "Reference manager and academic social network";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ atila ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mendeley-reference-manager";
   };
 

@@ -51,12 +51,21 @@ stdenv.mkDerivation {
     ]
   );
 
+<<<<<<< HEAD
   meta = {
     description = "OpenWrt Network interface configuration daemon";
     homepage = "https://git.openwrt.org/?p=project/netifd.git;a=summary";
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mkg20001 ];
+=======
+  meta = with lib; {
+    description = "OpenWrt Network interface configuration daemon";
+    homepage = "https://git.openwrt.org/?p=project/netifd.git;a=summary";
+    license = licenses.lgpl21Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mkg20001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "netifd";
   };
 }

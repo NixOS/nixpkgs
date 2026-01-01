@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
     "--with-backend=pcsc"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C library to interact with the CCID-part of the Yubikey NEO";
     homepage = "https://developers.yubico.com/libykneomgr";
     license = lib.licenses.bsd3;
     mainProgram = "ykneomgr";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C library to interact with the CCID-part of the Yubikey NEO";
+    homepage = "https://developers.yubico.com/libykneomgr";
+    license = licenses.bsd3;
+    mainProgram = "ykneomgr";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

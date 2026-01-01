@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -156,11 +159,14 @@ buildPythonPackage rec {
     "test_tool_yielding_with_error"
     "test_translate_model_params_openai"
     "test_unknown_tool_error_format_updated"
+<<<<<<< HEAD
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in the sandbox
     # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
     "test_can_create_image_from_plot"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {

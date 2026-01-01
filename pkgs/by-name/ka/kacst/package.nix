@@ -22,10 +22,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Latin-Arabic TrueType fonts";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Latin-Arabic TrueType fonts";
+    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ serge ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

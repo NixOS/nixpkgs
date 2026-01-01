@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/Archive/nemiver";
     description = "Easy to use standalone C/C++ debugger";
@@ -87,5 +88,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.juliendehos ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/Archive/nemiver";
+    description = "Easy to use standalone C/C++ debugger";
+    mainProgram = "nemiver";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.juliendehos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

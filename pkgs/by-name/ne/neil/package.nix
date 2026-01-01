@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ babashka ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/babashka/neil";
     description = "CLI to add common aliases and features to deps.edn-based projects";
@@ -34,5 +35,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = babashka.meta.platforms;
     maintainers = with lib.maintainers; [ jlesquembre ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/babashka/neil";
+    description = "CLI to add common aliases and features to deps.edn-based projects";
+    mainProgram = "neil";
+    license = licenses.mit;
+    platforms = babashka.meta.platforms;
+    maintainers = with maintainers; [ jlesquembre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

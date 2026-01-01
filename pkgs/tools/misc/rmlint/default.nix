@@ -92,12 +92,21 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
     homepage = "https://rmlint.readthedocs.org";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
+    homepage = "https://rmlint.readthedocs.org";
+    platforms = platforms.unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aaschmid
       koral
     ];

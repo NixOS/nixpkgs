@@ -5,21 +5,42 @@
   git,
   uv,
   python312,
+<<<<<<< HEAD
   nix-update-script,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
+<<<<<<< HEAD
   version = "0.2.20";
+=======
+  version = "0.2.18";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-AZyYjgUd2dGnBUHwo/cPagFE8IJmzsgMLwebTypLAgE=";
   };
 
   cargoHash = "sha256-a1yBu4MuyR0veBSQAUdaE/9rB04i6RVJ/NdWNmpRzmM=";
+=======
+    sha256 = "sha256-ddLtXIBf6WrjN+gxm0g3Wkmyps2resWsd1cH0F99Ii8=";
+  };
+
+  cargoHash = "sha256-E+t7bwKDnuZO/4WJEBaN+e5+P/Nbo14WWxgTLxDE7Jw=";
+
+  preBuild = ''
+    version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
+
+    substituteInPlace ./tests/languages/python.rs \
+      --replace '(3, 12, 11)' "$version312_str"
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeCheckInputs = [
     git
@@ -62,11 +83,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "run_worktree"
     "try_repo_relative_path"
     "languages::tests::test_native_tls"
+<<<<<<< HEAD
     "rust::additional_dependencies_cli"
     "rust::rustup_installer"
     "rust::remote_hooks"
     "rust::remote_hooks_with_lib_deps"
     "unsupported::unsupported_language"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # "meta_hooks"
     "reuse_env"
     "docker::docker"
@@ -143,12 +167,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lua::remote_hook"
     # error message differs
     "run_in_non_git_repo"
+<<<<<<< HEAD
     # depends on locale
     "init_nonexistent_repo"
   ];
 
   passthru.updateScript = nix-update-script { };
 
+=======
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "https://github.com/j178/prek";
     description = "Better `pre-commit`, re-engineered in Rust ";

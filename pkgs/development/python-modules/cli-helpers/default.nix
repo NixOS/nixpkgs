@@ -37,9 +37,15 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   meta = {
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python helpers for common CLI tasks";
     longDescription = ''
       CLI Helpers is a Python package that makes it easy to perform common
@@ -62,7 +68,12 @@ buildPythonPackage rec {
       Read the documentation at http://cli-helpers.rtfd.io
     '';
     homepage = "https://cli-helpers.readthedocs.io/en/stable/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.kalbasit ];
+=======
+    license = licenses.bsd3;
+    maintainers = [ maintainers.kalbasit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

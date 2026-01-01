@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Proxy for sending IIO sensor data to D-Bus";
     mainProgram = "monitor-sensor";
@@ -75,5 +76,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ _999eagle ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Proxy for sending IIO sensor data to D-Bus";
+    mainProgram = "monitor-sensor";
+    homepage = "https://gitlab.freedesktop.org/hadess/iio-sensor-proxy";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ _999eagle ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

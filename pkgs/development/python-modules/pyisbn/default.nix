@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyisbn" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for working with 10- and 13-digit ISBNs";
     homepage = "https://github.com/JNRowe/pyisbn";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ eigengrau ];
+=======
+  meta = with lib; {
+    description = "Python module for working with 10- and 13-digit ISBNs";
+    homepage = "https://github.com/JNRowe/pyisbn";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ eigengrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

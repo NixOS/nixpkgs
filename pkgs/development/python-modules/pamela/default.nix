@@ -23,9 +23,16 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "PAM interface using ctypes";
     homepage = "https://github.com/minrk/pamela";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "PAM interface using ctypes";
+    homepage = "https://github.com/minrk/pamela";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

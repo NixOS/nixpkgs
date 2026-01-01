@@ -31,11 +31,19 @@ stdenv.mkDerivation rec {
   # In procedure bytevector-u8-ref: Argument 2 out of range
   dontStrip = stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ngyro.com/software/guile-lzma.html";
     description = "Guile wrapper for lzma library";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://ngyro.com/software/guile-lzma.html";
+    description = "Guile wrapper for lzma library";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ foo-dogsquared ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 }

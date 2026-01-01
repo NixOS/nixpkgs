@@ -61,10 +61,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ledgerblue" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to communicate with Ledger Blue/Nano S";
     homepage = "https://github.com/LedgerHQ/blue-loader-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ np ];
+=======
+  meta = with lib; {
+    description = "Python library to communicate with Ledger Blue/Nano S";
+    homepage = "https://github.com/LedgerHQ/blue-loader-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ np ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -182,7 +182,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (nix-cli) version;
+<<<<<<< HEAD
     inherit nix-cli;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     src = patchedSrc;
 
     /**

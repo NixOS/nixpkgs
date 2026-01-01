@@ -1,12 +1,16 @@
 {
   "clang/gnu-install-dirs.patch" = [
     {
+<<<<<<< HEAD
       after = "22";
       path = ../22;
     }
     {
       after = "19";
       before = "22";
+=======
+      after = "19";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       path = ../19;
     }
   ];
@@ -57,12 +61,16 @@
   ];
   "llvm/lit-shell-script-runner-set-dyld-library-path.patch" = [
     {
+<<<<<<< HEAD
       after = "22";
       path = ../22;
     }
     {
       path = ../18;
       before = "22";
+=======
+      path = ../18;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
   ];
   "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch" = [
@@ -126,6 +134,7 @@
       path = ../21;
     }
   ];
+<<<<<<< HEAD
   "mlir/mlir-add-include-cstdint.patch" = [
     {
       after = "18";
@@ -138,4 +147,6 @@
       path = ../19;
     }
   ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Configuration parser library";
     maintainers = with lib.maintainers; [ pSub ];
     homepage = "https://github.com/williamh/dotconf";
     license = lib.licenses.lgpl21Plus;
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Configuration parser library";
+    maintainers = with maintainers; [ pSub ];
+    homepage = "https://github.com/williamh/dotconf";
+    license = licenses.lgpl21Plus;
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

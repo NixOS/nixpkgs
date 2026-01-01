@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Liberation Sans Narrow Font Family is a replacement for Arial Narrow";
     longDescription = ''
       Liberation Sans Narrow is a font originally created by Ascender
@@ -42,7 +46,11 @@ stdenv.mkDerivation rec {
       license to the Open Font License.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
+=======
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/liberationfonts";
   };
 }

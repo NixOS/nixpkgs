@@ -21,10 +21,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "expects" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Expressive and extensible TDD/BDD assertion library for Python";
     homepage = "https://expects.readthedocs.io/";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Expressive and extensible TDD/BDD assertion library for Python";
+    homepage = "https://expects.readthedocs.io/";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

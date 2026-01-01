@@ -23,7 +23,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Monospaced font for scientific and technical computing";
     longDescription = ''
       JuliaMono is a monospaced typeface designed for use in text editing
@@ -32,9 +36,16 @@ stdenvNoCC.mkDerivation rec {
       2020 JuliaCon conference in Lisbon, Portugal (which of course didn’t
       physically happen in Lisbon, but online).
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ suhr ];
     platforms = with lib.platforms; all;
     homepage = "https://juliamono.netlify.app/";
     license = lib.licenses.ofl;
+=======
+    maintainers = with maintainers; [ suhr ];
+    platforms = with platforms; all;
+    homepage = "https://juliamono.netlify.app/";
+    license = licenses.ofl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

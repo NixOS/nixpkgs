@@ -49,11 +49,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wavefile" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Pythonic libsndfile wrapper to read and write audio files";
     homepage = "https://github.com/vokimon/python-wavefile";
     changelog = "https://github.com/vokimon/python-wavefile#version-history";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
+=======
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

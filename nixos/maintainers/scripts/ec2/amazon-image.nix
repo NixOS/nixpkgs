@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # Tests in: nixos/tests/ec2-image.nix
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 {
   config,
   lib,

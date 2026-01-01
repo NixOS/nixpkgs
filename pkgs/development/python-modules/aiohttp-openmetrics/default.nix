@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_openmetrics" ];
 
+<<<<<<< HEAD
   meta = {
     description = "OpenMetrics provider for aiohttp";
     homepage = "https://github.com/jelmer/aiohttp-openmetrics/";
     changelog = "https://github.com/jelmer/aiohttp-openmetrics/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "OpenMetrics provider for aiohttp";
+    homepage = "https://github.com/jelmer/aiohttp-openmetrics/";
+    changelog = "https://github.com/jelmer/aiohttp-openmetrics/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

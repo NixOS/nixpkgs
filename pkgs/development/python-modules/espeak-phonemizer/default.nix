@@ -27,13 +27,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/rhasspy/espeak-phonemizer/releases/tag/v${version}";
     description = "Uses ctypes and libespeak-ng to transform test into IPA phonemes";
     mainProgram = "espeak-phonemizer";
     homepage = "https://github.com/rhasspy/espeak-phonemizer";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

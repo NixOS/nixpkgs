@@ -22,10 +22,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "od" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Shorthand syntax for building OrderedDicts";
     homepage = "https://github.com/epsy/od";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Shorthand syntax for building OrderedDicts";
+    homepage = "https://github.com/epsy/od";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

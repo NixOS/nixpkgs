@@ -37,15 +37,24 @@ buildGoModule rec {
     installManPage shfmt.1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/mvdan/sh";
     description = "Shell parser and formatter";
     longDescription = ''
       shfmt formats shell programs. It can use tabs or any number of spaces to indent.
       You can feed it standard input, any number of files or any number of directories to recurse into.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zowoq
       SuperSandro2000
     ];

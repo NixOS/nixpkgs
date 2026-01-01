@@ -52,10 +52,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.travis" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Travis CI configurations for PyScaffold";
     homepage = "https://pypi.org/project/pyscaffoldext-travis/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
+=======
+  meta = with lib; {
+    description = "Travis CI configurations for PyScaffold";
+    homepage = "https://pypi.org/project/pyscaffoldext-travis/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

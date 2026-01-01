@@ -21,12 +21,21 @@ stdenv.mkDerivation {
     cp vtwheel $out/lib/urxvt/perl
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pass mouse wheel commands to secondary screens (screen, less, nano, etc)";
     homepage = "https://aur.archlinux.org/packages/urxvt-vtwheel";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danbst ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Pass mouse wheel commands to secondary screens (screen, less, nano, etc)";
+    homepage = "https://aur.archlinux.org/packages/urxvt-vtwheel";
+    license = licenses.mit;
+    maintainers = with maintainers; [ danbst ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

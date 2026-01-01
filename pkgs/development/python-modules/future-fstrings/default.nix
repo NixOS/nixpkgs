@@ -19,12 +19,21 @@ buildPythonPackage rec {
   # No tests included in Pypi archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/asottile/future-fstrings";
     description = "Backport of fstrings to python<3.6";
     mainProgram = "future-fstrings-show";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/asottile/future-fstrings";
+    description = "Backport of fstrings to python<3.6";
+    mainProgram = "future-fstrings-show";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = pythonOlder "3.6"; # dependency tokenize-rt not packaged
   };
 }

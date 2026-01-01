@@ -149,6 +149,7 @@ buildPythonPackage rec {
     inherit (nixosTests) mitmproxy;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
@@ -156,5 +157,13 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "mitmproxy";
+=======
+  meta = with lib; {
+    description = "Man-in-the-middle proxy";
+    homepage = "https://mitmproxy.org/";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

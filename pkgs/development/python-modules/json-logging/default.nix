@@ -60,7 +60,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library to emit logs in JSON format";
     longDescription = ''
       Python logging library to emit JSON log that can be easily indexed and searchable by logging
@@ -68,7 +72,11 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bobbui/json-logging-python";
     changelog = "https://github.com/bobbui/json-logging-python/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

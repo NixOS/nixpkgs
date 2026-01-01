@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/tasknc --prefix PATH : ${taskwarrior2}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lharding/tasknc";
     description = "Ncurses wrapper around taskwarrior";
@@ -58,5 +59,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.linux; # Cannot test others
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lharding/tasknc";
+    description = "Ncurses wrapper around taskwarrior";
+    mainProgram = "tasknc";
+    maintainers = with maintainers; [ matthiasbeyer ];
+    platforms = platforms.linux; # Cannot test others
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

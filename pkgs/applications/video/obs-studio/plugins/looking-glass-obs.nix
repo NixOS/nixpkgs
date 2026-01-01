@@ -32,11 +32,19 @@ stdenv.mkDerivation {
     mv liblooking-glass-obs.so $out/lib/obs-plugins/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin for OBS Studio for efficient capturing of looking-glass";
     homepage = "https://looking-glass.io/docs/stable/obs/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ babbaj ];
+=======
+  meta = with lib; {
+    description = "Plugin for OBS Studio for efficient capturing of looking-glass";
+    homepage = "https://looking-glass.io/docs/stable/obs/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ babbaj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Hard coded x86_64 support
     platforms = [ "x86_64-linux" ];
   };

@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
     # https://github.com/antlr/antlr3/issues/205
     ++ lib.optional (!stdenv.hostPlatform.isx86) "--disable-abiflags";
 
+<<<<<<< HEAD
   meta = {
     description = "C runtime libraries of ANTLR v3";
     homepage = "https://www.antlr3.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    description = "C runtime libraries of ANTLR v3";
+    homepage = "https://www.antlr3.org/";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

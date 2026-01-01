@@ -27,12 +27,21 @@ buildPythonPackage rec {
   # upstream has no unit tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/Lattyware/unrpa";
     changelog = "https://github.com/Lattyware/unrpa/releases/tag/${version}";
     description = "Program to extract files from the RPA archive format";
     mainProgram = "unrpa";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ leo60228 ];
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ leo60228 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

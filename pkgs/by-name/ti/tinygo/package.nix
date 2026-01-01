@@ -139,11 +139,19 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://tinygo.org/";
     description = "Go compiler for small places";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://tinygo.org/";
+    description = "Go compiler for small places";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       muscaln
     ];
   };

@@ -26,10 +26,18 @@ stdenvNoCC.mkDerivation {
     installShellCompletion --zsh lib/_zi
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/z-shell/zi";
     description = "Swiss Army Knife for Zsh - Unix Shell";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sei40kr ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/z-shell/zi";
+    description = "Swiss Army Knife for Zsh - Unix Shell";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sei40kr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

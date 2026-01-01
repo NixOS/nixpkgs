@@ -31,12 +31,21 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests.beanstalkd;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://kr.github.io/beanstalkd/";
     description = "Simple, fast work queue";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.zimbatm ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://kr.github.io/beanstalkd/";
+    description = "Simple, fast work queue";
+    license = licenses.mit;
+    maintainers = [ maintainers.zimbatm ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "beanstalkd";
   };
 }

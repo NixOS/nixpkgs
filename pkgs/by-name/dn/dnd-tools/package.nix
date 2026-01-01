@@ -29,11 +29,20 @@ python3.pkgs.buildPythonApplication {
     setuptools
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savagezen/dnd-tools";
     description = "Set of interactive command line tools for Dungeons and Dragons 5th Edition";
     mainProgram = "dnd-tools";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.urlordjames ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savagezen/dnd-tools";
+    description = "Set of interactive command line tools for Dungeons and Dragons 5th Edition";
+    mainProgram = "dnd-tools";
+    license = licenses.agpl3Only;
+    maintainers = [ maintainers.urlordjames ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

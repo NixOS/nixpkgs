@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libknot" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for libknot";
     homepage = "https://gitlab.nic.cz/knot/knot-dns/-/tree/master/python/libknot";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Python bindings for libknot";
+    homepage = "https://gitlab.nic.cz/knot/knot-dns/-/tree/master/python/libknot";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Viewer for .msg files (MS Outlook)";
     mainProgram = "msgviewer";
@@ -44,5 +45,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Viewer for .msg files (MS Outlook)";
+    mainProgram = "msgviewer";
+    homepage = "https://www.washington.edu/alpine/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

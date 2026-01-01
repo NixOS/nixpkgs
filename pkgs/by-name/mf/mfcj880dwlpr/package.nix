@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Brother MFC-J880DW LPR driver";
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj880dw_us_eu_as&os=128";
@@ -125,5 +126,15 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; unfree;
     maintainers = with lib.maintainers; [ _6543 ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Brother MFC-J880DW LPR driver";
+    downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj880dw_us_eu_as&os=128";
+    homepage = "http://www.brother.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = with licenses; unfree;
+    maintainers = with maintainers; [ _6543 ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

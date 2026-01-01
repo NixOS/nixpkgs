@@ -79,6 +79,10 @@ with lib.maintainers;
   bazel = {
     members = [
       mboes
+<<<<<<< HEAD
+=======
+      uri-canva
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cbley
       olebedev
       groodt
@@ -251,6 +255,7 @@ with lib.maintainers;
     shortName = "Cyberus Technology employees";
   };
 
+<<<<<<< HEAD
   danklinux = {
     members = [
       luckshiba
@@ -260,6 +265,8 @@ with lib.maintainers;
     shortName = "Dank Linux";
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   darwin = {
     github = "darwin-core";
     enableFeatureFreezePing = true;
@@ -350,10 +357,13 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+<<<<<<< HEAD
   feel-co = {
     github = "feel-co";
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   flutter = {
     enableFeatureFreezePing = false;
     github = "flutter";
@@ -372,6 +382,7 @@ with lib.maintainers;
     shortName = "Flying Circus employees";
   };
 
+<<<<<<< HEAD
   forgejo = {
     members = [
       adamcstephens
@@ -386,6 +397,8 @@ with lib.maintainers;
     shortName = "Forgejo";
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   formatter = {
     github = "nix-formatting";
   };
@@ -422,6 +435,10 @@ with lib.maintainers;
 
   gitlab = {
     members = [
+<<<<<<< HEAD
+=======
+      globin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       krav
       leona
       talyz
@@ -516,6 +533,10 @@ with lib.maintainers;
 
   jetbrains = {
     members = [
+<<<<<<< HEAD
+=======
+      edwtjo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       leona
       theCapypara
       thiagokokada
@@ -555,6 +576,10 @@ with lib.maintainers;
       aanderse
       cpages
       dschrempf
+<<<<<<< HEAD
+=======
+      edwtjo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kazenyuk
       minijackson
       peterhoeg
@@ -570,6 +595,11 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
+<<<<<<< HEAD
+=======
+      edwtjo
+      hrdinka
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
@@ -661,6 +691,10 @@ with lib.maintainers;
   matrix = {
     members = [
       ma27
+<<<<<<< HEAD
+=======
+      fadenb
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mguentner
       dandellion
       nickcao
@@ -685,12 +719,18 @@ with lib.maintainers;
   minimal-bootstrap = {
     members = [
       alejandrosame
+<<<<<<< HEAD
       aleksi
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       artturin
       emilytrau
       ericson2314
       jk
+<<<<<<< HEAD
       pyrox0
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       siraben
     ];
     scope = "Maintain the minimal-bootstrap toolchain and related packages.";
@@ -811,6 +851,10 @@ with lib.maintainers;
     members = [
       sgo
       marcusramberg
+<<<<<<< HEAD
+=======
+      zakame
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     scope = "Maintain the Perl interpreter and Perl packages.";
     shortName = "Perl";
@@ -908,6 +952,15 @@ with lib.maintainers;
     shortName = "Serokell employees";
   };
 
+<<<<<<< HEAD
+=======
+  sphinx = {
+    members = [ ];
+    scope = "Maintain Sphinx related packages.";
+    shortName = "Sphinx";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenv = {
     enableFeatureFreezePing = true;
     github = "stdenv";

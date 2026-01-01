@@ -11,8 +11,11 @@
   openssl,
   pkg-config,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rustc,
   stdenv,
   xdg-utils,
@@ -58,7 +61,11 @@ let
     # buildRustPackage sets strictDeps = true;
     nativeCheckInputs = finalAttrs.buildInputs;
 
+<<<<<<< HEAD
     env.OPENSSL_NO_VENDOR = "1";
+=======
+    OPENSSL_NO_VENDOR = "1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     postInstall = ''
       mkdir -p $out/include
@@ -75,6 +82,7 @@ let
       hash = cargoHash;
     };
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
       inherit
         src
@@ -82,6 +90,10 @@ let
         version
         ;
       pnpm = pnpm_10;
+=======
+    pnpmDeps = pnpm_10.fetchDeps {
+      inherit src pname version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 2;
       hash = pnpmHash;
     };
@@ -90,8 +102,12 @@ let
       binaryen
       cargo
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_10
+=======
+      pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rustc
       rustc.llvmPackages.lld
       rustPlatform.cargoSetupHook

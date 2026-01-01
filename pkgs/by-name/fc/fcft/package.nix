@@ -33,14 +33,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
+<<<<<<< HEAD
   version = "3.3.3";
+=======
+  version = "3.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-MkGlph9WpqH4daov5ZZPO2ua2mUbrsuo8Xk6GoKhoxg=";
+=======
+    hash = "sha256-a+lELkEjMtqeBYGj6yl+OoQ+I6neyJt6a1T83B2KWOk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   depsBuildBuild = [ pkg-config ];

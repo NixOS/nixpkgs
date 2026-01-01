@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jumpy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jumpy is a common backend for NumPy and optionally JAX";
     homepage = "https://github.com/Farama-Foundation/Jumpy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    description = "Jumpy is a common backend for NumPy and optionally JAX";
+    homepage = "https://github.com/Farama-Foundation/Jumpy";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -25,10 +25,18 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "tabix" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/slowkow/pytabix";
     description = "Python interface for tabix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/slowkow/pytabix";
+    description = "Python interface for tabix";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

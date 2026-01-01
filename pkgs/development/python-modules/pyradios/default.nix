@@ -29,10 +29,17 @@ buildPythonPackage rec {
   # Tests and pythonImportsCheck require network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for the https://api.radio-browser.info";
     homepage = "https://github.com/andreztz/pyradios";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python client for the https://api.radio-browser.info";
+    homepage = "https://github.com/andreztz/pyradios";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

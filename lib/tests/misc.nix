@@ -203,6 +203,7 @@ runTests {
     };
   };
 
+<<<<<<< HEAD
   testOverridePreserveFunctionMetadata =
     let
       toCallableAttrs = f: setFunctionArgs f (functionArgs f);
@@ -282,6 +283,8 @@ runTests {
       };
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   testCallPackageWithOverridePreservesArguments =
     let
       f =

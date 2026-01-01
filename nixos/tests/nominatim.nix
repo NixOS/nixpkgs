@@ -10,7 +10,14 @@ in
 {
   name = "nominatim";
   meta = {
+<<<<<<< HEAD
     maintainers = with lib.teams; geospatial.members ++ ngi.members;
+=======
+    maintainers = with lib.teams; [
+      geospatial.members
+      ngi.members
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes = {
@@ -59,6 +66,7 @@ in
       { config, pkgs, ... }:
       {
         # Database password
+<<<<<<< HEAD
         systemd.services.nominatim = {
           serviceConfig.ExecStartPre =
             let
@@ -87,6 +95,16 @@ in
             [
               "+${createPasswordFile}"
             ];
+=======
+        system.activationScripts = {
+          passwordFile.text = with config.services.nominatim.database; ''
+            mkdir -p /run/secrets
+            echo "${host}:${toString port}:${dbname}:${apiUser}:password" \
+              > /run/secrets/pgpass
+            chown nominatim-api:nominatim-api /run/secrets/pgpass
+            chmod 0600 /run/secrets/pgpass
+          '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
 
         # Nominatim

@@ -122,12 +122,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "QPA plugin to make Qt a Mir server";
     homepage = "https://gitlab.com/ubports/development/core/qtmir";
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "QPA plugin to make Qt a Mir server";
+    homepage = "https://gitlab.com/ubports/development/core/qtmir";
+    license = licenses.lgpl3Only;
+    teams = [ teams.lomiri ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "qtmirserver" ];
   };
 })

@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_interface_logger_plugins" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stable interface for interactions between Snakemake and its logger plugins";
     homepage = "https://github.com/snakemake/snakemake-interface-logger-plugins";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Stable interface for interactions between Snakemake and its logger plugins";
+    homepage = "https://github.com/snakemake/snakemake-interface-logger-plugins";
+    license = licenses.mit;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

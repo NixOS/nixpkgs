@@ -73,7 +73,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GNOME audio player for transcription";
     mainProgram = "parlatype";
     longDescription = ''
@@ -84,11 +88,20 @@ stdenv.mkDerivation rec {
       transcribe audio files.
     '';
     homepage = "https://www.parlatype.xyz/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       alexshpilkin
       melchips
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      alexshpilkin
+      melchips
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

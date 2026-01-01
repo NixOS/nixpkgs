@@ -42,11 +42,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sr25519" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for sr25519 library";
     homepage = "https://github.com/polkascan/py-sr25519-bindings";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python bindings for sr25519 library";
+    homepage = "https://github.com/polkascan/py-sr25519-bindings";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       onny
       stargate01
     ];

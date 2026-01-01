@@ -27,11 +27,19 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rems-project/linksem";
     description = "Formalisation of substantial parts of ELF linking and DWARF debug information";
     maintainers = with lib.maintainers; [ genericnerdyusername ];
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rems-project/linksem";
+    description = "Formalisation of substantial parts of ELF linking and DWARF debug information";
+    maintainers = with maintainers; [ genericnerdyusername ];
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = ocaml.meta.platforms;
     broken = !(lib.versionAtLeast ocaml.version "4.07");
   };

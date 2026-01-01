@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     mpfr
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Worst-Case Peak-Gain library";
     homepage = "https://github.com/fixif/WCPG";
     license = lib.licenses.cecill-b;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    description = "Worst-Case Peak-Gain library";
+    homepage = "https://github.com/fixif/WCPG";
+    license = licenses.cecill-b;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

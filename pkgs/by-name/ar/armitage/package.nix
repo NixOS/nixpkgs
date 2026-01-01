@@ -131,12 +131,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical cyber attack management tool for Metasploit";
     homepage = "https://github.com/r00t0v3rr1d3/armitage";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Graphical cyber attack management tool for Metasploit";
+    homepage = "https://github.com/r00t0v3rr1d3/armitage";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "armitage";
   };
 })

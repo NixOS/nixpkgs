@@ -75,7 +75,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.terminator;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Terminal emulator with support for tiling and tabs";
     longDescription = ''
       The goal of this project is to produce a useful tool for arranging
@@ -85,8 +89,14 @@ python3.pkgs.buildPythonApplication rec {
     '';
     changelog = "https://github.com/gnome-terminator/terminator/releases/tag/${src.tag}";
     homepage = "https://github.com/gnome-terminator/terminator";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ bjornfor ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ bjornfor ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

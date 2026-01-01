@@ -41,10 +41,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "immutables" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Immutable mapping type";
     homepage = "https://github.com/MagicStack/immutables";
     changelog = "https://github.com/MagicStack/immutables/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 ];
+=======
+  meta = with lib; {
+    description = "Immutable mapping type";
+    homepage = "https://github.com/MagicStack/immutables";
+    changelog = "https://github.com/MagicStack/immutables/releases/tag/v${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

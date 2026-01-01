@@ -50,11 +50,19 @@ python3.pkgs.buildPythonApplication rec {
     lxml
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generator for YARA rules";
     mainProgram = "yarGen.py";
     homepage = "https://github.com/Neo23x0/yarGen";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Generator for YARA rules";
+    mainProgram = "yarGen.py";
+    homepage = "https://github.com/Neo23x0/yarGen";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

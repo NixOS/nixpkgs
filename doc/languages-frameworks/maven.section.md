@@ -86,7 +86,11 @@ jd-cli.overrideMavenAttrs (old: rec {
   src = fetchFromGitHub {
     owner = old.src.owner;
     repo = old.src.repo;
+<<<<<<< HEAD
     tag = "${old.pname}-${version}";
+=======
+    rev = "${old.pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # old source hash of 1.2.0 version
     hash = "sha256-US7j6tQ6mh1libeHnQdFxPGoxHzbZHqehWSgCYynKx8=";
   };

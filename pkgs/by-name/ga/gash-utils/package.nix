@@ -38,11 +38,20 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Core POSIX utilities written in Guile Scheme";
     homepage = "https://savannah.nongnu.org/projects/gash/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Core POSIX utilities written in Guile Scheme";
+    homepage = "https://savannah.nongnu.org/projects/gash/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

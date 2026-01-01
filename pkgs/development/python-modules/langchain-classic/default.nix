@@ -35,21 +35,34 @@
   responses,
   syrupy,
   toml,
+<<<<<<< HEAD
 
   # update
   gitUpdater,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "langchain-classic";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "1.0.0-unstable-2025-11-11";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
+<<<<<<< HEAD
     tag = "langchain-classic==${version}";
     hash = "sha256-4DlKOxt5OoPm38szMEJpw6gDl247eRsx4LZpofUKpUk=";
+=======
+    # no tagged releases avaialble
+    rev = "3dfea96ec1d2dac4e506d287860ee943c183c9f1";
+    hash = "sha256-U3UllSSa4tFz+nXAP6aNoYceU/xCPbwKSP2F2et+qgQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -105,6 +118,7 @@ buildPythonPackage rec {
     "test_socket_disabled"
   ];
 
+<<<<<<< HEAD
   # Bulk updater selects wrong tag
   passthru = {
     skipBulkUpdate = true;
@@ -113,6 +127,8 @@ buildPythonPackage rec {
     };
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonImportsCheck = [ "langchain_classic" ];
 
   meta = {

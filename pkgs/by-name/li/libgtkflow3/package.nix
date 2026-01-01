@@ -60,11 +60,20 @@ stdenv.mkDerivation rec {
     rm -r libgflow
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Flow graph widget for GTK 3";
     homepage = "https://notabug.org/grindhold/libgtkflow";
     maintainers = with lib.maintainers; [ grindhold ];
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Flow graph widget for GTK 3";
+    homepage = "https://notabug.org/grindhold/libgtkflow";
+    maintainers = with maintainers; [ grindhold ];
+    license = licenses.lgpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

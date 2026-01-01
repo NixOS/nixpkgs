@@ -50,11 +50,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "icalevents" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/jazzband/icalevents/releases/tag/${src.tag}";
     description = "Python module for iCal URL/file parsing and querying";
     homepage = "https://github.com/jazzband/icalevents";
     maintainers = with lib.maintainers; [ jamiemagee ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/jazzband/icalevents/releases/tag/${src.tag}";
+    description = "Python module for iCal URL/file parsing and querying";
+    homepage = "https://github.com/jazzband/icalevents";
+    maintainers = with maintainers; [ jamiemagee ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

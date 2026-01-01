@@ -12,7 +12,10 @@
   python-socks,
   rencode,
   setuptools,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
@@ -28,6 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-2nBrIMlYUI4PwirkiSJSkw5zw2Kc/KoVRyIIYYx4iYs=";
   };
 
+<<<<<<< HEAD
   patches = [
     # compatibility with python3.14: fix retrival of non-running event loop
     (fetchpatch {
@@ -36,6 +40,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonRelaxDeps = [ "async-timeout" ];
 
   build-system = [ setuptools ];

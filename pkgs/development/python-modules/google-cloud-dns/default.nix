@@ -44,11 +44,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.dns" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Google Cloud DNS API client library";
     homepage = "https://github.com/googleapis/python-dns";
     changelog = "https://github.com/googleapis/python-dns/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Google Cloud DNS API client library";
+    homepage = "https://github.com/googleapis/python-dns";
+    changelog = "https://github.com/googleapis/python-dns/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

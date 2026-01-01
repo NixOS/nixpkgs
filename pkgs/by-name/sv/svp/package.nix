@@ -149,13 +149,22 @@ stdenv.mkDerivation {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "SVPManager";
     description = "SmoothVideo Project 4 (SVP4) converts any video to 60 fps (and even higher) and performs this in real time right in your favorite video player";
     homepage = "https://www.svp-team.com/wiki/SVP:Linux";
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ xddxdd ];
   };
 }

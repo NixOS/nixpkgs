@@ -45,11 +45,19 @@ buildGoModule rec {
 
   postConfigure = lib.optional stdenv.hostPlatform.isDarwin darwin_configure;
 
+<<<<<<< HEAD
   meta = {
     description = "Age plugin to encrypt files with fido2 tokens using the hmac-secret extension and non-discoverable credentials";
     homepage = "https://github.com/olastor/age-plugin-fido2-hmac/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
+=======
+  meta = with lib; {
+    description = "Age plugin to encrypt files with fido2 tokens using the hmac-secret extension and non-discoverable credentials";
+    homepage = "https://github.com/olastor/age-plugin-fido2-hmac/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "age-plugin-fido2-hmac";
   };
 }

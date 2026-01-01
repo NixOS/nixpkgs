@@ -81,11 +81,20 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Session settings for elementary";
     homepage = "https://github.com/elementary/session-settings";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Session settings for elementary";
+    homepage = "https://github.com/elementary/session-settings";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

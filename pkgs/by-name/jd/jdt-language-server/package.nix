@@ -7,6 +7,7 @@
 }:
 
 let
+<<<<<<< HEAD
   timestamp = "202511261751";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -16,6 +17,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${finalAttrs.version}/jdt-language-server-${finalAttrs.version}-${timestamp}.tar.gz";
     hash = "sha256-GikaJpvYizxASCGRIpYaUuyAhyr7x6PzQnCyznf3oUw=";
+=======
+  timestamp = "202511192211";
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "jdt-language-server";
+  version = "1.53.0";
+
+  src = fetchurl {
+    url = "https://download.eclipse.org/jdtls/milestones/${finalAttrs.version}/jdt-language-server-${finalAttrs.version}-${timestamp}.tar.gz";
+    hash = "sha256-PWjA4Pvwj4UvchiJNMxoA8yIuwehgk3d8ROSt89Ls7E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = ".";

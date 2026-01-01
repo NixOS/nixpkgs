@@ -45,12 +45,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "segno" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/heuer/segno/releases/tag/${src.tag}";
     description = "QR Code and Micro QR Code encoder";
     mainProgram = "segno";
     homepage = "https://github.com/heuer/segno/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ phaer ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ phaer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

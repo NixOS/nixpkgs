@@ -123,6 +123,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      flokli
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       r3dl3g
     ];
     mainProgram = "jameica";

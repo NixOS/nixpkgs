@@ -83,7 +83,11 @@ stdenv.mkDerivation rec {
       # leave for now to avoid rebuilds on !enablePython before 24.11 fully lands
       [ "--disable-python-bindings" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/libpwquality/libpwquality";
     description = "Password quality checking and random password generation library";
     longDescription = ''
@@ -97,12 +101,21 @@ stdenv.mkDerivation rec {
       function and PAM module that can be used instead of pam_cracklib. The
       module supports all the options of pam_cracklib.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd3
       # or
       gpl2Plus
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ jk ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ jk ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

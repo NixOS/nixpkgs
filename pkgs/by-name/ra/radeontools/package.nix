@@ -23,9 +23,16 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ xorg.libpciaccess ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lowlevel tools to tweak register and dump state on radeon GPUs";
     homepage = "https://airlied.livejournal.com/";
     license = lib.licenses.zlib;
+=======
+  meta = with lib; {
+    description = "Lowlevel tools to tweak register and dump state on radeon GPUs";
+    homepage = "https://airlied.livejournal.com/";
+    license = licenses.zlib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -44,8 +44,13 @@ let
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
+<<<<<<< HEAD
   pname = "alacritty${lib.optionalString withGraphics "-graphics"}";
   version = "0.16.1";
+=======
+  pname = "alacritty";
+  version = if !withGraphics then "0.16.1" else "0.16.1-graphics";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src =
     # by default we want the official package
@@ -61,7 +66,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       fetchFromGitHub {
         owner = "ayosec";
         repo = "alacritty";
+<<<<<<< HEAD
         tag = "v${finalAttrs.version}-graphics";
+=======
+        tag = "v${finalAttrs.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         hash = "sha256-e+o0GLy05qXEY4T57dCuqhukTKBSm1WIHzPUV8uswRI=";
       };
 
@@ -161,6 +170,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       with lib.maintainers;
       if !withGraphics then
         [
+<<<<<<< HEAD
+=======
+          Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           rvdp
         ]
       else

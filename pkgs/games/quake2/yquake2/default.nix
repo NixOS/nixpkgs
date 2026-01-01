@@ -58,7 +58,11 @@ let
     makeFlags = [
       "WITH_OPENAL=${lib.boolToYesNo openalSupport}"
       "WITH_SYSTEMWIDE=yes"
+<<<<<<< HEAD
       "WITH_SYSTEMDIR=\${out}/share/games/quake2"
+=======
+      "WITH_SYSTEMDIR=$\{out}/share/games/quake2"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     nativeBuildInputs = [ copyDesktopItems ];
@@ -92,12 +96,21 @@ let
       })
     ];
 
+<<<<<<< HEAD
     meta = {
       description = "Yamagi Quake II client";
       homepage = "https://www.yamagi.org/quake2/";
       license = lib.licenses.gpl2Plus;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ tadfisher ];
+=======
+    meta = with lib; {
+      description = "Yamagi Quake II client";
+      homepage = "https://www.yamagi.org/quake2/";
+      license = licenses.gpl2Plus;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ tadfisher ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

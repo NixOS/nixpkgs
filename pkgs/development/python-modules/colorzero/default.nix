@@ -28,10 +28,18 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Yet another Python color library";
     homepage = "https://github.com/waveform80/colorzero";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Yet another Python color library";
+    homepage = "https://github.com/waveform80/colorzero";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

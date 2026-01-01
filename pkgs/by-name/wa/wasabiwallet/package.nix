@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     cp -v $desktopItem/share/applications/* $out/share/applications
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Privacy focused Bitcoin wallet";
     homepage = "https://wasabiwallet.io/";
@@ -78,5 +79,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ mmahut ];
+=======
+  meta = with lib; {
+    description = "Privacy focused Bitcoin wallet";
+    homepage = "https://wasabiwallet.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.mit;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

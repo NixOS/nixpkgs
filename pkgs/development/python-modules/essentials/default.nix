@@ -10,14 +10,22 @@
 }:
 buildPythonPackage rec {
   pname = "essentials";
+<<<<<<< HEAD
   version = "1.1.9";
+=======
+  version = "1.1.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-kKAXCtcl6duVpuGDnSqVfJmfltv9ybU8Gmr3y32Dg9I=";
+=======
+    hash = "sha256-SP5DAVsxxoCyKebRfI6sT4IK2/Z1XiGY7Hx3APtbHs0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];

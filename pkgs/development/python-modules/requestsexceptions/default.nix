@@ -22,11 +22,20 @@ buildPythonPackage rec {
     sed -i '/^hacking/d' test-requirements.txt
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Import exceptions from potentially bundled packages in requests";
     homepage = "https://pypi.python.org/pypi/requestsexceptions";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Import exceptions from potentially bundled packages in requests";
+    homepage = "https://pypi.python.org/pypi/requestsexceptions";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ makefu ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

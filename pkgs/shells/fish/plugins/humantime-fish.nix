@@ -20,10 +20,18 @@ buildFishPlugin {
     fishtape tests/humantime.fish
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Turn milliseconds into a human-readable string in Fish";
     homepage = "https://github.com/jorgebucaran/humantime.fish";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scrumplex ];
+=======
+  meta = with lib; {
+    description = "Turn milliseconds into a human-readable string in Fish";
+    homepage = "https://github.com/jorgebucaran/humantime.fish";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Scrumplex ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

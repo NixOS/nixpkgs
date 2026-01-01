@@ -31,11 +31,20 @@ buildNpmPackage {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source pastebin written in Node.js";
     homepage = "https://github.com/toptal/haste-server";
     license = lib.licenses.mit;
     mainProgram = "haste-server";
     maintainers = with lib.maintainers; [ mkg20001 ];
+=======
+  meta = with lib; {
+    description = "Open source pastebin written in Node.js";
+    homepage = "https://github.com/toptal/haste-server";
+    license = licenses.mit;
+    mainProgram = "haste-server";
+    maintainers = with maintainers; [ mkg20001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

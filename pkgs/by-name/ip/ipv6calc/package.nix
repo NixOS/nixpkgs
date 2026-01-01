@@ -58,7 +58,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Calculate/manipulate (not only) IPv6 addresses";
     longDescription = ''
       ipv6calc is a small utility to manipulate (not only) IPv6 addresses and
@@ -69,8 +73,14 @@ stdenv.mkDerivation rec {
       Now only one utiltity is needed to do a lot.
     '';
     homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Only;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

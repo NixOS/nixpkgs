@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin $out/hip/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Compiler driver utility that calls clang or nvcc";
     homepage = "https://github.com/ROCm/HIPCC";
@@ -49,5 +50,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Compiler driver utility that calls clang or nvcc";
+    homepage = "https://github.com/ROCm/HIPCC";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -27,10 +27,18 @@ stdenv.mkDerivation rec {
     cp *.h $out/include
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://math.nist.gov/tnt/";
     description = "JAMA/C++ Linear Algebra Package: Java-like matrix C++ templates";
     platforms = lib.platforms.unix;
     license = lib.licenses.publicDomain;
+=======
+  meta = with lib; {
+    homepage = "https://math.nist.gov/tnt/";
+    description = "JAMA/C++ Linear Algebra Package: Java-like matrix C++ templates";
+    platforms = platforms.unix;
+    license = licenses.publicDomain;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

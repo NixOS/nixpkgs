@@ -10,14 +10,22 @@
 
 buildPythonPackage rec {
   pname = "pysrdaligateway";
+<<<<<<< HEAD
   version = "0.19.3";
+=======
+  version = "0.17.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maginawin";
     repo = "PySrDaliGateway";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-tVnTSpEAZC7DzAiKRQWKhtrp5epnwPZQr4XimG525Rw=";
+=======
+    hash = "sha256-XvDnmIl9FgzxxWTFoDjbvUmhQIThVK/Ey+7LiDHQNpc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

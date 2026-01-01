@@ -58,6 +58,10 @@ buildNpmPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Configure Homebridge, monitor and backup from a browser";

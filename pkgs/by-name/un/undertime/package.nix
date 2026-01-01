@@ -6,14 +6,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "undertime";
+<<<<<<< HEAD
   version = "4.3.1";
+=======
+  version = "4.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "anarcat";
     repo = "undertime";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-TOrsQIi+ZcUQUGhb+iX8seuwNfKrrBL2DIcLK9wyjn0=";
+=======
+    hash = "sha256-sQI+fpg5PFGCsS9xikMTi4Ad76TayP13UgZag6CRBxE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = with python3Packages; [

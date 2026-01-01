@@ -85,11 +85,19 @@ lib.checkListOfEnum "Invalid accent, valid accents are ${toString validAccents}"
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "Soothing pastel theme for KDE";
       homepage = "https://github.com/catppuccin/kde";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
+=======
+    meta = with lib; {
+      description = "Soothing pastel theme for KDE";
+      homepage = "https://github.com/catppuccin/kde";
+      license = licenses.mit;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         michaelBelsanti
         gigglesquid
       ];

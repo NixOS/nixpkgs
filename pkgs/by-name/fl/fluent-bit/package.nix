@@ -29,13 +29,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
+<<<<<<< HEAD
   version = "4.2.2";
+=======
+  version = "4.1.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-BYaJ76iX969SLxCUMyIRbHnVt5/N+wjMMvsqxFmLqUI=";
+=======
+    hash = "sha256-mu6WPp4jUAnLpZzFwy8HoKosCiYPxejsKEEnBRKodr4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # The source build documentation covers some dependencies and CMake options.
@@ -102,7 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
   # We fix this by setting the systemd package's `systemdsystemunitdir` pkg-config variable.
   #
   # https://man.openbsd.org/pkg-config.1#PKG_CONFIG_$PACKAGE_$VARIABLE
+<<<<<<< HEAD
   env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+=======
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -113,6 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) fluent-bit;

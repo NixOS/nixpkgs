@@ -28,7 +28,11 @@ buildPythonPackage rec {
     pytest-asyncio_0
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # network access
@@ -37,10 +41,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorpcx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Transport, protocol and framing-independent async RPC client and server implementation";
     homepage = "https://github.com/kyuupichan/aiorpcX";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Transport, protocol and framing-independent async RPC client and server implementation";
+    homepage = "https://github.com/kyuupichan/aiorpcX";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

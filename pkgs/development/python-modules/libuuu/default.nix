@@ -12,12 +12,20 @@
 
 buildPythonPackage rec {
   pname = "libuuu";
+<<<<<<< HEAD
   version = "1.5.243";
+=======
+  version = "1.5.239";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-k7DFVrqkHzPLjZMdWyLdfawyOSw+L7Bi4oRdeJo6lxw=";
+=======
+    hash = "sha256-fknRdLwdB3JCnd6OJzU4jiOWvKgsQJdYkvBgONddaCY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtdeclarative
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple Program to backup folders to an external location by copying them";
     homepage = "https://gitlab.com/dev-nis/nis-one-click-backup-qt";
@@ -38,6 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ NIS ];
     mainProgram = "NIS_One-Click-Backup_Qt";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Simple Program to backup folders to an external location by copying them";
+    homepage = "https://gitlab.com/dev-nis/nis-one-click-backup-qt";
+    changelog = "https://gitlab.com/dev-nis/nis-one-click-backup-qt/-/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ NIS ];
+    mainProgram = "NIS_One-Click-Backup_Qt";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

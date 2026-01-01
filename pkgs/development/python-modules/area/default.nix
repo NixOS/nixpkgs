@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # tests not working on the package from pypi
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Calculate the area inside of any GeoJSON geometry. This is a port of Mapbox’s geojson-area for Python";
     homepage = "https://github.com/scisco/area";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Calculate the area inside of any GeoJSON geometry. This is a port of Mapbox’s geojson-area for Python";
+    homepage = "https://github.com/scisco/area";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

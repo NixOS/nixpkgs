@@ -359,6 +359,7 @@ overrideLlvmPackagesRocm (s: {
             url = "https://github.com/llvm/llvm-project/commit/816fde1cbb700ebcc8b3df81fb93d675c04c12cd.patch";
             relative = "clang";
           })
+<<<<<<< HEAD
           (fetchpatch {
             # [PATCH] Reapply "[CUDA][HIP] Add a __device__ version of std::__glibcxx_assert_fail()"
             # Fix errors with gcc15
@@ -367,6 +368,8 @@ overrideLlvmPackagesRocm (s: {
             url = "https://github.com/llvm/llvm-project/commit/8ec0552a7f1f50986dda6d13eae310d121d7e3ba.patch";
             relative = "clang";
           })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ]
         ++ old.patches
         ++ [

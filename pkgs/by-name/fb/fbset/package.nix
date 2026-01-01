@@ -29,15 +29,26 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Framebuffer device maintenance program";
     # NOTE: the website of the original author disappeared, the only remaining
     # repository is maintained by the debian maintainer of the package at
     # https://github.com/sudipm-mukherjee/fbset
     homepage = "http://users.telenet.be/geertu/Linux/fbdev/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     mainProgram = "fbset";
     maintainers = with lib.maintainers; [ baloo ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Only;
+    mainProgram = "fbset";
+    maintainers = with maintainers; [ baloo ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -38,11 +38,20 @@ buildPythonPackage rec {
     pytest-httpx
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for sending notifications to Android/Fire TVs";
     homepage = "https://github.com/engrbm87/notifications_android_tv";
     changelog = "https://github.com/engrbm87/notifications_android_tv/blob/${version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dominikh ];
+=======
+  meta = with lib; {
+    description = "Python API for sending notifications to Android/Fire TVs";
+    homepage = "https://github.com/engrbm87/notifications_android_tv";
+    changelog = "https://github.com/engrbm87/notifications_android_tv/blob/${version}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dominikh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

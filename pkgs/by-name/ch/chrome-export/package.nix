@@ -30,11 +30,19 @@ stdenv.mkDerivation rec {
     bash test/run_tests $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Scripts to save Google Chrome's bookmarks and history as HTML bookmarks files";
     homepage = "https://github.com/bdesham/chrome-export";
     license = [ lib.licenses.isc ];
     maintainers = [ lib.maintainers.bdesham ];
+=======
+  meta = with lib; {
+    description = "Scripts to save Google Chrome's bookmarks and history as HTML bookmarks files";
+    homepage = "https://github.com/bdesham/chrome-export";
+    license = [ licenses.isc ];
+    maintainers = [ maintainers.bdesham ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = python3.meta.platforms;
   };
 }

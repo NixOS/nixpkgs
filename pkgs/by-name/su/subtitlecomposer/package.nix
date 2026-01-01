@@ -43,7 +43,11 @@ stdenv.mkDerivation rec {
     sonnet
   ]);
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://apps.kde.org/subtitlecomposer";
     description = "Open source text-based subtitle editor";
     longDescription = ''
@@ -52,9 +56,16 @@ stdenv.mkDerivation rec {
       Subtitle Workshop for every platform supported by Plasma Frameworks.
     '';
     changelog = "https://invent.kde.org/multimedia/subtitlecomposer/-/blob/master/ChangeLog";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kugland ];
     mainProgram = "subtitlecomposer";
     platforms = with lib.platforms; linux ++ freebsd ++ windows;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kugland ];
+    mainProgram = "subtitlecomposer";
+    platforms = with platforms; linux ++ freebsd ++ windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

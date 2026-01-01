@@ -29,15 +29,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiconv ];
 
+<<<<<<< HEAD
   meta = {
     description = "Encrypt files with Advanced Encryption Standard (AES)";
     homepage = "https://www.aescrypt.com/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Encrypt files with Advanced Encryption Standard (AES)";
+    homepage = "https://www.aescrypt.com/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lovek323
       qknight
     ];
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     hydraPlatforms = with lib.platforms; unix;
+=======
+    hydraPlatforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

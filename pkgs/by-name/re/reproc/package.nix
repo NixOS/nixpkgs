@@ -49,10 +49,18 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/DaanDeMeyer/reproc";
     description = "Cross-platform (C99/C++11) process library";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/DaanDeMeyer/reproc";
+    description = "Cross-platform (C99/C++11) process library";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

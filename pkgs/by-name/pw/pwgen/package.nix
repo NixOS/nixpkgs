@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Password generator which creates passwords which can be easily memorized by a human";
     homepage = "https://github.com/tytso/pwgen";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pwgen";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Password generator which creates passwords which can be easily memorized by a human";
+    homepage = "https://github.com/tytso/pwgen";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
+    mainProgram = "pwgen";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

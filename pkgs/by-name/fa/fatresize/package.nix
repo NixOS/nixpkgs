@@ -30,11 +30,19 @@ stdenv.mkDerivation rec {
     util-linux
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "FAT16/FAT32 non-destructive resizer";
     homepage = "https://github.com/ya-mouse/fatresize";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "FAT16/FAT32 non-destructive resizer";
+    homepage = "https://github.com/ya-mouse/fatresize";
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fatresize";
   };
 }

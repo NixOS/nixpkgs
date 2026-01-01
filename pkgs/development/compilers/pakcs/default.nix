@@ -115,10 +115,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.informatik.uni-kiel.de/~pakcs/";
     description = "Implementation of the multi-paradigm declarative language Curry";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "http://www.informatik.uni-kiel.de/~pakcs/";
+    description = "Implementation of the multi-paradigm declarative language Curry";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       PAKCS is an implementation of the multi-paradigm declarative language
@@ -132,7 +139,12 @@ stdenv.mkDerivation {
       with dynamic web pages, prototyping embedded systems).
     '';
 
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ t4ccer ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

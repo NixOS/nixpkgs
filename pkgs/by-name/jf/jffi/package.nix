@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     echo ${libffi} > $out/nix-support/depends
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Java Foreign Function Interface";
@@ -71,5 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bachp ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Java Foreign Function Interface";
+    homepage = "https://github.com/jnr/jffi";
+    platforms = platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bachp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

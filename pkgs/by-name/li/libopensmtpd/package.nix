@@ -26,10 +26,18 @@ stdenv.mkDerivation rec {
     "LOCALBASE="
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for creating OpenSMTPD filters";
     homepage = "http://imperialat.at/dev/libopensmtpd/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ malte-v ];
+=======
+  meta = with lib; {
+    description = "Library for creating OpenSMTPD filters";
+    homepage = "http://imperialat.at/dev/libopensmtpd/";
+    license = licenses.isc;
+    maintainers = with maintainers; [ malte-v ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

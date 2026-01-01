@@ -54,10 +54,18 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Command Line Interface Formulation Framework";
     homepage = "https://github.com/openstack/cliff";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Command Line Interface Formulation Framework";
+    homepage = "https://github.com/openstack/cliff";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

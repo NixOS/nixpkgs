@@ -25,11 +25,19 @@ python3.pkgs.buildPythonPackage rec {
 
   pythonImportsCheck = [ "md_tangle" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/joakimmj/md-tangle/";
     description = "Generates (\"tangles\") source code from Markdown documents";
     mainProgram = "md-tangle";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/joakimmj/md-tangle/";
+    description = "Generates (\"tangles\") source code from Markdown documents";
+    mainProgram = "md-tangle";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

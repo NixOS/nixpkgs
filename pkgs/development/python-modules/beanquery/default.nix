@@ -45,15 +45,24 @@ buildPythonPackage rec {
     "beanquery"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/beancount/beanquery";
     description = "Beancount Query Language";
     longDescription = ''
       A customizable light-weight SQL query tool that works on tabular data,
       including Beancount.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ alapshin ];
+=======
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ alapshin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bean-query";
   };
 }

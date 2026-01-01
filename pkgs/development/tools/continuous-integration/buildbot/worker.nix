@@ -52,10 +52,18 @@ buildPythonPackage {
     smoke-test = nixosTests.buildbot;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
     teams = [ lib.teams.buildbot ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://buildbot.net/";
+    description = "Buildbot Worker Daemon";
+    teams = [ teams.buildbot ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

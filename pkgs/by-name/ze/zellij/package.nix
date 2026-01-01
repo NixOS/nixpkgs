@@ -54,6 +54,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   # Ensure that we don't vendor curl, but instead link against the libcurl from nixpkgs

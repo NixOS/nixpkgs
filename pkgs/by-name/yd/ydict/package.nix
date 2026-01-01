@@ -35,11 +35,20 @@ buildGoModule rec {
   # has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Yet another command-line Youdao Chinese dictionary";
     mainProgram = "ydict";
     homepage = "https://github.com/TimothyYe/ydict";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zendo ];
+=======
+  meta = with lib; {
+    description = "Yet another command-line Youdao Chinese dictionary";
+    mainProgram = "ydict";
+    homepage = "https://github.com/TimothyYe/ydict";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zendo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

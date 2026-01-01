@@ -34,9 +34,16 @@ buildPythonPackage rec {
   # Prevent infinite recursion with pytest
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pathlib-compatible object wrapper for zip files";
     homepage = "https://github.com/jaraco/zipp";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pathlib-compatible object wrapper for zip files";
+    homepage = "https://github.com/jaraco/zipp";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

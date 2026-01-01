@@ -7,8 +7,11 @@
   libredirect,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   restic,
   stdenv,
   util-linux,
@@ -32,6 +35,7 @@ let
 
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_9
     ];
@@ -39,6 +43,13 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_9;
+=======
+      pnpm_9.configHook
+    ];
+
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 1;
       hash = "sha256-vJgsU0OXyAKjUJsPOyIY8o3zfNW1BUZ5IL814wmJr3o=";
     };

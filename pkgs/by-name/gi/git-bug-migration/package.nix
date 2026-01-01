@@ -30,11 +30,19 @@ buildGoModule rec {
     git config --global user.email 'nobody@localhost'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for upgrading repositories using git-bug to new versions";
     homepage = "https://github.com/MichaelMure/git-bug-migration";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool for upgrading repositories using git-bug to new versions";
+    homepage = "https://github.com/MichaelMure/git-bug-migration";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       DeeUnderscore
       sudoforge
     ];

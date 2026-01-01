@@ -46,17 +46,29 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
+<<<<<<< HEAD
   version = "0.25.7";
+=======
+  version = "0.25.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-+MdPo2THiwgRT4x/Xnf9+1C+Bu0BsV9P1yIXhgdA3CQ=";
+=======
+    hash = "sha256-oUTnI0jCIm1PtQepfYGYFSZhhIh0blcyWXWkRmAB0DI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
+<<<<<<< HEAD
     hash = "sha256-0SOuaMjVihmSBQhVKZHIZkIUs+MXnW5VkrhGRD6xNcM=";
+=======
+    hash = "sha256-tdg0Ti+QWsIx64+WV0fPoyE/t3GlsUxXzU9qFHYfpt0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # keep yarnOfflineCache same output style with offlineCache = yarn-berry.fetchYarnBerryDeps { inherit (finalAttrs) src missingHashes; hash = "" };
@@ -106,7 +118,11 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
+<<<<<<< HEAD
     outputHash = "sha256-pPLnNsQ7+ao+MQw6Zmf/XA8ITWr+AeUA0gvu6qVUECw=";
+=======
+    outputHash = "sha256-iULgio5zpmJhKofkUxA98Ze7Qy+kRfbbi5oEHYw5vzY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [

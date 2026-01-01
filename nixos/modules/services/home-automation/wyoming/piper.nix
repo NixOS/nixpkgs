@@ -42,6 +42,7 @@ in
             options = {
               enable = mkEnableOption "Wyoming Piper server";
 
+<<<<<<< HEAD
               zeroconf = {
                 enable = mkEnableOption "zeroconf discovery" // {
                   default = true;
@@ -56,6 +57,8 @@ in
                 };
               };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               voice = mkOption {
                 type = str;
                 example = "en-us-ryan-medium";
@@ -109,6 +112,13 @@ in
                 apply = toString;
               };
 
+<<<<<<< HEAD
+=======
+              streaming = mkEnableOption "audio streaming on sentence boundaries" // {
+                default = true;
+              };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               useCUDA = mkOption {
                 type = bool;
                 default = pkgs.config.cudaSupport;
@@ -178,9 +188,14 @@ in
                 "--noise-w-scale"
                 options.noiseWidth
               ]
+<<<<<<< HEAD
               ++ lib.optionals options.zeroconf.enable [
                 "--zeroconf"
                 options.zeroconf.name
+=======
+              ++ lib.optionals options.streaming [
+                "--streaming"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               ]
               ++ lib.optionals options.useCUDA [
                 "--use-cuda"
@@ -205,7 +220,10 @@ in
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
+<<<<<<< HEAD
               "AF_NETLINK"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               "AF_UNIX"
             ];
             RestrictNamespaces = true;

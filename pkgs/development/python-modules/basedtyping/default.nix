@@ -54,6 +54,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/KotlinIsland/basedtyping";
     changelog = "https://github.com/KotlinIsland/basedtyping/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ PerchunPak ];
+=======
+    maintainers = with lib.maintainers; [ perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,10 +45,18 @@ stdenv.mkDerivation {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sample and MIDI device manager";
     homepage = "https://github.com/dagargo/elektroid";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ camelpunch ];
+=======
+  meta = with lib; {
+    description = "Sample and MIDI device manager";
+    homepage = "https://github.com/dagargo/elektroid";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ camelpunch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

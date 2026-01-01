@@ -28,11 +28,19 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/procyon
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Suite of Java metaprogramming tools including a Java decompiler";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     homepage = "https://github.com/mstrobel/procyon/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Suite of Java metaprogramming tools including a Java decompiler";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    homepage = "https://github.com/mstrobel/procyon/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "procyon";
   };

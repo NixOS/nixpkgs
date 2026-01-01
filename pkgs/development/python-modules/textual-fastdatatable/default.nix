@@ -47,7 +47,11 @@ buildPythonPackage rec {
     pytest-textual-snapshot
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "textual_fastdatatable" ];
 

@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acpica-tools";
+<<<<<<< HEAD
   version = "20251212";
+=======
+  version = "20250807";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "acpica";
     repo = "acpica";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-R2u93OzNv2/LcuxlqXBufGVv+rI3fNPMHl3VKcPn3VU=";
+=======
+    hash = "sha256-OY7jEirUDpzhgT9iCUYWeZmbCQl2R/agGIHXqJI/UBo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/belluzj/fantasque-sans";
     description = "Font family with a great monospaced variant for programmers";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/belluzj/fantasque-sans";
+    description = "Font family with a great monospaced variant for programmers";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.rycee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

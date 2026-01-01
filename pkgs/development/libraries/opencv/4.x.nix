@@ -293,7 +293,11 @@ effectiveStdenv.mkDerivation {
   cudaPropagateToOutput = "cxxdev";
 
   postUnpack = optionalString buildContrib ''
+<<<<<<< HEAD
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/${src.name}/opencv_contrib"
+=======
+    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/source/opencv_contrib"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
@@ -310,6 +314,7 @@ effectiveStdenv.mkDerivation {
       url = "https://github.com/opencv/opencv/commit/dbb622b7f59c3f0e5bd3487252ef37cf72dcdcdb.patch";
       hash = "sha256-MS9WizZQu0Gxw/daDDFmETxcDJYRTyhSq/xK0X5lAZM=";
     })
+<<<<<<< HEAD
     # Backport upstream fix for reproducible builds
     # https://github.com/opencv/opencv/pull/27962
     (fetchpatch {
@@ -317,6 +322,8 @@ effectiveStdenv.mkDerivation {
       url = "https://github.com/opencv/opencv/commit/7224bced8bff9d16d5e869d44f90f95ad8fdfe25.patch";
       hash = "sha256-DIlTQaIVWpPgJgPktY+0vd3BWJoS38YZn5aFS7DqsNM=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ optionals enableCuda [
     ./cuda_opt_flow.patch
@@ -332,7 +339,11 @@ effectiveStdenv.mkDerivation {
     installExtraFile ade
     + optionalString enableIpp (installExtraFiles ippicv)
     + (optionalString buildContrib ''
+<<<<<<< HEAD
       cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/${src.name}/opencv_contrib")
+=======
+      cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/source/opencv_contrib")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       ${installExtraFiles vgg}
       ${installExtraFiles boostdesc}
@@ -474,7 +485,10 @@ effectiveStdenv.mkDerivation {
   OpenBLAS = optionalString withOpenblas openblas_;
 
   cmakeFlags = [
+<<<<<<< HEAD
     (cmakeBool "BUILD_INFO_SKIP_SYSTEM_VERSION" true)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
     (cmakeBool "WITH_OPENMP" true)
     (cmakeBool "BUILD_PROTOBUF" false)

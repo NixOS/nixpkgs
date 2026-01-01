@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   fetchFromGitHub,
   influxdb-client,
@@ -11,6 +14,10 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyzmq,
   setproctitle,
   setuptools,
@@ -21,6 +28,11 @@ buildPythonPackage rec {
   version = "2.10.0";
   pyproject = true;
 
+<<<<<<< HEAD
+=======
+  disabled = pythonOlder "3.10";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "powerapi-ng";
     repo = "powerapi";
@@ -28,8 +40,11 @@ buildPythonPackage rec {
     hash = "sha256-rn1qe0RwYuUR23CgzOOeiwe1wuFihnhQ9a6ALgSP/cQ=";
   };
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = [
@@ -51,6 +66,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-timeout
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "powerapi" ];
@@ -66,6 +82,16 @@ buildPythonPackage rec {
     description = "Python framework for building software-defined power meters";
     homepage = "https://github.com/powerapi-ng/powerapi";
     changelog = "https://github.com/powerapi-ng/powerapi/releases/tag/${src.tag}";
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "powerapi" ];
+
+  meta = {
+    description = "Python framework for building software-defined power meters";
+    homepage = "https://github.com/powerapi-ng/powerapi";
+    changelog = "https://github.com/powerapi-ng/powerapi/releases/tag/v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

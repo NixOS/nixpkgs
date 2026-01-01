@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
     echo 'KERNEL=="/dev/input/event*", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"' >> $out/etc/udev/rules.d/80-mouse-actions.rules
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Execute commands from mouse events such as clicks/wheel on the side/corners of the screen, or drawing shapes";
     homepage = "https://github.com/jersou/mouse-actions";
@@ -50,5 +51,14 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ rgri ];
     mainProgram = "mouse-actions";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Execute commands from mouse events such as clicks/wheel on the side/corners of the screen, or drawing shapes";
+    homepage = "https://github.com/jersou/mouse-actions";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rgri ];
+    mainProgram = "mouse-actions";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

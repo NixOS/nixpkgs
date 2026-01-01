@@ -4,8 +4,11 @@
   nix-update-script,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
     nodejs
@@ -28,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
+=======
+    pnpm_9.configHook
+    nodejs
+  ];
+
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-v+wuYGK0WEgrPNBLuLnoO/uDEk6AqJTlNJZHTpEb4mc=";
   };

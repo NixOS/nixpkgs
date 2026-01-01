@@ -6,11 +6,19 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "0.1";
 in
 stdenv.mkDerivation {
   pname = "niff";
   inherit version;
+=======
+  pname = "niff";
+  version = "0.1";
+in
+stdenv.mkDerivation {
+  name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "FRidh";

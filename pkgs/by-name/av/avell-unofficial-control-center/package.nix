@@ -25,11 +25,20 @@ python3Packages.buildPythonApplication {
     elevate
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rodgomesc/avell-unofficial-control-center";
     description = "Software for controlling RGB keyboard lights on some gaming laptops that use ITE Device(8291) Rev 0.03";
     mainProgram = "aucc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rkitover ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rodgomesc/avell-unofficial-control-center";
+    description = "Software for controlling RGB keyboard lights on some gaming laptops that use ITE Device(8291) Rev 0.03";
+    mainProgram = "aucc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rkitover ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

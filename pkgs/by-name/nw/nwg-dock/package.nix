@@ -31,12 +31,21 @@ buildGoModule rec {
     gtk-layer-shell
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GTK3-based dock for sway";
     homepage = "https://github.com/nwg-piotr/nwg-dock";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "GTK3-based dock for sway";
+    homepage = "https://github.com/nwg-piotr/nwg-dock";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nwg-dock";
   };
 }

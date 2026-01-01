@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cmsdials" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API client interface to CMS DIALS service";
     homepage = "https://github.com/cms-DQM/dials-py";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ShamrockLee ];
+=======
+  meta = with lib; {
+    description = "Python API client interface to CMS DIALS service";
+    homepage = "https://github.com/cms-DQM/dials-py";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ShamrockLee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

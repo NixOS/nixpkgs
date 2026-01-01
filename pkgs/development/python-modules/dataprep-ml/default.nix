@@ -77,10 +77,18 @@ buildPythonPackage rec {
     "dataprep_ml.splitters"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Data utilities for Machine Learning pipelines";
     homepage = "https://github.com/mindsdb/dataprep_ml";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Data utilities for Machine Learning pipelines";
+    homepage = "https://github.com/mindsdb/dataprep_ml";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

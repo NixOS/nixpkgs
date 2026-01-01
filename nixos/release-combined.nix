@@ -98,8 +98,12 @@ rec {
 
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
+<<<<<<< HEAD
         (onFullSupported "nixos.tests.gitlab.gitlab")
         (onFullSupported "nixos.tests.gitlab.runner")
+=======
+        (onFullSupported "nixos.tests.gitlab")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         (onFullSupported "nixos.tests.gnome")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")

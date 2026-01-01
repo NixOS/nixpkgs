@@ -52,11 +52,19 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "tarsnapper" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper which expires backups using a gfs-scheme";
     homepage = "https://github.com/miracle2k/tarsnapper";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ gmacon ];
+=======
+  meta = with lib; {
+    description = "Wrapper which expires backups using a gfs-scheme";
+    homepage = "https://github.com/miracle2k/tarsnapper";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ gmacon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tarsnapper";
   };
 }

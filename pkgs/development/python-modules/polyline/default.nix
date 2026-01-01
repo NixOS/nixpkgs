@@ -35,7 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "polyline" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python implementation of Google's Encoded Polyline Algorithm Format";
     longDescription = ''
       polyline is a Python implementation of Google's Encoded Polyline Algorithm Format. It is
@@ -43,7 +47,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/frederickjansen/polyline";
     changelog = "https://github.com/frederickjansen/polyline/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ersin ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ ersin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

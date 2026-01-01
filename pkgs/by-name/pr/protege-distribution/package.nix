@@ -72,18 +72,31 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "OWL2 ontology editor from Stanford, with third-party plugins included";
     homepage = "https://protege.stanford.edu/";
     downloadPage = "https://protege.stanford.edu/products.php#desktop-protege";
     maintainers = with lib.maintainers; [ nessdoor ];
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "OWL2 ontology editor from Stanford, with third-party plugins included";
+    homepage = "https://protege.stanford.edu/";
+    downloadPage = "https://protege.stanford.edu/products.php#desktop-protege";
+    maintainers = with maintainers; [ nessdoor ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       bsd2
       epl10
       lgpl3
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "run-protege";
   };
 }

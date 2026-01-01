@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tago" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for interacting with Tago.io";
     homepage = "https://github.com/tago-io/tago-sdk-python";
     changelog = "https://github.com/tago-io/tago-sdk-python/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for interacting with Tago.io";
+    homepage = "https://github.com/tago-io/tago-sdk-python";
+    changelog = "https://github.com/tago-io/tago-sdk-python/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -41,15 +41,27 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Implementation of the Dirac video codec in ANSI C";
     homepage = "https://sourceforge.net/projects/schrodinger/";
     maintainers = [ ];
     license = [
+<<<<<<< HEAD
       lib.licenses.mpl11
       lib.licenses.lgpl2
       lib.licenses.mit
     ];
     platforms = lib.platforms.unix;
+=======
+      licenses.mpl11
+      licenses.lgpl2
+      licenses.mit
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

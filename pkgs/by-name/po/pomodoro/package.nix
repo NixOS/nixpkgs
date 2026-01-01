@@ -18,11 +18,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-oXOf9G0BMSbFFAsmRaAZzaquFva1i1gJ4ISqJkqSx4k=";
 
+<<<<<<< HEAD
   meta = {
     description = "Simple CLI pomodoro timer using desktop notifications written in Rust";
     homepage = "https://github.com/SanderJSA/Pomodoro";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ annaaurora ];
+=======
+  meta = with lib; {
+    description = "Simple CLI pomodoro timer using desktop notifications written in Rust";
+    homepage = "https://github.com/SanderJSA/Pomodoro";
+    license = licenses.mit;
+    maintainers = with maintainers; [ annaaurora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # error: redefinition of module 'ObjectiveC'
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "pomodoro";

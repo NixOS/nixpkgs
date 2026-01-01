@@ -27,11 +27,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Firmware loader for Qualcomm Gobi USB chipsets";
     homepage = "https://www.codon.org.uk/~mjg59/gobi_loader/";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ _0x4A6F ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Firmware loader for Qualcomm Gobi USB chipsets";
+    homepage = "https://www.codon.org.uk/~mjg59/gobi_loader/";
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ _0x4A6F ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

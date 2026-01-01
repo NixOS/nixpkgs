@@ -22,11 +22,20 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "txdbus" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Native Python implementation of DBus for Twisted";
     homepage = "https://github.com/cocagne/txdbus";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+  meta = with lib; {
+    description = "Native Python implementation of DBus for Twisted";
+    homepage = "https://github.com/cocagne/txdbus";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

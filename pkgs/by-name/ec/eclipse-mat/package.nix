@@ -114,7 +114,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast and feature-rich Java heap analyzer";
     mainProgram = "eclipse-mat";
     longDescription = ''
@@ -126,9 +130,15 @@ stdenv.mkDerivation rec {
       run a report to automatically extract leak suspects.
     '';
     homepage = "https://www.eclipse.org/mat";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.epl20;
     maintainers = [ lib.maintainers.ktor ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.epl20;
+    maintainers = [ maintainers.ktor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 

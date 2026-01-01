@@ -49,14 +49,23 @@ let
   clapJuceExtensions = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap-juce-extensions";
+<<<<<<< HEAD
     rev = "645ed2fd0949d36639e3d63333f26136df6df769";
     hash = "sha256-Lx88nyEFjPLA5yh8rrqBdyZIxe/j0FgIHoyKcbjuuI4=";
+=======
+    rev = "4f33b4930b6af806018c009f0f24b3a50808af99";
+    hash = "sha256-M+T7ll3Ap6VIP5ub+kfEKwT2RW2IxxY4wUPRQKFIotk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
   vcvRackSdk = srcOnly vcv-rack;
   pname = "airwin2rack";
+<<<<<<< HEAD
   version = "2.13.0-unstable-2025-12-07";
+=======
+  version = "2.13.0-unstable-2025-09-14";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 stdenv.mkDerivation {
   inherit pname;
@@ -65,8 +74,13 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "baconpaul";
     repo = "airwin2rack";
+<<<<<<< HEAD
     rev = "a797d6c7a453006c6a08db32d7bb373ecccb572b";
     hash = "sha256-+xGLVp4eR7Xb2dSEyfyHfAcoZGRSzL49l/U89N2VX+w=";
+=======
+    rev = "fc75563323bd9d8e46b1d58d89830e0bf760f0e8";
+    hash = "sha256-7jCDNbGMfJBo2xvRsDYdlEKSpAiRDNm6N4jTYCu+kKs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 

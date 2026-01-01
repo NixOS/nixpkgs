@@ -22,11 +22,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/adah1972/libunibreak";
     description = "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/adah1972/libunibreak";
+    description = "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
+    license = licenses.zlib;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

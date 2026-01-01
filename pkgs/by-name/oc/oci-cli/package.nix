@@ -25,14 +25,22 @@ in
 
 py.pkgs.buildPythonApplication rec {
   pname = "oci-cli";
+<<<<<<< HEAD
   version = "3.71.4";
+=======
+  version = "3.71.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-cli";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Dkbp5tXn0X5cuuSv1xFmuwAnZysuNPeEZKGYbMqRwFA=";
+=======
+    hash = "sha256-Yooaq7Jr8uu0yDGoVYhxJittJmMqhUDFSczWbFIyrN0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -100,6 +108,7 @@ py.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
     homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
@@ -108,6 +117,16 @@ py.pkgs.buildPythonApplication rec {
       upl
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Command Line Interface for Oracle Cloud Infrastructure";
+    homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
+    license = with licenses; [
+      asl20 # or
+      upl
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ilian
       FKouhai
     ];

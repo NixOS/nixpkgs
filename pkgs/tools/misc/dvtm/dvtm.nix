@@ -33,11 +33,20 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dynamic virtual terminal manager";
     homepage = "http://www.brain-dump.org/projects/dvtm";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Dynamic virtual terminal manager";
+    homepage = "http://www.brain-dump.org/projects/dvtm";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

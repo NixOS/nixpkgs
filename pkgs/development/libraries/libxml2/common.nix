@@ -73,12 +73,18 @@ stdenv'.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     findXMLCatalogs
   ]
+<<<<<<< HEAD
   ++
     lib.optionals
       (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin)
       [
         libiconv
       ]
+=======
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMinGW) [
+    libiconv
+  ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optionals icuSupport [
     icu
   ];
@@ -103,6 +109,7 @@ stdenv'.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && stdenv.hostPlatform.libc != "musl";
+<<<<<<< HEAD
   preCheck =
     lib.optional stdenv.hostPlatform.isDarwin ''
       export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
@@ -111,6 +118,11 @@ stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optional (stdenv.hostPlatform.isCygwin && pythonSupport) ''
       ln -s cygxml2mod.dll python/.libs/libxml2mod.dll
     '';
+=======
+  preCheck = lib.optional stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
@@ -126,12 +138,15 @@ stdenv'.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString (enableStatic && enableShared) ''
     moveToOutput lib/libxml2.a "$static"
+<<<<<<< HEAD
   ''
   # cyg prefix doesn't work for python modules
   + lib.optionalString (stdenv.hostPlatform.isCygwin && pythonSupport) ''
     for packages in "$py"/lib/python*/site-packages; do
       ln -s cygxml2mod.dll "$packages"/libxml2mod.dll
     done
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru = {

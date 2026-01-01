@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
     ./patch-alglib-CMakeLists.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Numerical analysis and data processing library";
     homepage = "https://www.alglib.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.paperdigits ];
+=======
+  meta = with lib; {
+    description = "Numerical analysis and data processing library";
+    homepage = "https://www.alglib.net/";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ maintainers.paperdigits ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       ALGLIB is a cross-platform numerical analysis and data processing library. It supports several programming languages (C++, C#, Delphi) and several operating systems (Windows and POSIX, including Linux). ALGLIB features include:
 

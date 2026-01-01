@@ -51,14 +51,22 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub";
+<<<<<<< HEAD
   version = "5.4.3";
+=======
+  version = "5.4.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-2LxbLwkEXpMBE5Fy7+3vQGO+CEKM50Ou5vATT6JtA8s=";
+=======
+    hash = "sha256-eSYoLoPWHQ/HHAFW6X262hrIrmUxDxrYEzVFiwGVqCs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   npmDeps = fetchNpmDeps {
@@ -138,6 +146,10 @@ buildPythonPackage rec {
     versionCheckHook
     virtualenv
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # Tries to install older versions through pip

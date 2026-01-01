@@ -42,6 +42,7 @@ let
           rm -rf Xcode.app
         '';
       };
+<<<<<<< HEAD
       meta = {
         homepage = "https://developer.apple.com/xcode/";
         description = "Apple's Xcode developer tools";
@@ -50,6 +51,16 @@ let
         platforms = lib.platforms.darwin ++ lib.platforms.linux;
         hydraPlatforms = [ ];
         sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+=======
+      meta = with lib; {
+        homepage = "https://developer.apple.com/xcode/";
+        description = "Apple's Xcode developer tools";
+        maintainers = with lib.maintainers; [ DimitarNestorov ];
+        license = licenses.unfree;
+        platforms = platforms.darwin ++ platforms.linux;
+        hydraPlatforms = [ ];
+        sourceProvenance = [ sourceTypes.binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
     in

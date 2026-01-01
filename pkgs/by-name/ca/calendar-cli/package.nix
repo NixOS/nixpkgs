@@ -3,10 +3,13 @@
   python3,
   fetchFromGitHub,
   nixosTests,
+<<<<<<< HEAD
   perl,
   radicale,
   which,
   xandikos,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,6 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-w35ySLnfxXZR/a7BrPLYqXs2kqkuYhh5PcgNxJqjDtE=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     patchShebangs tests
     substituteInPlace tests/test_calendar-cli.sh \
@@ -28,6 +32,8 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail "../bin/calendar-cli" "$out/bin/calendar-cli"
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = with python3.pkgs; [
     setuptools
   ];
@@ -40,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     tzlocal
     click
     six
+<<<<<<< HEAD
     vobject
   ];
 
@@ -59,16 +66,31 @@ python3.pkgs.buildPythonApplication rec {
 
     runHook postCheck
   '';
+=======
+  ];
+
+  # tests require networking
+  doCheck = false;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.tests = {
     inherit (nixosTests) radicale;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple command-line CalDav client";
     homepage = "https://github.com/tobixen/calendar-cli";
     license = lib.licenses.gpl3Plus;
     mainProgram = "calendar-cli";
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Simple command-line CalDav client";
+    homepage = "https://github.com/tobixen/calendar-cli";
+    license = licenses.gpl3Plus;
+    mainProgram = "calendar-cli";
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

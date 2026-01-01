@@ -59,11 +59,20 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/doc/${pname} AUTHORS *.md
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Ayu colored GTK and Kvantum themes based on Arc";
     homepage = "https://github.com/dnordstrom/ayu-theme/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ lovesegfault ];
+=======
+  meta = with lib; {
+    description = "Ayu colored GTK and Kvantum themes based on Arc";
+    homepage = "https://github.com/dnordstrom/ayu-theme/";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lovesegfault ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

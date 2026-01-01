@@ -32,11 +32,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cute KDE theme inspired by the game Needy Girl Overdose";
     homepage = "https://github.com/Notify-ctrl/Plasma-Overdose";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ takagiy ];
+=======
+  meta = with lib; {
+    description = "Cute KDE theme inspired by the game Needy Girl Overdose";
+    homepage = "https://github.com/Notify-ctrl/Plasma-Overdose";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ takagiy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

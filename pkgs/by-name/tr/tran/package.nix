@@ -25,11 +25,19 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Securely transfer and send anything between computers with TUI";
     homepage = "https://github.com/abdfnx/tran";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Securely transfer and send anything between computers with TUI";
+    homepage = "https://github.com/abdfnx/tran";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tran";
   };
 }

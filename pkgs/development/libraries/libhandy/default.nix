@@ -82,10 +82,15 @@ stdenv.mkDerivation rec {
   ];
 
   # Uses define_variable in pkg-config, but we still need it to use the glade output
+<<<<<<< HEAD
   env = {
     PKG_CONFIG_GLADEUI_2_0_MODULEDIR = "${placeholder "glade"}/lib/glade/modules";
     PKG_CONFIG_GLADEUI_2_0_CATALOGDIR = "${placeholder "glade"}/share/glade/catalogs";
   };
+=======
+  PKG_CONFIG_GLADEUI_2_0_MODULEDIR = "${placeholder "glade"}/lib/glade/modules";
+  PKG_CONFIG_GLADEUI_2_0_CATALOGDIR = "${placeholder "glade"}/share/glade/catalogs";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -139,13 +144,23 @@ stdenv.mkDerivation rec {
       '';
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${version}";
     description = "Building blocks for modern adaptive GNOME apps";
     mainProgram = "handy-1-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libhandy";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.lgpl21Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

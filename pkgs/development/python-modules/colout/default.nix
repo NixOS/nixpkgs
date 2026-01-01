@@ -34,11 +34,20 @@ buildPythonPackage rec {
   # This project does not have a unit test
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Color Up Arbitrary Command Output";
     mainProgram = "colout";
     homepage = "https://github.com/nojhan/colout";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ badele ];
+=======
+  meta = with lib; {
+    description = "Color Up Arbitrary Command Output";
+    mainProgram = "colout";
+    homepage = "https://github.com/nojhan/colout";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ badele ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

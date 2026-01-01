@@ -1,5 +1,6 @@
 {
   buildGoModule,
+<<<<<<< HEAD
   curl,
   dbmate,
   fetchFromGitHub,
@@ -101,24 +102,44 @@ let
   finalAttrs = {
     pname = "ncps";
     version = "0.5.1";
+=======
+  dbmate,
+  fetchFromGitHub,
+  lib,
+}:
+
+let
+  finalAttrs = {
+    pname = "ncps";
+    version = "0.4.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = fetchFromGitHub {
       owner = "kalbasit";
       repo = "ncps";
       tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
       hash = "sha256-dPCzfy29wjRL5eXaueM8qLtKMmsNcwTqtSDBNOJ4NMc=";
+=======
+      hash = "sha256-A2HLbob9MHHCUNIC1OBwyFeE6KuEIdXW75hPSZMgicI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     ldflags = [
       "-X github.com/kalbasit/ncps/cmd.Version=v${finalAttrs.version}"
     ];
 
+<<<<<<< HEAD
     vendorHash = "sha256-3YPKlz7+x7nYCqKmOroaiUyZGKIQMGFxcNyPnrA9Tio=";
+=======
+    vendorHash = "sha256-Plc1L23qOYj1evVIG+O3OxVAKVeEIA+Z6sP4Z/T1SxU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     doCheck = true;
     checkFlags = [ "-race" ];
 
     nativeBuildInputs = [
+<<<<<<< HEAD
       curl # used for checking MinIO health check
       dbmate # used for testing
       minio # S3-compatible storage for integration tests
@@ -137,6 +158,11 @@ let
       ${minioPreCheck}
     '';
 
+=======
+      dbmate # used for testing
+    ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     postInstall = ''
       mkdir -p $out/share/ncps
       cp -r db $out/share/ncps/db

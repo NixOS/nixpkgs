@@ -3,6 +3,11 @@
   fetchFromGitHub,
   gitUpdater,
   lib,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versionCheckHook,
   ArchiveZip,
   CompressRawLzma,
@@ -25,6 +30,11 @@ buildPerlPackage rec {
     patchShebangs exiftool
   '';
 
+<<<<<<< HEAD
+=======
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   propagatedBuildInputs = [
     ArchiveZip
     CompressRawLzma
@@ -32,6 +42,13 @@ buildPerlPackage rec {
     IOCompressBrotli
   ];
 
+<<<<<<< HEAD
+=======
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/exiftool
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-ver";

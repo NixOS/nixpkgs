@@ -40,15 +40,24 @@ buildDotnetModule rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Download-Client für die ARD-Audiothek";
     longDescription = ''
       Audiothekar is a command line client to browse and download programs from
       German public broadcast online offering at https://www.ardaudiothek.de/.
     '';
     homepage = "https://github.com/fxsth/Audiothekar";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       wamserma
     ];
     platforms = [ "x86_64-linux" ]; # needs some work to enable dotnet-sdk.meta.platforms;

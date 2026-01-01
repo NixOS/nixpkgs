@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
@@ -92,5 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     pkgConfigModules = [ "lapack" ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Linear Algebra PACKage";
+    homepage = "http://www.netlib.org/lapack/";
+    maintainers = with maintainers; [ markuskowa ];
+    license = licenses.bsd3;
+    pkgConfigModules = [ "lapack" ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

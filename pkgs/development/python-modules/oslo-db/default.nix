@@ -64,10 +64,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_db" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Oslo Database library";
     homepage = "https://github.com/openstack/oslo.db";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Oslo Database library";
+    homepage = "https://github.com/openstack/oslo.db";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libiconv ];
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-liconv";
 
+<<<<<<< HEAD
   meta = {
     description = "Iconv based simplified-traditional chinese conversion tool";
     mainProgram = "cconv";
@@ -28,5 +29,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.redfish64 ];
+=======
+  meta = with lib; {
+    description = "Iconv based simplified-traditional chinese conversion tool";
+    mainProgram = "cconv";
+    homepage = "https://github.com/xiaoyjy/cconv";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.redfish64 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

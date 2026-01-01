@@ -111,6 +111,7 @@ stdenv'.mkDerivation rec {
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
@@ -120,5 +121,16 @@ stdenv'.mkDerivation rec {
       pbsds
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
+    homepage = "https://github.com/IntelRealSense/librealsense";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      brian-dawn
+      pbsds
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

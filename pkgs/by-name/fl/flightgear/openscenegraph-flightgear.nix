@@ -80,6 +80,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DBUILD_OSG_APPLICATIONS=OFF" ];
 
+<<<<<<< HEAD
   meta = {
     description = "3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
@@ -88,6 +89,16 @@ stdenv.mkDerivation {
       raskin
     ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "3D graphics toolkit";
+    homepage = "http://www.openscenegraph.org/";
+    maintainers = with maintainers; [
+      aanderse
+      raskin
+    ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };
 }

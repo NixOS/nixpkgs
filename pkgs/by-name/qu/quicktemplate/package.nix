@@ -16,10 +16,17 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/valyala/quicktemplate";
     description = "Fast, powerful, yet easy to use template engine for Go";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/valyala/quicktemplate";
+    description = "Fast, powerful, yet easy to use template engine for Go";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qtc";
   };
 }

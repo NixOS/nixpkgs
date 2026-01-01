@@ -64,7 +64,11 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString withGui "glib-compile-schemas $out/share/glib-2.0/schemas";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for communicating with LXI compatible instruments";
     longDescription = ''
       lxi-tools is a collection of open source software tools
@@ -73,9 +77,15 @@ stdenv.mkDerivation rec {
       spectrum analyzers etc.
     '';
     homepage = "https://lxi-tools.github.io/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vq ];
+=======
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.vq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lxi";
   };
 }

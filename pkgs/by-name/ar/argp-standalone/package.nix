@@ -24,11 +24,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/argp-standalone/argp-standalone";
     description = "Standalone version of arguments parsing functions from Glibc";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ amar1729 ];
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/argp-standalone/argp-standalone";
+    description = "Standalone version of arguments parsing functions from Glibc";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ amar1729 ];
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

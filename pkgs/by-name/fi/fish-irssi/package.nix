@@ -33,10 +33,18 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DIRSSI_INCLUDE_PATH:PATH=${irssi}/include" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/falsovsky/FiSH-irssi";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/falsovsky/FiSH-irssi";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

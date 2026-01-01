@@ -11,7 +11,11 @@ import ../make-test-python.nix (
   {
     name = "guix-publish";
 
+<<<<<<< HEAD
     meta.maintainers = [ ];
+=======
+    meta.maintainers = with lib.maintainers; [ foo-dogsquared ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     nodes =
       let

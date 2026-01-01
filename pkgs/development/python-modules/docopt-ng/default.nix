@@ -21,10 +21,18 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "docopt" ];
   doCheck = false; # no tests in the package
 
+<<<<<<< HEAD
   meta = {
     description = "More-magic command line arguments parser. Now with more maintenance";
     homepage = "https://github.com/bazaar-projects/docopt-ng";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    description = "More-magic command line arguments parser. Now with more maintenance";
+    homepage = "https://github.com/bazaar-projects/docopt-ng";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

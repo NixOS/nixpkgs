@@ -43,6 +43,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "apispec" ];
@@ -52,6 +53,17 @@ buildPythonPackage rec {
     description = "Pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
     license = lib.licenses.mit;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "apispec" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/marshmallow-code/apispec/blob/${version}/CHANGELOG.rst";
+    description = "Pluggable API specification generator with support for the OpenAPI Specification";
+    homepage = "https://github.com/marshmallow-code/apispec";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

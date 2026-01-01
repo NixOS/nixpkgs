@@ -36,11 +36,20 @@ buildDunePackage rec {
   checkInputs = [ ounit2 ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tategakibunko/jingoo";
     description = "OCaml template engine almost compatible with jinja2";
     mainProgram = "jingoo";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ericbmerritt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tategakibunko/jingoo";
+    description = "OCaml template engine almost compatible with jinja2";
+    mainProgram = "jingoo";
+    license = licenses.mit;
+    maintainers = [ maintainers.ericbmerritt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

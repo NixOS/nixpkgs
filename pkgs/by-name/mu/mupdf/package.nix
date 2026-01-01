@@ -55,6 +55,7 @@ let
       hash = "sha256-0fuE0lm9rlAaok2Qe0V1uUrgP4AjMWgp3eTbw8G6PMM=";
     };
 
+<<<<<<< HEAD
     patches = [
       # Fix build with gcc15
       # https://github.com/freeglut/freeglut/pull/187
@@ -64,6 +65,9 @@ let
         hash = "sha256-agXw3JHq81tx5514kkorvuU5mX4E3AV930hy1OJl4L0=";
       })
     ];
+=======
+    patches = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # cmake 4 compatibility, upstream is dead
     postPatch = ''

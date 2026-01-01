@@ -111,6 +111,10 @@ mkDerivation rec {
     description = "XMPP (Jabber) client based on Qt5";
     mainProgram = "psi-plus";
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       unclechu
     ];
     license = lib.licenses.gpl2Only;

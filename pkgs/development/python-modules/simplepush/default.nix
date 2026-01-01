@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simplepush" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to send push notifications via Simplepush";
     homepage = "https://github.com/simplepush/simplepush-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to send push notifications via Simplepush";
+    homepage = "https://github.com/simplepush/simplepush-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -76,11 +76,20 @@ stdenv.mkDerivation rec {
     rapidjson
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C++ API for Kafka clients (i.e. KafkaProducer, KafkaConsumer, AdminClient)";
     homepage = "https://github.com/morganstanley/modern-cpp-kafka";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ditsuke ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C++ API for Kafka clients (i.e. KafkaProducer, KafkaConsumer, AdminClient)";
+    homepage = "https://github.com/morganstanley/modern-cpp-kafka";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ditsuke ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

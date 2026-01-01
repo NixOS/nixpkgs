@@ -91,11 +91,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Molecule editor and visualizer";
     maintainers = with lib.maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadrolibs";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Molecule editor and visualizer";
+    maintainers = with maintainers; [ sheepforce ];
+    homepage = "https://github.com/OpenChemistry/avogadrolibs";
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

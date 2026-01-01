@@ -19,11 +19,19 @@
 
 stdenv.mkDerivation rec {
   pname = "survex";
+<<<<<<< HEAD
   version = "1.4.19";
 
   src = fetchurl {
     url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-X8FZCZTJ7DkZeYnrzaLCukRhs/kTHwre9F1TTRlK2ro=";
+=======
+  version = "1.4.18";
+
+  src = fetchurl {
+    url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-oKCEd3G67+2tE6+UB5NKbW/xEWMvbmRkb/YzsgM6zmU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

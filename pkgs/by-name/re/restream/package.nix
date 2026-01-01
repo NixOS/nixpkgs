@@ -51,11 +51,20 @@ stdenv.mkDerivation rec {
         "$out/bin/restream"
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "reMarkable screen sharing over SSH";
     mainProgram = "restream";
     homepage = "https://github.com/rien/reStream";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.cpcloud ];
+=======
+  meta = with lib; {
+    description = "reMarkable screen sharing over SSH";
+    mainProgram = "restream";
+    homepage = "https://github.com/rien/reStream";
+    license = licenses.mit;
+    maintainers = [ maintainers.cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

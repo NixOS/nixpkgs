@@ -58,7 +58,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gcstar --prefix PERL5LIB : $PERL5LIB
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.com/Kerenoc/GCstar";
     description = "Manage your collections of movies, games, books, music and more";
     mainProgram = "gcstar";
@@ -69,8 +73,14 @@ stdenv.mkDerivation rec {
       Detailed information on each item can be automatically retrieved from the internet and you can store additional data, such as the location or who you've lent it to.
       You may also search and filter your collections by many criteria.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dasj19 ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dasj19 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

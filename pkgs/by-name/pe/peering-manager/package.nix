@@ -7,6 +7,7 @@
   plugins ? ps: [ ],
 }:
 
+<<<<<<< HEAD
 let
   python = python3.override {
     packageOverrides = final: prev: {
@@ -17,18 +18,31 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
   version = "1.10.1";
+=======
+python3.pkgs.buildPythonApplication rec {
+  pname = "peering-manager";
+  version = "1.9.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "peering-manager";
     repo = "peering-manager";
     tag = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ByECaQ6NW1Su+k/j/bcKJqFf7bStdWZxOZn95GJEqBg=";
+=======
+    sha256 = "sha256-lxelWtiMO6w8Tt7zK/NDdmc3PaKlGibKjSfhD+tGrCU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   format = "other";
 
   propagatedBuildInputs =
+<<<<<<< HEAD
     with python.pkgs;
+=======
+    with python3.pkgs;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     [
       django
       django-debug-toolbar
@@ -53,10 +67,16 @@ python.pkgs.buildPythonApplication rec {
       pyyaml
       requests
       social-auth-app-django
+<<<<<<< HEAD
       pytz
       tzdata
     ]
     ++ plugins python.pkgs;
+=======
+      tzdata
+    ]
+    ++ plugins python3.pkgs;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildPhase = ''
     runHook preBuild
@@ -78,14 +98,20 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     # PYTHONPATH of all dependencies used by the package
+<<<<<<< HEAD
     inherit python;
     pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+=======
+    python = python3;
+    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     tests = {
       inherit (nixosTests) peering-manager;
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://peering-manager.net/";
     license = lib.licenses.asl20;
@@ -93,5 +119,14 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "peering-manager";
     teams = [ lib.teams.wdz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://peering-manager.net/";
+    license = licenses.asl20;
+    description = "BGP sessions management tool";
+    mainProgram = "peering-manager";
+    teams = [ teams.wdz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

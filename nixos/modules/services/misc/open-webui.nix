@@ -56,7 +56,11 @@ in
         '';
         description = ''
           Extra environment variables for Open-WebUI.
+<<<<<<< HEAD
           For more details see <https://docs.openwebui.com/getting-started/env-configuration>
+=======
+          For more details see <https://docs.openwebui.com/getting-started/advanced-topics/env-configuration/>
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         '';
       };
 

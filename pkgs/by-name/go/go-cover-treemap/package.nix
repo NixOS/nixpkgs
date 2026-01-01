@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Go code coverage to SVG treemap";
     homepage = "https://github.com/nikolaydubina/go-cover-treemap";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "Go code coverage to SVG treemap";
+    homepage = "https://github.com/nikolaydubina/go-cover-treemap";
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "go-cover-treemap";
   };
 }

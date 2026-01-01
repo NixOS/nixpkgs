@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (src.meta) homepage;
     description = "Guess PC-type hard disk partitions";
     longDescription = ''
@@ -32,8 +36,13 @@ stdenv.mkDerivation rec {
       damaged, incorrect or deleted. The guessed table can be written to a file
       or device.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gpart";
   };
 }

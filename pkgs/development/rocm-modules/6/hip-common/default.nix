@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ Heterogeneous-Compute Interface for Portability";
     homepage = "https://github.com/ROCm/HIP";
@@ -41,5 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "C++ Heterogeneous-Compute Interface for Portability";
+    homepage = "https://github.com/ROCm/HIP";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

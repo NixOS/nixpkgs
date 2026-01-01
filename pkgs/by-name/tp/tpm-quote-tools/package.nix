@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
       $out/bin/tpm_mkaik
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Collection of programs that provide support for TPM based attestation using the TPM quote mechanism";
     longDescription = ''
       The TPM Quote Tools is a collection of programs that provide support
@@ -34,8 +38,14 @@ stdenv.mkDerivation rec {
       page for tpm_quote_tools provides a usage overview.
     '';
     homepage = "http://tpmquotetools.sourceforge.net/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ak ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ak ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

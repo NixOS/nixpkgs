@@ -20,11 +20,20 @@ python3Packages.buildPythonApplication {
     setuptools
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Software to identify the different types of hashes";
     homepage = "https://github.com/psypanda/hashID";
     mainProgram = "hashid";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ d3vil0p3r ];
+=======
+  meta = with lib; {
+    description = "Software to identify the different types of hashes";
+    homepage = "https://github.com/psypanda/hashID";
+    mainProgram = "hashid";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ d3vil0p3r ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -78,12 +78,19 @@ let
     bazel = bazel;
 
     bazelTargets = [ ":pip_pkg" ];
+<<<<<<< HEAD
     bazelFlags = [ "--noenable_bzlmod" ];
     removeRulesCC = false;
     LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
       sha256 = "sha256-7sPdIHWNFn13eaUanFgN988hFAwGnlU6cxmHOJUDpiQ=";
+=======
+    LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
+
+    fetchAttrs = {
+      sha256 = "sha256-TbWcWYidyXuAMgBnO2/k0NKCzc4wThf2uUeC3QxdBJY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     buildAttrs = {
@@ -148,5 +155,10 @@ buildPythonPackage {
     changelog = "https://github.com/tensorflow/probability/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+<<<<<<< HEAD
+=======
+    # Needs update for Bazel 7.
+    broken = true;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

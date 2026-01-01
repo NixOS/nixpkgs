@@ -36,11 +36,20 @@ stdenvNoCC.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Icon pack based upon Faenza and Mint-X";
     homepage = "https://github.com/madmaxms/iconpack-jade";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Icon pack based upon Faenza and Mint-X";
+    homepage = "https://github.com/madmaxms/iconpack-jade";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library to help create and query binary XML blobs";
     mainProgram = "xb-tool";
@@ -92,5 +93,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library to help create and query binary XML blobs";
+    mainProgram = "xb-tool";
+    homepage = "https://github.com/hughsie/libxmlb";
+    license = licenses.lgpl21Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

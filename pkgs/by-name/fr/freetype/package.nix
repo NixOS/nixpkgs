@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-freetype-config"
   ];
 
+<<<<<<< HEAD
   env = {
     # native compiler to generate building tool
     CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
@@ -91,6 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
       lib.optionalString stdenv.hostPlatform.isAarch32 "-std=gnu99"
       + lib.optionalString stdenv.hostPlatform.is32bit " -D_FILE_OFFSET_BITS=64";
   };
+=======
+  # native compiler to generate building tool
+  CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
+
+  # The asm for armel is written with the 'asm' keyword.
+  CFLAGS =
+    lib.optionalString stdenv.hostPlatform.isAarch32 "-std=gnu99"
+    + lib.optionalString stdenv.hostPlatform.is32bit " -D_FILE_OFFSET_BITS=64";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   enableParallelBuilding = true;
 
@@ -127,7 +137,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Font rendering engine";
     mainProgram = "freetype-config";
     longDescription = ''
@@ -141,9 +155,16 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.freedesktop.org/freetype/freetype/-/raw/VER-${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }/docs/CHANGES";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = lib.platforms.all;
     pkgConfigModules = [ "freetype2" ];
     maintainers = with lib.maintainers; [ ttuegel ];
+=======
+    license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
+    platforms = platforms.all;
+    pkgConfigModules = [ "freetype2" ];
+    maintainers = with maintainers; [ ttuegel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

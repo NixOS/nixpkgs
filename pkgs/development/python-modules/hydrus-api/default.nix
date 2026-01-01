@@ -29,10 +29,18 @@ buildPythonPackage rec {
   # There are no unit tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python module implementing the Hydrus API";
     homepage = "https://gitlab.com/cryzed/hydrus-api";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    description = "Python module implementing the Hydrus API";
+    homepage = "https://gitlab.com/cryzed/hydrus-api";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

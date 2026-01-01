@@ -38,11 +38,20 @@ buildPythonPackage rec {
     "smb"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Experimental SMB/CIFS library to support file sharing between Windows and Linux machines";
     homepage = "https://pysmb.readthedocs.io/";
     changelog = "https://github.com/miketeo/pysmb/releases/tag/${src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "Experimental SMB/CIFS library to support file sharing between Windows and Linux machines";
+    homepage = "https://pysmb.readthedocs.io/";
+    changelog = "https://github.com/miketeo/pysmb/releases/tag/${src.tag}";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

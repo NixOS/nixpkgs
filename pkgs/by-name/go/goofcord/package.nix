@@ -3,8 +3,11 @@
   stdenv,
   fetchFromGitHub,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs_22,
   nix-update-script,
   electron,
@@ -16,7 +19,11 @@
 }:
 
 let
+<<<<<<< HEAD
   pnpm = pnpm_9.override { nodejs = nodejs_22; };
+=======
+  pnpm' = pnpm_9.override { nodejs = nodejs_22; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
@@ -30,8 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm'.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs_22
     makeShellWrapper
     copyDesktopItems
@@ -43,9 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
+=======
+  pnpmDeps = pnpm'.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-8dSyU9arSvISc2kDWbg/CP6L4sZjZi/Zv7TZN4ONOjQ=";
   };

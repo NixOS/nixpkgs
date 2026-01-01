@@ -34,10 +34,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "indexed_zstd" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to seek within compressed zstd files";
     homepage = "https://github.com/martinellimarco/indexed_zstd";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python library to seek within compressed zstd files";
+    homepage = "https://github.com/martinellimarco/indexed_zstd";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

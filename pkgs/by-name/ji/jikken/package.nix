@@ -32,12 +32,21 @@ rustPlatform.buildRustPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful, source control friendly REST API testing toolkit";
     homepage = "https://jikken.io/";
     changelog = "https://github.com/jikkenio/jikken/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vinnymeller ];
+=======
+  meta = with lib; {
+    description = "Powerful, source control friendly REST API testing toolkit";
+    homepage = "https://jikken.io/";
+    changelog = "https://github.com/jikkenio/jikken/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vinnymeller ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jk";
   };
 }

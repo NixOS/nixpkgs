@@ -29,12 +29,21 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Validate your Kubernetes configuration files";
     mainProgram = "kubeval";
     homepage = "https://github.com/instrumenta/kubeval";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Validate your Kubernetes configuration files";
+    mainProgram = "kubeval";
+    homepage = "https://github.com/instrumenta/kubeval";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       johanot
       nicknovitski
     ];

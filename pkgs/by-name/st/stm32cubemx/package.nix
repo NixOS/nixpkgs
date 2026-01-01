@@ -84,7 +84,11 @@ let
       fi
     '';
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Graphical tool for configuring STM32 microcontrollers and microprocessors";
       longDescription = ''
         A graphical tool that allows a very easy configuration of STM32
@@ -94,9 +98,15 @@ let
         step-by-step process.
       '';
       homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
+<<<<<<< HEAD
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [
+=======
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
+      license = licenses.unfree;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         angaz
         wucke13
       ];

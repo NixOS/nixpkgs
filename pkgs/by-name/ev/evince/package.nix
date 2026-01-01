@@ -120,12 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dmultimedia=disabled"
   ];
 
+<<<<<<< HEAD
   # Fix build with gcc15
   env.NIX_CFLAGS_COMPILE = toString [
     "-DHAVE_STRING_H"
     "-DHAVE_STDLIB_H"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
@@ -141,7 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://apps.gnome.org/Evince/";
     description = "GNOME's document viewer";
 
@@ -152,12 +159,21 @@ stdenv.mkDerivation (finalAttrs: {
       on the GNOME Desktop with a single simple application.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "evince";
     teams = [
       lib.teams.gnome
       lib.teams.pantheon
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    mainProgram = "evince";
+    teams = [
+      teams.gnome
+      teams.pantheon
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 })

@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library for working with finite-state transducers";
     longDescription = ''
       Library for constructing, combining, optimizing, and searching weighted finite-state transducers (FSTs).
@@ -38,8 +42,14 @@ stdenv.mkDerivation rec {
       pattern matching, string processing, machine learning, information extraction and retrieval among others
     '';
     homepage = "https://www.openfst.org/twiki/bin/view/FST/WebHome";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.dfordivam ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.asl20;
+    maintainers = [ maintainers.dfordivam ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

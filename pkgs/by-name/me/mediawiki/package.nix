@@ -2,11 +2,16 @@
   lib,
   stdenvNoCC,
   fetchurl,
+<<<<<<< HEAD
+=======
+  imagemagick,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nixosTests,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
+<<<<<<< HEAD
   version = "1.45.0";
 
   src = fetchurl {
@@ -17,6 +22,21 @@ stdenvNoCC.mkDerivation rec {
   postPatch = ''
     substituteInPlace includes/installer/CliInstaller.php \
       --replace-fail '$vars = Installer::getExistingLocalSettings();' '$vars = null;'
+=======
+  version = "1.44.2";
+
+  src = fetchurl {
+    url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
+    hash = "sha256-59cCZpeWcfr9A3BeF6IfGFvRsoP/hD7XL+KQ6G+sQzE=";
+  };
+
+  postPatch = ''
+    sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
+
+    # fix generating previews for SVGs
+    substituteInPlace includes/config-schema.php \
+      --replace-fail "\$path/convert" "${imagemagick}/bin/convert"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   installPhase = ''
@@ -35,11 +55,20 @@ stdenvNoCC.mkDerivation rec {
     inherit (nixosTests.mediawiki) mysql postgresql;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Collaborative editing software that runs Wikipedia";
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
     platforms = lib.platforms.all;
     teams = [ lib.teams.c3d2 ];
+=======
+  meta = with lib; {
+    description = "Collaborative editing software that runs Wikipedia";
+    license = licenses.gpl2Plus;
+    homepage = "https://www.mediawiki.org/";
+    platforms = platforms.all;
+    teams = [ teams.c3d2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

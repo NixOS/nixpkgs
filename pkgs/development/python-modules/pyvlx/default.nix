@@ -36,7 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvlx" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python client to work with Velux units";
     longDescription = ''
       PyVLX uses the Velux KLF 200 interface to control io-Homecontrol
@@ -44,7 +48,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
     changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

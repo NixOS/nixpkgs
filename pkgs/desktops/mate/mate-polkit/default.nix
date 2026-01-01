@@ -8,15 +8,26 @@
   gobject-introspection,
   libayatana-appindicator,
   polkit,
+<<<<<<< HEAD
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+  mateUpdateScript,
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "mate-polkit";
   version = "1.28.1";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-polkit-${finalAttrs.version}.tar.xz";
+=======
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "NQod0KjtaiycGDz/KiHzlCmelo/MauLoyTxWXa5gSug=";
   };
 
@@ -34,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/mate-polkit";
     odd-unstable = true;
@@ -48,3 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "Integrates polkit authentication for MATE desktop";
+    homepage = "https://mate-desktop.org";
+    license = [ licenses.gpl2Plus ];
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

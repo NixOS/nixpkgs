@@ -31,10 +31,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bottleneck" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast NumPy array functions";
     homepage = "https://github.com/pydata/bottleneck";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Fast NumPy array functions";
+    homepage = "https://github.com/pydata/bottleneck";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

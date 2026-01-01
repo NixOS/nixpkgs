@@ -56,6 +56,10 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Write tests against structured configuration data";

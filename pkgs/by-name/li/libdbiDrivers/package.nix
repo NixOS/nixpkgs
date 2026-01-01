@@ -83,11 +83,19 @@ stdenv.mkDerivation rec {
     rm -rf $out/var
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://libdbi-drivers.sourceforge.net/";
     description = "Database drivers for libdbi";
     platforms = lib.platforms.all;
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    homepage = "https://libdbi-drivers.sourceforge.net/";
+    description = "Database drivers for libdbi";
+    platforms = platforms.all;
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

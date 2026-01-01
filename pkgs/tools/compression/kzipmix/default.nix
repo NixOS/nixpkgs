@@ -9,8 +9,13 @@ stdenv.mkDerivation rec {
   version = "20200115";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://www.jonof.id.au/files/kenutils/kzipmix-${version}-linux.tar.gz";
     hash = "sha256-ePgye0D6/ED53zx6xffLnYhkjed7SPU4BLOZQr9E3yA=";
+=======
+    url = "http://static.jonof.id.au/dl/kenutils/kzipmix-${version}-linux.tar.gz";
+    sha256 = "sha256-ePgye0D6/ED53zx6xffLnYhkjed7SPU4BLOZQr9E3yA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   installPhase = ''
@@ -21,10 +26,19 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/bin/zipmix
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool that aggressively optimizes the sizes of Zip archives";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     homepage = "http://advsys.net/ken/utils.htm";
+=======
+  meta = with lib; {
+    description = "Tool that aggressively optimizes the sizes of Zip archives";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    homepage = "http://advsys.net/ken/utils.htm";
+    maintainers = [ maintainers.sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

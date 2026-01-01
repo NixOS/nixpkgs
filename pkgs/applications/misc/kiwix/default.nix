@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Offline reader for Web content";
     mainProgram = "kiwix-desktop";
@@ -56,5 +57,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ greg ];
+=======
+  meta = with lib; {
+    description = "Offline reader for Web content";
+    mainProgram = "kiwix-desktop";
+    homepage = "https://kiwix.org";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ greg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -111,12 +111,21 @@ stdenv.mkDerivation rec {
     inherit sslSupport bdbSupport ldapSupport;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://apr.apache.org/";
     description = "Companion library to APR, the Apache Portable Runtime";
     mainProgram = "apu-1-config";
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
+=======
+    platforms = platforms.unix;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -34,12 +34,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Library for communicating with USB and Bluetooth HID devices";
     homepage = "https://github.com/libusb/hidapi";
     maintainers = with lib.maintainers; [ prusnak ];
     # You can choose between GPLv3, BSD or HIDAPI license (even more liberal)
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Library for communicating with USB and Bluetooth HID devices";
+    homepage = "https://github.com/libusb/hidapi";
+    maintainers = with maintainers; [ prusnak ];
+    # You can choose between GPLv3, BSD or HIDAPI license (even more liberal)
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd3 # or
       gpl3Only
     ];
@@ -51,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
         "hidapi-hidraw"
         "hidapi-libusb"
       ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+=======
+    platforms = platforms.unix ++ platforms.windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

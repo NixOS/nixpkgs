@@ -30,12 +30,21 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/usr/share/icons $out/share
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "New look into listening and enjoying Apple Music in style and performance";
     homepage = "https://github.com/ciderapp/Cider";
     license = lib.licenses.agpl3Only;
     mainProgram = "cider";
     maintainers = [ lib.maintainers.cigrainger ];
+=======
+  meta = with lib; {
+    description = "New look into listening and enjoying Apple Music in style and performance";
+    homepage = "https://github.com/ciderapp/Cider";
+    license = licenses.agpl3Only;
+    mainProgram = "cider";
+    maintainers = [ maintainers.cigrainger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

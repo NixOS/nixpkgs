@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Chinese font that shows stroke order for HSK 1-4";
     homepage = "http://rtega.be/chmn/index.php?subpage=68";
     license = [ lib.licenses.arphicpl ];
     maintainers = with lib.maintainers; [ johnazoidberg ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Chinese font that shows stroke order for HSK 1-4";
+    homepage = "http://rtega.be/chmn/index.php?subpage=68";
+    license = [ licenses.arphicpl ];
+    maintainers = with maintainers; [ johnazoidberg ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

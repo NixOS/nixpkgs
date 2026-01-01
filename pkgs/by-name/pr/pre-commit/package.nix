@@ -26,14 +26,22 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "pre-commit";
+<<<<<<< HEAD
   version = "4.5.1";
+=======
+  version = "4.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-3E/haU7TzTr+Qj3KadC7BYwuECZPa2Q+NvG5e4SSKSA=";
+=======
+    hash = "sha256-1IVzeZI4ln5eeArzPhcry6vhZVZj2rp+5D0r1c5ZEA8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -85,6 +93,10 @@ python3Packages.buildPythonApplication rec {
     # Node.js-related tests that are currently disabled on i686-linux.
     nodejs
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \
@@ -178,6 +190,7 @@ python3Packages.buildPythonApplication rec {
     "test_swift_language"
     "test_run_example_executable"
     "test_run_dep"
+<<<<<<< HEAD
     "test_control_c_control_c_on_install"
     "test_healthy_default_creator"
     "test_healthy_venv_creator"
@@ -198,6 +211,8 @@ python3Packages.buildPythonApplication rec {
     "test_unhealthy_then_replaced"
     "test_unhealthy_unexpected_pyvenv"
     "test_unhealthy_with_version_change"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # i don't know why these fail
     "test_install_existing_hooks_no_overwrite"

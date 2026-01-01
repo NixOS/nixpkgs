@@ -47,11 +47,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stone" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Official API Spec Language for Dropbox API V2";
     homepage = "https://github.com/dropbox/stone";
     changelog = "https://github.com/dropbox/stone/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Official API Spec Language for Dropbox API V2";
+    homepage = "https://github.com/dropbox/stone";
+    changelog = "https://github.com/dropbox/stone/releases/tag/${src.tag}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "stone";
   };

@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tests WebDAV servers by uploading test files, and then optionally testing for command execution or other actions directly on the target";
     homepage = "https://code.google.com/p/davtest/";
@@ -41,5 +42,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Tests WebDAV servers by uploading test files, and then optionally testing for command execution or other actions directly on the target";
+    homepage = "https://code.google.com/p/davtest/";
+    mainProgram = "davtest.pl";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

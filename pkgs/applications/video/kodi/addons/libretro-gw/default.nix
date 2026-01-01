@@ -28,11 +28,20 @@ buildKodiBinaryAddon rec {
     libretro
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/kodi-game/game.libretro.gw";
     description = "Game and Watch for Kodi";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/kodi-game/game.libretro.gw";
+    description = "Game and Watch for Kodi";
+    platforms = platforms.all;
+    license = licenses.gpl2Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,9 +23,16 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
     homepage = "https://bitbucket.org/birkenfeld/sphinx-contrib";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
+    homepage = "https://bitbucket.org/birkenfeld/sphinx-contrib";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

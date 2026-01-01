@@ -3,7 +3,10 @@
   stdenv,
   fetchFromGitHub,
   ocamlPackages,
+<<<<<<< HEAD
   dune,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +31,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = with ocamlPackages; [
     ocaml
+<<<<<<< HEAD
     dune
+=======
+    dune_3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     findlib
     ocamlbuild
   ];
@@ -52,13 +59,23 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify ]
   );
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Static type checker for JavaScript";
     mainProgram = "flow";
     homepage = "https://flow.org/";
     changelog = "https://github.com/facebook/flow/blob/v${version}/Changelog.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
     maintainers = with lib.maintainers; [ puffnfresh ];
+=======
+    license = licenses.mit;
+    platforms = ocamlPackages.ocaml.meta.platforms;
+    maintainers = with maintainers; [ puffnfresh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

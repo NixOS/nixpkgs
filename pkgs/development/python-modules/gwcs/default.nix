@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gwcs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to manage the Generalized World Coordinate System";
     homepage = "https://github.com/spacetelescope/gwcs";
     changelog = "https://github.com/spacetelescope/gwcs/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to manage the Generalized World Coordinate System";
+    homepage = "https://github.com/spacetelescope/gwcs";
+    changelog = "https://github.com/spacetelescope/gwcs/blob/${src.tag}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

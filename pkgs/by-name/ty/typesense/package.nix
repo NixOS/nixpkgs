@@ -39,11 +39,19 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://typesense.org";
     description = "Fast, typo-tolerant search engine for building delightful search experiences";
     mainProgram = "typesense-server";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    homepage = "https://typesense.org";
+    description = "Fast, typo-tolerant search engine for building delightful search experiences";
+    mainProgram = "typesense-server";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # There has been an attempt at building this from source, which were deemed
     # unfeasible at the time of writing this (July 2023) for the following reasons.
     # - Pre 0.25 would have been possible, but typesense has switched to bazel for 0.25+,
@@ -59,8 +67,14 @@ stdenv.mkDerivation {
     #     try to download stuff via cmake again, which is not possible in the sandbox.
     #     This is where I stopped trying for now.
     # XXX: retry once typesense has officially released their bazel based build.
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ oddlama ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with maintainers; [ oddlama ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,12 +32,21 @@ stdenv.mkDerivation {
   nativeCheckInputs = [ check ];
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Protocol decoding library for the sigrok signal analysis software suite";
     homepage = "https://sigrok.org/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Protocol decoding library for the sigrok signal analysis software suite";
+    homepage = "https://sigrok.org/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       vifino
     ];

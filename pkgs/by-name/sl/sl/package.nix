@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Steam Locomotive runs across your terminal when you type 'sl'";
     homepage = "http://www.tkl.iis.u-tokyo.ac.jp/~toyoda/index_e.html";
     license = rec {
@@ -37,8 +41,13 @@ stdenv.mkDerivation rec {
       fullName = shortName;
       url = "https://github.com/eyJhb/sl/blob/master/LICENSE";
     };
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ eyjhb ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ eyjhb ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sl";
   };
 }

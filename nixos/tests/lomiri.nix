@@ -76,6 +76,7 @@ let
   };
 
   sharedTestFunctions = ''
+<<<<<<< HEAD
     from collections.abc import Callable
     import tempfile
     import subprocess
@@ -142,6 +143,9 @@ let
       machine.screenshot("lomiri_launched")
 
     def wait_for_text(text) -> None:
+=======
+    def wait_for_text(text):
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       """
       Wait for on-screen text, and try to optimise retry count for slow hardware.
       """
@@ -149,7 +153,11 @@ let
       machine.sleep(30)
       machine.wait_for_text(text)
 
+<<<<<<< HEAD
     def toggle_maximise() -> None:
+=======
+    def toggle_maximise():
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       """
       Maximise the current window.
       """
@@ -163,7 +171,11 @@ let
       machine.send_key("esc")
       machine.sleep(5)
 
+<<<<<<< HEAD
     def mouse_click(xpos, ypos) -> None:
+=======
+    def mouse_click(xpos, ypos):
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       """
       Move the mouse to a screen location and hit left-click.
       """
@@ -176,7 +188,11 @@ let
       machine.execute("ydotool click 0xC0")
       machine.sleep(2)
 
+<<<<<<< HEAD
     def open_starter() -> None:
+=======
+    def open_starter():
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       """
       Open the starter, and ensure it's opened.
       """
@@ -244,7 +260,16 @@ let
 
             # The session should start, and not be stuck in i.e. a crash loop
             with subtest("lomiri starts"):
+<<<<<<< HEAD
                 ensure_lomiri_running()
+=======
+                machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+                # Output rendering from Lomiri has started when it starts printing performance diagnostics
+                machine.wait_for_console_text("Last frame took")
+                # Look for datetime's clock, one of the last elements to load
+                wait_for_text(r"(AM|PM)")
+                machine.screenshot("lomiri_launched")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
             # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
             # There's a test app we could use that also displays their contents, but it's abit inconsistent.
@@ -458,7 +483,16 @@ in
 
           # The session should start, and not be stuck in i.e. a crash loop
           with subtest("lomiri starts"):
+<<<<<<< HEAD
               ensure_lomiri_running()
+=======
+              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+              # Output rendering from Lomiri has started when it starts printing performance diagnostics
+              machine.wait_for_console_text("Last frame took")
+              # Look for datetime's clock, one of the last elements to load
+              wait_for_text(r"(AM|PM)")
+              machine.screenshot("lomiri_launched")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
@@ -605,7 +639,16 @@ in
 
           # The session should start, and not be stuck in i.e. a crash loop
           with subtest("lomiri starts"):
+<<<<<<< HEAD
               ensure_lomiri_running()
+=======
+              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+              # Output rendering from Lomiri has started when it starts printing performance diagnostics
+              machine.wait_for_console_text("Last frame took")
+              # Look for datetime's clock, one of the last elements to load
+              wait_for_text(r"(AM|PM)")
+              machine.screenshot("lomiri_launched")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
@@ -766,9 +809,20 @@ in
 
                 # Login
                 machine.send_chars("${pwInput}\n")
+<<<<<<< HEAD
 
                 # And the desktop doesn't render the wallpaper anymore. Grumble grumble...
                 ensure_lomiri_running()
+=======
+                machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+
+                # Output rendering from Lomiri has started when it starts printing performance diagnostics
+                machine.wait_for_console_text("Last frame took")
+                # And the desktop doesn't render the wallpaper anymore. Grumble grumble...
+                # Look for datetime's clock, one of the last elements to load
+                wait_for_text(r"(AM|PM)")
+                machine.screenshot("lomiri_launched")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
             # Lomiri in desktop mode should use the correct keymap
             with subtest("lomiri session keymap works"):

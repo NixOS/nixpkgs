@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) soapui; };
 
+<<<<<<< HEAD
   meta = {
     description = "Most Advanced REST & SOAP Testing Tool in the World";
     homepage = "https://www.soapui.org/";
@@ -62,6 +63,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.eupl11;
     maintainers = with lib.maintainers; [ gerschtli ];
     platforms = lib.platforms.linux; # we don't fetch the dmg yet
+=======
+  meta = with lib; {
+    description = "Most Advanced REST & SOAP Testing Tool in the World";
+    homepage = "https://www.soapui.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.eupl11;
+    maintainers = with maintainers; [ gerschtli ];
+    platforms = platforms.linux; # we don't fetch the dmg yet
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "soapui";
   };
 }

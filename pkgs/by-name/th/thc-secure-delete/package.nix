@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "THC's Secure Delete tools";
     homepage = "https://github.com/gordrs/thc-secure-delete";
@@ -43,5 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "srm";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "THC's Secure Delete tools";
+    homepage = "https://github.com/gordrs/thc-secure-delete";
+    changelog = "https://github.com/gordrs/thc-secure-delete/blob/v${finalAttrs.version}/CHANGES";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ tochiaha ];
+    mainProgram = "srm";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

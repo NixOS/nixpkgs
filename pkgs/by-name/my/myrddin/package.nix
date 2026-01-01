@@ -47,12 +47,21 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Systems language that is both powerful and fun to use";
     homepage = "https://myrlang.org/";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Systems language that is both powerful and fun to use";
+    homepage = "https://myrlang.org/";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # darwin: never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/myrddin.x86_64-darwin
     broken =
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;

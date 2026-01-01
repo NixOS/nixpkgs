@@ -18,10 +18,17 @@
   hicolor-icon-theme,
   wayland,
   wrapGAppsHook3,
+<<<<<<< HEAD
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+  mateUpdateScript,
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "mate-utils";
   version = "1.28.0";
   outputs = [
@@ -30,7 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-utils-${finalAttrs.version}.tar.xz";
+=======
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "WESdeg0dkA/wO3jKn36Ywh6X9H/Ca+5/8cYYNPIviNM=";
   };
 
@@ -69,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/mate-utils";
     odd-unstable = true;
@@ -86,3 +98,18 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "Utilities for the MATE desktop";
+    homepage = "https://mate-desktop.org";
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -27,10 +27,17 @@ buildGoModule {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Remote utility tool that to copy, paste and open browsers over TCP";
     homepage = "https://github.com/lemonade-command/lemonade/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Remote utility tool that to copy, paste and open browsers over TCP";
+    homepage = "https://github.com/lemonade-command/lemonade/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "lemonade";
   };

@@ -57,11 +57,19 @@ python3.pkgs.buildPythonApplication rec {
     "test_if_cog_needs_to_be_run"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert CSV files into a SQLite database";
     homepage = "https://github.com/simonw/csvs-to-sqlite";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.costrouc ];
+=======
+  meta = with lib; {
+    description = "Convert CSV files into a SQLite database";
+    homepage = "https://github.com/simonw/csvs-to-sqlite";
+    license = licenses.asl20;
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "csvs-to-sqlite";
   };
 }

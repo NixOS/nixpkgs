@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykulersky" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to control Brightech Kuler Sky Bluetooth LED devices";
     mainProgram = "pykulersky";
     homepage = "https://github.com/emlove/pykulersky";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to control Brightech Kuler Sky Bluetooth LED devices";
+    mainProgram = "pykulersky";
+    homepage = "https://github.com/emlove/pykulersky";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

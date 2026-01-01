@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest7CheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/architest/pymeeus";
     description = "Library of astronomical algorithms";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/architest/pymeeus";
+    description = "Library of astronomical algorithms";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

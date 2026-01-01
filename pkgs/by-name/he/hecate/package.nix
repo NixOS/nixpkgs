@@ -22,12 +22,21 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Terminal hex editor";
     longDescription = "The Hex Editor From Hell!";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ramkromberg ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Terminal hex editor";
+    longDescription = "The Hex Editor From Hell!";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ ramkromberg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hecate";
   };
 }

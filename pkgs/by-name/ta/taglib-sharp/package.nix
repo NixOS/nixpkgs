@@ -30,10 +30,18 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-docs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for reading and writing metadata in media files";
     homepage = "https://github.com/mono/taglib-sharp";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    description = "Library for reading and writing metadata in media files";
+    homepage = "https://github.com/mono/taglib-sharp";
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

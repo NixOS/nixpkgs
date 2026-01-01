@@ -42,12 +42,22 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Replacement for Terminal and the successor to iTerm";
     homepage = "https://www.iterm2.com/";
     hydraPlatforms = [ ]; # The build is little more than copying the binary
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Replacement for Terminal and the successor to iTerm";
+    homepage = "https://www.iterm2.com/";
+    hydraPlatforms = [ ]; # The build is little more than copying the binary
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      steinybot
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tricktron
       emaiax
     ];
@@ -55,6 +65,10 @@ stdenvNoCC.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+=======
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -54,11 +54,20 @@ buildPythonPackage rec {
     "test_adjoint"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/google-research/torchsde/releases/tag/v${version}";
     description = "Differentiable SDE solvers with GPU support and efficient sensitivity analysis";
     homepage = "https://github.com/google-research/torchsde";
     license = lib.licenses.asl20;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/google-research/torchsde/releases/tag/v${version}";
+    description = "Differentiable SDE solvers with GPU support and efficient sensitivity analysis";
+    homepage = "https://github.com/google-research/torchsde";
+    license = licenses.asl20;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

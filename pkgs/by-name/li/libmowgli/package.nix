@@ -15,10 +15,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jlw6ixMoIdIjmQ86N+KN+Gez218sw894POkcCYnT0s0=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Development framework for C providing high performance and highly flexible algorithms";
     homepage = "https://github.com/atheme/libmowgli-2";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Development framework for C providing high performance and highly flexible algorithms";
+    homepage = "https://github.com/atheme/libmowgli-2";
+    license = licenses.isc;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

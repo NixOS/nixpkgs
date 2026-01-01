@@ -31,10 +31,17 @@ buildPythonPackage rec {
   # recursion. See also: https://github.com/NixOS/nixpkgs/issues/63168
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Brain-dead simple parsing of ini files";
     homepage = "https://github.com/pytest-dev/iniconfig";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Brain-dead simple parsing of ini files";
+    homepage = "https://github.com/pytest-dev/iniconfig";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

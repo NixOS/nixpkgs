@@ -23,13 +23,21 @@
 stdenv.mkDerivation rec {
   name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
   pname = "NetworkManager-l2tp";
+<<<<<<< HEAD
   version = "1.20.22";
+=======
+  version = "1.20.20";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "nm-l2tp";
     repo = "network-manager-l2tp";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-TuYLNjogR3psb1B9zonHzRQext0ROS4ueD2WcWkseJk=";
+=======
+    hash = "sha256-AmbDWBCUG9fvqA6iJopYtbitdRwv2faWvIeKN90p234=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -75,12 +83,21 @@ stdenv.mkDerivation rec {
     networkManagerPlugin = "VPN/nm-l2tp-service.name";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "L2TP plugin for NetworkManager";
     inherit (networkmanager.meta) platforms;
     homepage = "https://github.com/nm-l2tp/network-manager-l2tp";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "L2TP plugin for NetworkManager";
+    inherit (networkmanager.meta) platforms;
+    homepage = "https://github.com/nm-l2tp/network-manager-l2tp";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       obadz
     ];
   };

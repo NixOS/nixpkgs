@@ -42,10 +42,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastdiff" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast native implementation of diff algorithm with a pure Python fallback";
     homepage = "https://github.com/syrusakbary/fastdiff";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Fast native implementation of diff algorithm with a pure Python fallback";
+    homepage = "https://github.com/syrusakbary/fastdiff";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     # resulting compiled object panics at import
     broken = stdenv.hostPlatform.is32bit;

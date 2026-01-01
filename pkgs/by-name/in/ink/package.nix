@@ -23,15 +23,25 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line tool for checking the ink level of your locally connected printer";
     longDescription = ''
       Ink is a command line tool for checking the ink level of your locally connected printer on a system which runs Linux or FreeBSD. Canon BJNP network printers are supported too.
     '';
     homepage = "https://ink.sourceforge.net/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [ samb96 ];
+=======
+    license = licenses.gpl2Only;
+    platforms = platforms.linux ++ platforms.freebsd;
+    maintainers = with maintainers; [ samb96 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ink";
   };
 }

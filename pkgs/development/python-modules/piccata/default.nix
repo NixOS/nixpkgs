@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "piccata" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple CoAP (RFC7252) toolkit";
     homepage = "https://github.com/NordicSemiconductor/piccata";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple CoAP (RFC7252) toolkit";
+    homepage = "https://github.com/NordicSemiconductor/piccata";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -22,7 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://software.sil.org/andika";
     description = "Family designed especially for literacy use taking into account the needs of beginning readers";
     longDescription = ''
@@ -30,8 +34,14 @@ stdenvNoCC.mkDerivation rec {
 
       A sans serif font is preferred by some literacy personnel for teaching people to read. Its forms are simpler and less cluttered than those of most serif fonts. For years, literacy workers have had to make do with fonts that were not really suitable for beginning readers and writers. In some cases, literacy specialists have had to tediously assemble letters from a variety of fonts in order to get all of the characters they need for their particular language project, resulting in confusing and unattractive publications. Andika addresses those issues.
     '';
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.f--t ];
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.f--t ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

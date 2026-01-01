@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   lib,
+=======
+  pkgs,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
@@ -31,10 +35,17 @@ buildPythonPackage rec {
   #This test is broken, when updating this package check if the test was fixed.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Common widgets for opcua-modeler og opcua-client-gui";
     homepage = "https://github.com/FreeOpcUa/opcua-widgets";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with pkgs.lib; {
+    description = "Common widgets for opcua-modeler og opcua-client-gui";
+    homepage = "https://github.com/FreeOpcUa/opcua-widgets";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

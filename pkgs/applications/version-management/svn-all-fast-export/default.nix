@@ -43,12 +43,21 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/svn-all-fast-export/svn2git";
     description = "Fast-import based converter for an svn repo to git repos";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.flokli ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/svn-all-fast-export/svn2git";
+    description = "Fast-import based converter for an svn repo to git repos";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = [ maintainers.flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "svn-all-fast-export";
   };
 }

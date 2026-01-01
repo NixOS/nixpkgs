@@ -66,11 +66,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/dofuuz/python-soxr/releases/tag/${src.tag}";
     description = "High quality, one-dimensional sample-rate conversion library";
     homepage = "https://github.com/dofuuz/python-soxr/tree/main";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/dofuuz/python-soxr/releases/tag/${src.tag}";
+    description = "High quality, one-dimensional sample-rate conversion library";
+    homepage = "https://github.com/dofuuz/python-soxr/tree/main";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

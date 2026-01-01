@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nameparser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for parsing human names into their individual components";
     homepage = "https://github.com/derek73/python-nameparser";
     changelog = "https://github.com/derek73/python-nameparser/releases/tag/v${version}";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "Module for parsing human names into their individual components";
+    homepage = "https://github.com/derek73/python-nameparser";
+    changelog = "https://github.com/derek73/python-nameparser/releases/tag/v${version}";
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

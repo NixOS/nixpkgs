@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "persisting_theory" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://code.agate.blue/agate/persisting-theory";
     description = "Automate data discovering and access inside a list of packages";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmai ];
+=======
+  meta = with lib; {
+    homepage = "https://code.agate.blue/agate/persisting-theory";
+    description = "Automate data discovering and access inside a list of packages";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mmai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

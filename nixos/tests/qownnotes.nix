@@ -55,8 +55,13 @@
           machine.wait_for_text("Nextcloud")
           machine.send_key("ret")
 
+<<<<<<< HEAD
           # OCR can't detect "App metric" or "Open network settings" anymore, so we will wait for another text
           machine.wait_for_text("usage data")
+=======
+          # OCR can't detect "App metric" anymore, so we will wait for another text
+          machine.wait_for_text("Open network settings")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           machine.send_key("ret")
 
           # Doesn't work for non-root

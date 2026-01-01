@@ -34,10 +34,18 @@ buildPythonPackage rec {
     tomli
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Shared functionality for calcipy-ecosystem";
     homepage = "https://corallium.kyleking.me";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yajo ];
+=======
+  meta = with lib; {
+    description = "Shared functionality for calcipy-ecosystem";
+    homepage = "https://corallium.kyleking.me";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yajo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

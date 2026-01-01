@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation (self: {
   pname = "emmy-lua-code-style";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.5.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "CppCXY";
     repo = "EmmyLuaCodeStyle";
     tag = self.version;
+<<<<<<< HEAD
     hash = "sha256-FYtDO9ZL7MjC+vHzrylyYBQHTtef/GM9ipt//EcLr4w=";
+=======
+    hash = "sha256-Lzh4ruyrWRTwU95iTMQozpLT5w92owHsDQM874XIuOg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ cmake ];

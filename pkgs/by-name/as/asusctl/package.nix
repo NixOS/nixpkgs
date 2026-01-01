@@ -18,16 +18,27 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
+<<<<<<< HEAD
   version = "6.2.0";
+=======
+  version = "6.1.17";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-frQbfCdK7bD6IAUa+MAOaRLhMrbdFRdHocQ0Z1tzsqE=";
   };
 
   cargoHash = "sha256-Z3JFp/qH3mD3Hy/kqSONOZ+syulgr+t0ZzFRvNN+Ayg=";
+=======
+    hash = "sha256-rNLQYCE7NZAel2fr5VoAMlm7QkH1KrySKdEn2+WMPo8=";
+  };
+
+  cargoHash = "sha256-/vMVSGUO6Zu/8GSTq1jsXLWVP9sWsuD7fJty3NnKXf4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postPatch = ''
     files="
@@ -46,6 +57,10 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace rog-control-center/src/main.rs \
       --replace-fail 'std::env::var("RUST_TRANSLATIONS").is_ok()' 'true'
 
+<<<<<<< HEAD
+=======
+    substituteInPlace data/asusd.rules --replace-fail /usr/bin/systemctl ${lib.getExe' systemd "systemctl"}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     substituteInPlace data/asusd.service \
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
@@ -97,6 +112,7 @@ rustPlatform.buildRustPackage rec {
       --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
     homepage = "https://gitlab.com/asus-linux/asusctl";
@@ -106,6 +122,16 @@ rustPlatform.buildRustPackage rec {
       k900
       aacebedo
       yuannan
+=======
+  meta = with lib; {
+    description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
+    homepage = "https://gitlab.com/asus-linux/asusctl";
+    license = licenses.mpl20;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [
+      k900
+      aacebedo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

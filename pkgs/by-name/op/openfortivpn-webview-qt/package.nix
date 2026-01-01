@@ -28,12 +28,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Perform the SAML single sign-on and easily retrieve the SVPNCOOKIE needed by openfortivpn";
     homepage = "https://github.com/gm-vm/openfortivpn-webview/tree/main";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jonboh ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Perform the SAML single sign-on and easily retrieve the SVPNCOOKIE needed by openfortivpn";
+    homepage = "https://github.com/gm-vm/openfortivpn-webview/tree/main";
+    license = licenses.mit;
+    maintainers = [ lib.maintainers.jonboh ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "openfortivpn-webview";
   };
 }

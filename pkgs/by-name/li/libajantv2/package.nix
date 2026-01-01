@@ -65,11 +65,20 @@ stdenv.mkDerivation rec {
     inherit (linuxPackages) ajantv2;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "AJA NTV2 Open Source Static Libs and Headers for building applications that only wish to statically link against";
     homepage = "https://github.com/aja-video/libajantv2";
     license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.lukegb ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "AJA NTV2 Open Source Static Libs and Headers for building applications that only wish to statically link against";
+    homepage = "https://github.com/aja-video/libajantv2";
+    license = with licenses; [ mit ];
+    maintainers = [ lib.maintainers.lukegb ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

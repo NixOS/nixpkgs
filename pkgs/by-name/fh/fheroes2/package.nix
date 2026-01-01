@@ -77,7 +77,11 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/ihhub/fheroes2";
     description = "Free implementation of Heroes of Might and Magic II game engine";
     mainProgram = "fheroes2";
@@ -86,8 +90,14 @@ stdenv.mkDerivation rec {
       Please refer to README of the project for instructions.
       On linux, the data can be placed in ~/.local/share/fheroes2 folder.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

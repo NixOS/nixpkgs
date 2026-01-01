@@ -43,10 +43,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "parse_type" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simplifies to build parse types based on the parse module";
     homepage = "https://github.com/jenisys/parse_type";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ alunduil ];
+=======
+  meta = with lib; {
+    description = "Simplifies to build parse types based on the parse module";
+    homepage = "https://github.com/jenisys/parse_type";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ alunduil ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

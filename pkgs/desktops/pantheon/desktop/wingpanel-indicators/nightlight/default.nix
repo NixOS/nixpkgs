@@ -44,11 +44,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Night Light Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-nightlight";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Night Light Indicator for Wingpanel";
+    homepage = "https://github.com/elementary/wingpanel-indicator-nightlight";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

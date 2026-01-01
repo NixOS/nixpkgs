@@ -24,11 +24,20 @@ stdenvNoCC.mkDerivation {
     mv * $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Dark plasma theme built with usability in mind";
     homepage = "https://github.com/freefreeno/Pitch-Black";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.pasqui23 ];
+=======
+  meta = with lib; {
+    description = "Dark plasma theme built with usability in mind";
+    homepage = "https://github.com/freefreeno/Pitch-Black";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.pasqui23 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

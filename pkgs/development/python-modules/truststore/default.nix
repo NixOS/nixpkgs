@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "truststore" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Verify certificates using native system trust stores";
     homepage = "https://github.com/sethmlarson/truststore";
     changelog = "https://github.com/sethmlarson/truststore/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anthonyroussel ];
+=======
+  meta = with lib; {
+    description = "Verify certificates using native system trust stores";
+    homepage = "https://github.com/sethmlarson/truststore";
+    changelog = "https://github.com/sethmlarson/truststore/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ anthonyroussel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

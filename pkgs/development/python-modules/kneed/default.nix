@@ -40,10 +40,18 @@ buildPythonPackage rec {
     "tests/test_no_matplotlib.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Knee point detection in Python";
     homepage = "https://github.com/arvkevi/kneed";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tm-drtina ];
+=======
+  meta = with lib; {
+    description = "Knee point detection in Python";
+    homepage = "https://github.com/arvkevi/kneed";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ tm-drtina ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

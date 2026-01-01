@@ -20,10 +20,18 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.python-excel.org/";
     description = "Library for developers to extract data from Microsoft Excel (tm) spreadsheet files";
     mainProgram = "runxlrd.py";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    homepage = "https://www.python-excel.org/";
+    description = "Library for developers to extract data from Microsoft Excel (tm) spreadsheet files";
+    mainProgram = "runxlrd.py";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

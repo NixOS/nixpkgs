@@ -13,16 +13,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xh";
+<<<<<<< HEAD
   version = "0.25.3";
+=======
+  version = "0.25.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-WRYClBIjw67lVrzvnIMqVHd6toi5yU7nClViqfXahKA=";
   };
 
   cargoHash = "sha256-T2ZaijWXyH8ZJKFTTngGtQsdRWL9re4i3nKHp8srWSI=";
+=======
+    hash = "sha256-UuWNLsJAoSjDPs/8VzW2vics3A/nsXWR5xmjMqTmYvQ=";
+  };
+
+  cargoHash = "sha256-SsJSBkOdQSpbEbFPK+qscSBePUKMLM1UpajpvpR2ZEo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
@@ -61,6 +72,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script { };
 

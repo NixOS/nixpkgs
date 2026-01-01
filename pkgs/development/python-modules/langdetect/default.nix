@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langdetect" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python port of Google's language-detection library";
     homepage = "https://github.com/Mimino666/langdetect";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erikarvstedt ];
+=======
+  meta = with lib; {
+    description = "Python port of Google's language-detection library";
+    homepage = "https://github.com/Mimino666/langdetect";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ erikarvstedt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

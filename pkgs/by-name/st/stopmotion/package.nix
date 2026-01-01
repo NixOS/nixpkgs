@@ -34,12 +34,21 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Create stop-motion animation movies";
     homepage = "http://linuxstopmotion.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Create stop-motion animation movies";
+    homepage = "http://linuxstopmotion.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "stopmotion";
   };
 }

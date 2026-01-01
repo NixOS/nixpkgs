@@ -64,6 +64,10 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       dywedir
+<<<<<<< HEAD
+=======
+      globin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ma27
       zowoq
       matthiasbeyer

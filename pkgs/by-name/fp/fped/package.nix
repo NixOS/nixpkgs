@@ -52,6 +52,7 @@ stdenv.mkDerivation {
     gtk2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Editor that allows the interactive creation of footprints electronic components";
     mainProgram = "fped";
@@ -59,5 +60,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Editor that allows the interactive creation of footprints electronic components";
+    mainProgram = "fped";
+    homepage = "http://projects.qi-hardware.com/index.php/p/fped/";
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

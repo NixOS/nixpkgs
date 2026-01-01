@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/World/design/icon-library";
     description = "Symbolic icons for your apps";
@@ -59,5 +60,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/World/design/icon-library";
+    description = "Symbolic icons for your apps";
+    mainProgram = "icon-library";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

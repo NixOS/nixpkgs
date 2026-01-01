@@ -17,11 +17,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional withSaidar ncurses;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.i-scream.org/libstatgrab/";
     description = "Library that provides cross platforms access to statistics about the running system";
     maintainers = [ ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.i-scream.org/libstatgrab/";
+    description = "Library that provides cross platforms access to statistics about the running system";
+    maintainers = [ ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -47,11 +47,19 @@ buildPythonPackage rec {
     "google.cloud.securitycenter_v1p1beta1"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cloud Security Command Center API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-securitycenter";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-securitycenter-v${version}/packages/google-cloud-securitycenter/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Cloud Security Command Center API API client library";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-securitycenter";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-securitycenter-v${version}/packages/google-cloud-securitycenter/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

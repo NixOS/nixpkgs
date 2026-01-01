@@ -25,11 +25,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gatt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bluetooth (Generic Attribute Profile) GATT SDK for Python";
     mainProgram = "gattctl";
     homepage = "https://github.com/getsenic/gatt-python/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Bluetooth (Generic Attribute Profile) GATT SDK for Python";
+    mainProgram = "gattctl";
+    homepage = "https://github.com/getsenic/gatt-python/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

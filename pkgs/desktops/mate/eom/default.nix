@@ -18,15 +18,26 @@
   mate-desktop,
   hicolor-icon-theme,
   wrapGAppsHook3,
+<<<<<<< HEAD
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+  mateUpdateScript,
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "eom";
   version = "1.28.0";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/eom-${finalAttrs.version}.tar.xz";
+=======
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "mgHKsplaGoxyWMhl6uXxgu1HMMRGcq/cOgfkI+3VOrw=";
   };
 
@@ -61,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/eom";
     odd-unstable = true;
@@ -76,3 +88,16 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "Image viewing and cataloging program for the MATE desktop";
+    mainProgram = "eom";
+    homepage = "https://mate-desktop.org";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

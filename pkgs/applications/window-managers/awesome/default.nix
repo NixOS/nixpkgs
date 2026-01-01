@@ -21,6 +21,10 @@
   which,
   dbus,
   net-tools,
+<<<<<<< HEAD
+=======
+  git,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doxygen,
   xmlto,
   docbook_xml_dtd_45,
@@ -114,6 +118,10 @@ stdenv.mkDerivation rec {
     librsvg
     dbus
     gdk-pixbuf
+<<<<<<< HEAD
+=======
+    git
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     luaEnv
     libpthreadstubs
     libstartup_notification
@@ -166,6 +174,7 @@ stdenv.mkDerivation rec {
     inherit lua;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Highly configurable, dynamic window manager for X";
     homepage = "https://awesomewm.org/";
@@ -174,5 +183,16 @@ stdenv.mkDerivation rec {
       lovek323
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Highly configurable, dynamic window manager for X";
+    homepage = "https://awesomewm.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      lovek323
+      rasendubi
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

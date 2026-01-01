@@ -23,12 +23,21 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wireguard overlay mesh network manager";
     homepage = "https://github.com/costela/wesher";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tylerjl ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Wireguard overlay mesh network manager";
+    homepage = "https://github.com/costela/wesher";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ tylerjl ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wesher";
   };
 }

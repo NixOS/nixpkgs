@@ -14,10 +14,18 @@ buildPythonPackage rec {
     hash = "sha256-vRXo72aWoreH/VwzdEAOgoGSRzRf7vy8Z/IA+lnLoWw=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python Library for Generating D-Bus Client Code";
     homepage = "https://github.com/stratis-storage/dbus-client-gen";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Python Library for Generating D-Bus Client Code";
+    homepage = "https://github.com/stratis-storage/dbus-client-gen";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

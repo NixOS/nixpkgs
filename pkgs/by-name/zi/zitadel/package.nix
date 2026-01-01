@@ -150,6 +150,7 @@ buildGoModule rec {
     }) { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Identity and access management platform";
     homepage = "https://zitadel.com/";
@@ -158,5 +159,15 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     maintainers = [ lib.maintainers.nrabulinski ];
+=======
+  meta = with lib; {
+    description = "Identity and access management platform";
+    homepage = "https://zitadel.com/";
+    downloadPage = "https://github.com/zitadel/zitadel/releases";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.asl20;
+    sourceProvenance = [ sourceTypes.fromSource ];
+    maintainers = [ maintainers.nrabulinski ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

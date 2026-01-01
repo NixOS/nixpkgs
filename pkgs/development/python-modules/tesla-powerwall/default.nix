@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tesla_powerwall" ];
 
+<<<<<<< HEAD
   meta = {
     description = "API for Tesla Powerwall";
     homepage = "https://github.com/jrester/tesla_powerwall";
     changelog = "https://github.com/jrester/tesla_powerwall/blob/v${version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "API for Tesla Powerwall";
+    homepage = "https://github.com/jrester/tesla_powerwall";
+    changelog = "https://github.com/jrester/tesla_powerwall/blob/v${version}/CHANGELOG";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

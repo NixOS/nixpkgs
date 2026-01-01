@@ -96,6 +96,7 @@ stdenv.mkDerivation {
     ./tests/tests.sh
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tool to download and extract data from HTML/XML pages as well as JSON APIs";
     mainProgram = "xidel";
@@ -103,5 +104,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Command line tool to download and extract data from HTML/XML pages as well as JSON APIs";
+    mainProgram = "xidel";
+    homepage = "https://www.videlibri.de/xidel.html";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

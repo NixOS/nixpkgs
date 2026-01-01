@@ -18,11 +18,20 @@ buildPythonPackage rec {
   # Tests are not included in PyPI tarball
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dadadel/pyment";
     description = "Create, update or convert docstrings in existing Python files, managing several styles";
     mainProgram = "pyment";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jethro ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dadadel/pyment";
+    description = "Create, update or convert docstrings in existing Python files, managing several styles";
+    mainProgram = "pyment";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ jethro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

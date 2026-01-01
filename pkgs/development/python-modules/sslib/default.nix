@@ -19,10 +19,18 @@ buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jqueiroz/python-sslib";
     description = "Python3 library for sharing secrets";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jqueiroz ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jqueiroz/python-sslib";
+    description = "Python3 library for sharing secrets";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jqueiroz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

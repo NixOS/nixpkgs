@@ -322,9 +322,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "doc" enableDocumentation)
     (lib.mesonEnable "directfb" false)
     (lib.mesonEnable "lcevcdecoder" lcevcdecSupport)
+<<<<<<< HEAD
     (lib.mesonEnable "ldac" ldacbtSupport)
     (lib.mesonEnable "webrtcdsp" webrtcAudioProcessingSupport)
     (lib.mesonEnable "isac" webrtcAudioProcessingSupport)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
@@ -415,7 +418,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GStreamer Bad Plugins";
     mainProgram = "gst-transcoder-1.0";
     homepage = "https://gstreamer.freedesktop.org";
@@ -425,8 +432,13 @@ stdenv.mkDerivation (finalAttrs: {
       something - be it a good code review, some documentation, a set of tests,
       a real live maintainer, or some actual wide use.
     '';
+<<<<<<< HEAD
     license = if enableGplPlugins then lib.licenses.gpl2Plus else lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

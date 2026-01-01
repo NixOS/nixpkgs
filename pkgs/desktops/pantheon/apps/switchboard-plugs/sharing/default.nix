@@ -46,11 +46,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Switchboard Sharing Plug";
     homepage = "https://github.com/elementary/switchboard-plug-sharing";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Switchboard Sharing Plug";
+    homepage = "https://github.com/elementary/switchboard-plug-sharing";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

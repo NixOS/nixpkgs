@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     cp nad2bin $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Repository for proj datum grids";
     homepage = "https://proj4.org";
@@ -33,5 +34,14 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "nad2bin";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Repository for proj datum grids";
+    homepage = "https://proj4.org";
+    license = licenses.mit;
+    maintainers = [ ];
+    mainProgram = "nad2bin";
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -25,10 +25,18 @@ buildPythonPackage rec {
   # requires internet access
   disabledTests = [ "test_real" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Calculates a token to run the Google Translate text to speech";
     homepage = "https://github.com/boudewijn26/gTTS-token";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
+=======
+  meta = with lib; {
+    description = "Calculates a token to run the Google Translate text to speech";
+    homepage = "https://github.com/boudewijn26/gTTS-token";
+    license = licenses.mit;
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

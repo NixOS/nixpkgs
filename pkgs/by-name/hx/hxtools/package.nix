@@ -1,5 +1,6 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
   fetchFromGitea,
   pkg-config,
@@ -9,10 +10,22 @@
   perlPackages,
   libHX,
   nix-update-script,
+=======
+  bash,
+  fetchurl,
+  libHX,
+  makeWrapper,
+  perl,
+  perlPackages,
+  stdenv,
+  pkg-config,
+  zstd,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hxtools";
+<<<<<<< HEAD
   version = "20251011";
 
   src = fetchFromGitea {
@@ -26,6 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+=======
+  version = "20250309";
+
+  src = fetchurl {
+    url = "https://inai.de/files/hxtools/hxtools-${finalAttrs.version}.tar.zst";
+    hash = "sha256-2ItcEiMe0GzgJ3MxZ28wjmXGSbZtc7BHpkpKIAodAwA=";
+  };
+
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    zstd
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -33,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     bash
     libHX
+<<<<<<< HEAD
   ]
   ++ (with perlPackages; [ TextCSV_XS ]);
 
@@ -40,6 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+=======
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/man2html \
+      --prefix PERL5LIB : "${with perlPackages; makePerlPath [ TextCSV_XS ]}"
+  '';
+
+  strictDeps = true;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "https://inai.de/projects/hxtools/";
     description = "Collection of small tools over the years by j.eng";
@@ -50,10 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
       gpl2Plus
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       meator
       chillcicada
     ];
+=======
+    maintainers = with lib.maintainers; [ meator ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 })

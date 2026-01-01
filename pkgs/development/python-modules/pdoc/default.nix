@@ -56,12 +56,21 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pdoc.dev/";
     description = "API Documentation for Python Projects";
     mainProgram = "pdoc";
+<<<<<<< HEAD
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

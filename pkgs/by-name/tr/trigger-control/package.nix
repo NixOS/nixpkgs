@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Control the dualsense's triggers on Linux (and Windows) with a gui and C++ api";
     homepage = "https://github.com/Etaash-mathamsetty/trigger-control";
@@ -73,5 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "trigger-control";
     maintainers = with lib.maintainers; [ azuwis ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Control the dualsense's triggers on Linux (and Windows) with a gui and C++ api";
+    homepage = "https://github.com/Etaash-mathamsetty/trigger-control";
+    license = licenses.mit;
+    mainProgram = "trigger-control";
+    maintainers = with maintainers; [ azuwis ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

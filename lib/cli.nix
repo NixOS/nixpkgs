@@ -85,7 +85,11 @@
     `optionValueSeparator`
 
     : How to separate an option from its flag;
+<<<<<<< HEAD
     By default, there is no separator, so option `-c` and value `5` would become `["-c" "5"]`.
+=======
+    By default, there is no separator, so option `-c` and value `5` would become ["-c" "5"].
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     This is useful if the command requires equals, for example, `-c=5`.
 
     # Examples
@@ -156,18 +160,28 @@
       );
 
   /**
+<<<<<<< HEAD
     Converts the given attributes into a single shell-escaped command-line
     string.
     Similar to `toCommandLineGNU`, but returns a single escaped string instead
     of a list of arguments.
     For further reference see:
     [`lib.cli.toCommandLineGNU`](#function-library-lib.cli.toCommandLineGNU)
+=======
+    Converts the given attributes into a single shell-escaped command-line string.
+    Similar to `toCommandLineGNU`, but returns a single escaped string instead of an array of arguments.
+    For further reference see: [`lib.cli.toCommandLineGNU`](#function-library-lib.cli.toCommandLineGNU)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   */
   toCommandLineShellGNU =
     options: attrs: lib.escapeShellArgs (lib.cli.toCommandLineGNU options attrs);
 
   /**
+<<<<<<< HEAD
     Converts an attribute set into a list of GNU-style command-line arguments.
+=======
+    Converts an attribute set into a list of GNU-style command line options.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     `toCommandLineGNU` returns a list of string arguments.
 
@@ -241,17 +255,24 @@
     lib.cli.toCommandLine optionFormat;
 
   /**
+<<<<<<< HEAD
     Converts the given attributes into a single shell-escaped command-line
     string.
     Similar to `toCommandLine`, but returns a single escaped string instead of
     a list of arguments.
     For further reference see:
     [`lib.cli.toCommandLine`](#function-library-lib.cli.toCommandLine)
+=======
+    Converts the given attributes into a single shell-escaped command-line string.
+    Similar to `toCommandLine`, but returns a single escaped string instead of an array of arguments.
+    For further reference see: [`lib.cli.toCommandLine`](#function-library-lib.cli.toCommandLine)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   */
   toCommandLineShell =
     optionFormat: attrs: lib.escapeShellArgs (lib.cli.toCommandLine optionFormat attrs);
 
   /**
+<<<<<<< HEAD
     Converts an attribute set into a list of command-line arguments.
 
     This is the most general command-line construction helper in `lib.cli`.
@@ -262,11 +283,17 @@
 
     `toCommandLine` returns a *flat list of strings*, suitable for use as `argv`
     arguments or for further processing (e.g. shell escaping).
+=======
+    Converts an attribute set into a list of command line options.
+
+    `toCommandLine` returns a list of string arguments.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
     `optionFormat`
 
+<<<<<<< HEAD
     : A function that takes the option name and returns an option spec, where
       the option spec is an attribute set describing how the option should be
       rendered.
@@ -312,6 +339,17 @@
 
     :::{.example}
     ## `lib.cli.toCommandLine` basic usage example
+=======
+    : The option format that describes how options and their arguments should be formatted.
+
+    `attrs`
+
+    : The attributes to transform into arguments.
+
+    # Examples
+    :::{.example}
+    ## `lib.cli.toCommandLine` usage example
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     ```nix
     let
@@ -320,6 +358,7 @@
         sep = "=";
         explicitBool = true;
       };
+<<<<<<< HEAD
     in
     lib.cli.toCommandLine optionFormat {
       v = true;
@@ -340,6 +379,16 @@
       ];
       n = false;
       data = builtins.toJSON { id = 0; };
+=======
+    in lib.cli.toCommandLine optionFormat {
+      v = true;
+      verbose = [true true false null];
+      i = ".bak";
+      testsuite = ["unit" "integration"];
+      e = ["s/a/b/" "s/b/c/"];
+      n = false;
+      data = builtins.toJSON {id = 0;};
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     => [
       "-data={\"id\":0}"
@@ -355,6 +404,7 @@
       "-verbose=false"
     ]
     ```
+<<<<<<< HEAD
     :::
 
     :::{.example}
@@ -419,6 +469,10 @@
     - `lib.cli.toCommandLineShell`
     - `lib.cli.toCommandLineGNU`
     - `lib.cli.toCommandLineShellGNU`
+=======
+
+    :::
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   */
   toCommandLine =
     optionFormat: attrs:

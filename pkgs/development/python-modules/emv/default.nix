@@ -48,12 +48,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "emv" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the EMV chip-and-pin smartcard protocol";
     homepage = "https://github.com/russss/python-emv";
     changelog = "https://github.com/russss/python-emv/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lukegb ];
+=======
+  meta = with lib; {
+    description = "Implementation of the EMV chip-and-pin smartcard protocol";
+    homepage = "https://github.com/russss/python-emv";
+    changelog = "https://github.com/russss/python-emv/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lukegb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "emvtool";
   };
 }

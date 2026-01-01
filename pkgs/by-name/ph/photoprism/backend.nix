@@ -45,7 +45,11 @@ buildGoModule {
     substituteInPlace internal/commands/passwd.go --replace-fail '/bin/stty' "${coreutils}/bin/stty"
   '';
 
+<<<<<<< HEAD
   vendorHash = "sha256-nOytOKceVuRryixDxx791my0JkdLPfyYdK6dAUG4CQc=";
+=======
+  vendorHash = "sha256-yLzIjoN1csyNpounvbQ6r1nudPypwjabAbdhyjna2+s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "cmd/photoprism" ];
 
@@ -54,10 +58,18 @@ buildGoModule {
 
   CGO_LDFLAGS = "-L${libtensorflow} -ltensorflow_framework";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://photoprism.app";
     description = "Photoprism's backend";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ benesim ];
+=======
+  meta = with lib; {
+    homepage = "https://photoprism.app";
+    description = "Photoprism's backend";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ benesim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

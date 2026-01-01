@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     xorgproto
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tiny screen magnifier for X11";
     homepage = "https://gitlab.com/amiloradovsky/magnify";
@@ -31,5 +32,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ amiloradovsky ];
     mainProgram = "magnify";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Tiny screen magnifier for X11";
+    homepage = "https://gitlab.com/amiloradovsky/magnify";
+    license = licenses.mit; # or GPL2+, optionally
+    maintainers = with maintainers; [ amiloradovsky ];
+    mainProgram = "magnify";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,8 +39,11 @@ let
     };
   */
 
+<<<<<<< HEAD
   inherit (pkgs) lib;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
     inherit pkgs licenseAccepted;
@@ -79,9 +82,13 @@ let
   };
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
+<<<<<<< HEAD
   latestSdkVersion = lib.foldl' (
     s: x: if lib.strings.compareVersions (toString x) s > 0 then toString x else s
   ) "0" androidComposition.platformVersions;
+=======
+  latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   jdk = pkgs.jdk;
 in
 pkgs.mkShell rec {
@@ -127,10 +134,17 @@ pkgs.mkShell rec {
 
           packages=(
             "build-tools" "cmdline-tools" \
+<<<<<<< HEAD
             "platform-tools" "platforms;android-${toString latestSdkVersion}" \
             "system-images;android-${toString latestSdkVersion};google_apis;x86_64"
           )
           ${lib.optionalString emulatorSupported ''packages+=("emulator")''}
+=======
+            "platform-tools" "platforms;android-${toString latestSdk}" \
+            "system-images;android-${toString latestSdk};google_apis;x86_64"
+          )
+          ${pkgs.lib.optionalString emulatorSupported ''packages+=("emulator")''}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           for package in "''${packages[@]}"; do
             if [[ ! $installed_packages_section =~ "$package" ]]; then
@@ -155,7 +169,11 @@ pkgs.mkShell rec {
           installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
           excluded_packages=(ndk)
+<<<<<<< HEAD
           for x in $(seq 1 ${lib.versions.major (toString latestSdkVersion)}); do
+=======
+          for x in $(seq 1 ${toString latestSdk}); do
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             excluded_packages+=(
               "platforms;android-$x"
               "sources;android-$x"
@@ -183,12 +201,20 @@ pkgs.mkShell rec {
           ];
         }
         (
+<<<<<<< HEAD
           lib.optionalString emulatorSupported ''
+=======
+          pkgs.lib.optionalString emulatorSupported ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             export ANDROID_USER_HOME=$PWD/.android
             mkdir -p $ANDROID_USER_HOME
 
             avdmanager delete avd -n testAVD || true
+<<<<<<< HEAD
             echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-${toString latestSdkVersion};google_apis;x86_64'
+=======
+            echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-${toString latestSdk};google_apis;x86_64'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             result=$(avdmanager list avd)
 
             if [[ ! $result =~ "Name: testAVD" ]]; then

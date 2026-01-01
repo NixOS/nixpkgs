@@ -40,11 +40,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sunspec2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interfacing with SunSpec devices";
     homepage = "https://github.com/sunspec/pysunspec2";
     changelog = "https://github.com/sunspec/pysunspec2/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python library for interfacing with SunSpec devices";
+    homepage = "https://github.com/sunspec/pysunspec2";
+    changelog = "https://github.com/sunspec/pysunspec2/releases/tag/${src.tag}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.cheriimoya ];
   };
 }

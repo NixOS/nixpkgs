@@ -54,10 +54,18 @@ buildPythonPackage {
 
   optional-dependencies = optional-dependencies;
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of common code that's shared among different research projects in FAIR computer vision team";
     homepage = "https://github.com/facebookresearch/fvcore";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Collection of common code that's shared among different research projects in FAIR computer vision team";
+    homepage = "https://github.com/facebookresearch/fvcore";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

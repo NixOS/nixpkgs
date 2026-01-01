@@ -23,10 +23,13 @@ let
   };
 in
 {
+<<<<<<< HEAD
   icu78 = make-icu {
     version = "78.1";
     hash = "sha256-Yhf1jKObIxJ2Bc/Gx+DTR1/ksNYxVwETg9cWy0FheIY=";
   };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   icu77 = make-icu {
     version = "77.1";
     hash = "sha256-WI5DH3cyfDkDH/u4hDwOO8EiwhE3RIX6h9xfP6/yQGE=";

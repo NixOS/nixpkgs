@@ -20,11 +20,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl ];
 
+<<<<<<< HEAD
   meta = {
     description = "C micro-package manager";
     homepage = "https://github.com/clibs/clib";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jb55 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C micro-package manager";
+    homepage = "https://github.com/clibs/clib";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jb55 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

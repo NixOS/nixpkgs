@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/yaml/pyyaml/blob/${src.rev}/CHANGES";
     description = "Next generation YAML parser and emitter for Python";
     homepage = "https://github.com/yaml/pyyaml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/yaml/pyyaml/blob/${src.rev}/CHANGES";
+    description = "Next generation YAML parser and emitter for Python";
+    homepage = "https://github.com/yaml/pyyaml";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -55,7 +55,11 @@ stdenv.mkDerivation rec {
     intltoolize
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://sourceforge.net/projects/yad-dialog/";
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
@@ -64,9 +68,16 @@ stdenv.mkDerivation rec {
       dialogs, pop-up menu in notification icon and more.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     mainProgram = "yad";
     maintainers = with lib.maintainers; [ smironov ];
     platforms = with lib.platforms; linux;
+=======
+    license = licenses.gpl3;
+    mainProgram = "yad";
+    maintainers = with maintainers; [ smironov ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

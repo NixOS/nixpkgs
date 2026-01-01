@@ -25,11 +25,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "w3lib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library of web-related functions";
     homepage = "https://github.com/scrapy/w3lib";
     changelog = "https://github.com/scrapy/w3lib/blob/v${version}/NEWS";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Library of web-related functions";
+    homepage = "https://github.com/scrapy/w3lib";
+    changelog = "https://github.com/scrapy/w3lib/blob/v${version}/NEWS";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

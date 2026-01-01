@@ -20,11 +20,20 @@ stdenv.mkDerivation {
     cp $src/*.ttf $out/share/fonts/truetype
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Meslo Nerd Font patched for Powerlevel10k";
     homepage = "https://github.com/romkatv/powerlevel10k-media";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bbigras ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Meslo Nerd Font patched for Powerlevel10k";
+    homepage = "https://github.com/romkatv/powerlevel10k-media";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bbigras ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -52,18 +52,30 @@ stdenv.mkDerivation rec {
     ln -s $sharedir/Scripts/tptp4X $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Thousands of problems for theorem provers and tools";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Thousands of problems for theorem provers and tools";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raskin
     ];
     # 6.3 GiB of data. Installation is unpacking and editing a few files.
     # No sense in letting Hydra build it.
     # Also, it is unclear what is covered by "verbatim" - we will edit configs
     hydraPlatforms = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
+=======
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfreeRedistributable;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://tptp.org/TPTP/";
   };
 }

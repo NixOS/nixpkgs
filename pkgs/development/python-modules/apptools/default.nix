@@ -46,7 +46,11 @@ buildPythonPackage rec {
     preferences = [ configobj ];
   };
 
+<<<<<<< HEAD
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+=======
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     export HOME=$TMP
@@ -54,11 +58,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apptools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of packages that Enthought has found useful in creating a number of applications";
     homepage = "https://github.com/enthought/apptools";
     changelog = "https://github.com/enthought/apptools/releases/tag/${src.tag}";
     license = lib.licenses.bsdOriginal;
+=======
+  meta = with lib; {
+    description = "Set of packages that Enthought has found useful in creating a number of applications";
+    homepage = "https://github.com/enthought/apptools";
+    changelog = "https://github.com/enthought/apptools/releases/tag/${src.tag}";
+    license = licenses.bsdOriginal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

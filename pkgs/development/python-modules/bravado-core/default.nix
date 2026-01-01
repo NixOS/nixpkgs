@@ -63,12 +63,21 @@ buildPythonPackage rec {
     "tests/spec/Spec"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for adding Swagger support to clients and servers";
     homepage = "https://github.com/Yelp/bravado-core";
     changelog = "https://github.com/Yelp/bravado-core/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Library for adding Swagger support to clients and servers";
+    homepage = "https://github.com/Yelp/bravado-core";
+    changelog = "https://github.com/Yelp/bravado-core/blob/v${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       vanschelven
       nickcao
     ];

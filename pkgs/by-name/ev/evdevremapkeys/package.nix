@@ -33,6 +33,7 @@ python3Packages.buildPythonPackage {
 
   pythonImportsCheck = [ "evdevremapkeys" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/philipl/evdevremapkeys";
     description = "Daemon to remap events on linux input devices";
@@ -40,5 +41,14 @@ python3Packages.buildPythonPackage {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.q3k ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/philipl/evdevremapkeys";
+    description = "Daemon to remap events on linux input devices";
+    mainProgram = "evdevremapkeys";
+    license = licenses.mit;
+    maintainers = [ maintainers.q3k ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,11 +30,19 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "LerpnApp" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitea.alexisvl.rocks/alexisvl/lerpn";
     description = "Curses RPN calculator written in straight Python";
     maintainers = [ ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://gitea.alexisvl.rocks/alexisvl/lerpn";
+    description = "Curses RPN calculator written in straight Python";
+    maintainers = [ ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lerpn";
   };
 }

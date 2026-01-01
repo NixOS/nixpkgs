@@ -23,11 +23,20 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "PHP port of Twitch's Twirp RPC framework";
     mainProgram = "protoc-gen-twirp_php";
     homepage = "https://github.com/twirphp/twirp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jojosch ];
+=======
+  meta = with lib; {
+    description = "PHP port of Twitch's Twirp RPC framework";
+    mainProgram = "protoc-gen-twirp_php";
+    homepage = "https://github.com/twirphp/twirp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jojosch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

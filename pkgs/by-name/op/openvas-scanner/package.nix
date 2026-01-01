@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     "-DOPENVAS_FEED_LOCK_PATH=$out/var/lib/openvas/feed-update.lock"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Scanner component for Greenbone Community Edition";
     homepage = "https://github.com/greenbone/openvas-scanner";
@@ -87,5 +88,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "openvas-scanner";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Scanner component for Greenbone Community Edition";
+    homepage = "https://github.com/greenbone/openvas-scanner";
+    changelog = "https://github.com/greenbone/openvas-scanner/blob/${src.rev}/changelog.toml";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
+    mainProgram = "openvas-scanner";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

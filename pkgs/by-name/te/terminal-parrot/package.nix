@@ -19,11 +19,19 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Shows colorful, animated party parrot in your terminial";
     homepage = "https://github.com/jmhobbs/terminal-parrot";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.heel ];
+=======
+  meta = with lib; {
+    description = "Shows colorful, animated party parrot in your terminial";
+    homepage = "https://github.com/jmhobbs/terminal-parrot";
+    license = licenses.mit;
+    maintainers = [ maintainers.heel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "terminal-parrot";
   };
 }

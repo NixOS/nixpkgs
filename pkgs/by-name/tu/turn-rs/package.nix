@@ -28,6 +28,10 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/turn-server";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {

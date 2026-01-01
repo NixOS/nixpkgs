@@ -62,14 +62,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Database management in a single PHP file";
     homepage = "https://docs.adminerevo.org";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Database management in a single PHP file";
+    homepage = "https://docs.adminerevo.org";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       gpl2Only
     ];
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

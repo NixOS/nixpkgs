@@ -42,11 +42,20 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/PortMidi/portmidi";
     description = "Platform independent library for MIDI I/O";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/PortMidi/portmidi";
+    description = "Platform independent library for MIDI I/O";
+    license = licenses.mit;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

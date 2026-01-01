@@ -34,11 +34,20 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/zanna-37/hass-swipe-navigation/releases/tag/v${version}";
     description = "Swipe through Home Assistant Dashboard views on mobile";
     homepage = "https://github.com/zanna-37/hass-swipe-navigation";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpinz ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/zanna-37/hass-swipe-navigation/releases/tag/v${version}";
+    description = "Swipe through Home Assistant Dashboard views on mobile";
+    homepage = "https://github.com/zanna-37/hass-swipe-navigation";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpinz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

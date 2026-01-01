@@ -42,7 +42,11 @@ python3Packages.buildPythonApplication rec {
     python3Packages.colorama
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/mgeeky/decode-spam-headers/";
     description = "Script that helps you understand why your E-Mail ended up in Spam";
     mainProgram = "decode-spam-headers";
@@ -61,7 +65,11 @@ python3Packages.buildPythonApplication rec {
       Resulting output will contain useful information on why this e-mail might
       have been blocked.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

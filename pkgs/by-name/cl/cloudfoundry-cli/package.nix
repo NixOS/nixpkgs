@@ -8,15 +8,25 @@
 
 buildGoModule rec {
   pname = "cloudfoundry-cli";
+<<<<<<< HEAD
   version = "8.17.0";
+=======
+  version = "8.16.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-OnUqREa2rYx/3yW+yZC69GTx/i7wtK4pLubAlGyYNSI=";
   };
   vendorHash = "sha256-FcymGl2dzCaZGEDpXyebffE3NbIgold8nKaZ+CW1p2o=";
+=======
+    sha256 = "sha256-7ROrXGGzHTI83/SgBqcNJdlZlWzt8rAYdsNM2vgyDKA=";
+  };
+  vendorHash = "sha256-vWy93zOHh4kCQ/D4rKlbL0mcDbOStYOvC8G4bc6KRgg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "." ];
 
@@ -41,11 +51,20 @@ buildGoModule rec {
     installShellCompletion --bash $bashCompletionScript
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Official command line client for Cloud Foundry";
     homepage = "https://github.com/cloudfoundry/cli";
     maintainers = with lib.maintainers; [ ris ];
     mainProgram = "cf";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Official command line client for Cloud Foundry";
+    homepage = "https://github.com/cloudfoundry/cli";
+    maintainers = with maintainers; [ ris ];
+    mainProgram = "cf";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

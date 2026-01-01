@@ -21,10 +21,18 @@ buildGoModule rec {
     "-X main.BuildVersion=v${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "RabbitMQ wire tap and swiss army knife";
     license = lib.licenses.gpl3Only;
     homepage = "https://github.com/jandelgado/rabtap";
     maintainers = with lib.maintainers; [ eigengrau ];
+=======
+  meta = with lib; {
+    description = "RabbitMQ wire tap and swiss army knife";
+    license = licenses.gpl3Only;
+    homepage = "https://github.com/jandelgado/rabtap";
+    maintainers = with maintainers; [ eigengrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

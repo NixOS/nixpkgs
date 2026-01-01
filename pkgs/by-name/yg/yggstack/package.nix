@@ -29,11 +29,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Yggdrasil as SOCKS proxy / port forwarder";
     homepage = "https://yggdrasil-network.github.io/";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Yggdrasil as SOCKS proxy / port forwarder";
+    homepage = "https://yggdrasil-network.github.io/";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       peigongdsd
     ];
   };

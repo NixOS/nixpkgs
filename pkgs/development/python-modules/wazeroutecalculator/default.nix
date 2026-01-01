@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "WazeRouteCalculator" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Calculate actual route time and distance with Waze API";
     homepage = "https://github.com/kovacsbalu/WazeRouteCalculator";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Calculate actual route time and distance with Waze API";
+    homepage = "https://github.com/kovacsbalu/WazeRouteCalculator";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

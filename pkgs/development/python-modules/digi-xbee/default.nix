@@ -45,10 +45,18 @@ buildPythonPackage rec {
     "digi.xbee.xsocket"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to interact with Digi International's XBee radio frequency modules";
     homepage = "https://github.com/digidotcom/xbee-python";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ jefflabonte ];
+=======
+  meta = with lib; {
+    description = "Python library to interact with Digi International's XBee radio frequency modules";
+    homepage = "https://github.com/digidotcom/xbee-python";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ jefflabonte ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

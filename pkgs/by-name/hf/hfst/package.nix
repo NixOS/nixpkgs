@@ -46,11 +46,20 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-foma-upstream=true"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "FST language processing library";
     homepage = "https://github.com/hfst/hfst";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ lurkki ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "FST language processing library";
+    homepage = "https://github.com/hfst/hfst";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ lurkki ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

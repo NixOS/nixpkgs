@@ -55,6 +55,7 @@ stdenv.mkDerivation {
   ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
+<<<<<<< HEAD
   meta = {
     description = "Coral Gasket Driver allows usage of the Coral EdgeTPU on Linux systems";
     homepage = "https://github.com/google/gasket-driver";
@@ -62,5 +63,14 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.kylehendricks ];
     platforms = lib.platforms.linux;
     broken = lib.versionOlder kernel.version "5.15";
+=======
+  meta = with lib; {
+    description = "Coral Gasket Driver allows usage of the Coral EdgeTPU on Linux systems";
+    homepage = "https://github.com/google/gasket-driver";
+    license = licenses.gpl2Only;
+    maintainers = [ lib.maintainers.kylehendricks ];
+    platforms = platforms.linux;
+    broken = versionOlder kernel.version "5.15";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

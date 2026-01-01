@@ -31,12 +31,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GUI for configuring Silicondust HDHomeRun TV tuners";
     homepage = "https://www.silicondust.com/support/linux";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.louisdk1 ];
+=======
+  meta = with lib; {
+    description = "GUI for configuring Silicondust HDHomeRun TV tuners";
+    homepage = "https://www.silicondust.com/support/linux";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.louisdk1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hdhomerun_config_gui";
   };
 }

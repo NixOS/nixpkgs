@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lakeside" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for controlling LED bulbs from Eufy";
     homepage = "https://github.com/nkgilley/python-lakeside";
     changelog = "https://github.com/nkgilley/python-lakeside/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for controlling LED bulbs from Eufy";
+    homepage = "https://github.com/nkgilley/python-lakeside";
+    changelog = "https://github.com/nkgilley/python-lakeside/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

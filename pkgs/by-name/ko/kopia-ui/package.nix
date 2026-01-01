@@ -10,12 +10,20 @@
   kopia,
 }:
 let
+<<<<<<< HEAD
   version = "0.22.3";
+=======
+  version = "0.22.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-5oNam99Mij78snSO6jiGPYzeD68sXEBKM2dGQtTUrww=";
+=======
+    hash = "sha256-UtyOMXX6Q0fhlnSMmI5d+0BHGvoWkPZbcm9B6vWG05Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 buildNpmPackage {

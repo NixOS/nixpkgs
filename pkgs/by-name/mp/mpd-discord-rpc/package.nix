@@ -27,12 +27,21 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rust application which displays your currently playing song / album / artist from MPD in Discord using Rich Presence";
     homepage = "https://github.com/JakeStanger/mpd-discord-rpc/";
     changelog = "https://github.com/JakeStanger/mpd-discord-rpc/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
+=======
+  meta = with lib; {
+    description = "Rust application which displays your currently playing song / album / artist from MPD in Discord using Rich Presence";
+    homepage = "https://github.com/JakeStanger/mpd-discord-rpc/";
+    changelog = "https://github.com/JakeStanger/mpd-discord-rpc/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kranzes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mpd-discord-rpc";
   };
 }

@@ -33,9 +33,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Ice" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://zeroc.com/";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://zeroc.com/";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Comprehensive RPC framework with support for Python, C++, .NET, Java, JavaScript and more";
     mainProgram = "slice2py";
     maintainers = [ ];

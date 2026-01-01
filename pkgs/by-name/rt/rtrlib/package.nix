@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
       --replace '=''${prefix}//' '=/'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source C implementation of the RPKI/Router Protocol client";
     homepage = "https://github.com/rtrlib/rtrlib";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Anillc ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Open-source C implementation of the RPKI/Router Protocol client";
+    homepage = "https://github.com/rtrlib/rtrlib";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Anillc ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

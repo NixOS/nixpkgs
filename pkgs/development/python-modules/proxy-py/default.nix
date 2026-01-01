@@ -85,11 +85,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proxy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python proxy framework";
     homepage = "https://github.com/abhinavsingh/proxy.py";
     changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/${src.tag}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python proxy framework";
+    homepage = "https://github.com/abhinavsingh/proxy.py";
+    changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/${src.tag}";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

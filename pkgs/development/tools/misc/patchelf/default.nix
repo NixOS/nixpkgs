@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   # fails 8 out of 24 tests, problems when loading libc.so.6
   doCheck = stdenv.name == "stdenv-linux";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/NixOS/patchelf";
     license = lib.licenses.gpl3Plus;
@@ -34,5 +35,14 @@ stdenv.mkDerivation rec {
     mainProgram = "patchelf";
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/NixOS/patchelf";
+    license = licenses.gpl3Plus;
+    description = "Small utility to modify the dynamic linker and RPATH of ELF executables";
+    mainProgram = "patchelf";
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

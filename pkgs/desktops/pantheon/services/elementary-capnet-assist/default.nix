@@ -48,12 +48,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Small WebKit app that assists a user with login when a captive portal is detected";
     homepage = "https://github.com/elementary/capnet-assist";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Small WebKit app that assists a user with login when a captive portal is detected";
+    homepage = "https://github.com/elementary/capnet-assist";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "io.elementary.capnet-assist";
   };
 }

@@ -135,6 +135,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://avocode.com/";
     description = "Bridge between designers and developers";
@@ -142,5 +143,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ megheaiulian ];
+=======
+  meta = with lib; {
+    homepage = "https://avocode.com/";
+    description = "Bridge between designers and developers";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ megheaiulian ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

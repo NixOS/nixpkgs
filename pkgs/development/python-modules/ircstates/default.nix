@@ -37,10 +37,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ircstates" ];
 
+<<<<<<< HEAD
   meta = {
     description = "sans-I/O IRC session state parsing library";
     license = lib.licenses.mit;
     homepage = "https://github.com/jesopo/ircstates";
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "sans-I/O IRC session state parsing library";
+    license = licenses.mit;
+    homepage = "https://github.com/jesopo/ircstates";
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

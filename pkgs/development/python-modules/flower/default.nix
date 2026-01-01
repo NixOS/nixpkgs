@@ -40,10 +40,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flower" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Real-time monitor and web admin for Celery distributed task queue";
     homepage = "https://github.com/mher/flower";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ arnoldfarkas ];
+=======
+  meta = with lib; {
+    description = "Real-time monitor and web admin for Celery distributed task queue";
+    homepage = "https://github.com/mher/flower";
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ arnoldfarkas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     install -D misc/chromium-bsu.desktop $out/share/applications/chromium-bsu.desktop
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://chromium-bsu.sourceforge.net/";
     description = "Fast paced, arcade-style, top-scrolling space shooter";
@@ -64,5 +65,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.artistic1;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://chromium-bsu.sourceforge.net/";
+    description = "Fast paced, arcade-style, top-scrolling space shooter";
+    mainProgram = "chromium-bsu";
+    license = licenses.artistic1;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -2,7 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gitUpdater,
   nixosTests,
   boost,
@@ -41,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RzqF3UDC4MY85ex9TOD2L0Zd7T6mgiZ+ImJuJG+xtjo=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix compat with newer Mir
     # Remove when version > 0.8.2
@@ -61,6 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'pkg_check_modules(MIRRENDERER REQUIRED mirrenderer' 'pkg_check_modules(MIRRENDERER mirrenderer'
+=======
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
+      --replace-fail '-march=native' '# -march=native' \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \

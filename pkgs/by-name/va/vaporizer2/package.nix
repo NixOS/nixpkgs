@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   postPatch = ''
     # LTO needs special setup on Linux
     substituteInPlace CMakeLists.txt \
@@ -39,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${finalAttrs.passthru.clapJuceExtensions} clap-juce-extensions
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -65,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "USE_SYSTEM_JUCE" "ON")
   ];
 
+<<<<<<< HEAD
   passthru.clapJuceExtensions = fetchFromGitHub {
     owner = "free-audio";
     repo = "clap-juce-extensions";
@@ -72,6 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Lx88nyEFjPLA5yh8rrqBdyZIxe/j0FgIHoyKcbjuuI4=";
     fetchSubmodules = true;
   };
+=======
+  # LTO needs special setup on Linux
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Wavetable synthesizer";

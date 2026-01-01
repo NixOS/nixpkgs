@@ -1,5 +1,6 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
@@ -15,17 +16,35 @@
 
   # tests
   pytestCheckHook,
+=======
+  buildPythonPackage,
+  fetchFromGitHub,
+  gemmi,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  rdkit,
+  scipy,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "meeko";
+<<<<<<< HEAD
   version = "0.7.1";
   pyproject = true;
+=======
+  version = "0.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "forlilab";
     repo = "Meeko";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ObGUUNzfK2k37uJ/aY3DHf9BlJ1nzqTe6tHvV2rj1og=";
   };
 
@@ -34,6 +53,13 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+=======
+    hash = "sha256-ViIBiczwxTwraYn8UnFAZFCFT28v3WEYm04W2YpU/4g=";
+  };
+
+  propagatedBuildInputs = [
+    # setup.py only requires numpy but others are needed at runtime
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     gemmi
     numpy
     rdkit
@@ -42,6 +68,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   disabledTests = [
     # Require internet connection
     "test_add_variants"
@@ -77,6 +104,8 @@ buildPythonPackage rec {
     "test_altloc"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonImportsCheck = [ "meeko" ];
 
   meta = {

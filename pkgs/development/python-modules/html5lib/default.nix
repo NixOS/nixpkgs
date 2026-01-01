@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+<<<<<<< HEAD
   fetchFromGitHub,
   setuptools,
   six,
@@ -30,19 +31,60 @@ buildPythonPackage {
   build-system = [ setuptools ];
 
   dependencies = [
+=======
+  fetchPypi,
+  fetchpatch,
+  six,
+  webencodings,
+  mock,
+  pytest-expect,
+  pytestCheckHook,
+}:
+
+buildPythonPackage rec {
+  pname = "html5lib";
+  version = "1.1";
+  format = "setuptools";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f";
+  };
+
+  patches = [
+    # Fix compatibility with pytest 6.
+    # Will be included in the next release after 1.1.
+    (fetchpatch {
+      url = "https://github.com/html5lib/html5lib-python/commit/2c19b9899ab3a3e8bd0ca35e5d78544334204169.patch";
+      hash = "sha256-VGCeB6o2QO/skeCZs8XLPfgEYVOSRL8cCpG7ajbZWEs=";
+    })
+  ];
+
+  propagatedBuildInputs = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     six
     webencodings
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
+=======
+  # latest release not compatible with pytest 6
+  doCheck = false;
+  nativeCheckInputs = [
+    mock
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pytest-expect
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   passthru.updateScript = unstableGitUpdater {
     branch = "master";
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "https://github.com/html5lib/html5lib-python";
     downloadPage = "https://github.com/html5lib/html5lib-python/releases";

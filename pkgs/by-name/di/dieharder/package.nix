@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Random Number Generator test suite";
     mainProgram = "dieharder";
@@ -38,5 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ zhaofengli ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Random Number Generator test suite";
+    mainProgram = "dieharder";
+    homepage = "https://webhome.phy.duke.edu/~rgb/General/dieharder.php";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ zhaofengli ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

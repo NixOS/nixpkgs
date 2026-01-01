@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   cacert,
   autoconf,
   automake,
@@ -9,6 +10,12 @@
   cmake,
   pkg-config,
   python3,
+=======
+  cmake,
+  pkg-config,
+  python3,
+  libopus,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   macdylibbundler,
   makeWrapper,
   darwin,
@@ -21,6 +28,10 @@
   speexdsp,
   hamlib_4,
   wxGTK32,
+<<<<<<< HEAD
+=======
+  sioclient,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dbus,
   apple-sdk_15,
   nix-update-script,
@@ -39,6 +50,7 @@ let
     tag = "v2.2.4";
     hash = "sha256-+8xZT+mVEqlqabQc+1buVH/X6FZxvCd0rWMyjPu9i4o=";
   };
+<<<<<<< HEAD
   opusSrc = fetchFromGitHub {
     owner = "xiph";
     repo = "opus";
@@ -58,17 +70,32 @@ let
     repo = "radae";
     rev = "0f26661b26d02e6963353dce7ad1bbe3f4791ab2";
     hash = "sha256-0pCH+oyVChWdOL5o6Uhb9DDSw4AqCfcsEKw2SZs3K4w=";
+=======
+  radaeSrc = fetchFromGitHub {
+    owner = "drowe67";
+    repo = "radae";
+    rev = "2354cd2a4b3af60c7feb1c0d6b3d6dd7417c2ac9";
+    hash = "sha256-yEr/OCXV83qXi89QHXMrUtQ2UwNOsijQMN35Or2JP+Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
+<<<<<<< HEAD
   version = "2.1.0";
+=======
+  version = "2.0.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-3nLO0UHoIjPN5liz3XJ7r9/Qo+a64ewqvzWPZuFG2SY=";
+=======
+    hash = "sha256-awWeq0ueKAK+4mAM0Nv3SsSv/mIFQ+/TqCPw9wjed1w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -80,6 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R ${mimallocSrc} mimalloc
     cp -R ${radaeSrc} radae
     chmod -R u+w ebur128 mimalloc radae
+<<<<<<< HEAD
+=======
+    substituteInPlace radae/cmake/BuildOpus.cmake \
+      --replace-fail "https://gitlab.xiph.org/xiph/opus/-/archive/main/opus-main.tar.gz" "${libopus.src}" \
+      --replace-fail "./autogen.sh && " ""
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     substituteInPlace cmake/BuildEbur128.cmake \
       --replace-fail "GIT_REPOSITORY https://github.com/jiixyj/libebur128.git" "URL $(realpath ebur128)" \
       --replace-fail 'GIT_TAG "v''${EBUR128_VERSION}"' "" \
@@ -88,9 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "GIT_REPOSITORY https://github.com/microsoft/mimalloc.git" "URL $(realpath mimalloc)" \
       --replace-fail "GIT_TAG        v2.2.4" ""
     substituteInPlace cmake/BuildRADE.cmake \
+<<<<<<< HEAD
       --replace-fail "https://github.com/xiph/opus/archive/940d4e5af64351ca8ba8390df3f555484c567fbb.zip" "${opusSrc}" \
       --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath radae)" \
       --replace-fail "GIT_TAG ms-disable-python-gc" ""
+=======
+      --replace-fail "GIT_REPOSITORY https://github.com/drowe67/radae.git" "URL $(realpath radae)" \
+      --replace-fail "GIT_TAG main" ""
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     patchShebangs test/test_*.sh
     substituteInPlace cmake/CheckGit.cmake \
       --replace-fail "git describe --abbrev=4 --always HEAD" "echo v${finalAttrs.version}"
@@ -104,9 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     autoconf
     automake
     libtool
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cmake
     pkg-config
     python3
@@ -132,6 +173,10 @@ stdenv.mkDerivation (finalAttrs: {
     speexdsp
     hamlib_4
     wxGTK32
+<<<<<<< HEAD
+=======
+    sioclient
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python3.pkgs.numpy
   ]
   ++ (

@@ -39,12 +39,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Data compression/decompression library for embedded/real-time systems";
     homepage = "https://github.com/atomicobject/heatshrink";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Data compression/decompression library for embedded/real-time systems";
+    homepage = "https://github.com/atomicobject/heatshrink";
+    license = licenses.isc;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "heatshrink";
   };
 })

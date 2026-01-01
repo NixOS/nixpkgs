@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
     eval-periphemu = callPackage ./test-eval-periphemu { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the CraftOS-PC API written in C++ using SDL";
     homepage = "https://www.craftos-pc.cc";
@@ -126,6 +127,17 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Implementation of the CraftOS-PC API written in C++ using SDL";
+    homepage = "https://www.craftos-pc.cc";
+    license = with licenses; [
+      mit
+      free
+    ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       siraben
       tomodachi94
       viluon

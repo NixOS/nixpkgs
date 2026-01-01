@@ -4,8 +4,11 @@
   makeBinaryWrapper,
   nodejs,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python3,
   stdenv,
   unixtools,
@@ -31,31 +34,51 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "homepage-dashboard";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.7.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-T2bAN8ucCjcWhXScTI8YxtfrwK9NEfHGHIE8xJgD6Bs=";
   };
 
   pnpmDeps = fetchPnpmDeps {
+=======
+    hash = "sha256-03am9z381UozNsmWZefopMp8/tLycXJyiZ5BUGaV1kY=";
+  };
+
+  pnpmDeps = pnpm_10.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       ;
+<<<<<<< HEAD
     pnpm = pnpm_10;
     fetcherVersion = 1;
     hash = "sha256-42dT1za9M4DowBh27UYh2QDyoVoNWA/L/9lyIY5OVwM=";
+=======
+    fetcherVersion = 1;
+    hash = "sha256-svkqmRFwZpcExFWtAbLL0lpHhzsI2s7RiLfQajIqjck=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 

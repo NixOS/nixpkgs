@@ -17,11 +17,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-mygMtVbNWwtIkxTGxMnuAMUU0mp49NZ50B9d436nWgI=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://src.anomalous.eu/cgiserver/about/";
     description = "Lightweight web server for sandboxing CGI applications";
     mainProgram = "cgiserver";
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.osl3;
+=======
+  meta = with lib; {
+    homepage = "https://src.anomalous.eu/cgiserver/about/";
+    description = "Lightweight web server for sandboxing CGI applications";
+    mainProgram = "cgiserver";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.osl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

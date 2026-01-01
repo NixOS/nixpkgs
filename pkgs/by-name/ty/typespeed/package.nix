@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--datadir=\${out}/share/" ];
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Curses based typing game";
     mainProgram = "typespeed";
@@ -32,5 +33,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.auntie ];
+=======
+  meta = with lib; {
+    description = "Curses based typing game";
+    mainProgram = "typespeed";
+    homepage = "https://typespeed.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.auntie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

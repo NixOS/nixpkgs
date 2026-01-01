@@ -45,11 +45,19 @@ buildDunePackage rec {
   '';
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Algorithms and datastructures for phylogenetics";
     homepage = "https://github.com/biocaml/phylogenetics";
     license = lib.licenses.cecill-b;
     maintainers = [ lib.maintainers.bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Algorithms and datastructures for phylogenetics";
+    homepage = "https://github.com/biocaml/phylogenetics";
+    license = licenses.cecill-b;
+    maintainers = [ maintainers.bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "phylosim";
   };
 }

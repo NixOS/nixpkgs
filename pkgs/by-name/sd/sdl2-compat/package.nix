@@ -2,6 +2,10 @@
   cmake,
   lib,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch2,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ninja,
   sdl3,
   stdenv,
@@ -30,13 +34,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
+<<<<<<< HEAD
   version = "2.32.60";
+=======
+  version = "2.32.58";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl2-compat";
     tag = "release-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-8nhSyifEeYEZj9tqid1x67jhxqmrR61NwQ/g0Z8vbw8=";
+=======
+    hash = "sha256-Ngmr/KG5dQ1IDVafn2Jw/29hFCzPGKc9GOenT/4fsIM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -73,6 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./find-headers.patch
+<<<<<<< HEAD
+=======
+
+    # https://github.com/libsdl-org/sdl2-compat/pull/545
+    (fetchpatch2 {
+      url = "https://github.com/libsdl-org/sdl2-compat/commit/b799076c72c2492224e81544f58f92b737cccbd3.patch?full_index=1";
+      hash = "sha256-fAc8yBlT+XFHDKcF4MFgBAz2WtXGmhYzNNrjaGSr+do=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
   setupHook = ./setup-hook.sh;
 

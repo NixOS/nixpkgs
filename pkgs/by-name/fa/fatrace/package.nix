@@ -29,10 +29,17 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Report system-wide file access events";
     homepage = "https://github.com/martinpitt/fatrace";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Report system-wide file access events";
+    homepage = "https://github.com/martinpitt/fatrace";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       fatrace reports file access events from all running processes.
       Its main purpose is to find processes which keep waking up the disk
@@ -40,6 +47,10 @@ stdenv.mkDerivation rec {
       Requires a Linux kernel with the FANOTIFY configuration option enabled.
       Enabling X86_MSR is also recommended for power-usage-report on x86.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

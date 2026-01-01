@@ -6,13 +6,22 @@
 
 stdenvNoCC.mkDerivation {
   pname = "bqn386";
+<<<<<<< HEAD
   version = "0-unstable-2025-03-23";
+=======
+  version = "0-unstable-2022-05-16";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "BQN386";
+<<<<<<< HEAD
     rev = "4d8b9f668ba76a15ca9cd44d9bfedaf95a4c0d96";
     hash = "sha256-7GW4W08d5sB9EIlPPTol29nWA64pPF+8PvrugrRkXtA=";
+=======
+    rev = "81e18d1eb8cb6b66df9e311b3b63ec086d910d18";
+    hash = "sha256-f0MbrxdkEiOqod41U07BvdDFDbFCqJuGyDIcx2Y24D0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [

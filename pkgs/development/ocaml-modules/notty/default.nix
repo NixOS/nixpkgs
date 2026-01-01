@@ -32,10 +32,18 @@ buildDunePackage rec {
     uutf
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pqwy/notty";
     description = "Declarative terminal graphics for OCaml";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pqwy/notty";
+    description = "Declarative terminal graphics for OCaml";
+    license = licenses.isc;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

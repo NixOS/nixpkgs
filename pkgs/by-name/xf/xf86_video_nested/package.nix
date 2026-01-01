@@ -40,11 +40,20 @@ stdenv.mkDerivation {
 
   CFLAGS = "-I${pixman}/include/pixman-1";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://cgit.freedesktop.org/xorg/driver/xf86-video-nested";
     description = "Driver to run Xorg on top of Xorg or something else";
     maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://cgit.freedesktop.org/xorg/driver/xf86-video-nested";
+    description = "Driver to run Xorg on top of Xorg or something else";
+    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

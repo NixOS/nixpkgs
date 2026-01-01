@@ -18,11 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanri";
+<<<<<<< HEAD
   version = "0.8.2";
+=======
+  version = "0.8.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "kanriapp";
     repo = "kanri";
     tag = "app-v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-HPwCU08cOkQre7ce9IxTbhwf3vi80VTpuLCoIT6b424=";
   };
 
@@ -31,6 +36,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-PBhn0VTt+6rf7YTuoVf3L4a6+AoXuad4E20dWiGVOOE=";
+=======
+    hash = "sha256-pP+q9AD2WATFYWHFitcrebN8y6iGCyXqmQYXCs9Ytf0=";
+  };
+
+  cargoHash = "sha256-JLv4YC40VcRMQVgJnunLkFIEfLKUTEDBgNMV6NmMAzA=";
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-z0RLQ6n3hdsaBy3BiIOpuvpPBq3ST02r7lfsGfJypb8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

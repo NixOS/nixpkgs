@@ -1,6 +1,10 @@
 {
   lib,
+<<<<<<< HEAD
   flutter338,
+=======
+  flutter335,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   gst_all_1,
   libunwind,
@@ -24,16 +28,27 @@ let
     ln -s ${zlib}/lib $out/lib
   '';
 
+<<<<<<< HEAD
   version = "1.29.1";
+=======
+  version = "0.26.10";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-+hqZQQtuNsyAIUKb0fydSnRTqc8EGVxWRtGubccsK2w=";
   };
 in
 flutter338.buildFlutterApplication {
+=======
+    hash = "sha256-PmkhIyRbRWp+ZujP8R1/h7NpKwYsaKx4JtYIikZjVzc=";
+  };
+in
+flutter335.buildFlutterApplication {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "saber";
   inherit version src;
 

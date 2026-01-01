@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
       };
   };
 
+<<<<<<< HEAD
   meta = {
     inherit (klipper.meta) homepage license;
     description = "Firmware part of Klipper";
@@ -115,5 +116,15 @@ stdenv.mkDerivation rec {
       cab404
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    inherit (klipper.meta) homepage license;
+    description = "Firmware part of Klipper";
+    maintainers = with maintainers; [
+      vtuan10
+      cab404
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

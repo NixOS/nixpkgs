@@ -64,11 +64,20 @@ python3.pkgs.buildPythonApplication rec {
   # bunch of linting
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keysign";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-keysign";
+    license = licenses.gpl3Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

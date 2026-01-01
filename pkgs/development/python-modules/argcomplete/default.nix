@@ -31,12 +31,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argcomplete" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Bash tab completion for argparse";
     homepage = "https://kislyuk.github.io/argcomplete/";
     changelog = "https://github.com/kislyuk/argcomplete/blob/${src.tag}/Changes.rst";
     downloadPage = "https://github.com/kislyuk/argcomplete";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ womfoo ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ womfoo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

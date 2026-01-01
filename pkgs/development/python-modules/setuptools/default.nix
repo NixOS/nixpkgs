@@ -39,6 +39,7 @@ buildPythonPackage rec {
     inherit distutils;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = "https://github.com/pypa/setuptools";
@@ -48,5 +49,16 @@ buildPythonPackage rec {
     license = with lib.licenses; [ mit ];
     platforms = python.meta.platforms;
     teams = [ lib.teams.python ];
+=======
+  meta = with lib; {
+    description = "Utilities to facilitate the installation of Python packages";
+    homepage = "https://github.com/pypa/setuptools";
+    changelog = "https://setuptools.pypa.io/en/stable/history.html#v${
+      replaceStrings [ "." ] [ "-" ] version
+    }";
+    license = with licenses; [ mit ];
+    platforms = python.meta.platforms;
+    teams = [ teams.python ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

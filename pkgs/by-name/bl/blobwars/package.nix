@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     find $out/share/games/blobwars/. -type f -exec chmod 644 {} +
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Platform action game featuring a blob with lots of weapons";
     mainProgram = "blobwars";
@@ -61,5 +62,17 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ iblech ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Platform action game featuring a blob with lots of weapons";
+    mainProgram = "blobwars";
+    homepage = "https://www.parallelrealities.co.uk/games/metalBlobSolid/";
+    license = with licenses; [
+      gpl2Plus
+      free
+    ];
+    maintainers = with maintainers; [ iblech ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

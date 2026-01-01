@@ -34,11 +34,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CXXFLAGS=-std=c++03" ];
 
+<<<<<<< HEAD
   meta = {
     description = "FUSE Compressed ROM filesystem with lzma";
     homepage = "https://bisqwit.iki.fi/source/cromfs.html";
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "FUSE Compressed ROM filesystem with lzma";
+    homepage = "https://bisqwit.iki.fi/source/cromfs.html";
+    license = licenses.gpl3;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

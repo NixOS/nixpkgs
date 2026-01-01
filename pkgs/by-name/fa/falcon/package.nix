@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   pkg-config,
   pcre,
@@ -21,6 +24,7 @@ stdenv.mkDerivation {
     hash = "sha256-0yLhwDVFNbfiW23hNxrvItCCkyaOvEbFSg1ZQuJvhIs=";
   };
 
+<<<<<<< HEAD
   patches = [
     # part of https://github.com/falconpl/falcon/pull/11
     (fetchpatch {
@@ -30,6 +34,8 @@ stdenv.mkDerivation {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -40,11 +46,19 @@ stdenv.mkDerivation {
     sqlite
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Programming language with macros and syntax at once";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Programming language with macros and syntax at once";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.cc.isClang;
   };
 }

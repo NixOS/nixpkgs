@@ -28,11 +28,20 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "lru" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast and memory efficient LRU cache for Python";
     homepage = "https://github.com/amitdev/lru-dict";
     changelog = "https://github.com/amitdev/lru-dict/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Fast and memory efficient LRU cache for Python";
+    homepage = "https://github.com/amitdev/lru-dict";
+    changelog = "https://github.com/amitdev/lru-dict/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -6,12 +6,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar";
+<<<<<<< HEAD
   version = "7.2.3";
+=======
+  version = "7.2.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchzip {
     url = "https://www.rarlab.com/rar/unrarsrc-${finalAttrs.version}.tar.gz";
     stripRoot = false;
+<<<<<<< HEAD
     hash = "sha256-AMaJ0PfnqUVPF2rdxWNtBfYu1oVFEqvSdnDaiNtmRAo=";
+=======
+    hash = "sha256-qRGaj2NL8uKq2O8t99odcfmiu2VamF409p4v5Wh29oM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = finalAttrs.src.name;
@@ -54,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
@@ -61,5 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "unrar";
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Utility for RAR archives";
+    homepage = "https://www.rarlab.com/";
+    license = licenses.unfreeRedistributable;
+    mainProgram = "unrar";
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

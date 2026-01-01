@@ -34,11 +34,19 @@ stdenv.mkDerivation rec {
     libssh2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Speedy, parallel, and modular, login brute-forcer";
     homepage = "https://github.com/jmk-foofus/medusa";
     changelog = "https://github.com/jmk-foofus/medusa/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Speedy, parallel, and modular, login brute-forcer";
+    homepage = "https://github.com/jmk-foofus/medusa";
+    changelog = "https://github.com/jmk-foofus/medusa/releases/tag/${src.tag}";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "medusa";
   };

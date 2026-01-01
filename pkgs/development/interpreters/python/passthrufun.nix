@@ -141,6 +141,7 @@ rec {
   pythonAtLeast = lib.versionAtLeast pythonVersion;
   pythonOlder = lib.versionOlder pythonVersion;
   inherit hasDistutilsCxxPatch;
+<<<<<<< HEAD
   inherit
     pythonOnBuildForBuild
     pythonOnBuildForHost
@@ -148,6 +149,9 @@ rec {
     pythonOnHostForHost
     pythonOnTargetForTarget
     ;
+=======
+  inherit pythonOnBuildForHost;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit pythonABITags;
 
   tests = callPackage ./tests.nix {

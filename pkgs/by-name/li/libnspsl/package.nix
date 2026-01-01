@@ -4,7 +4,10 @@
   fetchurl,
   pkg-config,
   netsurf-buildsystem,
+<<<<<<< HEAD
   publicsuffix-list,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,11 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NoTOwy9VXa7UMZk+C/bL2TdPbJCERiN+CJ8LYdaUrIA=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     rm public_suffix_list.dat
     ln -s ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat public_suffix_list.dat
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ netsurf-buildsystem ];

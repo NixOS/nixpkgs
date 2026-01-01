@@ -32,11 +32,21 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
+<<<<<<< HEAD
 
   meta = {
     homepage = "https://github.com/aristanetworks/j2lint";
     description = "Jinja2 Linter CLI";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ polyfloyd ];
+=======
+  versionCheckProgramArg = "--version";
+
+  meta = with lib; {
+    homepage = "https://github.com/aristanetworks/j2lint";
+    description = "Jinja2 Linter CLI";
+    license = licenses.mit;
+    maintainers = with maintainers; [ polyfloyd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,15 +20,27 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-0YxKaA7viWiQYtPXAdWXSWa79EY2x//3WiSjZ1NkkOQ=";
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Efficient WebAssembly interpreter";
     homepage = "https://github.com/paritytech/wasmi";
     changelog = "https://github.com/paritytech/wasmi/blob/${src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Efficient WebAssembly interpreter";
+    homepage = "https://github.com/paritytech/wasmi";
+    changelog = "https://github.com/paritytech/wasmi/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       mit
     ];
     mainProgram = "wasmi_cli";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

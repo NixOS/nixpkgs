@@ -25,12 +25,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pcbnewTransition" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library that allows you to support both, KiCad 5, 6 and 7 in your plugins";
     homepage = "https://github.com/yaqwsx/pcbnewTransition";
     changelog = "https://github.com/yaqwsx/pcbnewTransition/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Library that allows you to support both, KiCad 5, 6 and 7 in your plugins";
+    homepage = "https://github.com/yaqwsx/pcbnewTransition";
+    changelog = "https://github.com/yaqwsx/pcbnewTransition/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jfly
       matusf
     ];

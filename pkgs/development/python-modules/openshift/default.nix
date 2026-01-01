@@ -47,10 +47,18 @@ buildPythonPackage rec {
     "test/integration"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for the OpenShift API";
     homepage = "https://github.com/openshift/openshift-restclient-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ teto ];
+=======
+  meta = with lib; {
+    description = "Python client for the OpenShift API";
+    homepage = "https://github.com/openshift/openshift-restclient-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ teto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

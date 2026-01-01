@@ -29,12 +29,21 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple Python Communications - used by the ARTIQ experimental control package";
     mainProgram = "sipyco_rpctool";
     homepage = "https://github.com/m-labs/sipyco";
     changelog = "https://github.com/m-labs/sipyco/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ charlesbaynham ];
+=======
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ charlesbaynham ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

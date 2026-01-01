@@ -32,15 +32,27 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional guiSupport "--enable-gui";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Zoned block device manipulation library and tools";
     mainProgram = "zbd";
     homepage = "https://github.com/westerndigitalcorporation/libzbd";
     maintainers = [ ];
+<<<<<<< HEAD
     license = with lib.licenses; [
       lgpl3Plus
       gpl3Plus
     ];
     platforms = lib.platforms.linux;
+=======
+    license = with licenses; [
+      lgpl3Plus
+      gpl3Plus
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

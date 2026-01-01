@@ -18,11 +18,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-Xeh5JKIBiyOXRGVx9udoUNs+Wv49BMyFvmnAbDfG3rA=";
 
+<<<<<<< HEAD
   meta = {
     description = "CLI Emoji Picker";
     homepage = "https://github.com/bcongdon/ep";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urandom ];
+=======
+  meta = with lib; {
+    description = "CLI Emoji Picker";
+    homepage = "https://github.com/bcongdon/ep";
+    license = licenses.mit;
+    maintainers = with maintainers; [ urandom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ep";
   };
 }

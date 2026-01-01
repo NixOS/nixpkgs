@@ -48,6 +48,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Undelete tool for the XFS filesystem";
     mainProgram = "xfs_undelete";
@@ -55,5 +56,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.deepfire ];
+=======
+  meta = with lib; {
+    description = "Undelete tool for the XFS filesystem";
+    mainProgram = "xfs_undelete";
+    homepage = "https://github.com/ianka/xfs_undelete";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.deepfire ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

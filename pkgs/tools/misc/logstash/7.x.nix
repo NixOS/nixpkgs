@@ -65,17 +65,30 @@ let
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
       homepage = "https://www.elastic.co/products/logstash";
       sourceProvenance = with lib.sourceTypes; [
+=======
+    meta = with lib; {
+      description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
+      homepage = "https://www.elastic.co/products/logstash";
+      sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         fromSource
         binaryBytecode # source bundles dependencies as jars
         binaryNativeCode # bundled jruby includes native code
       ];
+<<<<<<< HEAD
       license = if enableUnfree then lib.licenses.elastic20 else lib.licenses.asl20;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [
+=======
+      license = if enableUnfree then licenses.elastic20 else licenses.asl20;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         offline
         basvandijk
       ];

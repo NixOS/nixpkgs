@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-contacts"; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://apps.gnome.org/Contacts/";
     description = "GNOME’s integrated address book";
@@ -81,5 +82,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://apps.gnome.org/Contacts/";
+    description = "GNOME’s integrated address book";
+    mainProgram = "gnome-contacts";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

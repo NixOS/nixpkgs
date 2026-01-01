@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geventhttpclient" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/geventhttpclient/geventhttpclient";
     description = "High performance, concurrent HTTP client library using gevent";
     changelog = "https://github.com/geventhttpclient/geventhttpclient/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/geventhttpclient/geventhttpclient";
+    description = "High performance, concurrent HTTP client library using gevent";
+    changelog = "https://github.com/geventhttpclient/geventhttpclient/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ koral ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

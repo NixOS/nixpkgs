@@ -23,13 +23,23 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "consul-alerts";
     description = "Highly available daemon for sending notifications and reminders based on Consul health checks";
     homepage = "https://github.com/AcalephStorage/consul-alerts";
     # As per README
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.darwin;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ nh2 ];
+=======
+    platforms = platforms.linux ++ platforms.freebsd ++ platforms.darwin;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ nh2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

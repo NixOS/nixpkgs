@@ -18,14 +18,22 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
+<<<<<<< HEAD
   version = "3.6.8";
+=======
+  version = "3.6.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "ufo2ft";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Qng6r+STE/Xz5T0kEwbj2eFDyWtIdH/I4wa6eO0epFc=";
+=======
+    hash = "sha256-TIeq4As5nThYck5jQLTdZySfOg51DtkiiYiiWEVSzxo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiolookin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for interacting with LOOKin devices";
     homepage = "https://github.com/ANMalko/aiolookin";
     changelog = "https://github.com/ANMalko/aiolookin/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client for interacting with LOOKin devices";
+    homepage = "https://github.com/ANMalko/aiolookin";
+    changelog = "https://github.com/ANMalko/aiolookin/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

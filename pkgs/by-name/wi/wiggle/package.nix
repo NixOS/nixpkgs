@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://blog.neil.brown.name/category/wiggle/";
     description = "Tool for applying patches with conflicts";
     mainProgram = "wiggle";
@@ -51,8 +55,13 @@ stdenv.mkDerivation rec {
       possible. Also, wiggle will (in some cases) detect changes that have
       already been applied, and will ignore them.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

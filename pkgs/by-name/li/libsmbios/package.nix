@@ -59,10 +59,17 @@ stdenv.mkDerivation rec {
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out/sbin/smbios-sys-info-lite"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dell/libsmbios";
     description = "Library to obtain BIOS information";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dell/libsmbios";
+    description = "Library to obtain BIOS information";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       osl21
       gpl2Plus
     ];

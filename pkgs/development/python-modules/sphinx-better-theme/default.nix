@@ -25,7 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "better" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/irskep/sphinx-better-theme";
     description = "Better Sphinx Theme";
     longDescription = ''
@@ -48,7 +52,12 @@ buildPythonPackage rec {
           html_theme_path = [better_theme_path]
           html_theme = 'better'
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ kaction ];
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ kaction ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

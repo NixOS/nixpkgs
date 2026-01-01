@@ -41,11 +41,19 @@ buildPythonPackage rec {
     "google.cloud.redis_v1beta1"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Google Cloud Memorystore for Redis API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-redis";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-redis-v${version}/packages/google-cloud-redis/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Google Cloud Memorystore for Redis API client library";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-redis";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-redis-v${version}/packages/google-cloud-redis/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

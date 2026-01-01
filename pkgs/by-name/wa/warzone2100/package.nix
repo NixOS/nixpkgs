@@ -9,7 +9,11 @@
   asciidoctor,
   gettext,
 
+<<<<<<< HEAD
   sdl3,
+=======
+  SDL2,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libtheora,
   libvorbis,
   libopus,
@@ -49,6 +53,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
+<<<<<<< HEAD
   version = "4.6.2";
 
   src = fetchurl {
@@ -58,6 +63,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     sdl3
+=======
+  version = "4.6.1";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
+    hash = "sha256-JqxVOEYCQ/ihSdMSZNpxyqTTPvaoAQA37/JOdyeMpQs=";
+  };
+
+  buildInputs = [
+    SDL2
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libtheora
     libvorbis
     libopus
@@ -130,7 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/Warzone2100/warzone2100";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free RTS game, originally developed by Pumpkin Studios";
     mainProgram = "warzone2100";
     longDescription = ''
@@ -145,11 +165,19 @@ stdenv.mkDerivation (finalAttrs: {
       variety of possible units and tactics.
     '';
     homepage = "https://wz2100.net";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       fgaz
     ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      fgaz
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # configure_mac.cmake tries to download stuff
     # https://github.com/Warzone2100/warzone2100/blob/master/macosx/README.md
     broken = stdenv.hostPlatform.isDarwin;

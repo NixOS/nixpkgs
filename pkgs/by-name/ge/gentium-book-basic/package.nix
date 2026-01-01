@@ -22,11 +22,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://software.sil.org/gentium/";
     description = "High-quality typeface family for Latin, Cyrillic, and Greek";
     maintainers = [ ];
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://software.sil.org/gentium/";
+    description = "High-quality typeface family for Latin, Cyrillic, and Greek";
+    maintainers = [ ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

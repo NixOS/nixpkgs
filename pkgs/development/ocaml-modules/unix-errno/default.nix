@@ -24,6 +24,7 @@ buildDunePackage rec {
     result
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/xapi-project/ocaml-unix-errno"; # This is the repo used in the opam package
     description = "Unix errno types, maps, and support for OCaml";
@@ -32,5 +33,15 @@ buildDunePackage rec {
       lgpl21Only
     ]; # All the files indicate ISC, but there's an LGPL LICENSE file
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/xapi-project/ocaml-unix-errno"; # This is the repo used in the opam package
+    description = "Unix errno types, maps, and support for OCaml";
+    license = with licenses; [
+      isc
+      lgpl21Only
+    ]; # All the files indicate ISC, but there's an LGPL LICENSE file
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

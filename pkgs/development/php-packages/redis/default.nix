@@ -21,11 +21,20 @@ buildPecl {
 
   internalDeps = with php.extensions; [ session ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/phpredis/phpredis/releases/tag/${version}";
     description = "PHP extension for interfacing with Redis";
     license = lib.licenses.php301;
     homepage = "https://github.com/phpredis/phpredis/";
     teams = [ lib.teams.php ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/phpredis/phpredis/releases/tag/${version}";
+    description = "PHP extension for interfacing with Redis";
+    license = licenses.php301;
+    homepage = "https://github.com/phpredis/phpredis/";
+    teams = [ teams.php ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

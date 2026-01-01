@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyschlage" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for interacting with Schlage Encode WiFi locks";
     homepage = "https://github.com/dknowles2/pyschlage";
     changelog = "https://github.com/dknowles2/pyschlage/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for interacting with Schlage Encode WiFi locks";
+    homepage = "https://github.com/dknowles2/pyschlage";
+    changelog = "https://github.com/dknowles2/pyschlage/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

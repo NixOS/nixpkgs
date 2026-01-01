@@ -44,11 +44,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_relaxed" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pytest-relaxed.readthedocs.io/";
     description = "Relaxed test discovery/organization for pytest";
     changelog = "https://github.com/bitprophet/pytest-relaxed/blob/${version}/docs/changelog.rst";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    homepage = "https://pytest-relaxed.readthedocs.io/";
+    description = "Relaxed test discovery/organization for pytest";
+    changelog = "https://github.com/bitprophet/pytest-relaxed/blob/${version}/docs/changelog.rst";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

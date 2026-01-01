@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -19,6 +20,25 @@ buildPythonPackage {
     repo = "coloraide";
     tag = version;
     hash = "sha256-WWqHYeFqdVAgBIiBgr5o8URI+ZyMIn7efnbTyelJgII=";
+=======
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  typing-extensions,
+}:
+let
+  pname = "coloraide";
+  version = "5.1";
+in
+buildPythonPackage {
+  inherit pname version;
+  pyproject = true;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-DfBmpjbb2EgZgfrEkCQNPtkGtANDx8AXErPfVC8rJ1A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -33,6 +53,7 @@ buildPythonPackage {
     "coloraide"
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -44,6 +65,14 @@ buildPythonPackage {
     maintainers = [
       lib.maintainers._9999years
       lib.maintainers.djacu
+=======
+  meta = {
+    description = "Color library for Python";
+    homepage = "https://pypi.org/project/coloraide/";
+    license = lib.licenses.mit;
+    maintainers = [
+      lib.maintainers._9999years
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

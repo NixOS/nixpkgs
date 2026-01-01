@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = bundlerUpdateScript "lvmsync";
 
+<<<<<<< HEAD
   meta = {
     description = "Optimised synchronisation of LVM snapshots over a network";
     mainProgram = "lvmsync";
@@ -39,6 +40,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Optimised synchronisation of LVM snapshots over a network";
+    mainProgram = "lvmsync";
+    homepage = "https://theshed.hezmatt.org/lvmsync/";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jluttine
       nicknovitski
     ];

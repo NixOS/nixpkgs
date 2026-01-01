@@ -53,11 +53,20 @@ buildPythonPackage rec {
     "tests/system/test_smoke.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "API Client library for Google Cloud Compute";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-compute";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-compute-v${version}/packages/google-cloud-compute/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "API Client library for Google Cloud Compute";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-compute";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-compute-v${version}/packages/google-cloud-compute/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

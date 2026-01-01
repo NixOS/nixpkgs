@@ -146,12 +146,21 @@ stdenv.mkDerivation rec {
   # Stripping causes the program to core dump.
   dontStrip = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Wolfram Engine computational software system";
     homepage = "https://www.wolfram.com/engine/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ fbeffa ];
+=======
+  meta = with lib; {
+    description = "Wolfram Engine computational software system";
+    homepage = "https://www.wolfram.com/engine/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ fbeffa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

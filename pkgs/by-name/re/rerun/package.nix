@@ -35,7 +35,11 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
+<<<<<<< HEAD
   version = "0.28.1";
+=======
+  version = "0.27.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -46,7 +50,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-ABT7za04QEQABpeRZArEval5aiy/FkNKj8psr6lrFos=";
+=======
+    hash = "sha256-az/NylYwhWoNvrOvsB+cRywoPrjngy/KX1B2hohcl0Q=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -55,7 +63,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
+<<<<<<< HEAD
   cargoHash = "sha256-WQtKSBf8PQ0itbbFWQKvaDvq7BiRV+i6YcKiPpdilBU=";
+=======
+  cargoHash = "sha256-wU2Bv9BzcHI9vhIzGpQY2oYCRCNTwXkBrUruf6+W7g8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cargoBuildFlags = [
     "--package rerun-cli"
@@ -186,6 +198,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {

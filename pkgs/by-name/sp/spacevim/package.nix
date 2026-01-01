@@ -75,7 +75,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://spacevim.org/";
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.PerchunPak ];
+=======
+    maintainers = [ lib.maintainers.perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
     mainProgram = "spacevim";
   };

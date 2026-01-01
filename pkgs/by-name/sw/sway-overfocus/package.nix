@@ -23,12 +23,21 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Better focus navigation for sway and i3";
     homepage = "https://github.com/korreman/sway-overfocus";
     changelog = "https://github.com/korreman/sway-overfocus/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ivan770 ];
+=======
+  meta = with lib; {
+    description = "Better focus navigation for sway and i3";
+    homepage = "https://github.com/korreman/sway-overfocus";
+    changelog = "https://github.com/korreman/sway-overfocus/releases/tag/${src.rev}";
+    license = licenses.mit;
+    maintainers = [ maintainers.ivan770 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sway-overfocus";
   };
 }

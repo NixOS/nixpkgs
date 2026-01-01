@@ -52,10 +52,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of games made with raylib";
     homepage = "https://www.raylib.com/games.html";
     license = lib.licenses.zlib;
+=======
+  meta = with lib; {
+    description = "Collection of games made with raylib";
+    homepage = "https://www.raylib.com/games.html";
+    license = licenses.zlib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (raylib.meta) platforms;
   };
 }

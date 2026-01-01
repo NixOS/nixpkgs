@@ -76,10 +76,18 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ liff ];
+=======
+  meta = with lib; {
+    description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ liff ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

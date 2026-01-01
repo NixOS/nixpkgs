@@ -111,10 +111,17 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) intune; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Intune Portal allows you to securely access corporate apps, data, and resources";
     homepage = "https://www.microsoft.com/";
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    description = "Microsoft Intune Portal allows you to securely access corporate apps, data, and resources";
+    homepage = "https://www.microsoft.com/";
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

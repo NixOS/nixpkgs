@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Music player with a waveform progress bar";
     homepage = "https://nulloy.com";
@@ -63,6 +64,16 @@ stdenv.mkDerivation rec {
     mainProgram = "nulloy";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Music player with a waveform progress bar";
+    homepage = "https://nulloy.com";
+    changelog = "https://github.com/nulloy/nulloy/blob/${src.rev}/ChangeLog";
+    license = licenses.gpl3Only;
+    mainProgram = "nulloy";
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

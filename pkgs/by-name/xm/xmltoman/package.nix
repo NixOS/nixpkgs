@@ -44,6 +44,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Two very simple scripts for converting xml to groff or html";
     homepage = "https://github.com/atsb/xmltoman";
@@ -51,5 +52,14 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "xmltoman";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Two very simple scripts for converting xml to groff or html";
+    homepage = "https://github.com/atsb/xmltoman";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ tochiaha ];
+    mainProgram = "xmltoman";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,11 +22,20 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert go test output to junit xml";
     mainProgram = "go-junit-report";
     homepage = "https://github.com/jstemmer/go-junit-report";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cryptix ];
+=======
+  meta = with lib; {
+    description = "Convert go test output to junit xml";
+    mainProgram = "go-junit-report";
+    homepage = "https://github.com/jstemmer/go-junit-report";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cryptix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

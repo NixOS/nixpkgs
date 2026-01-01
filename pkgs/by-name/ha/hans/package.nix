@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
     install -D -m0755 hans $out/bin/hans
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tunnel IPv4 over ICMP";
     longDescription = ''
       Hans makes it possible to tunnel IPv4 through ICMP echo packets, so you
@@ -37,8 +41,13 @@ stdenv.mkDerivation rec {
       allowed.
     '';
     homepage = "https://code.gerade.org/hans/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hans";
   };
 }

@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/tests.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pagination support for Flask";
     homepage = "https://github.com/lixxu/flask-paginate";
     changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Pagination support for Flask";
+    homepage = "https://github.com/lixxu/flask-paginate";
+    changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

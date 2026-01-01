@@ -17,10 +17,17 @@ buildPythonPackage rec {
   # tests take a long time to run and leave threads hanging
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://kazoo.readthedocs.org";
     description = "Higher Level Zookeeper Client";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://kazoo.readthedocs.org";
+    description = "Higher Level Zookeeper Client";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

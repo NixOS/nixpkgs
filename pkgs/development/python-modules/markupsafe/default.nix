@@ -46,6 +46,7 @@ buildPythonPackage rec {
       ;
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://markupsafe.palletsprojects.com/page/changes/#version-${
       lib.replaceStrings [ "." ] [ "-" ] version
@@ -53,6 +54,15 @@ buildPythonPackage rec {
     description = "Implements a XML/HTML/XHTML Markup safe string";
     homepage = "https://palletsprojects.com/p/markupsafe/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://markupsafe.palletsprojects.com/page/changes/#version-${
+      replaceStrings [ "." ] [ "-" ] version
+    }";
+    description = "Implements a XML/HTML/XHTML Markup safe string";
+    homepage = "https://palletsprojects.com/p/markupsafe/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

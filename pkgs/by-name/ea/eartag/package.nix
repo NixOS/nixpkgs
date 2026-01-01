@@ -82,16 +82,27 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.gnome.org/World/eartag";
     description = "Simple music tag editor";
     changelog = "https://gitlab.gnome.org/World/eartag/-/releases/${version}";
     # This seems to be using ICU license but we're flagging it to MIT license
     # since ICU license is a modified version of MIT and to prevent it from
     # being incorrectly identified as unfree software.
+<<<<<<< HEAD
     license = lib.licenses.mit;
     mainProgram = "eartag";
     maintainers = [ ];
     teams = [ lib.teams.gnome-circle ];
+=======
+    license = licenses.mit;
+    mainProgram = "eartag";
+    maintainers = with maintainers; [ foo-dogsquared ];
+    teams = [ teams.gnome-circle ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

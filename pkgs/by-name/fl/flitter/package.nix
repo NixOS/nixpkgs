@@ -28,12 +28,21 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Livesplit-inspired speedrunning split timer for Linux/macOS terminal";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
     homepage = "https://github.com/alexozer/flitter";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Livesplit-inspired speedrunning split timer for Linux/macOS terminal";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
+    homepage = "https://github.com/alexozer/flitter";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "flitter";
     broken = stdenv.hostPlatform.isDarwin;
   };

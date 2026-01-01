@@ -16,7 +16,11 @@
 
 buildPythonPackage rec {
   pname = "pomegranate";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {

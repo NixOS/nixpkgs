@@ -24,7 +24,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://fonts.google.com/specimen/Catamaran";
     description = "Stylish sans-serif Tamil and Latin typeface";
     longDescription = ''
@@ -35,8 +39,13 @@ stdenvNoCC.mkDerivation {
       (A catamaran is a multihulled vessel consisting of two parallel hulls of equal size.
       The catamaran concept is a relative newcomer for Western boat designers, been used since time immemorial among the Dravidian people, in South India.)
     '';
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

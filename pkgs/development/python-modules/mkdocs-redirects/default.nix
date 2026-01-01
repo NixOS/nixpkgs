@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_redirects" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open source plugin for Mkdocs page redirects";
     homepage = "https://github.com/mkdocs/mkdocs-redirects";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tfc ];
+=======
+  meta = with lib; {
+    description = "Open source plugin for Mkdocs page redirects";
+    homepage = "https://github.com/mkdocs/mkdocs-redirects";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tfc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

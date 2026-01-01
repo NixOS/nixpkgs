@@ -73,12 +73,21 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin
   ) "-Wno-gnu-folding-constant";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.flashrom.org";
+    description = "Utility for reading, writing, erasing and verifying flash ROM chips";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "flashrom";
   };
 })

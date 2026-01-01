@@ -27,6 +27,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parser like ConfigParser but for updating configuration files";
     homepage = "https://configupdater.readthedocs.io/en/latest/";
@@ -35,5 +36,15 @@ buildPythonPackage rec {
       psfl
     ];
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    description = "Parser like ConfigParser but for updating configuration files";
+    homepage = "https://configupdater.readthedocs.io/en/latest/";
+    license = with licenses; [
+      mit
+      psfl
+    ];
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -47,12 +47,21 @@ stdenv.mkDerivation rec {
     "neon/macros"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "WebDAV server protocol compliance test suite";
     homepage = "http://www.webdav.org/neon/litmus/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.lorenz ];
+=======
+  meta = with lib; {
+    description = "WebDAV server protocol compliance test suite";
+    homepage = "http://www.webdav.org/neon/litmus/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.lorenz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "litmus";
   };
 }

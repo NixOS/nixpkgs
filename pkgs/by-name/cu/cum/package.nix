@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
     rm -rf $out/tests $out/LICENSE
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Comic updater, mangafied";
     mainProgram = "cum";
@@ -45,5 +46,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Comic updater, mangafied";
+    mainProgram = "cum";
+    homepage = "https://github.com/Hamuko/cum";
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,12 +17,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-xPi/C9N3/9AsinmbHI/M9EGy4gvS7ZWXEl3xBf3f4LQ=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Minimal Djot CLI";
     mainProgram = "jotdown";
     homepage = "https://github.com/hellux/jotdown";
     changelog = "https://github.com/hellux/jotdown/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

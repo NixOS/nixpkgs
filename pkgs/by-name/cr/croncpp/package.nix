@@ -18,11 +18,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "C++11/14/17 header-only cross-platform library for handling CRON expressions";
     homepage = "https://github.com/mariusbancila/croncpp";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ typedrat ];
+=======
+  meta = with lib; {
+    description = "C++11/14/17 header-only cross-platform library for handling CRON expressions";
+    homepage = "https://github.com/mariusbancila/croncpp";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ typedrat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

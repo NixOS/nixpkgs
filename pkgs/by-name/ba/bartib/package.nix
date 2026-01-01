@@ -24,10 +24,17 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd bartib --bash misc/bartibCompletion.sh
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple timetracker for the command line";
     homepage = "https://github.com/nikolassv/bartib";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Simple timetracker for the command line";
+    homepage = "https://github.com/nikolassv/bartib";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "bartib";
   };

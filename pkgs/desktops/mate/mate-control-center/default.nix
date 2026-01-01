@@ -33,17 +33,28 @@
   hicolor-icon-theme,
   wrapGAppsHook3,
   yelp-tools,
+<<<<<<< HEAD
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+  mateUpdateScript,
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "mate-control-center";
   version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-control-center";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
+=======
+    tag = "v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-rsEu3Ig6GxqPOvAFOXhkEoXM+etyjWpQWHGOsA+myJs=";
   };
 
@@ -100,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/mate-control-center";
     odd-unstable = true;
@@ -114,3 +126,15 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "Utilities to configure the MATE desktop";
+    homepage = "https://github.com/mate-desktop/mate-control-center";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

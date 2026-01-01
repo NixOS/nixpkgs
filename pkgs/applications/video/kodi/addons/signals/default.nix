@@ -22,10 +22,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ruuk/script.module.addon.signals";
     description = "Provides signal/slot mechanism for inter-addon communication";
     license = lib.licenses.lgpl21Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ruuk/script.module.addon.signals";
+    description = "Provides signal/slot mechanism for inter-addon communication";
+    license = licenses.lgpl21Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

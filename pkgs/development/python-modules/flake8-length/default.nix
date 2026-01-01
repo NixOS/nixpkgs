@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flake8 plugin for a smart line length validation";
     homepage = "https://github.com/orsinium-labs/flake8-length";
     changelog = "https://github.com/orsinium-labs/flake8-length/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sauyon ];
+=======
+  meta = with lib; {
+    description = "Flake8 plugin for a smart line length validation";
+    homepage = "https://github.com/orsinium-labs/flake8-length";
+    changelog = "https://github.com/orsinium-labs/flake8-length/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sauyon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

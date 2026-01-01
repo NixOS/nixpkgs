@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.openntpd.org/";
     license = lib.licenses.bsd3;
     description = "OpenBSD NTP daemon (Debian port)";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    homepage = "https://www.openntpd.org/";
+    license = licenses.bsd3;
+    description = "OpenBSD NTP daemon (Debian port)";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -48,11 +48,20 @@ buildPythonPackage rec {
     inflection
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Standardize your DRF API error responses";
     homepage = "https://github.com/ghazi-git/drf-standardized-errors";
     changelog = "https://github.com/ghazi-git/drf-standardized-errors/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Standardize your DRF API error responses";
+    homepage = "https://github.com/ghazi-git/drf-standardized-errors";
+    changelog = "https://github.com/ghazi-git/drf-standardized-errors/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

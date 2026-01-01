@@ -29,10 +29,18 @@ stdenv.mkDerivation rec {
     "--with-cafile=/etc/ssl/certs/ca-certificates.crt"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/GuardTime/libksi";
     description = "Keyless Signature Infrastructure API library";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/GuardTime/libksi";
+    description = "Keyless Signature Infrastructure API library";
+    license = licenses.asl20;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

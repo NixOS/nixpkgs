@@ -69,11 +69,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aionotion" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for Notion Home Monitoring";
     homepage = "https://github.com/bachya/aionotion";
     changelog = "https://github.com/bachya/aionotion/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for Notion Home Monitoring";
+    homepage = "https://github.com/bachya/aionotion";
+    changelog = "https://github.com/bachya/aionotion/releases/tag/${src.tag}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

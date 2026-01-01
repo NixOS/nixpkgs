@@ -1,12 +1,21 @@
 --- a/libgcc/config.host
 +++ b/libgcc/config.host
+<<<<<<< HEAD
 @@ -239,8 +239,8 @@ case ${host} in
+=======
+@@ -239,7 +239,7 @@ case ${host} in
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
      x86_64-*-darwin2[0-2]*)
        tmake_file="t-darwin-min-11 t-darwin-libgccs1 $tmake_file"
        ;;
 -    *-*-darwin2*)
+<<<<<<< HEAD
 -      tmake_file="t-darwin-min-11 $tmake_file"
 +    *-*-darwin2* | *-*-darwin)
 +      tmake_file="t-darwin-min-11 t-darwin-libgccs1 $tmake_file"
+=======
++    *-*-darwin2* | *-*-darwin)
+       tmake_file="t-darwin-min-11 $tmake_file"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
        ;;
      *-*-darwin1[89]*)

@@ -64,12 +64,21 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/sheldon completions --shell zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast and configurable shell plugin manager";
     homepage = "https://github.com/rossmacarthur/sheldon";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ seqizz ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Fast and configurable shell plugin manager";
+    homepage = "https://github.com/rossmacarthur/sheldon";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ seqizz ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sheldon";
   };
 }

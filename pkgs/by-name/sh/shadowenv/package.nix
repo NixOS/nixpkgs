@@ -32,10 +32,17 @@ rustPlatform.buildRustPackage rec {
     HOME=$TMPDIR
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://shopify.github.io/shadowenv/";
     description = "Reversible directory-local environment variable manipulations";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://shopify.github.io/shadowenv/";
+    description = "Reversible directory-local environment variable manipulations";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "shadowenv";
   };

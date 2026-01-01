@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torrequest" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/erdiaker/torrequest";
     description = "Simple Python interface for HTTP(s) requests over Tor";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ applePrincess ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/erdiaker/torrequest";
+    description = "Simple Python interface for HTTP(s) requests over Tor";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ applePrincess ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

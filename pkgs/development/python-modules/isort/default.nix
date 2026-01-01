@@ -77,11 +77,19 @@ buildPythonPackage rec {
     "test_isort_should_warn_on_empty_custom_config_issue_1433"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python utility / library to sort Python imports";
     homepage = "https://github.com/PyCQA/isort";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ couchemar ];
+=======
+  meta = with lib; {
+    description = "Python utility / library to sort Python imports";
+    homepage = "https://github.com/PyCQA/isort";
+    license = licenses.mit;
+    maintainers = with maintainers; [ couchemar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "isort";
   };
 }

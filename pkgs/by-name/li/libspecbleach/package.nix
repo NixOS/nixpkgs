@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
     fftwFloat
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C library for audio noise reduction";
     homepage = "https://github.com/lucianodato/libspecbleach";
     license = lib.licenses.lgpl2;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C library for audio noise reduction";
+    homepage = "https://github.com/lucianodato/libspecbleach";
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

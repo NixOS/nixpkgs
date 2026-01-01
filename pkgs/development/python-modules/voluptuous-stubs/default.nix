@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Typing stubs for voluptuous";
     homepage = "https://github.com/ryanwang520/voluptuous-stubs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Typing stubs for voluptuous";
+    homepage = "https://github.com/ryanwang520/voluptuous-stubs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

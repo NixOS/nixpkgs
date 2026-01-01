@@ -9,14 +9,22 @@
   ripgrep,
 }:
 
+<<<<<<< HEAD
 rustPlatform.buildRustPackage (finalAttrs: {
+=======
+rustPlatform.buildRustPackage rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "repgrep";
   version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "acheronfail";
     repo = "repgrep";
+<<<<<<< HEAD
     tag = finalAttrs.version;
+=======
+    rev = version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-hLRl8mKRaufneJNBQqPsH+48ZQGxFBNgulXcaK4/6s4=";
   };
 
@@ -44,16 +52,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <(${lib.getExe ripgrep} --generate complete-fish | sed 's/-c rg/-c rgr/')
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive replacer for ripgrep that makes it easy to find and replace across files on the command line";
     homepage = "https://github.com/acheronfail/repgrep";
     changelog = "https://github.com/acheronfail/repgrep/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Interactive replacer for ripgrep that makes it easy to find and replace across files on the command line";
+    homepage = "https://github.com/acheronfail/repgrep";
+    changelog = "https://github.com/acheronfail/repgrep/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       asl20
       unlicense
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "rgr";
   };
 })
+=======
+    maintainers = [ ];
+    mainProgram = "rgr";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

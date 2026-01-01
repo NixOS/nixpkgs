@@ -30,11 +30,19 @@ python3.pkgs.buildPythonApplication rec {
     pefile
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "XOR Key Extractor";
     mainProgram = "xorex";
     homepage = "https://github.com/Neo23x0/xorex";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "XOR Key Extractor";
+    mainProgram = "xorex";
+    homepage = "https://github.com/Neo23x0/xorex";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

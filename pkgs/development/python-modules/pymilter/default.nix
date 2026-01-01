@@ -50,10 +50,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Milter" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://bmsi.com/python/milter.html";
     description = "Python bindings for libmilter api";
     maintainers = with lib.maintainers; [ yorickvp ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "http://bmsi.com/python/milter.html";
+    description = "Python bindings for libmilter api";
+    maintainers = with maintainers; [ yorickvp ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

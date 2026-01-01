@@ -87,11 +87,20 @@ buildPythonPackage rec {
     installShellCompletion --bash bash_completion.d/*
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Scalable Python framework for cluster administration";
     homepage = "https://cea-hpc.github.io/clustershell";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.alexvorobiev ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Scalable Python framework for cluster administration";
+    homepage = "https://cea-hpc.github.io/clustershell";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.alexvorobiev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

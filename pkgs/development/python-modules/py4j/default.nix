@@ -18,6 +18,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Py4J enables Python programs running in a Python interpreter to dynamically access Java objects in a Java Virtual Machine. Methods are called as if the Java objects resided in the Python interpreter and Java collections can be accessed through standard Python collection methods. Py4J also enables Java programs to call back Python objects";
     homepage = "https://www.py4j.org/";
@@ -27,5 +28,16 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.shlevy ];
+=======
+  meta = with lib; {
+    description = "Py4J enables Python programs running in a Python interpreter to dynamically access Java objects in a Java Virtual Machine. Methods are called as if the Java objects resided in the Python interpreter and Java collections can be accessed through standard Python collection methods. Py4J also enables Java programs to call back Python objects";
+    homepage = "https://www.py4j.org/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.shlevy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

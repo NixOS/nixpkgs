@@ -83,10 +83,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "OpenGL extension loading library for C/C++";
     homepage = "https://glew.sourceforge.net/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "OpenGL extension loading library for C/C++";
+    homepage = "https://glew.sourceforge.net/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # modified bsd
       free
       mit
@@ -94,9 +101,14 @@ stdenv.mkDerivation (finalAttrs: {
     ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
     pkgConfigModules = [ "glew" ];
     platforms =
+<<<<<<< HEAD
       if enableEGL then
         lib.subtractLists lib.platforms.darwin mesa.meta.platforms
       else
         mesa.meta.platforms;
+=======
+      with platforms;
+      if enableEGL then subtractLists darwin mesa.meta.platforms else mesa.meta.platforms;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

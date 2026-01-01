@@ -41,11 +41,20 @@ stdenv.mkDerivation rec {
     cp readme_zpaqd.txt "$out/share/doc/zpaq"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "ZPAQ archive (de)compressor and algorithm development tool";
     mainProgram = "zpaqd";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "ZPAQ archive (de)compressor and algorithm development tool";
+    mainProgram = "zpaqd";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

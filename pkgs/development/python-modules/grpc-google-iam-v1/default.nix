@@ -40,11 +40,19 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GRPC library for the google-iam-v1 service";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/grpc-google-iam-v1";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/grpc-google-iam-v1/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "GRPC library for the google-iam-v1 service";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/grpc-google-iam-v1";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/grpc-google-iam-v1/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

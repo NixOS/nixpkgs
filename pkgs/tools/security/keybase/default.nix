@@ -38,6 +38,7 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.keybase.io/";
     description = "Keybase official command-line utility and service";
@@ -51,5 +52,21 @@ buildGoModule rec {
       ryand56
     ];
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://www.keybase.io/";
+    description = "Keybase official command-line utility and service";
+    mainProgram = "keybase";
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+      avaq
+      np
+      rvolosatovs
+      Br1ght0ne
+      shofius
+      ryand56
+    ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

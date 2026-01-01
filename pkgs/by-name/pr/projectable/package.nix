@@ -36,11 +36,19 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "TUI file manager built for projects";
     homepage = "https://github.com/dzfrias/projectable";
     changelog = "https://github.com/dzfrias/projectable/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "TUI file manager built for projects";
+    homepage = "https://github.com/dzfrias/projectable";
+    changelog = "https://github.com/dzfrias/projectable/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "prj";
   };

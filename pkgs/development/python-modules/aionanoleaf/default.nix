@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aionanoleaf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the Nanoleaf API";
     homepage = "https://github.com/milanmeu/aionanoleaf";
     changelog = "https://github.com/milanmeu/aionanoleaf/releases/tag/v${version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for the Nanoleaf API";
+    homepage = "https://github.com/milanmeu/aionanoleaf";
+    changelog = "https://github.com/milanmeu/aionanoleaf/releases/tag/v${version}";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

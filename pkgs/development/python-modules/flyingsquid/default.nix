@@ -33,10 +33,18 @@ buildPythonPackage {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "More interactive weak supervision with FlyingSquid";
     homepage = "https://github.com/HazyResearch/flyingsquid";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "More interactive weak supervision with FlyingSquid";
+    homepage = "https://github.com/HazyResearch/flyingsquid";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

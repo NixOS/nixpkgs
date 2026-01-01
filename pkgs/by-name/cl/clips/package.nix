@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for Building Expert Systems";
     mainProgram = "clips";
     homepage = "http://www.clipsrules.net/";
@@ -42,8 +46,14 @@ stdenv.mkDerivation rec {
       expert systems and other programs where a heuristic solution is
       easier to implement and maintain than an algorithmic solution.
     '';
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.league ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.publicDomain;
+    maintainers = [ maintainers.league ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

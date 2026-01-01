@@ -46,11 +46,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ bindings for libgda";
     homepage = "https://www.gnome-db.org/";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.bot-wxt1221 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "C++ bindings for libgda";
+    homepage = "https://www.gnome-db.org/";
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.bot-wxt1221 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

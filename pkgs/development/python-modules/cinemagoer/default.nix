@@ -26,11 +26,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imdb" ]; # Former "imdbpy", upstream is yet to rename here
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for retrieving and managing the data of the IMDb movie database about movies and people";
     downloadPage = "https://github.com/cinemagoer/cinemagoer/";
     homepage = "https://cinemagoer.github.io/";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Python package for retrieving and managing the data of the IMDb movie database about movies and people";
+    downloadPage = "https://github.com/cinemagoer/cinemagoer/";
+    homepage = "https://cinemagoer.github.io/";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

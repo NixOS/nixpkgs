@@ -36,12 +36,21 @@ stdenv.mkDerivation rec {
     install -Dm644 bdsync.1 -t $out/share/man/man1/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast block device synchronizing tool";
     homepage = "https://github.com/rolffokkens/bdsync";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Fast block device synchronizing tool";
+    homepage = "https://github.com/rolffokkens/bdsync";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bdsync";
   };
 }

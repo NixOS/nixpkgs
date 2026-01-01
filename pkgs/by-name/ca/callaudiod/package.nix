@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
     glib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Daemon for dealing with audio routing during phone calls";
     homepage = "https://gitlab.com/mobian1/callaudiod";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pacman99 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Daemon for dealing with audio routing during phone calls";
+    homepage = "https://gitlab.com/mobian1/callaudiod";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pacman99 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

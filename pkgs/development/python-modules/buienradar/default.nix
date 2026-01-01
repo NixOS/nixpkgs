@@ -67,12 +67,21 @@ buildPythonPackage rec {
     "buienradar.constants"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/mjj4791/python-buienradar/blob/${src.tag}/CHANGLOG.rst";
     description = "Library and CLI tools for interacting with buienradar";
     mainProgram = "buienradar";
     homepage = "https://github.com/mjj4791/python-buienradar";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

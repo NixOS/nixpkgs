@@ -65,7 +65,11 @@ stdenv.mkDerivation rec {
     vulkan-loader
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "General purpose GPU compute framework built on Vulkan";
     longDescription = ''
       General purpose GPU compute framework built on Vulkan to
@@ -75,8 +79,14 @@ stdenv.mkDerivation rec {
       processing usecases. Backed by the Linux Foundation"
     '';
     homepage = "https://kompute.cc/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ atila ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ atila ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

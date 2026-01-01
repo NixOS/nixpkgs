@@ -68,15 +68,27 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Reimplementation of the DFT-D3 program";
     mainProgram = "s-dftd3";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Reimplementation of the DFT-D3 program";
+    mainProgram = "s-dftd3";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl3Only
       gpl3Only
     ];
     homepage = "https://github.com/dftd3/simple-dftd3";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

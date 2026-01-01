@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "RSS feed for websites missing it";
     homepage = "https://github.com/RSS-Bridge/rss-bridge";
@@ -38,5 +39,16 @@ stdenv.mkDerivation rec {
       mynacol
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "RSS feed for websites missing it";
+    homepage = "https://github.com/RSS-Bridge/rss-bridge";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [
+      dawidsowa
+      mynacol
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

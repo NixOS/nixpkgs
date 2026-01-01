@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rootless-containers/slirp4netns";
     description = "User-mode networking for unprivileged network namespaces";
@@ -46,6 +47,15 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     teams = [ lib.teams.podman ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rootless-containers/slirp4netns";
+    description = "User-mode networking for unprivileged network namespaces";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ orivej ];
+    teams = [ teams.podman ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "slirp4netns";
   };
 }

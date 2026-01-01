@@ -41,9 +41,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mwclient" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client library to the MediaWiki API";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python client library to the MediaWiki API";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/mwclient/mwclient";
     maintainers = [ ];
   };

@@ -19,12 +19,21 @@ stdenv.mkDerivation rec {
     "ac_cv_func_fnmatch_works=yes"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.cabextract.org.uk/";
     description = "Free Software for extracting Microsoft cabinet files";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    homepage = "https://www.cabextract.org.uk/";
+    description = "Free Software for extracting Microsoft cabinet files";
+    platforms = platforms.all;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cabextract";
   };
 }

@@ -33,7 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lightbulb" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = true; # missing linkd and confspec dependencies
     description = "Command handler for Hikari, the Python Discord API wrapper library";
     longDescription = ''
@@ -43,7 +47,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://hikari-lightbulb.readthedocs.io/en/latest/";
     # https://github.com/tandemdude/hikari-lightbulb/blob/d87df463488d1c1d947144ac0bafa4304e12ddfd/setup.py#L68
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ tomodachi94 ];
+=======
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ tomodachi94 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

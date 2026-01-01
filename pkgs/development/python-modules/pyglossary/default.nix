@@ -28,16 +28,35 @@
 
 buildPythonPackage rec {
   pname = "pyglossary";
+<<<<<<< HEAD
   version = "5.2.1";
+=======
+  version = "5.1.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ilius";
     repo = "pyglossary";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-kxCJ5Sv/v7LOIgNrhpv2Q3ooWx/eciWOVV5YhjOWf70=";
   };
 
+=======
+    hash = "sha256-OrySbbStVSz+WF8D+ODK++lKfYJOm9KCfOxDP3snuKY=";
+  };
+
+  patches = [
+    # Fixes a few install issues, can be removed in the next release. See:
+    # https://github.com/ilius/pyglossary/pull/684
+    (fetchpatch {
+      url = "https://github.com/ilius/pyglossary/commit/f86c91ed987579cd8a1c7f7f278452901ce725ac.patch";
+      hash = "sha256-ewYeNwD3/aSsNbMazgW/3tBpYAPBZdnVu9LCh7tQZjg=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     setuptools
   ]
@@ -69,6 +88,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  env = {
+    # The default --help creates permission errors that may be confusing when
+    # observed in the build log.
+    versionCheckProgramArg = "--version";
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [
     "pyglossary"

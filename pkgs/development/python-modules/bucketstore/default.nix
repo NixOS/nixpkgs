@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bucketstore" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for interacting with Amazon S3";
     homepage = "https://github.com/jpetrucciani/bucketstore";
     changelog = "https://github.com/jpetrucciani/bucketstore/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "Library for interacting with Amazon S3";
+    homepage = "https://github.com/jpetrucciani/bucketstore";
+    changelog = "https://github.com/jpetrucciani/bucketstore/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

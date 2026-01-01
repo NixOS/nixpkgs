@@ -24,8 +24,11 @@
   bintrans,
   xargs-j,
   kldxref,
+<<<<<<< HEAD
   ctfconvert,
   ctfmerge,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 let
   baseConfigFile =
@@ -48,13 +51,24 @@ let
       "include"
     ];
     postPatch = ''
+<<<<<<< HEAD
       for f in sys/contrib/dev/acpica/acpica_prep.sh; do
+=======
+      for f in sys/conf/kmod.mk sys/contrib/dev/acpica/acpica_prep.sh; do
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         substituteInPlace "$f" --replace-warn 'xargs -J' 'xargs-j '
       done
 
       for f in sys/conf/*.mk; do
         substituteInPlace "$f" --replace-quiet 'KERN_DEBUGDIR}''${' 'KERN_DEBUGDIR_'
       done
+<<<<<<< HEAD
+=======
+
+      sed -i sys/${hostArchBsd}/conf/${baseConfig} \
+        -e 's/WITH_CTF=1/WITH_CTF=0/' \
+        -e '/KDTRACE/d'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ''
     + lib.optionalString (baseConfigFile != null) ''
       cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
@@ -62,12 +76,23 @@ let
   };
 
   # Kernel modules need this for kern.opts.mk
+<<<<<<< HEAD
   env = lib.flip lib.mapAttrs' extraFlags (
+=======
+  env = {
+    MK_CTF = "no";
+  }
+  // (lib.flip lib.mapAttrs' extraFlags (
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     name: value: {
       name = "MK_${lib.toUpper name}";
       value = lib.boolToYesNo value;
     }
+<<<<<<< HEAD
   );
+=======
+  ));
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 mkDerivation rec {
   pname = "sys";
@@ -91,8 +116,11 @@ mkDerivation rec {
     bintrans
     xargs-j
     kldxref
+<<<<<<< HEAD
     ctfconvert
     ctfmerge
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # --dynamic-linker /red/herring is used when building the kernel.
@@ -111,18 +139,24 @@ mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     "-fno-stack-protector"
     "-Wno-unneeded-internal-declaration" # some openzfs code trips this
+<<<<<<< HEAD
     "-Wno-default-const-init-field-unsafe" # added in clang 21
     "-Wno-uninitialized-const-pointer" # added in clang 21
     "-Wno-format" # error: passing 'printf' format string where 'freebsd_kprintf' format string is expected
     "-Wno-sometimes-uninitialized" # this one is actually kind of concerning but it does trip
     "-Wno-unused-function"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   inherit env;
   passthru.env = env;
 
+<<<<<<< HEAD
   makeFlags = [ "XARGS_J=xargs-j" ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   KODIR = "${placeholder "out"}/kernel";
   KMODDIR = "${placeholder "out"}/kernel";
   DTBDIR = "${placeholder "out"}/dbt";

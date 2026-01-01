@@ -45,6 +45,7 @@ stdenv.mkDerivation {
 
   passthru.tests = { inherit (nixosTests) xss-lock; };
 
+<<<<<<< HEAD
   meta = {
     description = "Use external locker (such as i3lock) as X screen saver";
     license = lib.licenses.mit;
@@ -54,5 +55,16 @@ stdenv.mkDerivation {
       offline
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Use external locker (such as i3lock) as X screen saver";
+    license = licenses.mit;
+    mainProgram = "xss-lock";
+    maintainers = with maintainers; [
+      malyn
+      offline
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

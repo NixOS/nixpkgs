@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "pytomlpp";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.14";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     repo = "pytomlpp";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-RRsjnZK0FJiSkpWxurs9vJFyo2SUAKyFKXoJ8bcsHKI=";
+=======
+    hash = "sha256-P41jEs1ShpiuSenreE4ykesY2wgBaR7TUKuv3tcD5J0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # The latest setuptools has deprecated `setup_requires` and will attempt to automatically invoke `pip` to install dependencies during the build.
@@ -57,10 +65,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytomlpp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for tomlplusplus";
     homepage = "https://github.com/bobfang1992/pytomlpp";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python wrapper for tomlplusplus";
+    homepage = "https://github.com/bobfang1992/pytomlpp";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -89,7 +89,11 @@ stdenv.mkDerivation rec {
       ethtool
       pciutils
     ]
+<<<<<<< HEAD
     ++ lib.optional (stdenv.hostPlatform.isCygwin && stdenv.cc.isClang) libiconv
+=======
+    ++ lib.optional (stdenv.hostPlatform.isCygwin && stdenv.hostPlatform.isClang) libiconv
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ lib.optional enableAirolib sqlite
     ++ lib.optional enableRegex pcre2
     ++ lib.optional useAirpcap airpcap-sdk;

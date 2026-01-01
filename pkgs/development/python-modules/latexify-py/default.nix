@@ -34,11 +34,20 @@ buildPythonPackage rec {
     cd src
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generates LaTeX math description from Python functions";
     homepage = "https://github.com/google/latexify_py";
     changelog = "https://github.com/google/latexify_py/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Generates LaTeX math description from Python functions";
+    homepage = "https://github.com/google/latexify_py";
+    changelog = "https://github.com/google/latexify_py/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

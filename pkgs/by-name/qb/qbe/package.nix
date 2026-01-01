@@ -32,12 +32,21 @@ stdenv.mkDerivation (finalAttrs: {
     tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://c9x.me/compile/";
     description = "Small compiler backend written in C";
     maintainers = with lib.maintainers; [ fgaz ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://c9x.me/compile/";
+    description = "Small compiler backend written in C";
+    maintainers = with maintainers; [ fgaz ];
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qbe";
   };
 })

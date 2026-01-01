@@ -43,10 +43,17 @@ buildGoModule rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Database migration tool which supports SQL migrations and Go functions";
     homepage = "https://pressly.github.io/goose/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Database migration tool which supports SQL migrations and Go functions";
+    homepage = "https://pressly.github.io/goose/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "goose";
   };

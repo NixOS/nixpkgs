@@ -55,10 +55,17 @@ buildPythonPackage rec {
   # stripping the ico file on macos cause segfault
   stripExclude = [ "*.ico" ];
 
+<<<<<<< HEAD
   meta = {
     description = "3D visualization of scientific data in Python";
     homepage = "https://github.com/enthought/mayavi";
     license = lib.licenses.bsdOriginal;
+=======
+  meta = with lib; {
+    description = "3D visualization of scientific data in Python";
+    homepage = "https://github.com/enthought/mayavi";
+    license = licenses.bsdOriginal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "mayavi2";
   };

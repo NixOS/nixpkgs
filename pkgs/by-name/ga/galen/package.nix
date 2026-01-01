@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     cp galen.jar $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://galenframework.com";
     description = "Automated layout testing for websites";
@@ -37,5 +38,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "https://galenframework.com";
+    description = "Automated layout testing for websites";
+    mainProgram = "galen";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -46,10 +46,17 @@ buildPythonApplication {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Native Linux GUI for Chromecasting local files";
     homepage = "https://github.com/keredson/gnomecast";
     license = with lib.licenses; [ gpl3 ];
+=======
+  meta = with lib; {
+    description = "Native Linux GUI for Chromecasting local files";
+    homepage = "https://github.com/keredson/gnomecast";
+    license = with licenses; [ gpl3 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "gnomecast";
   };

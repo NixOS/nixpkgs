@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     flex
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.videolan.org/developers/libaacs.html";
     description = "Library to access AACS protected Blu-Ray disks";
@@ -41,5 +42,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.videolan.org/developers/libaacs.html";
+    description = "Library to access AACS protected Blu-Ray disks";
+    mainProgram = "aacs_info";
+    license = licenses.lgpl21;
+    maintainers = [ ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

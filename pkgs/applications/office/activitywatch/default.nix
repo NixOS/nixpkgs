@@ -1,6 +1,12 @@
 {
   lib,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rustPlatform,
   makeWrapper,
   pkg-config,
@@ -49,12 +55,21 @@ rec {
 
     pythonImportsCheck = [ "aw_watcher_afk" ];
 
+<<<<<<< HEAD
     meta = {
       description = "Watches keyboard and mouse activity to determine if you are AFK or not (for use with ActivityWatch)";
       homepage = "https://github.com/ActivityWatch/aw-watcher-afk";
       maintainers = with lib.maintainers; [ huantian ];
       mainProgram = "aw-watcher-afk";
       license = lib.licenses.mpl20;
+=======
+    meta = with lib; {
+      description = "Watches keyboard and mouse activity to determine if you are AFK or not (for use with ActivityWatch)";
+      homepage = "https://github.com/ActivityWatch/aw-watcher-afk";
+      maintainers = with maintainers; [ huantian ];
+      mainProgram = "aw-watcher-afk";
+      license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -78,12 +93,21 @@ rec {
 
     pythonImportsCheck = [ "aw_watcher_window" ];
 
+<<<<<<< HEAD
     meta = {
       description = "Cross-platform window watcher (for use with ActivityWatch)";
       homepage = "https://github.com/ActivityWatch/aw-watcher-window";
       maintainers = with lib.maintainers; [ huantian ];
       mainProgram = "aw-watcher-window";
       license = lib.licenses.mpl20;
+=======
+    meta = with lib; {
+      description = "Cross-platform window watcher (for use with ActivityWatch)";
+      homepage = "https://github.com/ActivityWatch/aw-watcher-window";
+      maintainers = with maintainers; [ huantian ];
+      mainProgram = "aw-watcher-window";
+      license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
     };
   };
@@ -140,12 +164,21 @@ rec {
 
     pythonImportsCheck = [ "aw_qt" ];
 
+<<<<<<< HEAD
     meta = {
       description = "Tray icon that manages ActivityWatch processes, built with Qt";
       homepage = "https://github.com/ActivityWatch/aw-qt";
       maintainers = with lib.maintainers; [ huantian ];
       mainProgram = "aw-qt";
       license = lib.licenses.mpl20;
+=======
+    meta = with lib; {
+      description = "Tray icon that manages ActivityWatch processes, built with Qt";
+      homepage = "https://github.com/ActivityWatch/aw-qt";
+      maintainers = with maintainers; [ huantian ];
+      mainProgram = "aw-qt";
+      license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       badPlatforms = lib.platforms.darwin; # requires pyobjc-framework
     };
   };
@@ -170,12 +203,21 @@ rec {
 
     pythonImportsCheck = [ "aw_notify" ];
 
+<<<<<<< HEAD
     meta = {
       description = "Desktop notification service for ActivityWatch";
       homepage = "https://github.com/ActivityWatch/aw-notify";
       maintainers = with lib.maintainers; [ huantian ];
       mainProgram = "aw-notify";
       license = lib.licenses.mpl20;
+=======
+    meta = with lib; {
+      description = "Desktop notification service for ActivityWatch";
+      homepage = "https://github.com/ActivityWatch/aw-notify";
+      maintainers = with maintainers; [ huantian ];
+      mainProgram = "aw-notify";
+      license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -212,6 +254,7 @@ rec {
       export HOME="$TMPDIR"
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "High-performance implementation of the ActivityWatch server, written in Rust";
       homepage = "https://github.com/ActivityWatch/aw-server-rust";
@@ -219,6 +262,15 @@ rec {
       mainProgram = "aw-server";
       platforms = lib.platforms.linux;
       license = lib.licenses.mpl20;
+=======
+    meta = with lib; {
+      description = "High-performance implementation of the ActivityWatch server, written in Rust";
+      homepage = "https://github.com/ActivityWatch/aw-server-rust";
+      maintainers = with maintainers; [ huantian ];
+      mainProgram = "aw-server";
+      platforms = platforms.linux;
+      license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -231,7 +283,10 @@ rec {
     npmDepsHash = "sha256-fPk7UpKuO3nEN1w+cf9DIZIG1+XRUk6PJfVmtpC30XE=";
 
     makeCacheWritable = true;
+<<<<<<< HEAD
     npmFlags = [ "--legacy-peer-deps" ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     patches = [
       # Hardcode version to avoid the need to have the Git repo available at build time.
@@ -254,11 +309,19 @@ rec {
       runHook postCheck
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "Web-based UI for ActivityWatch, built with Vue.js";
       homepage = "https://github.com/ActivityWatch/aw-webui/";
       maintainers = with lib.maintainers; [ huantian ];
       license = lib.licenses.mpl20;
+=======
+    meta = with lib; {
+      description = "Web-based UI for ActivityWatch, built with Vue.js";
+      homepage = "https://github.com/ActivityWatch/aw-webui/";
+      maintainers = with maintainers; [ huantian ];
+      license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 }

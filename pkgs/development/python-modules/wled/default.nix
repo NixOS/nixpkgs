@@ -69,11 +69,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wled" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asynchronous Python client for WLED";
     homepage = "https://github.com/frenck/python-wled";
     changelog = "https://github.com/frenck/python-wled/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Asynchronous Python client for WLED";
+    homepage = "https://github.com/frenck/python-wled";
+    changelog = "https://github.com/frenck/python-wled/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

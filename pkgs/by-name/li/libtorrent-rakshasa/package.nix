@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rakshasa";
+<<<<<<< HEAD
   version = "0.16.5";
+=======
+  version = "0.16.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-zBMenewDtUyhOAQrIKejiShGWDeIA+7U1heyOKfAjio=";
+=======
+    hash = "sha256-r+5rNaBXhHbDWFXbgEPriEmjWEjTyu2I5H7rl3PoF38=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -47,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rakshasa/libtorrent";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      ebzzry
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       codyopel
       thiagokokada
     ];

@@ -107,12 +107,21 @@ buildPythonPackage rec {
       --fish <(register-python-argcomplete pipx --shell fish)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Install and run Python applications in isolated environments";
     mainProgram = "pipx";
     homepage = "https://github.com/pypa/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yshym ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ yshym ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

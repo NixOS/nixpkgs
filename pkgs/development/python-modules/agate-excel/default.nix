@@ -33,11 +33,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "agate" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Adds read support for excel files to agate";
     homepage = "https://github.com/wireservice/agate-excel";
     changelog = "https://github.com/wireservice/agate-excel/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Adds read support for excel files to agate";
+    homepage = "https://github.com/wireservice/agate-excel";
+    changelog = "https://github.com/wireservice/agate-excel/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

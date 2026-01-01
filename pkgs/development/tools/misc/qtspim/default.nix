@@ -61,6 +61,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "New user interface for spim, a MIPS simulator";
     mainProgram = "qtspim";
@@ -68,5 +69,14 @@ stdenv.mkDerivation {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "New user interface for spim, a MIPS simulator";
+    mainProgram = "qtspim";
+    homepage = "https://spimsimulator.sourceforge.net/";
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

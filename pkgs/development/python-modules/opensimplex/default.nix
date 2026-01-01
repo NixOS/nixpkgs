@@ -24,7 +24,11 @@ buildPythonPackage rec {
   enabledTestPaths = [ "tests/test_opensimplex.py" ];
   pythonImportsCheck = [ "opensimplex" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "OpenSimplex Noise functions for 2D, 3D and 4D";
     longDescription = ''
       OpenSimplex noise is an n-dimensional gradient noise function that was
@@ -33,7 +37,12 @@ buildPythonPackage rec {
       directional artifacts characteristic of Perlin noise.
     '';
     homepage = "https://github.com/lmas/opensimplex";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ emilytrau ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

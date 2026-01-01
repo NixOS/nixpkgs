@@ -52,11 +52,20 @@ buildPythonPackage rec {
     "medpy.utilities"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Medical image processing library";
     homepage = "https://loli.github.io/medpy";
     changelog = "https://github.com/loli/medpy/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Medical image processing library";
+    homepage = "https://loli.github.io/medpy";
+    changelog = "https://github.com/loli/medpy/releases/tag/${version}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

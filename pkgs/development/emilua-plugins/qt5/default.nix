@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
         '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Qt5 bindings for Emilua";
     homepage = "https://emilua.org/";
@@ -83,5 +84,16 @@ stdenv.mkDerivation rec {
       lucasew
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Qt5 bindings for Emilua";
+    homepage = "https://emilua.org/";
+    license = licenses.boost;
+    maintainers = with maintainers; [
+      manipuladordedados
+      lucasew
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,6 +20,10 @@
   buildEnv,
   bundler,
   bundix,
+<<<<<<< HEAD
+=======
+  cargo,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rustPlatform,
   rustc,
   makeBinaryWrapper,
@@ -99,6 +103,10 @@ let
           # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
           removeReferencesTo,
           jitSupport ? yjitSupport,
+<<<<<<< HEAD
+=======
+          cargo,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           rustPlatform,
           rustc,
           yjitSupport ? yjitSupported,
@@ -148,6 +156,10 @@ let
           ])
           ++ ops yjitSupport [
             rustPlatform.cargoSetupHook
+<<<<<<< HEAD
+=======
+            cargo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             rustc
           ]
           ++ op useBaseRuby baseRuby;
@@ -187,6 +199,7 @@ let
           # make: *** [uncommon.mk:373: do-install-all] Error 1
           enableParallelInstalling = false;
 
+<<<<<<< HEAD
           patches = op useBaseRuby ./do-not-update-gems-baseruby-3.2.patch ++ [
             # When using a baseruby, ruby always sets "libdir" to the build
             # directory, which nix rejects due to a reference in to /build/ in
@@ -194,6 +207,29 @@ let
             # anything and fixes cross compilation.
             ./dont-refer-to-build-dir.patch
           ];
+=======
+          patches =
+            op useBaseRuby ./do-not-update-gems-baseruby-3.2.patch
+            ++ [
+              # When using a baseruby, ruby always sets "libdir" to the build
+              # directory, which nix rejects due to a reference in to /build/ in
+              # the final product. Removing this reference doesn't seem to break
+              # anything and fixes cross compilation.
+              ./dont-refer-to-build-dir.patch
+            ]
+            ++ ops (lib.versionAtLeast ver.majMin "3.4" && lib.versionOlder ver.majMin "3.5") [
+              (fetchpatch {
+                name = "ruby-3.4-fix-gcc-15-llvm-21-1.patch";
+                url = "https://github.com/ruby/ruby/commit/846bb760756a3bf1ab12d56d8909e104f16e6940.patch";
+                hash = "sha256-+f0mzHsGAe9FT9NWE345BxzaB6vmWzMTvEfWF84uFOs=";
+              })
+              (fetchpatch {
+                name = "ruby-3.4-fix-gcc-15-llvm-21-2.patch";
+                url = "https://github.com/ruby/ruby/commit/18e176659e8afe402cab7d39972f2d56f2cf378f.patch";
+                hash = "sha256-TKPG1hcC1G2WmUkvNV6QSnvUpTEDqrYKrIk/4fAS8QE=";
+              })
+            ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           cargoRoot = opString yjitSupport "yjit";
 
@@ -346,12 +382,21 @@ let
 
           disallowedRequisites = op (!jitSupport) stdenv.cc ++ op useBaseRuby baseRuby;
 
+<<<<<<< HEAD
           meta = {
             description = "Object-oriented language for quick and easy programming";
             homepage = "https://www.ruby-lang.org/";
             license = lib.licenses.ruby;
             maintainers = with lib.maintainers; [ manveru ];
             platforms = lib.platforms.all;
+=======
+          meta = with lib; {
+            description = "Object-oriented language for quick and easy programming";
+            homepage = "https://www.ruby-lang.org/";
+            license = licenses.ruby;
+            maintainers = with maintainers; [ manveru ];
+            platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             mainProgram = "ruby";
             knownVulnerabilities = op (lib.versionOlder ver.majMin "3.0") "This Ruby release has reached its end of life. See https://www.ruby-lang.org/en/downloads/branches/.";
           };
@@ -404,6 +449,7 @@ in
   };
 
   ruby_3_4 = generic {
+<<<<<<< HEAD
     version = rubyVersion "3" "4" "8" "";
     hash = "sha256-U8TdrUH7thifH17g21elHVS9H4f4dVs9aGBBVqNbBFs=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
@@ -412,6 +458,16 @@ in
   ruby_4_0 = generic {
     version = rubyVersion "4" "0" "0" "";
     hash = "sha256-LoOJyMByy2WMk6E3JzLZ6shAgsiLBldQ2x5SpaxjAnE=";
+=======
+    version = rubyVersion "3" "4" "7" "";
+    hash = "sha256-I4FabQlWlveRkJD9w+L5RZssg9VyJLLkRs4fX3Mz7zY=";
+    cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
+  };
+
+  ruby_3_5 = generic {
+    version = rubyVersion "3" "5" "0" "preview1";
+    hash = "sha256-7PCcfrkC6Rza+cxVPNAMypuEiz/A4UKXhQ+asIzdRvA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
   };
 

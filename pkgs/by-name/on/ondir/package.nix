@@ -24,7 +24,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Small program to automate tasks specific to certain directories";
     longDescription = ''
       It works by executing scripts in directories when you enter and leave them.
@@ -38,8 +42,13 @@ stdenv.mkDerivation {
       See man ondir for more information
     '';
     homepage = "https://github.com/alecthomas/ondir/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.michaelCTS ];
+=======
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.michaelCTS ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ondir";
   };
 }

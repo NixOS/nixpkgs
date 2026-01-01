@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tomli_w" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Write-only counterpart to Tomli, which is a read-only TOML parser";
     homepage = "https://github.com/hukkin/tomli-w";
     changelog = "https://github.com/hukkin/tomli-w/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
+=======
+  meta = with lib; {
+    description = "Write-only counterpart to Tomli, which is a read-only TOML parser";
+    homepage = "https://github.com/hukkin/tomli-w";
+    changelog = "https://github.com/hukkin/tomli-w/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lovesegfault ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

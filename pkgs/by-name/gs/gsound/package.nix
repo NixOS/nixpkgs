@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gsound";
     description = "Small library for playing system sounds";
@@ -51,5 +52,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gsound";
+    description = "Small library for playing system sounds";
+    mainProgram = "gsound-play";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

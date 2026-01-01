@@ -30,12 +30,21 @@ stdenv.mkDerivation rec {
     "-DPLOG_BUILD_SAMPLES=NO"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Portable, simple and extensible C++ logging library";
     homepage = "https://github.com/SergiusTheBest/plog";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Portable, simple and extensible C++ logging library";
+    homepage = "https://github.com/SergiusTheBest/plog";
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raphaelr
       erdnaxe
     ];

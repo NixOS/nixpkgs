@@ -38,6 +38,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Network fabric for containers designed to work in conjunction with flannel";
     mainProgram = "flannel";
@@ -45,5 +46,14 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ abbe ];
+=======
+  meta = with lib; {
+    description = "Network fabric for containers designed to work in conjunction with flannel";
+    mainProgram = "flannel";
+    homepage = "https://github.com/flannel-io/cni-plugin/";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -15,11 +15,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-QjcXeLLIvegzETIu3xbZQ+o2WYxR6xkALVOOWYWhGUo=";
 
+<<<<<<< HEAD
   meta = {
     description = "CLI-tool to diff Keepass (.kdbx) files";
     homepage = "https://keepass-diff.narigo.dev/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wamserma ];
+=======
+  meta = with lib; {
+    description = "CLI-tool to diff Keepass (.kdbx) files";
+    homepage = "https://keepass-diff.narigo.dev/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ wamserma ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "keepass-diff";
   };
 }

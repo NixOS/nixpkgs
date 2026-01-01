@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/jiixyj/epoll-shim/pull/34
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Small epoll implementation using kqueue";
     homepage = "https://github.com/jiixyj/epoll-shim";
@@ -40,5 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms =
       lib.platforms.darwin ++ lib.platforms.freebsd ++ lib.platforms.netbsd ++ lib.platforms.openbsd;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    description = "Small epoll implementation using kqueue";
+    homepage = "https://github.com/jiixyj/epoll-shim";
+    license = licenses.mit;
+    platforms = platforms.darwin ++ platforms.freebsd ++ platforms.netbsd ++ platforms.openbsd;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

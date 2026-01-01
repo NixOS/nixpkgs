@@ -50,7 +50,11 @@ in
       after = [ "network-online.target" ];
       environment = {
         LIVEKIT_URL = cfg.livekitUrl;
+<<<<<<< HEAD
         LIVEKIT_JWT_BIND = ":${toString cfg.port}";
+=======
+        LIVEKIT_JWT_PORT = toString cfg.port;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         LIVEKIT_KEY_FILE = "/run/credentials/lk-jwt-service.service/livekit-secrets";
       };
 

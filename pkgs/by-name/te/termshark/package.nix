@@ -32,11 +32,20 @@ buildGoModule rec {
     "-X github.com/gcla/termshark.Version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://termshark.io/";
     description = "Terminal UI for wireshark-cli, inspired by Wireshark";
     mainProgram = "termshark";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ winpat ];
+=======
+  meta = with lib; {
+    homepage = "https://termshark.io/";
+    description = "Terminal UI for wireshark-cli, inspired by Wireshark";
+    mainProgram = "termshark";
+    license = licenses.mit;
+    maintainers = with maintainers; [ winpat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

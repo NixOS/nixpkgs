@@ -46,7 +46,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "C++ based class library for building Graphical User Interfaces";
     longDescription = ''
       FOX stands for Free Objects for X.
@@ -55,8 +59,14 @@ stdenv.mkDerivation rec {
       Current aims are to make FOX completely platform independent, and thus programs written against the FOX library will be only a compile away from running on a variety of platforms.
     '';
     homepage = "http://fox-toolkit.org";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.lgpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

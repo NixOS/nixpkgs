@@ -17,14 +17,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dexed";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "0.9.9";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "asb2m10";
     repo = "dexed";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-9EbaME3kw2ptCWpaV9CnM0j5HOof264s5iFoOTcjwNg=";
+=======
+    hash = "sha256-SPIcaFwx4uGx4Bc1EH1FTnAZ2BAno2h3iO0yhB3G71U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

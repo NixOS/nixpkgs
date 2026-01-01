@@ -27,15 +27,27 @@ stdenv.mkDerivation rec {
       --replace 'TOMB="''${PASSWORD_STORE_TOMB:-tomb}"' 'TOMB="''${PASSWORD_STORE_TOMB:-${tomb}/bin/tomb}"'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pass extension that keeps the password store encrypted inside a tomb";
     homepage = "https://github.com/roddhjav/pass-tomb";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Pass extension that keeps the password store encrypted inside a tomb";
+    homepage = "https://github.com/roddhjav/pass-tomb";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lovek323
       fpletz
       tadfisher
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

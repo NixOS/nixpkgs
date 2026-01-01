@@ -11,7 +11,11 @@
   vorbis-tools,
   pulseaudio,
   nodejs,
+<<<<<<< HEAD
   yt-dlp,
+=======
+  youtube-dl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   opusTools,
   gst_all_1,
   enableSonos ? true,
@@ -27,21 +31,34 @@ let
     gst_all_1.gstreamer
     nodejs
     ffmpeg
+<<<<<<< HEAD
     yt-dlp
+=======
+    youtube-dl
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ pulseaudio ];
 
 in
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
+<<<<<<< HEAD
   version = "2025-12-21";
+=======
+  version = "2022-10-31";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
+<<<<<<< HEAD
     rev = "9cdc5f3f9060ef4078522366ce896356515d8e52";
     hash = "sha256-UMzOIxgeTpAFQZtYirOYPoVcKgiKdGx2zwVyWmo32w4=";
+=======
+    rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
+    sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
@@ -89,11 +106,19 @@ python3Packages.buildPythonApplication {
       --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://mkchromecast.com/";
     description = "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ shou ];
+=======
+  meta = with lib; {
+    homepage = "https://mkchromecast.com/";
+    description = "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
+    license = licenses.mit;
+    maintainers = with maintainers; [ shou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mkchromecast";
   };
 }

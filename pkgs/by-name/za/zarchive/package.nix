@@ -20,11 +20,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zstd ];
 
+<<<<<<< HEAD
   meta = {
     description = "File archive format supporting random-access reads";
     homepage = "https://github.com/Exzap/ZArchive";
     license = lib.licenses.mit0;
     maintainers = with lib.maintainers; [ zhaofengli ];
+=======
+  meta = with lib; {
+    description = "File archive format supporting random-access reads";
+    homepage = "https://github.com/Exzap/ZArchive";
+    license = licenses.mit0;
+    maintainers = with maintainers; [ zhaofengli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zarchive";
   };
 }

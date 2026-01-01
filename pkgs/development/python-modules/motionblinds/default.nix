@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "motionblinds" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interfacing with Motion Blinds";
     homepage = "https://github.com/starkillerOG/motion-blinds";
     changelog = "https://github.com/starkillerOG/motion-blinds/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for interfacing with Motion Blinds";
+    homepage = "https://github.com/starkillerOG/motion-blinds";
+    changelog = "https://github.com/starkillerOG/motion-blinds/releases/tag/${src.tag}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

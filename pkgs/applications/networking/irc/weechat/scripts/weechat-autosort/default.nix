@@ -20,10 +20,18 @@ stdenv.mkDerivation {
     install -D autosort.py $out/share/autosort.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Autosort is a weechat script to automatically or manually keep your buffers sorted";
     homepage = "https://github.com/de-vri-es/weechat-autosort";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ flokli ];
+=======
+  meta = with lib; {
+    description = "Autosort is a weechat script to automatically or manually keep your buffers sorted";
+    homepage = "https://github.com/de-vri-es/weechat-autosort";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

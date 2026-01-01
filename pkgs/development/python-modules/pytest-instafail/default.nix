@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_instafail" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin that shows failures and errors instantly instead of waiting until the end of test session";
     homepage = "https://github.com/pytest-dev/pytest-instafail";
     changelog = "https://github.com/pytest-dev/pytest-instafail/blob/v${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jacg ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin that shows failures and errors instantly instead of waiting until the end of test session";
+    homepage = "https://github.com/pytest-dev/pytest-instafail";
+    changelog = "https://github.com/pytest-dev/pytest-instafail/blob/v${version}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jacg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

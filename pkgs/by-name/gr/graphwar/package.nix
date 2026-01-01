@@ -60,11 +60,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.graphwar.com/";
     description = "Artillery game in which you must hit your enemies using mathematical functions";
     license = lib.licenses.gpl3Plus;
     platforms = jdk.meta.platforms;
     maintainers = with lib.maintainers; [ yrd ];
+=======
+  meta = with lib; {
+    homepage = "https://www.graphwar.com/";
+    description = "Artillery game in which you must hit your enemies using mathematical functions";
+    license = licenses.gpl3Plus;
+    platforms = jdk.meta.platforms;
+    maintainers = with maintainers; [ yrd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

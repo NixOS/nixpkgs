@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "augeas" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/hercules-team/python-augeas/releases/tag/v${version}";
     description = "Pure python bindings for augeas";
     homepage = "https://github.com/hercules-team/python-augeas";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/hercules-team/python-augeas/releases/tag/v${version}";
+    description = "Pure python bindings for augeas";
+    homepage = "https://github.com/hercules-team/python-augeas";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

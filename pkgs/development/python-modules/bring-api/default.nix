@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bring_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to access the Bring! shopping lists API";
     homepage = "https://github.com/miaucl/bring-api";
     changelog = "https://github.com/miaucl/bring-api/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to access the Bring! shopping lists API";
+    homepage = "https://github.com/miaucl/bring-api";
+    changelog = "https://github.com/miaucl/bring-api/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

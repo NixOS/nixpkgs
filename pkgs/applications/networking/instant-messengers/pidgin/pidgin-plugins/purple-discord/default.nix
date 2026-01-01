@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     json-glib
   ];
 
+<<<<<<< HEAD
   env = {
     PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
     PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
@@ -39,5 +40,16 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sna ];
+=======
+  PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
+  PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
+
+  meta = with lib; {
+    homepage = "https://github.com/EionRobb/purple-discord";
+    description = "Discord plugin for Pidgin";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sna ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

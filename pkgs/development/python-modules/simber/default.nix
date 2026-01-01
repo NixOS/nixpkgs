@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simber" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, minimal and powerful logger for Python";
     homepage = "https://github.com/deepjyoti30/simber";
     changelog = "https://github.com/deepjyoti30/simber/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ j0hax ];
+=======
+  meta = with lib; {
+    description = "Simple, minimal and powerful logger for Python";
+    homepage = "https://github.com/deepjyoti30/simber";
+    changelog = "https://github.com/deepjyoti30/simber/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ j0hax ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

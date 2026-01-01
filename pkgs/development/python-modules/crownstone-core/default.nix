@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crownstone_core" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module with shared classes, util functions and definition of Crownstone";
     homepage = "https://github.com/crownstone/crownstone-lib-python-core";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module with shared classes, util functions and definition of Crownstone";
+    homepage = "https://github.com/crownstone/crownstone-lib-python-core";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

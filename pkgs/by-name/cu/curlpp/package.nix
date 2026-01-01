@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl ];
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.curlpp.org/";
     description = "C++ wrapper around libcURL";
     mainProgram = "curlpp-config";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://www.curlpp.org/";
+    description = "C++ wrapper around libcURL";
+    mainProgram = "curlpp-config";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

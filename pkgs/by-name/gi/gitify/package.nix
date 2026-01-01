@@ -3,8 +3,11 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   electron,
   makeDesktopItem,
@@ -13,31 +16,53 @@
   makeWrapper,
   nix-update-script,
 }:
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
   version = "6.14.1";
+=======
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gitify";
+  version = "6.13.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-nZoWqfocEg33C22CfVIkayUWkkZ29A8FcAEXx+tJGUU=";
+=======
+    hash = "sha256-BOpFY6Yj4rmCr+ui7pitsUT15Ls7Tzx+FviZfgGJa4E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     copyDesktopItems
     imagemagick
     makeWrapper
   ];
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 2;
     hash = "sha256-LnYwUXwGm/2yx7QrMcPu32oPtRJKnuqysecwwH25QIg=";
+=======
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
+    hash = "sha256-S4K6IZjWDfUdnvwfGin4kZjc10c9Xml8NwFkMpWtDDQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

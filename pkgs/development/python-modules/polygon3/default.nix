@@ -25,10 +25,18 @@ buildPythonPackage {
   # > /nix/store/vbi8rnz0k3jyh4h4g16bbkchdd8mnxw7-setuptools-check-hook/nix-support/setup-hook: line 4: 30620 Abort trap: 6           /nix/store/5cxanhipcbfxnrqgw2qsr3zqr4z711bj-python3-3.10.12/bin/python3.10 nix_run_setup test
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Polygon is a python package that handles polygonal shapes in 2D";
     homepage = "https://github.com/jraedler/Polygon3";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Polygon is a python package that handles polygonal shapes in 2D";
+    homepage = "https://github.com/jraedler/Polygon3";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

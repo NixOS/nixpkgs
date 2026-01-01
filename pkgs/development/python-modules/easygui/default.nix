@@ -21,10 +21,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "easygui" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Very simple, very easy GUI programming in Python";
     homepage = "https://github.com/robertlugg/easygui";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Very simple, very easy GUI programming in Python";
+    homepage = "https://github.com/robertlugg/easygui";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

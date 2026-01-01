@@ -21,11 +21,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "precis_i18n" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Internationalized usernames and passwords";
     homepage = "https://github.com/byllyfish/precis_i18n";
     changelog = "https://github.com/byllyfish/precis_i18n/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Internationalized usernames and passwords";
+    homepage = "https://github.com/byllyfish/precis_i18n";
+    changelog = "https://github.com/byllyfish/precis_i18n/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

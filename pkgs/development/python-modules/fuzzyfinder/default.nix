@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fuzzyfinder" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/amjith/fuzzyfinder/blob/${src.tag}/CHANGELOG.rst";
     description = "Fuzzy Finder implemented in Python";
     homepage = "https://github.com/amjith/fuzzyfinder";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/amjith/fuzzyfinder/blob/${src.tag}/CHANGELOG.rst";
+    description = "Fuzzy Finder implemented in Python";
+    homepage = "https://github.com/amjith/fuzzyfinder";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

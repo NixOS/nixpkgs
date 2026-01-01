@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   pythonOlder,
 
@@ -41,6 +44,7 @@ buildPythonPackage rec {
     hash = "sha256-woJYfgLNIVzTYj9q8IjXo+SXhQZkQdB/Ofv5StGy9Rc=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       # valkey 9.0 compat
@@ -49,6 +53,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = lib.optionals (pythonOlder "3.11") [ async-timeout ];
@@ -83,7 +89,11 @@ buildPythonPackage rec {
     ujson
     uvloop
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTestMarks = [
     "onlycluster"
@@ -101,10 +111,13 @@ buildPythonPackage rec {
     #  OSError: AF_UNIX path too long
     "test_uds_connect"
     "test_network_connection_failure"
+<<<<<<< HEAD
   ]
   ++ lib.optionals (pythonOlder "3.13") [
     # multiple disconnects are counted instead of just one
     "test_valkey_from_pool"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [

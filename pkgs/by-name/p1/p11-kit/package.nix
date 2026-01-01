@@ -82,7 +82,11 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library for loading and sharing PKCS#11 modules";
     longDescription = ''
       Provides a way to load and enumerate PKCS#11 modules.
@@ -94,12 +98,20 @@ stdenv.mkDerivation rec {
       "https://github.com/p11-glue/p11-kit/raw/${version}/NEWS"
       "https://github.com/p11-glue/p11-kit/releases/tag/${version}"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # https://github.com/p11-glue/p11-kit/issues/355#issuecomment-778777141
       lib.systems.inspect.platformPatterns.isStatic
     ];
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "p11-kit";
   };
 }

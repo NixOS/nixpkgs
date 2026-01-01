@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "PFS (PlayStation File System) shell for POSIX-based systems";
@@ -35,6 +36,17 @@ stdenv.mkDerivation rec {
       afl20 # APA, PFS, and iomanX libraries which are compiled together with this package
     ];
     maintainers = with lib.maintainers; [ makefu ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "PFS (PlayStation File System) shell for POSIX-based systems";
+    platforms = platforms.unix;
+    license = with licenses; [
+      gpl2Only # the pfsshell software itself
+      afl20 # APA, PFS, and iomanX libraries which are compiled together with this package
+    ];
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pfsshell";
   };
 }

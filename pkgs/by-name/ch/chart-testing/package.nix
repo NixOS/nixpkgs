@@ -64,11 +64,19 @@ buildGoModule rec {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for testing Helm charts";
     homepage = "https://github.com/helm/chart-testing";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ atkinschang ];
+=======
+  meta = with lib; {
+    description = "Tool for testing Helm charts";
+    homepage = "https://github.com/helm/chart-testing";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ atkinschang ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ct";
   };
 }

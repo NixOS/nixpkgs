@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     sed -i 's,\(-lshishi\),-L${shishi}/lib \1,' $out/lib/libgss.la
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.gnu.org/software/gss/";
     description = "Generic Security Service";
@@ -81,5 +82,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/gss/";
+    description = "Generic Security Service";
+    mainProgram = "gss";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

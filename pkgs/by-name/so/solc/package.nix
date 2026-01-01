@@ -32,6 +32,10 @@ let
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   meta = {
@@ -54,6 +58,10 @@ let
           pname
           version
           nativeInstallCheckInputs
+<<<<<<< HEAD
+=======
+          versionCheckProgramArg
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           doInstallCheck
           meta
           ;
@@ -156,6 +164,10 @@ let
           pname
           version
           nativeInstallCheckInputs
+<<<<<<< HEAD
+=======
+          versionCheckProgramArg
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           doInstallCheck
           meta
           ;

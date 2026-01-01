@@ -80,9 +80,15 @@ in
 
   enableParallelBuilding = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
     maintainers = with lib.maintainers; [ jwiegley ];
+=======
+  meta = with lib; {
+    description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
+    maintainers = with maintainers; [ jwiegley ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }).overrideAttrs
   (

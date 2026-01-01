@@ -72,13 +72,22 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/libexpat/libexpat/blob/${tag}/expat/Changes";
     homepage = "https://libexpat.github.io/";
     description = "Stream-oriented XML parser library written in C";
     mainProgram = "xmlwf";
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     license = lib.licenses.mit; # expat version
+=======
+    platforms = platforms.all;
+    license = licenses.mit; # expat version
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "expat" ];
   };
 })

@@ -76,11 +76,19 @@ buildGoModule rec {
     inherit version;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Git hooks manager with per-repo and shared Git hooks including version control";
     homepage = "https://github.com/gabyx/Githooks";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ gabyx ];
+=======
+  meta = with lib; {
+    description = "Git hooks manager with per-repo and shared Git hooks including version control";
+    homepage = "https://github.com/gabyx/Githooks";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ gabyx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "githooks-cli";
   };
 }

@@ -211,8 +211,12 @@ let
   ]);
 
   rules_cc_darwin_patched = stdenv.mkDerivation {
+<<<<<<< HEAD
     pname = "rules_cc-${pname}";
     inherit version;
+=======
+    name = "rules_cc-${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = _bazel-build.deps;
 
@@ -246,8 +250,12 @@ let
     '';
   };
   llvm-raw_darwin_patched = stdenv.mkDerivation {
+<<<<<<< HEAD
     pname = "llvm-raw-${pname}";
     inherit version;
+=======
+    name = "llvm-raw-${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = _bazel-build.deps;
 
@@ -287,7 +295,11 @@ let
       _bazel-build;
 
   _bazel-build = buildBazelPackage.override { inherit stdenv; } {
+<<<<<<< HEAD
     inherit pname version;
+=======
+    name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     #bazel = bazel_5;
     bazel = bazel;
 

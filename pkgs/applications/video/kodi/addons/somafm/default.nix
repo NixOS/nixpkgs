@@ -23,10 +23,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm";
     description = "SomaFM addon for Kodi";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm";
+    description = "SomaFM addon for Kodi";
+    license = licenses.gpl3Plus;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

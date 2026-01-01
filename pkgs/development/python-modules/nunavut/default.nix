@@ -42,7 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nunavut" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "UAVCAN DSDL template engine";
     mainProgram = "nnvg";
     longDescription = ''
@@ -51,8 +55,13 @@ buildPythonPackage rec {
     '';
     homepage = "https://nunavut.readthedocs.io/";
     changelog = "https://github.com/OpenCyphal/nunavut/releases/tag/${version}";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ wucke13 ];
     license = with lib.licenses; [
+=======
+    maintainers = with maintainers; [ wucke13 ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd3
       mit
     ];

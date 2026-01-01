@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
     xorg.xcbutil
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple screen locker like slock";
     longDescription = ''
       Simple screen locker. After locking, a colored background (default: white) or
@@ -57,12 +61,21 @@ stdenv.mkDerivation rec {
       for every keystroke. After entering your password, the screen is unlocked again.
     '';
     homepage = "https://i3wm.org/i3lock/";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       malyn
     ];
     mainProgram = "i3lock";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+    maintainers = with maintainers; [
+      malyn
+    ];
+    mainProgram = "i3lock";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

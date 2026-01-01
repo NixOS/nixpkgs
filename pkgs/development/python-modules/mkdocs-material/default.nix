@@ -83,13 +83,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.tag}/CHANGELOG";
     description = "Material for mkdocs";
     downloadPage = "https://github.com/squidfunk/mkdocs-material";
     homepage = "https://squidfunk.github.io/mkdocs-material/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dandellion
       jaysa68
     ];

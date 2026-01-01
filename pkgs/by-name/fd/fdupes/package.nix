@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Identifies duplicate files residing within specified directories";
     longDescription = ''
       fdupes searches the given path for duplicate files.
@@ -38,8 +42,13 @@ stdenv.mkDerivation rec {
       followed by a byte-by-byte comparison.
     '';
     homepage = "https://github.com/adrianlopezroche/fdupes";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fdupes";
   };
 }

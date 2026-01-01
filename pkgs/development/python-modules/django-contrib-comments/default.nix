@@ -17,9 +17,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/django/django-contrib-comments";
     description = "Code formerly known as django.contrib.comments";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/django/django-contrib-comments";
+    description = "Code formerly known as django.contrib.comments";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

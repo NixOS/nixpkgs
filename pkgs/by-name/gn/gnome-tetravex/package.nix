@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-tetravex"; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tetravex";
     description = "Complete the puzzle by matching numbered tiles";
@@ -58,5 +59,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-tetravex";
+    description = "Complete the puzzle by matching numbered tiles";
+    mainProgram = "gnome-tetravex";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

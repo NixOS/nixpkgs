@@ -5,7 +5,10 @@
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
+<<<<<<< HEAD
   nodejs_22,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
@@ -20,8 +23,13 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.11\\.[0-9]+)$";
+<<<<<<< HEAD
     version = "10.11.9";
     srcHash = "sha256-e7itz3VcjSwXGTA+Dn0g5CmQzpnquQ6GmWNdvwrhaQo=";
+=======
+    version = "10.11.8";
+    srcHash = "sha256-OlP5fO85YXP09H9jClSHNGC0/Gvq4h0+VgHTBKsbUWA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     vendorHash = "sha256-Lsw/cvl98JdVmzWr85lAv/JMcTmZZZ4ALLunFLNcrro=";
     npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
     lockfileOverlay = ''
@@ -221,9 +229,12 @@ buildMattermost rec {
           --replace-fail 'options: {}' 'options: { disable: true }'
       '';
 
+<<<<<<< HEAD
       # https://github.com/NixOS/nixpkgs/issues/474535
       nodejs = nodejs_22;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       npmDepsHash = npmDeps.hash;
       makeCacheWritable = true;
       forceGitDeps = true;

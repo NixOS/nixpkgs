@@ -48,6 +48,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "txtorcon" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
     homepage = "https://github.com/meejah/txtorcon";
@@ -57,5 +58,16 @@ buildPythonPackage rec {
       exarkun
     ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Twisted-based Tor controller client, with state-tracking and configuration abstractions";
+    homepage = "https://github.com/meejah/txtorcon";
+    changelog = "https://github.com/meejah/txtorcon/releases/tag/v${version}";
+    maintainers = with maintainers; [
+      jluttine
+      exarkun
+    ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

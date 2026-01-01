@@ -29,10 +29,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://kodi.wiki/view/Add-on:Trakt";
     description = "Trakt.tv movie and TV show scrobbler for Kodi";
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://kodi.wiki/view/Add-on:Trakt";
+    description = "Trakt.tv movie and TV show scrobbler for Kodi";
+    license = licenses.gpl2Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

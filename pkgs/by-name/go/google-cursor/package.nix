@@ -43,11 +43,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r GoogleDot-* $out/share/icons
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Opensource cursor theme inspired by Google";
     homepage = "https://github.com/ful1e5/Google_Cursor";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ quadradical ];
+=======
+  meta = with lib; {
+    description = "Opensource cursor theme inspired by Google";
+    homepage = "https://github.com/ful1e5/Google_Cursor";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ quadradical ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

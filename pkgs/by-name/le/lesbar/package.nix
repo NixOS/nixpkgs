@@ -33,12 +33,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Programming language agnostic view layer for creating desktop widgets and status bars";
     homepage = "https://git.sr.ht/~salmiak/lesbar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpentland ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Programming language agnostic view layer for creating desktop widgets and status bars";
+    homepage = "https://git.sr.ht/~salmiak/lesbar";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpentland ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lesbar";
   };
 })

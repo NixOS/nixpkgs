@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "screeninfo" ];
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Fetch location and size of physical screens";
     homepage = "https://github.com/rr-/screeninfo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickhu ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Fetch location and size of physical screens";
+    homepage = "https://github.com/rr-/screeninfo";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickhu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

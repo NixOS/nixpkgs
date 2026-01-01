@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   unittestFlagsArray = [ "tests/ '*test.py'" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pythonic wrapper for the Wikipedia API";
     homepage = "https://github.com/goldsmith/Wikipedia";
     changelog = "https://github.com/goldsmith/Wikipedia/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Pythonic wrapper for the Wikipedia API";
+    homepage = "https://github.com/goldsmith/Wikipedia";
+    changelog = "https://github.com/goldsmith/Wikipedia/blob/master/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

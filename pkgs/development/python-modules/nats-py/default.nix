@@ -64,11 +64,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nats" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for NATS.io";
     homepage = "https://github.com/nats-io/nats.py";
     changelog = "https://github.com/nats-io/nats.py/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client for NATS.io";
+    homepage = "https://github.com/nats-io/nats.py";
+    changelog = "https://github.com/nats-io/nats.py/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

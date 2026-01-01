@@ -49,10 +49,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mapbox_earcut" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/skogler/mapbox_earcut_python";
     changelog = "https://github.com/skogler/mapbox_earcut_python/releases/tag/${src.tag}";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/skogler/mapbox_earcut_python";
+    changelog = "https://github.com/skogler/mapbox_earcut_python/releases/tag/${src.tag}";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Mapbox-earcut fast triangulation of 2D-polygons";
     longDescription = ''
       Python bindings for the C++ implementation of the Mapbox Earcut

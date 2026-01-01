@@ -1,4 +1,5 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #! nix-shell -i python3 -p python3 python3.pkgs.packaging python3.pkgs.xmltodict python3.pkgs.requests nurl
 import os
 import subprocess
@@ -7,15 +8,24 @@ import pathlib
 import requests
 import json
 import re
+=======
+# ! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
+import os
+import subprocess
+import pprint
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 from argparse import ArgumentParser
 from xmltodict import parse
 from json import dump, loads
 from sys import stdout
+<<<<<<< HEAD
 from packaging import version
 
 UPDATES_URL = "https://www.jetbrains.com/updates/updates.xml"
 IDES_FILE_PATH = pathlib.Path(__file__).parent.joinpath("..").joinpath("ides.json").resolve()
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 def convert_hash_to_sri(base32: str) -> str:
     result = subprocess.run(["nix-hash", "--to-sri", "--type", "sha256", base32], capture_output=True, check=True, text=True)
@@ -28,6 +38,7 @@ def ensure_is_list(x):
     return x
 
 
+<<<<<<< HEAD
 def one_or_more(x):
     return x if isinstance(x, list) else [x]
 
@@ -60,6 +71,8 @@ def latest_build(channel):
     return latest
 
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 def jar_repositories(root_path: str) -> list[str]:
     repositories = []
     file_contents = parse(open(root_path + "/.idea/jarRepositories.xml").read())
@@ -70,11 +83,15 @@ def jar_repositories(root_path: str) -> list[str]:
     for option in ensure_is_list(options):
         for item in option['option']:
             if item['@name'] == 'url':
+<<<<<<< HEAD
                 repositories.append(
                     # Remove protocol and cache-redirector server, we only want the original URL. We try both the original
                     # URL and the URL via the cache-redirector for download in build.nix
                     re.sub(r'^https?://', '', item['@value']).removeprefix("cache-redirector.jetbrains.com/")
                 )
+=======
+                repositories.append(item['@value'])
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     return repositories
 
@@ -90,7 +107,11 @@ def kotlin_jps_plugin_info(root_path: str) -> (str, str):
         version = option['@value']
 
         print(f"* Prefetching Kotlin JPS Plugin version {version}...")
+<<<<<<< HEAD
         prefetch = subprocess.run(["nix-prefetch-url", "--type", "sha256", f"https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar"], capture_output=True, check=True, text=True)
+=======
+        prefetch = subprocess.run(["nix-prefetch-url", "--type", "sha256", f"https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/{version}/kotlin-jps-plugin-classpath-{version}.jar"], capture_output=True, check=True, text=True)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         return (version, convert_hash_to_sri(prefetch.stdout.strip()))
 
@@ -125,6 +146,7 @@ def prefetch_android(variant: str, buildNumber: str) -> str:
     return convert_hash_to_sri(prefetch.stdout.strip())
 
 
+<<<<<<< HEAD
 def generate_restarter_hash(nixpkgs_path: str, root_path: str) -> str:
     print("* Generating restarter Cargo hash...")
     root_name = pathlib.Path(root_path).name
@@ -153,10 +175,14 @@ def generate_jps_hash(nixpkgs_path: str, root_path: str) -> str:
 
 
 def get_args() -> str:
+=======
+def get_args() -> (str, str):
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     parser = ArgumentParser(
         description="Updates the IDEA / PyCharm source build infomations"
     )
     parser.add_argument("out", help="File to output json to")
+<<<<<<< HEAD
     args = parser.parse_args()
     return args.out
 
@@ -223,6 +249,48 @@ def main():
     result['pycharm-oss']['kotlin-jps-plugin']['version'], result['pycharm-oss']['kotlin-jps-plugin']['hash'] = kotlin_jps_plugin_info(pycharmOutPath)
     kotlinc_version = requested_kotlinc_version(pycharmOutPath)
     print(f"* Prefetched PyCharm Open Source requested Kotlin compiler {kotlinc_version}")
+=======
+    parser.add_argument("path", help="Path to the bin/versions.json file")
+    args = parser.parse_args()
+    return args.path, args.out
+
+
+def main():
+    versions_path, out = get_args()
+    versions = loads(open(versions_path).read())
+    idea_data = versions['x86_64-linux']['idea-community']
+    pycharm_data = versions['x86_64-linux']['pycharm-community']
+
+    result = { 'idea-community': {}, 'pycharm-community': {} }
+    result['idea-community']['version'] = idea_data['version']
+    result['idea-community']['buildNumber'] = idea_data['build_number']
+    result['idea-community']['buildType'] = 'idea'
+    result['pycharm-community']['version'] = pycharm_data['version']
+    result['pycharm-community']['buildNumber'] = pycharm_data['build_number']
+    result['pycharm-community']['buildType'] = 'pycharm'
+    print('Fetching IDEA info...')
+    result['idea-community']['ideaHash'], ideaOutPath = prefetch_intellij_community('idea', result['idea-community']['buildNumber'])
+    result['idea-community']['androidHash'] = prefetch_android('idea', result['idea-community']['buildNumber'])
+    result['idea-community']['jpsHash'] = ''
+    result['idea-community']['restarterHash'] = ''
+    result['idea-community']['mvnDeps'] = 'idea_maven_artefacts.json'
+    result['idea-community']['repositories'] = jar_repositories(ideaOutPath)
+    result['idea-community']['kotlin-jps-plugin'] = {}
+    result['idea-community']['kotlin-jps-plugin']['version'], result['idea-community']['kotlin-jps-plugin']['hash'] = kotlin_jps_plugin_info(ideaOutPath)
+    kotlinc_version = requested_kotlinc_version(ideaOutPath)
+    print(f"* Prefetched IDEA Community requested Kotlin compiler {kotlinc_version}")
+    print('Fetching PyCharm info...')
+    result['pycharm-community']['ideaHash'], pycharmOutPath = prefetch_intellij_community('pycharm', result['pycharm-community']['buildNumber'])
+    result['pycharm-community']['androidHash'] = prefetch_android('pycharm', result['pycharm-community']['buildNumber'])
+    result['pycharm-community']['jpsHash'] = ''
+    result['pycharm-community']['restarterHash'] = ''
+    result['pycharm-community']['mvnDeps'] = 'pycharm_maven_artefacts.json'
+    result['pycharm-community']['repositories'] = jar_repositories(pycharmOutPath)
+    result['pycharm-community']['kotlin-jps-plugin'] = {}
+    result['pycharm-community']['kotlin-jps-plugin']['version'], result['pycharm-community']['kotlin-jps-plugin']['hash'] = kotlin_jps_plugin_info(pycharmOutPath)
+    kotlinc_version = requested_kotlinc_version(pycharmOutPath)
+    print(f"* Prefetched PyCharm Community requested Kotlin compiler {kotlinc_version}")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     if out == "stdout":
         dump(result, stdout, indent=2)

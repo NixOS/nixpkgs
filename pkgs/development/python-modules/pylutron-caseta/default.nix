@@ -56,11 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylutron_caseta" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to control Lutron Caseta devices";
     homepage = "https://github.com/gurumitts/pylutron-caseta";
     changelog = "https://github.com/gurumitts/pylutron-caseta/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to control Lutron Caseta devices";
+    homepage = "https://github.com/gurumitts/pylutron-caseta";
+    changelog = "https://github.com/gurumitts/pylutron-caseta/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,11 +20,19 @@ rustPlatform.buildRustPackage rec {
   # requires nightly features
   RUSTC_BOOTSTRAP = 1;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for unit testing tree sitter highlights for nvim-treesitter";
     mainProgram = "highlight-assertions";
     homepage = "https://github.com/thehamsta/highlight-assertions";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Tool for unit testing tree sitter highlights for nvim-treesitter";
+    mainProgram = "highlight-assertions";
+    homepage = "https://github.com/thehamsta/highlight-assertions";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

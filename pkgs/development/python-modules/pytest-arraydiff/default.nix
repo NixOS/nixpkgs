@@ -31,10 +31,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_arraydiff" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to help with comparing array output from tests";
     homepage = "https://github.com/astrofrog/pytest-arraydiff";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Pytest plugin to help with comparing array output from tests";
+    homepage = "https://github.com/astrofrog/pytest-arraydiff";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

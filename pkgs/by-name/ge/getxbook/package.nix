@@ -26,11 +26,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of tools to download books from Google Books";
     homepage = "https://njw.me.uk/getxbook/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Collection of tools to download books from Google Books";
+    homepage = "https://njw.me.uk/getxbook/";
+    license = licenses.isc;
+    maintainers = with maintainers; [ obadz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

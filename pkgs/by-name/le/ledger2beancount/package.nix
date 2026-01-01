@@ -54,7 +54,11 @@ stdenv.mkDerivation rec {
       --set PERL5LIB "${perlPackages.makeFullPerlPath perlDeps}"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Ledger to Beancount text-based converter";
     longDescription = ''
       A script to automatically convert Ledger-based textual ledgers to Beancount ones.
@@ -62,8 +66,14 @@ stdenv.mkDerivation rec {
       Conversion is based on (concrete) syntax, so that information that is not meaningful for accounting reasons but still valuable (e.g., comments, formatting, etc.) can be preserved.
     '';
     homepage = "https://github.com/beancount/ledger2beancount";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pablovsky ];
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pablovsky ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

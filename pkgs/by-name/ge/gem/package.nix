@@ -42,6 +42,7 @@ stdenv.mkDerivation {
     libX11
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Graphics Environment for Multimedia";
     homepage = "http://puredata.info/downloads/gem";
@@ -51,5 +52,16 @@ stdenv.mkDerivation {
       carlthome
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Graphics Environment for Multimedia";
+    homepage = "http://puredata.info/downloads/gem";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      raboof
+      carlthome
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

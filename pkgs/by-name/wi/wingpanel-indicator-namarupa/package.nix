@@ -54,11 +54,20 @@ stdenv.mkDerivation {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Wingpanel Namarupa Indicator (Ayatana support)";
     homepage = "https://github.com/lenemter/wingpanel-indicator-namarupa";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Wingpanel Namarupa Indicator (Ayatana support)";
+    homepage = "https://github.com/lenemter/wingpanel-indicator-namarupa";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

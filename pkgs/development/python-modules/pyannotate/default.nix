@@ -45,10 +45,17 @@ buildPythonPackage rec {
     "pyannotate_tools/annotations/tests/dundermain_test.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Auto-generate PEP-484 annotations";
     homepage = "https://github.com/dropbox/pyannotate";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Auto-generate PEP-484 annotations";
+    homepage = "https://github.com/dropbox/pyannotate";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "pyannotate";
   };

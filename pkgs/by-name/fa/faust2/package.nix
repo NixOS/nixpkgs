@@ -6,14 +6,21 @@
   makeWrapper,
   pkg-config,
   cmake,
+<<<<<<< HEAD
   llvm,
+=======
+  llvm_18, # does not build with 19+ due to API changes
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   emscripten,
   openssl,
   libsndfile,
   libmicrohttpd,
   gnutls,
   libtasn1,
+<<<<<<< HEAD
   libtool,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libxml2,
   p11-kit,
   vim,
@@ -24,12 +31,17 @@
 
 let
 
+<<<<<<< HEAD
   version = "2.83.1";
+=======
+  version = "2.79.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-DojqKLoGb6aGpqpeTAXyLFsbWs/UgYr9nA+JMGa712A=";
     fetchSubmodules = true;
   };
@@ -40,6 +52,18 @@ let
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    hash = "sha256-Rn+Cjpk4vttxARrkDSnpKdBdSRtgElsit8zu1BA8Jd4=";
+    fetchSubmodules = true;
+  };
+
+  meta = with lib; {
+    homepage = "https://faust.grame.fr/";
+    downloadPage = "https://github.com/grame-cncm/faust/";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       magnetophon
       pmahoney
     ];
@@ -60,12 +84,19 @@ let
         makeWrapper
         pkg-config
         cmake
+<<<<<<< HEAD
         libtool
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         vim
         which
       ];
       buildInputs = [
+<<<<<<< HEAD
         llvm
+=======
+        llvm_18
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         emscripten
         openssl
         libsndfile
@@ -81,6 +112,7 @@ let
 
       preConfigure = ''
         # include llvm-config in path
+<<<<<<< HEAD
         export PATH="${lib.getDev llvm}/bin:$PATH"
         cd build
 
@@ -104,6 +136,16 @@ let
       ''
       + ''
 
+=======
+        export PATH="${lib.getDev llvm_18}/bin:$PATH"
+        cd build
+        substituteInPlace Make.llvm.static \
+          --replace 'mkdir -p $@ && cd $@ && ar -x ../../$<' 'mkdir -p $@ && cd $@ && ar -x ../source/build/lib/libfaust.a && cd ../source/build/'
+        substituteInPlace Make.llvm.static \
+          --replace 'rm -rf $(TMP)' ' ' \
+          --replace-fail "ar" "${stdenv.cc.targetPrefix}ar"
+        sed -i 's@LIBNCURSES_PATH ?= .*@LIBNCURSES_PATH ?= ${ncurses_static}/lib/libncurses.a@'  Make.llvm.static
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         cd ..
         shopt -s globstar
         for f in **/Makefile **/Makefile.library **/CMakeLists.txt build/Make.llvm.static embedded/faustjava/faust2engine architecture/autodiff/autodiff.sh source/tools/faust2appls/* **/llvm.cmake tools/benchmark/faust2object; do
@@ -133,7 +175,11 @@ let
         # not used as an executable, so patch 'uname' usage directly
         # rather than use makeWrapper.
         substituteInPlace "$out"/bin/faustoptflags \
+<<<<<<< HEAD
           --replace-fail uname "${coreutils}/bin/uname"
+=======
+          --replace uname "${coreutils}/bin/uname"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         # wrapper for scripts that don't need faust.wrap*
         for script in "$out"/bin/faust2*; do
@@ -197,7 +243,11 @@ let
         # 'faustoptflags' to absolute paths.
         for script in "$out"/bin/*; do
           substituteInPlace "$script" \
+<<<<<<< HEAD
             --replace-quiet " error " "echo"
+=======
+            --replace " error " "echo"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         done
       '';
 

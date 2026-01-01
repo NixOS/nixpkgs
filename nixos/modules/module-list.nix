@@ -205,6 +205,8 @@
   ./programs/dublin-traceroute.nix
   ./programs/ecryptfs.nix
   ./programs/ente-auth.nix
+  ./programs/dublin-traceroute.nix
+  ./programs/ecryptfs.nix
   ./programs/environment.nix
   ./programs/envision.nix
   ./programs/evince.nix
@@ -504,6 +506,7 @@
   ./services/continuous-integration/gitea-actions-runner.nix
   ./services/continuous-integration/github-runners.nix
   ./services/continuous-integration/gitlab-runner/runner.nix
+  ./services/continuous-integration/gitlab-runner.nix
   ./services/continuous-integration/gocd-agent/default.nix
   ./services/continuous-integration/gocd-server/default.nix
   ./services/continuous-integration/hercules-ci-agent/default.nix
@@ -920,6 +923,7 @@
   ./services/misc/podgrab.nix
   ./services/misc/polaris.nix
   ./services/misc/portunus.nix
+  ./services/misc/preload.nix
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
   ./services/misc/radicle.nix
@@ -1533,6 +1537,7 @@
   ./services/system/nix-daemon-firewall.nix
   ./services/system/nix-daemon.nix
   ./services/system/nohang.nix
+  ./services/system/nix-daemon.nix
   ./services/system/nscd.nix
   ./services/system/nvme-rs.nix
   ./services/system/saslauthd.nix
@@ -1594,6 +1599,7 @@
   ./services/web-apps/commafeed.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cook-cli.nix
+  ./services/web-apps/crabfit.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/dashy.nix
   ./services/web-apps/davis.nix
@@ -1609,6 +1615,7 @@
   ./services/web-apps/eintopf.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ente.nix
+  ./services/web-apps/ethercalc.nix
   ./services/web-apps/fediwall.nix
   ./services/web-apps/fider.nix
   ./services/web-apps/filebrowser.nix
@@ -1646,6 +1653,8 @@
   ./services/web-apps/immich-public-proxy.nix
   ./services/web-apps/immich.nix
   ./services/web-apps/immichframe.nix
+  ./services/web-apps/immich-public-proxy.nix
+  ./services/web-apps/immich.nix
   ./services/web-apps/invidious.nix
   ./services/web-apps/isso.nix
   ./services/web-apps/jirafeau.nix
@@ -1711,6 +1720,7 @@
   ./services/web-apps/phylactery.nix
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/pihole-web.nix
+  ./services/web-apps/pingvin-share.nix
   ./services/web-apps/pixelfed.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
@@ -1963,6 +1973,7 @@
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix
+  ./virtualisation/multipass.nix
   ./virtualisation/nixos-containers.nix
   ./virtualisation/oci-containers.nix
   ./virtualisation/oci-options.nix

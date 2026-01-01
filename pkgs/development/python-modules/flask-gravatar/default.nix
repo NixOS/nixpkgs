@@ -57,10 +57,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_gravatar" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/zzzsochi/Flask-Gravatar";
     description = "Small and simple integration of gravatar into flask";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/zzzsochi/Flask-Gravatar";
+    description = "Small and simple integration of gravatar into flask";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

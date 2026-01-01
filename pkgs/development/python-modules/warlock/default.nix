@@ -43,10 +43,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "warlock" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python object model built on JSON schema and JSON patch";
     homepage = "https://github.com/bcwaldon/warlock";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python object model built on JSON schema and JSON patch";
+    homepage = "https://github.com/bcwaldon/warlock";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

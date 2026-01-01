@@ -38,11 +38,20 @@ buildPythonPackage rec {
     lxml = [ fonttools ] ++ fonttools.optional-dependencies.lxml;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Set of UFO based objects for use in font editing applications";
     homepage = "https://github.com/robotools/defcon";
     changelog = "https://github.com/robotools/defcon/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Set of UFO based objects for use in font editing applications";
+    homepage = "https://github.com/robotools/defcon";
+    changelog = "https://github.com/robotools/defcon/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

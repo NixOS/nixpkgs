@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srpenergy.client" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/lamoreauxlab/srpenergy-api-client-python/releases/tag/${version}";
     description = "Unofficial Python module for interacting with Srp Energy data";
     homepage = "https://github.com/lamoreauxlab/srpenergy-api-client-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/lamoreauxlab/srpenergy-api-client-python/releases/tag/${version}";
+    description = "Unofficial Python module for interacting with Srp Energy data";
+    homepage = "https://github.com/lamoreauxlab/srpenergy-api-client-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

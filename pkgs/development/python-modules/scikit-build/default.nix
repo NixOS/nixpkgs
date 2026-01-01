@@ -98,6 +98,7 @@ buildPythonPackage rec {
     "test_sdist_with_symlinks"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
@@ -107,5 +108,16 @@ buildPythonPackage rec {
       bsd2
     ]; # BSD due to reuses of PyNE code
     maintainers = with lib.maintainers; [ FlorianFranzen ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
+    description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
+    homepage = "https://github.com/scikit-build/scikit-build";
+    license = with licenses; [
+      mit
+      bsd2
+    ]; # BSD due to reuses of PyNE code
+    maintainers = with maintainers; [ FlorianFranzen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -55,11 +55,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "open_meteo" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/frenck/python-open-meteo/releases/tag/v${version}";
     description = "Python client for the Open-Meteo API";
     homepage = "https://github.com/frenck/python-open-meteo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/frenck/python-open-meteo/releases/tag/v${version}";
+    description = "Python client for the Open-Meteo API";
+    homepage = "https://github.com/frenck/python-open-meteo";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

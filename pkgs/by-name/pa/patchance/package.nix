@@ -58,7 +58,11 @@ python3Packages.buildPythonApplication rec {
     description = "JACK Patchbay GUI";
     mainProgram = "patchance";
     license = lib.licenses.gpl2;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 }

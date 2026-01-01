@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r barrage sounds enemy field stage tumiki $out/share/games/tumiki-fighters/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/tf_e.html";
     description = "Sticky 2D shooter";
@@ -92,5 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/tf_e.html";
+    description = "Sticky 2D shooter";
+    mainProgram = "tumiki-fighters";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

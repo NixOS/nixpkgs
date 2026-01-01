@@ -28,11 +28,20 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "uTorrent Transport Protocol library";
     homepage = "https://github.com/transmission/libutp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "uTorrent Transport Protocol library";
+    homepage = "https://github.com/transmission/libutp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

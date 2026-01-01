@@ -211,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   # Necessary for builtin Backup plugin
   postFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -220,6 +221,8 @@ stdenv.mkDerivation (finalAttrs: {
       chmod a+x $out/Applications/Joplin.app/Contents/Resources/build/7zip/7za
     '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   desktopItems = [
     (makeDesktopItem {
       name = "joplin";
@@ -233,7 +236,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Open source note taking and to-do application with synchronisation capabilities";
     mainProgram = "joplin-desktop";
     longDescription = ''
@@ -244,8 +251,13 @@ stdenv.mkDerivation (finalAttrs: {
       Markdown format.
     '';
     homepage = "https://joplinapp.org";
+<<<<<<< HEAD
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fugi
     ];
     platforms = electron.meta.platforms ++ lib.platforms.darwin;

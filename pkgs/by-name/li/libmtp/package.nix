@@ -78,7 +78,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/libmtp/libmtp";
     description = "Implementation of Microsoft's Media Transfer Protocol";
     longDescription = ''
@@ -86,8 +90,14 @@ stdenv.mkDerivation rec {
       in the form of a library suitable primarily for POSIX compliant operating
       systems. We implement MTP Basic, the stuff proposed for standardization.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ lovesegfault ];
+=======
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ lovesegfault ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

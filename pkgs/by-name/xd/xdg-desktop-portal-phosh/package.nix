@@ -72,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./cargo_lock_deps_version.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "A backend implementation for xdg-desktop-portal that is using GTK/GNOME/Phosh to provide interfaces that aren't provided by the GTK portal";
     homepage = "https://gitlab.gnome.org/guidog/xdg-desktop-portal-phosh";
@@ -79,5 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ armelclo ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "A backend implementation for xdg-desktop-portal that is using GTK/GNOME/Phosh to provide interfaces that aren't provided by the GTK portal";
+    homepage = "https://gitlab.gnome.org/guidog/xdg-desktop-portal-phosh";
+    changelog = "https://gitlab.gnome.org/guidog/xdg-desktop-portal-phosh/-/blob/main/NEWS";
+    maintainers = with maintainers; [ armelclo ];
+    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

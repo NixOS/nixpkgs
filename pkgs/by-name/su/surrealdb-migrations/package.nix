@@ -9,7 +9,11 @@
 
 let
   pname = "surrealdb-migrations";
+<<<<<<< HEAD
   version = "2.4.0";
+=======
+  version = "2.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -18,10 +22,17 @@ rustPlatform.buildRustPackage {
     owner = "Odonno";
     repo = "surrealdb-migrations";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-eeIXbpfXZ91XcQ+4T76BGZU0Ron5dAf2pUAvLj9nEok=";
   };
 
   cargoHash = "sha256-XA4OXHKSdVKoq3aKpKnYXzWjXHolDqPNLeIDS3iARYI=";
+=======
+    hash = "sha256-BCShTHZSeahJclOHcWh7etl0FajhFs4/RVVszFZdOV8=";
+  };
+
+  cargoHash = "sha256-fV7yHRiqcM4l9i3tnoMawEQxd9fqbcZYZkeTITy310g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Error: No such file or directory (os error 2)
   # failures:
@@ -52,11 +63,20 @@ rustPlatform.buildRustPackage {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Awesome SurrealDB migration tool, with a user-friendly CLI and a versatile Rust library that enables seamless integration into any project";
     homepage = "https://crates.io/crates/surrealdb-migrations";
     mainProgram = "surrealdb-migrations";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Awesome SurrealDB migration tool, with a user-friendly CLI and a versatile Rust library that enables seamless integration into any project";
+    homepage = "https://crates.io/crates/surrealdb-migrations";
+    mainProgram = "surrealdb-migrations";
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

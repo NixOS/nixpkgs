@@ -53,15 +53,27 @@ let
           --zsh <($GOPATH/bin/kops completion zsh)
       '';
 
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = "Easiest way to get a production Kubernetes up and running";
         mainProgram = "kops";
         homepage = "https://github.com/kubernetes/kops";
         changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
+<<<<<<< HEAD
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
           offline
           zimbatm
+=======
+        license = licenses.asl20;
+        maintainers = with maintainers; [
+          offline
+          zimbatm
+          diegolelis
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           yurrriq
         ];
       };

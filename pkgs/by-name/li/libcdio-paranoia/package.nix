@@ -32,16 +32,27 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-ld-version-script" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "CD paranoia on top of libcdio";
     longDescription = ''
       This is a port of xiph.org's cdda paranoia to use libcdio for CDROM
       access. By doing this, cdparanoia runs on platforms other than GNU/Linux.
     '';
     homepage = "https://github.com/rocky/libcdio-paranoia";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "cd-paranoia";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3;
+    maintainers = [ ];
+    mainProgram = "cd-paranoia";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

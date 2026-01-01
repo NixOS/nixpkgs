@@ -14,22 +14,38 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   requests,
   uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "aiosonic";
+<<<<<<< HEAD
   version = "0.30.1";
   pyproject = true;
 
+=======
+  version = "0.26.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "aiosonic";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-VqtPl/dZmxjB7z9AjwBfmYmcxFae2NhWEnsw4l9+IYg=";
+=======
+    hash = "sha256-sYd7qjOiRENO6hPhJ01RLsr+2RtTITrXjcT6/ZaGfAU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -116,11 +132,14 @@ buildPythonPackage rec {
       "test_proxy_request"
     ];
 
+<<<<<<< HEAD
   disabledTestPaths = [
     # tests hang
     "tests/test_sse.py"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     changelog = "https://github.com/sonic182/aiosonic/blob/${src.tag}/CHANGELOG.md";
     description = "Very fast Python asyncio http client";

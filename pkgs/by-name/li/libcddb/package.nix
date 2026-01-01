@@ -27,11 +27,20 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 3 of 5 tests with locale errors
 
+<<<<<<< HEAD
   meta = {
     description = "C library to access data on a CDDB server (freedb.org)";
     homepage = "https://libcddb.sourceforge.net/";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "cddb_query";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C library to access data on a CDDB server (freedb.org)";
+    homepage = "https://libcddb.sourceforge.net/";
+    license = licenses.lgpl2Plus;
+    mainProgram = "cddb_query";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

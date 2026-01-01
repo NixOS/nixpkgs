@@ -20,12 +20,21 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper for the user, group and hosts NSS API";
     mainProgram = "nss_wrapper.pl";
     homepage = "https://git.samba.org/?p=nss_wrapper.git;a=summary;";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Wrapper for the user, group and hosts NSS API";
+    mainProgram = "nss_wrapper.pl";
+    homepage = "https://git.samba.org/?p=nss_wrapper.git;a=summary;";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

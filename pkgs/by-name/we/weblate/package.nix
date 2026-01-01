@@ -9,7 +9,10 @@
   gdk-pixbuf,
   glib,
   gobject-introspection,
+<<<<<<< HEAD
   askalono,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   borgbackup,
   writeText,
   nixosTests,
@@ -24,7 +27,11 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
+<<<<<<< HEAD
   version = "5.15.1";
+=======
+  version = "5.14.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pyproject = true;
 
@@ -37,7 +44,11 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
+<<<<<<< HEAD
     hash = "sha256-9k6H9/XW7vbXix+zadxHCNl9UJ3yE1ONa/+VRvIGk28=";
+=======
+    hash = "sha256-DwoJ24yGLJt+bItN/9SW0ruf+Lz3A9JxvD4QjlKaqzw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python.pkgs; [ setuptools ];
@@ -65,11 +76,15 @@ python.pkgs.buildPythonApplication rec {
     '';
 
   pythonRelaxDeps = [
+<<<<<<< HEAD
     "celery"
     "certifi"
     "cyrtranslit"
     "django-appconf"
     "urllib3"
+=======
+    "certifi"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   dependencies =
@@ -82,7 +97,10 @@ python.pkgs.buildPythonApplication rec {
       celery
       certifi
       charset-normalizer
+<<<<<<< HEAD
       confusable-homoglyphs
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       crispy-bootstrap3
       crispy-bootstrap5
       cryptography
@@ -107,7 +125,10 @@ python.pkgs.buildPythonApplication rec {
       docutils
       drf-spectacular
       drf-standardized-errors
+<<<<<<< HEAD
       fedora-messaging
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       filelock
       fluent-syntax
       gitpython
@@ -122,7 +143,10 @@ python.pkgs.buildPythonApplication rec {
       packaging
       phply
       pillow
+<<<<<<< HEAD
       pyaskalono
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pycairo
       pygments
       pygobject3
@@ -138,6 +162,10 @@ python.pkgs.buildPythonApplication rec {
       siphashc
       social-auth-app-django
       social-auth-core
+<<<<<<< HEAD
+=======
+      standardwebhooks
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tesserocr
       translate-toolkit
       translation-finder
@@ -149,10 +177,14 @@ python.pkgs.buildPythonApplication rec {
     ++ django.optional-dependencies.argon2
     ++ celery.optional-dependencies.redis
     ++ drf-spectacular.optional-dependencies.sidecar
+<<<<<<< HEAD
     ++ drf-standardized-errors.optional-dependencies.openapi
     ++ translate-toolkit.optional-dependencies.toml
     ++ urllib3.optional-dependencies.brotli
     ++ urllib3.optional-dependencies.zstd;
+=======
+    ++ drf-standardized-errors.optional-dependencies.openapi;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];

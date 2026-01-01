@@ -46,13 +46,23 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       Readable bitmap font inspired by Envy Code R
     '';
     homepage = "http://ywstd.fr/p/pj/#envypn";
+<<<<<<< HEAD
     license = lib.licenses.miros;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ erdnaxe ];
+=======
+    license = licenses.miros;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ erdnaxe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

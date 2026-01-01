@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/man/man1 doc/boxes.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line program which draws, removes, and repairs ASCII art boxes";
     mainProgram = "boxes";
@@ -58,5 +59,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ waiting-for-dev ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Command line program which draws, removes, and repairs ASCII art boxes";
+    mainProgram = "boxes";
+    homepage = "https://boxes.thomasjensen.com";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ waiting-for-dev ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

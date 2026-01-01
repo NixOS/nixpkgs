@@ -24,11 +24,19 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "iA Writer Duospace Typeface";
     homepage = "https://ia.net/topics/in-search-of-the-perfect-writing-font";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "iA Writer Duospace Typeface";
+    homepage = "https://ia.net/topics/in-search-of-the-perfect-writing-font";
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

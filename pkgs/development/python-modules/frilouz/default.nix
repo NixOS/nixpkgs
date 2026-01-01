@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frilouz" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/QuantStack/frilouz";
     description = "Python AST parser adapter with partial error recovery";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/QuantStack/frilouz";
+    description = "Python AST parser adapter with partial error recovery";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

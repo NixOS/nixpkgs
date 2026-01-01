@@ -37,11 +37,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pam" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python pam module";
     homepage = "https://github.com/FirefighterBlu3/python-pam";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python pam module";
+    homepage = "https://github.com/FirefighterBlu3/python-pam";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mkg20001
     ];
   };

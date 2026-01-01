@@ -22,7 +22,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+<<<<<<< HEAD
     environment.systemPackages = [ pkgs.glasgow ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     services.udev.packages = [ pkgs.glasgow ];
     users.groups.plugdev = { };
   };

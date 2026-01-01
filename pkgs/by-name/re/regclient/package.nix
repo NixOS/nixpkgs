@@ -76,10 +76,18 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Docker and OCI Registry Client in Go and tooling using those libraries";
     homepage = "https://github.com/regclient/regclient";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ maxbrunet ];
+=======
+  meta = with lib; {
+    description = "Docker and OCI Registry Client in Go and tooling using those libraries";
+    homepage = "https://github.com/regclient/regclient";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ maxbrunet ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

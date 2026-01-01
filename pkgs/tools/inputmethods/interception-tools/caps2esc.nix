@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/interception/linux/plugins/caps2esc";
     description = "Transforming the most useless key ever into the most useful one";
@@ -32,5 +33,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/interception/linux/plugins/caps2esc";
+    description = "Transforming the most useless key ever into the most useful one";
+    mainProgram = "caps2esc";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -37,7 +37,11 @@ buildPythonPackage rec {
     ${python.interpreter} ./test.py
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "DKIM + ARC email signing/verification tools + Python module";
     longDescription = ''
       Python module that implements DKIM (DomainKeys Identified Mail) email
@@ -47,6 +51,10 @@ buildPythonPackage rec {
       Received Chain (ARC) protocol.
     '';
     homepage = "https://launchpad.net/dkimpy";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

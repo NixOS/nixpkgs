@@ -45,11 +45,20 @@ buildPythonPackage rec {
     "test_formatting_battery"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Code formatter for CWL";
     homepage = "https://github.com/rabix/cwl-format";
     changelog = "https://github.com/rabix/cwl-format/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Code formatter for CWL";
+    homepage = "https://github.com/rabix/cwl-format";
+    changelog = "https://github.com/rabix/cwl-format/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

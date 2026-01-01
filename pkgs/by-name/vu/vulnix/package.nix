@@ -8,14 +8,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
+<<<<<<< HEAD
   version = "1.12.2";
+=======
+  version = "1.12.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "vulnix";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-RHYiwIWV7gf4Ty70ECY3RLouNZAEG5uxjq0+K4LK5QU=";
+=======
+    hash = "sha256-Nxhv3K/wF7AYi5kTJxL2pjiDWgWN+27wKsMXf0yaXrk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   __darwinAllowLocalNetworking = true;
@@ -59,11 +67,20 @@ python3Packages.buildPythonApplication rec {
 
   dontStrip = true;
 
+<<<<<<< HEAD
   meta = {
     description = "NixOS vulnerability scanner";
     mainProgram = "vulnix";
     homepage = "https://github.com/nix-community/vulnix";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ henrirosten ];
+=======
+  meta = with lib; {
+    description = "NixOS vulnerability scanner";
+    mainProgram = "vulnix";
+    homepage = "https://github.com/nix-community/vulnix";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ henrirosten ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

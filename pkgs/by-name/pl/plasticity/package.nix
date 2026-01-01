@@ -120,6 +120,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--add-flags "--use-gl=egl")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CAD for artists";
     homepage = "https://www.plasticity.xyz";
@@ -127,6 +128,15 @@ stdenv.mkDerivation rec {
     mainProgram = "Plasticity";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ imadnyc ];
+=======
+  meta = with lib; {
+    description = "CAD for artists";
+    homepage = "https://www.plasticity.xyz";
+    license = licenses.unfree;
+    mainProgram = "Plasticity";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ imadnyc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -32,13 +32,23 @@ mkDerivation rec {
     libunibreak
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/buggins/coolreader";
     description = "Cross platform open source e-book reader";
     mainProgram = "cr3";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus; # see https://github.com/buggins/coolreader/issues/80
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus; # see https://github.com/buggins/coolreader/issues/80
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

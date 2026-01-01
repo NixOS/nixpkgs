@@ -30,6 +30,7 @@ buildGoModule rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cipher/decipher text within a file";
     mainProgram = "s5";
@@ -37,5 +38,16 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ mvisonneau ];
+=======
+  versionCheckProgramArg = "--version";
+
+  meta = with lib; {
+    description = "Cipher/decipher text within a file";
+    mainProgram = "s5";
+    homepage = "https://github.com/mvisonneau/s5";
+    license = licenses.asl20;
+    platforms = platforms.unix ++ platforms.darwin;
+    maintainers = with maintainers; [ mvisonneau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -26,7 +26,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ packaging ] ++ lib.optional (stdenv.hostPlatform.isLinux) pyxdg;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/damonlynch/showinfilemanager";
     description = "Open the system file manager and select files in it";
     mainProgram = "showinfilemanager";
@@ -37,7 +41,11 @@ buildPythonPackage rec {
       highlighting the files and allowing the user to quickly do
       something with them.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

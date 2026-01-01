@@ -81,11 +81,20 @@ buildPythonPackage rec {
     "test_type_str"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Framework for configuring complex applications";
     homepage = "https://github.com/omry/omegaconf";
     changelog = "https://github.com/omry/omegaconf/blob/v${version}/NEWS.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Framework for configuring complex applications";
+    homepage = "https://github.com/omry/omegaconf";
+    changelog = "https://github.com/omry/omegaconf/blob/v${version}/NEWS.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

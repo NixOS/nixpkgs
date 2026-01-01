@@ -3,8 +3,11 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+<<<<<<< HEAD
   pythonAtLeast,
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
   pytest,
   pytestCheckHook,
@@ -30,6 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-3vBYOk/P78NOjAbs3fT6py5QOOK3fX+AKtO4j5vxZfk=";
   };
 
+<<<<<<< HEAD
   patches = lib.optionals (pythonAtLeast "3.13") [
     (fetchpatch {
       # python 3.14 compat
@@ -40,6 +44,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
@@ -56,11 +62,20 @@ buildPythonPackage rec {
 
   pytestFlags = [ "-Wignore::DeprecationWarning" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin to fake subprocess for pytest";
     homepage = "https://github.com/aklajnert/pytest-subprocess";
     changelog = "https://github.com/aklajnert/pytest-subprocess/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Plugin to fake subprocess for pytest";
+    homepage = "https://github.com/aklajnert/pytest-subprocess";
+    changelog = "https://github.com/aklajnert/pytest-subprocess/blob/${src.tag}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

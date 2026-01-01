@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
   # Fixes installation path
   PREFIX = placeholder "out";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/kira64xyz/yafetch";
     description = "Yet another fetch clone written in C++";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ashley ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/kira64xyz/yafetch";
+    description = "Yet another fetch clone written in C++";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ashley ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yafetch";
   };
 }

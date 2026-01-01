@@ -40,7 +40,11 @@ buildPythonPackage rec {
     owner = "jxnl";
     repo = "instructor";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-VWFrMgfe92bHUK1hueqJLHQ7G7ATCgK7wXr+eqrVWcw=";
+=======
+    hash = "sha256-vknPfRHyLoLo2838p/fbjrqyaBORZzLp9+fN98yVDz0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];
@@ -83,7 +87,10 @@ buildPythonPackage rec {
     "successfully"
     "test_mode_functions_deprecation_warning"
     "test_partial"
+<<<<<<< HEAD
     "test_provider_invalid_type_raises_error"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"

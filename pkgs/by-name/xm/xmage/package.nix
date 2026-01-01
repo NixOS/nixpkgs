@@ -8,11 +8,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmage";
+<<<<<<< HEAD
   version = "1.4.58-dev_2025-10-06_20-40";
 
   src = fetchurl {
     url = "http://xmage.today/files/mage-full_${finalAttrs.version}.zip";
     sha256 = "sha256-UOtxV+ykDIH+PLjLrC66Rut92IIw2iDHWwvJ2ytmUAs=";
+=======
+  version = "1.4.57-dev_2025-04-19_14-28";
+
+  src = fetchurl {
+    url = "http://xmage.today/files/mage-full_${finalAttrs.version}.zip";
+    sha256 = "sha256-EeaUd81fqiPDqHiMP86E9gtdFi545PIBfCgb1i5Z5i0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   preferLocalBuild = true;
@@ -42,12 +50,21 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +x $out/bin/xmage
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Magic Another Game Engine";
     mainProgram = "xmage";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Magic Another Game Engine";
+    mainProgram = "xmage";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
       abueide
     ];

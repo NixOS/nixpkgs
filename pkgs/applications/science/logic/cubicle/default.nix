@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     OCAMLOPT = "ocamlfind ocamlopt -package num";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source model checker for verifying safety properties of array-based systems";
     mainProgram = "cubicle";
@@ -44,5 +45,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dwarfmaster ];
+=======
+  meta = with lib; {
+    description = "Open source model checker for verifying safety properties of array-based systems";
+    mainProgram = "cubicle";
+    homepage = "https://cubicle.lri.fr/";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dwarfmaster ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

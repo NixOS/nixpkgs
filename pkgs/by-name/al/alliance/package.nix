@@ -70,11 +70,20 @@ stdenv.mkDerivation {
     cp -p distrib/*.png $out/icons/hicolor/48x48/apps/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
     homepage = "http://coriolis.lip6.fr/";
     license = with lib.licenses; gpl2Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
+    homepage = "http://coriolis.lip6.fr/";
+    license = with licenses; gpl2Plus;
+    maintainers = [ ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

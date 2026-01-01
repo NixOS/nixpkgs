@@ -46,12 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "systemdspawner" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "JupyterHub Spawner using systemd for resource isolation";
     mainProgram = "check-kernel.bash";
     homepage = "https://github.com/jupyterhub/systemdspawner";
     changelog = "https://github.com/jupyterhub/systemdspawner/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

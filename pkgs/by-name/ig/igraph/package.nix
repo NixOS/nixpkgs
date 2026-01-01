@@ -25,13 +25,21 @@ assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !bla
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "1.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "igraph";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-mXaW9UOTPN5iM7ZNoV2NjH+2Maez5A/YfABeQRe0vgY=";
+=======
+    hash = "sha256-SwcihzISSmeVhpMrysOhWrUzVVuB4ZBVEjC0vHJwrdw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -104,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     python = python3.pkgs.igraph;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
@@ -111,6 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "C library for complex network analysis and graph theory";
+    homepage = "https://igraph.org/";
+    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       MostAwesomeDude
       dotlambda
     ];

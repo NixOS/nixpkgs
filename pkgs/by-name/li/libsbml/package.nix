@@ -49,11 +49,20 @@ stdenv.mkDerivation (attrs: {
 
   pythonImportsCheck = [ "libsbml" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for manipulating Systems Biology Markup Language (SBML)";
     homepage = "https://github.com/sbmlteam/libsbml";
     license = lib.licenses.lgpl21Only;
     maintainers = [ lib.maintainers.kupac ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Library for manipulating Systems Biology Markup Language (SBML)";
+    homepage = "https://github.com/sbmlteam/libsbml";
+    license = licenses.lgpl21Only;
+    maintainers = [ maintainers.kupac ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

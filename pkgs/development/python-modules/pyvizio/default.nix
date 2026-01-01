@@ -35,11 +35,20 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pyvizio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for Vizio SmartCast";
     mainProgram = "pyvizio";
     homepage = "https://github.com/vkorn/pyvizio";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client for Vizio SmartCast";
+    mainProgram = "pyvizio";
+    homepage = "https://github.com/vkorn/pyvizio";
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,10 +39,17 @@ stdenv.mkDerivation rec {
     cp -v src/zkfuse $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ztzg ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ztzg ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zkfuse";
   };
 }

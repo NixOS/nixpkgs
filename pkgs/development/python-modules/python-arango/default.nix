@@ -32,7 +32,11 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
+<<<<<<< HEAD
   version = "8.2.5";
+=======
+  version = "8.2.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -41,7 +45,11 @@ buildPythonPackage rec {
     owner = "arangodb";
     repo = "python-arango";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-WzoQ3pwFDbPoXjHPdX03S9MAnNJTwe6MqXhq0g/pAs0=";
+=======
+    hash = "sha256-cc8VxaNVOydsuhnNa8Qo8xfhIUIkuNZUWBZNqu6xEwg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -150,11 +158,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arango" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Driver for ArangoDB";
     homepage = "https://github.com/ArangoDB-Community/python-arango";
     changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jsoo1 ];
+=======
+  meta = with lib; {
+    description = "Python Driver for ArangoDB";
+    homepage = "https://github.com/ArangoDB-Community/python-arango";
+    changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jsoo1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

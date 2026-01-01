@@ -64,11 +64,19 @@ stdenv.mkDerivation rec {
     chmod -R a+w $dir/inf/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Brother MFC-465CN LPR printer driver";
     homepage = "http://www.brother.com/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ phrogg ];
+=======
+  meta = with lib; {
+    description = "Brother MFC-465CN LPR printer driver";
+    homepage = "http://www.brother.com/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ phrogg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

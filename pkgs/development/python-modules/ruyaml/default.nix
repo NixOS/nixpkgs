@@ -48,11 +48,20 @@ buildPythonPackage rec {
     "test_issue_61"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "YAML 1.2 loader/dumper package for Python";
     homepage = "https://ruyaml.readthedocs.io/";
     changelog = "https://github.com/pycontribs/ruyaml/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "YAML 1.2 loader/dumper package for Python";
+    homepage = "https://ruyaml.readthedocs.io/";
+    changelog = "https://github.com/pycontribs/ruyaml/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -21,7 +21,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.moe.gov.tw/";
     description = "Set of KAI and SONG fonts from the Ministry of Education of Taiwan";
     version = version;
@@ -30,8 +34,14 @@ stdenvNoCC.mkDerivation rec {
       Both are provided by the Ministry of Education of Taiwan; each character's shape
       closely follows the official recommendation, and can be used as for teaching purposes.
     '';
+<<<<<<< HEAD
     license = lib.licenses.cc-by-nd-30;
     maintainers = [ lib.maintainers.jiehong ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.cc-by-nd-30;
+    maintainers = [ maintainers.jiehong ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

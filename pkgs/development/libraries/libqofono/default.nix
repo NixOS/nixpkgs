@@ -50,11 +50,20 @@ mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Library for accessing the ofono daemon, and declarative plugin for it";
     homepage = "https://git.sailfishos.org/mer-core/libqofono/";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library for accessing the ofono daemon, and declarative plugin for it";
+    homepage = "https://git.sailfishos.org/mer-core/libqofono/";
+    license = licenses.lgpl21Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

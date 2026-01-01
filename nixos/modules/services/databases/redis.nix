@@ -479,12 +479,20 @@ in
         isSystemUser = true;
         group = redisName name;
       }
+<<<<<<< HEAD
     ) (lib.filterAttrs (name: conf: conf.user == redisName name) enabledServers);
+=======
+    ) enabledServers;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     users.groups = lib.mapAttrs' (
       name: conf:
       lib.nameValuePair (redisName name) {
       }
+<<<<<<< HEAD
     ) (lib.filterAttrs (name: conf: conf.group == redisName name) enabledServers);
+=======
+    ) enabledServers;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     systemd.services = lib.mapAttrs' (
       name: conf:

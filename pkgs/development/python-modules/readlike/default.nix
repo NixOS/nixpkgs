@@ -24,10 +24,18 @@ buildPythonPackage rec {
     "tests"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GNU Readline-like line editing module";
     homepage = "https://github.com/jangler/readlike";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "GNU Readline-like line editing module";
+    homepage = "https://github.com/jangler/readlike";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

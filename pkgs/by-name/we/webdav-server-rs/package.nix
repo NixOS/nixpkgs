@@ -34,7 +34,11 @@ rustPlatform.buildRustPackage {
        --replace '/usr/include/tirpc' '${libtirpc.dev}/include/tirpc'
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Implementation of WebDAV server in Rust";
     longDescription = ''
       webdav-server-rs is an implementation of WebDAV with full support for
@@ -42,8 +46,13 @@ rustPlatform.buildRustPackage {
       quota.
     '';
     homepage = "https://github.com/miquels/webdav-server-rs";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pmy ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pmy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "webdav-server";
   };
 }

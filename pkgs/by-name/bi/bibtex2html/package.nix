@@ -22,11 +22,20 @@ stdenv.mkDerivation {
     perl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of tools for translating from BibTeX to HTML";
     homepage = "https://www.lri.fr/~filliatr/bibtex2html/";
     license = lib.licenses.gpl2Only;
     platforms = ocaml.meta.platforms or [ ];
     maintainers = [ lib.maintainers.scolobb ];
+=======
+  meta = with lib; {
+    description = "Collection of tools for translating from BibTeX to HTML";
+    homepage = "https://www.lri.fr/~filliatr/bibtex2html/";
+    license = licenses.gpl2Only;
+    platforms = ocaml.meta.platforms or [ ];
+    maintainers = [ maintainers.scolobb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

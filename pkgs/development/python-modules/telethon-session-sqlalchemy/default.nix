@@ -23,16 +23,28 @@ buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tulir/telethon-session-sqlalchemy";
     description = "SQLAlchemy backend for Telethon session storage";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tulir/telethon-session-sqlalchemy";
+    description = "SQLAlchemy backend for Telethon session storage";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Package requires SQLAlchemy <2
     # https://github.com/tulir/telethon-session-sqlalchemy/blob/d498503ddde332e190bfa47e70f0bfa59fe6b5ef/setup.py#L17
     # Repo is archived and so this is unlikely to change unless someone forks
     # and takes over development
+<<<<<<< HEAD
     broken = lib.versionAtLeast sqlalchemy.version "2";
+=======
+    broken = versionAtLeast sqlalchemy.version "2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

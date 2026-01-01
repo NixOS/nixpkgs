@@ -12,7 +12,10 @@
   inih,
   liburcu,
   nixosTests,
+<<<<<<< HEAD
   python3,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation rec {
@@ -24,11 +27,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-Ww9WqB9kEyYmb3Yq6KVjsp2Vzbzag7x5OPaM4SLx7dk=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace {./scrub/xfs_scrub_all.py.in,./mkfs/xfs_protofile.py.in}\
       --replace-fail '#!/usr/bin/python3' '#!/usr/bin/env python3'
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   outputs = [
     "bin"
     "dev"
@@ -49,7 +55,10 @@ stdenv.mkDerivation rec {
     icu
     inih
     liburcu
+<<<<<<< HEAD
     (python3.withPackages (ps: [ ps.dbus-python ]))
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
@@ -92,16 +101,28 @@ stdenv.mkDerivation rec {
     inherit (nixosTests.installer) lvm;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://xfs.wiki.kernel.org";
     description = "SGI XFS utilities";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://xfs.wiki.kernel.org";
+    description = "SGI XFS utilities";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Only
       lgpl21
       gpl3Plus
     ]; # see https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/tree/debian/copyright
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dezgeg
       ajs124
     ];

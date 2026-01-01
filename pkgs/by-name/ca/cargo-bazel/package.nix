@@ -22,11 +22,20 @@ rustPlatform.buildRustPackage rec {
   # `test_data` is explicitly excluded from the package published to crates.io, so tests cannot be run
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Part of the `crate_universe` collection of tools which use Cargo to generate build targets for Bazel";
     mainProgram = "cargo-bazel";
     homepage = "https://github.com/bazelbuild/rules_rust";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rickvanprim ];
+=======
+  meta = with lib; {
+    description = "Part of the `crate_universe` collection of tools which use Cargo to generate build targets for Bazel";
+    mainProgram = "cargo-bazel";
+    homepage = "https://github.com/bazelbuild/rules_rust";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rickvanprim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -117,11 +117,20 @@ python3.pkgs.buildPythonApplication rec {
     cp ${launchScript} $out/share/inkscape/extensions/textext/launch.sh
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Re-editable LaTeX graphics for Inkscape";
     homepage = "https://textext.github.io/textext/";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.raboof ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Re-editable LaTeX graphics for Inkscape";
+    homepage = "https://textext.github.io/textext/";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.raboof ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

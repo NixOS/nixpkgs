@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     installManPage inputplug.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Monitor XInput events and run arbitrary scripts on hierarchy change events";
     homepage = "https://github.com/andrewshadura/inputplug";
@@ -38,6 +39,16 @@ rustPlatform.buildRustPackage rec {
     # `daemon(3)` is deprecated on macOS and `pidfile-rs` needs updating
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ jecaro ];
+=======
+  meta = with lib; {
+    description = "Monitor XInput events and run arbitrary scripts on hierarchy change events";
+    homepage = "https://github.com/andrewshadura/inputplug";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    # `daemon(3)` is deprecated on macOS and `pidfile-rs` needs updating
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [ jecaro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "inputplug";
   };
 }

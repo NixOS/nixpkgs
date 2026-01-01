@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "justext" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Heuristic based boilerplate removal tool";
     homepage = "https://github.com/miso-belica/jusText";
     changelog = "https://github.com/miso-belica/jusText/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jokatzke ];
+=======
+  meta = with lib; {
+    description = "Heuristic based boilerplate removal tool";
+    homepage = "https://github.com/miso-belica/jusText";
+    changelog = "https://github.com/miso-belica/jusText/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ jokatzke ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

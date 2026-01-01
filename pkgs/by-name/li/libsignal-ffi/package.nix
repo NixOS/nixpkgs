@@ -21,14 +21,22 @@ rustPlatform.buildRustPackage rec {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
+<<<<<<< HEAD
   version = "0.86.8";
+=======
+  version = "0.86.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-+GFuwS4y8yr86ETVIjlz/6HocAamASmBOIjkTLtCIag=";
+=======
+    hash = "sha256-f2f2AY4PYs+HcaordHAIXHhvyfgZ9D3GrfW5wC06/h4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -40,18 +48,30 @@ rustPlatform.buildRustPackage rec {
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
   env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
+<<<<<<< HEAD
   cargoHash = "sha256-uiMct9ygg1c1rQb6RsM2AoibuKCExPy9P75C7jDX8Cs=";
+=======
+  cargoHash = "sha256-JKFO/+t++3WEsqnCEsI/S4wpNUFiCIIudiRbjrT/i6k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cargoBuildFlags = [
     "-p"
     "libsignal-ffi"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C ABI library which exposes Signal protocol logic";
     homepage = "https://github.com/signalapp/libsignal";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "C ABI library which exposes Signal protocol logic";
+    homepage = "https://github.com/signalapp/libsignal";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pentane
       SchweGELBin
     ];

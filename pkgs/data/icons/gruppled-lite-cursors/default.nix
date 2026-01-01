@@ -21,10 +21,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r ${theme}/{cursors,index.theme} $out/share/icons/${theme}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Gruppled Lite Cursors theme";
     homepage = "https://github.com/nim65s/gruppled-lite-cursors";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ nim65s ];
+=======
+  meta = with lib; {
+    description = "Gruppled Lite Cursors theme";
+    homepage = "https://github.com/nim65s/gruppled-lite-cursors";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ nim65s ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

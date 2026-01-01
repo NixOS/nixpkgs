@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin prettyping
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/denilsonsa/prettyping";
     description = "Wrapper around the standard ping tool with the objective of making the output prettier, more colorful, more compact, and easier to read";
@@ -25,5 +26,14 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qoelet ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/denilsonsa/prettyping";
+    description = "Wrapper around the standard ping tool with the objective of making the output prettier, more colorful, more compact, and easier to read";
+    mainProgram = "prettyping";
+    license = with licenses; [ mit ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ qoelet ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

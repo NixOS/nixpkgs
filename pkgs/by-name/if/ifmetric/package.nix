@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for setting IP interface metrics";
     longDescription = ''
       ifmetric is a Linux tool for setting the metrics of all IPv4 routes
@@ -34,9 +38,15 @@ stdenv.mkDerivation rec {
       correlate with higher priorities.
     '';
     homepage = "http://0pointer.de/lennart/projects/ifmetric";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.anna328p ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.anna328p ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ifmetric";
   };
 }

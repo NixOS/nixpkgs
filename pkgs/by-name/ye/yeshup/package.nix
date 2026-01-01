@@ -20,11 +20,19 @@ stdenv.mkDerivation {
     cp -v yeshup $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/RhysU/yeshup";
     platforms = lib.platforms.linux;
     license = lib.licenses.cc-by-sa-30; # From Stackoverflow answer
     maintainers = with lib.maintainers; [ obadz ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/RhysU/yeshup";
+    platforms = platforms.linux;
+    license = licenses.cc-by-sa-30; # From Stackoverflow answer
+    maintainers = with maintainers; [ obadz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yeshup";
   };
 }

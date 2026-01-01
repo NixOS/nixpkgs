@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lc7001" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for interacting with Legrand LC7001";
     homepage = "https://github.com/rtyle/lc7001";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for interacting with Legrand LC7001";
+    homepage = "https://github.com/rtyle/lc7001";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,7 +24,11 @@ buildPythonPackage rec {
   # There is no test embedded
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Snapshot of django-filebrowser for the Mezzanine CMS";
     longDescription = ''
       filebrowser-safe was created to provide a snapshot of the
@@ -33,8 +37,14 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/stephenmcd/filebrowser-safe";
     downloadPage = "https://pypi.python.org/pypi/filebrowser_safe/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ prikhi ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ prikhi ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

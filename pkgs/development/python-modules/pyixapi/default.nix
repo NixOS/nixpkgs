@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyixapi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API client library for IX-API";
     homepage = "https://github.com/peering-manager/pyixapi/";
     changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.wdz ];
+=======
+  meta = with lib; {
+    description = "Python API client library for IX-API";
+    homepage = "https://github.com/peering-manager/pyixapi/";
+    changelog = "https://github.com/peering-manager/pyixapi/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    teams = [ teams.wdz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

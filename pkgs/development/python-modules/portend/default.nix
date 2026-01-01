@@ -35,9 +35,16 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Monitor TCP ports for bound or unbound states";
     homepage = "https://github.com/jaraco/portend";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Monitor TCP ports for bound or unbound states";
+    homepage = "https://github.com/jaraco/portend";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -42,11 +42,20 @@ stdenv.mkDerivation {
                 "_IMPORT_PREFIX \"$dev\""
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C++ wrapper around libcurl";
     homepage = "https://docs.libcpr.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rycee ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C++ wrapper around libcurl";
+    homepage = "https://docs.libcpr.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rycee ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,11 +28,19 @@
 
 stdenv.mkDerivation rec {
   pname = "publii";
+<<<<<<< HEAD
   version = "0.47.3";
 
   src = fetchurl {
     url = "https://getpublii.com/download/Publii-${version}.deb";
     hash = "sha256-1LzjnN0gmzE4JJdgTOUQ3n/BATg+B5Lfi0yR94TU+XE=";
+=======
+  version = "0.47.1";
+
+  src = fetchurl {
+    url = "https://getpublii.com/download/Publii-${version}.deb";
+    hash = "sha256-X2rN/inGAxQWYg8OxTLtGzr4q4vUgCYCz3xuxCyCwkQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dontConfigure = true;

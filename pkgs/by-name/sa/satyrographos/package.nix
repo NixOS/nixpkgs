@@ -17,6 +17,11 @@ in
 ocamlPackages.buildDunePackage {
   inherit pname version src;
 
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = with ocamlPackages; [
     menhir
   ];
@@ -27,13 +32,21 @@ ocamlPackages.buildDunePackage {
     opam-format
     opam-state
     ppx_deriving
+<<<<<<< HEAD
     (ppx_deriving_yojson.override { yojson = yojson_2; })
+=======
+    ppx_deriving_yojson
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ppx_import
     ppx_jane
     shexp
     uri
     uri-sexp
     yaml-sexp
+<<<<<<< HEAD
+=======
+    yojson
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {

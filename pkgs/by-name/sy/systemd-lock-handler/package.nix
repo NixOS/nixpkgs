@@ -42,11 +42,20 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://git.sr.ht/~whynothugo/systemd-lock-handler";
     description = "Translates systemd-system lock/sleep signals into systemd-user target activations";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ liff ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~whynothugo/systemd-lock-handler";
+    description = "Translates systemd-system lock/sleep signals into systemd-user target activations";
+    license = licenses.isc;
+    maintainers = with maintainers; [ liff ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

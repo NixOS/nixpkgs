@@ -49,16 +49,28 @@ stdenv.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple command line time tracker written in ruby";
     homepage = "https://github.com/samg/timetrap";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Simple command line time tracker written in ruby";
+    homepage = "https://github.com/samg/timetrap";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jerith666
       manveru
       nicknovitski
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {

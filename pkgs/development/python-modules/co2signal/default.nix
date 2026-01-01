@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "CO2Signal" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Package to access the CO2 Signal API";
     homepage = "https://github.com/danielsjf/CO2Signal";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ plabadens ];
+=======
+  meta = with lib; {
+    description = "Package to access the CO2 Signal API";
+    homepage = "https://github.com/danielsjf/CO2Signal";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ plabadens ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

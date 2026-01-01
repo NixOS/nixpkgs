@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Makefile for Arduino sketches";
     homepage = "https://github.com/sudar/Arduino-Makefile";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.eyjhb ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Makefile for Arduino sketches";
+    homepage = "https://github.com/sudar/Arduino-Makefile";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.eyjhb ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

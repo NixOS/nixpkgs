@@ -20,11 +20,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.graphics.rwth-aachen.de/software/openmesh/";
     description = "Generic and efficient polygon mesh data structure";
     maintainers = with lib.maintainers; [ yzx9 ];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://www.graphics.rwth-aachen.de/software/openmesh/";
+    description = "Generic and efficient polygon mesh data structure";
+    maintainers = with maintainers; [ yzx9 ];
+    platforms = platforms.all;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

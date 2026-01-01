@@ -32,10 +32,18 @@ buildPythonPackage rec {
     pytest --force-flaky --max-runs 2  test/test_pytest/test_pytest_options_example.py
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/box/flaky/blob/v${version}/HISTORY.rst";
     homepage = "https://github.com/box/flaky";
     description = "Plugin for nose or py.test that automatically reruns flaky tests";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/box/flaky/blob/v${version}/HISTORY.rst";
+    homepage = "https://github.com/box/flaky";
+    description = "Plugin for nose or py.test that automatically reruns flaky tests";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

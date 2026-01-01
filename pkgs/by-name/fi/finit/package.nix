@@ -4,13 +4,17 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
+<<<<<<< HEAD
   libcap,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libite,
   libuev,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "finit";
+<<<<<<< HEAD
   version = "4.15";
 
   src = fetchFromGitHub {
@@ -18,6 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "finit";
     tag = finalAttrs.version;
     hash = "sha256-HZQHWJODWbMGH1m/P6teo0j9BDwWmKKHIa7YN0vA+c4=";
+=======
+  version = "4.14";
+
+  src = fetchFromGitHub {
+    owner = "troglobit";
+    repo = "finit";
+    tag = finalAttrs.version;
+    hash = "sha256-v4QHc6pX50z4j4UBpw7J2k78Pqt7n503qiDRDWyrhOc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -33,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     libcap
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libite
     libuev
   ];

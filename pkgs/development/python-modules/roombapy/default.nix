@@ -63,12 +63,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roombapy" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
     mainProgram = "roombapy";
     homepage = "https://github.com/pschmitt/roombapy";
     changelog = "https://github.com/pschmitt/roombapy/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

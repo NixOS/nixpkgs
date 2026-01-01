@@ -14,13 +14,22 @@
 }:
 mkLibretroCore {
   core = "play";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-23";
+=======
+  version = "0-unstable-2025-11-03";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "jpd002";
     repo = "Play-";
+<<<<<<< HEAD
     rev = "d0f1375248e3003199cb973a12332b4cc9f0724f";
     hash = "sha256-uMPlJDjLmXDO9mrnjYu/3Fr5qwBBADUARTMz1hckLJM=";
+=======
+    rev = "77c62d3a942e219bc9d072b4800fa0881208ce2a";
+    hash = "sha256-ROrANubftSJwGl9THdAIRhSFOy1uHZ6v2kAmYWLDhN0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 

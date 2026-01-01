@@ -21,9 +21,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyairports" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Package which enables airport lookup by 3-letter IATA code";
     homepage = "https://github.com/ozeliger/pyairports";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Package which enables airport lookup by 3-letter IATA code";
+    homepage = "https://github.com/ozeliger/pyairports";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cfhammill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,12 +45,21 @@ stdenv.mkDerivation rec {
     simple-execution = callPackage ./tests.nix { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open-Source, Automated Benchmarking";
     homepage = "https://www.phoronix-test-suite.com/";
     maintainers = with lib.maintainers; [ davidak ];
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Open-Source, Automated Benchmarking";
+    homepage = "https://www.phoronix-test-suite.com/";
+    maintainers = with maintainers; [ davidak ];
+    license = licenses.gpl3;
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "phoronix-test-suite";
   };
 }

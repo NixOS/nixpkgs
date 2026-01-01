@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   fetchFromGitea,
   ppp,
 }:
@@ -13,6 +14,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dskoll";
     repo = "rp-pppoe";
     tag = finalAttrs.version;
+=======
+  fetchFromGitHub,
+  ppp,
+}:
+let
+in
+stdenv.mkDerivation rec {
+  pname = "rp-pppoe";
+  version = "4.0";
+
+  src = fetchFromGitHub {
+    owner = "dfskoll";
+    repo = "rp-pppoe";
+    rev = version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-2y26FVxVn8sU9/E2yJeJmbhAeOB0Go7EUPMU9H58H6U=";
   };
 
@@ -37,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "AR:=$(AR)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Roaring Penguin Point-to-Point over Ethernet tool";
     platforms = lib.platforms.linux;
@@ -45,3 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ DictXiong ];
   };
 })
+=======
+  meta = with lib; {
+    description = "Roaring Penguin Point-to-Point over Ethernet tool";
+    platforms = platforms.linux;
+    homepage = "https://github.com/dfskoll/rp-pppoe";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ DictXiong ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -50,11 +50,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "ncurses-based console hexeditor written in C";
     homepage = "https://github.com/LonnyGomes/hexcurse";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "ncurses-based console hexeditor written in C";
+    homepage = "https://github.com/LonnyGomes/hexcurse";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "hexcurse";
   };

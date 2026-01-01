@@ -31,9 +31,16 @@ buildPythonPackage rec {
                   "_open_library('${libdiscid}/lib/libdiscid${extension}')"
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python binding of libdiscid";
     homepage = "https://python-discid.readthedocs.org/";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Python binding of libdiscid";
+    homepage = "https://python-discid.readthedocs.org/";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

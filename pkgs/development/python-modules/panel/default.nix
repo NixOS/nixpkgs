@@ -50,12 +50,20 @@ buildPythonPackage rec {
   # infinite recursion in test dependencies (hvplot)
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "High level dashboarding library for python visualization libraries";
     mainProgram = "panel";
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

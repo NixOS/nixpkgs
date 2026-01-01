@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "OAuth2 token management command line utility";
     homepage = "https://github.com/zalando-stups/zign";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.mschuwalow ];
+=======
+  meta = with lib; {
+    description = "OAuth2 token management command line utility";
+    homepage = "https://github.com/zalando-stups/zign";
+    license = licenses.asl20;
+    maintainers = [ maintainers.mschuwalow ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

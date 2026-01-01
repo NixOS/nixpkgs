@@ -1,7 +1,10 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i python3 -p python3 python3.pkgs.xmltodict
 import os
+<<<<<<< HEAD
 import urllib
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 from argparse import ArgumentParser
 from xmltodict import parse
 from json import dump
@@ -23,6 +26,7 @@ def ensure_is_list(x):
     return x
 
 def add_entries(sources, targets, hashes):
+<<<<<<< HEAD
     for artefact in sources:
         target = None
         base_jar_name = os.path.basename(urllib.parse.urlparse(artefact["@url"]).path)
@@ -45,6 +49,13 @@ def add_entries(sources, targets, hashes):
             "url": url,
             "hash": artefact["sha256sum"],
             "path": path
+=======
+    for num, artefact in enumerate(sources):
+        hashes.append({
+            "url": artefact["@url"][26:],
+            "hash": artefact["sha256sum"],
+            "path": targets[num]["@url"][25:-2]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         })
 
 

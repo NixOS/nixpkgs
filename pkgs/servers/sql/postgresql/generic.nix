@@ -176,7 +176,11 @@ let
           overrideCC llvmPackages.stdenv (
             llvmPackages.stdenv.cc.override {
               # LLVM bintools are not used by default, but are needed to make -flto work below.
+<<<<<<< HEAD
               bintools = buildPackages."llvmPackages_${lib.versions.major llvmPackages.release_version}".bintools;
+=======
+              bintools = llvmPackages.bintools;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             }
           )
         else
@@ -572,7 +576,11 @@ let
 
           psqlSchema = lib.versions.major version;
 
+<<<<<<< HEAD
           withJIT = if jitSupport then this.withPackages (_: [ this.jit ]) else null;
+=======
+          withJIT = this.withPackages (_: [ this.jit ]);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           withoutJIT = this;
 
           pkgs =
@@ -612,7 +620,10 @@ let
 
           tests = {
             postgresql = nixosTests.postgresql.postgresql.passthru.override finalAttrs.finalPackage;
+<<<<<<< HEAD
             postgresql-replication = nixosTests.postgresql.postgresql-replication.passthru.override finalAttrs.finalPackage;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             postgresql-tls-client-cert = nixosTests.postgresql.postgresql-tls-client-cert.passthru.override finalAttrs.finalPackage;
             postgresql-wal-receiver = nixosTests.postgresql.postgresql-wal-receiver.passthru.override finalAttrs.finalPackage;
             pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -622,19 +633,32 @@ let
           };
         };
 
+<<<<<<< HEAD
       meta = {
         homepage = "https://www.postgresql.org";
         description = "Powerful, open source object-relational database system";
         license = lib.licenses.postgresql;
         changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
         teams = [ lib.teams.postgres ];
+=======
+      meta = with lib; {
+        homepage = "https://www.postgresql.org";
+        description = "Powerful, open source object-relational database system";
+        license = licenses.postgresql;
+        changelog = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
+        teams = [ teams.postgres ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         pkgConfigModules = [
           "libecpg"
           "libecpg_compat"
           "libpgtypes"
           "libpq"
         ];
+<<<<<<< HEAD
         platforms = lib.platforms.unix;
+=======
+        platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
         # (`%.bc` is the corresponding `make(1)`-rule) for each sub-directory in `backend/` for

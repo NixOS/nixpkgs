@@ -33,11 +33,19 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GTK theme with the Kanagawa colour palette";
     homepage = "https://github.com/Fausto-Korpsvart/Kanagawa-GKT-Theme";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ iynaix ];
+=======
+  meta = with lib; {
+    description = "GTK theme with the Kanagawa colour palette";
+    homepage = "https://github.com/Fausto-Korpsvart/Kanagawa-GKT-Theme";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ iynaix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = gtk3.meta.platforms;
   };
 }

@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asynccmd" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asyncio implementation of Cmd Python library";
     homepage = "https://github.com/valentinmk/asynccmd";
     changelog = "https://github.com/valentinmk/asynccmd/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Asyncio implementation of Cmd Python library";
+    homepage = "https://github.com/valentinmk/asynccmd";
+    changelog = "https://github.com/valentinmk/asynccmd/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

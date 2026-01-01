@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "MPM (Multi-Processing Module) for the Apache web server";
     maintainers = [ lib.maintainers.zupo ];
     homepage = "http://mpm-itk.sesse.net/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "MPM (Multi-Processing Module) for the Apache web server";
+    maintainers = [ maintainers.zupo ];
+    homepage = "http://mpm-itk.sesse.net/";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

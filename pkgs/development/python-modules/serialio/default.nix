@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "serialio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for concurrency agnostic serial communication";
     homepage = "https://github.com/tiagocoutinho/serialio";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for concurrency agnostic serial communication";
+    homepage = "https://github.com/tiagocoutinho/serialio";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

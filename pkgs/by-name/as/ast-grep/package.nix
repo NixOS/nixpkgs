@@ -11,13 +11,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
+<<<<<<< HEAD
   version = "0.40.3";
+=======
+  version = "0.40.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-kSaDSXhE5PDQj2taQnYUttEbc3dm9VlqwIelApPlpsI=";
+=======
+    hash = "sha256-tbN8MiesWWIHew5/2STNhXu+3eXjMLRrcm8+9cZf+tM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -25,7 +33,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
+<<<<<<< HEAD
   cargoHash = "sha256-mz3+483vEL31kQ2oyM0GrwkFVxvPnORalQEaEBQ6/Js=";
+=======
+  cargoHash = "sha256-+wetHwdURcNPLa9TGZmS4HlyYcQHSpLnXbrNXS/JckM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -50,6 +62,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

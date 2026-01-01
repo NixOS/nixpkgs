@@ -17,9 +17,13 @@
   qpdf,
   tesseract5,
   unpaper,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm_10,
+=======
+  pnpm,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   poppler-utils,
   liberation_ttf,
   xcbuild,
@@ -30,13 +34,21 @@
   xorg,
 }:
 let
+<<<<<<< HEAD
   version = "2.20.3";
+=======
+  version = "2.19.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-aAcE0AUkB5SS4jwFOKCM7+iqc7EqGJv0qjqz0mnj2Wo=";
+=======
+    hash = "sha256-nHLsA5hmAFkOAEQU/xD+hllwtc2SyBtns5auCNm9KNg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   python = python3.override {
@@ -61,8 +73,11 @@ let
     };
   };
 
+<<<<<<< HEAD
   pnpm' = pnpm_10.override { nodejs = nodejs_20; };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   path = lib.makeBinPath [
     ghostscript_headless
     (imagemagickBig.override { ghostscript = ghostscript_headless; })
@@ -81,19 +96,30 @@ let
 
     src = src + "/src-ui";
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm';
       fetcherVersion = 2;
       hash = "sha256-pG7olcBq5P52CvZYLqUjb+RwxjbQbSotlS50pvgm7WQ=";
+=======
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      fetcherVersion = 2;
+      hash = "sha256-lxZOwt+/ReU7m7he0iJSt5HqaPkRksveCgvDG7uodjA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     nativeBuildInputs = [
       node-gyp
       nodejs_20
       pkg-config
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm'
+=======
+      pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -173,6 +199,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+<<<<<<< HEAD
     "celery"
     "django-allauth"
     "drf-spectacular-sidecar"
@@ -181,6 +208,14 @@ python.pkgs.buildPythonApplication rec {
     "redis"
     # requested by maintainer
     "ocrmypdf"
+=======
+    "django-allauth"
+    "django-cors-headers"
+    "drf-spectacular-sidecar"
+    "filelock"
+    "ocrmypdf"
+    "redis"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   dependencies =
@@ -193,7 +228,22 @@ python.pkgs.buildPythonApplication rec {
       concurrent-log-handler
       dateparser
       django
+<<<<<<< HEAD
       django-allauth
+=======
+      # django-allauth version 65.9.X not yet supported
+      # See https://github.com/paperless-ngx/paperless-ngx/issues/10336
+      (django-allauth.overrideAttrs (
+        new: prev: rec {
+          version = "65.7.0";
+          src = prev.src.override {
+            tag = version;
+            hash = "sha256-1HmEJ5E4Vp/CoyzUegqQXpzKUuz3dLx2EEv7dk8fq8w=";
+          };
+          patches = [ ];
+        }
+      ))
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       django-auditlog
       django-cachalot
       django-celery-results

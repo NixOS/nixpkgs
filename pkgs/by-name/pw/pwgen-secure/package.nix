@@ -49,11 +49,19 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "pwgen_secure" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Secure password generation library to replace pwgen";
     homepage = "https://github.com/mjmunger/pwgen_secure/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Secure password generation library to replace pwgen";
+    homepage = "https://github.com/mjmunger/pwgen_secure/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "spwgen";
   };
 }

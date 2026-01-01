@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -I nixpkgs=./. -i bash -p bash nix curl jq gawk gnused nixfmt
+=======
+#!nix-shell -I nixpkgs=./. -i bash -p bash nix-prefetch curl jq gawk gnused nixfmt
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 set -euo pipefail
 
@@ -49,6 +53,7 @@ done < <(echo "$RELEASE_URLS" | jq -r)
 
 >&2 echo "Updating Xanmod \"$VARIANT\" from $OLD_VERSION to $NEW_VERSION ($SUFFIX)"
 
+<<<<<<< HEAD
 prefetchURL() {
     result=$(nix-build -E "with import ./. {}; fetchzip { url=\"$1\"; hash=\"\"; }" 2>&1)
     echo "$result" | awk '/got:/ {print $NF}'
@@ -56,6 +61,10 @@ prefetchURL() {
 
 URL="https://gitlab.com/api/v4/projects/xanmod%2Flinux/repository/archive.tar.gz?sha=$NEW_VERSION-$SUFFIX"
 HASH="$(prefetchURL "$URL")"
+=======
+URL="https://gitlab.com/api/v4/projects/xanmod%2Flinux/repository/archive.tar.gz?sha=$NEW_VERSION-$SUFFIX"
+HASH="$(nix-prefetch fetchzip --quiet --url "$URL")"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 update_variant() {
     local file_path="$1"

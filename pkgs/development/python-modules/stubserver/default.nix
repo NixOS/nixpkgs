@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stubserver" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Web and FTP server for use in unit and7or acceptance tests";
     homepage = "https://github.com/tarttelin/Python-Stub-Server";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Web and FTP server for use in unit and7or acceptance tests";
+    homepage = "https://github.com/tarttelin/Python-Stub-Server";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

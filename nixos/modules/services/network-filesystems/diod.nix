@@ -9,6 +9,23 @@ let
 
   diodBool = b: if b then "1" else "0";
 
+<<<<<<< HEAD
+=======
+  diodConfig = pkgs.writeText "diod.conf" ''
+    allsquash = ${diodBool cfg.allsquash}
+    auth_required = ${diodBool cfg.authRequired}
+    exportall = ${diodBool cfg.exportall}
+    exportopts = "${lib.concatStringsSep "," cfg.exportopts}"
+    exports = { ${lib.concatStringsSep ", " (map (s: ''"${s}"'') cfg.exports)} }
+    listen = { ${lib.concatStringsSep ", " (map (s: ''"${s}"'') cfg.listen)} }
+    logdest = "${cfg.logdest}"
+    nwthreads = ${toString cfg.nwthreads}
+    squashuser = "${cfg.squashuser}"
+    statfs_passthru = ${diodBool cfg.statfsPassthru}
+    userdb = ${diodBool cfg.userdb}
+    ${cfg.extraConfig}
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 {
   options = {
@@ -136,6 +153,7 @@ in
   config = lib.mkIf config.services.diod.enable {
     environment.systemPackages = [ pkgs.diod ];
 
+<<<<<<< HEAD
     environment.etc."diod.conf".text = ''
       allsquash = ${diodBool cfg.allsquash}
       auth_required = ${diodBool cfg.authRequired}
@@ -153,5 +171,15 @@ in
 
     systemd.packages = [ pkgs.diod ];
     systemd.services.diod.wantedBy = [ "multi-user.target" ];
+=======
+    systemd.services.diod = {
+      description = "diod 9P file server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.diod}/sbin/diod -f -c ${diodConfig}";
+      };
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

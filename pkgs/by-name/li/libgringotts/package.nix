@@ -26,11 +26,20 @@ stdenv.mkDerivation rec {
     libmhash
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small library to encapsulate data in an encrypted structure";
     homepage = "https://libgringotts.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "Small library to encapsulate data in an encrypted structure";
+    homepage = "https://libgringotts.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

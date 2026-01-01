@@ -19,10 +19,18 @@ buildKodiBinaryAddon rec {
 
   extraBuildInputs = [ tinyxml ];
 
+<<<<<<< HEAD
   meta = {
     description = "RAR archive Virtual Filesystem add-on for Kodi";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    description = "RAR archive Virtual Filesystem add-on for Kodi";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

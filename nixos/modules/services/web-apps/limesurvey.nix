@@ -511,7 +511,11 @@ in
                 tryFiles = "$uri /index.php?$args";
               };
 
+<<<<<<< HEAD
               "~ \\.php$".extraConfig = ''
+=======
+              "~ \.php$".extraConfig = ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 fastcgi_pass unix:${config.services.phpfpm.pools."limesurvey".socket};
               '';
               "/tmp".root = "/var/lib/limesurvey";

@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Manage macOS Finder sidebar favorites";
     homepage = "https://github.com/mosen/mysides";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tboerger ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Manage macOS Finder sidebar favorites";
+    homepage = "https://github.com/mosen/mysides";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tboerger ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

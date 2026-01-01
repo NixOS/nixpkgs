@@ -19,10 +19,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for downloading (streaming) media files using the mmst and mmsh protocols";
     homepage = "http://libmms.sourceforge.net";
     platforms = lib.platforms.all;
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    description = "Library for downloading (streaming) media files using the mmst and mmsh protocols";
+    homepage = "http://libmms.sourceforge.net";
+    platforms = platforms.all;
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10") ];
 
+<<<<<<< HEAD
   meta = {
     description = "NOAA APT satellite imagery decoding library";
     mainProgram = "aptdec";
@@ -42,5 +43,17 @@ stdenv.mkDerivation rec {
       alexwinter
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "NOAA APT satellite imagery decoding library";
+    mainProgram = "aptdec";
+    homepage = "https://github.com/Xerbo/aptdec";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      aciceri
+      alexwinter
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

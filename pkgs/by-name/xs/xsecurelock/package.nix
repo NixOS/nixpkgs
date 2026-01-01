@@ -64,12 +64,21 @@ stdenv.mkDerivation rec {
     wrapProgram $out/libexec/xsecurelock/saver_blank --prefix PATH : ${coreutils}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "X11 screen lock utility with security in mind";
     homepage = "https://github.com/google/xsecurelock";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "X11 screen lock utility with security in mind";
+    homepage = "https://github.com/google/xsecurelock";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xsecurelock";
   };
 }

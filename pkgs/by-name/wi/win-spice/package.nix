@@ -81,6 +81,7 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Windows SPICE Drivers";
     homepage = "https://www.spice-space.org/";
@@ -88,5 +89,14 @@ stdenv.mkDerivation {
     maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Windows SPICE Drivers";
+    homepage = "https://www.spice-space.org/";
+    license = [ licenses.asl20 ]; # See https://github.com/vrozenfe/qxl-dod
+    maintainers = [ ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

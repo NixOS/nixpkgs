@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nclib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module that provides netcat features";
     homepage = "https://nclib.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module that provides netcat features";
+    homepage = "https://nclib.readthedocs.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "serve-stdio";
   };
 }

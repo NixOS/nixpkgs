@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
     cd libltdl; autoreconf; cd ..
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pcman.ptt.cc";
     license = lib.licenses.gpl2;
     description = "Telnet BBS browser with GTK interface";
     maintainers = [ lib.maintainers.sifmelcara ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://pcman.ptt.cc";
+    license = licenses.gpl2;
+    description = "Telnet BBS browser with GTK interface";
+    maintainers = [ maintainers.sifmelcara ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pcmanx";
   };
 }

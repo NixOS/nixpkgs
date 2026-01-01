@@ -29,12 +29,21 @@ rustPlatform.buildRustPackage rec {
     export PATH="$(pwd)/target/${stdenv.hostPlatform.rust.rustcTarget}/release:$PATH"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo subcommand for watching over Cargo project's source";
     mainProgram = "cargo-watch";
     homepage = "https://github.com/watchexec/cargo-watch";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cargo subcommand for watching over Cargo project's source";
+    mainProgram = "cargo-watch";
+    homepage = "https://github.com/watchexec/cargo-watch";
+    license = licenses.cc0;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       xrelkd
       ivan
       matthiasbeyer

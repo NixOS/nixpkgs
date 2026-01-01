@@ -46,11 +46,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py_stringmatching" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast numpy.version "2";
     description = "Python string matching library including string tokenizers and string similarity measures";
     homepage = "https://github.com/anhaidgroup/py_stringmatching";
     changelog = "https://github.com/anhaidgroup/py_stringmatching/blob/v${version}/CHANGES.txt";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,10 +22,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Eclipse Cyclone DDS project";
     homepage = "https://cyclonedds.io/";
     license = with lib.licenses; [ epl20 ];
     maintainers = with lib.maintainers; [ bachp ];
+=======
+  meta = with lib; {
+    description = "Eclipse Cyclone DDS project";
+    homepage = "https://cyclonedds.io/";
+    license = with licenses; [ epl20 ];
+    maintainers = with maintainers; [ bachp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

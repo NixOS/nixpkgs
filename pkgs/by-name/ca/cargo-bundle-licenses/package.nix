@@ -17,16 +17,28 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-HHBFT4u0NPjhKJa3KNg8/AgkgNoFUkMWmioVaXYlD2M=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Generate a THIRDPARTY file with all licenses in a cargo project";
     mainProgram = "cargo-bundle-licenses";
     homepage = "https://github.com/sstadick/cargo-bundle-licenses";
     changelog = "https://github.com/sstadick/cargo-bundle-licenses/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = with lib.licenses; [
       mit
       asl20
     ];
     maintainers = with lib.maintainers; [
+=======
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
   };

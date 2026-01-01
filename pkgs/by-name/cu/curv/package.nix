@@ -77,6 +77,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "2D and 3D geometric modelling programming language for creating art with maths";
     homepage = "https://codeberg.org/doug-moen/curv";
@@ -84,6 +85,15 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+  meta = with lib; {
+    description = "2D and 3D geometric modelling programming language for creating art with maths";
+    homepage = "https://codeberg.org/doug-moen/curv";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "curv";
   };
 }

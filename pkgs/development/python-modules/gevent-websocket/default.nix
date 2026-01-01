@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geventwebsocket" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Websocket handler for the gevent pywsgi server";
     homepage = "https://www.gitlab.com/noppo/gevent-websocket";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Websocket handler for the gevent pywsgi server";
+    homepage = "https://www.gitlab.com/noppo/gevent-websocket";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

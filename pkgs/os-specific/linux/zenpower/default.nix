@@ -26,15 +26,27 @@ stdenv.mkDerivation rec {
     install -D zenpower.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon/zenpower/"
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Linux kernel driver for reading temperature, voltage(SVI2), current(SVI2) and power(SVI2) for AMD Zen family CPUs";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Linux kernel driver for reading temperature, voltage(SVI2), current(SVI2) and power(SVI2) for AMD Zen family CPUs";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       alexbakker
       artturin
     ];
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     broken = lib.versionOlder kernel.version "4.14";
+=======
+    broken = versionOlder kernel.version "4.14";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

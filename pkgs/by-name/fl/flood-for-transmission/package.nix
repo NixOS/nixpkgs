@@ -28,6 +28,7 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Flood clone for Transmission";
     homepage = "https://github.com/johman10/flood-for-transmission";
@@ -35,5 +36,14 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ al3xtjames ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Flood clone for Transmission";
+    homepage = "https://github.com/johman10/flood-for-transmission";
+    downloadPage = "https://github.com/johman10/flood-for-transmission/releases";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ al3xtjames ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,10 +20,18 @@ buildPythonPackage rec {
   # checks fail for seemingly spurious reasons
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "PEG-based parser interpreter with memoization (in time)";
     homepage = "https://github.com/avakar/speg";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ xworld21 ];
+=======
+  meta = with lib; {
+    description = "PEG-based parser interpreter with memoization (in time)";
+    homepage = "https://github.com/avakar/speg";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ xworld21 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

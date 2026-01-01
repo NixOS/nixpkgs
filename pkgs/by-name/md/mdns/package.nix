@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Public domain mDNS/DNS-SD library in C";
     homepage = "https://github.com/mjansson/mdns";
@@ -32,5 +33,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Public domain mDNS/DNS-SD library in C";
+    homepage = "https://github.com/mjansson/mdns";
+    changelog = "https://github.com/mjansson/mdns/blob/${src.rev}/CHANGELOG";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ hexa ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

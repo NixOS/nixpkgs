@@ -17,9 +17,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pillow ];
 
+<<<<<<< HEAD
   meta = {
     description = "Eases the transition from PIL to Pillow for Python packages";
     homepage = "https://github.com/beanbaginc/pillowfight";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Eases the transition from PIL to Pillow for Python packages";
+    homepage = "https://github.com/beanbaginc/pillowfight";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,10 +31,17 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Urban Dictionary CLI - written in Rust";
     homepage = "https://github.com/lsmb/udict";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Urban Dictionary CLI - written in Rust";
+    homepage = "https://github.com/lsmb/udict";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "udict";
   };

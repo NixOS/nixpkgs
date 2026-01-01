@@ -42,11 +42,20 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lxqt/lxqt-globalkeys";
     description = "LXQt service for global keyboard shortcuts registration";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-globalkeys";
+    description = "LXQt service for global keyboard shortcuts registration";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

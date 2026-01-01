@@ -26,10 +26,16 @@
   ultralytics-thop,
 
   # tests
+<<<<<<< HEAD
   aiohttp,
   onnx,
   onnxruntime,
   pytestCheckHook,
+=======
+  pytestCheckHook,
+  onnx,
+  onnxruntime,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
@@ -73,10 +79,16 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ultralytics" ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     aiohttp
     onnx
     onnxruntime
     pytestCheckHook
+=======
+    pytestCheckHook
+    onnx
+    onnxruntime
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   enabledTestPaths = [
@@ -120,11 +132,14 @@ buildPythonPackage rec {
 
     # RuntimeError: required keyword attribute 'value' has the wrong type
     "test_utils_benchmarks"
+<<<<<<< HEAD
 
     # RuntimeError: Dataset 'https://github.com/ultralytics/assets/releases/download/v0.0.0/coco8-ndjson.ndjson'
     # error <E2><9D><8C> [Errno 13] Permission denied:
     # '/nix/store/rnns5r21nibx26f2c2gxdk3h8l0jcg68-python3.12-ultralytics-8.3.221/datasets/coco8-ndjson/labels/train/000000000009.txt'
     "test_train_ndjson"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {

@@ -24,12 +24,21 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal based bitwise calculator in curses";
     homepage = "https://github.com/mellowcandle/bitwise";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.whonore ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Terminal based bitwise calculator in curses";
+    homepage = "https://github.com/mellowcandle/bitwise";
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.whonore ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bitwise";
   };
 }

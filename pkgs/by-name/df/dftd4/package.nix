@@ -86,15 +86,27 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
     mainProgram = "dftd4";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
+    mainProgram = "dftd4";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl3Plus
       gpl3Plus
     ];
     homepage = "https://github.com/grimme-lab/dftd4";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

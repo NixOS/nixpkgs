@@ -105,12 +105,28 @@ let
       # network
       network = callLibs ./network;
 
+<<<<<<< HEAD
+=======
+      # TODO: For consistency, all builtins should also be available from a sub-library;
+      # these are the only ones that are currently not
+      inherit (builtins)
+        addErrorContext
+        isPath
+        trace
+        typeOf
+        unsafeGetAttrPos
+        ;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (self.trivial)
         id
         const
         pipe
         concat
+<<<<<<< HEAD
         "or"
+=======
+        or
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         and
         xor
         bitAnd
@@ -294,7 +310,10 @@ let
         elem
         elemAt
         isList
+<<<<<<< HEAD
         concatAttrValues
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ;
       inherit (self.strings)
         concatStrings
@@ -326,7 +345,10 @@ let
         escape
         escapeShellArg
         escapeShellArgs
+<<<<<<< HEAD
         isPath
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         isStorePath
         isStringLike
         isValidPosixName
@@ -343,7 +365,10 @@ let
         toUpper
         toCamelCase
         toSentenceCase
+<<<<<<< HEAD
         typeOf
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         addContextFrom
         splitString
         splitStringBy
@@ -511,7 +536,10 @@ let
         assertOneOf
         ;
       inherit (self.debug)
+<<<<<<< HEAD
         trace
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         traceIf
         traceVal
         traceValFn
@@ -522,8 +550,11 @@ let
         traceValSeqN
         traceValSeqNFn
         traceFnSeqN
+<<<<<<< HEAD
         addErrorContext
         unsafeGetAttrPos
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         runTests
         testAllTrue
         ;

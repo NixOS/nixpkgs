@@ -59,11 +59,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "calmjs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Framework for building toolchains and utilities for working with the Node.js ecosystem";
     mainProgram = "calmjs";
     homepage = "https://github.com/calmjs/calmjs";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Framework for building toolchains and utilities for working with the Node.js ecosystem";
+    mainProgram = "calmjs";
+    homepage = "https://github.com/calmjs/calmjs";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,18 +36,31 @@ stdenv.mkDerivation {
     cp -r * $out
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "LLVM-based toolchain for Linux designed to build a portable osquery";
     homepage = "https://github.com/osquery/osquery-toolchain";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = with lib.licenses; [
       gpl2Only
       asl20
     ];
     maintainers = with lib.maintainers; [ squalus ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = with licenses; [
+      gpl2Only
+      asl20
+    ];
+    maintainers = with maintainers; [ squalus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

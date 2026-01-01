@@ -45,27 +45,44 @@ let
 in
 jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
+<<<<<<< HEAD
   javaVersion = "21.0.9";
   build = "1163.86";
+=======
+  javaVersion = "21.0.8";
+  build = "1148.57";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
   # git tag --points-at [revision]
   # Look for the line that starts with jbr-
+<<<<<<< HEAD
   openjdkTag = "jbr-release-21.0.9b1163.86";
+=======
+  openjdkTag = "jbr-release-21.0.8b1148.57";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   version = "${javaVersion}-b${build}";
 
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
+<<<<<<< HEAD
     hash = "sha256-P2boCbGB66X8LB4sZHGFO8lqHbv6F4kqGVMGBd9yKu0=";
+=======
+    hash = "sha256-RgXwWNHAeFxmrFmyB+DP5dOif06iql2UvimEaARnQvg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   env = {
     BOOT_JDK = jdk.home;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
+<<<<<<< HEAD
     SOURCE_DATE_EPOCH = 1765114563;
+=======
+    SOURCE_DATE_EPOCH = 1759539679;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ];
@@ -183,7 +200,11 @@ jdk.overrideAttrs (oldAttrs: rec {
   ]
   ++ oldAttrs.buildInputs or [ ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "OpenJDK fork to better support Jetbrains's products";
     longDescription = ''
       JetBrains Runtime is a runtime environment for running IntelliJ Platform
@@ -197,7 +218,12 @@ jdk.overrideAttrs (oldAttrs: rec {
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (jdk.meta) license platforms mainProgram;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+      edwtjo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aoli-al
     ];
 

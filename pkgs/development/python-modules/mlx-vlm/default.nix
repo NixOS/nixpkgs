@@ -15,6 +15,10 @@
   opencv-python,
   pillow,
   requests,
+<<<<<<< HEAD
+=======
+  scipy,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   soundfile,
   tqdm,
   transformers,
@@ -28,14 +32,22 @@
 
 buildPythonPackage rec {
   pname = "mlx-vlm";
+<<<<<<< HEAD
   version = "0.3.9";
+=======
+  version = "0.3.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blaizzy";
     repo = "mlx-vlm";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-L+llrfFo4C++JZ3GjpZi16wMZNXtKrYh3pxhZ5N1n/4=";
+=======
+    hash = "sha256-KhppKqIJPmtjgSXSC3n5HTMm3fDUJaoYJEiGfQ5vGNQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -54,6 +66,10 @@ buildPythonPackage rec {
     opencv-python
     pillow
     requests
+<<<<<<< HEAD
+=======
+    scipy
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     soundfile
     tqdm
     transformers
@@ -74,7 +90,10 @@ buildPythonPackage rec {
     "test_multi_modality"
 
     # RuntimeError: [metal_kernel] No GPU back-end
+<<<<<<< HEAD
     "test_glm4v"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_glm4v_moe"
     "test_kimi_vl"
   ];
@@ -91,11 +110,17 @@ buildPythonPackage rec {
   meta = {
     description = "Inference and fine-tuning of Vision Language Models (VLMs) on your Mac using MLX";
     homepage = "https://github.com/Blaizzy/mlx-vlm";
+<<<<<<< HEAD
     changelog = "https://github.com/Blaizzy/mlx-vlm/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = [
       "aarch64-darwin"
     ];
+=======
+    changelog = "https://github.com/Blaizzy/mlx-vlm/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

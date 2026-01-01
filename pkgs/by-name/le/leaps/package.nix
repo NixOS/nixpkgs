@@ -32,11 +32,19 @@ buildGoModule rec {
     inherit (nixosTests) leaps;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Pair programming tool and library written in Golang";
     mainProgram = "leaps";
     homepage = "https://github.com/jeffail/leaps/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pair programming tool and library written in Golang";
+    mainProgram = "leaps";
+    homepage = "https://github.com/jeffail/leaps/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ qknight ];
   };
 }

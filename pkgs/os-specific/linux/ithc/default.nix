@@ -30,12 +30,21 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Linux driver for Intel Touch Host Controller";
     homepage = "https://github.com/quo/ithc-linux";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ aacebedo ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Linux driver for Intel Touch Host Controller";
+    homepage = "https://github.com/quo/ithc-linux";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ aacebedo ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = kernel.kernelOlder "5.9" || kernel.kernelAtLeast "6.10";
   };
 }

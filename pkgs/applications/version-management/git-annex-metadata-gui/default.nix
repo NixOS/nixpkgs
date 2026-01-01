@@ -34,6 +34,7 @@ buildPythonApplication rec {
     git-annex-adapter
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/alpernebbi/git-annex-metadata-gui";
     description = "Graphical interface for git-annex metadata commands";
@@ -44,5 +45,17 @@ buildPythonApplication rec {
     ];
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/alpernebbi/git-annex-metadata-gui";
+    description = "Graphical interface for git-annex metadata commands";
+    mainProgram = "git-annex-metadata-gui";
+    maintainers = with maintainers; [
+      dotlambda
+      matthiasbeyer
+    ];
+    license = licenses.gpl3Plus;
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,11 +28,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
     homepage = "https://github.com/knik0/faac";
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ codyopel ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Open source MPEG-4 and MPEG-2 AAC encoder";
+    homepage = "https://github.com/knik0/faac";
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ codyopel ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

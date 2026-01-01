@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
+<<<<<<< HEAD
       "https://invisible-island.net/archives/diffstat/diffstat-${version}.tgz"
+=======
+      "ftp://ftp.invisible-island.net/diffstat/diffstat-${version}.tgz"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "https://invisible-mirror.net/archives/diffstat/diffstat-${version}.tgz"
     ];
     hash = "sha256-ifkpSorHT8728bmsQI9D6+340gjj7+C5m0rMFtxlgsc=";
@@ -24,7 +28,11 @@ stdenv.mkDerivation rec {
     url = "https://invisible-island.net/archives/diffstat/";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Read output of diff and display a histogram of the changes";
     mainProgram = "diffstat";
     longDescription = ''
@@ -33,8 +41,14 @@ stdenv.mkDerivation rec {
       reviewing large, complex patch files.
     '';
     homepage = "https://invisible-island.net/diffstat/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

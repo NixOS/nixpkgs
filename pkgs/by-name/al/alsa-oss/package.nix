@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture alsa-oss emulation";
     mainProgram = "aoss";
@@ -38,7 +42,12 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,11 +36,20 @@ stdenv.mkDerivation {
     tagPrefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight cross platform C++ GUID/UUID library";
     license = lib.licenses.mit;
     homepage = "https://github.com/graeme-hill/crossguid";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Lightweight cross platform C++ GUID/UUID library";
+    license = licenses.mit;
+    homepage = "https://github.com/graeme-hill/crossguid";
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

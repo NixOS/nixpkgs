@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openwrt.ubus" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for OpenWrt ubus RPC";
     homepage = "https://github.com/Noltari/python-ubus-rpc";
     changelog = "https://github.com/Noltari/python-ubus-rpc/releases/tag/${version}";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API for OpenWrt ubus RPC";
+    homepage = "https://github.com/Noltari/python-ubus-rpc";
+    changelog = "https://github.com/Noltari/python-ubus-rpc/releases/tag/${version}";
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

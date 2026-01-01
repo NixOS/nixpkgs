@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/local" "$out"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal gopher client";
     mainProgram = "sacc";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Terminal gopher client";
+    mainProgram = "sacc";
+    homepage = "gopher://bitreich.org/1/scm/sacc";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

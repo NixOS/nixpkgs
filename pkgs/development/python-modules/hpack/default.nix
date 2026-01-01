@@ -28,11 +28,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hpack" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/python-hyper/hpack/blob/${src.rev}/CHANGELOG.rst";
     description = "Pure-Python HPACK header compression";
     homepage = "https://github.com/python-hyper/hpack";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/python-hyper/hpack/blob/${src.rev}/CHANGELOG.rst";
+    description = "Pure-Python HPACK header compression";
+    homepage = "https://github.com/python-hyper/hpack";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -60,11 +60,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "audio_metadata" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for handling the metadata from audio files";
     homepage = "https://github.com/thebigmunch/audio-metadata";
     changelog = "https://github.com/thebigmunch/audio-metadata/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
+=======
+  meta = with lib; {
+    description = "Library for handling the metadata from audio files";
+    homepage = "https://github.com/thebigmunch/audio-metadata";
+    changelog = "https://github.com/thebigmunch/audio-metadata/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jakewaksbaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

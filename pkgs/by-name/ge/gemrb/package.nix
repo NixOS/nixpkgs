@@ -92,7 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
   # a bunch of tests fail in our sandbox
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Reimplementation of the Infinity Engine, used by games such as Baldur's Gate";
     longDescription = ''
       GemRB (Game engine made with pre-Rendered Background) is a portable
@@ -101,8 +105,13 @@ stdenv.mkDerivation (finalAttrs: {
       ruleset (Baldur's Gate and Icewind Dale series, Planescape: Torment).
     '';
     homepage = "https://gemrb.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gemrb";
   };
 })

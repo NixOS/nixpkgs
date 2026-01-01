@@ -18,12 +18,21 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-K4vovc78MiLkWMVS4YDuSK9L7EmwpGdZXdRqeELcPT8=";
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "D2 diagram generator plugin for MdBook";
     mainProgram = "mdbook-d2";
     homepage = "https://github.com/danieleades/mdbook-d2";
     changelog = "https://github.com/danieleades/mdbook-d2/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

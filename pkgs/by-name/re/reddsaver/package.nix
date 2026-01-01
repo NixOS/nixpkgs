@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   # package does not contain tests as of v0.3.3
   docCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool to download saved media from Reddit";
     homepage = "https://github.com/manojkarthick/reddsaver";
@@ -33,6 +34,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = [ lib.maintainers.manojkarthick ];
+=======
+  meta = with lib; {
+    description = "CLI tool to download saved media from Reddit";
+    homepage = "https://github.com/manojkarthick/reddsaver";
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = [ maintainers.manojkarthick ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "reddsaver";
   };
 

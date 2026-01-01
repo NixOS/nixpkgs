@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool to analyze the control flow of C programs";
     mainProgram = "cflow";
 
@@ -48,12 +52,20 @@ stdenv.mkDerivation rec {
       produced flowcharts in Emacs.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
+=======
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     homepage = "https://www.gnu.org/software/cflow/";
 
     maintainers = [ ];
 
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

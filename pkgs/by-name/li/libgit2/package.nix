@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   pkg-config,
   python3,
@@ -22,7 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
+<<<<<<< HEAD
   version = "1.9.2";
+=======
+  version = "1.9.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = [
@@ -35,9 +43,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-TCeEh8DpVoxpF/HkahxM3ONDjawAkIiMo6S7ogG3fLg=";
   };
 
+=======
+    hash = "sha256-/xI3v7LNhpgfjv/m+sZwYDhhYvS6kQYxiiiG3+EF8Mw=";
+  };
+
+  patches = [
+    # https://github.com/libgit2/libgit2/pull/7146
+    ./fix-ssh-custom-heap-buffer-overflow.patch
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmakeFlags = [
     "-DREGEX_BACKEND=pcre2"
     "-DUSE_HTTP_PARSER=llhttp"
@@ -92,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = lib.mapAttrs (_: v: v.override { libgit2 = finalAttrs.finalPackage; }) {
     inherit libgit2-glib;
     inherit (python3Packages) pygit2;
+<<<<<<< HEAD
     inherit (gitstatus) romkatv_libgit2;
   };
 
@@ -102,5 +122,17 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+    inherit gitstatus;
+  };
+
+  meta = with lib; {
+    description = "Linkable library implementation of Git that you can use in your application";
+    mainProgram = "git2";
+    homepage = "https://libgit2.org/";
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

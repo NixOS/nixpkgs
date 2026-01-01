@@ -76,11 +76,20 @@ mkDerivation rec {
           $out/lib/udev/rules.d/20-libambit.rules
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Helps fetch data from Suunto Ambit GPS watches";
     homepage = "https://github.com/openambitproject/openambit/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ rycee ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Helps fetch data from Suunto Ambit GPS watches";
+    homepage = "https://github.com/openambitproject/openambit/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ rycee ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

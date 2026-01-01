@@ -118,7 +118,11 @@ stdenv.mkDerivation rec {
     ln -s ${utsushi-networkscan}/libexec/utsushi/networkscan $out/libexec/utsushi
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "SANE utsushi backend for some Epson scanners";
     mainProgram = "utsushi";
     longDescription = ''
@@ -187,11 +191,20 @@ stdenv.mkDerivation rec {
       XP-970 Series
     '';
     homepage = "https://gitlab.com/utsushi/imagescan";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       wucke13
       maxwilson
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      wucke13
+      maxwilson
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

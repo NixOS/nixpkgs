@@ -30,9 +30,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utility functions for Python class constructs";
     homepage = "https://github.com/jaraco/jaraco.classes";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Utility functions for Python class constructs";
+    homepage = "https://github.com/jaraco/jaraco.classes";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

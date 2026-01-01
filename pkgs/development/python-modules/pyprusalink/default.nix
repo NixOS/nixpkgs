@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyprusalink" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to communicate with PrusaLink";
     homepage = "https://github.com/home-assistant-libs/pyprusalink";
     changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to communicate with PrusaLink";
+    homepage = "https://github.com/home-assistant-libs/pyprusalink";
+    changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

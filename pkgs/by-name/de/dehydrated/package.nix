@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     }"
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Letsencrypt/acme client implemented as a shell-script";
@@ -60,5 +61,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.pstn ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Letsencrypt/acme client implemented as a shell-script";
+    mainProgram = "dehydrated";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.pstn ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

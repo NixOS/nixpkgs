@@ -18,10 +18,18 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-mr5FBURTGP2J3JMlcexXjz4GFJNqPR4rZyqHVN7+6iM=";
   };
 
+<<<<<<< HEAD
   # Upstream does not ship a lock file, we have to maintain our own for now.
   # https://github.com/postfixadmin/postfixadmin/issues/948
   composerLock = ./composer.lock;
   vendorHash = "sha256-uyHEfWCC6V4d+ez7FbqBKrh4IfbQ2pgD4UvbdGEfobI=";
+=======
+  vendorHash = "sha256-gv6QYuHGo2r2WgtLPLco/PmKxYSijDkpWoF/vIR5y5s=";
+
+  # Upstream does not ship a lock file, we have to maintain our own for now.
+  # https://github.com/postfixadmin/postfixadmin/issues/948
+  composerLock = ./composer.lock;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     out_dir="$out"/share/php/postfixadmin/

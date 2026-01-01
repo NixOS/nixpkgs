@@ -120,8 +120,11 @@ Unless you understand how the fetcher you're using calculates the hash from the 
    - `cvs`
    - `bzr`
    - `svn`
+<<<<<<< HEAD
    - `darcs`
    - `pijul`
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
    The hash is printed to stdout.
 
@@ -765,7 +768,11 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`
 
 ## `fetchgit` {#fetchgit}
 
+<<<<<<< HEAD
 Used with Git. Expects `url` to a Git repo, `rev` or `tag`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash), or use `tag` for a tag name like `refs/tags/v1.0`.
+=======
+Used with Git. Expects `url` to a Git repo, `rev`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 If you want to fetch a tag you should pass the `tag` parameter instead of `rev` which has the same effect as setting `rev = "refs/tags"/${version}"`.
 This is safer than just setting `rev = version` w.r.t. possible branch and tag name conflicts.
@@ -1005,3 +1012,7 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

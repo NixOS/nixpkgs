@@ -30,7 +30,11 @@ let
         };
 
         imageFile = mkOption {
+<<<<<<< HEAD
           type = with types; nullOr pathInStore;
+=======
+          type = with types; nullOr package;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           default = null;
           description = ''
             Path to an image file to load before running the image. This can

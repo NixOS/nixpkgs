@@ -34,10 +34,17 @@ buildPythonPackage rec {
     BERKELEYDB_LIBDIR = "${lib.getLib pkgs.db}/lib";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for Oracle Berkeley DB";
     homepage = "https://www.jcea.es/programacion/pybsddb.htm";
     license = with lib.licenses; [ bsd3 ];
+=======
+  meta = with lib; {
+    description = "Python bindings for Oracle Berkeley DB";
+    homepage = "https://www.jcea.es/programacion/pybsddb.htm";
+    license = with licenses; [ bsd3 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

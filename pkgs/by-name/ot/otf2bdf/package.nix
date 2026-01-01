@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     cp otf2bdf.man $out/share/man/man1/otf2bdf.1
   '';
 
+<<<<<<< HEAD
   meta = {
     #homepage = "http://sofia.nmsu.edu/~mleisher/Software/otf2bdf/";  # timeout
     homepage = "https://github.com/jirutka/otf2bdf";
@@ -33,6 +34,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit0;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ hzeller ];
+=======
+  meta = with lib; {
+    #homepage = "http://sofia.nmsu.edu/~mleisher/Software/otf2bdf/";  # timeout
+    homepage = "https://github.com/jirutka/otf2bdf";
+    description = "OpenType to BDF font converter";
+    license = licenses.mit0;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ hzeller ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "otf2bdf";
   };
 }

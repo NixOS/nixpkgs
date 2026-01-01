@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Thin wrapper around libyubihsm providing both an interactive and command-line interface to a YubiHSM";
     homepage = "https://github.com/Yubico/yubihsm-shell";
@@ -79,5 +80,16 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Thin wrapper around libyubihsm providing both an interactive and command-line interface to a YubiHSM";
+    homepage = "https://github.com/Yubico/yubihsm-shell";
+    maintainers = with maintainers; [
+      matthewcroughan
+      numinit
+    ];
+    license = licenses.asl20;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

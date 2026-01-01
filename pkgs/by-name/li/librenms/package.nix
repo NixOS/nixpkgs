@@ -123,6 +123,7 @@ phpPackage.buildComposerProject2 rec {
     tests.librenms = nixosTests.librenms;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
@@ -130,5 +131,14 @@ phpPackage.buildComposerProject2 rec {
     maintainers = with lib.maintainers; [ netali ];
     teams = [ lib.teams.wdz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
+    homepage = "https://www.librenms.org/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ netali ];
+    teams = [ teams.wdz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

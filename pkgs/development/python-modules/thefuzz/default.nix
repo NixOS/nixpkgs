@@ -47,11 +47,20 @@ buildPythonPackage rec {
     "test_pep8_conformance"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fuzzy string matching for Python";
     homepage = "https://github.com/seatgeek/thefuzz";
     changelog = "https://github.com/seatgeek/thefuzz/blob/${version}/CHANGES.rst";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ sumnerevans ];
+=======
+  meta = with lib; {
+    description = "Fuzzy string matching for Python";
+    homepage = "https://github.com/seatgeek/thefuzz";
+    changelog = "https://github.com/seatgeek/thefuzz/blob/${version}/CHANGES.rst";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ sumnerevans ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

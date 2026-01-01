@@ -25,11 +25,19 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) doh-proxy-rust; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jedisct1/doh-server";
     description = "Fast, mature, secure DoH server proxy written in Rust";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ stephank ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jedisct1/doh-server";
+    description = "Fast, mature, secure DoH server proxy written in Rust";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ stephank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "doh-proxy";
   };
 }

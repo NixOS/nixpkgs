@@ -64,11 +64,20 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Banking application for small screens";
     homepage = "https://www.tabos.org/projects/saldo/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "org.tabos.saldo";
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Banking application for small screens";
+    homepage = "https://www.tabos.org/projects/saldo/";
+    license = licenses.gpl3Plus;
+    mainProgram = "org.tabos.saldo";
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

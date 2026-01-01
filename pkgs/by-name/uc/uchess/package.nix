@@ -29,11 +29,20 @@ buildGoModule rec {
     wrapProgram $out/bin/uchess --suffix PATH : ${stockfish}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Play chess against UCI engines in your terminal";
     mainProgram = "uchess";
     homepage = "https://tmountain.github.io/uchess/";
     maintainers = with lib.maintainers; [ tmountain ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Play chess against UCI engines in your terminal";
+    mainProgram = "uchess";
+    homepage = "https://tmountain.github.io/uchess/";
+    maintainers = with maintainers; [ tmountain ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

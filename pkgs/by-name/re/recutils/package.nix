@@ -72,7 +72,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.gnu.org/software/recutils/";
     description = "Tools and libraries to access human-editable, text-based databases";
     longDescription = ''
@@ -80,8 +84,14 @@ stdenv.mkDerivation rec {
       text-based databases called recfiles. The data is stored as a sequence of
       records, each record containing an arbitrary number of named fields.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -3,6 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytestCheckHook,
   pythonOlder,
 
@@ -16,17 +20,41 @@
 
 buildPythonPackage rec {
   pname = "shapely";
+<<<<<<< HEAD
   version = "2.1.2";
   pyproject = true;
   disabled = pythonOlder "3.11";
+=======
+  version = "2.1.1";
+  pyproject = true;
+  disabled = pythonOlder "3.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "shapely";
     repo = "shapely";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-tnnOJsAI3v52ngFOIUIkeDuRIu2JlZGuHreVv4W8LeE=";
   };
 
+=======
+    hash = "sha256-qIITlPym92wfq0byqjRxofpmYYg7vohbi1qPVEu6hRg=";
+  };
+
+  patches = [
+    # Fix tests for GEOS 3.14
+    (fetchpatch {
+      url = "https://github.com/shapely/shapely/commit/a561132c4e13c1fde597f56a8a7133c3c09b9928.patch";
+      hash = "sha256-a9gDfw2Dw+fd82T9f0BufYd/+gxE+ALvWyLm4vHygzU=";
+    })
+    (fetchpatch {
+      url = "https://github.com/shapely/shapely/commit/56e16e6eb27c54c6c24b9a251c12414e289fb7d0.patch";
+      hash = "sha256-JyjPVcJswEozF4C73QotKsPou55H41Ct9oVgkxhDhbk=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cython
     geos # for geos-config

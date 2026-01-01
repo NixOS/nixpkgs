@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   writableTmpDirAsHomeHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   hatch-vcs,
@@ -38,6 +41,7 @@ buildPythonPackage rec {
     hash = "sha256-gK2yylteI3VLVJ0p7NB7bR7cirCo2BvFKnYIH3kfyh4=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     # During `pythonImportsCheck`, `corner` imports `arviz` which wants to write a stamp file to the
     # homedir. It then needs to be writable.
@@ -45,6 +49,8 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     hatch-vcs
     hatchling

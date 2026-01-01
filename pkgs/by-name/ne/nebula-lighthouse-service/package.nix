@@ -9,14 +9,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nebula-lighthouse-service";
+<<<<<<< HEAD
   version = "2.0.2";
+=======
+  version = "2.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "manuels";
     repo = "nebula-lighthouse-service";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-cYVFRGYhzsyIZiakLKOYaFxvHP+QXjbT2B4O/oHl6i8=";
+=======
+    hash = "sha256-cRwmOGuPEYlURVbaf9AwaSmhvUzzZvATv5RGPUztnbY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

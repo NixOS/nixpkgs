@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "MANDIR=share/man/man1"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for controlling PaX flags on a per binary basis";
     mainProgram = "paxctl";
@@ -34,5 +35,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "Tool for controlling PaX flags on a per binary basis";
+    mainProgram = "paxctl";
+    homepage = "https://pax.grsecurity.net";
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

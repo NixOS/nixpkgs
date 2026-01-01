@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast GF(256) Cauchy MDS Block Erasure Codec in C++";
     homepage = "https://github.com/f4exb/cm256cc";
@@ -35,5 +36,16 @@ stdenv.mkDerivation rec {
       alkeryn
     ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Fast GF(256) Cauchy MDS Block Erasure Codec in C++";
+    homepage = "https://github.com/f4exb/cm256cc";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      aciceri
+      alkeryn
+    ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

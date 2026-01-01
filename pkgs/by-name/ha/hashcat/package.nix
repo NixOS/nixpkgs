@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
       done
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast password cracker";
     mainProgram = "hashcat";
@@ -123,6 +124,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fast password cracker";
+    mainProgram = "hashcat";
+    homepage = "https://hashcat.net/hashcat/";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       felixalbrigtsen
       zimbatm
     ];

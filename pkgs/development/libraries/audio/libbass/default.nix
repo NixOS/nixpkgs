@@ -15,28 +15,46 @@
 let
   allBass = {
     bass = {
+<<<<<<< HEAD
       h = "c/bass.h";
       version = "2.4.18.3";
+=======
+      h = "bass.h";
+      version = "2.4.17";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       so = {
         i686_linux = "libs/x86/libbass.so";
         x86_64-linux = "libs/x86_64/libbass.so";
         armv7l-linux = "libs/armhf/libbass.so";
         aarch64-linux = "libs/aarch64/libbass.so";
       };
+<<<<<<< HEAD
       url = "https://web.archive.org/web/20251222154947/https://www.un4seen.com/files/bass24-linux.zip";
       hash = "sha256-3iZk+9MaGn7vTbSNprjChICMXhk8Pu4hWHIR3peGkXI=";
+=======
+      url = "https://web.archive.org/web/20240501180538/http://www.un4seen.com/files/bass24-linux.zip";
+      hash = "sha256-/JAlvtZtnzuzZjWy3n1WT8Q5ZVLO0BJJAJT7/dELS3o=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     bass_fx = {
       h = "C/bass_fx.h";
+<<<<<<< HEAD
       version = "2.4.12.6";
+=======
+      version = "2.4.12.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       so = {
         i686_linux = "libs/x86/libbass_fx.so";
         x86_64-linux = "libs/x86_64/libbass_fx.so";
         armv7l-linux = "libs/armhf/libbass_fx.so";
         aarch64-linux = "libs/aarch64/libbass_fx.so";
       };
+<<<<<<< HEAD
       url = "https://web.archive.org/web/20250627192213/https://www.un4seen.com/files/z/0/bass_fx24-linux.zip";
+=======
+      url = "https://web.archive.org/web/20240926184106/https://www.un4seen.com/files/z/0/bass_fx24-linux.zip";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hash = "sha256-Hul2ELwnaDV8TDRMDXoFisle31GATDkf3PdkR2K9QTs=";
     };
 
@@ -98,12 +116,21 @@ let
           install -m644 -t $out/include/ ${bass.h}
         '';
 
+<<<<<<< HEAD
       meta = {
         description = "Shareware audio library";
         homepage = "https://www.un4seen.com/";
         license = lib.licenses.unfreeRedistributable;
         platforms = builtins.attrNames bass.so;
         maintainers = with lib.maintainers; [ poz ];
+=======
+      meta = with lib; {
+        description = "Shareware audio library";
+        homepage = "https://www.un4seen.com/";
+        license = licenses.unfreeRedistributable;
+        platforms = builtins.attrNames bass.so;
+        maintainers = with maintainers; [ poz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 

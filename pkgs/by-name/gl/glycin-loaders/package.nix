@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Glycin loaders for several formats";
     homepage = "https://gitlab.gnome.org/GNOME/glycin";
@@ -117,5 +118,16 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Glycin loaders for several formats";
+    homepage = "https://gitlab.gnome.org/GNOME/glycin";
+    teams = [ teams.gnome ];
+    license = with licenses; [
+      mpl20 # or
+      lgpl21Plus
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -10,13 +10,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaLogs";
+<<<<<<< HEAD
   version = "1.40.0";
+=======
+  version = "1.38.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-liHpejO6wVr3YEyWhBwakWlDfly7mujVhQn7Sl5Z1kE=";
+=======
+    hash = "sha256-UosxxeTZzM/f2rqUdMqPxHgnu57/dUc/X7gFOySy+M4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = null;
@@ -36,7 +44,11 @@ buildGoModule (finalAttrs: {
   postPatch = ''
     # Relax go version to major.minor
     sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' go.mod
+<<<<<<< HEAD
     sed -i -E 's/^(## explicit; go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
+=======
+    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   ldflags = [
@@ -48,7 +60,15 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
+<<<<<<< HEAD
     tests = lib.recurseIntoAttrs nixosTests.victorialogs;
+=======
+    tests = {
+      inherit (nixosTests)
+        victorialogs
+        ;
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     updateScript = nix-update-script { };
   };
 

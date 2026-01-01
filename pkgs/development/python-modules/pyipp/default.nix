@@ -59,11 +59,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyipp" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/ctalkington/python-ipp/releases/tag/${version}";
     description = "Asynchronous Python client for Internet Printing Protocol (IPP)";
     homepage = "https://github.com/ctalkington/python-ipp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/ctalkington/python-ipp/releases/tag/${version}";
+    description = "Asynchronous Python client for Internet Printing Protocol (IPP)";
+    homepage = "https://github.com/ctalkington/python-ipp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

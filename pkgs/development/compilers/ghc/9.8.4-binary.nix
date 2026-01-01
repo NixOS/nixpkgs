@@ -232,7 +232,11 @@ stdenv.mkDerivation {
   # of the bindist installer can find the libraries they expect.
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location.
+<<<<<<< HEAD
   env.${libEnvVar} = libPath;
+=======
+  ${libEnvVar} = libPath;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postUnpack =
     # Verify our assumptions of which `libtinfo.so` (ncurses) version is used,

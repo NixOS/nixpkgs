@@ -37,12 +37,21 @@ stdenv.mkDerivation {
 
   passthru.tests.reproducible-html-manpage = callPackage ./test-reproducible-html.nix { };
 
+<<<<<<< HEAD
   meta = {
     description = "Markdown-based tool for building manpages";
     mainProgram = "ronn";
     homepage = "https://github.com/apjanke/ronn-ng";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Markdown-based tool for building manpages";
+    mainProgram = "ronn";
+    homepage = "https://github.com/apjanke/ronn-ng";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zimbatm
       nicknovitski
     ];

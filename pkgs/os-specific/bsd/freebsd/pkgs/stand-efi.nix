@@ -6,7 +6,10 @@
   buildPackages,
   freebsd-lib,
   vtfontcvt,
+<<<<<<< HEAD
   elfcopy,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 let
   hostArchBsd = freebsd-lib.mkBsdArch stdenv;
@@ -22,6 +25,7 @@ mkDerivation {
     "lib/libc"
     "lib/liblua"
     "libexec/flua"
+<<<<<<< HEAD
     #"lib/flua"
     "stand"
     "sys"
@@ -30,6 +34,13 @@ mkDerivation {
     vtfontcvt
     elfcopy
   ];
+=======
+    "lib/flua"
+    "stand"
+    "sys"
+  ];
+  extraNativeBuildInputs = [ vtfontcvt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   makeFlags = [
     "STRIP=-s" # flag to install, not command
@@ -39,6 +50,7 @@ mkDerivation {
   ]
   ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "MK_WERROR=no";
 
+<<<<<<< HEAD
   hardeningDisable = [
     "stackprotector"
     "fortify"
@@ -54,6 +66,18 @@ mkDerivation {
     make -C $BSDSRCDIR/stand/ficl $makeFlags
     make -C $BSDSRCDIR/stand/liblua $makeFlags
     make -C $BSDSRCDIR/stand/liblua32 $makeFlags
+=======
+  hardeningDisable = [ "stackprotector" ];
+
+  # ???
+  preBuild = ''
+    NIX_CFLAGS_COMPILE+=" -I${include}/include -I$BSDSRCDIR/sys/sys -I$BSDSRCDIR/sys/${hostArchBsd}/include"
+    export NIX_CFLAGS_COMPILE
+
+    make -C $BSDSRCDIR/stand/libsa $makeFlags
+    make -C $BSDSRCDIR/stand/ficl $makeFlags
+    make -C $BSDSRCDIR/stand/liblua $makeFlags
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   postPatch = ''

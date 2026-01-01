@@ -16,7 +16,11 @@
   stdenv,
 }:
 let
+<<<<<<< HEAD
   version = "2.57.1598";
+=======
+  version = "2.56.1582";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   urlVersion = builtins.replaceStrings [ "." ] [ "0" ] version;
 in
 stdenv.mkDerivation {
@@ -25,7 +29,11 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.roonlabs.com/updates/production/RoonServer_linuxx64_${urlVersion}.tar.bz2";
+<<<<<<< HEAD
     hash = "sha256-GfcVaZRE8QzjXpDEyLDdyvvgzsBKtumtq3QguoyBjkg=";
+=======
+    hash = "sha256-LKuno7SpOpxx3JpM36tYlOHjJWWRLRjPiA096Bv/QvQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dontConfigure = true;
@@ -105,6 +113,7 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = ./update.py;
+<<<<<<< HEAD
   meta = {
     description = "Music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
@@ -112,6 +121,15 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Music player for music lovers";
+    changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
+    homepage = "https://roonlabs.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lovesegfault
       steell
       ramblurr

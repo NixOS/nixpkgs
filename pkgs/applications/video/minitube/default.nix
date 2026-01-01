@@ -49,7 +49,11 @@ mkDerivation rec {
 
   qmakeFlags = [ "DEFINES+=APP_GOOGLE_API_KEY=${withAPIKey}" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Stand-alone YouTube video player";
     longDescription = ''
       Watch YouTube videos in a new way: you type a keyword, Minitube gives
@@ -57,8 +61,13 @@ mkDerivation rec {
       website, it aims to create a new TV-like experience.
     '';
     homepage = "https://flavio.tordini.org/minitube";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "minitube";
   };

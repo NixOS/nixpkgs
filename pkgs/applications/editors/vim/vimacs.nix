@@ -35,10 +35,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Vim-Improved eMACS: Emacs emulation for Vim";
     homepage = "http://algorithm.com.au/code/vimacs";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Vim-Improved eMACS: Emacs emulation for Vim";
+    homepage = "http://algorithm.com.au/code/vimacs";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ millerjason ];
   };
 }

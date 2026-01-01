@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "flufl" ];
 
+<<<<<<< HEAD
   meta = {
     description = "NFS-safe file locking with timeouts for POSIX and Windows";
     homepage = "https://flufllock.readthedocs.io/";
     changelog = "https://gitlab.com/warsaw/flufl.lock/-/blob/${version}/docs/NEWS.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qyliss ];
+=======
+  meta = with lib; {
+    description = "NFS-safe file locking with timeouts for POSIX and Windows";
+    homepage = "https://flufllock.readthedocs.io/";
+    changelog = "https://gitlab.com/warsaw/flufl.lock/-/blob/${version}/docs/NEWS.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ qyliss ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

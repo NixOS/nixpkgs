@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-H+SZ+aUQReFJiN2MQHxaI0/bM1sXaSFVlIhedCKBQ0M=";
 
+<<<<<<< HEAD
   meta = {
     description = "Reimplementation of mkrom in Rust";
     homepage = "https://github.com/siraben/remkrom";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
+=======
+  meta = with lib; {
+    description = "Reimplementation of mkrom in Rust";
+    homepage = "https://github.com/siraben/remkrom";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "remkrom";
   };
 }

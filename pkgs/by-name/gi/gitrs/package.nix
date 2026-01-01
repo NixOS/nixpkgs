@@ -34,11 +34,19 @@ rustPlatform.buildRustPackage rec {
     libz
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, opinionated, tool, written in Rust, for declaratively managing Git repos on your machine";
     homepage = "https://github.com/mccurdyc/gitrs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mccurdyc ];
+=======
+  meta = with lib; {
+    description = "Simple, opinionated, tool, written in Rust, for declaratively managing Git repos on your machine";
+    homepage = "https://github.com/mccurdyc/gitrs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mccurdyc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gitrs";
   };
 }

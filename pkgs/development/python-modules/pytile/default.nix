@@ -51,7 +51,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python API for Tile Bluetooth trackers";
     longDescription = ''
       pytile is a simple Python library for retrieving information on Tile
@@ -59,7 +63,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bachya/pytile";
     changelog = "https://github.com/bachya/pytile/releases/tag/${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -49,10 +49,18 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml --replace-fail "setuptools[core]" "setuptools"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Official Telethon extension to provide much faster cryptography for Telegram API requests";
     homepage = "https://github.com/cher-nov/cryptg";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Official Telethon extension to provide much faster cryptography for Telegram API requests";
+    homepage = "https://github.com/cher-nov/cryptg";
+    license = licenses.cc0;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

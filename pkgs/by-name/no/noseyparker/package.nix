@@ -81,6 +81,10 @@ rustPlatform.buildRustPackage rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/noseyparker-cli";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Find secrets and sensitive information in textual data";

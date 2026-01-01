@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "peewee";
+<<<<<<< HEAD
   version = "3.18.3";
+=======
+  version = "3.18.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +30,11 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = "peewee";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-gMoU6YQMlEfL6onRAA/8v/08Je2jeLoZ3zw+2n1fmw4=";
+=======
+    hash = "sha256-BIOY3vAHzSonxXYFmfFbVxbbUWnUVtcBRsTVMRo7peE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -53,11 +61,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "peewee" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python ORM with support for various database implementation";
     homepage = "http://peewee-orm.com";
     changelog = "https://github.com/coleifer/peewee/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python ORM with support for various database implementation";
+    homepage = "http://peewee-orm.com";
+    changelog = "https://github.com/coleifer/peewee/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "pwiz.py";
   };

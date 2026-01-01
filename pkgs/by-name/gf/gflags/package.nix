@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "C++ library that implements commandline flags processing";
     mainProgram = "gflags_completions.sh";
     longDescription = ''
@@ -48,8 +52,14 @@ stdenv.mkDerivation rec {
       It was owned by Google. google-gflags project has been renamed to gflags and maintained by new community.
     '';
     homepage = "https://gflags.github.io/gflags/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.bsd3;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "C++ and python library of 2D and 3D vector, matrix, and math operations for computer graphics";
     homepage = "https://github.com/AcademySoftwareFoundation/Imath";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ paperdigits ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C++ and python library of 2D and 3D vector, matrix, and math operations for computer graphics";
+    homepage = "https://github.com/AcademySoftwareFoundation/Imath";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ paperdigits ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

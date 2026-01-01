@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hggit" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Push and pull from a Git server using Mercurial";
     homepage = "https://hg-git.github.io/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ koral ];
+=======
+  meta = with lib; {
+    description = "Push and pull from a Git server using Mercurial";
+    homepage = "https://hg-git.github.io/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ koral ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

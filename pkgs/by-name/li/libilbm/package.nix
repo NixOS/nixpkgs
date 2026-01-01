@@ -23,7 +23,11 @@ stdenv.mkDerivation {
     pkg-config
     help2man
   ];
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Parser for the ILBM: IFF Interleaved BitMap format";
     longDescription = ''
       libilbm is a portable parser library built on top of libiff,
@@ -32,8 +36,14 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/svanderburg/libilbm";
     changelog = "https://github.com/svanderburg/libilbm/blob/master/ChangeLog";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ _414owen ];
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+=======
+    maintainers = with maintainers; [ _414owen ];
+    platforms = platforms.all;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

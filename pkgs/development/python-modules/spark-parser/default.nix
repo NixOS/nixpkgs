@@ -26,11 +26,20 @@ buildPythonPackage rec {
     "-v"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Early-Algorithm Context-free grammar Parser";
     mainProgram = "spark-parser-coverage";
     homepage = "https://github.com/rocky/python-spark";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin ];
+=======
+  meta = with lib; {
+    description = "Early-Algorithm Context-free grammar Parser";
+    mainProgram = "spark-parser-coverage";
+    homepage = "https://github.com/rocky/python-spark";
+    license = licenses.mit;
+    maintainers = with maintainers; [ raskin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

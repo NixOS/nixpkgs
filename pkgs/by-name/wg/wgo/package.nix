@@ -33,11 +33,19 @@ buildGoModule {
     "-skip=TestWgoCmd_FileEvent"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Live reload for Go apps";
     mainProgram = "wgo";
     homepage = "https://github.com/bokwoon95/wgo";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Live reload for Go apps";
+    mainProgram = "wgo";
+    homepage = "https://github.com/bokwoon95/wgo";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

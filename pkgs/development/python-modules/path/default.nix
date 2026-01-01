@@ -43,11 +43,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "path" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Object-oriented file system path manipulation";
     homepage = "https://github.com/jaraco/path";
     changelog = "https://github.com/jaraco/path/blob/v${version}/NEWS.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Object-oriented file system path manipulation";
+    homepage = "https://github.com/jaraco/path";
+    changelog = "https://github.com/jaraco/path/blob/v${version}/NEWS.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

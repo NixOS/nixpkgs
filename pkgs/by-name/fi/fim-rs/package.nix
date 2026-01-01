@@ -9,13 +9,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fim-rs";
+<<<<<<< HEAD
   version = "0.6.1";
+=======
+  version = "0.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Achiefs";
     repo = "fim";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-xJzglrNB5rqaRQTgRFIl8/AXjeDwFPykIE5LJwJ3cX4=";
+=======
+    hash = "sha256-V9BzgVcDTnYSy7N5fCo38vQmXRDXLjY6wvnSkIpuDGg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoLock = {
@@ -39,7 +47,11 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
+<<<<<<< HEAD
   # Relies on /var/lib/fim existing, but /var is not available under nix-build.
+=======
+  # There is a failure while the binary is checked
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doCheck = false;
 
   meta = {

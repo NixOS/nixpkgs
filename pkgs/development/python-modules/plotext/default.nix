@@ -22,11 +22,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plotext" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plotting directly in the terminal";
     mainProgram = "plotext";
     homepage = "https://github.com/piccolomo/plotext";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
+=======
+  meta = with lib; {
+    description = "Plotting directly in the terminal";
+    mainProgram = "plotext";
+    homepage = "https://github.com/piccolomo/plotext";
+    license = licenses.mit;
+    maintainers = with maintainers; [ samuela ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

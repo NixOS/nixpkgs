@@ -22,10 +22,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "jstyleson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to parse JSON with js-style comments";
     homepage = "https://github.com/linjackson78/jstyleson";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Python library to parse JSON with js-style comments";
+    homepage = "https://github.com/linjackson78/jstyleson";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

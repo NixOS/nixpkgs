@@ -57,11 +57,19 @@ stdenv.mkDerivation {
 
   inherit (topkg) installPhase;
 
+<<<<<<< HEAD
   meta = {
     description = "OCaml module for normalizing Unicode text";
     homepage = webpage;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "OCaml module for normalizing Unicode text";
+    homepage = webpage;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "unftrip";
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.03";

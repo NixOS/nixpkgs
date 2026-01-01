@@ -30,11 +30,19 @@ python3Packages.buildPythonApplication rec {
     pytest-mock
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/languitar/pass-git-helper";
     description = "Git credential helper interfacing with pass, the standard unix password manager";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/languitar/pass-git-helper";
+    description = "Git credential helper interfacing with pass, the standard unix password manager";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hmenke
     ];
     mainProgram = "pass-git-helper";

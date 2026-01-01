@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvista" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easier Pythonic interface to VTK";
     homepage = "https://pyvista.org";
     changelog = "https://github.com/pyvista/pyvista/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    description = "Easier Pythonic interface to VTK";
+    homepage = "https://pyvista.org";
+    changelog = "https://github.com/pyvista/pyvista/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

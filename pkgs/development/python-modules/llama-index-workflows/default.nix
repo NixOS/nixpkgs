@@ -3,19 +3,28 @@
   buildPythonPackage,
   eval-type-backport,
   fetchPypi,
+<<<<<<< HEAD
   uv-build,
+=======
+  hatchling,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   llama-index-instrumentation,
   pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-workflows";
+<<<<<<< HEAD
   version = "2.11.5";
+=======
+  version = "2.11.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_workflows";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-3vumxRaanJhv4G3Z8+5eGmzF9Yx3ZgXARYuqClXwdkM=";
   };
 
@@ -25,6 +34,14 @@ buildPythonPackage rec {
   '';
 
   build-system = [ uv-build ];
+=======
+    hash = "sha256-BG9BRshG9UFl91B8XkZsL1lINJ9UElyUUFY0OgC/pCs=";
+  };
+
+  pythonRelaxDeps = [ "pydantic" ];
+
+  build-system = [ hatchling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dependencies = [
     eval-type-backport

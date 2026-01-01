@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     cp -r SampleDrivers/Matrix* $out/share/ColPack/examples
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Package comprising of implementations of algorithms for
     vertex coloring and derivative computation";
@@ -44,5 +45,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ edwtjo ];
+=======
+  meta = with lib; {
+    description = "Package comprising of implementations of algorithms for
+    vertex coloring and derivative computation";
+    homepage = "https://cscapes.cs.purdue.edu/coloringpage/software.htm#functionalities";
+    license = licenses.lgpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ edwtjo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

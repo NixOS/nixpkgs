@@ -33,10 +33,18 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "certvalidator" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/wbond/certvalidator";
     description = "Validates X.509 certificates and paths";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ baloo ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/wbond/certvalidator";
+    description = "Validates X.509 certificates and paths";
+    license = licenses.mit;
+    maintainers = with maintainers; [ baloo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

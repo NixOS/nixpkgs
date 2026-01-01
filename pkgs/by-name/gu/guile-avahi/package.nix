@@ -39,11 +39,19 @@ stdenv.mkDerivation rec {
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-unused-function";
 
+<<<<<<< HEAD
   meta = {
     description = "Bindings to Avahi for GNU Guile";
     homepage = "https://www.nongnu.org/guile-avahi/";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Bindings to Avahi for GNU Guile";
+    homepage = "https://www.nongnu.org/guile-avahi/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ foo-dogsquared ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 }

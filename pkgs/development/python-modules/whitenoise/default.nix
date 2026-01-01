@@ -40,11 +40,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whitenoise" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to serve static file for WSGI applications";
     homepage = "https://whitenoise.readthedocs.io/";
     changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library to serve static file for WSGI applications";
+    homepage = "https://whitenoise.readthedocs.io/";
+    changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

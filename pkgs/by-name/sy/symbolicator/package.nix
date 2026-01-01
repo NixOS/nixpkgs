@@ -42,11 +42,19 @@ rustPlatform.buildRustPackage rec {
   # tests require network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Native Symbolication as a Service";
     homepage = "https://getsentry.github.io/symbolicator/";
     changelog = "https://github.com/getsentry/symbolicator/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Native Symbolication as a Service";
+    homepage = "https://getsentry.github.io/symbolicator/";
+    changelog = "https://github.com/getsentry/symbolicator/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "symbolicator";
   };

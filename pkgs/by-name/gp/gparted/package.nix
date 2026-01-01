@@ -16,10 +16,15 @@
   gpart,
   hdparm,
   procps,
+<<<<<<< HEAD
+=======
+  util-linuxMinimal,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   polkit,
   wrapGAppsHook3,
   replaceVars,
   mtools,
+<<<<<<< HEAD
   xhost,
   dosfstools,
   e2fsprogs,
@@ -39,6 +44,10 @@
   udftools,
   xfsprogs,
   xfsdump,
+=======
+  dosfstools,
+  xhost,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -81,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
+<<<<<<< HEAD
   runtimeDeps = [
     dosfstools
     e2fsprogs
@@ -103,6 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
     xfsdump
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
@@ -111,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
        --prefix PATH : "${
+<<<<<<< HEAD
          lib.makeBinPath (
            [
              gpart
@@ -124,6 +137,20 @@ stdenv.mkDerivation (finalAttrs: {
            ]
            ++ finalAttrs.runtimeDeps
          )
+=======
+         lib.makeBinPath [
+           gpart
+           hdparm
+           util-linuxMinimal
+           procps
+           coreutils
+           gnused
+           gnugrep
+           mtools
+           dosfstools
+           xhost
+         ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
        }"
     )
   '';

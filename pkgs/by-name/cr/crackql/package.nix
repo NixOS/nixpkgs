@@ -38,11 +38,20 @@ python3.pkgs.buildPythonApplication {
     extraArgs = [ "--version=branch" ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GraphQL password brute-force and fuzzing utility";
     mainProgram = "crackql";
     homepage = "https://github.com/nicholasaleks/CrackQL";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "GraphQL password brute-force and fuzzing utility";
+    mainProgram = "crackql";
+    homepage = "https://github.com/nicholasaleks/CrackQL";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "magic_filter" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Magic filter based on dynamic attribute getter";
     homepage = "https://github.com/aiogram/magic-filter";
     changelog = "https://github.com/aiogram/magic-filter/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Magic filter based on dynamic attribute getter";
+    homepage = "https://github.com/aiogram/magic-filter";
+    changelog = "https://github.com/aiogram/magic-filter/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

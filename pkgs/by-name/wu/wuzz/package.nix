@@ -27,10 +27,17 @@ buildGoModule rec {
 
   vendorHash = "sha256-oIm6DWSs6ZDKi6joxydguSXxqtGyKP21cmWtz8MkeIQ=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/asciimoo/wuzz";
     description = "Interactive cli tool for HTTP inspection";
     license = lib.licenses.agpl3Only;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/asciimoo/wuzz";
+    description = "Interactive cli tool for HTTP inspection";
+    license = licenses.agpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wuzz";
   };
 }

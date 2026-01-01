@@ -71,16 +71,28 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.opensmtpd.org/";
     description = ''
       A free implementation of the server-side SMTP protocol as defined by
       RFC 5321, with some additional standard extensions
     '';
+<<<<<<< HEAD
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       obadz
+=======
+    license = licenses.isc;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      obadz
+      ekleog
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       vifino
     ];
   };

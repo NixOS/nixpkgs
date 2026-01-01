@@ -50,14 +50,23 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCUTTER_INSTALL_PLUGDIR=share/rizin/cutter/plugins/native"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # errors out with undefined symbols from Cutter
     broken = enableCutterPlugin && stdenv.hostPlatform.isDarwin;
     description = "Deep ghidra decompiler and sleigh disassembler integration for rizin";
     homepage = finalAttrs.src.meta.homepage;
     changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ chayleaf ];
+=======
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ chayleaf ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (rizin.meta) platforms;
   };
 })

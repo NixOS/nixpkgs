@@ -23,10 +23,18 @@ buildKodiAddon rec {
     vfs-libarchive
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://a4k-openproject.github.io/a4kSubtitles/";
     description = "Multi-Source Subtitles Addon";
     license = lib.licenses.mit;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://a4k-openproject.github.io/a4kSubtitles/";
+    description = "Multi-Source Subtitles Addon";
+    license = licenses.mit;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

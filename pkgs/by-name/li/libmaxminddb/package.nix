@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-G/v477o+1kYuBOIlkGrVzl/pWKo9YmoSNbKiJT1gB0M=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C library for working with MaxMind geolocation DB files";
     homepage = "https://github.com/maxmind/libmaxminddb";
@@ -20,5 +21,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.helsinki-systems ];
     mainProgram = "mmdblookup";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C library for working with MaxMind geolocation DB files";
+    homepage = "https://github.com/maxmind/libmaxminddb";
+    license = licenses.asl20;
+    teams = [ teams.helsinki-systems ];
+    mainProgram = "mmdblookup";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

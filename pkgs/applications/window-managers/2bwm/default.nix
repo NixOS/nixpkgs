@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
 
   installPhase = "make install DESTDIR=$out PREFIX=\"\"";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/venam/2bwm";
     description = "Fast floating WM written over the XCB library and derived from mcwm";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/venam/2bwm";
+    description = "Fast floating WM written over the XCB library and derived from mcwm";
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

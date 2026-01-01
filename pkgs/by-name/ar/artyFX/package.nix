@@ -49,12 +49,21 @@ stdenv.mkDerivation rec {
       'cmake_minimum_required(VERSION 4.0)'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://openavproductions.com/artyfx/";
     description = "LV2 plugin bundle of artistic realtime effects";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://openavproductions.com/artyfx/";
+    description = "LV2 plugin bundle of artistic realtime effects";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Build uses `-msse` and `-mfpmath=sse`
     badPlatforms = [ "aarch64-linux" ];
   };

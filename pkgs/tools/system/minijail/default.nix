@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/heads/main/README.md";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
@@ -59,6 +60,18 @@ stdenv.mkDerivation rec {
       qyliss
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/heads/main/README.md";
+    description = "Sandboxing library and application using Linux namespaces and capabilities";
+    changelog = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/tags/linux-v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+      pcarrier
+      qyliss
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "minijail0";
   };
 }

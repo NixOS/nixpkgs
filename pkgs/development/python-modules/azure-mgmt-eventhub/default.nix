@@ -35,11 +35,20 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "This is the Microsoft Azure EventHub Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/eventhub/azure-mgmt-eventhub";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-eventhub_${version}/sdk/eventhub/azure-mgmt-eventhub/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
+=======
+  meta = with lib; {
+    description = "This is the Microsoft Azure EventHub Management Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/eventhub/azure-mgmt-eventhub";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-eventhub_${version}/sdk/eventhub/azure-mgmt-eventhub/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maxwilson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

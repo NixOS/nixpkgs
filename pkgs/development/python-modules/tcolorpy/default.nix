@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/thombashi/tcolorpy";
     description = "Library to apply true color for terminal text";
     maintainers = with lib.maintainers; [ genericnerdyusername ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/thombashi/tcolorpy";
+    description = "Library to apply true color for terminal text";
+    maintainers = with maintainers; [ genericnerdyusername ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

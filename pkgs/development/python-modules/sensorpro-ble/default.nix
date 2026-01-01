@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sensorpro_ble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Sensorpro BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/sensorpro-ble";
     changelog = "https://github.com/Bluetooth-Devices/sensorpro-ble/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Sensorpro BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/sensorpro-ble";
+    changelog = "https://github.com/Bluetooth-Devices/sensorpro-ble/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

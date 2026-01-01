@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Set of useful tools for aiohttp.web server";
     homepage = "https://github.com/wikibusiness/aiohttp-remotes";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ qyliss ];
+=======
+  meta = with lib; {
+    description = "Set of useful tools for aiohttp.web server";
+    homepage = "https://github.com/wikibusiness/aiohttp-remotes";
+    license = licenses.mit;
+    maintainers = with maintainers; [ qyliss ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

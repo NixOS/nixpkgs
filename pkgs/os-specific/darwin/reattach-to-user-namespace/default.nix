@@ -28,10 +28,18 @@ stdenv.mkDerivation rec {
     cp reattach-to-user-namespace $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper that provides access to the Mac OS X pasteboard service";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ lnl7 ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Wrapper that provides access to the Mac OS X pasteboard service";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ lnl7 ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

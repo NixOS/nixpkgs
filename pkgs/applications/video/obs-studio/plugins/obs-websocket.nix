@@ -37,11 +37,19 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Legacy websocket 4.9.1 protocol support for OBS Studio 28 or above";
     homepage = "https://github.com/obsproject/obs-websocket";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Legacy websocket 4.9.1 protocol support for OBS Studio 28 or above";
+    homepage = "https://github.com/obsproject/obs-websocket";
+    maintainers = with maintainers; [ flexiondotorg ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

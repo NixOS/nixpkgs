@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geojson_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for convenient access to GeoJSON feeds";
     homepage = "https://github.com/exxamalte/python-geojson-client";
     changelog = "https://github.com/exxamalte/python-geojson-client/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for convenient access to GeoJSON feeds";
+    homepage = "https://github.com/exxamalte/python-geojson-client";
+    changelog = "https://github.com/exxamalte/python-geojson-client/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

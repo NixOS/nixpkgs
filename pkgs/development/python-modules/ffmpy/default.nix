@@ -61,10 +61,18 @@ buildPythonPackage rec {
     HOME=$(mktemp -d) go build -o tests/ffmpeg/ffmpeg tests/ffmpeg/ffmpeg.go
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple python interface for FFmpeg/FFprobe";
     homepage = "https://github.com/Ch00k/ffmpy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+  meta = with lib; {
+    description = "Simple python interface for FFmpeg/FFprobe";
+    homepage = "https://github.com/Ch00k/ffmpy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

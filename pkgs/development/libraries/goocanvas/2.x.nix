@@ -55,11 +55,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-python"
   ];
+<<<<<<< HEAD
 
   env = {
     PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "$(dev)/share/gir-1.0";
     PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
   };
+=======
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "$(dev)/share/gir-1.0";
+  PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "$(out)/lib/girepository-1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -70,11 +75,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Canvas widget for GTK based on the the Cairo 2D library";
     homepage = "https://gitlab.gnome.org/Archive/goocanvas";
     license = lib.licenses.lgpl2;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Canvas widget for GTK based on the the Cairo 2D library";
+    homepage = "https://gitlab.gnome.org/Archive/goocanvas";
+    license = licenses.lgpl2;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

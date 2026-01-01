@@ -34,10 +34,18 @@ buildPythonPackage rec {
     tensorflow
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Probabilistic programming language using Tensorflow";
     homepage = "https://github.com/blei-lab/edward";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Probabilistic programming language using Tensorflow";
+    homepage = "https://github.com/blei-lab/edward";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

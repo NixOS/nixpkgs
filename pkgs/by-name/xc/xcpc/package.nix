@@ -39,12 +39,21 @@ stdenv.mkDerivation rec {
       "$out/share/pixmaps/" ""
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Portable Amstrad CPC 464/664/6128 emulator written in C";
     homepage = "https://www.xcpc-emulator.net";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Portable Amstrad CPC 464/664/6128 emulator written in C";
+    homepage = "https://www.xcpc-emulator.net";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xcpc";
   };
 }

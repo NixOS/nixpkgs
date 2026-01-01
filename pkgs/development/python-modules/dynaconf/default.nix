@@ -94,6 +94,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dynaconf" ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Dynamic configurator for Python Project";
     homepage = "https://github.com/dynaconf/dynaconf";

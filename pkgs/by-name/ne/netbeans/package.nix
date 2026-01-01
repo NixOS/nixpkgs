@@ -91,6 +91,10 @@ stdenv.mkDerivation {
       binaryNativeCode
     ];
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      sander
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rszibele
       kashw2
     ];

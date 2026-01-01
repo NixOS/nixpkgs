@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py_partiql_parser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tokenizer/parser/executor for the PartiQL-language";
     homepage = "https://github.com/getmoto/py-partiql-parser";
     changelog = "https://github.com/getmoto/py-partiql-parser/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ centromere ];
+=======
+  meta = with lib; {
+    description = "Tokenizer/parser/executor for the PartiQL-language";
+    homepage = "https://github.com/getmoto/py-partiql-parser";
+    changelog = "https://github.com/getmoto/py-partiql-parser/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ centromere ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

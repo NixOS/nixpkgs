@@ -675,9 +675,15 @@ in
       };
 
       extraStatic = mkOption {
+<<<<<<< HEAD
         type = with types; nullOr (attrsOf pathInStore);
         description = ''
           Attribute set of extra paths to add to the static files directory.
+=======
+        type = with types; nullOr (attrsOf package);
+        description = ''
+          Attribute set of extra packages to add to the static files directory.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           Do not add frontends here. These should be configured through
           [{option}`services.akkoma.frontends`](#opt-services.akkoma.frontends).

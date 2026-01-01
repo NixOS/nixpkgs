@@ -726,7 +726,14 @@ let
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
+<<<<<<< HEAD
                   nixos-rebuild-ng
+=======
+                  (nixos-rebuild-ng.override {
+                    withNgSuffix = false;
+                    withReexec = true;
+                  })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                   ntp
                   perlPackages.ConfigIniFiles
                   perlPackages.FileSlurp

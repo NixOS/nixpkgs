@@ -388,6 +388,7 @@ let
     svaRetro = [ jbedo ];
     StructuralVariantAnnotation = [ jbedo ];
     RQuantLib = [ kupac ];
+<<<<<<< HEAD
     XLConnect = [ b-rodrigues ];
   };
 
@@ -397,11 +398,22 @@ let
     FactoMineR = [ self.car ];
     pander = [ self.codetools ];
     pliman = [ self.EBImage ];
+=======
+  };
+
+  packagesWithRDepends = {
+    spectralGraphTopology = [ self.CVXR ];
+    FactoMineR = [ self.car ];
+    pander = [ self.codetools ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rmsb = [ self.rstantools ];
     gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
     disbayes = [ self.rstantools ];
+<<<<<<< HEAD
     survextrap = [ self.rstantools ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     tipsae = [ self.rstantools ];
     TriDimRegression = [ self.rstantools ];
     bbmix = [ self.rstantools ];
@@ -426,10 +438,13 @@ let
       cmake
       which
     ];
+<<<<<<< HEAD
     astgrepr = with pkgs; [
       cargo
       rustc
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     audio = [ pkgs.portaudio ];
     BayesChange = [ pkgs.gsl ];
     BayesSAE = [ pkgs.gsl ];
@@ -452,7 +467,10 @@ let
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
+<<<<<<< HEAD
     blosc = [ pkgs.pkg-config ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     CellBarcode = [ pkgs.zlib ];
     cld3 = [ pkgs.protobuf ];
     cpp11qpdf = with pkgs; [
@@ -475,10 +493,13 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = [ pkgs.pkg-config ];
+<<<<<<< HEAD
     ciflyr = with pkgs; [
       cargo
       rustc
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     interpolation = [ pkgs.pkg-config ];
     clarabel = [ pkgs.cargo ];
     curl = [ pkgs.curl.dev ];
@@ -490,12 +511,16 @@ let
         zlib.dev
       ]
       ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp;
+<<<<<<< HEAD
     datefixR = with pkgs; [
       cargo
       rustc
     ];
     devEMF = with pkgs; [ xorg.libXft.dev ];
     DEploid = [ pkgs.zlib.dev ];
+=======
+    devEMF = with pkgs; [ xorg.libXft.dev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     DEploid_utils = [ pkgs.zlib.dev ];
     diversitree = with pkgs; [
       gsl
@@ -526,10 +551,13 @@ let
     fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
     frailtyMMpen = [ pkgs.gsl ];
+<<<<<<< HEAD
     gadjid = with pkgs; [
       cargo
       rustc
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     gamstransfer = [ pkgs.zlib ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools =
@@ -563,10 +591,13 @@ let
     gsl = [ pkgs.gsl ];
     gslnls = [ pkgs.gsl ];
     gert = [ pkgs.libgit2 ];
+<<<<<<< HEAD
     h3o = with pkgs; [
       cargo
       rustc
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     haven = with pkgs; [ zlib.dev ];
     hellorust = [ pkgs.cargo ];
     hgwrr = [ pkgs.gsl ];
@@ -610,10 +641,13 @@ let
       libpng.dev
     ];
     iBMQ = [ pkgs.gsl ];
+<<<<<<< HEAD
     iscream = with pkgs; [
       pkg-config
       which
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     jack = [ pkgs.pkg-config ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
@@ -628,7 +662,10 @@ let
       cargo
       rustc
     ];
+<<<<<<< HEAD
     libdeflate = [ pkgs.cmake ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     LOMAR = [ pkgs.gmp.dev ];
     littler = [ pkgs.libdeflate ];
     lpsymphony = with pkgs; [
@@ -641,11 +678,14 @@ let
       geos
       gdal
     ];
+<<<<<<< HEAD
     otelsdk = with pkgs; [
       cmake
       which
       curl.dev
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rsbml = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
     MAGEE = [
@@ -704,6 +744,7 @@ let
     RAppArmor = [ pkgs.libapparmor ];
     rapportools = [ pkgs.which ];
     rapport = [ pkgs.which ];
+<<<<<<< HEAD
     rbm25 = with pkgs; [
       cargo
       rustc
@@ -711,6 +752,10 @@ let
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppDPR = [ pkgs.gsl ];
+=======
+    rcdd = [ pkgs.gmp.dev ];
+    RcppCNPy = [ pkgs.zlib.dev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     RcppGSL = [ pkgs.gsl ];
     RcppZiggurat = [ pkgs.gsl ];
     reprex = [ pkgs.which ];
@@ -794,19 +839,25 @@ let
     Rpoppler = [ pkgs.poppler ];
     RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.protobuf ];
+<<<<<<< HEAD
     rsamplr = with pkgs; [
       cargo
       rustc
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];
     Rssa = [ pkgs.fftw.dev ];
     rsvg = [ pkgs.pkg-config ];
     runjags = [ pkgs.jags ];
+<<<<<<< HEAD
     tomledit = with pkgs; [
       cargo
       rustc
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     xslt = [ pkgs.pkg-config ];
     RVowpalWabbit = with pkgs; [
       zlib.dev
@@ -867,6 +918,7 @@ let
       cargo
       rustc
     ];
+<<<<<<< HEAD
     socratadata = with pkgs; [
       cargo
       rustc
@@ -875,6 +927,8 @@ let
       cargo
       rustc
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     strawr = with pkgs; [ curl.dev ];
     string2path = [ pkgs.cargo ];
     terra = with pkgs; [
@@ -883,10 +937,14 @@ let
       geos
       netcdf
     ];
+<<<<<<< HEAD
     tok = with pkgs; [
       cargo
       rustc
     ];
+=======
+    tok = [ pkgs.cargo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rshift = with pkgs; [
       cargo
       rustc
@@ -905,10 +963,14 @@ let
       cargo
       rustc
     ];
+<<<<<<< HEAD
     awdb = with pkgs; [
       cargo
       rustc
     ];
+=======
+    awdb = [ pkgs.cargo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     apcf = with pkgs; [ geos ];
     SemiCompRisks = [ pkgs.gsl ];
     showtext = with pkgs; [
@@ -952,6 +1014,7 @@ let
     ];
     units = [ pkgs.udunits ];
     unigd = [ pkgs.pkg-config ];
+<<<<<<< HEAD
     unsum = with pkgs; [
       cargo
       rustc
@@ -962,10 +1025,18 @@ let
       cargo
       rustc
     ];
+=======
+    vdiffr = [ pkgs.libpng.dev ];
+    V8 = [ pkgs.nodejs.libv8 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     XBRL = with pkgs; [
       zlib
       libxml2.dev
     ];
+<<<<<<< HEAD
+=======
+    XLConnect = [ pkgs.jdk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
     XML = with pkgs; [
       libtool
@@ -984,7 +1055,10 @@ let
     oligo = [ pkgs.zlib.dev ];
     gmapR = [ pkgs.zlib.dev ];
     Rsubread = [ pkgs.zlib.dev ];
+<<<<<<< HEAD
     Rsubbotools = [ pkgs.gsl ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     XVector = [ pkgs.zlib.dev ];
     Rsamtools = with pkgs; [
       zlib.dev
@@ -1080,7 +1154,10 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+<<<<<<< HEAD
     abn = [ pkgs.jags ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     adbcpostgresql = with pkgs; [
       readline.dev
       zlib.dev
@@ -1097,14 +1174,20 @@ let
       zlib.dev
       zstd.dev
     ];
+<<<<<<< HEAD
     blosc = [ pkgs.c-blosc ];
     EHRmuse = [ pkgs.gsl.dev ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     island = [ pkgs.gsl.dev ];
     knowYourCG = with pkgs; [
       zlib.dev
       ncurses.dev
     ];
+<<<<<<< HEAD
     lnmixsurv = [ pkgs.gsl.dev ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     svKomodo = [ pkgs.which ];
     transmogR = [ pkgs.zlib.dev ];
     ulid = [ pkgs.zlib.dev ];
@@ -1124,11 +1207,14 @@ let
     clustermq = [ pkgs.pkg-config ];
     coga = [ pkgs.gsl.dev ];
     mBvs = [ pkgs.gsl.dev ];
+<<<<<<< HEAD
     milorGWAS = [ pkgs.zlib.dev ];
     pliman = with pkgs; [
       fftw.dev
       libpng.dev
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rcontroll = [ pkgs.gsl.dev ];
     deepSNV = with pkgs; [
       xz.dev
@@ -1145,17 +1231,23 @@ let
       proj.dev
       sqlite.dev
     ];
+<<<<<<< HEAD
     GeoFIS = with pkgs; [
       mpfr.dev
       gmp.dev
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mitoClone2 = with pkgs; [
       xz.dev
       bzip2.dev
       zlib.dev
     ];
     gpg = [ pkgs.gpgme ];
+<<<<<<< HEAD
     mutscan = [ pkgs.zlib.dev ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
@@ -1166,7 +1258,10 @@ let
       bzip2.dev
       xz.dev
       libdeflate
+<<<<<<< HEAD
       zstd.dev
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkg-config ];
@@ -1185,6 +1280,7 @@ let
     XML = [ pkgs.pkg-config ];
     apsimx = [ pkgs.which ];
     cairoDevice = [ pkgs.pkg-config ];
+<<<<<<< HEAD
     CBN2Path = [ pkgs.gsl ];
     chebpol = [ pkgs.pkg-config ];
     baseline = [ pkgs.lapack ];
@@ -1194,6 +1290,11 @@ let
       xz.dev
       zlib.dev
     ];
+=======
+    chebpol = [ pkgs.pkg-config ];
+    baseline = [ pkgs.lapack ];
+    eds = [ pkgs.zlib.dev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pgenlibr = [ pkgs.zlib.dev ];
     fftw = [ pkgs.pkg-config ];
     gdtools = [ pkgs.pkg-config ];
@@ -1218,7 +1319,10 @@ let
       fftw.dev
       pkg-config
     ];
+<<<<<<< HEAD
     GRAB = [ pkgs.zlib.dev ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     jqr = [ pkgs.jq.out ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [
@@ -1243,10 +1347,13 @@ let
     mwaved = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];
     openssl = [ pkgs.pkg-config ];
+<<<<<<< HEAD
     otelsdk = with pkgs; [
       protobuf
       zlib.dev
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pdftools = [ pkgs.pkg-config ];
     qckitfastq = [ pkgs.zlib.dev ];
     raer = with pkgs; [
@@ -1258,7 +1365,10 @@ let
       quantlib.dev
       boost.dev
     ];
+<<<<<<< HEAD
     saeMSPE = [ pkgs.gsl.dev ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sf = with pkgs; [
       pkg-config
       sqlite.dev
@@ -1272,7 +1382,10 @@ let
     showtext = [ pkgs.pkg-config ];
     spate = [ pkgs.pkg-config ];
     stringi = [ pkgs.pkg-config ];
+<<<<<<< HEAD
     SynExtend = [ pkgs.zlib.dev ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     tesseract = [ pkgs.pkg-config ];
@@ -1307,8 +1420,11 @@ let
       zlib.dev
     ];
     GrafGen = [ pkgs.zlib ];
+<<<<<<< HEAD
     SLmetrics = [ pkgs.zlib.dev ];
     tidypopgen = [ pkgs.zlib.dev ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     tikzDevice = with pkgs; [
       which
       texliveMedium
@@ -1565,7 +1681,10 @@ let
         zlib.dev
         libjpeg.dev
         bzip2.dev
+<<<<<<< HEAD
         libwebp
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ]
       ++ lib.optional stdenv.hostPlatform.isDarwin lerc.dev;
     qqconf = [ pkgs.fftw.dev ];
@@ -1594,7 +1713,10 @@ let
     ChemmineOB = with pkgs; [
       eigen
       openbabel
+<<<<<<< HEAD
       zlib.dev
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     DGP4LCF = [
       pkgs.lapack
@@ -1633,7 +1755,10 @@ let
     "gWidgets2tcltk"
     "HiveR"
     "ic50"
+<<<<<<< HEAD
     "iClick"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "iDynoR"
     "iplots"
     "likeLTD"
@@ -1738,7 +1863,10 @@ let
     "dataverse"
     "immuneSIM"
     "mastif"
+<<<<<<< HEAD
     "rdss"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "shinymeta"
     "shinyobjects"
     "wppi"
@@ -1869,6 +1997,7 @@ let
       };
     });
 
+<<<<<<< HEAD
     rvisidata = old.rvisidata.overrideAttrs (attrs: {
       postPatch = ''
         substituteInPlace R/main.r --replace-fail \
@@ -1878,6 +2007,8 @@ let
       '';
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     timeless = old.timeless.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
       cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
@@ -1902,14 +2033,18 @@ let
       postPatch = "patchShebangs configure";
     });
 
+<<<<<<< HEAD
     astgrepr = old.astgrepr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cartogramR = old.cartogramR.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+<<<<<<< HEAD
     h3o = old.h3o.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
@@ -1918,14 +2053,19 @@ let
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rshift = old.rshift.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+<<<<<<< HEAD
     tomledit = old.tomledit.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ymd = old.ymd.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
@@ -1986,10 +2126,13 @@ let
       '';
     });
 
+<<<<<<< HEAD
     ciflyr = old.ciflyr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     clarabel = old.clarabel.overrideAttrs (attrs: {
       postPatch = ''
         patchShebangs configure
@@ -2005,10 +2148,13 @@ let
       '';
     });
 
+<<<<<<< HEAD
     datefixR = old.datefixR.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     PICS = old.PICS.overrideAttrs (attrs: {
       postPatch = ''
         # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
@@ -2017,10 +2163,13 @@ let
       '';
     });
 
+<<<<<<< HEAD
     gadjid = old.gadjid.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     genoCN = old.genoCN.overrideAttrs (attrs: {
       postPatch = ''
         # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
@@ -2030,6 +2179,7 @@ let
       '';
     });
 
+<<<<<<< HEAD
     rbm25 = old.rbm25.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
@@ -2046,6 +2196,8 @@ let
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     trigger = old.trigger.overrideAttrs (attrs: {
       postPatch = ''
         # https://developer.r-project.org/blosxom.cgi/R-devel/NEWS/2025/01/08#n2025-01-08
@@ -2073,10 +2225,13 @@ let
       ];
     });
 
+<<<<<<< HEAD
     unsum = old.unsum.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     vapour = old.vapour.overrideAttrs (attrs: {
       configureFlags = [
         "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
@@ -2168,10 +2323,13 @@ let
       postPatch = "patchShebangs configure";
     });
 
+<<<<<<< HEAD
     otelsdk = old.otelsdk.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     RcppArmadillo = old.RcppArmadillo.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -2184,10 +2342,13 @@ let
       postPatch = "patchShebangs configure";
     });
 
+<<<<<<< HEAD
     xactonomial = old.xactonomial.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     zoomerjoin = old.zoomerjoin.overrideAttrs (attrs: {
       nativeBuildInputs = [
         pkgs.cargo
@@ -2239,10 +2400,13 @@ let
       hardeningDisable = [ "format" ];
     });
 
+<<<<<<< HEAD
     libdeflate = old.libdeflate.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     MANOR = old.MANOR.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
     });
@@ -2390,6 +2554,13 @@ let
       ];
     });
 
+<<<<<<< HEAD
+=======
+    CNEr = old.CNEr.overrideAttrs (attrs: {
+      patches = [ ./patches/CNEr.patch ];
+    });
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     covidsymptom = old.covidsymptom.overrideAttrs (attrs: {
       preConfigure = "rm R/covidsymptomdata.R";
     });
@@ -2604,6 +2775,7 @@ let
         '';
     });
 
+<<<<<<< HEAD
     XLConnect =
       let
         poi-ooxml-full = fetchurl {
@@ -2681,6 +2853,8 @@ let
         '';
       });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     immunotation =
       let
         MHC41alleleList = fetchurl {
@@ -3028,6 +3202,7 @@ let
       '';
     });
 
+<<<<<<< HEAD
     iscream =
       let
         # https://huishenlab.github.io/iscream/articles/htslib.html
@@ -3042,6 +3217,8 @@ let
           ++ [ htslib-deflate ];
       });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     torch = old.torch.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure

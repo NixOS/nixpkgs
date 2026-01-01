@@ -19,11 +19,21 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "ERROR: Run 'git submodule update --init test/samples' first."
 
+<<<<<<< HEAD
   meta = {
     description = "DTS Coherent Acoustics decoder with support for HD extensions";
     mainProgram = "dcadec";
     homepage = "https://github.com/foo86/dcadec";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "DTS Coherent Acoustics decoder with support for HD extensions";
+    mainProgram = "dcadec";
+    maintainers = with maintainers; [ edwtjo ];
+    homepage = "https://github.com/foo86/dcadec";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

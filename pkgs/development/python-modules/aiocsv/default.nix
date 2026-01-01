@@ -49,10 +49,18 @@ buildPythonPackage rec {
     "tests/test_parser.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for for asynchronous CSV reading/writing";
     homepage = "https://github.com/MKuranowski/aiocsv";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for for asynchronous CSV reading/writing";
+    homepage = "https://github.com/MKuranowski/aiocsv";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

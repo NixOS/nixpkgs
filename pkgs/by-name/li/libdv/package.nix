@@ -30,10 +30,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ popt ];
 
+<<<<<<< HEAD
   meta = {
     description = "Software decoder for DV format video, as defined by the IEC 61834 and SMPTE 314M standards";
     homepage = "https://sourceforge.net/projects/libdv/";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Software decoder for DV format video, as defined by the IEC 61834 and SMPTE 314M standards";
+    homepage = "https://sourceforge.net/projects/libdv/";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

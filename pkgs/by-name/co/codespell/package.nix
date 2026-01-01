@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "codespell_lib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fix common misspellings in source code";
     mainProgram = "codespell";
@@ -49,6 +50,17 @@ python3.pkgs.buildPythonApplication rec {
       cc-by-sa-30
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fix common misspellings in source code";
+    mainProgram = "codespell";
+    homepage = "https://github.com/codespell-project/codespell";
+    license = with licenses; [
+      gpl2Only
+      cc-by-sa-30
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       johnazoidberg
       SuperSandro2000
     ];

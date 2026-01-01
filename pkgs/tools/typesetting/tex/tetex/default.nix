@@ -85,11 +85,19 @@ stdenv.mkDerivation rec {
     substituteInPlace ./tetex-src-3.0/configure --replace /usr/bin/install $(type -P install)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Full-featured (La)TeX distribution";
     homepage = "http://www.tug.org/tetex/";
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Full-featured (La)TeX distribution";
+    homepage = "http://www.tug.org/tetex/";
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hydraPlatforms = [ ];
   };
 }

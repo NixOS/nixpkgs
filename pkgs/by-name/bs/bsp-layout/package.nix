@@ -36,16 +36,26 @@ stdenv.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Manage layouts in bspwm";
     longDescription = ''
       bsp-layout is a dynamic layout manager for bspwm, written in bash.
       It provides layout options to fit most workflows.
     '';
     homepage = "https://github.com/phenax/bsp-layout";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ totoroot ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ totoroot ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bsp-layout";
   };
 }

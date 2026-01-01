@@ -40,10 +40,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydelijn" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package to retrieve realtime data of passages at stops of De Lijn";
     homepage = "https://github.com/bollewolle/pydelijn";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python package to retrieve realtime data of passages at stops of De Lijn";
+    homepage = "https://github.com/bollewolle/pydelijn";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

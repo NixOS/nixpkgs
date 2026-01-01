@@ -45,12 +45,21 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/iurie-sw/geonkick";
     description = "Free software percussion synthesizer";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.magnetophon ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/iurie-sw/geonkick";
+    description = "Free software percussion synthesizer";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.magnetophon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "geonkick";
   };
 }

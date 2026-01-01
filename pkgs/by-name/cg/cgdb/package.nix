@@ -33,15 +33,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Curses interface to gdb";
     mainProgram = "cgdb";
 
     homepage = "https://cgdb.github.io/";
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
 
     platforms = with lib.platforms; linux ++ cygwin;
+=======
+    license = licenses.gpl2Plus;
+
+    platforms = with platforms; linux ++ cygwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

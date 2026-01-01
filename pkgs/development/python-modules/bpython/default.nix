@@ -60,7 +60,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "bpython" ];
 
@@ -68,12 +72,21 @@ buildPythonPackage rec {
     rev-suffix = "-release";
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/bpython/bpython/blob/${src.tag}/CHANGELOG.rst";
     description = "Fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    changelog = "https://github.com/bpython/bpython/blob/${src.tag}/CHANGELOG.rst";
+    description = "Fancy curses interface to the Python interactive interpreter";
+    homepage = "https://bpython-interpreter.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       flokli
       dotlambda
     ];

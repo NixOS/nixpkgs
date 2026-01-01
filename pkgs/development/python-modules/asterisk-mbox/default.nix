@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asterisk_mbox" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client side of a client/server to interact with Asterisk voicemail mailboxes";
     homepage = "https://github.com/PhracturedBlue/asterisk_mbox";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Client side of a client/server to interact with Asterisk voicemail mailboxes";
+    homepage = "https://github.com/PhracturedBlue/asterisk_mbox";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

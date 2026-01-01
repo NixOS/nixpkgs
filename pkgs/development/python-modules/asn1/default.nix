@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asn1" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python ASN.1 encoder and decoder";
     homepage = "https://github.com/andrivet/python-asn1";
     changelog = "https://github.com/andrivet/python-asn1/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python ASN.1 encoder and decoder";
+    homepage = "https://github.com/andrivet/python-asn1";
+    changelog = "https://github.com/andrivet/python-asn1/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

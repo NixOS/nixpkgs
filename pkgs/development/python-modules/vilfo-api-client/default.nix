@@ -42,10 +42,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vilfo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple wrapper client for the Vilfo router API";
     homepage = "https://github.com/ManneW/vilfo-api-client-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Simple wrapper client for the Vilfo router API";
+    homepage = "https://github.com/ManneW/vilfo-api-client-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

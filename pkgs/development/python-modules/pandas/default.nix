@@ -63,7 +63,11 @@
 let
   pandas = buildPythonPackage rec {
     pname = "pandas";
+<<<<<<< HEAD
     version = "2.3.3";
+=======
+    version = "2.3.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -72,7 +76,11 @@ let
       owner = "pandas-dev";
       repo = "pandas";
       tag = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-jY1uM9HmJzoFk26ilbtzJnxAsQhmXS19r73JcFeFWRQ=";
+=======
+      hash = "sha256-xvdiWjJ5uHfrzXB7c4cYjFjZ6ue5i7qzb4tAEPJMAV0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
@@ -184,7 +192,11 @@ let
       pytest-xdist
       pytestCheckHook
     ]
+<<<<<<< HEAD
     ++ lib.concatAttrValues optional-dependencies
+=======
+    ++ lib.flatten (lib.attrValues optional-dependencies)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       # for locale executable
       glibc
@@ -247,20 +259,32 @@ let
 
     pythonImportsCheck = [ "pandas" ];
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # pandas devs no longer test i686, it's commonly broken
       # broken = stdenv.hostPlatform.isi686;
       changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
       description = "Powerful data structures for data analysis, time series, and statistics";
       downloadPage = "https://github.com/pandas-dev/pandas";
       homepage = "https://pandas.pydata.org";
+<<<<<<< HEAD
       license = lib.licenses.bsd3;
+=======
+      license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       longDescription = ''
         Flexible and powerful data analysis / manipulation library for
         Python, providing labeled data structures similar to R data.frame
         objects, statistical functions, and much more.
       '';
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [
+=======
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         raskin
       ];
     };

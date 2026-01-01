@@ -37,11 +37,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for VAPID header generation";
     mainProgram = "vapid";
     homepage = "https://github.com/mozilla-services/vapid";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "Library for VAPID header generation";
+    mainProgram = "vapid";
+    homepage = "https://github.com/mozilla-services/vapid";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

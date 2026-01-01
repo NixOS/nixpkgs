@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colorthief" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for grabbing the color palette from an image";
     homepage = "https://github.com/fengsp/color-thief-py";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python module for grabbing the color palette from an image";
+    homepage = "https://github.com/fengsp/color-thief-py";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

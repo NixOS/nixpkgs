@@ -39,10 +39,18 @@ buildPythonPackage rec {
 
   doCheck = false; # tests require boost setup for ad hoc module compilation
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/inducer/codepy";
     description = "Generate and execute native code at run time, from Python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ atila ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/inducer/codepy";
+    description = "Generate and execute native code at run time, from Python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ atila ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

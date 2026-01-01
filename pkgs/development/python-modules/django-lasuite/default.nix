@@ -15,21 +15,32 @@
   pytest-django,
   responses,
   celery,
+<<<<<<< HEAD
   freezegun,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytestCheckHook,
   nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "django-lasuite";
+<<<<<<< HEAD
   version = "0.0.22";
+=======
+  version = "0.0.18";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "django-lasuite";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-T9FLxgWePifYIiD2Ivbfir2dlpUvZl2jj8y86VbxVDk=";
+=======
+    hash = "sha256-kXRaoVOyabGPCnO8uyWHbpE0zOIYZkHcqmWNSz0BHZY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];
@@ -45,6 +56,7 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
+<<<<<<< HEAD
   optional-dependencies = lib.fix (self: {
     all = with self; configuration ++ malware_detection;
     configuration = [ django-configurations ];
@@ -61,6 +73,17 @@ buildPythonPackage rec {
     responses
   ]
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  pythonRelaxDeps = true;
+
+  nativeCheckInputs = [
+    celery
+    pytestCheckHook
+    pytest-django
+    factory-boy
+    responses
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     export PYTHONPATH=tests:$PYTHONPATH

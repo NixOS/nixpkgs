@@ -32,9 +32,15 @@ buildPythonPackage rec {
     export TMPDIR="/tmp"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Test utilities for code working with files and commands";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Test utilities for code working with files and commands";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/jupyter/testpath";
   };
 }

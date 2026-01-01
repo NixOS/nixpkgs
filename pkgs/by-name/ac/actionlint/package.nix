@@ -11,7 +11,11 @@
 
 buildGoModule rec {
   pname = "actionlint";
+<<<<<<< HEAD
   version = "1.7.10";
+=======
+  version = "1.7.9";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "cmd/actionlint" ];
 
@@ -19,10 +23,17 @@ buildGoModule rec {
     owner = "rhysd";
     repo = "actionlint";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-KnvFzV1VDivt7JL1lavM9wgaxdsdnEiLAk/pmzkXi+c=";
   };
 
   vendorHash = "sha256-McXlYsJvANyPAXAaXM8/NCFxbDs9IgSgFvt68h8mGek=";
+=======
+    hash = "sha256-QZVZ4pF69rtdXmFIMXooTpAjzPM4TTzUKVVMWYqmUvQ=";
+  };
+
+  vendorHash = "sha256-oejeEImMgNXnbDIFg7MslcisVJj4Pl150ZMJ0YqGdLM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     makeWrapper

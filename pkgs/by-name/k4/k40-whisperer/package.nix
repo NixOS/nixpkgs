@@ -64,7 +64,11 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : $out
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       Control software for the stock K40 Laser controller
     '';
@@ -76,8 +80,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.scorchworks.com/K40whisperer/k40whisperer.html";
     downloadPage = "https://www.scorchworks.com/K40whisperer/k40whisperer.html#download";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ fooker ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ fooker ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

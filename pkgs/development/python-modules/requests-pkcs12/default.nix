@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_pkcs12" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PKCS#12 support for the Python requests library";
     homepage = "https://github.com/m-click/requests_pkcs12";
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "PKCS#12 support for the Python requests library";
+    homepage = "https://github.com/m-click/requests_pkcs12";
+    license = with licenses; [ isc ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

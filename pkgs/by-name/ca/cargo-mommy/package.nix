@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-B0hPxw/8T5x6E0dwPIHoPChLx4K2ORvPEUDYHncZrPE=";
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo wrapper that encourages you after running commands";
     mainProgram = "cargo-mommy";
@@ -24,5 +25,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ GoldsteinE ];
+=======
+  meta = with lib; {
+    description = "Cargo wrapper that encourages you after running commands";
+    mainProgram = "cargo-mommy";
+    homepage = "https://github.com/Gankra/cargo-mommy";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [ GoldsteinE ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

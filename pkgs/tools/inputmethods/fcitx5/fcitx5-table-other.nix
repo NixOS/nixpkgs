@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
     boost
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Some other tables for Fcitx";
     homepage = "https://github.com/fcitx/fcitx5-table-other";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Some other tables for Fcitx";
+    homepage = "https://github.com/fcitx/fcitx5-table-other";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ poscat ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

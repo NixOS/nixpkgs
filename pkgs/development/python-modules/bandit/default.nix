@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bandit" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Security oriented static analyser for python code";
     homepage = "https://bandit.readthedocs.io/";
     changelog = "https://github.com/PyCQA/bandit/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "Security oriented static analyser for python code";
+    homepage = "https://bandit.readthedocs.io/";
+    changelog = "https://github.com/PyCQA/bandit/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

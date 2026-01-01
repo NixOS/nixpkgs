@@ -54,10 +54,18 @@ buildPerlModule rec {
   # Ensure compatibility with GCC-11 (compilation fails if -Wno-format-security)
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://metacpan.org/dist/Bio-BigFile";
     description = "Manipulate Jim Kent's BigWig and BigBed index files for genomic features";
     license = lib.licenses.artistic2;
     maintainers = with lib.maintainers; [ apraga ];
+=======
+  meta = with lib; {
+    homepage = "https://metacpan.org/dist/Bio-BigFile";
+    description = "Manipulate Jim Kent's BigWig and BigBed index files for genomic features";
+    license = licenses.artistic2;
+    maintainers = with maintainers; [ apraga ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

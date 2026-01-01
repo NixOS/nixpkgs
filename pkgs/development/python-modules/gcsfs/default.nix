@@ -20,7 +20,11 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
+<<<<<<< HEAD
   version = "2025.10.0";
+=======
+  version = "2025.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +33,11 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "gcsfs";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-Co98M3zK839mIWhV1Sifyb9r0sy1BjX6stDIj/0ONYo=";
+=======
+    hash = "sha256-aXBlj9ej3Ya7h4x/akl/iX6dDS/SgkkEsOQ2E9KmCDU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

@@ -16,6 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
+<<<<<<< HEAD
   version = "404";
 
   src = fetchurl {
@@ -24,6 +25,16 @@ stdenv.mkDerivation rec {
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
     hash = "sha256-YzMvkhwie6WeWJ+gff2tFZnBCshZ6ibHKsHdSkG1ZaQ=";
+=======
+  version = "403";
+
+  src = fetchurl {
+    urls = [
+      "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
+      "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
+    ];
+    hash = "sha256-EzGw31kZyyQ//jJtxv8QopHmg6Ji9wzflkpmS+czrYM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./sixel-256.support.patch ];
@@ -113,6 +124,10 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://invisible-island.net/xterm";
     license = with lib.licenses; [ mit ];
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ nequissimus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = with lib.platforms; linux ++ darwin;
     changelog = "https://invisible-island.net/xterm/xterm.log.html";
     mainProgram = "xterm";

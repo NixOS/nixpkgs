@@ -24,11 +24,19 @@ rustPlatform.buildRustPackage {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Script interpolation engine for markdown documents";
     homepage = "https://github.com/terror/present/";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ cameronfyfe ];
+=======
+  meta = with lib; {
+    description = "Script interpolation engine for markdown documents";
+    homepage = "https://github.com/terror/present/";
+    license = licenses.cc0;
+    maintainers = with maintainers; [ cameronfyfe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "present";
   };
 }

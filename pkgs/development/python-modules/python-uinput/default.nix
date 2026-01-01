@@ -21,10 +21,17 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "Pythonic API to Linux uinput kernel module";
     homepage = "https://tjjr.fi/sw/python-uinput/";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Pythonic API to Linux uinput kernel module";
+    homepage = "https://tjjr.fi/sw/python-uinput/";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

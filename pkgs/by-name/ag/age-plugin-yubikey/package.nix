@@ -30,16 +30,28 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "YubiKey plugin for age";
     mainProgram = "age-plugin-yubikey";
     homepage = "https://github.com/str4d/age-plugin-yubikey";
     changelog = "https://github.com/str4d/age-plugin-yubikey/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = with lib.licenses; [
       mit
       asl20
     ];
     maintainers = with lib.maintainers; [
+=======
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kranzes
       vtuan10
       adamcstephens

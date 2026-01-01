@@ -1,6 +1,7 @@
 {
   buildPythonApplication,
   fetchFromGitHub,
+<<<<<<< HEAD
   i3ipc,
   lib,
   poetry-core,
@@ -11,6 +12,17 @@ buildPythonApplication rec {
   pname = "kitti3";
   version = "0.5.1-unstable-2021-09-10";
   pyproject = true;
+=======
+  poetry-core,
+  i3ipc,
+  lib,
+}:
+
+buildPythonApplication {
+  pname = "kitti3";
+  version = "unstable-2021-09-11";
+  format = "pyproject";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "LandingEllipse";
@@ -33,6 +45,7 @@ buildPythonApplication rec {
     i3ipc
   ];
 
+<<<<<<< HEAD
   passthru.updateScript = writeScript "update-kitti3" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p git common-updater-scripts perl tomlq
@@ -57,6 +70,13 @@ buildPythonApplication rec {
     description = "Kitty drop-down service for sway & i3wm";
     mainProgram = "kitti3";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/LandingEllipse/kitti3";
+    description = "Kitty drop-down service for sway & i3wm";
+    mainProgram = "kitti3";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

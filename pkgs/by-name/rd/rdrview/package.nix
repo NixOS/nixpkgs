@@ -36,11 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tool to extract main content from a webpage";
     homepage = "https://github.com/eafer/rdrview";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ djanatyn ];
+=======
+  meta = with lib; {
+    description = "Command line tool to extract main content from a webpage";
+    homepage = "https://github.com/eafer/rdrview";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ djanatyn ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rdrview";
   };
 

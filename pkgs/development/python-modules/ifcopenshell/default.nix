@@ -205,11 +205,20 @@ buildPythonPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Open source IFC library and geometry engine";
     homepage = "https://ifcopenshell.org/";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ autra ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Open source IFC library and geometry engine";
+    homepage = "https://ifcopenshell.org/";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ autra ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

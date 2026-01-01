@@ -52,10 +52,17 @@ buildPythonPackage rec {
     inherit sage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Read resources from Python packages";
     homepage = "https://importlib-resources.readthedocs.io/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Read resources from Python packages";
+    homepage = "https://importlib-resources.readthedocs.io/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

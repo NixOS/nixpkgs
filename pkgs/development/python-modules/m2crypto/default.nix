@@ -47,11 +47,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "M2Crypto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python crypto and SSL toolkit";
     homepage = "https://gitlab.com/m2crypto/m2crypto";
     changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python crypto and SSL toolkit";
+    homepage = "https://gitlab.com/m2crypto/m2crypto";
+    changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

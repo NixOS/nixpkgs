@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lingua" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Translation toolset";
     homepage = "https://github.com/wichert/lingua";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ np ];
+=======
+  meta = with lib; {
+    description = "Translation toolset";
+    homepage = "https://github.com/wichert/lingua";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ np ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

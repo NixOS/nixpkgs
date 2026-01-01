@@ -24,11 +24,20 @@ buildGoModule rec {
 
   passthru.tests.robustirc-bridge = nixosTests.robustirc-bridge;
 
+<<<<<<< HEAD
   meta = {
     description = "Bridge to robustirc.net-IRC-Network";
     mainProgram = "robustirc-bridge";
     homepage = "https://robustirc.net/";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.hax404 ];
+=======
+  meta = with lib; {
+    description = "Bridge to robustirc.net-IRC-Network";
+    mainProgram = "robustirc-bridge";
+    homepage = "https://robustirc.net/";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.hax404 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -49,14 +49,23 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/doc
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.ntp.org/";
     description = "Implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2
       url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
     };
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

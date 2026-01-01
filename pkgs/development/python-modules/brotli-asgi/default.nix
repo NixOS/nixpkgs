@@ -43,10 +43,18 @@ buildPythonPackage {
     brotlipy
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Compression AGSI middleware using brotli";
     homepage = "https://github.com/fullonic/brotli-asgi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Compression AGSI middleware using brotli";
+    homepage = "https://github.com/fullonic/brotli-asgi";
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

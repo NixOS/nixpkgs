@@ -29,11 +29,20 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # there's no test
 
+<<<<<<< HEAD
   meta = {
     description = "Minimalist thrilling shoot 'em up game";
     mainProgram = "brutalmaze";
     homepage = "https://brutalmaze.rtfd.io";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
+=======
+  meta = with lib; {
+    description = "Minimalist thrilling shoot 'em up game";
+    mainProgram = "brutalmaze";
+    homepage = "https://brutalmaze.rtfd.io";
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.McSinyx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

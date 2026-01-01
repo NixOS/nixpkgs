@@ -23,11 +23,19 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Highly customizable native true color skin for the Video Disc Recorder";
     maintainers = [ lib.maintainers.ck3d ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Highly customizable native true color skin for the Video Disc Recorder";
+    maintainers = [ maintainers.ck3d ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (vdr.meta) platforms;
   };
 }

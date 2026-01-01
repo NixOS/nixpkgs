@@ -42,13 +42,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Minimal ftp server";
     mainProgram = "bftpd";
     downloadPage = "http://bftpd.sf.net/download.html";
     homepage = "http://bftpd.sf.net/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

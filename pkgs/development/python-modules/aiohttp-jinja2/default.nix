@@ -44,10 +44,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_jinja2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jinja2 support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp_jinja2";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Jinja2 support for aiohttp";
+    homepage = "https://github.com/aio-libs/aiohttp_jinja2";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -40,8 +40,14 @@ for url in "${urls[@]}"; do
     # Extract filename from URL
     filename=$(extract_filename "$url")
 
+<<<<<<< HEAD
     # Download the file, filter out prereleases, and fix line endings
     echo "Fetching $url to $dir/$filename"
     curl -sL "$url" | jq 'del(.builds[] | select(has("prerelease")))' > "${dir}/${filename}"
+=======
+    # Download the file and fix line endings
+    echo "Fetching $url to $dir/$filename"
+    curl -sL "$url" -o "${dir}/${filename}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ensure_unix_format "${dir}/${filename}"
 done

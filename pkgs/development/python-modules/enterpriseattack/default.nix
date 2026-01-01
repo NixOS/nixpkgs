@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "enterpriseattack" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with the Mitre Att&ck Enterprise dataset";
     homepage = "https://github.com/xakepnz/enterpriseattack";
     changelog = "https://github.com/xakepnz/enterpriseattack/releases/tag/v.${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with the Mitre Att&ck Enterprise dataset";
+    homepage = "https://github.com/xakepnz/enterpriseattack";
+    changelog = "https://github.com/xakepnz/enterpriseattack/releases/tag/v.${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

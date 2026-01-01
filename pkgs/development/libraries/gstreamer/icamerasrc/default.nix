@@ -58,10 +58,17 @@ stdenv.mkDerivation {
     inherit (ipu6-camera-hal) ipuVersion;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GStreamer Plugin for MIPI camera support through the IPU6/IPU6EP/IPU6SE on Intel Tigerlake/Alderlake/Jasperlake platforms";
     homepage = "https://github.com/intel/icamerasrc/tree/icamerasrc_slim_api";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "GStreamer Plugin for MIPI camera support through the IPU6/IPU6EP/IPU6SE on Intel Tigerlake/Alderlake/Jasperlake platforms";
+    homepage = "https://github.com/intel/icamerasrc/tree/icamerasrc_slim_api";
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

@@ -16,16 +16,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
+<<<<<<< HEAD
   version = "1.54.0";
+=======
+  version = "1.53.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "broot";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-c7q6VTXoToUSx8gsOLcsLUvriZYYyYwGAjO8VTF3JFk=";
   };
 
   cargoHash = "sha256-jErnCexuu8PPUugsI+fRqWpqtpspDiVjnfn3it5jeK4=";
+=======
+    hash = "sha256-iiKfS1r62G9cBKa/KEW/SPwhZ/Pebw0mUvHy40DFCqA=";
+  };
+
+  cargoHash = "sha256-Hp+Fx1b0bQptNJKQeThZ3W7lSGdo6YsVAHAu69/YTX4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     installShellFiles
@@ -79,6 +90,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script { };
 

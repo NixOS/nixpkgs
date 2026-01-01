@@ -37,11 +37,20 @@ buildPythonPackage rec {
       --replace-fail 'raises((AttributeError, DNSSyntaxError))' 'raises((AttributeError, DNSSyntaxError, ValueError))'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple DNS library for managing zone files";
     homepage = "https://localzone.iomaestro.com";
     changelog = "https://github.com/ags-slc/localzone/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ flyfloh ];
+=======
+  meta = with lib; {
+    description = "Simple DNS library for managing zone files";
+    homepage = "https://localzone.iomaestro.com";
+    changelog = "https://github.com/ags-slc/localzone/blob/v${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ flyfloh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

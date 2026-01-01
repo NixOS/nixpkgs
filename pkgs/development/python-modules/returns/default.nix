@@ -58,11 +58,20 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "typesafety" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Make your functions return something meaningful, typed, and safe";
     homepage = "https://github.com/dry-python/returns";
     changelog = "https://github.com/dry-python/returns/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jessemoore ];
+=======
+  meta = with lib; {
+    description = "Make your functions return something meaningful, typed, and safe";
+    homepage = "https://github.com/dry-python/returns";
+    changelog = "https://github.com/dry-python/returns/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ jessemoore ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

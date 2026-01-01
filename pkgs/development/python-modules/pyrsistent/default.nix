@@ -32,9 +32,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrsistent" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tobgu/pyrsistent/";
     description = "Persistent/Functional/Immutable data structures";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tobgu/pyrsistent/";
+    description = "Persistent/Functional/Immutable data structures";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

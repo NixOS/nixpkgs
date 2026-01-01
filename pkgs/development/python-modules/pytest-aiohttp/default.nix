@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pytestFlags = [ "-Wignore::pytest.PytestDeprecationWarning" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/aio-libs/pytest-aiohttp/";
     changelog = "https://github.com/aio-libs/pytest-aiohttp/blob/${src.rev}/CHANGES.rst";
     description = "Pytest plugin for aiohttp support";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/aio-libs/pytest-aiohttp/";
+    changelog = "https://github.com/aio-libs/pytest-aiohttp/blob/${src.rev}/CHANGES.rst";
+    description = "Pytest plugin for aiohttp support";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

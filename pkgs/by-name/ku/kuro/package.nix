@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/davidsmorais/kuro/releases/tag/${src.rev}";
     description = "Unofficial, featureful, open source, community-driven, free Microsoft To-Do app";
@@ -87,6 +88,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     mainProgram = "kuro";
     maintainers = with lib.maintainers; [ ChaosAttractor ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/davidsmorais/kuro/releases/tag/${src.rev}";
+    description = "Unofficial, featureful, open source, community-driven, free Microsoft To-Do app";
+    homepage = "https://github.com/davidsmorais/kuro";
+    license = licenses.mit;
+    mainProgram = "kuro";
+    maintainers = with maintainers; [ ChaosAttractor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (electron.meta) platforms;
   };
 }

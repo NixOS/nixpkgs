@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     cp NEWS    $out/share/doc/bashmount
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jamielinux/bashmount";
     description = "Menu-driven bash script for the management of removable media with udisks";
@@ -38,5 +39,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.koral ];
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jamielinux/bashmount";
+    description = "Menu-driven bash script for the management of removable media with udisks";
+    mainProgram = "bashmount";
+    maintainers = [ maintainers.koral ];
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

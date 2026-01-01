@@ -39,14 +39,22 @@ stdenv.mkDerivation rec {
   # Maybe it clashes with lci scientific logic software package...
   postInstall = "mv $out/bin/lci $out/bin/lolcode-lci";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://lolcode.org";
     description = "Esoteric programming language";
     longDescription = ''
       LOLCODE is a funny esoteric  programming language, a bit Pascal-like,
       whose keywords are LOLspeak.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
+=======
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "lolcode-lci";
     platforms = lib.platforms.unix;

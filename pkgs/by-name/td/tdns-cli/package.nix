@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-KDZGTGLHLuZgFtzIp+lL0VIiQcYspvxAivp7hVE9V/A=";
 
+<<<<<<< HEAD
   meta = {
     description = "DNS tool that aims to replace dig and nsupdate";
     homepage = "https://github.com/rotty/tdns-cli";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ astro ];
+=======
+  meta = with lib; {
+    description = "DNS tool that aims to replace dig and nsupdate";
+    homepage = "https://github.com/rotty/tdns-cli";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tdns";
   };
 }

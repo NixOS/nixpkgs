@@ -77,12 +77,21 @@ stdenv.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Atlassian Plugin SDK";
     homepage = "https://developer.atlassian.com/server/framework/atlassian-sdk/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pathob ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Atlassian Plugin SDK";
+    homepage = "https://developer.atlassian.com/server/framework/atlassian-sdk/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pathob ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "atlas-mvn";
   };
 }

@@ -53,10 +53,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kaction ];
+=======
+  meta = with lib; {
+    description = "Sphinx extension for creating unselectable prompt";
+    homepage = "https://github.com/sbrunner/sphinx-prompt";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ kaction ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

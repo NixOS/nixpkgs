@@ -60,10 +60,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "paranoid_crypto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library contains checks for well known weaknesses on cryptographic artifacts";
     homepage = "https://github.com/google/paranoid_crypto";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library contains checks for well known weaknesses on cryptographic artifacts";
+    homepage = "https://github.com/google/paranoid_crypto";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -38,11 +38,19 @@ buildPythonPackage rec {
     "azure.mgmt.kusto"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Kusto Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-kusto_${version}/sdk/kusto/azure-mgmt-kusto/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Kusto Management Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-kusto_${version}/sdk/kusto/azure-mgmt-kusto/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

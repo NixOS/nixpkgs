@@ -49,11 +49,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Universal Access Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-a11y";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Universal Access Indicator for Wingpanel";
+    homepage = "https://github.com/elementary/wingpanel-indicator-a11y";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

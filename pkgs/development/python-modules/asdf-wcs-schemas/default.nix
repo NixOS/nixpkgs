@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf_wcs_schemas" ];
 
+<<<<<<< HEAD
   meta = {
     description = "World Coordinate System (WCS) ASDF schemas";
     homepage = "https://github.com/asdf-format/asdf-wcs-schemas";
     changelog = "https://github.com/asdf-format/asdf-wcs-schemas/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "World Coordinate System (WCS) ASDF schemas";
+    homepage = "https://github.com/asdf-format/asdf-wcs-schemas";
+    changelog = "https://github.com/asdf-format/asdf-wcs-schemas/blob/${src.tag}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

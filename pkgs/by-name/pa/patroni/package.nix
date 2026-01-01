@@ -50,6 +50,10 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   __darwinAllowLocalNetworking = true;
 

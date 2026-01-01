@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+<<<<<<< HEAD
   meta = {
     description = "C library for creating Excel XLSX files";
     homepage = "https://libxlsxwriter.github.io/";
@@ -46,5 +47,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C library for creating Excel XLSX files";
+    homepage = "https://libxlsxwriter.github.io/";
+    changelog = "https://github.com/jmcnamara/libxlsxwriter/blob/${src.rev}/Changes.txt";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

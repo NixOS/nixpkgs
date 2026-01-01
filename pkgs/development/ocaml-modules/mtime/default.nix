@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
+<<<<<<< HEAD
   meta = {
     description = "Monotonic wall-clock time for OCaml";
     homepage = "https://erratique.ch/software/mtime";
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Monotonic wall-clock time for OCaml";
+    homepage = "https://erratique.ch/software/mtime";
+    inherit (ocaml.meta) platforms;
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }

@@ -20,11 +20,20 @@ stdenv.mkDerivation rec {
     cp cutee $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C++ Unit Testing Easy Environment";
     mainProgram = "cutee";
     homepage = "https://www.codesink.org/cutee_unit_testing.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "C++ Unit Testing Easy Environment";
+    mainProgram = "cutee";
+    homepage = "https://www.codesink.org/cutee_unit_testing.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

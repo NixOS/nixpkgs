@@ -40,11 +40,19 @@ buildPythonPackage rec {
     scipy
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/taynaud/python-louvain";
     description = "Louvain Community Detection";
     mainProgram = "community";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/taynaud/python-louvain";
+    description = "Louvain Community Detection";
+    mainProgram = "community";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

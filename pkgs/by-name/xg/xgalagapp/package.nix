@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://marc.mongenet.ch/OSS/XGalaga/";
     description = "XGalaga++ is a classic single screen vertical shoot ’em up. It is inspired by XGalaga and reuses most of its sprites";
     mainProgram = "xgalaga++";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://marc.mongenet.ch/OSS/XGalaga/";
+    description = "XGalaga++ is a classic single screen vertical shoot ’em up. It is inspired by XGalaga and reuses most of its sprites";
+    mainProgram = "xgalaga++";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

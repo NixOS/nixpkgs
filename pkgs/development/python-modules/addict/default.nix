@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "addict" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module that exposes a dictionary subclass that allows items to be set like attributes";
     homepage = "https://github.com/mewwts/addict";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Module that exposes a dictionary subclass that allows items to be set like attributes";
+    homepage = "https://github.com/mewwts/addict";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

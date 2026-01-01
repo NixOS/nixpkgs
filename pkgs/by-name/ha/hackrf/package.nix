@@ -54,11 +54,20 @@ stdenv.mkDerivation rec {
       --replace "find_library (FFTW_LIBRARIES NAMES fftw3)" "find_library (FFTW_LIBRARIES NAMES fftw3f)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open source SDR platform";
     homepage = "https://greatscottgadgets.com/hackrf/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ sjmackenzie ];
+=======
+  meta = with lib; {
+    description = "Open source SDR platform";
+    homepage = "https://greatscottgadgets.com/hackrf/";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ sjmackenzie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -38,9 +38,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tokenlib" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mozilla-services/tokenlib";
     description = "Generic support library for signed-token-based auth schemes";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mozilla-services/tokenlib";
+    description = "Generic support library for signed-token-based auth schemes";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -25,11 +25,20 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Live reload for Go apps";
     mainProgram = "air";
     homepage = "https://github.com/air-verse/air";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Gonzih ];
+=======
+  meta = with lib; {
+    description = "Live reload for Go apps";
+    mainProgram = "air";
+    homepage = "https://github.com/air-verse/air";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ Gonzih ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

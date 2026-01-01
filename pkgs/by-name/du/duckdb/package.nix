@@ -10,7 +10,10 @@
   unixODBC,
   withJdbc ? false,
   withOdbc ? false,
+<<<<<<< HEAD
   versionCheckHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -57,8 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   installCheckPhase =
     let
       excludes = map (pattern: "exclude:'${pattern}'") (
@@ -135,7 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.updateScript = ./update.sh;
+<<<<<<< HEAD
   passthru.pythonHash = versions.python_hash;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";

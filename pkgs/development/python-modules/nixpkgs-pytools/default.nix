@@ -28,10 +28,17 @@ buildPythonPackage rec {
   # tests require network ..
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for removing the tedious nature of creating nixpkgs derivations";
     homepage = "https://github.com/nix-community/nixpkgs-pytools";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tools for removing the tedious nature of creating nixpkgs derivations";
+    homepage = "https://github.com/nix-community/nixpkgs-pytools";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

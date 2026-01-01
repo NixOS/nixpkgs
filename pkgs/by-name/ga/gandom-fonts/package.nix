@@ -23,11 +23,19 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rastikerdar/gandom-font";
     description = "Persian (Farsi) Font - فونت (قلم) فارسی گندم";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rastikerdar/gandom-font";
+    description = "Persian (Farsi) Font - فونت (قلم) فارسی گندم";
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

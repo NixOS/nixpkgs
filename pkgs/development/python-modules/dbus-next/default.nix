@@ -45,11 +45,19 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Zero-dependency DBus library for Python with asyncio support";
     homepage = "https://github.com/altdesktop/python-dbus-next";
     changelog = "https://github.com/altdesktop/python-dbus-next/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Zero-dependency DBus library for Python with asyncio support";
+    homepage = "https://github.com/altdesktop/python-dbus-next";
+    changelog = "https://github.com/altdesktop/python-dbus-next/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

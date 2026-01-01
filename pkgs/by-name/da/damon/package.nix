@@ -17,11 +17,19 @@ buildGoModule {
 
   vendorHash = "sha256-/ZZxw6qEUJQUz3J0TxUYJECCcX276r74g0N2tV77+8I=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/hashicorp/damon";
     license = lib.licenses.mpl20;
     description = "Terminal UI (TUI) for HashiCorp Nomad";
     teams = [ lib.teams.iog ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/hashicorp/damon";
+    license = licenses.mpl20;
+    description = "Terminal UI (TUI) for HashiCorp Nomad";
+    teams = [ teams.iog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "damon";
   };
 }

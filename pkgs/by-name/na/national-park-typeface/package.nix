@@ -22,10 +22,17 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = ''Typeface designed to mimic the national park service signs that are carved using a router bit'';
     homepage = "https://nationalparktypeface.com/";
     license = lib.licenses.ofl;
+=======
+  meta = with lib; {
+    description = ''Typeface designed to mimic the national park service signs that are carved using a router bit'';
+    homepage = "https://nationalparktypeface.com/";
+    license = licenses.ofl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

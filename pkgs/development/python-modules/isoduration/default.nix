@@ -38,10 +38,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "isoduration" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for operations with ISO 8601 durations";
     homepage = "https://github.com/bolsote/isoduration";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for operations with ISO 8601 durations";
+    homepage = "https://github.com/bolsote/isoduration";
+    license = licenses.isc;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

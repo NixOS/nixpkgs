@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automatically generate all types of basic memory management operations and write into trace files";
     mainProgram = "TraceFileGen";
@@ -39,6 +40,15 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.cmcdragonkai ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Automatically generate all types of basic memory management operations and write into trace files";
+    mainProgram = "TraceFileGen";
+    homepage = "https://github.com/GarCoSim";
+    maintainers = [ maintainers.cmcdragonkai ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

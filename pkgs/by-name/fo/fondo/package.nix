@@ -61,12 +61,21 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/calo001/fondo";
     description = "Find the most beautiful wallpapers for your desktop";
     license = lib.licenses.agpl3Plus;
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/calo001/fondo";
+    description = "Find the most beautiful wallpapers for your desktop";
+    license = licenses.agpl3Plus;
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "com.github.calo001.fondo";
   };
 }

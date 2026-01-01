@@ -19,7 +19,10 @@ let
       "java.base"
       "java.logging"
       "java.xml"
+<<<<<<< HEAD
       "jdk.crypto.ec"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     jdk = jdk_headless;
   };
@@ -123,11 +126,20 @@ maven.buildMavenPackage rec {
       });
   };
 
+<<<<<<< HEAD
   meta = {
     description = "XML Language Server";
     mainProgram = "lemminx";
     homepage = "https://github.com/eclipse/lemminx";
     license = lib.licenses.epl20;
     maintainers = with lib.maintainers; [ tricktron ];
+=======
+  meta = with lib; {
+    description = "XML Language Server";
+    mainProgram = "lemminx";
+    homepage = "https://github.com/eclipse/lemminx";
+    license = licenses.epl20;
+    maintainers = with maintainers; [ tricktron ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

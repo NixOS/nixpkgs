@@ -69,6 +69,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Integrated tool environment for modeling, validation and verification of real-time systems";
     homepage = "https://uppaal.org/";
@@ -76,6 +77,15 @@ stdenvNoCC.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin ++ windows;
     broken = !(stdenvNoCC.hostPlatform.isLinux && stdenvNoCC.hostPlatform.isx86_64);
     maintainers = with lib.maintainers; [ mortenmunk ];
+=======
+  meta = with lib; {
+    description = "Integrated tool environment for modeling, validation and verification of real-time systems";
+    homepage = "https://uppaal.org/";
+    license = licenses.unfreeRedistributable;
+    platforms = with platforms; linux ++ darwin ++ windows;
+    broken = !(stdenvNoCC.hostPlatform.isLinux && stdenvNoCC.hostPlatform.isx86_64);
+    maintainers = with maintainers; [ mortenmunk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "uppaal";
   };
 }

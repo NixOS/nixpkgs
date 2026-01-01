@@ -45,11 +45,19 @@ buildPythonPackage rec {
   # all the tests talk to the internet
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Get and save images from jump web viewer";
     homepage = "https://github.com/eggplants/getjump";
     changelog = "https://github.com/eggplants/getjump/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Get and save images from jump web viewer";
+    homepage = "https://github.com/eggplants/getjump";
+    changelog = "https://github.com/eggplants/getjump/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "jget";
   };

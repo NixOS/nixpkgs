@@ -30,10 +30,17 @@ buildGoModule rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Your shell history: synced, queryable, and in context";
     homepage = "https://github.com/ddworken/hishtory";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Your shell history: synced, queryable, and in context";
+    homepage = "https://github.com/ddworken/hishtory";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "hishtory";
   };

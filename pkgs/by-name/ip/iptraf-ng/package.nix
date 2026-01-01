@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Console-based network monitoring utility (fork of iptraf)";
     longDescription = ''
       IPTraf-ng is a console-based network monitoring utility. IPTraf-ng
@@ -47,9 +51,15 @@ stdenv.mkDerivation rec {
       network cards.
     '';
     homepage = "https://github.com/iptraf-ng/iptraf-ng";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ devhell ];
+=======
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ devhell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "iptraf-ng";
   };
 }

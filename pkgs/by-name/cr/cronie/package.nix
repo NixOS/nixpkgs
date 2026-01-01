@@ -2,7 +2,10 @@
   lib,
   autoreconfHook,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenv,
 }:
 
@@ -17,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WrzdpE9t7vWpc8QFoFs+S/HgHwsidRNmfcHp7ltSWQw=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with GCC 15
     (fetchpatch {
@@ -25,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"

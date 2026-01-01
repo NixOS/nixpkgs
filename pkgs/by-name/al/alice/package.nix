@@ -33,11 +33,20 @@ stdenv.mkDerivation (attrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source font by Ksenia Erulevich";
     homepage = "https://github.com/cyrealtype/Alice";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ncfavier ];
+=======
+  meta = with lib; {
+    description = "Open-source font by Ksenia Erulevich";
+    homepage = "https://github.com/cyrealtype/Alice";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ncfavier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

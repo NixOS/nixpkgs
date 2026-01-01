@@ -12,11 +12,19 @@ perlPackages.buildPerlPackage {
     sha256 = "d4a2c10aebef663b598ea37f3aa3e3b752acf1fbbb961232c3dbe1155008d1fa";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Render/convert graphs in/from various formats";
     license = lib.licenses.gpl1Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.jensbin ];
+=======
+  meta = with lib; {
+    description = "Render/convert graphs in/from various formats";
+    license = licenses.gpl1Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.jensbin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "graph-easy";
   };
 }

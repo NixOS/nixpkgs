@@ -77,10 +77,18 @@ buildPythonPackage rec {
     orjson = [ orjson ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "ClickHouse Database Core Driver for Python, Pandas, and Superset";
     homepage = "https://github.com/ClickHouse/clickhouse-connect";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "ClickHouse Database Core Driver for Python, Pandas, and Superset";
+    homepage = "https://github.com/ClickHouse/clickhouse-connect";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

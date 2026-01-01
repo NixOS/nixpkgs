@@ -99,6 +99,7 @@ stdenv.mkDerivation {
       ''${gappsWrapperArgs[@]}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pinegrow.com";
     description = "UI Web Editor";
@@ -106,6 +107,15 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = with lib.licenses; [ unfreeRedistributable ];
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    homepage = "https://pinegrow.com";
+    description = "UI Web Editor";
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = with licenses; [ unfreeRedistributable ];
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pinegrow";
   };
 }

@@ -14,14 +14,22 @@
 
 buildPythonPackage rec {
   pname = "prometheus-api-client";
+<<<<<<< HEAD
   version = "0.7.0";
+=======
+  version = "0.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "4n4nd";
     repo = "prometheus-api-client-python";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-dpvGvI37jMoWvMrVSCwiyendGCDLCw+s2TI04y8akx8=";
+=======
+    hash = "sha256-Xi3n1Ha6bpfp4KfCh/Zky7bBrXOojuR6BVzPNQ3a18Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -42,7 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prometheus_api_client" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python wrapper for the Prometheus HTTP API";
     longDescription = ''
       The prometheus-api-client library consists of multiple modules which
@@ -51,7 +63,11 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/4n4nd/prometheus-api-client-python";
     changelog = "https://github.com/4n4nd/prometheus-api-client-python/blob/${src.tag}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

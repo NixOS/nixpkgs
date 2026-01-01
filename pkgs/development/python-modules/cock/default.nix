@@ -23,9 +23,16 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pohmelie/cock";
     description = "Configuration file with click";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pohmelie/cock";
+    description = "Configuration file with click";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

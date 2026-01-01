@@ -20,14 +20,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sc-controller";
+<<<<<<< HEAD
   version = "0.5.5";
+=======
+  version = "0.5.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";
     repo = "sc-controller";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-IQxHa0bR8FWad9v5DfvXHskwayCgzbJm5ekzf1sjfiQ=";
+=======
+    hash = "sha256-7rSsRoxFCXSHSIIoBrIPPY+4/+M99Hdop8+EeryJues=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -101,6 +109,10 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rnhmjoj
     ];
   };

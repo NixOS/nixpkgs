@@ -40,10 +40,18 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "bkyml" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/joscha/bkyml";
     description = "CLI tool to generate a pipeline.yaml file for Buildkite on the fly";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ olebedev ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/joscha/bkyml";
+    description = "CLI tool to generate a pipeline.yaml file for Buildkite on the fly";
+    license = licenses.mit;
+    maintainers = with maintainers; [ olebedev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

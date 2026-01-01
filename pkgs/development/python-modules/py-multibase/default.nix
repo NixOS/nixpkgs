@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multibase" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for distinguishing base encodings and other simple string encodings";
     homepage = "https://github.com/multiformats/py-multibase";
     changelog = "https://github.com/multiformats/py-multibase/blob/v${version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rakesh4g ];
+=======
+  meta = with lib; {
+    description = "Module for distinguishing base encodings and other simple string encodings";
+    homepage = "https://github.com/multiformats/py-multibase";
+    changelog = "https://github.com/multiformats/py-multibase/blob/v${version}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rakesh4g ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

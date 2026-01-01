@@ -79,7 +79,11 @@ stdenv.mkDerivation rec {
       done
     '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.minizinc.org/";
     description = "IDE for MiniZinc, a medium-level constraint modelling language";
     mainProgram = "MiniZincIDE";
@@ -90,8 +94,14 @@ stdenv.mkDerivation rec {
       that it can be mapped onto existing solvers easily and consistently.
       It is a subset of the higher-level language Zinc.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+=======
+    license = licenses.mpl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.dtzWill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

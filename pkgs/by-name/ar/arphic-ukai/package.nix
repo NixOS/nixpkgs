@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CJK Unicode font Kai style";
     homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
@@ -38,5 +39,14 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.arphicpl;
     maintainers = [ lib.maintainers.changlinli ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "CJK Unicode font Kai style";
+    homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
+
+    license = licenses.arphicpl;
+    maintainers = [ maintainers.changlinli ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

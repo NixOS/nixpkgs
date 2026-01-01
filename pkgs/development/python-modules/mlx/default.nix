@@ -1,5 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
+=======
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
@@ -35,14 +39,22 @@ let
 
   mlx = buildPythonPackage rec {
     pname = "mlx";
+<<<<<<< HEAD
     version = "0.30.1";
+=======
+    version = "0.28.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "ml-explore";
       repo = "mlx";
       tag = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-Vt0RH+70VBwUjXSfPTsNdRS3g0ookJHhzf2kvgEtgH8=";
+=======
+      hash = "sha256-+2dVZ89a09q8mWIbv6fBsySp7clzRV1tOyqr5hjFrNU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     patches = [
@@ -53,7 +65,11 @@ let
 
     postPatch = ''
       substituteInPlace pyproject.toml \
+<<<<<<< HEAD
         --replace-fail "nanobind==2.10.2" "nanobind"
+=======
+        --replace-fail "nanobind==2.4.0" "nanobind>=2.4.0"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       substituteInPlace mlx/backend/cpu/jit_compiler.cpp \
         --replace-fail "g++" "$CXX"
@@ -72,7 +88,11 @@ let
     passthru.skipBulkUpdate = true;
 
     env = {
+<<<<<<< HEAD
       DEV_RELEASE = 1;
+=======
+      PYPI_RELEASE = version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       CMAKE_ARGS = toString [
         # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
         # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
@@ -113,6 +133,20 @@ let
       "python/tests/"
     ];
 
+<<<<<<< HEAD
+=======
+    disabledTests = [
+      # AssertionError
+      "test_numpy_conv"
+      "test_tensordot"
+    ];
+
+    disabledTestPaths = [
+      # AssertionError
+      "python/tests/test_blas.py"
+    ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Additional testing by executing the example Python scripts supplied with mlx
     # using the version of the library we've built.
     passthru.tests = {
@@ -142,10 +176,16 @@ let
       license = lib.licenses.mit;
       platforms = [ "aarch64-darwin" ];
       maintainers = with lib.maintainers; [
+<<<<<<< HEAD
         Gabriella439
         booxter
         cameronyule
         viraptor
+=======
+        viraptor
+        Gabriella439
+        cameronyule
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     };
   };

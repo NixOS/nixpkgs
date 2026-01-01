@@ -60,7 +60,11 @@ stdenvNoCC.mkDerivation (self: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lexical network of the English language";
     longDescription = ''
       Open English WordNet is a lexical network of the English language grouping
@@ -73,8 +77,14 @@ stdenvNoCC.mkDerivation (self: {
       open source methodology.
     '';
     homepage = "https://en-word.net/";
+<<<<<<< HEAD
     license = lib.licenses.cc-by-40;
     maintainers = with lib.maintainers; [ nicoo ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.cc-by-40;
+    maintainers = with maintainers; [ nicoo ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

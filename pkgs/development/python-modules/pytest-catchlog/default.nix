@@ -24,8 +24,13 @@ buildPythonPackage rec {
   # Requires pytest < 3.1
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://pypi.python.org/pypi/pytest-catchlog/";
     description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog";
   };

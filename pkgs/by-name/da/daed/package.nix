@@ -1,7 +1,10 @@
 {
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   stdenv,
   clang,
@@ -27,6 +30,7 @@ let
   web = stdenv.mkDerivation {
     inherit pname version src;
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
       inherit
         pname
@@ -34,14 +38,22 @@ let
         src
         ;
       pnpm = pnpm_9;
+=======
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 1;
       hash = "sha256-+yLpSbDzr1OV/bmUUg6drOvK1ok3cBd+RRV7Qrrlp+Q=";
     };
 
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_9
+=======
+      pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     buildPhase = ''

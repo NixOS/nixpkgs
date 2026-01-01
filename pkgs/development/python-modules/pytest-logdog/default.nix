@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_logdog" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to test logging";
     homepage = "https://github.com/ods/pytest-logdog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin to test logging";
+    homepage = "https://github.com/ods/pytest-logdog";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

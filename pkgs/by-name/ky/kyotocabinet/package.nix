@@ -32,10 +32,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://dbmx.net/kyotocabinet";
     description = "Library of routines for managing a database";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://dbmx.net/kyotocabinet";
+    description = "Library of routines for managing a database";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -59,12 +59,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shaperglot" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to test OpenType fonts for language support";
     homepage = "https://github.com/googlefonts/shaperglot";
     changelog = "https://github.com/googlefonts/shaperglot/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Tool to test OpenType fonts for language support";
+    homepage = "https://github.com/googlefonts/shaperglot";
+    changelog = "https://github.com/googlefonts/shaperglot/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "shaperglot";
   };
 }

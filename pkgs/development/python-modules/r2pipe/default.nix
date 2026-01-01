@@ -47,10 +47,18 @@ buildPythonPackage rec {
     EOF
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Interact with radare2";
     homepage = "https://github.com/radare/radare2-r2pipe";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ timokau ];
+=======
+  meta = with lib; {
+    description = "Interact with radare2";
+    homepage = "https://github.com/radare/radare2-r2pipe";
+    license = licenses.mit;
+    maintainers = with maintainers; [ timokau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

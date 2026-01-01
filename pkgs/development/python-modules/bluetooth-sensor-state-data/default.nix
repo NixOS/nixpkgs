@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bluetooth_sensor_state_data" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Models for storing and converting Bluetooth Sensor State Data";
     homepage = "https://github.com/bluetooth-devices/bluetooth-sensor-state-data";
     changelog = "https://github.com/Bluetooth-Devices/bluetooth-sensor-state-data/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Models for storing and converting Bluetooth Sensor State Data";
+    homepage = "https://github.com/bluetooth-devices/bluetooth-sensor-state-data";
+    changelog = "https://github.com/Bluetooth-Devices/bluetooth-sensor-state-data/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

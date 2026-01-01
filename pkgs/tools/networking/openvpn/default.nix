@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) initrd-network-openvpn systemd-initrd-networkd-openvpn;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Robust and highly flexible tunneling application";
     downloadPage = "https://openvpn.net/community-downloads/";
@@ -88,6 +89,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Robust and highly flexible tunneling application";
+    downloadPage = "https://openvpn.net/community-downloads/";
+    homepage = "https://openvpn.net/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "openvpn";
   };
 })

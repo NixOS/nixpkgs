@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-guilemoduledir=$(out)/${guile.siteDir}" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.nongnu.org/guile-reader/";
     description = "Simple framework for building readers for GNU Guile";
     longDescription = ''
@@ -47,7 +51,11 @@ stdenv.mkDerivation rec {
       Scheme readers. For example, it is used to implement Skribilo's
       R5RS-derived document syntax.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
+=======
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };

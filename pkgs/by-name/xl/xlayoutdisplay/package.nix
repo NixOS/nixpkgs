@@ -47,7 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Detects and arranges linux display outputs, using XRandR for detection and xrandr for arrangement";
     homepage = "https://github.com/alex-courtis/xlayoutdisplay";
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ dtzWill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     mainProgram = "xlayoutdisplay";

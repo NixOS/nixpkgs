@@ -1926,7 +1926,11 @@ in
               # Udev attributes for systemd to name the device and to create a .device target.
               systemdAttrs =
                 n:
+<<<<<<< HEAD
                 ''NAME:="${n}", ENV{ID_NET_NAME}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
+=======
+                ''NAME:="${n}", ENV{INTERFACE}="${n}", ENV{SYSTEMD_ALIAS}="/sys/subsystem/net/devices/${n}", TAG+="systemd"'';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             in
             flip (concatMapStringsSep "\n") (attrNames wlanDeviceInterfaces) (
               device:

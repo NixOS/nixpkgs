@@ -37,6 +37,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiovlc" ];
@@ -47,5 +48,17 @@ buildPythonPackage rec {
     changelog = "https://github.com/MartinHjelmare/aiovlc/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "aiovlc" ];
+
+  meta = with lib; {
+    description = "Python module to control VLC";
+    homepage = "https://github.com/MartinHjelmare/aiovlc";
+    changelog = "https://github.com/MartinHjelmare/aiovlc/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

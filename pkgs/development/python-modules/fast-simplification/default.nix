@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "fast-simplification";
+<<<<<<< HEAD
   version = "0.1.13";
+=======
+  version = "0.1.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "fast-simplification";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MgAOGB4wJQ68GyotaxiR9Xdho+TckHKEglQvCE2TWVY=";
+=======
+    hash = "sha256-OhVJKYmJR+A6JDaM/7Bfkc4PNlhsc6NgRNU+SokCg1U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

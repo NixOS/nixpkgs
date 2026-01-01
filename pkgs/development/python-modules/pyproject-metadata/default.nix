@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyproject_metadata" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PEP 621 metadata parsing";
     homepage = "https://github.com/FFY00/python-pyproject-metadata";
     changelog = "https://github.com/FFY00/python-pyproject-metadata/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "PEP 621 metadata parsing";
+    homepage = "https://github.com/FFY00/python-pyproject-metadata";
+    changelog = "https://github.com/FFY00/python-pyproject-metadata/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

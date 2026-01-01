@@ -32,7 +32,11 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "fipy";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-usuAj+bIzbCSxYuKeUDxEESbjxPCwYwdD/opaBbgl1w=";
+=======
+    hash = "sha256-345YrGQgHNq0FULjJjLqHksyfm/EHl+KyGfxwS6xK9U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   propagatedBuildInputs = [
@@ -63,11 +67,20 @@ buildPythonPackage rec {
   # to start a daemon on the builder.
   # pythonImportsCheck = [ "fipy" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.ctcms.nist.gov/fipy/";
     description = "Finite Volume PDE Solver Using Python";
     changelog = "https://github.com/usnistgov/fipy/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ wd15 ];
+=======
+  meta = with lib; {
+    homepage = "https://www.ctcms.nist.gov/fipy/";
+    description = "Finite Volume PDE Solver Using Python";
+    changelog = "https://github.com/usnistgov/fipy/blob/${version}/CHANGELOG.rst";
+    license = licenses.free;
+    maintainers = with maintainers; [ wd15 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

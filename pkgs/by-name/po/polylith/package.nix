@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool used to develop Polylith based architectures in Clojure";
     mainProgram = "poly";
@@ -54,6 +55,15 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool used to develop Polylith based architectures in Clojure";
+    mainProgram = "poly";
+    homepage = "https://github.com/polyfy/polylith";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.epl10;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ericdallo
       jlesquembre
     ];

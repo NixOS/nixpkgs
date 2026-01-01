@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Elegant, simple, clean dock";
     mainProgram = "plank";
@@ -88,5 +89,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ davidak ];
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Elegant, simple, clean dock";
+    mainProgram = "plank";
+    homepage = "https://launchpad.net/plank";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ davidak ];
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

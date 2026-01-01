@@ -78,12 +78,20 @@ let
               ;
             dontBuilt = true;
             installPhase = ''
+<<<<<<< HEAD
               cp -R ext/gitlab_glfm_markdown $out
+=======
+              cp -R ext/glfm_markdown $out
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               rm $out/Cargo.lock
               cp Cargo.lock $out
             '';
           };
+<<<<<<< HEAD
           hash = "sha256-x97e5fg11IU63VZd1n3CHduVC7GQagI8MFiFwR+p0wk=";
+=======
+          hash = "sha256-f2a6/xPNGfiT4bbKAlHYYcqc0PkEkW+cpH7QbJMCY7c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
 
         dontBuild = false;
@@ -104,6 +112,10 @@ let
         '';
 
         postInstall = ''
+<<<<<<< HEAD
+=======
+          mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           find $out -type f -name .rustc_info.json -delete
         '';
       };
@@ -320,21 +332,37 @@ stdenv.mkDerivation {
   };
 
   meta =
+<<<<<<< HEAD
 
     {
       homepage = "http://www.gitlab.com/";
       platforms = lib.platforms.linux;
       teams = [ lib.teams.gitlab ];
+=======
+    with lib;
+    {
+      homepage = "http://www.gitlab.com/";
+      platforms = platforms.linux;
+      teams = [ teams.gitlab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     // (
       if gitlabEnterprise then
         {
+<<<<<<< HEAD
           license = lib.licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+=======
+          license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           description = "GitLab Enterprise Edition";
         }
       else
         {
+<<<<<<< HEAD
           license = lib.licenses.mit;
+=======
+          license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           description = "GitLab Community Edition";
           longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
         }

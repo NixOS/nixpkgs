@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple high quality GIF encoding";
     homepage = "https://github.com/lukechilds/gifgen";
@@ -36,5 +37,14 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "gifgen";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Simple high quality GIF encoding";
+    homepage = "https://github.com/lukechilds/gifgen";
+    license = licenses.mit;
+    maintainers = [ ];
+    mainProgram = "gifgen";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,10 +23,18 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Code search-and-replace tool";
     homepage = "https://github.com/dalance/amber";
     license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.bdesham ];
+=======
+  meta = with lib; {
+    description = "Code search-and-replace tool";
+    homepage = "https://github.com/dalance/amber";
+    license = with licenses; [ mit ];
+    maintainers = [ maintainers.bdesham ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

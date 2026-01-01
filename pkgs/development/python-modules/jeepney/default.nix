@@ -58,11 +58,20 @@ buildPythonPackage rec {
     "jeepney.io.trio"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://gitlab.com/takluyver/jeepney/-/blob/${src.tag}/docs/release-notes.rst";
     homepage = "https://gitlab.com/takluyver/jeepney";
     description = "Pure Python DBus interface";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://gitlab.com/takluyver/jeepney/-/blob/${src.tag}/docs/release-notes.rst";
+    homepage = "https://gitlab.com/takluyver/jeepney";
+    description = "Pure Python DBus interface";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

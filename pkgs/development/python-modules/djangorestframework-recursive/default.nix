@@ -28,10 +28,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rest_framework_recursive" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Recursive Serialization for Django REST framework";
     homepage = "https://github.com/heywbj/django-rest-framework-recursive";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Recursive Serialization for Django REST framework";
+    homepage = "https://github.com/heywbj/django-rest-framework-recursive";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

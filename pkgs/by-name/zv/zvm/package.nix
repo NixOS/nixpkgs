@@ -8,18 +8,32 @@
 
 buildGoModule rec {
   pname = "zvm";
+<<<<<<< HEAD
   version = "0.8.11";
+=======
+  version = "0.8.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "tristanisham";
     repo = "zvm";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-RMXF69zqqNK3tifbeDM7dxkiHMws7n+PeeHvCUK7/OU=";
   };
 
   vendorHash = "sha256-dM9FiUucSBkk8L93HfzoHQ1EyyRmAZjfedvOyRBDFBA=";
 
   doInstallCheck = true;
+=======
+    hash = "sha256-M1xpE2Lq6XZgvH9J0c2Xj1BJNN+4TTGwp4iluVyVAJs=";
+  };
+
+  vendorHash = "sha256-wo+vA9AYXIjv6SGb7hNY6ZIVMyJ5enMd8gpQ6u3F7To=";
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };

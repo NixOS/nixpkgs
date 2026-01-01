@@ -39,7 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/waydabber/m1ddc";
     license = lib.licenses.mit;
     mainProgram = "m1ddc";
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.amarshall ];
+=======
+    maintainers = [ lib.maintainers.joanmassachs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "aarch64-darwin" ];
   };
 })

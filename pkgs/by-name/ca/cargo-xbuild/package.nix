@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-8ceL4Ntb+P+BvLqlnSxKcyZREckyWAKDhxR6prjaxHM=";
 
+<<<<<<< HEAD
   meta = {
     description = "Automatically cross-compiles the sysroot crates core, compiler_builtins, and alloc";
     homepage = "https://github.com/rust-osdev/cargo-xbuild";
@@ -25,6 +26,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Automatically cross-compiles the sysroot crates core, compiler_builtins, and alloc";
+    homepage = "https://github.com/rust-osdev/cargo-xbuild";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       johntitor
       xrelkd
     ];

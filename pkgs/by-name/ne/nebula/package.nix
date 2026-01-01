@@ -3,27 +3,44 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+<<<<<<< HEAD
   withPkcs11 ? true,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "nebula";
   version = "1.10.0";
+=======
+}:
+
+buildGoModule rec {
+  pname = "nebula";
+  version = "1.9.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = "nebula";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-p/2A1ZTBUPvrA8eAgLxjR7NSAfiIEkDcjX0Db8dCmfQ=";
   };
 
   vendorHash = "sha256-rod6YDosI9nBf2v6Q/rw/fT9p9N8Zo/lu989UhyL8/s=";
+=======
+    tag = "v${version}";
+    hash = "sha256-U6PCHRSETkrA/nulTqIn9vvj3zks10kJ1k2syFsPMnM=";
+  };
+
+  vendorHash = "sha256-oXhq+s5gDKPVClZpOzYi7BaYwcDqbCLBEO5BNGy9LJA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [
     "cmd/nebula"
     "cmd/nebula-cert"
   ];
 
+<<<<<<< HEAD
   tags = lib.optional withPkcs11 "pkcs11";
 
   ldflags = [ "-X main.Build=${finalAttrs.version}" ];
@@ -51,6 +68,11 @@ buildGoModule (finalAttrs: {
       '';
     });
 
+=======
+  ldflags = [ "-X main.Build=${version}" ];
+
+  passthru.tests = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (nixosTests.nebula)
       connectivity
       reload
@@ -75,6 +97,7 @@ buildGoModule (finalAttrs: {
       parts.
     '';
     homepage = "https://github.com/slackhq/nebula";
+<<<<<<< HEAD
     changelog = "https://github.com/slackhq/nebula/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -82,3 +105,13 @@ buildGoModule (finalAttrs: {
     ];
   };
 })
+=======
+    changelog = "https://github.com/slackhq/nebula/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      numinit
+    ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Software package for mapping low-divergent sequences against a large reference genome, such as the human genome";
     mainProgram = "bwa";
@@ -48,5 +49,14 @@ stdenv.mkDerivation rec {
     homepage = "https://bio-bwa.sourceforge.net/";
     maintainers = with lib.maintainers; [ luispedro ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Software package for mapping low-divergent sequences against a large reference genome, such as the human genome";
+    mainProgram = "bwa";
+    license = licenses.gpl3Plus;
+    homepage = "https://bio-bwa.sourceforge.net/";
+    maintainers = with maintainers; [ luispedro ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

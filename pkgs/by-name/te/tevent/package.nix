@@ -71,10 +71,18 @@ stdenv.mkDerivation rec {
     stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
   ) "--undefined-version";
 
+<<<<<<< HEAD
   meta = {
     description = "Event system based on the talloc memory management library";
     homepage = "https://tevent.samba.org/";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Event system based on the talloc memory management library";
+    homepage = "https://tevent.samba.org/";
+    license = licenses.lgpl3Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

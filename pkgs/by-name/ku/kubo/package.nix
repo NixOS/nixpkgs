@@ -61,6 +61,7 @@ buildGoModule rec {
     install --mode=444 -D 'misc/systemd/ipfs-hardened.service' "$systemd_unit_hardened/etc/systemd/system/ipfs.service"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "IPFS implementation in Go";
     homepage = "https://ipfs.io/";
@@ -69,6 +70,16 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "ipfs";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "IPFS implementation in Go";
+    homepage = "https://ipfs.io/";
+    changelog = "https://github.com/ipfs/kubo/releases/tag/${rev}";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    mainProgram = "ipfs";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       Luflosi
     ];
   };

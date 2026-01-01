@@ -22,11 +22,20 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Increments the version number of the current project";
     mainProgram = "cargo-bump";
     homepage = "https://github.com/wraithan/cargo-bump";
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ cafkafk ];
+=======
+  meta = with lib; {
+    description = "Increments the version number of the current project";
+    mainProgram = "cargo-bump";
+    homepage = "https://github.com/wraithan/cargo-bump";
+    license = with licenses; [ isc ];
+    maintainers = with maintainers; [ cafkafk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

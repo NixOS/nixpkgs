@@ -88,10 +88,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "glanceclient" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the OpenStack Images API";
     homepage = "https://github.com/openstack/python-glanceclient/";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Python bindings for the OpenStack Images API";
+    homepage = "https://github.com/openstack/python-glanceclient/";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

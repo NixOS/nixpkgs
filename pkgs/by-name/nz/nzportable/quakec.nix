@@ -7,12 +7,20 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "nzp-quakec";
+<<<<<<< HEAD
   version = "0-unstable-2025-11-26";
+=======
+  version = "0-unstable-2024-10-12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "nzp-team";
     repo = "quakec";
+<<<<<<< HEAD
     rev = "b1d7fec5a536b088283578866ade2c596f7928d0";
+=======
+    rev = "01e95c4dab91ce0e8b7387d2726d9ee307792ae7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-h4llx3tzeoI1aHLokM7NqkZJWuo6rcrmWfb0pDQL+zM=";
   };
 

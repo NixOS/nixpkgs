@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Enable git-like did-you-mean feature in click";
     homepage = "https://github.com/click-contrib/click-didyoumean";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbode ];
+=======
+  meta = with lib; {
+    description = "Enable git-like did-you-mean feature in click";
+    homepage = "https://github.com/click-contrib/click-didyoumean";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

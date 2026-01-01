@@ -30,11 +30,20 @@ stdenv.mkDerivation {
 
   buildFlags = [ "gtk3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin for DeaDBeeF audio player that fetches and shows the song’s lyrics";
     homepage = "https://github.com/C0rn3j/deadbeef-lyricbar";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jtojnar ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Plugin for DeaDBeeF audio player that fetches and shows the song’s lyrics";
+    homepage = "https://github.com/C0rn3j/deadbeef-lyricbar";
+    license = licenses.mit;
+    maintainers = [ maintainers.jtojnar ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

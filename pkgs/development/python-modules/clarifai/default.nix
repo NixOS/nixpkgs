@@ -121,12 +121,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clarifai" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Clarifai Python Utilities";
     homepage = "https://github.com/Clarifai/clarifai-python";
     changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Clarifai Python Utilities";
+    homepage = "https://github.com/Clarifai/clarifai-python";
+    changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "clarifai";
   };
 }

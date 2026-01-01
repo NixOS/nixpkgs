@@ -38,11 +38,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorun" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Boilerplate for asyncio applications";
     homepage = "https://github.com/cjrh/aiorun";
     changelog = "https://github.com/cjrh/aiorun/blob/v${version}/CHANGES";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Boilerplate for asyncio applications";
+    homepage = "https://github.com/cjrh/aiorun";
+    changelog = "https://github.com/cjrh/aiorun/blob/v${version}/CHANGES";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation {
     install -D sw-icon.xpm $out/share/icons/hicolor/256x256/apps/sw-icon.xpm
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Turn your Android device into wireless headphones / wireless speaker";
     homepage = "https://georgielabs.net/";
@@ -38,5 +39,14 @@ stdenvNoCC.mkDerivation {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    description = "Turn your Android device into wireless headphones / wireless speaker";
+    homepage = "https://georgielabs.net/";
+    maintainers = with maintainers; [ mkg20001 ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

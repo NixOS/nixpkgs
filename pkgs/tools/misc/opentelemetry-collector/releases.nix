@@ -124,7 +124,11 @@ let
           };
         };
 
+<<<<<<< HEAD
         meta = {
+=======
+        meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           homepage = "https://github.com/open-telemetry/opentelemetry-collector-releases";
           description = "OpenTelemetry Collector Official Releases";
           longDescription = ''
@@ -134,8 +138,14 @@ let
             support open-source telemetry data formats (e.g. Jaeger, Prometheus, etc.)
             sending to multiple open-source or commercial back-ends.
           '';
+<<<<<<< HEAD
           license = lib.licenses.asl20;
           maintainers = with lib.maintainers; [
+=======
+          license = licenses.asl20;
+          maintainers = with maintainers; [
+            uri-canva
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             jk
             zimbatm
           ];

@@ -20,10 +20,18 @@ stdenv.mkDerivation rec {
   # check phase is empty for now (as of version 0.9)
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Calculates rank-width and rank-decompositions";
     license = with lib.licenses; [ gpl2Plus ];
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Calculates rank-width and rank-decompositions";
+    license = with licenses; [ gpl2Plus ];
+    teams = [ teams.sage ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

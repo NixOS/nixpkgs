@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     install -m755 $src $out/bin/${pname}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Jailbreak for iPhone 5s though iPhone X, iOS 12.0 and up";
     homepage = "https://checkra.in/";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ onny ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Jailbreak for iPhone 5s though iPhone X, iOS 12.0 and up";
+    homepage = "https://checkra.in/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ onny ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

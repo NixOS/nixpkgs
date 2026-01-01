@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/rasterio/affine/blob/${version}/CHANGES.txt";
     description = "Matrices describing affine transformation of the plane";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/rasterio/affine/blob/${version}/CHANGES.txt";
+    description = "Matrices describing affine transformation of the plane";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/rasterio/affine";
     maintainers = [ ];
   };

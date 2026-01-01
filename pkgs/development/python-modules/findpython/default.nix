@@ -39,12 +39,21 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "findpython" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Utility to find python versions on your system";
     mainProgram = "findpython";
     homepage = "https://github.com/frostming/findpython";
     changelog = "https://github.com/frostming/findpython/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

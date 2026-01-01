@@ -24,11 +24,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iteration_utilities" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities based on Pythons iterators and generators";
     homepage = "https://github.com/MSeifert04/iteration_utilities";
     changelog = "https://github.com/MSeifert04/iteration_utilities/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Utilities based on Pythons iterators and generators";
+    homepage = "https://github.com/MSeifert04/iteration_utilities";
+    changelog = "https://github.com/MSeifert04/iteration_utilities/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.synapse.spark" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Synapse Spark Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-synapse-spark";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-spark_${version}/sdk/synapse/azure-synapse-spark/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Synapse Spark Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-synapse-spark";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-spark_${version}/sdk/synapse/azure-synapse-spark/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

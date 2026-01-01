@@ -33,11 +33,19 @@ buildGoModule rec {
       --zsh <(echo "complete -o nospace -C $INSTALL labctl")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of helper tools for network engineers, while configuring and experimenting with their own network labs";
     homepage = "https://labctl.net";
     changelog = "https://github.com/labctl/labctl/releases";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Collection of helper tools for network engineers, while configuring and experimenting with their own network labs";
+    homepage = "https://labctl.net";
+    changelog = "https://github.com/labctl/labctl/releases";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "labctl";
   };

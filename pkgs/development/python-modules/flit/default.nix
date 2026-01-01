@@ -61,11 +61,19 @@ buildPythonPackage rec {
     "test_symlink_module_pep621"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/pypa/flit/blob/${version}/doc/history.rst";
     description = "Simple packaging tool for simple packages";
     mainProgram = "flit";
     homepage = "https://github.com/pypa/flit";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -35,11 +35,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
+<<<<<<< HEAD
   version = "3.27.3";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
     sha256 = "sha256-pNhbZ3l1Iq6GEZWLX9oLtn5JIa/ia9U+HS/wpBWNrMs=";
+=======
+  version = "3.27";
+
+  src = fetchurl {
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-YZUpLdeRC+aMtwGNRRZig+rv0/nbl3P81umnjUnqyZk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # TODO: render & install HTML documentation using asciidoctor
@@ -153,6 +161,10 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       bjornfor
+<<<<<<< HEAD
+=======
+      rasendubi
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

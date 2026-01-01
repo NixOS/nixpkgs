@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thrift" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the Apache Thrift RPC system";
     homepage = "https://thrift.apache.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hbunke ];
+=======
+  meta = with lib; {
+    description = "Python bindings for the Apache Thrift RPC system";
+    homepage = "https://thrift.apache.org/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hbunke ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

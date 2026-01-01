@@ -9,7 +9,10 @@
   yojson,
   csexp,
   result,
+<<<<<<< HEAD
   seq,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   menhirSdk,
 }:
 
@@ -44,6 +47,7 @@ buildDunePackage rec {
     yojson
     csexp
     result
+<<<<<<< HEAD
     seq
     menhirSdk
   ];
@@ -53,5 +57,15 @@ buildDunePackage rec {
     homepage = "https://github.com/ocaml/merlin";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+    menhirSdk
+  ];
+
+  meta = with lib; {
+    description = "Editor-independent tool to ease the development of programs in OCaml";
+    homepage = "https://github.com/ocaml/merlin";
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

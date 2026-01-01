@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyowm" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper around the OpenWeatherMap web API";
     homepage = "https://pyowm.readthedocs.io/";
     changelog = "https://github.com/csparpa/pyowm/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper around the OpenWeatherMap web API";
+    homepage = "https://pyowm.readthedocs.io/";
+    changelog = "https://github.com/csparpa/pyowm/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

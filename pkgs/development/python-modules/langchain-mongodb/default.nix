@@ -14,9 +14,13 @@
   lark,
   numpy,
   pymongo,
+<<<<<<< HEAD
   pymongo-search-utils,
 
   # test
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   freezegun,
   httpx,
   langchain-community,
@@ -35,14 +39,22 @@
 
 buildPythonPackage rec {
   pname = "langchain-mongodb";
+<<<<<<< HEAD
   version = "0.9.0";
+=======
+  version = "0.8.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
     tag = "libs/langchain-mongodb/v${version}";
+<<<<<<< HEAD
     hash = "sha256-g2FEowzGvP7a/zx/qn8EUxj5s6j/miMlzkRJEE64G0k=";
+=======
+    hash = "sha256-TpEiTQe4nZEhb7yWdm73oKaHGr58Ej3cNeD1sP5pAxA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/libs/langchain-mongodb";
@@ -63,7 +75,10 @@ buildPythonPackage rec {
     langchain-text-splitters
     numpy
     pymongo
+<<<<<<< HEAD
     pymongo-search-utils
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [

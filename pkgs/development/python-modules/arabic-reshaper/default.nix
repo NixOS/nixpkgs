@@ -29,11 +29,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arabic_reshaper" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Reconstruct Arabic sentences to be used in applications that don't support Arabic";
     homepage = "https://github.com/mpcabd/python-arabic-reshaper";
     changelog = "https://github.com/mpcabd/python-arabic-reshaper/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    description = "Reconstruct Arabic sentences to be used in applications that don't support Arabic";
+    homepage = "https://github.com/mpcabd/python-arabic-reshaper";
+    changelog = "https://github.com/mpcabd/python-arabic-reshaper/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

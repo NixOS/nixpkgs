@@ -29,15 +29,25 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "OpenConnect proxy";
     longDescription = ''
       ocproxy is a user-level SOCKS and port forwarding proxy for OpenConnect
       based on lwIP.
     '';
     homepage = "https://github.com/cernekee/ocproxy";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.joko ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd3;
+    maintainers = [ maintainers.joko ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

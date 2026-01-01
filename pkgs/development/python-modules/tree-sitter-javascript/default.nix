@@ -32,10 +32,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tree_sitter_javascript" ];
 
+<<<<<<< HEAD
   meta = {
     description = "JavaScript and JSX grammar for tree-sitter";
     homepage = "https://github.com/tree-sitter/tree-sitter-javascript";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "JavaScript and JSX grammar for tree-sitter";
+    homepage = "https://github.com/tree-sitter/tree-sitter-javascript";
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

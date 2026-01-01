@@ -104,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
       markuskowa
     ];
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     broken = stdenv.hostPlatform.isCygwin;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

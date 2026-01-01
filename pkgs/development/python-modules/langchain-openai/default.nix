@@ -33,14 +33,22 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
+<<<<<<< HEAD
   version = "1.1.6";
+=======
+  version = "1.0.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
+<<<<<<< HEAD
     hash = "sha256-Y+GV48rlqMfT4TrmoJFGqbHKfc8gxq61NhcUpwSsOwk=";
+=======
+    hash = "sha256-6xJEzwJlKGJg6LBQdKIt1E0dkSJcnocUOXq+NzUVEEc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -80,6 +88,7 @@ buildPythonPackage rec {
     "test_get_num_tokens_from_messages"
     "test_get_token_ids"
     "test_embeddings_respects_token_limit"
+<<<<<<< HEAD
 
     # Fail when langchain-core gets ahead of this package
     "test_serdes"
@@ -87,6 +96,8 @@ buildPythonPackage rec {
     "test_load_openai_llm"
     "test_loads_openai_chat"
     "test_load_openai_chat"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];

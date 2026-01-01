@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     cp -v debian/manpages/stund.8.gz $server/man/man8
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Stun server and test client";
     homepage = "https://sourceforge.net/projects/stun/";
@@ -47,6 +48,17 @@ stdenv.mkDerivation rec {
       obadz
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Stun server and test client";
+    homepage = "https://sourceforge.net/projects/stun/";
+    license = licenses.vsl10;
+    maintainers = with maintainers; [
+      marcweber
+      obadz
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "stun";
   };
 }

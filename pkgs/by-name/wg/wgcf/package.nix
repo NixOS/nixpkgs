@@ -19,11 +19,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-lG0D0LJV9IMq9R8O4IuxTQeulBb4q0ToZTU+HaGmn68=";
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform, unofficial CLI for Cloudflare Warp";
     homepage = "https://github.com/ViRb3/wgcf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yureien ];
+=======
+  meta = with lib; {
+    description = "Cross-platform, unofficial CLI for Cloudflare Warp";
+    homepage = "https://github.com/ViRb3/wgcf";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yureien ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wgcf";
   };
 }

@@ -25,10 +25,18 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "HMAC-based Extract-and-Expand Key Derivation Function (RFC 5869)";
     homepage = "https://github.com/hannesm/ocaml-hkdf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    description = "HMAC-based Extract-and-Expand Key Derivation Function (RFC 5869)";
+    homepage = "https://github.com/hannesm/ocaml-hkdf";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

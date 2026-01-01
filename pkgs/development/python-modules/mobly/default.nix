@@ -57,11 +57,20 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/google/mobly/blob/${src.rev}/CHANGELOG.md";
     description = "Automation framework for special end-to-end test cases";
     homepage = "https://github.com/google/mobly";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/google/mobly/blob/${src.rev}/CHANGELOG.md";
+    description = "Automation framework for special end-to-end test cases";
+    homepage = "https://github.com/google/mobly";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

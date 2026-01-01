@@ -49,11 +49,20 @@ stdenv.mkDerivation rec {
     make DESTDIR=$out install_man
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://knightos.org/";
     description = "Assembler and linker for the Z80";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://knightos.org/";
+    description = "Assembler and linker for the Z80";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

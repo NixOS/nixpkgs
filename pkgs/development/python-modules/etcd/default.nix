@@ -33,10 +33,17 @@ buildPythonPackage rec {
   # No proper tests are available
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python etcd client that just works";
     homepage = "https://github.com/dsoprea/PythonEtcdClient";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "Python etcd client that just works";
+    homepage = "https://github.com/dsoprea/PythonEtcdClient";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

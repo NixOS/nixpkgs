@@ -18,10 +18,17 @@ buildPythonPackage rec {
     sha256 = "1h7iam33vwxk8bvslfj4qlsdprdnwf8bvzhqh3jq5frr391cadbw";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Pattern matching and various utilities for file systems paths";
     homepage = "https://github.com/gorakhargosh/pathtools";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pattern matching and various utilities for file systems paths";
+    homepage = "https://github.com/gorakhargosh/pathtools";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

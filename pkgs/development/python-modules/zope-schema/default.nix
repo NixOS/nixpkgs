@@ -11,13 +11,18 @@
 
 buildPythonPackage rec {
   pname = "zope-schema";
+<<<<<<< HEAD
   version = "8.1";
+=======
+  version = "7.0.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.schema";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-pO3yL0gej2PGD01ySiPJPU66P/9hW73T2n/ZnUPa3C0=";
   };
 
@@ -26,6 +31,11 @@ buildPythonPackage rec {
       --replace-fail "setuptools ==" "setuptools >="
   '';
 
+=======
+    hash = "sha256-aUjlSgMfoKQdE0ta8jxNjh+L7OKkfOVvUWnvhx+QRsI=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = [

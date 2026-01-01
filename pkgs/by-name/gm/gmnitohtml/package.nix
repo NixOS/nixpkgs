@@ -44,7 +44,11 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://git.sr.ht/~adnano/gmnitohtml";
     changelog = "https://git.sr.ht/~adnano/gmnitohtml/log";
     description = "Gemini text to HTML converter";
@@ -52,8 +56,13 @@ buildGoModule rec {
       he gmnitohtml utility reads Gemini text from the standard input and writes
       HTML to the standard output.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jk
       sikmir
     ];

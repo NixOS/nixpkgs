@@ -24,9 +24,16 @@ buildPythonPackage rec {
     cython src/_readtags.pyx
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Ctags indexing python bindings";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Ctags indexing python bindings";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

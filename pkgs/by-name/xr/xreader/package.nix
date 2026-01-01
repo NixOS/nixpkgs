@@ -20,7 +20,11 @@
   libspectre,
   libgxps,
   webkitgtk_4_1,
+<<<<<<< HEAD
   mathjax,
+=======
+  nodePackages,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ninja,
   djvulibre,
   backends ? [
@@ -37,13 +41,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
+<<<<<<< HEAD
   version = "4.6.1";
+=======
+  version = "4.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-+T89KxGTGycN1pnXBxJY15ViRvwJbM2adZVUTTSG3VQ=";
+=======
+    hash = "sha256-cp/pZ42AS98AD78BVMeY3SHQHkYA2h4o0kddr/H+kUA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -57,8 +69,12 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+<<<<<<< HEAD
     # FIXME: `MathJax.js` is only available in MathJax 2.7.x.
     "-Dmathjax-directory=${mathjax}"
+=======
+    "-Dmathjax-directory=${nodePackages.mathjax}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "-Dintrospection=true"
   ]
   ++ (map (x: "-D${x}=true") backends);
@@ -75,7 +91,11 @@ stdenv.mkDerivation rec {
     libspectre
     libgxps
     webkitgtk_4_1
+<<<<<<< HEAD
     mathjax
+=======
+    nodePackages.mathjax
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     djvulibre
   ];
 
@@ -85,6 +105,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Document viewer capable of displaying multiple and single page
 document formats like PDF and Postscript";
@@ -92,5 +113,14 @@ document formats like PDF and Postscript";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    description = "Document viewer capable of displaying multiple and single page
+document formats like PDF and Postscript";
+    homepage = "https://github.com/linuxmint/xreader";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

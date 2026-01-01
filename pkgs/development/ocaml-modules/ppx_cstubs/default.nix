@@ -45,12 +45,21 @@ buildDunePackage rec {
     ctypes
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/fdopen/ppx_cstubs";
     changelog = "https://github.com/fdopen/ppx_cstubs/raw/${version}/CHANGES.md";
     description = "Preprocessor for easier stub generation with ocaml-ctypes";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.osener ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/fdopen/ppx_cstubs";
+    changelog = "https://github.com/fdopen/ppx_cstubs/raw/${version}/CHANGES.md";
+    description = "Preprocessor for easier stub generation with ocaml-ctypes";
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.osener ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast ocaml.version "5.2";
   };
 }

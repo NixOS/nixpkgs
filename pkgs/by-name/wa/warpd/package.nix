@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
       --replace 'bin/warpd $(DESTDIR)' 'bin/warpd -t $(DESTDIR)'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modal keyboard driven interface for mouse manipulation";
     homepage = "https://github.com/rvaiya/warpd";
@@ -68,6 +69,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hhydraa ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Modal keyboard driven interface for mouse manipulation";
+    homepage = "https://github.com/rvaiya/warpd";
+    changelog = "https://github.com/rvaiya/warpd/blob/${src.rev}/CHANGELOG.md";
+    maintainers = with maintainers; [ hhydraa ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "warpd";
   };
 }

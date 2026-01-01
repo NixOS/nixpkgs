@@ -17,16 +17,28 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7S7L/OKHTOAP9tbM7+xWhvcYBZScvX6SBW3U1AyFGrs=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "CLI tool that allow you to create a temporary new Rust project using cargo with already installed dependencies";
     mainProgram = "cargo-temp";
     homepage = "https://github.com/yozhgoor/cargo-temp";
     changelog = "https://github.com/yozhgoor/cargo-temp/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = with lib.maintainers; [
+=======
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
   };

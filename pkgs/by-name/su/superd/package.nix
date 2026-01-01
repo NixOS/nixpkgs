@@ -34,12 +34,21 @@ buildGoModule rec {
     installShellCompletion --zsh completions/zsh/superctl
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Unprivileged user service supervisor";
     homepage = "https://sr.ht/~craftyguy/superd/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Unprivileged user service supervisor";
+    homepage = "https://sr.ht/~craftyguy/superd/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       chuangzhu
       wentam
     ];

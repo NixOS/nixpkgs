@@ -56,11 +56,20 @@ buildPythonPackage rec {
   # Tests use sockets
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Services plugin for pytest testing framework";
     homepage = "https://github.com/pytest-dev/pytest-services";
     changelog = "https://github.com/pytest-dev/pytest-services/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Services plugin for pytest testing framework";
+    homepage = "https://github.com/pytest-dev/pytest-services";
+    changelog = "https://github.com/pytest-dev/pytest-services/blob/${src.tag}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

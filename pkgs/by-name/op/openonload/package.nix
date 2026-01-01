@@ -147,11 +147,19 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "OpenOnLoad high performance network stack from Solarflare";
     homepage = "https://www.openonload.org";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ YorikSar ];
+=======
+  meta = with lib; {
+    description = "OpenOnLoad high performance network stack from Solarflare";
+    homepage = "https://www.openonload.org";
+    license = lib.licenses.gpl2;
+    maintainers = with maintainers; [ YorikSar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # ARM64 build fails, see https://github.com/Xilinx-CNS/onload/issues/253
     platforms = [ "x86_64-linux" ];
   };

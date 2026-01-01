@@ -898,7 +898,10 @@ stdenv.mkDerivation (finalAttrs: {
       withLocaled
       withMachined
       withNetworkd
+<<<<<<< HEAD
       withNspawn
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       withPortabled
       withSysupdate
       withTimedated
@@ -1016,7 +1019,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+<<<<<<< HEAD
     homepage = "https://systemd.io";
+=======
+    homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "System and service manager for Linux";
     longDescription = ''
       systemd is a suite of basic building blocks for a Linux system. It

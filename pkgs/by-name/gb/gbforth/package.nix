@@ -49,7 +49,11 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gbforth.org/";
     description = "Forth-based Game Boy development kit";
     mainProgram = "gbforth";
@@ -58,8 +62,14 @@ stdenv.mkDerivation {
       It features a Forth-based assembler, a cross-compiler with support for
       lazy code generation and a library of useful words.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

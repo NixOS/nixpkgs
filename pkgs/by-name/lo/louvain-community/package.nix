@@ -26,11 +26,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "cmake_minimum_required(VERSION 3.3 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Louvain Community Detection Library";
     homepage = "https://github.com/meelgroup/louvain-community";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ t4ccer ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Louvain Community Detection Library";
+    homepage = "https://github.com/meelgroup/louvain-community";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

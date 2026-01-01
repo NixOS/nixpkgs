@@ -20,8 +20,11 @@ in
   options.services.n8n = {
     enable = lib.mkEnableOption "n8n server";
 
+<<<<<<< HEAD
     package = lib.mkPackageOption pkgs "n8n" { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -34,6 +37,7 @@ in
         See <https://docs.n8n.io/hosting/configuration/environment-variables/> for available options.
       '';
       type = lib.types.submodule {
+<<<<<<< HEAD
         freeformType =
           with lib.types;
           attrsOf (oneOf [
@@ -41,6 +45,9 @@ in
             (coercedTo int toString str)
             (coercedTo bool builtins.toJSON str)
           ]);
+=======
+        freeformType = with lib.types; attrsOf str;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         options = {
           GENERIC_TIMEZONE = lib.mkOption {
             type = with lib.types; nullOr str;
@@ -67,7 +74,11 @@ in
             readOnly = true;
           };
           N8N_DIAGNOSTICS_ENABLED = lib.mkOption {
+<<<<<<< HEAD
             type = with lib.types; coercedTo bool builtins.toJSON str;
+=======
+            type = with lib.types; coercedTo bool toString str;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             default = false;
             description = ''
               Whether to share selected, anonymous telemetry with n8n.
@@ -75,7 +86,11 @@ in
             '';
           };
           N8N_VERSION_NOTIFICATIONS_ENABLED = lib.mkOption {
+<<<<<<< HEAD
             type = with lib.types; coercedTo bool builtins.toJSON str;
+=======
+            type = with lib.types; coercedTo bool toString str;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             default = false;
             description = ''
               When enabled, n8n sends notifications of new versions and security updates.
@@ -97,7 +112,11 @@ in
       };
       serviceConfig = {
         Type = "simple";
+<<<<<<< HEAD
         ExecStart = lib.getExe cfg.package;
+=======
+        ExecStart = "${pkgs.n8n}/bin/n8n";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         Restart = "on-failure";
         StateDirectory = "n8n";
 

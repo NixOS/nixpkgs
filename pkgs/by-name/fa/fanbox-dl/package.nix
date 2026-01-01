@@ -20,11 +20,20 @@ buildGoModule rec {
   # pings websites during testing
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pixiv FANBOX Downloader";
     mainProgram = "fanbox-dl";
     homepage = "https://github.com/hareku/fanbox-dl";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.moni ];
+=======
+  meta = with lib; {
+    description = "Pixiv FANBOX Downloader";
+    mainProgram = "fanbox-dl";
+    homepage = "https://github.com/hareku/fanbox-dl";
+    license = licenses.mit;
+    maintainers = [ maintainers.moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

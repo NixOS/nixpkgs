@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
     libite
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "FTP/TFTP server for Linux that just works";
     homepage = "https://troglobit.com/projects/uftpd/";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ vifino ];
+=======
+  meta = with lib; {
+    description = "FTP/TFTP server for Linux that just works";
+    homepage = "https://troglobit.com/projects/uftpd/";
+    license = licenses.isc;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ vifino ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

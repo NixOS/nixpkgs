@@ -30,11 +30,19 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Manages isolated PostgreSQL databases for your integration tests";
     homepage = "https://github.com/allaboutapps/integresql";
     changelog = "https://github.com/allaboutapps/integresql/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Manages isolated PostgreSQL databases for your integration tests";
+    homepage = "https://github.com/allaboutapps/integresql";
+    changelog = "https://github.com/allaboutapps/integresql/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "integresql";
   };

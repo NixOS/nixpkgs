@@ -94,7 +94,16 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     rustc
     rustPlatform.cargoSetupHook
+<<<<<<< HEAD
     qt6Packages.wrapQtAppsHook
+=======
+    (
+      if buildClient || buildServerGui then
+        qt6Packages.wrapQtAppsHook
+      else
+        qt6Packages.wrapQtAppsNoGuiHook
+    )
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [

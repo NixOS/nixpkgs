@@ -19,11 +19,19 @@ buildGoModule rec {
 
   subPackages = [ "cmd/livekit-cli" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command line interface to LiveKit";
     homepage = "https://livekit.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mgdelacroix ];
+=======
+  meta = with lib; {
+    description = "Command line interface to LiveKit";
+    homepage = "https://livekit.io/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mgdelacroix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "livekit-cli";
   };
 }

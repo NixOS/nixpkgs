@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Daemon-less notifications without D-Bus";
     homepage = "https://github.com/dudik/herbe";
@@ -42,6 +43,15 @@ stdenv.mkDerivation rec {
     # NOTE: Could also work on 'unix'.
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wishfort36 ];
+=======
+  meta = with lib; {
+    description = "Daemon-less notifications without D-Bus";
+    homepage = "https://github.com/dudik/herbe";
+    license = licenses.mit;
+    # NOTE: Could also work on 'unix'.
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wishfort36 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "herbe";
   };
 }

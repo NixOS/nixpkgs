@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Search github repositories interactively";
     homepage = "https://github.com/gennaro-tedesco/gh-s";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daru-san ];
+=======
+  meta = with lib; {
+    description = "Search github repositories interactively";
+    homepage = "https://github.com/gennaro-tedesco/gh-s";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ daru-san ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gh-s";
   };
 }

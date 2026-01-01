@@ -21,11 +21,20 @@ buildGoModule rec {
     rm $out/bin/plugin*
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Protocol Buffer companion tool. Track your .proto files and prevent changes to messages and services which impact API compatibility. https://protolock.dev";
     mainProgram = "protolock";
     homepage = "https://github.com/nilslice/protolock";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ groodt ];
+=======
+  meta = with lib; {
+    description = "Protocol Buffer companion tool. Track your .proto files and prevent changes to messages and services which impact API compatibility. https://protolock.dev";
+    mainProgram = "protolock";
+    homepage = "https://github.com/nilslice/protolock";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ groodt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

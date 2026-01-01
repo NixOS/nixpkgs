@@ -173,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
@@ -185,6 +186,20 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Middleware layer between C libraries and language bindings";
+    homepage = "https://gi.readthedocs.io/";
+    maintainers = with maintainers; [
+      lovek323
+      artturin
+    ];
+    teams = [ teams.gnome ];
+    pkgConfigModules = [ "gobject-introspection-1.0" ];
+    platforms = platforms.unix;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2
       lgpl2
     ];

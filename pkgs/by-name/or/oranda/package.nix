@@ -45,11 +45,19 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_CONF = "";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Generate beautiful landing pages for your developer tools";
     homepage = "https://github.com/axodotdev/oranda";
     changelog = "https://github.com/axodotdev/oranda/blob/${src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Generate beautiful landing pages for your developer tools";
+    homepage = "https://github.com/axodotdev/oranda";
+    changelog = "https://github.com/axodotdev/oranda/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       mit
     ];

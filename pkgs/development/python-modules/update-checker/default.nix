@@ -23,9 +23,16 @@ buildPythonPackage rec {
   # requires network
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python module that will check for package updates";
     homepage = "https://github.com/bboe/update_checker";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Python module that will check for package updates";
+    homepage = "https://github.com/bboe/update_checker";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

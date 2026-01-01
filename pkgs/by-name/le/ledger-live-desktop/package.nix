@@ -37,11 +37,19 @@ appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "App for Ledger hardware wallets";
     homepage = "https://www.ledger.com/ledger-live/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "App for Ledger hardware wallets";
+    homepage = "https://www.ledger.com/ledger-live/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       andresilva
       thedavidmeister
       nyanloutre
@@ -50,6 +58,10 @@ appimageTools.wrapType2 rec {
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ledger-live-desktop";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

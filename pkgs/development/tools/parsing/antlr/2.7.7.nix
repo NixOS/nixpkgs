@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Powerful parser generator";
     longDescription = ''
       ANTLR (ANother Tool for Language Recognition) is a powerful parser
@@ -27,7 +31,12 @@ stdenv.mkDerivation rec {
       walk parse trees.
     '';
     homepage = "https://www.antlr.org/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

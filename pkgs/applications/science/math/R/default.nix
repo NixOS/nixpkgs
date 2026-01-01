@@ -46,7 +46,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
+<<<<<<< HEAD
   version = "4.5.2";
+=======
+  version = "4.5.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src =
     let
@@ -54,12 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
       hash = "sha256-DXH/cQbsac18Z+HpXtGjzuNViAkx8ut4xTABSp43nyA=";
+=======
+      hash = "sha256-tCp5IUADhmRbEBBbkcaHKHh9tcTIPJ9sMKzc5jLhu3A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
   outputs = [
     "out"
+<<<<<<< HEAD
     "man"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "tex"
   ];
 
@@ -216,11 +227,19 @@ stdenv.mkDerivation (finalAttrs: {
     url
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
     mainProgram = "R";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "http://www.r-project.org/";
+    description = "Free software environment for statistical computing and graphics";
+    mainProgram = "R";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       GNU R is a language and environment for statistical computing and
@@ -242,9 +261,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     pkgConfigModules = [ "libR" ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
 
     maintainers = with lib.maintainers; [ jbedo ];
     teams = [ lib.teams.sage ];
+=======
+    platforms = platforms.all;
+
+    maintainers = with maintainers; [ jbedo ];
+    teams = [ teams.sage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

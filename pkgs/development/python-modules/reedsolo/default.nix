@@ -35,10 +35,18 @@ buildPythonPackage rec {
     "tests/test_creedsolo.py" # TODO: package creedsolo
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure-python universal errors-and-erasures Reed-Solomon Codec";
     homepage = "https://github.com/tomerfiliba/reedsolomon";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ yorickvp ];
+=======
+  meta = with lib; {
+    description = "Pure-python universal errors-and-erasures Reed-Solomon Codec";
+    homepage = "https://github.com/tomerfiliba/reedsolomon";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ yorickvp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

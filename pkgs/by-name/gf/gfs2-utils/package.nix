@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pagure.io/gfs2-utils";
     description = "Tools for creating, checking and working with gfs2 filesystems";
@@ -59,5 +60,16 @@ stdenv.mkDerivation rec {
       lib.licenses.lgpl2Plus
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://pagure.io/gfs2-utils";
+    description = "Tools for creating, checking and working with gfs2 filesystems";
+    maintainers = with maintainers; [ qyliss ];
+    license = [
+      licenses.gpl2Plus
+      licenses.lgpl2Plus
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

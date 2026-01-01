@@ -2,7 +2,11 @@
   lib,
   stdenv,
   buildPythonPackage,
+<<<<<<< HEAD
   pythonAtLeast,
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
 
   # build-system
@@ -21,6 +25,11 @@ buildPythonPackage rec {
   version = "0.19.2";
   pyproject = true;
 
+<<<<<<< HEAD
+=======
+  disabled = pythonOlder "3.6";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
@@ -55,6 +64,7 @@ buildPythonPackage rec {
     "test_dict_completion"
   ];
 
+<<<<<<< HEAD
   disabledTestPaths = lib.optionals (pythonAtLeast "3.14") [
     # Jedi.api.environment.InvalidPythonEnvironment: The python binary is potentially unsafe
     "test/test_inference/test_sys_path.py::test_venv_and_pths"
@@ -74,6 +84,13 @@ buildPythonPackage rec {
     homepage = "https://github.com/davidhalter/jedi";
     changelog = "https://github.com/davidhalter/jedi/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Autocompletion tool for Python that can be used for text editors";
+    homepage = "https://github.com/davidhalter/jedi";
+    changelog = "https://github.com/davidhalter/jedi/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

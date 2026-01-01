@@ -39,10 +39,17 @@ buildPythonPackage rec {
     "test_to_sql_create_statement_with_dialects"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Adds SQL read/write support to agate";
     homepage = "https://github.com/wireservice/agate-sql";
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    description = "Adds SQL read/write support to agate";
+    homepage = "https://github.com/wireservice/agate-sql";
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

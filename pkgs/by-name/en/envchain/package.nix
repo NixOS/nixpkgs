@@ -37,11 +37,19 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set environment variables with macOS keychain or D-Bus secret service";
     homepage = "https://github.com/sorah/envchain";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Set environment variables with macOS keychain or D-Bus secret service";
+    homepage = "https://github.com/sorah/envchain";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "envchain";
   };

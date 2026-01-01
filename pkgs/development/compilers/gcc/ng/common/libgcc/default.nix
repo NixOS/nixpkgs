@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (fetchpatch {
       name = "custom-threading-model.patch";
+<<<<<<< HEAD
       url = "https://github.com/gcc-mirror/gcc/commit/e5d853bbe9b05d6a00d98ad236f01937303e40c4.diff";
       hash = "sha256-92LIttIXdh12/lRhivb2JTPpqUmGBRn+uKmR5pzuveo=";
       includes = [
@@ -67,6 +68,20 @@ stdenv.mkDerivation (finalAttrs: {
       name = "no-target-system-root.patch";
       url = "https://github.com/gcc-mirror/gcc/commit/9947930b7ae923010c5061fd8fa6b1ec4f22f161.diff";
       hash = "sha256-BZmpHpJuuyDmQMwpQhSgCZO0Rg7kXt8rTiJAT+e0sUw=";
+=======
+      url = "https://inbox.sourceware.org/gcc-patches/20250716204545.1063669-1-git@JohnEricson.me/raw";
+      hash = "sha256-NgiC4cFeFInXXg27me1XpSeImPaL0WHs50Tf1YHz4ps=";
+    })
+    (fetchpatch {
+      name = "libgcc.mvars-less-0.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250716234028.1153560-1-John.Ericson@Obsidian.Systems/raw";
+      hash = "sha256-NEcieDCsy+7IRU3qQKVD3i57OuwGZKB/rmNF8X2I1n0=";
+    })
+    (fetchpatch {
+      name = "libgcc.mvars-less-1.patch";
+      url = "https://inbox.sourceware.org/gcc-patches/20250716234028.1153560-2-John.Ericson@Obsidian.Systems/raw";
+      hash = "sha256-nfRC4f6m3kHDro4+6E4y1ZPs+prxBQmn0H2rzIjaMWM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     })
     (fetchpatch {
       name = "regular-libdir-includedir.patch";

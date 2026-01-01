@@ -24,7 +24,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.marksimonson.com/fonts/view/anonymous-pro";
     description = "TrueType font set intended for source code";
     longDescription = ''
@@ -34,8 +38,14 @@ stdenvNoCC.mkDerivation rec {
       most Western and Central European Latin-based languages, plus
       Greek and Cyrillic. It is designed by Mark Simonson.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ raskin ];
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

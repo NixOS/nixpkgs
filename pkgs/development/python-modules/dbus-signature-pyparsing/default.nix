@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbus_signature_pyparsing" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parser for a D-Bus Signature";
     homepage = "https://github.com/stratis-storage/dbus-signature-pyparsing";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Parser for a D-Bus Signature";
+    homepage = "https://github.com/stratis-storage/dbus-signature-pyparsing";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

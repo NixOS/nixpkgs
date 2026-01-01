@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://jwilk.net/software/mwic";
     description = "Spell-checker that groups possible misspellings and shows them in their contexts";
     mainProgram = "mwic";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    homepage = "http://jwilk.net/software/mwic";
+    description = "Spell-checker that groups possible misspellings and shows them in their contexts";
+    mainProgram = "mwic";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -65,6 +65,10 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Toolkit for reproducible evaluation, diagnostic, and error analysis of speaker diarization systems";

@@ -89,8 +89,11 @@ rustPlatform.buildRustPackage {
     GIT_VERSION = src.tag;
     GIT_COMMIT_HASH = "builtByNix";
     GIT_BUILD_DATE = "1970-01-01T00:00:00Z";
+<<<<<<< HEAD
 
     RUSTFLAGS = "-C target-feature=+aes,+sse2";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # requires network access or filesystem mutations

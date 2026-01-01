@@ -80,11 +80,19 @@ buildPythonPackage rec {
     "test_fitde3D_saved_noder"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Band-structure interpolator and transport coefficient calculator";
     mainProgram = "btp2";
     homepage = "http://www.boltztrap.org/";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Band-structure interpolator and transport coefficient calculator";
+    mainProgram = "btp2";
+    homepage = "http://www.boltztrap.org/";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -68,11 +68,19 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Reproducible apt/dnf/apk/pacman, with content-addressing";
     homepage = "https://github.com/reproducible-containers/repro-get";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matthewcroughan ];
+=======
+  meta = with lib; {
+    description = "Reproducible apt/dnf/apk/pacman, with content-addressing";
+    homepage = "https://github.com/reproducible-containers/repro-get";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ matthewcroughan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "repro-get";
   };
 }

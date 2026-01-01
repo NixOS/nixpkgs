@@ -21,11 +21,20 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
+<<<<<<< HEAD
   meta = {
     description = "Script to normalize the XML and other data inside of a UFO";
     mainProgram = "ufonormalizer";
     homepage = "https://github.com/unified-font-object/ufoNormalizer";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Script to normalize the XML and other data inside of a UFO";
+    mainProgram = "ufonormalizer";
+    homepage = "https://github.com/unified-font-object/ufoNormalizer";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,9 +33,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jaxwilko/gtk-theme-framework";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jaxwilko/gtk-theme-framework";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

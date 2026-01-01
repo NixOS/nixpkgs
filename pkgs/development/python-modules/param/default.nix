@@ -44,11 +44,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "param" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Declarative Python programming using Parameters";
     homepage = "https://param.holoviz.org/";
     changelog = "https://github.com/holoviz/param/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Declarative Python programming using Parameters";
+    homepage = "https://param.holoviz.org/";
+    changelog = "https://github.com/holoviz/param/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

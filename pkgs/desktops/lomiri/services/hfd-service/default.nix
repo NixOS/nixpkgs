@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "DBus-activated service that manages human feedback devices such as LEDs and vibrators on mobile devices";
     homepage = "https://gitlab.com/ubports/development/core/hfd-service";
@@ -75,5 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "DBus-activated service that manages human feedback devices such as LEDs and vibrators on mobile devices";
+    homepage = "https://gitlab.com/ubports/development/core/hfd-service";
+    changelog = "https://gitlab.com/ubports/development/core/hfd-service/-/blob/${finalAttrs.version}/ChangeLog";
+    license = licenses.lgpl3Only;
+    teams = [ teams.lomiri ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

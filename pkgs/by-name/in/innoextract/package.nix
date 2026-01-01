@@ -48,12 +48,21 @@ stdenv.mkDerivation {
   # use unstable as latest release does not yet support cmake-4
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to unpack installers created by Inno Setup";
     homepage = "https://constexpr.org/innoextract/";
     license = lib.licenses.zlib;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Tool to unpack installers created by Inno Setup";
+    homepage = "https://constexpr.org/innoextract/";
+    license = licenses.zlib;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "innoextract";
   };
 }

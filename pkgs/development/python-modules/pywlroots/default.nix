@@ -14,6 +14,10 @@
   wayland,
   pywayland,
   xkbcommon,
+<<<<<<< HEAD
+=======
+  xorg,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytestCheckHook,
   qtile,
 }:
@@ -36,6 +40,11 @@ buildPythonPackage rec {
     libinput
     libxkbcommon
     pixman
+<<<<<<< HEAD
+=======
+    xorg.libxcb
+    xorg.xcbutilwm
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     udev
     wayland
     wlroots
@@ -57,6 +66,7 @@ buildPythonPackage rec {
     inherit qtile;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/flacjacket/pywlroots";
     description = "Python bindings to wlroots using cffi";
@@ -66,5 +76,13 @@ buildPythonPackage rec {
       chvp
       doronbehar
     ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/flacjacket/pywlroots";
+    description = "Python bindings to wlroots using cffi";
+    license = licenses.ncsa;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ chvp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/{data,obs-plugins}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "OBS Studio plugin to make sources available to record via a filter";
     homepage = "https://github.com/exeldro/obs-source-record";
@@ -36,6 +37,16 @@ stdenv.mkDerivation rec {
       shackra
     ];
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "OBS Studio plugin to make sources available to record via a filter";
+    homepage = "https://github.com/exeldro/obs-source-record";
+    maintainers = with maintainers; [
+      robbins
+      shackra
+    ];
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

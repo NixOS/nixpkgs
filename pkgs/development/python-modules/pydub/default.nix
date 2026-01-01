@@ -56,11 +56,19 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test/test.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Manipulate audio with a simple and easy high level interface";
     homepage = "http://pydub.com";
     changelog = "https://github.com/jiaaro/pydub/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Manipulate audio with a simple and easy high level interface";
+    homepage = "http://pydub.com";
+    changelog = "https://github.com/jiaaro/pydub/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

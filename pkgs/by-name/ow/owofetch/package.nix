@@ -19,12 +19,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-0ON1h8+ruLOvBR7Q/hOIW6j+BjfPAAuYA2wrUYj59Ow=";
 
+<<<<<<< HEAD
   meta = {
     description = "Alternative to *fetch, uwuifies all stats";
     homepage = "https://github.com/netthier/owofetch-rs";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.x86_64;
     maintainers = with lib.maintainers; [ nullishamy ];
+=======
+  meta = with lib; {
+    description = "Alternative to *fetch, uwuifies all stats";
+    homepage = "https://github.com/netthier/owofetch-rs";
+    license = licenses.gpl3Only;
+    platforms = platforms.x86_64;
+    maintainers = with maintainers; [ nullishamy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "owofetch";
   };
 }

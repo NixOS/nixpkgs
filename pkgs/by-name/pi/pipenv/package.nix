@@ -74,6 +74,10 @@ buildPythonApplication rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # this test wants access to the internet

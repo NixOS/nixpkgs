@@ -50,7 +50,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-twisted
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "uplink" ];
 

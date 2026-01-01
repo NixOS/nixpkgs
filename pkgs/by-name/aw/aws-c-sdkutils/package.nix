@@ -37,11 +37,20 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "AWS SDK utility library";
     homepage = "https://github.com/awslabs/aws-c-sdkutils";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ r-burns ];
+=======
+  meta = with lib; {
+    description = "AWS SDK utility library";
+    homepage = "https://github.com/awslabs/aws-c-sdkutils";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ r-burns ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

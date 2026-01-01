@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for creating Commodore 1541 Floppy disk images in D64, D71 or D81 format";
     homepage = "https://bitbucket.org/ptv_claus/cc1541/src/master/";
@@ -40,5 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "cc1541";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Tool for creating Commodore 1541 Floppy disk images in D64, D71 or D81 format";
+    homepage = "https://bitbucket.org/ptv_claus/cc1541/src/master/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
+    mainProgram = "cc1541";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

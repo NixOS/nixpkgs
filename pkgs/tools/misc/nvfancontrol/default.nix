@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
     export LIBRARY_PATH=${libXNVCtrl}/lib:${libX11}/lib:${libXext}/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Nvidia dynamic fan control for Linux";
     homepage = "https://github.com/foucault/nvfancontrol";
@@ -38,6 +39,15 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ gpl3Only ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ devins2518 ];
+=======
+  meta = with lib; {
+    description = "Nvidia dynamic fan control for Linux";
+    homepage = "https://github.com/foucault/nvfancontrol";
+    changelog = "https://github.com/foucault/nvfancontrol/releases/tag/${version}";
+    license = with licenses; [ gpl3Only ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ devins2518 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nvfancontrol";
   };
 }

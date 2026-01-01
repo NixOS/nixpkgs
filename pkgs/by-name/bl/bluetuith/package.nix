@@ -1,24 +1,42 @@
 {
   lib,
+<<<<<<< HEAD
   buildGoModule,
+=======
+  # Module requires Go 1.25, drop pin once buildGoModule uses Go >= 1.25.
+  buildGo125Module,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   nix-update-script,
 }:
 
+<<<<<<< HEAD
 buildGoModule (finalAttrs: {
   pname = "bluetuith";
   version = "0.2.6";
+=======
+buildGo125Module (finalAttrs: {
+  pname = "bluetuith";
+  version = "0.2.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = "bluetuith";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-jxN4FLefv+edlpBnwDN/pBxZ7sHkv2w+R2tUeNCI6Tw=";
   };
 
   vendorHash = "sha256-baSiOHiB02hfqDt95ldeKwz+tJgunXheTvREznxPUSc=";
 
   subPackages = [ "." ];
+=======
+    hash = "sha256-h7SMGI8wIiu4i2kcKRsmLHM4tu7ZZK0usBXh5zFu94E=";
+  };
+
+  vendorHash = null;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env.CGO_ENABLED = 0;
 

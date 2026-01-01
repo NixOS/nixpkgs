@@ -124,14 +124,23 @@ buildGoModule rec {
     command = "agent version";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
     homepage = "https://www.datadoghq.com";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
     ];
   };

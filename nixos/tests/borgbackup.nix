@@ -42,8 +42,13 @@ let
 in
 {
   name = "borgbackup";
+<<<<<<< HEAD
   meta = {
     maintainers = with pkgs.lib.maintainers; [ dotlambda ];
+=======
+  meta = with pkgs.lib; {
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes = {

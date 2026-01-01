@@ -33,12 +33,21 @@ stdenv.mkDerivation (finalAttrs: {
     geos = callPackage ./tests.nix { geos = finalAttrs.finalPackage; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
     homepage = "https://libgeos.org";
     license = lib.licenses.lgpl21Only;
     mainProgram = "geosop";
     teams = [ lib.teams.geospatial ];
+=======
+  meta = with lib; {
+    description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
+    homepage = "https://libgeos.org";
+    license = licenses.lgpl21Only;
+    mainProgram = "geosop";
+    teams = [ teams.geospatial ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "geos" ];
     changelog = "https://github.com/libgeos/geos/releases/tag/${finalAttrs.finalPackage.version}";
   };

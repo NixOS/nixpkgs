@@ -9,15 +9,29 @@
   python3Packages,
   runCommand,
   scdoc,
+<<<<<<< HEAD
+=======
+  withNgSuffix ? true,
+  withReexec ? false,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   withShellFiles ? true,
   # Very long tmp dirs lead to "too long for Unix domain socket"
   # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
   withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
   # passthru.tests
   nixosTests,
+<<<<<<< HEAD
 }:
 let
   executable = "nixos-rebuild";
+=======
+  nixVersions,
+  lixPackageSets,
+  nixos-rebuild-ng,
+}:
+let
+  executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 python3Packages.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
@@ -50,7 +64,15 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace nixos_rebuild/constants.py \
       --subst-var-by executable ${executable} \
+<<<<<<< HEAD
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
+=======
+      --subst-var-by withReexec ${lib.boolToString withReexec} \
+      --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
+
+    substituteInPlace pyproject.toml \
+      --replace-fail nixos-rebuild ${executable}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   postInstall = lib.optionalString withShellFiles ''
@@ -94,11 +116,40 @@ python3Packages.buildPythonApplication rec {
       };
 
       tests = {
+<<<<<<< HEAD
         inherit (nixosTests)
           # FIXME: this test is disabled since it times out in @ofborg
           # nixos-rebuild-install-bootloader
           nixos-rebuild-specialisations
           nixos-rebuild-target-host
+=======
+        with_reexec = nixos-rebuild-ng.override {
+          withReexec = true;
+          withNgSuffix = false;
+        };
+        with_nix_latest = nixos-rebuild-ng.override {
+          nix = nixVersions.latest;
+        };
+        with_nix_stable = nixos-rebuild-ng.override {
+          nix = nixVersions.stable;
+        };
+        with_nix_2_28 = nixos-rebuild-ng.override {
+          # oldest supported version in nixpkgs
+          nix = nixVersions.nix_2_28;
+        };
+        with_lix_latest = nixos-rebuild-ng.override {
+          nix = lixPackageSets.latest.lix;
+        };
+        with_lix_stable = nixos-rebuild-ng.override {
+          nix = lixPackageSets.stable.lix;
+        };
+
+        inherit (nixosTests)
+          # FIXME: this test is disabled since it times out in @ofborg
+          # nixos-rebuild-install-bootloader-ng
+          nixos-rebuild-specialisations-ng
+          nixos-rebuild-target-host-ng
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ;
         repl = callPackage ./tests/repl.nix { };
         # NOTE: this is a passthru test rather than a build-time test because we

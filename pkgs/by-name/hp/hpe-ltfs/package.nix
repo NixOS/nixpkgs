@@ -36,12 +36,21 @@ stdenv.mkDerivation rec {
     libuuid
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "HPE's implementation of the open-source tape filesystem standard ltfs";
     homepage = "https://support.hpe.com/hpesc/public/km/product/1009214665/Product";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.redvers ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "HPE's implementation of the open-source tape filesystem standard ltfs";
+    homepage = "https://support.hpe.com/hpesc/public/km/product/1009214665/Product";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.redvers ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "https://github.com/nix-community/hpe-ltfs";
   };
 }

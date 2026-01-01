@@ -14,13 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "haruna";
+<<<<<<< HEAD
   version = "1.7.0";
+=======
+  version = "1.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${finalAttrs.finalPackage.version}";
+<<<<<<< HEAD
     hash = "sha256-FRYsUsZBLXhFCZslQtaD10fd3SqbJ+4TKKShIpuUkQk=";
+=======
+    hash = "sha256-pAFO6zclJNmHD91ady0vlnBg6ebSWMzJq7TZN/uBGnM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     domain = "invent.kde.org";
   };
 

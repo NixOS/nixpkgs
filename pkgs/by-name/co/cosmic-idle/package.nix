@@ -16,7 +16,11 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-idle";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "1.0.0-beta.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -58,9 +62,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+<<<<<<< HEAD
 
     updateScript = nix-update-script {
       extraArgs = [
+=======
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "--version-regex"
         "epoch-(.*)"
       ];

@@ -25,11 +25,20 @@ buildGoModule {
 
   passthru.updateScript = nix-update-script { extraArgs = lib.singleton "--version=branch"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Remove unnecessary type conversions from Go source";
     mainProgram = "unconvert";
     homepage = "https://github.com/mdempsky/unconvert";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kalbasit ];
+=======
+  meta = with lib; {
+    description = "Remove unnecessary type conversions from Go source";
+    mainProgram = "unconvert";
+    homepage = "https://github.com/mdempsky/unconvert";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ kalbasit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

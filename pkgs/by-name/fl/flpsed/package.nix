@@ -29,11 +29,19 @@ stdenv.mkDerivation rec {
     "FLTKCONFIG=${lib.getExe' (lib.getDev fltk13) "fltk-config"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "WYSIWYG PostScript annotator";
     homepage = "https://flpsed.org/flpsed.html";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "WYSIWYG PostScript annotator";
+    homepage = "https://flpsed.org/flpsed.html";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "flpsed";
   };

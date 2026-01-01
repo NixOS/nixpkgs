@@ -10,13 +10,21 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "2.4.1";
+=======
+  version = "2.4.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-izoxMMvNjcgBPpc0kvhv4OIuqa1OHvmeoqFKrVgp0bE=";
+=======
+    hash = "sha256-kxX9gHNKDlRir9TGSob6iz8cRJOqHdoYlvIi4MQAroc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 flutter335.buildFlutterApplication {

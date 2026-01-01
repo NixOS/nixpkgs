@@ -30,12 +30,20 @@ buildPythonPackage rec {
   # OverflowError: Python int too large to convert to C long
   doCheck = !stdenv.hostPlatform.is32bit;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://more-itertools.readthedocs.org";
     changelog = "https://more-itertools.readthedocs.io/en/stable/versions.html";
     description = "Expansion of the itertools module";
     downloadPage = "https://github.com/more-itertools/more-itertools";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

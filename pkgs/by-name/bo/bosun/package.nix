@@ -28,11 +28,19 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Time Series Alerting Framework";
     license = lib.licenses.mit;
     homepage = "https://bosun.org";
     maintainers = with lib.maintainers; [ offline ];
+=======
+  meta = with lib; {
+    description = "Time Series Alerting Framework";
+    license = licenses.mit;
+    homepage = "https://bosun.org";
+    maintainers = with maintainers; [ offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

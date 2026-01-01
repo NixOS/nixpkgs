@@ -68,6 +68,10 @@ symlinkJoin {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       smironov
+<<<<<<< HEAD
+=======
+      globin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       TethysSvensson
     ];
     mainProgram = "zathura";

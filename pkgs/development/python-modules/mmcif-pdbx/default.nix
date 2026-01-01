@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdbx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Yet another version of PDBx/mmCIF Python implementation";
     homepage = "https://github.com/Electrostatics/mmcif_pdbx";
     changelog = "https://github.com/Electrostatics/mmcif_pdbx/releases/tag/v${version}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Yet another version of PDBx/mmCIF Python implementation";
+    homepage = "https://github.com/Electrostatics/mmcif_pdbx";
+    changelog = "https://github.com/Electrostatics/mmcif_pdbx/releases/tag/v${version}";
+    license = licenses.cc0;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

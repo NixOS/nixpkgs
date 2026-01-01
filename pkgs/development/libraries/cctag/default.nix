@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Detection of CCTag markers made up of concentric circles";
     homepage = "https://cctag.readthedocs.io";
@@ -72,5 +73,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ tmarkus ];
+=======
+  meta = with lib; {
+    description = "Detection of CCTag markers made up of concentric circles";
+    homepage = "https://cctag.readthedocs.io";
+    downloadPage = "https://github.com/alicevision/CCTag";
+    license = licenses.mpl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ tmarkus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -2,8 +2,11 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
   nodePackages,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildNpmPackage rec {
@@ -17,6 +20,7 @@ buildNpmPackage rec {
     hash = "sha256-T6d/KQQGoXHgV0iNhOms8d9zfjYMfnBNwPLShrEkHG4=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix critical xmldom security issue
     # Se https://github.com/tyrasd/osmtogeojson/pull/146
@@ -51,6 +55,20 @@ buildNpmPackage rec {
     homepage = "https://tyrasd.github.io/osmtogeojson/";
     maintainers = with lib.maintainers; [ thibautmarty ];
     license = lib.licenses.mit;
+=======
+  postPatch = ''
+    cp ${./package-lock.json} ./package-lock.json
+  '';
+
+  npmDepsHash = "sha256-stAVuyjuRQthQ3jQdekmZYjeau9l0GzEEMkV1q5fT2k=";
+  dontNpmBuild = true;
+
+  meta = with lib; {
+    description = "Converts OSM data to GeoJSON";
+    homepage = "https://tyrasd.github.io/osmtogeojson/";
+    maintainers = with maintainers; [ thibautmarty ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "osmtogeojson";
   };
 }

@@ -43,16 +43,28 @@ rustPlatform.buildRustPackage {
     install -D -m 0644 data/*.kdl $out/data/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "System76 Scheduler";
     mainProgram = "system76-scheduler";
     homepage = "https://github.com/pop-os/system76-scheduler";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "System76 Scheduler";
+    mainProgram = "system76-scheduler";
+    homepage = "https://github.com/pop-os/system76-scheduler";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "x86-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.cmm ];
+=======
+    maintainers = [ maintainers.cmm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

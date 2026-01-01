@@ -51,11 +51,19 @@ stdenv.mkDerivation rec {
     "ocaml-install"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://piqi.org";
     description = "Universal schema language and a collection of tools built around it";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.maurer ];
+=======
+  meta = with lib; {
+    homepage = "https://piqi.org";
+    description = "Universal schema language and a collection of tools built around it";
+    license = licenses.asl20;
+    maintainers = [ maintainers.maurer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast ocaml.version "5.0";
   };
 }

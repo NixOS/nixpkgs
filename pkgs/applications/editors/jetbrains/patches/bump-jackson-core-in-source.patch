@@ -5,7 +5,11 @@
  )
  
 -private val mavenTelemetryDependencies = listOf("com.fasterxml.jackson.core:jackson-core:2.16.0")
+<<<<<<< HEAD
 +private val mavenTelemetryDependencies = listOf("com.fasterxml.jackson.core:jackson-core:2.19.0")
+=======
++private val mavenTelemetryDependencies = listOf("com.fasterxml.jackson.core:jackson-core:2.17.0")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  
  object BundledMavenDownloader {
    private val mutex = Mutex()

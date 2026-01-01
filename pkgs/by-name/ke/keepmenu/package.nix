@@ -52,6 +52,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "keepmenu" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/firecat53/keepmenu";
     description = "Dmenu/Rofi frontend for Keepass databases";
@@ -59,5 +60,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ elliot ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/firecat53/keepmenu";
+    description = "Dmenu/Rofi frontend for Keepass databases";
+    mainProgram = "keepmenu";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ elliot ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

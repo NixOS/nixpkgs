@@ -51,10 +51,18 @@ buildPythonPackage {
     "test_contains_reserved_property_name"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bitcraft/PyTMX";
     description = "Python library to read Tiled Map Editor's TMX maps";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bitcraft/PyTMX";
+    description = "Python library to read Tiled Map Editor's TMX maps";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,11 +17,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "zunit-zsh";
     repo = "zunit";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-kXgJjD7N9pUIk57g/EEXZ8ADypuVO+Vyj8ssgwOzVCg=";
     # The "tests" folder is missing in GitHub-provided download archives.
     # work around with `git clone`.
     # https://github.com/orgs/community/discussions/180774
     forceFetchGit = true;
+=======
+    hash = "sha256-GkBewb795piCaniZJZpGEZFhKaNs8p8swV5z34OegPY=";
+    deepClone = true; # Needed in order to get "tests" folder
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;

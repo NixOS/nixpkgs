@@ -54,13 +54,22 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/ToneLib-Zoom.desktop --replace /usr/ $out/
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # webkitgtk_4_0 was removed
     broken = true;
     description = "ToneLib Zoom – change and save all the settings in your Zoom(r) guitar pedal";
     homepage = "https://tonelib.net/";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Zoom";

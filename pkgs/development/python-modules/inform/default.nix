@@ -47,7 +47,11 @@ buildPythonPackage rec {
     "test_inform"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Print and logging utilities";
     longDescription = ''
       Inform is designed to display messages from programs that are typically
@@ -56,7 +60,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://inform.readthedocs.io";
     changelog = "https://github.com/KenKundert/inform/blob/${src.tag}/doc/releases.rst";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jeremyschlatter ];
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ jeremyschlatter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

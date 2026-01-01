@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "deltachat2";
+<<<<<<< HEAD
   version = "0.9.0";
+=======
+  version = "0.8.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat2";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-/Q524yoY25kcRNYgFw2k/lJJ3ydVN3hhoaC571nh1cw=";
+=======
+    hash = "sha256-RVEohIFILAaCGuOwq6VmK7qLOKKP4cTuTMX+9DBO+Ns=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [

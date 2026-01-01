@@ -90,7 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Implementation for VA-API (Video Acceleration API)";
     longDescription = ''
       VA-API is an open-source library and API specification, which provides
@@ -100,8 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://01.org/linuxmedia/vaapi";
     changelog = "https://raw.githubusercontent.com/intel/libva/${finalAttrs.version}/NEWS";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "libva"
       "libva-drm"
@@ -111,7 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
       "libva-wayland"
       "libva-x11"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # Mandatory libva shared library.
       lib.systems.inspect.platformPatterns.isStatic

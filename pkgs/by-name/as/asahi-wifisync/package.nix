@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ZxgRxQyDID3mBpr8dhHScctk14Pm9V51Gn24d24JyVk=";
   cargoDepsName = pname;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to sync Wifi passwords with macos on ARM Macs";
     homepage = "https://crates.io/crates/asahi-wifisync";
@@ -23,5 +24,14 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lukaslihotzki ];
     mainProgram = "asahi-wifisync";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool to sync Wifi passwords with macos on ARM Macs";
+    homepage = "https://crates.io/crates/asahi-wifisync";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lukaslihotzki ];
+    mainProgram = "asahi-wifisync";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

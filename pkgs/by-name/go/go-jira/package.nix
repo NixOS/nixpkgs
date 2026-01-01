@@ -19,11 +19,19 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple command line client for Atlassian's Jira service written in Go";
     homepage = "https://github.com/go-jira/jira";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Simple command line client for Atlassian's Jira service written in Go";
+    homepage = "https://github.com/go-jira/jira";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       carlosdagos
       timstott
     ];

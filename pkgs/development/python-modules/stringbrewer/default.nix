@@ -25,10 +25,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "stringbrewer" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to generate random strings matching a pattern";
     homepage = "https://github.com/simoncozens/stringbrewer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python library to generate random strings matching a pattern";
+    homepage = "https://github.com/simoncozens/stringbrewer";
+    license = licenses.mit;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

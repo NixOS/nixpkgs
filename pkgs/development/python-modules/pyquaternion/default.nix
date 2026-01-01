@@ -39,10 +39,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyquaternion" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for representing and using quaternions";
     homepage = "http://kieranwynn.github.io/pyquaternion/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lucasew ];
+=======
+  meta = with lib; {
+    description = "Library for representing and using quaternions";
+    homepage = "http://kieranwynn.github.io/pyquaternion/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lucasew ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

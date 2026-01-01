@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     updateScript = ./update.py;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Minecraft Server";
     homepage = "https://minecraft.net";
@@ -46,6 +47,15 @@ stdenv.mkDerivation {
     license = lib.licenses.unfreeRedistributable;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Minecraft Server";
+    homepage = "https://minecraft.net";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       tomberek
       costrouc

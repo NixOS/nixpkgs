@@ -19,7 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Distributed firewall";
     longDescription = ''
       Diswall (distributed firewall) - a client of distributed firewall
@@ -31,8 +35,13 @@ rustPlatform.buildRustPackage rec {
       intruder to get any system information.
     '';
     homepage = "https://www.diswall.stream";
+<<<<<<< HEAD
     license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ izorkin ];
+=======
+    license = with licenses; [ gpl3 ];
+    maintainers = with maintainers; [ izorkin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "diswall";
   };
 }

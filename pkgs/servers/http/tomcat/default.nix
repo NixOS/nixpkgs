@@ -60,6 +60,7 @@ let
 in
 {
   tomcat9 = common {
+<<<<<<< HEAD
     version = "9.0.113";
     hash = "sha256-eQ2yuAkreVTewq/Gr3Gnu7bGeZgZhRbdap+GVmG10qc=";
   };
@@ -72,5 +73,19 @@ in
   tomcat11 = common {
     version = "11.0.15";
     hash = "sha256-xRWg7bJzhGtNeSb6gXWqpGkF9F1eKvWI4BeD41qJppw=";
+=======
+    version = "9.0.111";
+    hash = "sha256-6pZLufCeo6mqD1JZJOjCfvryd6cI9p6B99Ct9YWlw3M=";
+  };
+
+  tomcat10 = common {
+    version = "10.1.48";
+    hash = "sha256-bAAMIBNs8q7QRhQpl4GEFqFgwOUWwfuiRUS00J26lRM=";
+  };
+
+  tomcat11 = common {
+    version = "11.0.14";
+    hash = "sha256-wfjC3snB+CUOwpNr9h/ttTqH09YIJxYtYrweSsZ0Now=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,10 +31,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Razzeee/script.module.trakt";
     description = "Python trakt.py library packed for Kodi";
     license = lib.licenses.mit;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Razzeee/script.module.trakt";
+    description = "Python trakt.py library packed for Kodi";
+    license = licenses.mit;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

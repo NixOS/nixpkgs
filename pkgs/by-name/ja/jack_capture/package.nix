@@ -33,12 +33,21 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Program for recording soundfiles with jack";
     mainProgram = "jack_capture";
     homepage = "https://github.com/kmatheussen/jack_capture/";
     license = lib.licenses.gpl2;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Program for recording soundfiles with jack";
+    mainProgram = "jack_capture";
+    homepage = "https://github.com/kmatheussen/jack_capture/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 }

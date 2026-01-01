@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyzabbix" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with the Zabbix API";
     homepage = "https://github.com/lukecyca/pyzabbix";
     changelog = "https://github.com/lukecyca/pyzabbix/blob/${version}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with the Zabbix API";
+    homepage = "https://github.com/lukecyca/pyzabbix";
+    changelog = "https://github.com/lukecyca/pyzabbix/blob/${version}/CHANGELOG.md";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -76,11 +76,19 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Screen recorder for Linux";
     homepage = "https://www.maartenbaert.be/simplescreenrecorder";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Screen recorder for Linux";
+    homepage = "https://www.maartenbaert.be/simplescreenrecorder";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qingping_ble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Qingping BLE devices";
     homepage = "https://github.com/bluetooth-devices/qingping-ble";
     changelog = "https://github.com/Bluetooth-Devices/qingping-ble/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Qingping BLE devices";
+    homepage = "https://github.com/bluetooth-devices/qingping-ble";
+    changelog = "https://github.com/Bluetooth-Devices/qingping-ble/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

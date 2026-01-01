@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gpib_ctypes.gpib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform Python bindings for the NI GPIB and linux-gpib C interfaces";
     homepage = "https://github.com/tivek/gpib_ctypes/";
     changelog = "https://github.com/tivek/gpib_ctypes/blob/${version}/HISTORY.rst";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fsagbuya ];
+=======
+  meta = with lib; {
+    description = "Cross-platform Python bindings for the NI GPIB and linux-gpib C interfaces";
+    homepage = "https://github.com/tivek/gpib_ctypes/";
+    changelog = "https://github.com/tivek/gpib_ctypes/blob/${version}/HISTORY.rst";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fsagbuya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

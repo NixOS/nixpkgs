@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rectpack" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of algorithms for solving the 2D knapsack problem";
     homepage = "https://github.com/secnot/rectpack";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fbeffa ];
+=======
+  meta = with lib; {
+    description = "Collection of algorithms for solving the 2D knapsack problem";
+    homepage = "https://github.com/secnot/rectpack";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fbeffa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

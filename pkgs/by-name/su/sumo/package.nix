@@ -32,6 +32,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sumo";
+<<<<<<< HEAD
   version = "1.25.0";
 
   src = fetchFromGitHub {
@@ -39,6 +40,15 @@ stdenv.mkDerivation rec {
     repo = "sumo";
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-rUa5DpoBfnviSEmzPEiVnZU0KGavAIOFoysQ74uTll0=";
+=======
+  version = "1.24.0";
+
+  src = fetchFromGitHub {
+    owner = "eclipse";
+    repo = "sumo";
+    tag = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-xf7/hUJpl+XmXx5MmFzYu2geFNe7JVaxDrraoqLrSuk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -81,7 +91,11 @@ stdenv.mkDerivation rec {
     libXrender
   ]);
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "SUMO traffic simulator";
     longDescription = ''
       Eclipse SUMO is an open source, highly
@@ -91,8 +105,13 @@ stdenv.mkDerivation rec {
       tools for scenario creation.
     '';
     homepage = "https://github.com/eclipse/sumo";
+<<<<<<< HEAD
     license = lib.licenses.epl20;
     maintainers = [ ];
     teams = [ lib.teams.geospatial ];
+=======
+    license = licenses.epl20;
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

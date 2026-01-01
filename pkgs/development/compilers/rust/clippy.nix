@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage {
     install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/cargo-clippy"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://rust-lang.github.io/rust-clippy/";
     description = "Bunch of lints to catch common mistakes and improve your Rust code";
@@ -50,5 +51,18 @@ rustPlatform.buildRustPackage {
       asl20
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://rust-lang.github.io/rust-clippy/";
+    description = "Bunch of lints to catch common mistakes and improve your Rust code";
+    mainProgram = "cargo-clippy";
+    maintainers = with maintainers; [ basvandijk ];
+    teams = [ teams.rust ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -37,12 +37,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Prints a Linux system's font configuration";
     homepage = "https://github.com/derat/font-config-info";
     license = with lib.licenses; [ bsd3 ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    description = "Prints a Linux system's font configuration";
+    homepage = "https://github.com/derat/font-config-info";
+    license = with licenses; [ bsd3 ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "font-config-info";
   };
 }

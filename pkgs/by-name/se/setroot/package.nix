@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple X background setter inspired by imlibsetroot and feh";
     homepage = "https://github.com/ttzhou/setroot";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple X background setter inspired by imlibsetroot and feh";
+    homepage = "https://github.com/ttzhou/setroot";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "setroot";
   };
 }

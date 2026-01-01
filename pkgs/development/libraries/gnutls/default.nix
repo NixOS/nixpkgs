@@ -32,7 +32,11 @@
   emacs,
   ffmpeg,
   haskellPackages,
+<<<<<<< HEAD
   knot-resolver_5,
+=======
+  knot-resolver,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ngtcp2-gnutls,
   ocamlPackages,
   pkgsStatic,
@@ -59,11 +63,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
+<<<<<<< HEAD
   version = "3.8.11";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
     hash = "sha256-kb0jxKhuvGFS6BMD0gz2zq65e8j4QmbQ+uxuKfF7qiA=";
+=======
+  version = "3.8.10";
+
+  src = fetchurl {
+    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
+    hash = "sha256-23+rfM55Hncn677yM0MByCHXmlUOxVye8Ja2ELA+trc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -203,7 +215,11 @@ stdenv.mkDerivation rec {
       ffmpeg
       emacs
       qemu
+<<<<<<< HEAD
       knot-resolver_5
+=======
+      knot-resolver
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       samba
       openconnect
       ;
@@ -214,7 +230,11 @@ stdenv.mkDerivation rec {
     static = pkgsStatic.gnutls;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GNU Transport Layer Security Library";
 
     longDescription = ''
@@ -232,8 +252,14 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://gnutls.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ vcunat ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ vcunat ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

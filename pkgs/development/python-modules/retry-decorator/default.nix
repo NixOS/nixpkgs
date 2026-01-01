@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "retry_decorator" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Decorator for retrying when exceptions occur";
     homepage = "https://github.com/pnpnpn/retry-decorator";
     changelog = "https://github.com/pnpnpn/retry-decorator/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 ];
+=======
+  meta = with lib; {
+    description = "Decorator for retrying when exceptions occur";
+    homepage = "https://github.com/pnpnpn/retry-decorator";
+    changelog = "https://github.com/pnpnpn/retry-decorator/releases/tag/v${version}";
+    license = with licenses; [ asl20 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

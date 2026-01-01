@@ -17,10 +17,17 @@ buildGoModule rec {
 
   vendorHash = "sha256-aXrXw/7ZtSZXIKDMZuWPV2zAf0e0lU0QCBhua7tHGEY=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/schachmat/wego";
     description = "Weather app for the terminal";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/schachmat/wego";
+    description = "Weather app for the terminal";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wego";
   };
 }

@@ -33,6 +33,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/theopolis/uefi-firmware-parser";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ KSJ2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "uefi-firmware-parser";
   };
 }

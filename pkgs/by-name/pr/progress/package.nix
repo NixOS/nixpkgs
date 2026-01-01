@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Xfennec/progress";
     description = "Tool that shows the progress of coreutils programs";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Xfennec/progress";
+    description = "Tool that shows the progress of coreutils programs";
+    license = licenses.gpl3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "progress";
   };
 }

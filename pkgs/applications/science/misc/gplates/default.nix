@@ -78,12 +78,21 @@ stdenv.mkDerivation (finalAttrs: {
     qwt
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
     mainProgram = "gplates";
     homepage = "https://www.gplates.org";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Desktop software for the interactive visualisation of plate-tectonics";
+    mainProgram = "gplates";
+    homepage = "https://www.gplates.org";
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # FIX: this check: https://github.com/GPlates/GPlates/blob/gplates/cmake/modules/Config_h.cmake#L72
   };
 })

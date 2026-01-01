@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elevate" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for re-launching the current process as super-user";
     homepage = "https://github.com/barneygale/elevate";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rkitover ];
+=======
+  meta = with lib; {
+    description = "Python module for re-launching the current process as super-user";
+    homepage = "https://github.com/barneygale/elevate";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rkitover ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,14 +33,22 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
+<<<<<<< HEAD
   version = "2025.12.4";
+=======
+  version = "2025.11.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-/dO8BS7L62nSblDAmtO2YY5wKXyHGLWlsrtUwoEu2u4=";
+=======
+    hash = "sha256-nu5sJkihCptZ3KSBE/8xR31yl7gnFQQdT+auLQ2qEw0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -177,6 +185,11 @@ python.pkgs.buildPythonApplication rec {
     "test_clang_tidy_mode_targeted_scan"
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix { };

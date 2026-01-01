@@ -198,7 +198,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Install udev files into our own tree.
+<<<<<<< HEAD
   env.PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+=======
+  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   separateDebugInfo = true;
   strictDeps = true;

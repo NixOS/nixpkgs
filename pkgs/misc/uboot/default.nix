@@ -146,12 +146,21 @@ let
         dontStrip = true;
 
         meta =
+<<<<<<< HEAD
 
           {
             homepage = "https://www.denx.de/wiki/U-Boot/";
             description = "Boot loader for embedded systems";
             license = lib.licenses.gpl2Plus;
             maintainers = with lib.maintainers; [
+=======
+          with lib;
+          {
+            homepage = "https://www.denx.de/wiki/U-Boot/";
+            description = "Boot loader for embedded systems";
+            license = licenses.gpl2Plus;
+            maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               dezgeg
               lopsided98
             ];

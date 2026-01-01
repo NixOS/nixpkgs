@@ -50,7 +50,11 @@ buildPythonPackage rec {
   optional-dependencies = {
     botocore = [ botocore ];
     zarr = [ zarr ];
+<<<<<<< HEAD
     all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
+=======
+    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeCheckInputs = [

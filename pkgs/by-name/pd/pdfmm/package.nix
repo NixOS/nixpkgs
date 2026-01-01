@@ -49,6 +49,7 @@ resholve.mkDerivation {
     keep."$toutLu" = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical assistant to reduce the size of a PDF file";
     homepage = "https://github.com/jpfleury/pdfmm";
@@ -56,5 +57,14 @@ resholve.mkDerivation {
     maintainers = with lib.maintainers; [ urandom ];
     mainProgram = "pdfmm";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Graphical assistant to reduce the size of a PDF file";
+    homepage = "https://github.com/jpfleury/pdfmm";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ urandom ];
+    mainProgram = "pdfmm";
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

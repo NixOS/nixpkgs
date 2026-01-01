@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
       --replace 'echo UNKNOWN' 'echo ${lib.substring 0 10 src.rev}'
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Place and route tool for FPGAs";
     mainProgram = "arachne-pnr";
     longDescription = ''
@@ -41,11 +45,20 @@ stdenv.mkDerivation rec {
       the IceStorm [2] icepack command.
     '';
     homepage = "https://github.com/cseed/arachne-pnr";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       shell
       thoughtpolice
     ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      shell
+      thoughtpolice
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

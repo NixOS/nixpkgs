@@ -2,7 +2,10 @@
   rustPlatform,
   libdeltachat,
   pkg-config,
+<<<<<<< HEAD
   versionCheckHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 rustPlatform.buildRustPackage {
@@ -30,12 +33,15 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
+<<<<<<< HEAD
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = libdeltachat.meta // {
     description = "Delta Chat RPC server exposing JSON-RPC core API over standard I/O";
     mainProgram = "deltachat-rpc-server";

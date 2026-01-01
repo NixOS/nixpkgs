@@ -59,6 +59,7 @@ let
     popd
   '';
 
+<<<<<<< HEAD
   fetchtorrentWithHash =
     args:
     fetchtorrent (
@@ -73,6 +74,12 @@ let
       }
       // args
     );
+=======
+  # Fixed output derivation hash is identical for all derivations: the empty
+  # directory.
+  fetchtorrentWithHash =
+    args: fetchtorrent ({ hash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo="; } // args);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 # Seems almost but not quite worth using lib.mapCartesianProduct...
 builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash v) {

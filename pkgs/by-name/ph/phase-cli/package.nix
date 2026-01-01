@@ -45,6 +45,10 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = true;
 
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Securely manage and sync environment variables with Phase";

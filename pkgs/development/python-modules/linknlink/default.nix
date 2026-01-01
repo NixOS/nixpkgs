@@ -30,11 +30,20 @@ buildPythonPackage rec {
   # Module has no test
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Module and CLI for controlling Linklink devices locally";
     homepage = "https://github.com/xuanxuan000/python-linknlink";
     changelog = "https://github.com/xuanxuan000/python-linknlink/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module and CLI for controlling Linklink devices locally";
+    homepage = "https://github.com/xuanxuan000/python-linknlink";
+    changelog = "https://github.com/xuanxuan000/python-linknlink/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

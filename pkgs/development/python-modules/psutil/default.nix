@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "psutil";
+<<<<<<< HEAD
   version = "7.1.3";
+=======
+  version = "7.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   inherit stdenv;
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "giampaolo";
     repo = "psutil";
     tag = "release-${version}";
+<<<<<<< HEAD
     hash = "sha256-vMGUoiPr+QIe1N+I++d/DM9i2jeHTI68npGoJ2vKF10=";
+=======
+    hash = "sha256-LyGnLrq+SzCQmz8/P5DOugoNEyuH0IC7uIp8UAPwH0U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

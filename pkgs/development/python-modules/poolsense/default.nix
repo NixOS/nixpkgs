@@ -21,10 +21,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "poolsense" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to access PoolSense device";
     homepage = "https://github.com/haemishkyd/poolsense";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to access PoolSense device";
+    homepage = "https://github.com/haemishkyd/poolsense";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

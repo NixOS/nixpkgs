@@ -25,10 +25,18 @@ buildPythonPackage rec {
   # There are no unit tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for testing.* packages";
     homepage = "https://github.com/tk0miya/testing.common.database";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Utilities for testing.* packages";
+    homepage = "https://github.com/tk0miya/testing.common.database";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

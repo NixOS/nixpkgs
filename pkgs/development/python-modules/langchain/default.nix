@@ -28,7 +28,10 @@
   blockbuster,
   freezegun,
   httpx,
+<<<<<<< HEAD
   langchain-tests,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   lark,
   pandas,
   pytest-asyncio,
@@ -46,14 +49,22 @@
 
 buildPythonPackage rec {
   pname = "langchain";
+<<<<<<< HEAD
   version = "1.2.0";
+=======
+  version = "1.0.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
+<<<<<<< HEAD
     hash = "sha256-DximXCwrDSUVXZenUrubuGcxdnRCPCPMgdW9UJnkGnE=";
+=======
+    hash = "sha256-NQra/L7OfnVyFTbGkSDcG30r8W733eAs9abII53wy4g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/libs/langchain_v1";
@@ -97,7 +108,10 @@ buildPythonPackage rec {
     freezegun
     httpx
     lark
+<<<<<<< HEAD
     langchain-tests
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pandas
     pytest-asyncio
     pytest-mock
@@ -126,8 +140,11 @@ buildPythonPackage rec {
     "test_timeout_returns_error"
     # Can't see the shell session results when sandboxed
     "test_startup_and_shutdown_commands"
+<<<<<<< HEAD
     # Timing sensitive tests
     "test_tool_retry_constant_backoff"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   disabledTestPaths = [

@@ -30,7 +30,11 @@ tag_sha="$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s "https://api.github
 rev="$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s "https://api.github.com/repos/ankitects/anki/git/tags/$tag_sha" | jq -r '.object.sha')"
 
 nixpkgs="$(git rev-parse --show-toplevel)"
+<<<<<<< HEAD
 scriptDir="$nixpkgs/pkgs/by-name/an/anki"
+=======
+scriptDir="$nixpkgs/pkgs/games/anki"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 ver=$(nix-instantiate --eval -E "(import \"$nixpkgs\" { config = {}; overlays = []; }).anki.version" | tr -d '"')
 
@@ -51,7 +55,11 @@ yarnHash=$(yarn-berry-fetcher prefetch $TMPDIR/yarn.lock $TMPDIR/missing-hashes.
 echo "Copying missing-hashes.json back into nixpkgs"
 cp $TMPDIR/missing-hashes.json "$scriptDir/missing-hashes.json"
 
+<<<<<<< HEAD
 sed -i -E "s|yarnHash = \".*\"|yarnHash = \"$yarnHash\"|" "$scriptDir/package.nix"
+=======
+sed -i -E "s|yarnHash = \".*\"|yarnHash = \"$yarnHash\"|" "$scriptDir/default.nix"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 echo "yarnHash updated"
 echo "Regenerating uv-deps.json"
@@ -82,8 +90,14 @@ echo "Wrote uv-deps.json"
 
 srcHash="$(nix-prefetch-github ankitects anki --fetch-submodules --rev "$tag" --json | jq -r '.hash')"
 
+<<<<<<< HEAD
 sed -i "s|version = \".*\";|version = \"$tag\";|" "$scriptDir/package.nix"
 sed -i "s|rev = \".*\";|rev = \"$rev\";|" "$scriptDir/package.nix"
 sed -i "s|srcHash = \".*\";|srcHash = \"$srcHash\";|" "$scriptDir/package.nix"
+=======
+sed -i "s|version = \".*\";|version = \"$tag\";|" "$scriptDir/default.nix"
+sed -i "s|rev = \".*\";|rev = \"$rev\";|" "$scriptDir/default.nix"
+sed -i "s|srcHash = \".*\";|srcHash = \"$srcHash\";|" "$scriptDir/default.nix"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 touch $TMPDIR/.done

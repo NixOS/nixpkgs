@@ -26,15 +26,27 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Loadable dynamic extension to both SQLite and SpatiaLite";
     homepage = "https://www.gaia-gis.it/fossil/virtualpg";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Loadable dynamic extension to both SQLite and SpatiaLite";
+    homepage = "https://www.gaia-gis.it/fossil/virtualpg";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mpl11
       gpl2Plus
       lgpl21Plus
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

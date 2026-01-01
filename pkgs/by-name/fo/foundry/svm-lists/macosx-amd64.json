@@ -1066,6 +1066,7 @@
       "urls": [
         "dweb:/ipfs/QmbrZ9EQQakmwZ2MKzdT6Xp6RQfwbbc6bhrP7ZSeMGE6fx"
       ]
+<<<<<<< HEAD
     },
     {
       "path": "solc-macosx-amd64-v0.8.31+commit.fd3a2265",
@@ -1081,6 +1082,11 @@
   ],
   "releases": {
     "0.8.31": "solc-macosx-amd64-v0.8.31+commit.fd3a2265",
+=======
+    }
+  ],
+  "releases": {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "0.8.30": "solc-macosx-amd64-v0.8.30+commit.73712a01",
     "0.8.29": "solc-macosx-amd64-v0.8.29+commit.ab55807c",
     "0.8.28": "solc-macosx-amd64-v0.8.28+commit.7893614a",
@@ -1179,5 +1185,9 @@
     "0.4.0": "solc-macosx-amd64-v0.4.0+commit.acd334c9",
     "0.3.6": "solc-macosx-amd64-v0.3.6+commit.988fe5e5"
   },
+<<<<<<< HEAD
   "latestRelease": "0.8.31"
+=======
+  "latestRelease": "0.8.30"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

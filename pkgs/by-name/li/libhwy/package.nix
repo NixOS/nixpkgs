@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Performance-portable, length-agnostic SIMD with runtime dispatch";
     homepage = "https://github.com/google/highway";
@@ -91,5 +92,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ zhaofengli ];
+=======
+  meta = with lib; {
+    description = "Performance-portable, length-agnostic SIMD with runtime dispatch";
+    homepage = "https://github.com/google/highway";
+    license = with licenses; [
+      asl20
+      bsd3
+    ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ zhaofengli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

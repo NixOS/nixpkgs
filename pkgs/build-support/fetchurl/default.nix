@@ -35,6 +35,7 @@ let
   # "gnu", etc.).
   sites = builtins.attrNames mirrors;
 
+<<<<<<< HEAD
   /**
     Resolve a URL against the available mirrors.
 
@@ -69,6 +70,8 @@ let
     else
       map (mirror: mirror + lib.elemAt mirrorSplit 1) mirrorList;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   impureEnvVars =
     lib.fetchers.proxyImpureEnvVars
     ++ [
@@ -98,6 +101,10 @@ lib.extendMkDerivation {
     "derivationArgs"
 
     # Hash attributes will be map to the corresponding outputHash*
+<<<<<<< HEAD
+=======
+    "hash"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "sha1"
     "sha256"
     "sha512"
@@ -169,7 +176,10 @@ lib.extendMkDerivation {
 
       # Passthru information, if any.
       passthru ? { },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # Doing the download on a remote machine just duplicates network
       # traffic, so don't do that by default
       preferLocalBuild ? true,
@@ -248,22 +258,47 @@ lib.extendMkDerivation {
           }
         else if cacert != null then
           {
+<<<<<<< HEAD
             outputHashAlgo = null;
             outputHash = lib.fakeHash;
+=======
+            outputHashAlgo = "sha256";
+            outputHash = "";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           }
         else
           throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
 
+<<<<<<< HEAD
       finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
       finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
 
       resolvedUrl = lib.head (resolveUrl url);
+=======
+      resolvedUrl =
+        let
+          mirrorSplit = lib.match "mirror://([[:alpha:]]+)/(.+)" url;
+          mirrorName = lib.head mirrorSplit;
+          mirrorList =
+            if lib.hasAttr mirrorName mirrors then
+              mirrors."${mirrorName}"
+            else
+              throw "unknown mirror:// site ${mirrorName}";
+        in
+        if mirrorSplit == null || mirrorName == null then
+          url
+        else
+          "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     in
 
     derivationArgs
     // {
+<<<<<<< HEAD
       __structuredAttrs = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       name =
         if finalAttrs.pname or null != null && finalAttrs.version or null != null then
           "${finalAttrs.pname}-${finalAttrs.version}"
@@ -285,6 +320,7 @@ lib.extendMkDerivation {
       preferHashedMirrors = false;
 
       # New-style output content requirements.
+<<<<<<< HEAD
       hash =
         if
           hash_.outputHashAlgo == null
@@ -306,6 +342,13 @@ lib.extendMkDerivation {
       # Disable TLS verification only when we know the hash and no credentials are
       # needed to access the resource
       env.SSL_CERT_FILE =
+=======
+      inherit (hash_) outputHashAlgo outputHash;
+
+      # Disable TLS verification only when we know the hash and no credentials are
+      # needed to access the resource
+      SSL_CERT_FILE =
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         if
           (
             hash_.outputHash == ""
@@ -339,6 +382,7 @@ lib.extendMkDerivation {
         ''
       ) curlOpts;
 
+<<<<<<< HEAD
       inherit
         curlOptsList
         downloadToTemp
@@ -346,6 +390,16 @@ lib.extendMkDerivation {
         mirrorsFile
         postFetch
         showURLs
+=======
+      curlOptsList = lib.escapeShellArgs curlOptsList;
+
+      inherit
+        showURLs
+        mirrorsFile
+        postFetch
+        downloadToTemp
+        executable
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ;
 
       impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
@@ -354,6 +408,18 @@ lib.extendMkDerivation {
 
       inherit preferLocalBuild;
 
+<<<<<<< HEAD
+=======
+      postHook =
+        if netrcPhase == null then
+          null
+        else
+          ''
+            ${netrcPhase}
+            curlOpts="$curlOpts --netrc-file $PWD/netrc"
+          '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit meta;
       passthru = {
         inherit url resolvedUrl;
@@ -364,6 +430,9 @@ lib.extendMkDerivation {
   # No ellipsis
   inheritFunctionArgs = false;
 }
+<<<<<<< HEAD
 // {
   inherit resolveUrl;
 }
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

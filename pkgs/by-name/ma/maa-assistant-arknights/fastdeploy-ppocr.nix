@@ -68,11 +68,19 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     install -Dm644 ${finalAttrs.src}/cmake/Findonnxruntime.cmake $cmake/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "MaaAssistantArknights stripped-down version of FastDeploy";
     homepage = "https://github.com/MaaAssistantArknights/FastDeploy";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "MaaAssistantArknights stripped-down version of FastDeploy";
+    homepage = "https://github.com/MaaAssistantArknights/FastDeploy";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = cudaSupport && stdenv.hostPlatform.system != "x86_64-linux";
   };
 })

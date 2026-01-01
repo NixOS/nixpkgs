@@ -29,7 +29,11 @@ buildGoModule rec {
     export PATH=$TMPDIR/usr/bin:$PATH
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Leak git repositories from misconfigured websites";
     mainProgram = "gitjacker";
     longDescription = ''
@@ -39,7 +43,12 @@ buildGoModule rec {
       even where directory listings are disabled.
     '';
     homepage = "https://github.com/liamg/gitjacker";
+<<<<<<< HEAD
     license = with lib.licenses; [ unlicense ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ unlicense ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

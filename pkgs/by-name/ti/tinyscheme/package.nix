@@ -68,7 +68,11 @@ stdenv.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lightweight Scheme implementation";
     longDescription = ''
       TinyScheme is a lightweight Scheme interpreter that implements as large a
@@ -76,8 +80,15 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://tinyscheme.sourceforge.net/";
     changelog = "https://tinyscheme.sourceforge.net/CHANGES";
+<<<<<<< HEAD
     license = lib.licenses.bsdOriginal;
     mainProgram = "tinyscheme";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsdOriginal;
+    mainProgram = "tinyscheme";
+    maintainers = [ maintainers.ebzzry ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

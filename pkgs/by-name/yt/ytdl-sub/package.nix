@@ -4,19 +4,30 @@
   ffmpeg_7,
   lib,
   versionCheckHook,
+<<<<<<< HEAD
   writableTmpDirAsHomeHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
+<<<<<<< HEAD
   version = "2025.12.30";
+=======
+  version = "2025.11.27";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmbannon";
     repo = "ytdl-sub";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-MRDLtrfxGJIWz5yk4tW4MMSY9muhgZz0w8+1XWmSAks=";
+=======
+    hash = "sha256-HkdDcTQza4pw72FuQgss+GRiiHPtKFRSCJ87fIYPdq4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -46,8 +57,13 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     versionCheckHook
     python3Packages.pytestCheckHook
+<<<<<<< HEAD
     writableTmpDirAsHomeHook
   ];
+=======
+  ];
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env = {
     YTDL_SUB_FFMPEG_PATH = "${lib.getExe' ffmpeg_7 "ffmpeg"}";
@@ -56,7 +72,10 @@ python3Packages.buildPythonApplication rec {
 
   disabledTests = [
     "test_logger_can_be_cleaned_during_execution"
+<<<<<<< HEAD
     "test_no_config_works"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_presets_run"
     "test_thumbnail"
   ];

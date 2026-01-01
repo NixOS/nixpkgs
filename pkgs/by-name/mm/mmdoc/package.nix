@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     libzip
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal Markdown Documentation";
     mainProgram = "mmdoc";
@@ -42,5 +43,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ ryantm ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Minimal Markdown Documentation";
+    mainProgram = "mmdoc";
+    homepage = "https://github.com/ryantm/mmdoc";
+    license = licenses.cc0;
+    maintainers = with maintainers; [ ryantm ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

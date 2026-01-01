@@ -78,10 +78,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://scalacenter.github.io/bloop/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://scalacenter.github.io/bloop/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
     mainProgram = "bloop";
     platforms = [
@@ -89,7 +96,11 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       agilesteel
       kubukoz
       tomahna

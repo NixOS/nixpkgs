@@ -36,11 +36,19 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/7USTIN/manga-cli";
     description = "Bash script for reading mangas via the terminal by scraping manganato";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ baitinq ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/7USTIN/manga-cli";
+    description = "Bash script for reading mangas via the terminal by scraping manganato";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ baitinq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "manga-cli";
   };
 }

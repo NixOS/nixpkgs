@@ -34,7 +34,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-xLeetcmzvpILLLMhMx7oahWLxguFjG3qbYpeeWpFUlw=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Customization of kubernetes YAML configurations";
     longDescription = ''
       kustomize lets you customize raw, template-free YAML files for
@@ -42,8 +46,13 @@ buildGoModule rec {
       as is.
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       carlosdagos
       vdemeester
       zaninime

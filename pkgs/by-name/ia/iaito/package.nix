@@ -11,14 +11,22 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "iaito";
+<<<<<<< HEAD
   version = "6.0.7";
+=======
+  version = "6.0.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   srcs = [
     (fetchFromGitHub {
       owner = "radareorg";
       repo = "iaito";
       tag = finalAttrs.version;
+<<<<<<< HEAD
       hash = "sha256-sATBtjNboSnk3j1PVm60HZO1MDw1A4FRttVp0M4t+/I=";
+=======
+      hash = "sha256-99SuUTwHcpyJ5V9Cnanm6ylH3NVgyk3TmDoaFVwFE4E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       name = "main";
     })
     (fetchFromGitHub {

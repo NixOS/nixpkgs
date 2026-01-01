@@ -66,14 +66,24 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GStreamer RTSP server";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
       A library on top of GStreamer for building an RTSP server.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bkchr ];
+=======
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bkchr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

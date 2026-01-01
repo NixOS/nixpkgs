@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_thebe" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Integrate interactive code blocks into your documentation with Thebe and Binder";
     homepage = "https://github.com/executablebooks/sphinx-thebe";
     changelog = "https://github.com/executablebooks/sphinx-thebe/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Integrate interactive code blocks into your documentation with Thebe and Binder";
+    homepage = "https://github.com/executablebooks/sphinx-thebe";
+    changelog = "https://github.com/executablebooks/sphinx-thebe/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

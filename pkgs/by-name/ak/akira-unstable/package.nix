@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Native Linux Design application built in Vala and GTK";
     homepage = "https://github.com/akiraux/Akira";
@@ -71,6 +72,17 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Native Linux Design application built in Vala and GTK";
+    homepage = "https://github.com/akiraux/Akira";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      Br1ght0ne
+    ];
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "com.github.akiraux.akira";
   };
 }

@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple cargo plugin to get a list of features for a specific crate";
     mainProgram = "cargo-whatfeatures";
@@ -32,6 +33,17 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Simple cargo plugin to get a list of features for a specific crate";
+    mainProgram = "cargo-whatfeatures";
+    homepage = "https://github.com/museun/cargo-whatfeatures";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ivan-babrou
       matthiasbeyer
     ];

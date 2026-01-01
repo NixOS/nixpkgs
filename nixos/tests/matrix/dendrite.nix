@@ -8,8 +8,13 @@ let
 in
 {
   name = "dendrite";
+<<<<<<< HEAD
   meta = {
     maintainers = pkgs.lib.teams.matrix.members;
+=======
+  meta = with pkgs.lib; {
+    maintainers = teams.matrix.members;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes = {

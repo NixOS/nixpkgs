@@ -28,11 +28,20 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "mini-graph-card-bundle.js";
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/kalkih/mini-graph-card/releases/tag/v${version}";
     description = "Minimalistic graph card for Home Assistant Lovelace UI";
     homepage = "https://github.com/kalkih/mini-graph-card";
     maintainers = with lib.maintainers; [ hexa ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/kalkih/mini-graph-card/releases/tag/v${version}";
+    description = "Minimalistic graph card for Home Assistant Lovelace UI";
+    homepage = "https://github.com/kalkih/mini-graph-card";
+    maintainers = with maintainers; [ hexa ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

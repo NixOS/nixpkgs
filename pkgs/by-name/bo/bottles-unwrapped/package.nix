@@ -32,20 +32,31 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
+<<<<<<< HEAD
   version = "60.1";
+=======
+  version = "52.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-d9nRT6AvFxnhI/theJtPg79EdmA+9UFS4OWDlkV03sA=";
+=======
+    hash = "sha256-KRSFljHUB5JEk2saCb0voIukekeUSySinBICBrzY9eQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
     ./vulkan_icd.patch
     ./redirect-bugtracker.patch
     ./remove-flatpak-check.patch
+<<<<<<< HEAD
     ./terminal.patch # Needed for `Launch with Terminal`
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ (
     if removeWarningPopup then

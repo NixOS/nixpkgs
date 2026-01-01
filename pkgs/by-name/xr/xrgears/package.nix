@@ -59,6 +59,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.freedesktop.org/monado/demos/xrgears";
     description = "OpenXR example using Vulkan for rendering";
@@ -66,5 +67,14 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scrumplex ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.freedesktop.org/monado/demos/xrgears";
+    description = "OpenXR example using Vulkan for rendering";
+    mainProgram = "xrgears";
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ Scrumplex ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

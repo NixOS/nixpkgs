@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "pystac";
+<<<<<<< HEAD
   version = "1.14.2";
+=======
+  version = "1.14.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -25,7 +29,11 @@ buildPythonPackage rec {
     owner = "stac-utils";
     repo = "pystac";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-lSwapIOoZfI9m7BRVQVD8DS7+N+zieOiuvgwflt/bZw=";
+=======
+    hash = "sha256-k2w/Se/XdPLZQ69TQkIomPsI6uiM+dO2H2HQ3fvPyF0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

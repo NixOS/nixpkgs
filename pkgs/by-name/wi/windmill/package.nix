@@ -47,13 +47,21 @@
 
 let
   pname = "windmill";
+<<<<<<< HEAD
   version = "1.601.0";
+=======
+  version = "1.549.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-yaIQFK3ECP8DccfwaaMwAEisnzM5JijznDsY6mRBNHA=";
+=======
+    hash = "sha256-+4cYZCD8iqrrckYWTDCM++SogptXXahfCKN6O8E8HuE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -66,7 +74,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTY_V8_ARCHIVE = librusty_v8;
   };
 
+<<<<<<< HEAD
   cargoHash = "sha256-b+qSk2DgVJkWeSB+qXosVtMOM+kUobmYB5Av68/tr68=";
+=======
+  cargoHash = "sha256-m7/72IRbzllAfAlbjKsjGrTaiXzpj2TufLKrTpKLbUU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildFeatures = [
     "agent_worker_server"
@@ -195,7 +207,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     sourceRoot = "${src.name}/frontend";
 
+<<<<<<< HEAD
     npmDepsHash = "sha256-4Sy7C9zzVjw4HIHFFWKfhMUtn97XWyNBDaWAV4WicK4=";
+=======
+    npmDepsHash = "sha256-2CBqPDEqKGDIGo7ARK3sxTkFNsTxIa6V1QCtSKDkj4I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # without these you get a
     # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory

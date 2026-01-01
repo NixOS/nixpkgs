@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mdformat plugin for admonitions";
     homepage = "https://github.com/KyleKing/mdformat-admon";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aldoborrero ];
+=======
+  meta = with lib; {
+    description = "Mdformat plugin for admonitions";
+    homepage = "https://github.com/KyleKing/mdformat-admon";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aldoborrero ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -210,11 +210,20 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities to configure the GNOME desktop";
     mainProgram = "gnome-control-center";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Utilities to configure the GNOME desktop";
+    mainProgram = "gnome-control-center";
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

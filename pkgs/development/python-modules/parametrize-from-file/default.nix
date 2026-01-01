@@ -55,11 +55,20 @@ buildPythonPackage rec {
     "test_load_suite_params_err"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read unit test parameters from config files";
     homepage = "https://github.com/kalekundert/parametrize_from_file";
     changelog = "https://github.com/kalekundert/parametrize_from_file/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "Read unit test parameters from config files";
+    homepage = "https://github.com/kalekundert/parametrize_from_file";
+    changelog = "https://github.com/kalekundert/parametrize_from_file/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

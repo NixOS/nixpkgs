@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-gPF4XrUqDDJCCY1zrUr3AXDG0uoADR8LBxRP4yolcug=";
 
+<<<<<<< HEAD
   meta = {
     description = "TUI for Mastodon with vim inspired keys";
     homepage = "https://github.com/RasmusLindroth/tut";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ equirosa ];
+=======
+  meta = with lib; {
+    description = "TUI for Mastodon with vim inspired keys";
+    homepage = "https://github.com/RasmusLindroth/tut";
+    license = licenses.mit;
+    maintainers = with maintainers; [ equirosa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tut";
   };
 }

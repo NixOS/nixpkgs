@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://johncheetham.com/projects/gshogi/";
     description = "Graphical implementation of the Shogi board game, also known as Japanese Chess";
@@ -52,5 +53,14 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.ciil ];
+=======
+  meta = with lib; {
+    homepage = "http://johncheetham.com/projects/gshogi/";
+    description = "Graphical implementation of the Shogi board game, also known as Japanese Chess";
+    mainProgram = "gshogi";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.ciil ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

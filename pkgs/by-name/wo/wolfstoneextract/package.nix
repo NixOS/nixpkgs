@@ -20,15 +20,27 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Utility to extract Wolfstone data from Wolfenstein II";
     mainProgram = "wolfstoneextract";
     homepage = "https://bitbucket.org/ecwolf/wolfstoneextract/src/master/";
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl3Only
       bsd3
     ];
     maintainers = with lib.maintainers; [ keenanweaver ];
+=======
+    license = with licenses; [
+      gpl3Only
+      bsd3
+    ];
+    maintainers = with maintainers; [ keenanweaver ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

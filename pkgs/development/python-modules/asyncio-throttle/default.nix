@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncio_throttle" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, easy-to-use throttler for asyncio";
     homepage = "https://github.com/hallazzang/asyncio-throttle";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Simple, easy-to-use throttler for asyncio";
+    homepage = "https://github.com/hallazzang/asyncio-throttle";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,12 +23,21 @@ stdenv.mkDerivation {
 
   buildInputs = [ libao ];
 
+<<<<<<< HEAD
   meta = {
     description = "Morse code training program";
     homepage = "http://aldo.nongnu.org/";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Morse code training program";
+    homepage = "http://aldo.nongnu.org/";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aldo";
   };
 }

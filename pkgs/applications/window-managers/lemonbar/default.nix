@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight xcb based bar";
     homepage = "https://github.com/LemonBoy/bar";
@@ -36,6 +37,17 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Lightweight xcb based bar";
+    homepage = "https://github.com/LemonBoy/bar";
+    maintainers = with maintainers; [
+      meisternu
+      moni
+    ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lemonbar";
   };
 }

@@ -39,6 +39,7 @@ let
 in
 stdenv.mkDerivation (final: {
   pname = "quarto";
+<<<<<<< HEAD
   version = "1.8.26";
 
   src = fetchurl {
@@ -46,6 +47,19 @@ stdenv.mkDerivation (final: {
     hash = "sha256-rYyqbTrsw/K2pKj7gpZnfvLvlBCkij7rp7H5ockQAPA=";
   };
 
+=======
+  version = "1.7.34";
+
+  src = fetchurl {
+    url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
+    hash = "sha256-3WsDCkS5Y9AflLlpa6y6ca/DF4621RqcwQUzK3fqa5o=";
+  };
+
+  patches = [
+    ./deno2.patch
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     makeWrapper
     which

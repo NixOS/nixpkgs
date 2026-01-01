@@ -642,7 +642,11 @@ in
         let
           nginxHasSSL =
             with config.services.nginx.virtualHosts."${cfg.hostname}";
+<<<<<<< HEAD
             onlySSL || addSSL || forceSSL;
+=======
+            onlySSL || enableSSL || addSSL || forceSSL;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         in
         ''
           set -euo pipefail

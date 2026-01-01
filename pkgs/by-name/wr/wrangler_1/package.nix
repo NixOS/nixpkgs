@@ -32,11 +32,16 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool designed for folks who are interested in using Cloudflare Workers";
     mainProgram = "wrangler";
@@ -45,5 +50,16 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
+=======
+  meta = with lib; {
+    description = "CLI tool designed for folks who are interested in using Cloudflare Workers";
+    mainProgram = "wrangler";
+    homepage = "https://github.com/cloudflare/wrangler";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

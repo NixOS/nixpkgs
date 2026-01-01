@@ -35,11 +35,20 @@ buildPythonPackage rec {
     six
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/man-group/pytest-plugins/blob/${src.tag}/CHANGES.md";
     description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables aren’t set";
     homepage = "https://github.com/manahl/pytest-plugins";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ryansydnor ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/man-group/pytest-plugins/blob/${src.tag}/CHANGES.md";
+    description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables aren’t set";
+    homepage = "https://github.com/manahl/pytest-plugins";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ryansydnor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,11 +32,19 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple GIT URL parser";
     homepage = "https://github.com/coala/git-url-parse";
     changelog = "https://github.com/coala/git-url-parse/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple GIT URL parser";
+    homepage = "https://github.com/coala/git-url-parse";
+    changelog = "https://github.com/coala/git-url-parse/blob/${src.rev}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

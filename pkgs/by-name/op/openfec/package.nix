@@ -54,11 +54,20 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Application-level Forward Erasure Correction codes";
     homepage = "https://github.com/roc-streaming/openfec";
     license = lib.licenses.cecill-c;
     maintainers = with lib.maintainers; [ bgamari ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Application-level Forward Erasure Correction codes";
+    homepage = "https://github.com/roc-streaming/openfec";
+    license = licenses.cecill-c;
+    maintainers = with maintainers; [ bgamari ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

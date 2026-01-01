@@ -52,10 +52,18 @@ buildPythonPackage rec {
   # All tests require network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Contrastive Language-Image Pretraining";
     homepage = "https://github.com/rom1504/CLIP";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    description = "Contrastive Language-Image Pretraining";
+    homepage = "https://github.com/rom1504/CLIP";
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

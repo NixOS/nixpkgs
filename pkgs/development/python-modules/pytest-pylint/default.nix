@@ -40,10 +40,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_pylint" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to check source code with pylint";
     homepage = "https://github.com/carsongee/pytest-pylint";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pytest plugin to check source code with pylint";
+    homepage = "https://github.com/carsongee/pytest-pylint";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -108,7 +108,11 @@ stdenv.mkDerivation (
       });
     };
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Convert blu-ray and dvd to mkv";
       longDescription = ''
         makemkv is a one-click QT application that transcodes an encrypted
@@ -119,6 +123,7 @@ stdenv.mkDerivation (
         can always download the latest version from makemkv.com that will reset the
         expiration date.
       '';
+<<<<<<< HEAD
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = [
         lib.licenses.unfree
@@ -127,6 +132,16 @@ stdenv.mkDerivation (
       homepage = "https://makemkv.com";
       platforms = [ "x86_64-linux" ];
       maintainers = with lib.maintainers; [ jchw ];
+=======
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      license = [
+        licenses.unfree
+        licenses.lgpl21
+      ];
+      homepage = "https://makemkv.com";
+      platforms = [ "x86_64-linux" ];
+      maintainers = with maintainers; [ jchw ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
 )

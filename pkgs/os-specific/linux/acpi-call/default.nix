@@ -5,6 +5,7 @@
   kernel,
   kernelModuleMakeFlags,
 }:
+<<<<<<< HEAD
 let
   pname = "acpi-call";
   version = "1.2.2";
@@ -12,6 +13,13 @@ in
 stdenv.mkDerivation {
   inherit pname;
   version = "${version}-${kernel.version}";
+=======
+
+stdenv.mkDerivation rec {
+  pname = "acpi-call";
+  version = "1.2.2";
+  name = "${pname}-${version}-${kernel.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -33,15 +41,27 @@ stdenv.mkDerivation {
     install -D -m755 examples/turn_off_gpu.sh $out/bin/test_discrete_video_off.sh
   '';
 
+<<<<<<< HEAD
   meta = {
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raskin
       mic92
     ];
     homepage = "https://github.com/nix-community/acpi_call";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     description = "Module allowing arbitrary ACPI calls; use case: hybrid video";
     mainProgram = "test_discrete_video_off.sh";
     license = lib.licenses.gpl3Plus;
+=======
+    platforms = platforms.linux;
+    description = "Module allowing arbitrary ACPI calls; use case: hybrid video";
+    mainProgram = "test_discrete_video_off.sh";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

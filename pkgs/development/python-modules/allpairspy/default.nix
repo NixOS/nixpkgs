@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "allpairspy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pairwise test combinations generator";
     homepage = "https://github.com/thombashi/allpairspy";
     changelog = "https://github.com/thombashi/allpairspy/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Pairwise test combinations generator";
+    homepage = "https://github.com/thombashi/allpairspy";
+    changelog = "https://github.com/thombashi/allpairspy/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -169,10 +169,18 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) suricata; };
 
+<<<<<<< HEAD
   meta = {
     description = "Free and open source, mature, fast and robust network threat detection engine";
     homepage = "https://suricata.io";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Free and open source, mature, fast and robust network threat detection engine";
+    homepage = "https://suricata.io";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

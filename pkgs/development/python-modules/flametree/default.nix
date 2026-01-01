@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flametree" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python file and zip operations made easy";
     homepage = "https://github.com/Edinburgh-Genome-Foundry/Flametree";
     changelog = "https://github.com/Edinburgh-Genome-Foundry/Flametree/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Python file and zip operations made easy";
+    homepage = "https://github.com/Edinburgh-Genome-Foundry/Flametree";
+    changelog = "https://github.com/Edinburgh-Genome-Foundry/Flametree/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

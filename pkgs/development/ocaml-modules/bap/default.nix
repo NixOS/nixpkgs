@@ -138,11 +138,19 @@ stdenv.mkDerivation rec {
     "--with-llvm-config=${llvm.dev}/bin/llvm-config"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages";
     homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.maurer ];
+=======
+  meta = with lib; {
+    description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages";
+    homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
+    license = licenses.mit;
+    maintainers = [ maintainers.maurer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bap";
     broken = lib.versionOlder ocaml.version "4.08";
   };

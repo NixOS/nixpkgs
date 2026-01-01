@@ -31,11 +31,20 @@ buildPythonPackage rec {
     ${python.interpreter} -m django test --settings=tests.settings
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tweak the form field rendering in templates, not in python-level form definitions";
     homepage = "https://github.com/jazzband/django-widget-tweaks";
     changelog = "https://github.com/jazzband/django-widget-tweaks/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxxk ];
+=======
+  meta = with lib; {
+    description = "Tweak the form field rendering in templates, not in python-level form definitions";
+    homepage = "https://github.com/jazzband/django-widget-tweaks";
+    changelog = "https://github.com/jazzband/django-widget-tweaks/blob/${src.tag}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maxxk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

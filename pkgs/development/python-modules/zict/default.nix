@@ -31,10 +31,18 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mutable mapping tools";
     homepage = "https://github.com/dask/zict";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
+=======
+  meta = with lib; {
+    description = "Mutable mapping tools";
+    homepage = "https://github.com/dask/zict";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ teh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/file-roller";
     changelog = "https://gitlab.gnome.org/GNOME/file-roller/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
@@ -73,6 +74,17 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [
       lib.teams.gnome
       lib.teams.pantheon
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/file-roller";
+    changelog = "https://gitlab.gnome.org/GNOME/file-roller/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    description = "Archive manager for the GNOME desktop environment";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    teams = [
+      teams.gnome
+      teams.pantheon
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "file-roller";
   };

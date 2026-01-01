@@ -12,19 +12,31 @@
 
 buildPythonPackage rec {
   pname = "typst";
+<<<<<<< HEAD
   version = "0.14.5";
+=======
+  version = "0.14.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "messense";
     repo = "typst-py";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Slo9cstmh9ZjxcqVdRldU+n82JK1cGf89cHE9Rrh7z0=";
+=======
+    hash = "sha256-PshpYyT+WVZezHEMYETsxwSlPzZ8mXWFw2YgXPEyAIw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
+<<<<<<< HEAD
     hash = "sha256-haEthOKjyQkHhPgYPo40uLjfv29BDCC084KWmGRwkVk=";
+=======
+    hash = "sha256-453c6hs1Wr4KFu523jMqdNmi0cBxlpkh92bt4ZXXhLo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

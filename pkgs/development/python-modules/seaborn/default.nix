@@ -79,10 +79,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seaborn" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
     changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
     license = with lib.licenses; [ bsd3 ];
+=======
+  meta = with lib; {
+    description = "Statistical data visualization";
+    homepage = "https://seaborn.pydata.org/";
+    changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
+    license = with licenses; [ bsd3 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

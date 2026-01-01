@@ -106,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Secure french messenger";
     homepage = "https://www.olvid.io";
@@ -113,5 +114,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "olvid";
     maintainers = with lib.maintainers; [ rookeur ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Secure french messenger";
+    homepage = "https://www.olvid.io";
+    license = licenses.agpl3Only;
+    mainProgram = "olvid";
+    maintainers = with maintainers; [ rookeur ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

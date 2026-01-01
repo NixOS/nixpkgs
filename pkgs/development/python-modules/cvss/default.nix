@@ -35,12 +35,21 @@ buildPythonPackage rec {
     cd tests
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for CVSS2/3/4";
     homepage = "https://github.com/RedHatProductSecurity/cvss";
     changelog = "https://github.com/RedHatProductSecurity/cvss/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for CVSS2/3/4";
+    homepage = "https://github.com/RedHatProductSecurity/cvss";
+    changelog = "https://github.com/RedHatProductSecurity/cvss/releases/tag/${src.tag}";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cvss_calculator";
   };
 }

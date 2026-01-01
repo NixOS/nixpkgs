@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     }"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Todo-txt + Rofi = Todofi.sh";
     mainProgram = "todofi.sh";
@@ -49,5 +50,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ewok ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Todo-txt + Rofi = Todofi.sh";
+    mainProgram = "todofi.sh";
+    homepage = "https://github.com/hugokernel/todofi.sh";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ewok ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -59,7 +59,11 @@ buildGoModule {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Application drawer for sway Wayland compositor";
     homepage = "https://github.com/nwg-piotr/nwg-drawer";
     changelog = "https://github.com/nwg-piotr/nwg-drawer/releases/tag/${src.rev}";

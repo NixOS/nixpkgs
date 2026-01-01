@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libbytesize";
+<<<<<<< HEAD
   version = "2.12";
+=======
+  version = "2.11";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libbytesize";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-MQADGFruQODQ8rxu1R8TF9zqd4jKLtyRQrWFds5UNS0=";
+=======
+    hash = "sha256-scOnucn7xp6KKEtkpwfyrdzcntJF2l0h0fsQotcceLc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [

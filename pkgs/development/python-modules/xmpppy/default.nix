@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Python 2/3 implementation of XMPP";
     homepage = "https://github.com/xmpppy/xmpppy";
     changelog = "https://github.com/xmpppy/xmpppy/blob/${version}/CHANGES.rst";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jopejoe1 ];
+=======
+  meta = with lib; {
+    description = "Python 2/3 implementation of XMPP";
+    homepage = "https://github.com/xmpppy/xmpppy";
+    changelog = "https://github.com/xmpppy/xmpppy/blob/${version}/CHANGES.rst";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ jopejoe1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

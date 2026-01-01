@@ -17,11 +17,20 @@
     sha256 = "059lydp7d6pjgrd4pdnqq2zffzlba62ch102f01rgzf9aps3c8lz";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Gerbil libp2p: use libp2p from Gerbil";
     homepage = "https://github.com/vyzo/gerbil-libp2p";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "Gerbil libp2p: use libp2p from Gerbil";
+    homepage = "https://github.com/vyzo/gerbil-libp2p";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

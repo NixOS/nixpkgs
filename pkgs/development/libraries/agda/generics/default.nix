@@ -25,11 +25,20 @@ mkDerivation rec {
     rm tests.agda-lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for datatype-generic programming in Agda";
     homepage = src.meta.homepage;
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ turion ];
+=======
+  meta = with lib; {
+    description = "Library for datatype-generic programming in Agda";
+    homepage = src.meta.homepage;
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ turion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

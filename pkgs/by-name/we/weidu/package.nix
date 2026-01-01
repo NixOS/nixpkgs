@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "InfinityEngine Modding Engine";
     homepage = "https://weidu.org";
@@ -78,6 +79,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     # should work fine on Windows
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "InfinityEngine Modding Engine";
+    homepage = "https://weidu.org";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ peterhoeg ];
+    # should work fine on Windows
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "weidu";
   };
 }

@@ -61,11 +61,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "emborg" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive command line interface to Borg Backup";
     homepage = "https://github.com/KenKundert/emborg";
     changelog = "https://github.com/KenKundert/emborg/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "Interactive command line interface to Borg Backup";
+    homepage = "https://github.com/KenKundert/emborg";
+    changelog = "https://github.com/KenKundert/emborg/releases/tag/${src.tag}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

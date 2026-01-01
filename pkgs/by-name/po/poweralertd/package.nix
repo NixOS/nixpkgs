@@ -44,12 +44,21 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "UPower-powered power alerter";
     homepage = "https://git.sr.ht/~kennylevinsen/poweralertd";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thibautmarty ];
+=======
+  meta = with lib; {
+    description = "UPower-powered power alerter";
+    homepage = "https://git.sr.ht/~kennylevinsen/poweralertd";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thibautmarty ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "poweralertd";
   };
 }

@@ -50,6 +50,7 @@ buildPythonPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "qcengine" ];
@@ -59,6 +60,17 @@ buildPythonPackage rec {
     homepage = "https://molssi.github.io/QCElemental/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sheepforce ];
+=======
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "qcengine" ];
+
+  meta = with lib; {
+    description = "Quantum chemistry program executor and IO standardizer (QCSchema) for quantum chemistry";
+    homepage = "https://molssi.github.io/QCElemental/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qcengine";
   };
 }

@@ -48,12 +48,21 @@ stdenv.mkDerivation rec {
     cp -v *.txt $out/share/doc/${pname}-${version}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.sentex.net/~mwandel/jhead/";
     description = "Exif Jpeg header manipulation tool";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ rycee ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.sentex.net/~mwandel/jhead/";
+    description = "Exif Jpeg header manipulation tool";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ rycee ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jhead";
   };
 }

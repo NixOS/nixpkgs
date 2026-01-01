@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withPlymouth plymouth;
 
+<<<<<<< HEAD
   meta = {
     description = "Attest the trustworthiness of a device against a human using time-based one-time passwords";
     homepage = "https://github.com/tpm2-software/tpm2-totp";
@@ -48,5 +49,15 @@ stdenv.mkDerivation rec {
     mainProgram = "tpm2-totp";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ raitobezarius ];
+=======
+  meta = with lib; {
+    description = "Attest the trustworthiness of a device against a human using time-based one-time passwords";
+    homepage = "https://github.com/tpm2-software/tpm2-totp";
+    changelog = "https://github.com/tpm2-software/tpm2-totp/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.bsd3;
+    mainProgram = "tpm2-totp";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ raitobezarius ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

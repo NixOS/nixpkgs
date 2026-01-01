@@ -36,12 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool testing variable refresh rates";
     homepage = "https://github.com/Nixola/VRRTest";
     license = lib.licenses.zlib;
     mainProgram = "vrrtest";
     maintainers = with lib.maintainers; [ justinlime ];
+=======
+  meta = with lib; {
+    description = "Tool testing variable refresh rates";
+    homepage = "https://github.com/Nixola/VRRTest";
+    license = licenses.zlib;
+    mainProgram = "vrrtest";
+    maintainers = with maintainers; [ justinlime ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (love.meta) platforms;
   };
 })

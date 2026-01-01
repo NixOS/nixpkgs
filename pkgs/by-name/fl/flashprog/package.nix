@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     allowedVersions = "^[0-9\\.]+$";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
@@ -74,6 +75,18 @@ stdenv.mkDerivation (finalAttrs: {
       funkeleinhorn
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://flashprog.org";
+    description = "Utility for reading, writing, erasing and verifying flash ROM chips";
+    changelog = "https://flashprog.org/wiki/Flashprog/v${finalAttrs.version}";
+    license = with licenses; [ gpl2 ];
+    maintainers = with maintainers; [
+      felixsinger
+      funkeleinhorn
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "flashprog";
   };
 })

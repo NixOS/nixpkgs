@@ -6,17 +6,25 @@
   installShellFiles,
   git,
   jq,
+<<<<<<< HEAD
   fzf,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-worktree-switcher";
+<<<<<<< HEAD
   version = "0.2.8";
+=======
+  version = "0.2.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "mateusauler";
     repo = "git-worktree-switcher";
     tag = "${finalAttrs.version}-fork";
+<<<<<<< HEAD
     hash = "sha256-OXUVIL4bIqqxnLLwdO0+8gxCDMqA4TPvjIc2i8BeBmw=";
   };
 
@@ -24,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     fzf
     git
     jq
+=======
+    hash = "sha256-vPnAXiizCU5nXce+aE2x2G5ei+7A+eBTUpxcGleSSa8=";
+  };
+
+  buildInputs = [
+    jq
+    git
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [
@@ -41,7 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp wt $out/bin
     wrapProgram $out/bin/wt --prefix PATH : ${
       lib.makeBinPath [
+<<<<<<< HEAD
         fzf
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         git
         jq
       ]

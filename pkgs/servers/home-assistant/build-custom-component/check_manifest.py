@@ -68,7 +68,11 @@ def main(args):
     # At least one manifest should match the component name
     ok &= any(check_derivation_name(manifest) for manifest in manifests)
 
+<<<<<<< HEAD
     # All requirements need to match, use `ignoreVersionRequirement` to ignore too strict version constraints
+=======
+    # All requirements need to match, use `ignoreRequirementVersion` to ignore too strict version constraints
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ok &= all(
         check_requirements(manifest, args.ignore_version_requirement)
         for manifest in manifests

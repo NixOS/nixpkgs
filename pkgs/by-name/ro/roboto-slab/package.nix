@@ -24,8 +24,13 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "0g663npi5lkvwcqafd4cjrm90ph0nv1lig7d19xzfymnj47qpj8x";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://fonts.google.com/specimen/Roboto+Slab";
+=======
+  meta = with lib; {
+    homepage = "https://www.google.com/fonts/specimen/Roboto+Slab";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Roboto Slab Typeface by Google";
     longDescription = ''
       Roboto has a dual nature. It has a mechanical skeleton and the forms
@@ -38,8 +43,14 @@ stdenv.mkDerivation {
       This is the Roboto Slab family, which can be used alongside the normal
       Roboto family and the Roboto Condensed family.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

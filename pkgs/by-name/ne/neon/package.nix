@@ -22,12 +22,20 @@ let
 in
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "0.36.0";
+=======
+  version = "0.35.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "neon";
 
   src = fetchurl {
     url = "https://notroj.github.io/${pname}/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-cMx/Ku694mOQbhhbJm4E4N6Ss45fTszL9h6LeRd8Lwc=";
+=======
+    sha256 = "sha256-FGevtz814/XQ6f1wYowUy6Jmpl4qH7bj+UXuM4XIWVs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = optionals stdenv.hostPlatform.isDarwin [ ./darwin-fix-configure.patch ];

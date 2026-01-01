@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dm_env" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python client for Apache Kafka";
     homepage = "https://github.com/dpkp/kafka-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Pure Python client for Apache Kafka";
+    homepage = "https://github.com/dpkp/kafka-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

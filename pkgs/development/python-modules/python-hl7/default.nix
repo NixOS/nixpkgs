@@ -27,12 +27,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hl7" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple library for parsing messages of Health Level 7 (HL7) version 2.x into Python objects";
     mainProgram = "mllp_send";
     homepage = "https://python-hl7.readthedocs.org";
     changelog = "https://python-hl7.readthedocs.io/en/latest/changelog.html";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

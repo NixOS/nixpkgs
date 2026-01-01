@@ -43,11 +43,19 @@ buildPythonPackage rec {
     "repoze.who.plugins"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "WSGI Authentication Middleware / API";
     homepage = "http://www.repoze.org";
     changelog = "https://github.com/repoze/repoze.who/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    description = "WSGI Authentication Middleware / API";
+    homepage = "http://www.repoze.org";
+    changelog = "https://github.com/repoze/repoze.who/blob/${version}/CHANGES.rst";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -27,7 +27,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://cadsondemak.github.io/chonburi/";
     description = "Didonic Thai and Latin display typeface";
     longDescription = ''
@@ -38,8 +42,14 @@ stdenv.mkDerivation {
       the family to other weights including both narrow and extended version. It
       is also ready to be matched with other non-Latin script.
     '';
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.toastal ];
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.toastal ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

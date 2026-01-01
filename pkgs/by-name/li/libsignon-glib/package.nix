@@ -68,11 +68,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library for managing single signon credentials which can be used from GLib applications";
     homepage = "https://gitlab.com/accounts-sso/libsignon-glib";
     license = lib.licenses.lgpl21;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library for managing single signon credentials which can be used from GLib applications";
+    homepage = "https://gitlab.com/accounts-sso/libsignon-glib";
+    license = licenses.lgpl21;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

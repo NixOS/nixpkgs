@@ -52,12 +52,21 @@ stdenv.mkDerivation rec {
     pipewire
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GTK patchbay for pipewire";
     homepage = "https://gitlab.freedesktop.org/pipewire/helvum";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fufexan ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GTK patchbay for pipewire";
+    homepage = "https://gitlab.freedesktop.org/pipewire/helvum";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fufexan ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "helvum";
   };
 }

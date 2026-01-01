@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Build2 package dependency manager utility library";
     longDescription = ''
       This library defines the types and utilities for working with build2 packages.
@@ -47,8 +51,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://build2.org/";
     changelog = "https://git.build2.org/cgit/libbpkg/log";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ r-burns ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

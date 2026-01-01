@@ -66,10 +66,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnow" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ServiceNow HTTP client library written in Python";
     homepage = "https://github.com/rbw/pysnow";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ almac ];
+=======
+  meta = with lib; {
+    description = "ServiceNow HTTP client library written in Python";
+    homepage = "https://github.com/rbw/pysnow";
+    license = licenses.mit;
+    maintainers = with maintainers; [ almac ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

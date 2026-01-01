@@ -154,16 +154,28 @@ mkDerivation rec {
 
   passthru.updateScript = ./update-teamviewer.sh;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.teamviewer.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    homepage = "https://www.teamviewer.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+      jagajaga
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jraygauthier
       gador
       c4patino

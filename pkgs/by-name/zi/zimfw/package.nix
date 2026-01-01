@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Zsh configuration framework with blazing speed and modular extensions";
     homepage = "https://zimfw.sh";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.joedevivo ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Zsh configuration framework with blazing speed and modular extensions";
+    homepage = "https://zimfw.sh";
+    license = licenses.mit;
+    maintainers = [ maintainers.joedevivo ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

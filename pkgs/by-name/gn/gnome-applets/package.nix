@@ -63,7 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   # Don't try to install modules to gnome panel's directory, as it's read only
+<<<<<<< HEAD
   env.PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
+=======
+  PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -72,13 +76,23 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Applets for use with the GNOME panel";
     mainProgram = "cpufreq-selector";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-applets";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-applets/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

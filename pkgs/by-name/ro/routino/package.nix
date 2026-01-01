@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.routino.org/";
     changelog = "http://routino.org/software/NEWS.txt";
@@ -57,5 +58,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    homepage = "http://www.routino.org/";
+    changelog = "http://routino.org/software/NEWS.txt";
+    description = "OpenStreetMap Routing Software";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

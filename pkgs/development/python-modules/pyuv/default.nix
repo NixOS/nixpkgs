@@ -42,10 +42,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyuv" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface for libuv";
     homepage = "https://github.com/saghul/pyuv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python interface for libuv";
+    homepage = "https://github.com/saghul/pyuv";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -56,11 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "box" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python dictionaries with advanced dot notation access";
     homepage = "https://github.com/cdgriffith/Box";
     changelog = "https://github.com/cdgriffith/Box/blob/${version}/CHANGES.rst";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python dictionaries with advanced dot notation access";
+    homepage = "https://github.com/cdgriffith/Box";
+    changelog = "https://github.com/cdgriffith/Box/blob/${version}/CHANGES.rst";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

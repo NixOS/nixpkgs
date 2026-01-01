@@ -33,11 +33,14 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/0630fa25465530c0e7358f00016bdc812894f67f/community/webrtc-audio-processing-1/add-loongarch-support.patch";
       hash = "sha256-Cn3KwKSSV/QJm1JW0pkEWB6OmeA0fRlVkiMU8OzXNzY=";
     })
+<<<<<<< HEAD
     # Fix compilation against gcc15
     (fetchurl {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/webrtc-audio-processing-1/-/raw/9de1306d3a6a78f435666453b85ba8ede0dd91ea/0001-Fix-compilation-with-GCC-15.patch";
       hash = "sha256-Ws7FRBX5+nIKWJv6cROqO5eSm5AJGyZVWrAjQ4R3n0I=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   outputs = [
@@ -60,6 +63,7 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-msse2";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
@@ -81,5 +85,28 @@ stdenv.mkDerivation rec {
     # BE platforms are unsupported
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
     badPlatforms = lib.platforms.bigEndian;
+=======
+  meta = with lib; {
+    homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
+    description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
+    license = licenses.bsd3;
+    platforms =
+      intersectLists
+        # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/meson.build
+        (platforms.darwin ++ platforms.linux ++ platforms.windows)
+        # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/webrtc/rtc_base/system/arch.h
+        (
+          platforms.arm
+          ++ platforms.aarch64
+          ++ platforms.loongarch64
+          ++ platforms.mips
+          ++ platforms.power
+          ++ platforms.riscv
+          ++ platforms.x86
+        );
+    # BE platforms are unsupported
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/31
+    badPlatforms = platforms.bigEndian;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

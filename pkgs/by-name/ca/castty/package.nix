@@ -27,12 +27,21 @@ stdenv.mkDerivation {
     "PREFIX=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool to record audio-enabled screencasts of your terminal, for the web";
     homepage = "https://github.com/dhobsd/castty";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ iblech ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "CLI tool to record audio-enabled screencasts of your terminal, for the web";
+    homepage = "https://github.com/dhobsd/castty";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ iblech ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "castty";
   };
 }

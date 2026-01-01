@@ -13,7 +13,11 @@ stdenvNoCC.mkDerivation {
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
+<<<<<<< HEAD
     url = "https://dotcolon.net/files/fonts/route159_${majorVersion}${minorVersion}.zip";
+=======
+    url = "https://dotcolon.net/download/fonts/route159_${majorVersion}${minorVersion}.zip";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-1InyBW1LGbp/IU/ql9mvT14W3MTxJdWThFwRH6VHpTU=";
     stripRoot = false;
   };
@@ -26,6 +30,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://dotcolon.net/font/route159/";
     description = "Weighted sans serif font";
@@ -34,5 +39,15 @@ stdenvNoCC.mkDerivation {
       minijackson
     ];
     license = lib.licenses.ofl;
+=======
+  meta = with lib; {
+    homepage = "http://dotcolon.net/font/route159/";
+    description = "Weighted sans serif font";
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      minijackson
+    ];
+    license = licenses.ofl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -3,7 +3,10 @@
   mkDerivation,
   compatIfNeeded,
   libdwarf,
+<<<<<<< HEAD
   libelf,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   zlib,
   libspl,
 }:
@@ -30,7 +33,10 @@ mkDerivation {
     libdwarf
     zlib
     libspl
+<<<<<<< HEAD
     libelf
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta.license = lib.licenses.cddl;

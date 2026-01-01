@@ -28,11 +28,19 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ openssl ];
 
+<<<<<<< HEAD
   meta = {
     description = "S3 cli client with multi configs with diffent provider";
     homepage = "https://github.com/yanganto/s3rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yanganto ];
+=======
+  meta = with lib; {
+    description = "S3 cli client with multi configs with diffent provider";
+    homepage = "https://github.com/yanganto/s3rs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yanganto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "s3rs";
   };
 }

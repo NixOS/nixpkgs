@@ -24,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful command line tool for automating iOS simulators and devices";
     homepage = "https://github.com/facebook/idb";
@@ -32,5 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "idb_companion";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ siddarthkay ];
+=======
+  meta = with lib; {
+    description = "Powerful command line tool for automating iOS simulators and devices";
+    homepage = "https://github.com/facebook/idb";
+    license = licenses.mit;
+    platforms = platforms.darwin;
+    mainProgram = "idb_companion";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ siddarthkay ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

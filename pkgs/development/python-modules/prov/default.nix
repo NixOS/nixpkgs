@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prov" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for W3C Provenance Data Model (PROV)";
     homepage = "https://github.com/trungdong/prov";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ashgillman ];
+=======
+  meta = with lib; {
+    description = "Python library for W3C Provenance Data Model (PROV)";
+    homepage = "https://github.com/trungdong/prov";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ashgillman ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

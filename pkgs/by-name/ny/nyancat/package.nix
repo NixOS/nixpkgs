@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Nyancat in your terminal, rendered through ANSI escape sequences";
     homepage = "https://nyancat.dakko.us";
     license = lib.licenses.ncsa;
     maintainers = with lib.maintainers; [ midchildan ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Nyancat in your terminal, rendered through ANSI escape sequences";
+    homepage = "https://nyancat.dakko.us";
+    license = licenses.ncsa;
+    maintainers = with maintainers; [ midchildan ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nyancat";
   };
 }

@@ -17,6 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-qAmkUV5l5g8/w8ZTYFGYvd9I8NUk8rMYjutenHvTRnw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Kubectl alternative with quick context switching";
     mainProgram = "tubectl";
@@ -24,5 +25,14 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ farcaller ];
+=======
+  meta = with lib; {
+    description = "Kubectl alternative with quick context switching";
+    mainProgram = "tubectl";
+    homepage = "https://github.com/reconquest/tubekit";
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ farcaller ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

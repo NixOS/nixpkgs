@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "motionmount" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to control the TVM7675 Pro (Signature) series of MotionMount";
     homepage = "https://github.com/vogelsproducts/python-MotionMount";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to control the TVM7675 Pro (Signature) series of MotionMount";
+    homepage = "https://github.com/vogelsproducts/python-MotionMount";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

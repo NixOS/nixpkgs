@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     ))
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/fkinoshita/Telegraph/releases/v${finalAttrs.version}";
     description = "Write and decode Morse";
@@ -51,5 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "telegraph";
     maintainers = with lib.maintainers; [ michaelgrahamevans ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/fkinoshita/Telegraph/releases/v${finalAttrs.version}";
+    description = "Write and decode Morse";
+    homepage = "https://github.com/fkinoshita/Telegraph";
+    license = licenses.gpl3Only;
+    mainProgram = "telegraph";
+    maintainers = with maintainers; [ michaelgrahamevans ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

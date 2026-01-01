@@ -8,6 +8,10 @@
 let
   cfg = config.services.mpdscribble;
   mpdCfg = config.services.mpd;
+<<<<<<< HEAD
+=======
+  mpdOpt = options.services.mpd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   endpointUrls = {
     "last.fm" = "http://post.audioscrobbler.com";
@@ -113,11 +117,19 @@ in
 
     host = lib.mkOption {
       default = (
+<<<<<<< HEAD
         if mpdCfg.settings.bind_to_address != "any" then mpdCfg.settings.bind_to_address else "localhost"
       );
       defaultText = lib.literalExpression ''
         if config.services.mpd.settings.bind_to_address != "any"
         then config.services.mpd.settings.bind_to_address
+=======
+        if mpdCfg.network.listenAddress != "any" then mpdCfg.network.listenAddress else "localhost"
+      );
+      defaultText = lib.literalExpression ''
+        if config.${mpdOpt.network.listenAddress} != "any"
+        then config.${mpdOpt.network.listenAddress}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         else "localhost"
       '';
       type = lib.types.str;
@@ -147,8 +159,13 @@ in
     };
 
     port = lib.mkOption {
+<<<<<<< HEAD
       default = mpdCfg.settings.port;
       defaultText = lib.literalExpression "config.services.mpd.settings.port";
+=======
+      default = mpdCfg.network.port;
+      defaultText = lib.literalExpression "config.${mpdOpt.network.port}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       type = lib.types.port;
       description = ''
         Port for the mpdscribble daemon to search for a mpd daemon on.

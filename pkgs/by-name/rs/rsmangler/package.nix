@@ -35,12 +35,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     version = "rsmangler v ${lib.versions.majorMinor finalAttrs.version}";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Perform various manipulations on the wordlists";
     homepage = "https://github.com/digininja/RSMangler";
     license = lib.licenses.cc-by-sa-20;
     mainProgram = "rsmangler";
     maintainers = with lib.maintainers; [ d3vil0p3r ];
+=======
+  meta = with lib; {
+    description = "Perform various manipulations on the wordlists";
+    homepage = "https://github.com/digininja/RSMangler";
+    license = licenses.cc-by-sa-20;
+    mainProgram = "rsmangler";
+    maintainers = with maintainers; [ d3vil0p3r ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = ruby.meta.platforms;
   };
 })

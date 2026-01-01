@@ -44,9 +44,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pytoolz/cytoolz/";
+    description = "Cython implementation of Toolz: High performance functional utilities";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

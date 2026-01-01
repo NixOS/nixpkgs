@@ -27,11 +27,19 @@ rustPlatform.buildRustPackage rec {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Vulkan compute tool for testing video memory stability";
     homepage = "https://github.com/GpuZelenograd/memtest_vulkan";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ atemu ];
+=======
+  meta = with lib; {
+    description = "Vulkan compute tool for testing video memory stability";
+    homepage = "https://github.com/GpuZelenograd/memtest_vulkan";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ atemu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "memtest_vulkan";
     broken =
       stdenv.system == "aarch64-linux" # error: linker `aarch64-linux-gnu-gcc` not found

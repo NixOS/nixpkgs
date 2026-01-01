@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "IIO AD9361 library for filter design and handling, multi-chip sync, etc";
     homepage = "http://analogdevicesinc.github.io/libad9361-iio/";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "IIO AD9361 library for filter design and handling, multi-chip sync, etc";
+    homepage = "http://analogdevicesinc.github.io/libad9361-iio/";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

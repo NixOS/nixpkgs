@@ -32,11 +32,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Kernel modules for DPDK";
     homepage = "https://git.dpdk.org/dpdk-kmods/";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.mic92 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Kernel modules for DPDK";
+    homepage = "https://git.dpdk.org/dpdk-kmods/";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.mic92 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -9,18 +9,35 @@
   nix-update-script,
 }:
 
+<<<<<<< HEAD
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-igitt";
   version = "0.1.19";
+=======
+let
+  pname = "git-igitt";
+  version = "0.1.18";
+in
+rustPlatform.buildRustPackage {
+  inherit pname version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "mlange-42";
     repo = "git-igitt";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-kryC07G/sMMtz1v6EZPYdCunl/CjC4H+jAV3Y91X9Cg=";
   };
 
   cargoHash = "sha256-45ME5Uaqa6qKuqvO1ETEVrySiAylPmx30uShQPPGNmY=";
+=======
+    rev = version;
+    hash = "sha256-JXEWnekL9Mtw0S3rI5aeO1HB9kJ7bRJDJ6EJ4ATlFeQ=";
+  };
+
+  cargoHash = "sha256-ndxxkYMFHAX6uourCyUpvJYcZCXQ5X2CMX4jTJmNRiQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -44,4 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = [ lib.maintainers.pinage404 ];
     mainProgram = "git-igitt";
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

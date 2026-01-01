@@ -41,11 +41,20 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Header-only C++ library for printing colored messages";
     homepage = "https://github.com/ikalnytskyi/termcolor";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Header-only C++ library for printing colored messages";
+    homepage = "https://github.com/ikalnytskyi/termcolor";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

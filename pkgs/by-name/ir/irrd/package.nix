@@ -41,14 +41,22 @@ in
 
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
+<<<<<<< HEAD
   version = "4.5.0b2";
+=======
+  version = "4.5.0b1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MMacxjF0LLSdInSwXwpHJUTdUQJ6sl4yu83vWR/A4Jc=";
+=======
+    hash = "sha256-Hr/PbC4N/yrYeQ7bTfqIchDFmaL3c4afxV1XS7FR1F8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

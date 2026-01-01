@@ -54,12 +54,21 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 config $out/share/tessen/config
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://git.sr.ht/~ayushnix/tessen";
     description = "Interactive menu to autotype and copy Pass and GoPass data";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ monaaraj ];
+=======
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~ayushnix/tessen";
+    description = "Interactive menu to autotype and copy Pass and GoPass data";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ monaaraj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tessen";
   };
 }

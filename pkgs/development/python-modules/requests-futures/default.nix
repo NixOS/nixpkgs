@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_futures" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asynchronous Python HTTP Requests for Humans using Futures";
     homepage = "https://github.com/ross/requests-futures";
     changelog = "https://github.com/ross/requests-futures/blob/${src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ applePrincess ];
+=======
+  meta = with lib; {
+    description = "Asynchronous Python HTTP Requests for Humans using Futures";
+    homepage = "https://github.com/ross/requests-futures";
+    changelog = "https://github.com/ross/requests-futures/blob/${src.tag}/CHANGELOG.md";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ applePrincess ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

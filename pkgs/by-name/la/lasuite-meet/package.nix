@@ -13,14 +13,22 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "0.1.42";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-QtaP0b8Aj//tCS6uo4NJcK+IjyrSBTOZ+/ijG3T3ePE=";
+=======
+    hash = "sha256-STb4JCEoKgzokIA5mWFqJkFH9mtdnIp8NcopLWYSbwQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "source/src/backend";
@@ -32,6 +40,7 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [ setuptools ];
 
+<<<<<<< HEAD
   dependencies =
     with python.pkgs;
     [
@@ -75,6 +84,46 @@ python.pkgs.buildPythonApplication rec {
     ++ celery.optional-dependencies.redis
     ++ django-lasuite.optional-dependencies.all
     ++ django-storages.optional-dependencies.s3;
+=======
+  dependencies = with python.pkgs; [
+    aiohttp
+    boto3
+    brevo-python
+    brotli
+    celery
+    django
+    django-configurations
+    django-cors-headers
+    django-countries
+    django-extensions
+    django-lasuite
+    django-parler
+    django-redis
+    django-storages
+    django-timezone-field
+    djangorestframework
+    dockerflow
+    drf-spectacular
+    drf-spectacular-sidecar
+    easy-thumbnails
+    factory-boy
+    gunicorn
+    jsonschema
+    june-analytics-python
+    livekit-api
+    markdown
+    mozilla-django-oidc
+    nested-multipart-parser
+    psycopg
+    pyjwt
+    pyopenssl
+    python-frontmatter
+    redis
+    requests
+    sentry-sdk
+    whitenoise
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonRelaxDeps = true;
 

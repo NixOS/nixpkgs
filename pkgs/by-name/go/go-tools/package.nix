@@ -19,11 +19,19 @@ buildGoModule rec {
 
   excludedPackages = [ "website" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of tools and libraries for working with Go code, including linters and static analysis";
     homepage = "https://staticcheck.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Collection of tools and libraries for working with Go code, including linters and static analysis";
+    homepage = "https://staticcheck.io";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rvolosatovs
       kalbasit
       smasher164

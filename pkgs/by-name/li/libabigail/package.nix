@@ -55,14 +55,25 @@ stdenv.mkDerivation rec {
     patchShebangs tests/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "ABI Generic Analysis and Instrumentation Library";
     homepage = "https://sourceware.org/libabigail/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "ABI Generic Analysis and Instrumentation Library";
+    homepage = "https://sourceware.org/libabigail/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       llvm-exception
     ];
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

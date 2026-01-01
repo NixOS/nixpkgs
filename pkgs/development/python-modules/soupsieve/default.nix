@@ -23,9 +23,15 @@ buildPythonPackage rec {
   # Circular dependency on beautifulsoup4
   # pythonImportsCheck = [ "soupsieve" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CSS4 selector implementation for Beautiful Soup";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "CSS4 selector implementation for Beautiful Soup";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/facelessuser/soupsieve";
     maintainers = [ ];
   };

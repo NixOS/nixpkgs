@@ -34,10 +34,18 @@ buildPythonPackage rec {
     export DYLD_LIBRARY_PATH="${foma}/lib"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for HFST";
     homepage = "https://github.com/hfst/hfst";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ lurkki ];
+=======
+  meta = with lib; {
+    description = "Python bindings for HFST";
+    homepage = "https://github.com/hfst/hfst";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ lurkki ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

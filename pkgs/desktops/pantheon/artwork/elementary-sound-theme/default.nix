@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Set of system sounds for elementary";
     homepage = "https://github.com/elementary/sound-theme";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Set of system sounds for elementary";
+    homepage = "https://github.com/elementary/sound-theme";
+    license = licenses.unlicense;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

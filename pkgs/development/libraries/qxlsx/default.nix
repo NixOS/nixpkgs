@@ -35,10 +35,18 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Excel file(*.xlsx) reader/writer library using Qt 5 or 6";
     homepage = "https://qtexcel.github.io/QXlsx";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Excel file(*.xlsx) reader/writer library using Qt 5 or 6";
+    homepage = "https://qtexcel.github.io/QXlsx";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

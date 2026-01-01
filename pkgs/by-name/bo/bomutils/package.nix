@@ -25,11 +25,20 @@ stdenv.mkDerivation rec {
   # which refers to std::data from C++17
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/hogliux/bomutils";
     description = "Open source tools to create bill-of-materials files used in macOS installers";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/hogliux/bomutils";
+    description = "Open source tools to create bill-of-materials files used in macOS installers";
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

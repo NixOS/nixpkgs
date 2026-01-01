@@ -18,14 +18,22 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-store";
+<<<<<<< HEAD
   version = "0.1.3";
+=======
+  version = "0.1.3b1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "pycrdt-store";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-KlB3BDhL/dt1IaQvWOfq1hgTKptrobgoBpus/mjZ26M=";
+=======
+    hash = "sha256-UMLR30PqtPUlD6z7VTPl7ZkSSw4HkmO5bUa/lSeFFoE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -43,8 +51,11 @@ buildPythonPackage rec {
     trio
   ];
 
+<<<<<<< HEAD
   disabledTestMarks = [ "flaky" ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonImportsCheck = [ "pycrdt.store" ];
 
   meta = {

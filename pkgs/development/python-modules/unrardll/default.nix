@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unrardll" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrap the Unrar DLL to enable unraring of files in python";
     homepage = "https://github.com/kovidgoyal/unrardll";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    description = "Wrap the Unrar DLL to enable unraring of files in python";
+    homepage = "https://github.com/kovidgoyal/unrardll";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

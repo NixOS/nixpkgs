@@ -38,13 +38,21 @@ assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
+<<<<<<< HEAD
   version = "3.2.8";
+=======
+  version = "3.2.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "FreeRADIUS";
     repo = "freeradius-server";
     tag = "release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+<<<<<<< HEAD
     hash = "sha256-NvcXTT0jp3WR/w+JWcNESg6iNYqIV8QAlM8MxpYkpjs=";
+=======
+    hash = "sha256-FG0/quBB5Q/bdYQqkFaZc/BhcIC/n2uVstlIGe4EPvE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -101,12 +109,21 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://freeradius.org/";
     description = "Modular, high performance free RADIUS suite";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    homepage = "https://freeradius.org/";
+    description = "Modular, high performance free RADIUS suite";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 ## TODO: include windbind optionally (via samba?)

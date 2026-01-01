@@ -25,7 +25,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "import/"; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Ubuntu Classic font";
     longDescription = "The Ubuntu typeface has been specially
     created to complement the Ubuntu tone of voice. It has a
@@ -33,8 +37,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     the Ubuntu brand that convey a precise, reliable and free attitude.";
     homepage = "https://design.ubuntu.com/font";
     changelog = "https://git.launchpad.net/ubuntu/+source/fonts-ubuntu-classic/tree/FONTLOG.txt?h=${finalAttrs.src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.ufl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bobby285271 ];
+=======
+    license = licenses.ufl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ bobby285271 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

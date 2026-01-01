@@ -18,10 +18,18 @@ buildPythonPackage rec {
 
   buildInputs = [ sane-backends ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/python-pillow/Sane";
     description = "Python interface to the SANE scanner and frame grabber";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/python-pillow/Sane";
+    description = "Python interface to the SANE scanner and frame grabber";
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

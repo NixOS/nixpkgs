@@ -38,11 +38,19 @@ buildGoModule rec {
     substituteInPlace test/learn_test.go --replace TestLearnArgparseSubCommand SkipLearnArgparseSubCommand
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for generating Bash/Fish/Zsh autocompletions based on `--help` output";
     homepage = "https://github.com/dim-an/cod/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Tool for generating Bash/Fish/Zsh autocompletions based on `--help` output";
+    homepage = "https://github.com/dim-an/cod/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "cod";
   };

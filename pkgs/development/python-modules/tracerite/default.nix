@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tracerite" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tracebacks for Humans in Jupyter notebooks";
     homepage = "https://github.com/sanic-org/tracerite";
     changelog = "https://github.com/sanic-org/tracerite/releases/tag/${src.tag}";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ p0lyw0lf ];
+=======
+  meta = with lib; {
+    description = "Tracebacks for Humans in Jupyter notebooks";
+    homepage = "https://github.com/sanic-org/tracerite";
+    changelog = "https://github.com/sanic-org/tracerite/releases/tag/${src.tag}";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ p0lyw0lf ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

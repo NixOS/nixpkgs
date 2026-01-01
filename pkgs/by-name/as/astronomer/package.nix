@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to detect illegitimate stars from bot accounts on GitHub projects";
     homepage = "https://github.com/Ullaakut/astronomer";
     changelog = "https://github.com/Ullaakut/astronomer/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tool to detect illegitimate stars from bot accounts on GitHub projects";
+    homepage = "https://github.com/Ullaakut/astronomer";
+    changelog = "https://github.com/Ullaakut/astronomer/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "astronomer";
   };

@@ -51,9 +51,15 @@ stdenv.mkDerivation rec {
     install -Dm755 libexecinfo.a -t $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Quick-n-dirty BSD licensed clone of the GNU libc backtrace facility";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Quick-n-dirty BSD licensed clone of the GNU libc backtrace facility";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.freshports.org/devel/libexecinfo";
     maintainers = [ ];
   };

@@ -12,12 +12,20 @@
   appstream-glib,
   blueprint-compiler,
   libadwaita,
+<<<<<<< HEAD
   libportal-gtk4,
   gtksourceview5,
   nix-update-script,
 }:
 let
   version = "1.1.0";
+=======
+  libportal,
+  nix-update-script,
+}:
+let
+  version = "1.0.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 python3Packages.buildPythonApplication {
   pname = "rewaita";
@@ -28,7 +36,11 @@ python3Packages.buildPythonApplication {
     owner = "SwordPuffin";
     repo = "Rewaita";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-B3CxtGKLvlGORae1b7vMDFbvNntVO24yrzbiHzOP28k=";
+=======
+    hash = "sha256-T1MrSg3DO6U/ztX4LYB1Uhpne+7xAfr8+INV5CyS0eE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -52,16 +64,23 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [
     pygobject3
+<<<<<<< HEAD
     pillow
     numpy
     fortune
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
     libadwaita
     gtk4
+<<<<<<< HEAD
     libportal-gtk4
     gtksourceview5
+=======
+    libportal
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   dontWrapGApps = true;

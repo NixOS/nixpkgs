@@ -40,6 +40,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-usbids-dir=${hwdata}/share/hwdata/" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/torvalds/linux/tree/master/tools/usb/usbip";
     description = "Allows to pass USB device from server to client over the network";
@@ -48,6 +49,16 @@ stdenv.mkDerivation {
       gpl2Plus
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/torvalds/linux/tree/master/tools/usb/usbip";
+    description = "Allows to pass USB device from server to client over the network";
+    license = with licenses; [
+      gpl2Only
+      gpl2Plus
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = kernelOlder "4.10";
   };
 }

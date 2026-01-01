@@ -35,12 +35,21 @@ appimageTools.wrapType2 {
 
   passthru.updateScript = ./update-plexamp.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Beautiful Plex music player for audiophiles, curators, and hipsters";
     homepage = "https://plexamp.com/";
     changelog = "https://forums.plex.tv/t/plexamp-release-notes/221280/82";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Beautiful Plex music player for audiophiles, curators, and hipsters";
+    homepage = "https://plexamp.com/";
+    changelog = "https://forums.plex.tv/t/plexamp-release-notes/221280/82";
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       killercup
       redhawk
       synthetica

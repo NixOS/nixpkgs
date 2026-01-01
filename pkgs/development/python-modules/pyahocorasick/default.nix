@@ -8,14 +8,23 @@
 
 buildPythonPackage rec {
   pname = "pyahocorasick";
+<<<<<<< HEAD
   version = "2.3.0";
   pyproject = true;
+=======
+  version = "2.2.0";
+  format = "setuptools";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "WojciechMula";
     repo = "pyahocorasick";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ysQZOyJZ9xrNp3plVpaDtGqzjNuRDAELtAcjbC8Byis=";
+=======
+    hash = "sha256-lFJhHDN9QAKw5dqzgjRxcs+7+LuTqP9qQ68B5LlCNmU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -24,7 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ahocorasick" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python module implementing Aho-Corasick algorithm";
     longDescription = ''
       This Python module is a fast and memory efficient library for exact or
@@ -33,7 +46,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/WojciechMula/pyahocorasick";
     changelog = "https://github.com/WojciechMula/pyahocorasick/blob/${src.tag}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

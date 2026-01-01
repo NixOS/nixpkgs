@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fjaraskupan" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for controlling Fjäråskupan kitchen fans";
     homepage = "https://github.com/elupus/fjaraskupan";
     changelog = "https://github.com/elupus/fjaraskupan/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for controlling Fjäråskupan kitchen fans";
+    homepage = "https://github.com/elupus/fjaraskupan";
+    changelog = "https://github.com/elupus/fjaraskupan/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

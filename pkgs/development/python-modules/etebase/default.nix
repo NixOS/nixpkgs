@@ -72,10 +72,17 @@ buildPythonPackage rec {
     inherit (nixosTests) etebase-server;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.etebase.com/";
     description = "Python client library for Etebase";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://www.etebase.com/";
+    description = "Python client library for Etebase";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

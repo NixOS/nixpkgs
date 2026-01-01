@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "subzerod" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to help with the enumeration of subdomains";
     mainProgram = "subzerod";
     homepage = "https://github.com/sanderfoobar/subzerod";
     license = with lib.licenses; [ wtfpl ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to help with the enumeration of subdomains";
+    mainProgram = "subzerod";
+    homepage = "https://github.com/sanderfoobar/subzerod";
+    license = with licenses; [ wtfpl ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

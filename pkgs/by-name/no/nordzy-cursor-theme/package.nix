@@ -21,12 +21,21 @@ stdenvNoCC.mkDerivation rec {
     cp -r hyprcursors/themes/* $out/share/icons
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cursor theme using the Nord color palette and based on Vimix and cz-Viator";
     homepage = "https://github.com/guillaumeboehm/Nordzy-cursors";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cursor theme using the Nord color palette and based on Vimix and cz-Viator";
+    homepage = "https://github.com/guillaumeboehm/Nordzy-cursors";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       alexnortung
     ];
   };

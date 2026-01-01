@@ -26,11 +26,20 @@ stdenv.mkDerivation {
     clr
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "AQLPROFILE library for AMD HSA runtime API extension support";
     homepage = "https://github.com/ROCm/aqlprofile/";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "AQLPROFILE library for AMD HSA runtime API extension support";
+    homepage = "https://github.com/ROCm/aqlprofile/";
+    license = with licenses; [ mit ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

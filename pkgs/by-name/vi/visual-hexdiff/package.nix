@@ -45,6 +45,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Visual hexadecimal difference editor";
     homepage = "http://tboudet.free.fr/hexdiff/";
@@ -52,5 +53,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "hexdiff";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Visual hexadecimal difference editor";
+    homepage = "http://tboudet.free.fr/hexdiff/";
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ erictapen ];
+    mainProgram = "hexdiff";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

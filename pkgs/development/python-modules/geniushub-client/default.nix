@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geniushubclient" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with Genius Hub systems";
     homepage = "https://github.com/manzanotti/geniushub-client";
     changelog = "https://github.com/manzanotti/geniushub-client/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Module to interact with Genius Hub systems";
+    homepage = "https://github.com/manzanotti/geniushub-client";
+    changelog = "https://github.com/manzanotti/geniushub-client/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -5,9 +5,14 @@
   makeWrapper,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
+=======
+}:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 buildNpmPackage (finalAttrs: {
   pname = "serve";
   version = "14.2.4";
@@ -20,15 +25,24 @@ buildNpmPackage (finalAttrs: {
   };
 
   npmDeps = null;
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 2;
     hash = "sha256-IJMu0XHwEn2TZP/He79FFGl/PeXOCTD51lIgmImpyKo=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pnpm_9 ];
   npmConfigHook = pnpmConfigHook;
+=======
+  npmConfigHook = pnpm_9.configHook;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dontNpmBuild = true;
 

@@ -50,11 +50,20 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C99 implementation of the TLS/SSL protocols";
     homepage = "https://github.com/aws/s2n-tls";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "C99 implementation of the TLS/SSL protocols";
+    homepage = "https://github.com/aws/s2n-tls";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

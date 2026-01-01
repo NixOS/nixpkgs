@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Package to generate parametrized pytests from external files";
     homepage = "https://github.com/chrisjsewell/pytest-param-files";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ loicreynier ];
+=======
+  meta = with lib; {
+    description = "Package to generate parametrized pytests from external files";
+    homepage = "https://github.com/chrisjsewell/pytest-param-files";
+    license = licenses.mit;
+    maintainers = with maintainers; [ loicreynier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

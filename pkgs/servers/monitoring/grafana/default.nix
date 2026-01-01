@@ -7,8 +7,11 @@
   tzdata,
   wire,
   yarn-berry_4,
+<<<<<<< HEAD
   yarn-berry_4-fetcher,
   buildPackages,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python3,
   jq,
   moreutils,
@@ -21,7 +24,11 @@
 
 buildGoModule (finalAttrs: {
   pname = "grafana";
+<<<<<<< HEAD
   version = "12.3.1";
+=======
+  version = "12.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -33,7 +40,11 @@ buildGoModule (finalAttrs: {
     owner = "grafana";
     repo = "grafana";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-OGk7dq5jr3rEGqkWLBHrna02ireXHfYoLWJcWIY6Ccg=";
+=======
+    hash = "sha256-5DfPxsP8Lo8y8S44S/OkxOxWFL0JfAxPF7ZmT8FRPbw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -46,15 +57,25 @@ buildGoModule (finalAttrs: {
   };
 
   missingHashes = ./missing-hashes.json;
+<<<<<<< HEAD
   # Since this is not a dependency attribute the buildPackages has to be specified.
   offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
     hash = "sha256-mdQC0QCqOcP+uQaS1j2QktigEQKUQxLD3wkiMBVVuHE=";
+=======
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-CAEhdKsFMUuIs8DsJ9xSr2FRdBp4fPUWyvjC6FuiyG8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-xT99rvarFwidwpnxUGchv3Ny0v2hLHAcG8epV01Vc30=";
+=======
+  vendorHash = "sha256-qoku03G6lQlwTzm/UpnrEpPqIxJmPZAy8VJ/KfYXhHM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Grafana seems to just set it to the latest version available
   # nowadays.
@@ -72,19 +93,30 @@ buildGoModule (finalAttrs: {
 
   proxyVendor = true;
 
+<<<<<<< HEAD
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     wire
     jq
     moreutils
     removeReferencesTo
     # required to run old node-gyp
+<<<<<<< HEAD
     (python3.pythonOnBuildForHost.withPackages (ps: [ ps.distutils ]))
     faketty
     nodejs
     yarn-berry_4
     yarn-berry_4-fetcher.yarnBerryConfigHook
+=======
+    (python3.withPackages (ps: [ ps.distutils ]))
+    faketty
+    nodejs
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
@@ -93,7 +125,11 @@ buildGoModule (finalAttrs: {
   overrideModAttrs = (
     old: {
       nativeBuildInputs = lib.filter (
+<<<<<<< HEAD
         x: lib.getName x != (lib.getName buildPackages.yarn-berry_4-fetcher.yarnBerryConfigHook)
+=======
+        x: lib.getName x != (lib.getName yarn-berry_4.yarnBerryConfigHook)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ) old.nativeBuildInputs;
     }
   );
@@ -104,6 +140,7 @@ buildGoModule (finalAttrs: {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
+<<<<<<< HEAD
     # ```
     # go-1.25.4/share/go/pkg/tool/linux_amd64/link: running aarch64-unknown-linux-gnu-gcc failed: exit status 1
     # aarch64-unknown-linux-gnu-gcc -m64 -s -o $WORK/b001/exe/gen -rdynamic /build/go-link-507658645/go.o
@@ -112,6 +149,11 @@ buildGoModule (finalAttrs: {
     # Above log is due to https://github.com/golang/go/blob/b194f5d24a71e34f147c90e4351d80ac75be55de/src/cmd/cgo/gcc.go#L1763
     CC="$CC_FOR_BUILD" LD="$CC_FOR_BUILD" GOOS= GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     CC="$CC_FOR_BUILD" LD="$LD_FOR_BUILD" GOOS= GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
+=======
+    GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
+    GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   postBuild = ''
@@ -154,11 +196,19 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = lib.licenses.agpl3Only;
     homepage = "https://grafana.com";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
+    license = licenses.agpl3Only;
+    homepage = "https://grafana.com";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       offline
       fpletz
       globin

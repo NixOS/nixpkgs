@@ -28,11 +28,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sanic_routing" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Core routing component for the Sanic web framework";
     homepage = "https://github.com/sanic-org/sanic-routing";
     changelog = "https://github.com/sanic-org/sanic-routing/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Core routing component for the Sanic web framework";
+    homepage = "https://github.com/sanic-org/sanic-routing";
+    changelog = "https://github.com/sanic-org/sanic-routing/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

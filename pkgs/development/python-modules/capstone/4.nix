@@ -44,11 +44,19 @@ buildPythonPackage {
     make check
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.capstone-engine.org/";
     license = lib.licenses.bsdOriginal;
     description = "Python bindings for Capstone disassembly engine";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "http://www.capstone-engine.org/";
+    license = licenses.bsdOriginal;
+    description = "Python bindings for Capstone disassembly engine";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bennofs
       ris
     ];

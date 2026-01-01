@@ -33,6 +33,10 @@ python3.pkgs.buildPythonApplication rec {
     markupsafe
     packaging
     pygments
+<<<<<<< HEAD
+=======
+    toml # remove once python311 is the default
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     typogrify
   ];
 
@@ -50,11 +54,20 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Documentation generator for GObject-based libraries";
     mainProgram = "gi-docgen";
     homepage = "https://gitlab.gnome.org/GNOME/gi-docgen";
     license = lib.licenses.asl20; # OR GPL-3.0-or-later
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "Documentation generator for GObject-based libraries";
+    mainProgram = "gi-docgen";
+    homepage = "https://gitlab.gnome.org/GNOME/gi-docgen";
+    license = licenses.asl20; # OR GPL-3.0-or-later
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -74,12 +74,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "icontract" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provide design-by-contract with informative violation messages";
     homepage = "https://github.com/Parquery/icontract";
     changelog = "https://github.com/Parquery/icontract/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Provide design-by-contract with informative violation messages";
+    homepage = "https://github.com/Parquery/icontract";
+    changelog = "https://github.com/Parquery/icontract/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gador
       thiagokokada
     ];

@@ -21,11 +21,20 @@ buildGoModule rec {
     mv $out/bin/{cmd,ec2-metadata-mock}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Amazon EC2 Metadata Mock";
     mainProgram = "ec2-metadata-mock";
     homepage = "https://github.com/aws/amazon-ec2-metadata-mock";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ymatsiuk ];
+=======
+  meta = with lib; {
+    description = "Amazon EC2 Metadata Mock";
+    mainProgram = "ec2-metadata-mock";
+    homepage = "https://github.com/aws/amazon-ec2-metadata-mock";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ymatsiuk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

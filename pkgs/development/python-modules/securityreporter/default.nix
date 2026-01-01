@@ -43,11 +43,20 @@ buildPythonPackage rec {
     "tests/functional/"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the Reporter API";
     homepage = "https://github.com/dongit-org/python-reporter";
     changelog = "https://github.com/dongit-org/python-reporter/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for the Reporter API";
+    homepage = "https://github.com/dongit-org/python-reporter";
+    changelog = "https://github.com/dongit-org/python-reporter/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

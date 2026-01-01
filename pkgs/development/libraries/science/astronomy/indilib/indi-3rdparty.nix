@@ -109,17 +109,30 @@ let
         doInstallCheck = true;
 
         meta =
+<<<<<<< HEAD
 
+=======
+          with lib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           {
             homepage = "https://www.indilib.org/";
             description = "Third party drivers for the INDI astronomical software suite";
             changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
+<<<<<<< HEAD
             license = lib.licenses.lgpl2Plus;
             maintainers = with lib.maintainers; [
               sheepforce
               returntoreality
             ];
             platforms = lib.platforms.linux;
+=======
+            license = licenses.lgpl2Plus;
+            maintainers = with maintainers; [
+              sheepforce
+              returntoreality
+            ];
+            platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           }
           // meta;
       }
@@ -127,9 +140,15 @@ let
 
   libaltaircam = buildIndi3rdParty {
     pname = "libaltaircam";
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -142,9 +161,15 @@ let
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
     cmakeFlags = [ "-DCONF_DIR=etc/" ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.mpl20;
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      license = licenses.mpl20;
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -163,9 +188,15 @@ let
       (lib.getLib stdenv.cc.cc)
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
+=======
+    meta = with lib; {
+      license = licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -173,9 +204,15 @@ let
     pname = "libastroasis";
     buildInputs = [ (lib.getLib stdenv.cc.cc) ];
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -188,18 +225,30 @@ let
       libdc1394
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
+=======
+    meta = with lib; {
+      license = licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libbressercam = buildIndi3rdParty {
     pname = "libbressercam";
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -215,9 +264,15 @@ let
       libusb1
     ];
 
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.bsd2;
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      license = licenses.bsd2;
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -227,9 +282,15 @@ let
       indilib
       libusb1
     ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.bsd2;
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      license = licenses.bsd2;
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -240,27 +301,45 @@ let
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libmallincam = buildIndi3rdParty {
     pname = "libmallincam";
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libmeadecam = buildIndi3rdParty {
     pname = "libmeadecam";
     buildInputs = [ libusb1 ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.lgpl21Only;
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      license = lib.licenses.lgpl21Only;
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -268,36 +347,60 @@ let
     pname = "libmicam";
     buildInputs = [ libusb1 ];
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libnncam = buildIndi3rdParty {
     pname = "libnncam";
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libogmacam = buildIndi3rdParty {
     pname = "libogmacam";
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libomegonprocam = buildIndi3rdParty {
     pname = "libomegonprocam";
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -305,8 +408,13 @@ let
   libpigpiod = buildIndi3rdParty {
     pname = "libpigpiod";
     buildInputs = [ indilib ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unlicense;
+=======
+    meta = with lib; {
+      license = licenses.unlicense;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       broken = true;
       platforms = [ ];
     };
@@ -322,9 +430,15 @@ let
 
     buildInputs = [ indilib ];
 
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.lgpl3Plus;
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      license = licenses.lgpl3Plus;
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -342,9 +456,15 @@ let
       systemd
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -371,9 +491,15 @@ let
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
 
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -384,9 +510,15 @@ let
       indilib
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -397,9 +529,15 @@ let
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ i686 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ i686 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -418,18 +556,30 @@ let
     buildInputs = [ libusb1 ];
     nativeBuildInputs = [ autoPatchelfHook ];
 
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libstarshootg = buildIndi3rdParty {
     pname = "libstarshootg";
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -440,36 +590,60 @@ let
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libsvbonycam = buildIndi3rdParty {
     pname = "libsvbonycam";
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libtoupcam = buildIndi3rdParty {
     pname = "libtoupcam";
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
   libtscam = buildIndi3rdParty {
     pname = "libtscam";
     nativeBuildInputs = [ autoPatchelfHook ];
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.unfreeRedistributable;
       platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
+=======
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

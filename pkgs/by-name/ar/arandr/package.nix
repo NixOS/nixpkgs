@@ -11,17 +11,25 @@
 }:
 
 let
+<<<<<<< HEAD
   inherit (python3Packages)
     buildPythonApplication
     setuptools
     docutils
     pygobject3
     ;
+=======
+  inherit (python3Packages) buildPythonApplication docutils pygobject3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 buildPythonApplication rec {
   pname = "arandr";
   version = "0.1.11";
+<<<<<<< HEAD
   pyproject = true;
+=======
+  format = "setuptools";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "arandr";
@@ -40,6 +48,7 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     gsettings-desktop-schemas
     gtk3
     xrandr
@@ -49,6 +58,15 @@ buildPythonApplication rec {
 
   dependencies = [
     docutils
+=======
+    docutils
+    gsettings-desktop-schemas
+    gtk3
+  ];
+
+  propagatedBuildInputs = [
+    xrandr
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pygobject3
   ];
 
@@ -59,12 +77,15 @@ buildPythonApplication rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   dontWrapGApps = true;
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex=(\\d.*)"
@@ -75,7 +96,11 @@ buildPythonApplication rec {
     changelog = "https://gitlab.com/arandr/arandr/-/blob/${src.tag}/ChangeLog";
     description = "Simple visual front end for XRandR";
     homepage = "https://christian.amsuess.com/tools/arandr/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
+=======
+    license = lib.licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "arandr";
     maintainers = with lib.maintainers; [
       gepbird

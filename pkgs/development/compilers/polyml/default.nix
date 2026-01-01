@@ -50,15 +50,25 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Standard ML compiler and interpreter";
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
     homepage = "https://www.polyml.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21;
     platforms = with lib.platforms; (linux ++ darwin);
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.lgpl21;
+    platforms = with platforms; (linux ++ darwin);
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kovirobi
     ];
   };

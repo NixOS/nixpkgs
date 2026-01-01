@@ -22,10 +22,18 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ libmad ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savonet/ocaml-mad";
     description = "Bindings for the mad library which provides functions for encoding wave audio files into mp3";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savonet/ocaml-mad";
+    description = "Bindings for the mad library which provides functions for encoding wave audio files into mp3";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

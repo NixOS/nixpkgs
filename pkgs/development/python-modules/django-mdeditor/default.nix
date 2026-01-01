@@ -29,11 +29,20 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "mdeditor" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Markdown Editor plugin application for django based on Editor.md";
     homepage = "https://github.com/pylixm/django-mdeditor";
     changelog = "https://github.com/pylixm/django-mdeditor/releases";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ augustebaum ];
+=======
+  meta = with lib; {
+    description = "Markdown Editor plugin application for django based on Editor.md";
+    homepage = "https://github.com/pylixm/django-mdeditor";
+    changelog = "https://github.com/pylixm/django-mdeditor/releases";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ augustebaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

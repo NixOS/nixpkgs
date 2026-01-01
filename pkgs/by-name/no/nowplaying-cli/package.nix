@@ -23,12 +23,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "macOS command-line utility for retrieving currently playing media";
     homepage = "https://github.com/kirtan-shah/nowplaying-cli";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "macOS command-line utility for retrieving currently playing media";
+    homepage = "https://github.com/kirtan-shah/nowplaying-cli";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nowplaying-cli";
   };
 })

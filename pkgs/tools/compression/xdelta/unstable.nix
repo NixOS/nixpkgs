@@ -54,7 +54,11 @@ stdenv.mkDerivation rec {
     install -D -m644 xdelta3.1 $out/share/man/man1/xdelta3.1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Binary differential compression in VCDIFF (RFC 3284) format";
     longDescription = ''
       xdelta is a command line program for delta encoding, which generates two
@@ -62,8 +66,14 @@ stdenv.mkDerivation rec {
       for binary files and does not generate human readable output.
     '';
     homepage = "http://xdelta.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     mainProgram = "xdelta3";
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    mainProgram = "xdelta3";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -7,8 +7,11 @@
   electron_39,
   nodejs,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeDesktopItem,
   darwin,
   nix-update-script,
@@ -62,9 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-08boCPsuT09OileZUWhB8awXWHrlJzoER2Bx0WXeOHU=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
+=======
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 2;
     hash = "sha256-nBjAmXzjR0qGCM91UAonQKP0NG7+DXImueSbhbnMK/k=";
   };
@@ -79,8 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems

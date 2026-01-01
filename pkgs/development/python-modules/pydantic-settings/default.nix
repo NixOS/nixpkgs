@@ -57,10 +57,17 @@ let
       pytest = self.overridePythonAttrs { doCheck = true; };
     };
 
+<<<<<<< HEAD
     meta = {
       description = "Settings management using pydantic";
       homepage = "https://github.com/pydantic/pydantic-settings";
       license = lib.licenses.mit;
+=======
+    meta = with lib; {
+      description = "Settings management using pydantic";
+      homepage = "https://github.com/pydantic/pydantic-settings";
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       broken = lib.versionOlder pydantic.version "2.0.0";
       maintainers = [ ];
     };

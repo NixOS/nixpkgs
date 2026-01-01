@@ -64,10 +64,18 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/google/crc32c";
     description = "CRC32C implementation with support for CPU-specific acceleration instructions";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/google/crc32c";
+    description = "CRC32C implementation with support for CPU-specific acceleration instructions";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

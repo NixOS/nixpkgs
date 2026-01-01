@@ -3,6 +3,10 @@
   jdk,
   maven,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeDesktopItem,
   copyDesktopItems,
   imagemagick,
@@ -16,13 +20,22 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "quark-goldleaf";
+<<<<<<< HEAD
   version = "1.2.0";
+=======
+  version = "1.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "XorTroll";
     repo = "Goldleaf";
+<<<<<<< HEAD
     tag = version;
     hash = "sha256-ldGNtNmn7ln53JvxRkP1AMPslKH0JtSPhBkyqytSx20=";
+=======
+    rev = version;
+    hash = "sha256-gagIQGOiygJ0Onm0SrkbFWaovqWX2WJNx7LpSRheCLM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/Quark";
@@ -30,6 +43,15 @@ maven.buildMavenPackage rec {
   patches = [
     ./fix-maven-plugin-versions.patch
     ./remove-pom-jfx.patch
+<<<<<<< HEAD
+=======
+    (fetchpatch {
+      name = "fix-config-path.patch";
+      url = "https://github.com/XorTroll/Goldleaf/commit/714ecc2755df9c1252615ad02cafff9c0311a739.patch";
+      hash = "sha256-4j+6uLIOdltZ4XIb3OtOzZg9ReH9660gZMMNQpHnn4o=";
+      relative = "Quark";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   mvnJdk = jdk';
@@ -108,7 +130,11 @@ maven.buildMavenPackage rec {
 
       or by adding the package manually to udev packages:
 
+<<<<<<< HEAD
       `services.udev.packages = [ pkgs.quark-goldleaf ];`
+=======
+      `services.udev.packages = [ pkgs.quark-goldleaf ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '';
     license = lib.licenses.gpl3Only;
     mainProgram = "quark-goldleaf";

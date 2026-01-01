@@ -32,11 +32,20 @@ python3.pkgs.buildPythonApplication rec {
   # "SystemExit: Unable to access the X Display, is $DISPLAY set properly?"
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python based editor for ASN.1 encoded data";
     homepage = "https://github.com/Futsch1/asn1editor";
     license = lib.licenses.mit;
     mainProgram = "asn1editor";
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Python based editor for ASN.1 encoded data";
+    homepage = "https://github.com/Futsch1/asn1editor";
+    license = licenses.mit;
+    mainProgram = "asn1editor";
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

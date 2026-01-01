@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Secure ACME/Let's Encrypt client";
     homepage = "https://git.wolfsden.cz/acme-client-portable";
     platforms = lib.platforms.unix;
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ pmahoney ];
+=======
+  meta = with lib; {
+    description = "Secure ACME/Let's Encrypt client";
+    homepage = "https://git.wolfsden.cz/acme-client-portable";
+    platforms = platforms.unix;
+    license = licenses.isc;
+    maintainers = with maintainers; [ pmahoney ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "acme-client";
   };
 }

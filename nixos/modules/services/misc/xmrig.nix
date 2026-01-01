@@ -65,7 +65,12 @@ in
     };
   };
 
+<<<<<<< HEAD
   meta = {
     maintainers = with lib.maintainers; [ ratsclub ];
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ ratsclub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -35,15 +35,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sunvox";
+<<<<<<< HEAD
   version = "2.1.4";
+=======
+  version = "2.1.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchzip {
     urls = [
       "https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
       # Upstream removes downloads of older versions, please save bumped versions to archive.org
+<<<<<<< HEAD
       "https://web.archive.org/web/20251208174416/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
     ];
     hash = "sha256-FY5DxdQN1ClFp/dS5fXgFhoU7uk/gUoPrYtsZK5q9O4=";
+=======
+      "https://web.archive.org/web/20251019141206/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
+    ];
+    hash = "sha256-egOaIZEyI5x2VV660qbO+pan22BFRaa4d+8sOpJhpBM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs =
@@ -68,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
   ];
 
+<<<<<<< HEAD
   desktopItems =
     let
       sunvoxDesktop =
@@ -97,6 +108,23 @@ stdenv.mkDerivation (finalAttrs: {
         (sunvoxDesktop "LoFi")
       ]
     );
+=======
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
+    (makeDesktopItem {
+      name = "sunvox";
+      exec = "sunvox";
+      desktopName = "SunVox";
+      genericName = "Modular Synthesizer";
+      comment = "Modular synthesizer with pattern-based sequencer";
+      icon = "sunvox";
+      categories = [
+        "AudioVideo"
+        "Audio"
+        "Midi"
+      ];
+    })
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dontConfigure = true;
   dontBuild = true;
@@ -141,12 +169,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
     license = lib.licenses.unfreeRedistributable;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     homepage = "https://www.warmplace.ru/soft/sunvox/";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
+    license = licenses.unfreeRedistributable;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    homepage = "https://www.warmplace.ru/soft/sunvox/";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       puffnfresh
       OPNA2608
     ];

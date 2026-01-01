@@ -16,6 +16,10 @@
   mtime,
   # fix eval on legacy ocaml versions
   ocaml_intrinsics ? null,
+<<<<<<< HEAD
+=======
+  patricia-tree,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   prelude,
   scfg,
   yojson,
@@ -27,13 +31,21 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
+<<<<<<< HEAD
   version = "0.18.0";
+=======
+  version = "0.15.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-s72m7N9Ovd2Vl4F+hb2MsNmnF1hFQGkf2s7TrJ9IWI8=";
+=======
+    hash = "sha256-z3DDdzU39tg2F3+pAFPILiKY3pQxOpehdoxwckyhZBI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -51,6 +63,10 @@ buildDunePackage (finalAttrs: {
     menhirLib
     mtime
     ocaml_intrinsics
+<<<<<<< HEAD
+=======
+    patricia-tree
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     prelude
     scfg
     yojson
@@ -80,9 +96,13 @@ buildDunePackage (finalAttrs: {
     downloadPage = "https://github.com/formalsec/smtml";
     changelog = "https://github.com/formalsec/smtml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       ethancedwards8
       redianthus
     ];
+=======
+    maintainers = [ lib.maintainers.ethancedwards8 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

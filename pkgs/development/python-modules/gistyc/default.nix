@@ -25,7 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gistyc" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/ThomasAlbin/gistyc";
     description = "Python based GitHub GIST management tool";
     longDescription = ''
@@ -36,7 +40,11 @@ buildPythonPackage rec {
       actions). Files are separated in GIST sections depending on the separation
       blocks.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
+=======
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

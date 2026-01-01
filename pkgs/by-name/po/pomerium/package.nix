@@ -1,13 +1,21 @@
 {
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildGoModule,
   fetchFromGitHub,
   lib,
   envoy,
+<<<<<<< HEAD
   yarnConfigHook,
   yarnBuildHook,
   fetchYarnDeps,
   nodejs,
+=======
+  mkYarnPackage,
+  fetchYarnDeps,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nixosTests,
   pomerium-cli,
 }:
@@ -32,6 +40,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-mOTjBH8VqsMdyW5jTIZ76bf55WnHw9XuUSh6zsBktt0=";
 
+<<<<<<< HEAD
   ui = stdenv.mkDerivation {
     pname = "pomerium-ui";
     inherit version;
@@ -53,6 +62,31 @@ buildGoModule rec {
       cp -R dist $out
       runHook postInstall
     '';
+=======
+  ui = mkYarnPackage {
+    inherit version;
+    src = "${src}/ui";
+
+    packageJSON = ./package.json;
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/ui/yarn.lock";
+      sha256 = lib.fileContents ./yarn-hash;
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      yarn --offline build
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -R deps/pomerium/dist $out
+      runHook postInstall
+    '';
+
+    doDist = false;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   subPackages = [
@@ -128,12 +162,21 @@ buildGoModule rec {
     updateScript = ./updater.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pomerium.io";
     description = "Authenticating reverse proxy";
     mainProgram = "pomerium";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://pomerium.io";
+    description = "Authenticating reverse proxy";
+    mainProgram = "pomerium";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lukegb
       devusb
     ];

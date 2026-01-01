@@ -21,10 +21,18 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.tortall.net/projects/yasm/";
     description = "Complete rewrite of the NASM assembler";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://www.tortall.net/projects/yasm/";
+    description = "Complete rewrite of the NASM assembler";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

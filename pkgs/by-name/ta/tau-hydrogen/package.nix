@@ -26,11 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.xcursorgen
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GTK icon theme for tauOS";
     homepage = "https://github.com/tau-OS/tau-hydrogen";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "GTK icon theme for tauOS";
+    homepage = "https://github.com/tau-OS/tau-hydrogen";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

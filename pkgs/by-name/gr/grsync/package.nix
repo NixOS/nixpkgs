@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     rsync
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Synchronize folders, files and make backups";
     homepage = "http://www.opbyte.it/grsync/";
@@ -42,5 +43,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "grsync";
     maintainers = [ lib.maintainers.kuznero ];
+=======
+  meta = with lib; {
+    description = "Synchronize folders, files and make backups";
+    homepage = "http://www.opbyte.it/grsync/";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    mainProgram = "grsync";
+    maintainers = [ maintainers.kuznero ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -44,12 +44,21 @@ stdenv.mkDerivation rec {
     installShellCompletion --zsh _xwallpaper
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/stoeckmann/xwallpaper";
     description = "Utility for setting wallpapers in X";
     license = lib.licenses.isc;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/stoeckmann/xwallpaper";
+    description = "Utility for setting wallpapers in X";
+    license = licenses.isc;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xwallpaper";
   };
 }

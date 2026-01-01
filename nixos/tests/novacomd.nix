@@ -2,7 +2,14 @@ import ./make-test-python.nix (
   { pkgs, ... }:
   {
     name = "novacomd";
+<<<<<<< HEAD
     meta.maintainers = [ ];
+=======
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ dtzWill ];
+    };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodes.machine =
       { ... }:
       {

@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Display and manipulate molecular structures";
     homepage = "http://www3.cmbi.umcn.nl/molden/";
     license = {
@@ -57,7 +61,12 @@ stdenv.mkDerivation rec {
       url = "http://www3.cmbi.umcn.nl/molden/CopyRight.html";
       free = false;
     };
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ markuskowa ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

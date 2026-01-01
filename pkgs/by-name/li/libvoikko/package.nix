@@ -31,11 +31,20 @@ stdenv.mkDerivation (finalAttrs: {
     hfst-ospell
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://voikko.puimula.org/";
     description = "Finnish language processing library";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ lurkki ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://voikko.puimula.org/";
+    description = "Finnish language processing library";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ lurkki ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
     ln -sv application-{msword,rtf}.png
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast, lightweight, gtk2 file manager";
     mainProgram = "rox";
@@ -104,5 +105,17 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eleanor ];
+=======
+  meta = with lib; {
+    description = "Fast, lightweight, gtk2 file manager";
+    mainProgram = "rox";
+    homepage = "http://rox.sourceforge.net/desktop";
+    license = with licenses; [
+      gpl2
+      lgpl2
+    ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eleanor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

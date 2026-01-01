@@ -22,10 +22,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_comments" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Add comments and annotation to your documentation";
     homepage = "https://github.com/executablebooks/sphinx-comments";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Add comments and annotation to your documentation";
+    homepage = "https://github.com/executablebooks/sphinx-comments";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Git prepare-commit-msg hook for authoring commit messages with GPT-3";
     mainProgram = "gptcommit";
@@ -42,5 +43,14 @@ rustPlatform.buildRustPackage {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = with lib.platforms; all;
+=======
+  meta = with lib; {
+    description = "Git prepare-commit-msg hook for authoring commit messages with GPT-3";
+    mainProgram = "gptcommit";
+    homepage = "https://github.com/zurawiki/gptcommit";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ happysalada ];
+    platforms = with platforms; all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

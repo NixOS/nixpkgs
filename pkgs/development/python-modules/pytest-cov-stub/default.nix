@@ -14,9 +14,15 @@ buildPythonPackage {
 
   build-system = [ hatchling ];
 
+<<<<<<< HEAD
   meta = {
     description = "Nixpkgs checkPhase stub for pytest-cov";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Nixpkgs checkPhase stub for pytest-cov";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.pbsds ];
   };
 }

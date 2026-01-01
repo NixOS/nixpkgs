@@ -116,11 +116,20 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/dt/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Common Desktop Environment";
     homepage = "https://sourceforge.net/projects/cdesktopenv/";
     license = lib.licenses.lgpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Common Desktop Environment";
+    homepage = "https://sourceforge.net/projects/cdesktopenv/";
+    license = licenses.lgpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

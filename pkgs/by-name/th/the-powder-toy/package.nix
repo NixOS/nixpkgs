@@ -65,12 +65,21 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ "resources/powder.desktop" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Free 2D physics sandbox game";
     homepage = "https://powdertoy.co.uk/";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Free 2D physics sandbox game";
+    homepage = "https://powdertoy.co.uk/";
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       siraben
     ];
     mainProgram = "powder";

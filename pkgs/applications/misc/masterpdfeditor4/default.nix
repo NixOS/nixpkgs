@@ -51,11 +51,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Master PDF Editor - version 4, without watermark";
     homepage = "https://code-industry.net/free-pdf-editor/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
+=======
+  meta = with lib; {
+    description = "Master PDF Editor - version 4, without watermark";
+    homepage = "https://code-industry.net/free-pdf-editor/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfreeRedistributable;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

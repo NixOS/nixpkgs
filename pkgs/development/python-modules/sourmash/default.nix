@@ -69,12 +69,21 @@ buildPythonPackage rec {
     "test_metagenome_kreport_out_fail"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Quickly search, compare, and analyze genomic and metagenomic data sets";
     mainProgram = "sourmash";
     homepage = "https://sourmash.bio";
     changelog = "https://github.com/sourmash-bio/sourmash/releases/tag/v${version}";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ luizirber ];
     license = lib.licenses.bsd3;
+=======
+    maintainers = with maintainers; [ luizirber ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

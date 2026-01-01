@@ -17,11 +17,19 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Report when files are changed";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ somasis ];
+=======
+  meta = with lib; {
+    description = "Report when files are changed";
+    license = licenses.publicDomain;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ somasis ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rwc";
   };
 }

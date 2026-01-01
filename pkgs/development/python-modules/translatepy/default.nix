@@ -38,11 +38,20 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "translatepy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module grouping multiple translation APIs";
     mainProgram = "translatepy";
     homepage = "https://github.com/Animenosekai/translate";
     license = with lib.licenses; [ agpl3Only ];
     maintainers = with lib.maintainers; [ emilytrau ];
+=======
+  meta = with lib; {
+    description = "Module grouping multiple translation APIs";
+    mainProgram = "translatepy";
+    homepage = "https://github.com/Animenosekai/translate";
+    license = with licenses; [ agpl3Only ];
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

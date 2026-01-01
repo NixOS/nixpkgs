@@ -32,11 +32,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/prasmussen/gdrive";
     description = "Command line utility for interacting with Google Drive";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.rzetterberg ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/prasmussen/gdrive";
+    description = "Command line utility for interacting with Google Drive";
+    license = licenses.mit;
+    maintainers = [ maintainers.rzetterberg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gdrive";
   };
 }

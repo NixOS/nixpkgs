@@ -9,6 +9,10 @@ let
   cfg = config.programs.bandwhich;
 in
 {
+<<<<<<< HEAD
+=======
+  meta.maintainers = with lib.maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   options = {
     programs.bandwhich = {

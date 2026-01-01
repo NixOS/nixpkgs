@@ -45,6 +45,7 @@ buildPythonPackage rec {
     "omniORB"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python backend for omniorb";
     homepage = "http://omniorb.sourceforge.net";
@@ -54,5 +55,16 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Python backend for omniorb";
+    homepage = "http://omniorb.sourceforge.net";
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
+    maintainers = with maintainers; [ nim65s ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

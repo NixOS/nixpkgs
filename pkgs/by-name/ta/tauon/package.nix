@@ -32,12 +32,20 @@ let
   # fork of pypresence, to be reverted if/when there's an upstream release
   lynxpresence = python3Packages.buildPythonPackage rec {
     pname = "lynxpresence";
+<<<<<<< HEAD
     version = "4.6.2";
+=======
+    version = "4.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
+<<<<<<< HEAD
       hash = "sha256-w4WShLTTSf4JGQVL4lTkbOLL8C7cjnf8WwHyfwKK2zA=";
+=======
+      hash = "sha256-y/KboyhEGs9RvyKayEIQu2+WaiQNOdsHDl1/pEoqEkQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     build-system = with python3Packages; [ setuptools ];
@@ -48,14 +56,22 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "tauon";
+<<<<<<< HEAD
   version = "8.2.2";
+=======
+  version = "8.1.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "Tauon";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-d7bEC68ZJthJE/AlcUqBSNM4L4YAjwHXTiWDCtKf598=";
+=======
+    hash = "sha256-AV8B09H/25+2ZOoGux2/A4xP8sBBpRP197JYkS9/awk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postUnpack = ''

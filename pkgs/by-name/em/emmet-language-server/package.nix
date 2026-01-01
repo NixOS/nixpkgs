@@ -3,11 +3,18 @@
   stdenvNoCC,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
   nix-update-script,
 }:
+=======
+  fetchFromGitHub,
+  nix-update-script,
+}:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emmet-language-server";
   version = "2.8.0";
@@ -19,17 +26,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-EY/xfrf6sGnZPbkbf9msauOoZ0h0EjLSwQC0aiS/Kco=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-sMOC5MQmJKwXZoUZnOmBy2I83SNMdrPc6WQKmeVGiCc=";
   };
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildPhase = ''

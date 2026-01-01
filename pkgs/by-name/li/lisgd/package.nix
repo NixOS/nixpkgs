@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bind gestures via libinput touch events";
     mainProgram = "lisgd";
@@ -49,5 +50,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Bind gestures via libinput touch events";
+    mainProgram = "lisgd";
+    homepage = "https://git.sr.ht/~mil/lisgd";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

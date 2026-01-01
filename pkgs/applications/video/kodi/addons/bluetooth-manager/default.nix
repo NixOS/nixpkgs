@@ -15,10 +15,18 @@ buildKodiAddon rec {
     hash = "sha256-KKaR7rIkflMYU6EDBEcorHQ3t7jsB4Qe6Ikg+eBblkA=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Addon that allows to manage bluetooth devices from within a Linux based Kodi";
     platforms = lib.platforms.all;
     maintainers = lib.teams.kodi.members;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Addon that allows to manage bluetooth devices from within a Linux based Kodi";
+    platforms = platforms.all;
+    maintainers = teams.kodi.members;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

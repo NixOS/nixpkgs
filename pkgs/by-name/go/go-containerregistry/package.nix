@@ -15,13 +15,21 @@ in
 
 buildGoModule rec {
   pname = "go-containerregistry";
+<<<<<<< HEAD
   version = "0.20.7";
+=======
+  version = "0.20.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "go-containerregistry";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-UDLKdeQ2Nxf5MCruN4IYNGL0xOp8Em2d+wmXX+R9ow4=";
+=======
+    sha256 = "sha256-fmn2SPmYecyKY7HMPjPKvovRS/Ez+SwDe+1maccq4Hc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   vendorHash = null;
 
@@ -65,12 +73,21 @@ buildGoModule rec {
   # NOTE: no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for interacting with remote images and registries including crane and gcrane";
     homepage = "https://github.com/google/go-containerregistry";
     license = lib.licenses.asl20;
     mainProgram = "crane";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tools for interacting with remote images and registries including crane and gcrane";
+    homepage = "https://github.com/google/go-containerregistry";
+    license = licenses.asl20;
+    mainProgram = "crane";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       yurrriq
       ryan4yin
     ];

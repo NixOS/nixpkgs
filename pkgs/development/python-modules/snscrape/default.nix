@@ -54,11 +54,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snscrape" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Social networking service scraper";
     homepage = "https://github.com/JustAnotherArchivist/snscrape";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ivan ];
+=======
+  meta = with lib; {
+    description = "Social networking service scraper";
+    homepage = "https://github.com/JustAnotherArchivist/snscrape";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ivan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "snscrape";
   };
 }

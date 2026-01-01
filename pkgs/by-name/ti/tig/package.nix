@@ -77,17 +77,29 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${git}/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://jonas.github.io/tig/";
+    description = "Text-mode interface for git";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       qknight
       globin
       ma27
     ];
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tig";
   };
 }

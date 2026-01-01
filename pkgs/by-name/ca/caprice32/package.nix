@@ -61,12 +61,21 @@ stdenv.mkDerivation rec {
     install -Dm644 $out/share/caprice32/resources/freedesktop/caprice32.menu -t $out/etc/xdg/menus/applications-merged/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Complete emulation of CPC464, CPC664 and CPC6128";
     homepage = "https://github.com/ColinPitrat/caprice32";
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Complete emulation of CPC464, CPC664 and CPC6128";
+    homepage = "https://github.com/ColinPitrat/caprice32";
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cap32";
   };
 }

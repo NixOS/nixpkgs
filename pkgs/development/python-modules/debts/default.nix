@@ -35,11 +35,20 @@ buildPythonPackage rec {
     py.test tests
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Simple library and cli-tool to help you solve some debts settlement scenarios";
     mainProgram = "debts";
     license = lib.licenses.beerware;
     maintainers = [ lib.maintainers.symphorien ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Simple library and cli-tool to help you solve some debts settlement scenarios";
+    mainProgram = "debts";
+    license = licenses.beerware;
+    maintainers = [ maintainers.symphorien ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

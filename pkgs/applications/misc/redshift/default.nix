@@ -144,7 +144,11 @@ rec {
       sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
     };
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Screen color temperature manager";
       longDescription = ''
         Redshift adjusts the color temperature according to the position
@@ -154,9 +158,15 @@ rec {
         your eyes to slowly adapt. At night the color temperature should
         be set to match the lamps in your room.
       '';
+<<<<<<< HEAD
       license = lib.licenses.gpl3Plus;
       homepage = "http://jonls.dk/redshift";
       platforms = lib.platforms.unix;
+=======
+      license = licenses.gpl3Plus;
+      homepage = "http://jonls.dk/redshift";
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "redshift";
       maintainers = [ ];
     };
@@ -174,6 +184,10 @@ rec {
     };
 
     meta = redshift.meta // {
+<<<<<<< HEAD
+=======
+      name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       longDescription = "Gammastep" + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";

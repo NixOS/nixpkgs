@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
+<<<<<<< HEAD
   postFixup = ''
     substituteInPlace $dev/lib/cmake/cnats/cnats-config.cmake \
       --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
@@ -51,5 +52,13 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "C API for the NATS messaging system";
+    homepage = "https://github.com/nats-io/nats.c";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

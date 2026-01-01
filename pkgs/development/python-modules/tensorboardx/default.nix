@@ -75,16 +75,29 @@ buildPythonPackage rec {
     "tests/test_record_writer.py"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library for writing tensorboard-compatible logs";
     homepage = "https://tensorboardx.readthedocs.io";
     downloadPage = "https://github.com/lanpa/tensorboardX";
     changelog = "https://github.com/lanpa/tensorboardX/blob/${src.rev}/HISTORY.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lebastr
       akamaus
     ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      lebastr
+      akamaus
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

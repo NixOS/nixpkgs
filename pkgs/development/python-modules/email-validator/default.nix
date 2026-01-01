@@ -36,12 +36,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "email_validator" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Email syntax and deliverability validation library";
     mainProgram = "email_validator";
     homepage = "https://github.com/JoshData/python-email-validator";
     changelog = "https://github.com/JoshData/python-email-validator/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ siddharthist ];
+=======
+    license = licenses.cc0;
+    maintainers = with maintainers; [ siddharthist ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -19,14 +19,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctagdrc";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "0.1.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "BillyDM";
     repo = "CTAGDRC";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-dJAmcoDhGoVG8h1T84qYhzEuvGdBVYQUuQC8mJkD4To=";
+=======
+    tag = finalAttrs.version;
+    hash = "sha256-szBI8ESJz1B/JuGcZD8D53c1yJeUW1uK4GewQExtD9Q=";
+    fetchSubmodules = true;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -87,7 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Audio compressor plugin created with JUCE";
     homepage = "https://github.com/BillyDM/CTAGDRC";
+<<<<<<< HEAD
     changelog = "https://github.com/BillyDM/CTAGDRC/releases/tag/v${finalAttrs.version}";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     mainProgram = "CTAGDRC";

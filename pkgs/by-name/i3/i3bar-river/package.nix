@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pango ];
 
+<<<<<<< HEAD
   meta = {
     description = "Port of i3bar for river";
     homepage = "https://github.com/MaxVerevkin/i3bar-river";
@@ -29,5 +30,14 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nicegamer7 ];
     mainProgram = "i3bar-river";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Port of i3bar for river";
+    homepage = "https://github.com/MaxVerevkin/i3bar-river";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nicegamer7 ];
+    mainProgram = "i3bar-river";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

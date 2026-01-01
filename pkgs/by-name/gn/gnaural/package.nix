@@ -41,10 +41,17 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/gnome
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Programmable auditory binaural-beat synthesizer";
     homepage = "https://gnaural.sourceforge.net/";
     license = with lib.licenses; [ gpl2Only ];
+=======
+  meta = with lib; {
+    description = "Programmable auditory binaural-beat synthesizer";
+    homepage = "https://gnaural.sourceforge.net/";
+    license = with licenses; [ gpl2Only ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gnaural";
   };
 }

@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
   ];
   patches = [ ./gcc14-fix.patch ];
   env.NIX_CFLAGS_COMPILE = toString [ "-lm" ];
+<<<<<<< HEAD
   meta = {
     homepage = "http://lpg.ticalc.org/prj_tilem/";
     description = "Emulator and debugger for Texas Instruments Z80-based graphing calculators";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "http://lpg.ticalc.org/prj_tilem/";
+    description = "Emulator and debugger for Texas Instruments Z80-based graphing calculators";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tilem2";
   };
 }

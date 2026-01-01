@@ -81,11 +81,20 @@ stdenv.mkDerivation rec {
     "--set QT_X11_NO_MITSHM 1"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to create bootable live USB drives from ISO images";
     homepage = "https://unetbootin.github.io/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool to create bootable live USB drives from ISO images";
+    homepage = "https://unetbootin.github.io/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ebzzry ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "unetbootin";
   };
 }

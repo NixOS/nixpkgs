@@ -7,14 +7,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zasm";
+<<<<<<< HEAD
   version = "4.5.0";
+=======
+  version = "4.4.17";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "megatokio";
     repo = "zasm";
     tag = finalAttrs.version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-bymcbuz3hcUYeqoYtY2mm7rDYPgPVHoaxKQ/LBWsskQ=";
+=======
+    hash = "sha256-nc8hlGfix9eVTP5ZimmLKv22cdfsKRfrG70brpUh6CA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     postFetch = ''
       # remove folder containing files with weird names (causes the hash to turn out differently under macOS vs. Linux)
       rm -rv $out/Test

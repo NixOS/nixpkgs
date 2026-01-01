@@ -23,11 +23,19 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "NextDNS DNS/53 to DoH Proxy";
     homepage = "https://nextdns.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pnelson ];
+=======
+  meta = with lib; {
+    description = "NextDNS DNS/53 to DoH Proxy";
+    homepage = "https://nextdns.io";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pnelson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nextdns";
   };
 }

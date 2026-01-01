@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/avr8-burn-omat
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GUI tool for avrdude";
     mainProgram = "avr8-burn-omat";
@@ -38,5 +39,14 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "GUI tool for avrdude";
+    mainProgram = "avr8-burn-omat";
+    homepage = "http://avr8-burn-o-mat.aaabbb.de/avr8_burn_o_mat_avrdude_gui_en.html";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

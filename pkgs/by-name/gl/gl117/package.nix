@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Air combat simulator";
     mainProgram = "gl-117";
@@ -41,5 +42,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ raskin ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Air combat simulator";
+    mainProgram = "gl-117";
+    homepage = "https://sourceforge.net/projects/gl-117";
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

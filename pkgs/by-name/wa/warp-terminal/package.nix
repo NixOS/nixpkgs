@@ -114,18 +114,31 @@ let
     '';
   });
 
+<<<<<<< HEAD
   meta = {
     description = "Rust-based terminal";
     homepage = "https://www.warp.dev";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Rust-based terminal";
+    homepage = "https://www.warp.dev";
+    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       imadnyc
       FlameFlag
       johnrtitor
       logger
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.darwin ++ [
+=======
+    platforms = platforms.darwin ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "x86_64-linux"
       "aarch64-linux"
     ];

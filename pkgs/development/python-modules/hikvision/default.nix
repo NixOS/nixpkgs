@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hikvision.api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for interacting with Hikvision IP Cameras";
     homepage = "https://github.com/fbradyirl/hikvision";
     changelog = "https://github.com/fbradyirl/hikvision/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for interacting with Hikvision IP Cameras";
+    homepage = "https://github.com/fbradyirl/hikvision";
+    changelog = "https://github.com/fbradyirl/hikvision/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

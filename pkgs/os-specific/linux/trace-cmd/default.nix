@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "trace-cmd-v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "User-space tools for the Linux kernel ftrace subsystem";
     mainProgram = "trace-cmd";
@@ -102,6 +103,18 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "User-space tools for the Linux kernel ftrace subsystem";
+    mainProgram = "trace-cmd";
+    homepage = "https://www.trace-cmd.org/";
+    license = with licenses; [
+      lgpl21Only
+      gpl2Only
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       basvandijk
       wentasah

@@ -68,6 +68,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   env = {
     OPENSSL_NO_VENDOR = 1;
     PROTOC = "${protobuf}/bin/protoc";
@@ -79,14 +80,30 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/paritytech/polkadot-sdk";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  OPENSSL_NO_VENDOR = 1;
+  PROTOC = "${protobuf}/bin/protoc";
+  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+
+  meta = with lib; {
+    description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";
+    homepage = "https://github.com/paritytech/polkadot-sdk";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       akru
       andresilva
       FlorianFranzen
       RaghavSood
     ];
     # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
+<<<<<<< HEAD
     platforms = lib.intersectLists lib.platforms.unix (
       lib.platforms.aarch64 ++ lib.platforms.s390x ++ lib.platforms.riscv64 ++ lib.platforms.x86
+=======
+    platforms = intersectLists platforms.unix (
+      platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     );
   };
 }

@@ -36,10 +36,18 @@ buildPythonPackage rec {
   # Tests use pypi.org.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Low-level components of distutils2/packaging";
     homepage = "https://distlib.readthedocs.io";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ lnl7 ];
+=======
+  meta = with lib; {
+    description = "Low-level components of distutils2/packaging";
+    homepage = "https://distlib.readthedocs.io";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ lnl7 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

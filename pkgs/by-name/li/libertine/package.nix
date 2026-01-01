@@ -50,10 +50,18 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux Libertine Fonts";
     homepage = "http://linuxlibertine.sf.net";
     maintainers = with lib.maintainers; [ erdnaxe ];
     license = lib.licenses.ofl;
+=======
+  meta = with lib; {
+    description = "Linux Libertine Fonts";
+    homepage = "http://linuxlibertine.sf.net";
+    maintainers = with maintainers; [ erdnaxe ];
+    license = licenses.ofl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

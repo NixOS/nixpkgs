@@ -57,11 +57,16 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken =
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "C++ interface to the Pango text rendering library";
     homepage = "https://www.pango.org/";
+<<<<<<< HEAD
     license = with lib.licenses; [
       lgpl2
       lgpl21
@@ -71,6 +76,17 @@ stdenv.mkDerivation rec {
       raskin
     ];
     platforms = lib.platforms.unix;
+=======
+    license = with licenses; [
+      lgpl2
+      lgpl21
+    ];
+    maintainers = with maintainers; [
+      lovek323
+      raskin
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an

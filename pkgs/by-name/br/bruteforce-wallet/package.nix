@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Try to find password of encrypted cryptocurrency wallet";
     homepage = "https://github.com/glv2/bruteforce-wallet";
@@ -37,5 +38,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ octodi ];
     mainProgram = "bruteforce-wallet";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Try to find password of encrypted cryptocurrency wallet";
+    homepage = "https://github.com/glv2/bruteforce-wallet";
+    changelog = "https://github.com/glv2/bruteforce-wallet/blob/${src.rev}/NEWS";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ octodi ];
+    mainProgram = "bruteforce-wallet";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

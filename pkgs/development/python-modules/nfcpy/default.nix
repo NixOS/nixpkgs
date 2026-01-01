@@ -51,11 +51,20 @@ buildPythonPackage rec {
     "tests/test_clf_udp.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to read/write NFC tags or communicate with another NFC device";
     homepage = "https://github.com/nfcpy/nfcpy";
     changelog = "https://github.com/nfcpy/nfcpy/blob/v${version}/HISTORY.rst";
     license = lib.licenses.eupl11;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to read/write NFC tags or communicate with another NFC device";
+    homepage = "https://github.com/nfcpy/nfcpy";
+    changelog = "https://github.com/nfcpy/nfcpy/blob/v${version}/HISTORY.rst";
+    license = licenses.eupl11;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

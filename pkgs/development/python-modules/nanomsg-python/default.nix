@@ -30,10 +30,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nanomsg" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bindings for nanomsg";
     homepage = "https://github.com/tonysimpson/nanomsg-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bgamari ];
+=======
+  meta = with lib; {
+    description = "Bindings for nanomsg";
+    homepage = "https://github.com/tonysimpson/nanomsg-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bgamari ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -13,16 +13,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
+<<<<<<< HEAD
   version = "0.19.1";
+=======
+  version = "0.19.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-/smeK7qCw1EgADc7bgC1xUep3hPj7gOddanbaTjbGgs=";
   };
 
   cargoHash = "sha256-zVkShePjUzagP8MAG5oq6hqm+lHxH++ufXkmetN+jvA=";
+=======
+    hash = "sha256-wmoZneXmhstEX1Ocd9gkVRaZ9UGaYJERU5FlIUoHOI4=";
+  };
+
+  cargoHash = "sha256-EZJszeFAo9vjtk+RJ8nqFqpKD7BpQ/mCImD472NXZNM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +46,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Needed to get openssl-sys to use pkg-config.
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -49,7 +64,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=cli::remote::test::test_should_make_remote_args_from_two_bookmarks_and_local_dir"
     "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
     "--skip=system::auto_update::test::test_should_check_whether_github_api_is_reachable"
+<<<<<<< HEAD
     "--skip=system::environment::tests::test_system_environment_get_config_dir_err"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     "--skip=system::watcher::test::should_poll_file_removed"

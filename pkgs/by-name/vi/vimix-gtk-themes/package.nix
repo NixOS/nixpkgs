@@ -88,11 +88,20 @@ lib.checkListOfEnum "${pname}: theme variants"
 
     passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
     meta = {
       description = "Flat Material Design theme for GTK based desktop environments";
       homepage = "https://github.com/vinceliuice/vimix-gtk-themes";
       license = lib.licenses.gpl3Only;
       platforms = lib.platforms.unix;
       maintainers = [ lib.maintainers.romildo ];
+=======
+    meta = with lib; {
+      description = "Flat Material Design theme for GTK based desktop environments";
+      homepage = "https://github.com/vinceliuice/vimix-gtk-themes";
+      license = licenses.gpl3Only;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }

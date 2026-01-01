@@ -23,10 +23,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rm -rf $out/include/igl/opengl
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple C++ geometry processing library";
     homepage = "https://github.com/libigl/libigl";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ nim65s ];
+=======
+  meta = with lib; {
+    description = "Simple C++ geometry processing library";
+    homepage = "https://github.com/libigl/libigl";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ nim65s ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -25,7 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     bison
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Language for typesetting graphs";
     longDescription = ''
       Grap is an Expressive language for describing graphs and incorporating
@@ -35,8 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.lunabase.org/~faber/Vault/software/grap/";
     changelog = "https://github.com/snorerot13/grap/blob/master/CHANGES";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ afh ];
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ afh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "grap";
   };
 })

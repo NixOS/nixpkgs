@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchFromSourcehut,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ncurses,
   boehmgc,
   gettext,
@@ -65,7 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./RAND_egd.libressl.patch
+<<<<<<< HEAD
     ./https.patch
+=======
+    (fetchpatch {
+      name = "https.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/https.patch?h=w3m-mouse&id=5b5f0fbb59f674575e87dd368fed834641c35f03";
+      sha256 = "08skvaha1hjyapsh8zw5dgfy433mw2hk7qy9yy9avn8rjqj7kjxk";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

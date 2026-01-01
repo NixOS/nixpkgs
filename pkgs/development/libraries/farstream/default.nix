@@ -59,10 +59,18 @@ stdenv.mkDerivation rec {
     gst-libav
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/Farstream";
     description = "Audio/Video Communications Framework formely known as farsight";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    homepage = "https://www.freedesktop.org/wiki/Software/Farstream";
+    description = "Audio/Video Communications Framework formely known as farsight";
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

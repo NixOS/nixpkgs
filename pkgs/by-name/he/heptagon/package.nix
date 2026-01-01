@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix CAML_LD_LIBRARY_PATH : "${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Compiler for the Heptagon/BZR synchronous programming language";
     homepage = "https://gitlab.inria.fr/synchrone/heptagon";
@@ -61,5 +62,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ wegank ];
     mainProgram = "heptc";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Compiler for the Heptagon/BZR synchronous programming language";
+    homepage = "https://gitlab.inria.fr/synchrone/heptagon";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wegank ];
+    mainProgram = "heptc";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

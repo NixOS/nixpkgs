@@ -43,10 +43,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "kd-tree implementation for fast nearest neighbour search in Python";
     homepage = "https://github.com/storpipfugl/pykdtree";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ psyanticy ];
+=======
+  meta = with lib; {
+    description = "kd-tree implementation for fast nearest neighbour search in Python";
+    homepage = "https://github.com/storpipfugl/pykdtree";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ psyanticy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

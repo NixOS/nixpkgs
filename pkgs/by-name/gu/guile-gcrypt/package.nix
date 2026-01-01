@@ -41,11 +41,19 @@ stdenv.mkDerivation rec {
   # In procedure bytevector-u8-ref: Argument 2 out of range
   dontStrip = stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Bindings to Libgcrypt for GNU Guile";
     homepage = "https://notabug.org/cwebber/guile-gcrypt";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
+=======
+  meta = with lib; {
+    description = "Bindings to Libgcrypt for GNU Guile";
+    homepage = "https://notabug.org/cwebber/guile-gcrypt";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ethancedwards8 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 }

@@ -15,13 +15,21 @@ in
 # Based on the libretro parallel-n64 derivation with slight tweaks
 libretro.mkLibretroCore (finalAttrs: {
   core = "parallel-n64-next";
+<<<<<<< HEAD
   version = "2.27.1";
+=======
+  version = "2.24.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "parallel-launcher";
     repo = "parallel-n64";
     tag = reformatVersion finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-u4F6CbC1NEU3OWtcqMIi/teX+SS4Jq9v5M2qc9z5bXg=";
+=======
+    hash = "sha256-BeeKX78zozxx72cmJ3HI0nH/STvkltMBZs2+mb4ukM0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   extraNativeBuildInputs = [

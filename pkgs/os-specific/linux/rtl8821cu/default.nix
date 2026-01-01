@@ -9,13 +9,22 @@
 
 stdenv.mkDerivation {
   pname = "rtl8821cu";
+<<<<<<< HEAD
   version = "${kernel.version}-unstable-2025-12-15";
+=======
+  version = "${kernel.version}-unstable-2025-10-09";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821cu-20210916";
+<<<<<<< HEAD
     rev = "7f63a9da2e8ed83403f6f920e9b1628a37b38ef4";
     hash = "sha256-RgGO6r2mx6MiDOWpPJIC0MvX7rejWu+TdHWtsW1PNOY=";
+=======
+    rev = "3d1fcf4bc838542ceb03b0b4e9e40600720cf6ae";
+    hash = "sha256-N22f4TOPyGIROcmkiUtPgOASVEbbSqsyOKMZTQpqjLs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   hardeningDisable = [ "pic" ];

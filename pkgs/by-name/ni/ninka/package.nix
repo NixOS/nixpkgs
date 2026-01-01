@@ -37,6 +37,7 @@ perlPackages.buildPerlPackage {
     perl Makefile.PL
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Sentence based license detector";
     mainProgram = "ninka";
@@ -44,5 +45,14 @@ perlPackages.buildPerlPackage {
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Sentence based license detector";
+    mainProgram = "ninka";
+    homepage = "http://ninka.turingmachine.org/";
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

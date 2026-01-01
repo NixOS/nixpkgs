@@ -24,11 +24,19 @@ stdenv.mkDerivation {
       --replace "inode.i_dir_acl" "inode.i_size_high"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility that can recover deleted files from an ext3 or ext4 partition";
     homepage = "https://extundelete.sourceforge.net/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Utility that can recover deleted files from an ext3 or ext4 partition";
+    homepage = "https://extundelete.sourceforge.net/";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "extundelete";
   };

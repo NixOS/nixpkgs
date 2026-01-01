@@ -18,15 +18,25 @@ stdenv.mkDerivation rec {
     cp -R config legal lib library plugins LICENCE.txt NOTICE.txt README.txt RELEASE_NOTES.txt $out
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://serviio.org";
     description = "UPnP Media Streaming Server";
     longDescription = ''
       Serviio is a free media server. It allows you to stream your media files (music, video or images)
       to any DLNA-certified renderer device (e.g. a TV set, Bluray player, games console) on your home network.
     '';
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.thpham ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.unfree;
+    maintainers = [ maintainers.thpham ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

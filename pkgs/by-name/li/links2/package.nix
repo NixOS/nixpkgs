@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://links.twibright.com/";
     description = "Small browser with some graphics support";
@@ -76,5 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "links";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://links.twibright.com/";
+    description = "Small browser with some graphics support";
+    maintainers = with maintainers; [ raskin ];
+    mainProgram = "links";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

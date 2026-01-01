@@ -50,5 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/embotech/ecos/releases";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

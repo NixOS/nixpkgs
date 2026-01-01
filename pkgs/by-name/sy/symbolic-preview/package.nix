@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/World/design/symbolic-preview";
     description = "Symbolics made easy";
@@ -47,6 +48,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/World/design/symbolic-preview";
+    description = "Symbolics made easy";
+    mainProgram = "symbolic-preview";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };

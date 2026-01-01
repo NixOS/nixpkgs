@@ -32,12 +32,21 @@ stdenv.mkDerivation {
     install -D SoliCurses.out $out/bin/solicurses
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Version of Solitaire written in C++ using the ncurses library";
     mainProgram = "solicurses";
     homepage = "https://github.com/KaylaPP/SoliCurses";
     maintainers = with lib.maintainers; [ laalsaas ];
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Version of Solitaire written in C++ using the ncurses library";
+    mainProgram = "solicurses";
+    homepage = "https://github.com/KaylaPP/SoliCurses";
+    maintainers = with maintainers; [ laalsaas ];
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (ncurses.meta) platforms;
   };
 }

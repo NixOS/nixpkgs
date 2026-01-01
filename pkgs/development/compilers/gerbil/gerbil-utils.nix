@@ -16,11 +16,20 @@
     sha256 = "0dga03qq7iy12bnpxr6d40qhvihsvn3y87psf2w2clnpypjb3blx";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Gerbil Clan: Community curated Collection of Common Utilities";
     homepage = "https://github.com/fare/gerbil-utils";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "Gerbil Clan: Community curated Collection of Common Utilities";
+    homepage = "https://github.com/fare/gerbil-utils";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

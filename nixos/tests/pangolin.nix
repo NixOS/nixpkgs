@@ -16,7 +16,10 @@ in
   meta.maintainers = with lib.maintainers; [
     jackr
     sigmasquadron
+<<<<<<< HEAD
     water-sucks
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # The full test is not yet implemented, but once upstream supports a way to

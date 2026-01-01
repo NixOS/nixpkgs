@@ -35,6 +35,11 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Adb logcat wrapper";
     homepage = "https://github.com/flxo/rogcat";

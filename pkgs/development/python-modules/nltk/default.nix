@@ -22,14 +22,22 @@
 
 buildPythonPackage rec {
   pname = "nltk";
+<<<<<<< HEAD
   version = "3.9.2";
+=======
+  version = "3.9.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-D0CemwacpBd8GQPD6EPu+Qx+kpkvpJMa5gfabeSeFBk=";
+=======
+    hash = "sha256-h9EnvT3kvYmk+BJl5fpZyxsZmydEAXU3D3QX0rx66Gg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dependencies = [
@@ -99,11 +107,19 @@ buildPythonPackage rec {
     dataDir = pkgs.callPackage ./data-dir.nix { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Natural Language Processing ToolKit";
     mainProgram = "nltk";
     homepage = "http://nltk.org/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Natural Language Processing ToolKit";
+    mainProgram = "nltk";
+    homepage = "http://nltk.org/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.bengsparks ];
   };
 }

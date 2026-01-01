@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tools for napi-rs";
     mainProgram = "napi";
     homepage = "https://napi.rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ winter ];
+=======
+  meta = with lib; {
+    description = "CLI tools for napi-rs";
+    mainProgram = "napi";
+    homepage = "https://napi.rs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ winter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (nodejs.meta) platforms;
   };
 }

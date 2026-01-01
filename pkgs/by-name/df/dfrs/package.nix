@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-U6z0YMHRmjGobLYdyBaMWJam9mDrHUQEOv5MjOpNfHU=";
 
+<<<<<<< HEAD
   meta = {
     description = "Display file system space usage using graphs and colors";
     homepage = "https://github.com/anthraxx/dfrs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wamserma ];
+=======
+  meta = with lib; {
+    description = "Display file system space usage using graphs and colors";
+    homepage = "https://github.com/anthraxx/dfrs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ wamserma ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dfrs";
   };
 }

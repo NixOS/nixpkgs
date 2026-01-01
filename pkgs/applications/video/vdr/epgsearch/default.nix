@@ -10,12 +10,20 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-epgsearch";
+<<<<<<< HEAD
   version = "2.4.5";
+=======
+  version = "2.4.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     repo = "vdr-plugin-epgsearch";
     owner = "vdr-projects";
+<<<<<<< HEAD
     sha256 = "sha256-ERHy6ks5evYmOUoTXNd63ETIA2PyR67VZ7CXR6kn7x4=";
+=======
+    sha256 = "sha256-hHTb6MbN18gNiovX1BKR6ldxxRDeDXJt4kNm722phRk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rev = "v${version}";
   };
 

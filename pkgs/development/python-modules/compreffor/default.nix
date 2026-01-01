@@ -42,12 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "compreffor" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/googlefonts/compreffor/releases/tag/${version}";
     description = "CFF table subroutinizer for FontTools";
     mainProgram = "compreffor";
     homepage = "https://github.com/googlefonts/compreffor";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

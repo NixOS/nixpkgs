@@ -47,12 +47,22 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ dpkg ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo subcommand that generates Debian packages from information in Cargo.toml";
     mainProgram = "cargo-deb";
     homepage = "https://github.com/kornelski/cargo-deb";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cargo subcommand that generates Debian packages from information in Cargo.toml";
+    mainProgram = "cargo-deb";
+    homepage = "https://github.com/kornelski/cargo-deb";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
   };

@@ -16,9 +16,16 @@ buildPythonPackage rec {
   # attempts to run mysql
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Framework that aims at making it easy to provide authentication via OAuth 2.0 within an application stack";
     homepage = "https://github.com/wndhydrnt/python-oauth2";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Framework that aims at making it easy to provide authentication via OAuth 2.0 within an application stack";
+    homepage = "https://github.com/wndhydrnt/python-oauth2";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

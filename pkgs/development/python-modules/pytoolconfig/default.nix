@@ -65,6 +65,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   meta = {
@@ -73,6 +74,16 @@ buildPythonPackage rec {
     changelog = "https://github.com/bagel897/pytoolconfig/releases/tag/v${version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  meta = with lib; {
+    description = "Python tool configuration";
+    homepage = "https://github.com/bagel897/pytoolconfig";
+    changelog = "https://github.com/bagel897/pytoolconfig/releases/tag/v${version}";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fab
       hexa
     ];

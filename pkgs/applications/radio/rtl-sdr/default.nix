@@ -39,16 +39,28 @@ let
           --replace 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'
       '';
 
+<<<<<<< HEAD
       meta = {
         inherit (meta) longDescription homepage;
         description = "Software to turn the RTL2832U into a SDR receiver";
         license = lib.licenses.gpl2Plus;
         maintainers = with lib.maintainers; [
+=======
+      meta = with lib; {
+        inherit (meta) longDescription homepage;
+        description = "Software to turn the RTL2832U into a SDR receiver";
+        license = licenses.gpl2Plus;
+        maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           bjornfor
           skovati
           Tungsten842
         ];
+<<<<<<< HEAD
         platforms = lib.platforms.unix;
+=======
+        platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         mainProgram = "rtl_sdr";
       };
     };

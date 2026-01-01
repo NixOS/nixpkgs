@@ -32,7 +32,11 @@ buildPerlPackage {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Database toolkit";
     longDescription = ''
       You can use Maatkit to prove replication is working correctly, fix
@@ -42,7 +46,11 @@ buildPerlPackage {
       In addition to MySQL, there is support for PostgreSQL, Memcached, and a
       growing variety of other databases and technologies.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
+=======
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://code.google.com/archive/p/maatkit/";
   };
 }

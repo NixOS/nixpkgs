@@ -26,13 +26,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
+<<<<<<< HEAD
   version = "8.2.3";
+=======
+  version = "8.2.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-PsTAo92Vz+LNxOsbI9VVnx+rHFm67a3bBMeDcLdhXFA=";
+=======
+    hash = "sha256-0TMUSNCrDEtOkojcmFFhmLQ0ghyLAn+OS4xl4Sbr76c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = lib.optional useSystemJemalloc (fetchpatch2 {
@@ -114,6 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/redis-server";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     tests.redis = nixosTests.redis;
@@ -127,7 +139,13 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
     changelog = "https://github.com/redis/redis/releases/tag/${finalAttrs.version}";
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [
+      globin
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "redis-cli";
   };
 })

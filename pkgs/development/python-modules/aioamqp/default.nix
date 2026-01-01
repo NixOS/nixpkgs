@@ -30,10 +30,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioamqp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "AMQP implementation using asyncio";
     homepage = "https://github.com/polyconseil/aioamqp";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "AMQP implementation using asyncio";
+    homepage = "https://github.com/polyconseil/aioamqp";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

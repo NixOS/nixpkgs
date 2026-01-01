@@ -39,5 +39,9 @@ buildPythonPackage {
     mainProgram = "breathe-apidoc";
     homepage = "https://github.com/breathe-doc/breathe";
     license = lib.licenses.bsd3;
+<<<<<<< HEAD
+=======
+    teams = [ lib.teams.sphinx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

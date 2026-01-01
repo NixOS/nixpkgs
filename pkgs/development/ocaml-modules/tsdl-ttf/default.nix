@@ -31,10 +31,17 @@ buildDunePackage rec {
     tsdl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SDL2_ttf bindings for Ocaml with Tsdl";
     homepage = "https://github.com/sanette/tsdl-ttf";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "SDL2_ttf bindings for Ocaml with Tsdl";
+    homepage = "https://github.com/sanette/tsdl-ttf";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

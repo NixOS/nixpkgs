@@ -38,7 +38,11 @@ mkDerivation rec {
     qtx11extras
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Program that lets you use gaming devices anywhere";
     longDescription = ''
       A simple Linux/QT program that lets you use your gaming devices
@@ -58,7 +62,11 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/panzi/qjoypad/";
     license = lib.licenses.gpl2Only;
+<<<<<<< HEAD
     platforms = with lib.platforms; linux;
+=======
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qjoypad";
   };
 }

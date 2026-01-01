@@ -47,13 +47,23 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zenity";
     description = "Tool to display dialogs from the commandline and shell scripts";
     homepage = "https://gitlab.gnome.org/GNOME/zenity";
     changelog = "https://gitlab.gnome.org/GNOME/zenity/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
+=======
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

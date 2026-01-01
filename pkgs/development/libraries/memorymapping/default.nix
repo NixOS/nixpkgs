@@ -36,6 +36,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://nimbuskit.github.io/memorymapping/";
     description = "fmemopen for Mac OS and iOS";
@@ -44,6 +45,16 @@ stdenv.mkDerivation {
     # Uses BSD-style funopen() to implement glibc-style fmemopen().
     # Add more BSDs if you need to.
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "https://nimbuskit.github.io/memorymapping/";
+    description = "fmemopen for Mac OS and iOS";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ veprbl ];
+    # Uses BSD-style funopen() to implement glibc-style fmemopen().
+    # Add more BSDs if you need to.
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

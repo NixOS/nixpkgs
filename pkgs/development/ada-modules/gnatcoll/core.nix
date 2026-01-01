@@ -78,11 +78,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/AdaCore/gnatcoll-core";
     description = "GNAT Components Collection - Core packages";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/AdaCore/gnatcoll-core";
+    description = "GNAT Components Collection - Core packages";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.sternenseemann ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

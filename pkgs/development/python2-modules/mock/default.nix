@@ -38,10 +38,17 @@ buildPythonPackage rec {
     pytest
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mock objects for Python";
     homepage = "http://python-mock.sourceforge.net/";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Mock objects for Python";
+    homepage = "http://python-mock.sourceforge.net/";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

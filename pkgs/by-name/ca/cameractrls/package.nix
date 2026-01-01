@@ -40,14 +40,22 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "cameractrls";
+<<<<<<< HEAD
   version = "0.6.10";
+=======
+  version = "0.6.9";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "soyersoyer";
     repo = "cameractrls";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-WtFwi7X2RvOqx8sYLhzurm6DYbwbVOswYJfb17aORF0=";
+=======
+    hash = "sha256-eQwTEu8lBToh3N8FSlNQbTIGnIejnJLKScyN07jnzqQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

@@ -7,19 +7,32 @@
   pandas,
   pyarrow,
   pytest8_3CheckHook,
+<<<<<<< HEAD
   pythonAtLeast,
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "db-dtypes";
+<<<<<<< HEAD
   version = "1.4.4";
   pyproject = true;
 
+=======
+  version = "1.4.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Aq/2yDyvUpLsGr+mmBDQpC9X1pWLpDtYD6qql2sgGNw=";
   };
 
@@ -30,6 +43,11 @@ buildPythonPackage rec {
       --replace-fail '"day is out of range for month"' '"day 99 must be in range 1..28 for month 2 in year 2021"'
   '';
 
+=======
+    hash = "sha256-AyO/GwtExMWi4mB3OMtYPFvAVS/ylcBXGiGXgaScyCA=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = [
@@ -50,11 +68,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "db_dtypes" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";
     homepage = "https://github.com/googleapis/python-db-dtypes-pandas";
     changelog = "https://github.com/googleapis/python-db-dtypes-pandas/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";
+    homepage = "https://github.com/googleapis/python-db-dtypes-pandas";
+    changelog = "https://github.com/googleapis/python-db-dtypes-pandas/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

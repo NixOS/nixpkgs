@@ -100,7 +100,11 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ stdlib ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Coq plugin providing tactics for rewriting universally quantified equations";
     longDescription = ''
       This Coq plugin provides tactics for rewriting universally quantified
@@ -110,8 +114,14 @@ mkCoqDerivation {
       operator instances, such as for Z binary arithmetic and booleans, are
       provided with the plugin.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

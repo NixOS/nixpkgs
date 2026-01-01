@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
+<<<<<<< HEAD
   meta = {
     description = "Reusable Django application for allowing users to filter querysets dynamically";
     homepage = "https://github.com/carltongibson/django-filter";
     changelog = "https://github.com/carltongibson/django-filter/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmai ];
+=======
+  meta = with lib; {
+    description = "Reusable Django application for allowing users to filter querysets dynamically";
+    homepage = "https://github.com/carltongibson/django-filter";
+    changelog = "https://github.com/carltongibson/django-filter/blob/${version}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mmai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

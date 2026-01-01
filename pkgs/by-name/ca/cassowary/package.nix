@@ -23,11 +23,19 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rogerwelin/cassowary";
     description = "Modern cross-platform HTTP load-testing tool written in Go";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hugoreeves ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rogerwelin/cassowary";
+    description = "Modern cross-platform HTTP load-testing tool written in Go";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hugoreeves ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cassowary";
   };
 }

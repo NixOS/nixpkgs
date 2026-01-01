@@ -74,16 +74,26 @@ let
           inherit updateScript;
         };
 
+<<<<<<< HEAD
         meta = {
+=======
+        meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           inherit description license mainProgram;
           homepage =
             if versionAtLeast finalAttrs.version "11" then
               "https://www.saxonica.com/products/latest.xml"
             else
               "https://www.saxonica.com/products/archive.xml";
+<<<<<<< HEAD
           sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
           maintainers = with lib.maintainers; [ rvl ];
           platforms = lib.platforms.all;
+=======
+          sourceProvenance = with sourceTypes; [ binaryBytecode ];
+          maintainers = with maintainers; [ rvl ];
+          platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       }
     );
@@ -130,9 +140,13 @@ in
     pname = "saxon";
     version = "6.5.3";
     src = fetchurl {
+<<<<<<< HEAD
       url = "mirror://sourceforge/saxon/OldFiles/${version}/saxon${
         builtins.replaceStrings [ "." ] [ "_" ] version
       }.zip";
+=======
+      url = "mirror://sourceforge/saxon/saxon${dashify version}.zip";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hash = "sha256-Q28wzqyUCPBJ2C3a8acdG2lmeee8GeEAgg9z8oUfvlA=";
     };
     description = "XSLT 1.0 processor";

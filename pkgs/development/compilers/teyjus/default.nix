@@ -28,12 +28,21 @@ buildDunePackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Efficient implementation of the Lambda Prolog language";
     homepage = "https://github.com/teyjus/teyjus";
     changelog = "https://github.com/teyjus/teyjus/releases/tag/v${version}";
     license = lib.licenses.gpl3;
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.bcdarwin ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = [ maintainers.bcdarwin ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -38,11 +38,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Genomic sequence aligner";
     homepage = "https://gitlab.com/mcfrith/last";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.x86_64;
+=======
+  meta = with lib; {
+    description = "Genomic sequence aligner";
+    homepage = "https://gitlab.com/mcfrith/last";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ jbedo ];
+    platforms = platforms.x86_64;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

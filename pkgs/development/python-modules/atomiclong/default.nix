@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atomiclong" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Long data type with atomic operations using CFFI";
     homepage = "https://github.com/dreid/atomiclong";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ robbinch ];
+=======
+  meta = with lib; {
+    description = "Long data type with atomic operations using CFFI";
+    homepage = "https://github.com/dreid/atomiclong";
+    license = licenses.mit;
+    maintainers = with maintainers; [ robbinch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

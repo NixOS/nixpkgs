@@ -25,9 +25,18 @@
       start_all()
 
       # it may take around a minute to compile the file and serve it
+<<<<<<< HEAD
       machine.succeed("slipshow serve -p 6000 /etc/slipshow/bbslides.md &>/dev/null &")
 
       machine.wait_for_open_port(6000)
       machine.succeed("curl -i 0.0.0.0:6000")
+=======
+      machine.succeed("slipshow serve /etc/slipshow/bbslides.md &>/dev/null &")
+
+      # slipshow serves defaultly on :8080 and unfortunately cannot
+      # be changed currently
+      machine.wait_for_open_port(8080)
+      machine.succeed("curl -i 0.0.0.0:8080")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '';
 }

@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${wrapperPath}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "BTRFS Automatic Snapshot Service for Linux";
     homepage = "https://github.com/hunleyd/btrfs-auto-snapshot";
@@ -56,6 +57,15 @@ stdenv.mkDerivation rec {
     mainProgram = "btrfs-auto-snapshot";
     maintainers = with lib.maintainers; [ motiejus ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "BTRFS Automatic Snapshot Service for Linux";
+    homepage = "https://github.com/hunleyd/btrfs-auto-snapshot";
+    license = licenses.gpl2;
+    mainProgram = "btrfs-auto-snapshot";
+    maintainers = with maintainers; [ motiejus ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       btrfs-auto-snapshot is a Bash script designed to bring as much of the

@@ -37,12 +37,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnucash";
+<<<<<<< HEAD
   version = "5.14";
+=======
+  version = "5.13";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${finalAttrs.version}/gnucash-${finalAttrs.version}.tar.bz2";
+<<<<<<< HEAD
     hash = "sha256-DG/SAhTahqmgRDNZ97YtmivU7YAv1oCFPaS3V6NxrJE=";
+=======
+    hash = "sha256-CC7swzK3IvIj0/JRJibr5e9j+UqvXECeh1JsZURkrvU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -59,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
   ];
 
+<<<<<<< HEAD
   env = {
     # https://github.com/Gnucash/gnucash/commit/e680a87a66b8ec17132f186e222cbc94ad52b3d0
     GNC_DBD_DIR = "${libdbiDrivers}/lib/dbd";
@@ -75,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     );
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [
     aqbanking
     boost
@@ -114,17 +125,35 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     find . -name '._*' -type f -delete
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     substituteInPlace bindings/python/__init__.py \
       --subst-var-by gnc_dbd_dir "${libdbiDrivers}/lib/dbd" \
       --subst-var-by gsettings_schema_dir ${glib.makeSchemaPath "$out" "gnucash-${finalAttrs.version}"};
   '';
 
+<<<<<<< HEAD
+=======
+  # this needs to be an environment variable and not a cmake flag to suppress
+  # guile warning
+  env.GUILE_AUTO_COMPILE = "0";
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+      # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+      "-Wno-error=use-after-free"
+    ]
+  );
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doCheck = true;
   enableParallelChecking = true;
   checkTarget = "check";
 
+<<<<<<< HEAD
   passthru = {
     docs = stdenv.mkDerivation {
       pname = "gnucash-docs";
@@ -145,6 +174,24 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     updateScript = ./update.sh;
+=======
+  passthru.docs = stdenv.mkDerivation {
+    pname = "gnucash-docs";
+    inherit (finalAttrs) version;
+
+    src = fetchFromGitHub {
+      owner = "Gnucash";
+      repo = "gnucash-docs";
+      tag = finalAttrs.version;
+      hash = "sha256-EVK36JzK8BPe6St4FhhZEqdc07oaiePJ/EH2NHm3r1U=";
+    };
+
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [
+      libxml2
+      libxslt
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   preFixup = ''
@@ -186,6 +233,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs $out/share/gnucash/python/pycons/*.py
   '';
 
+<<<<<<< HEAD
+=======
+  passthru.updateScript = ./update.sh;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "https://www.gnucash.org/";
     description = "Free software for double entry accounting";

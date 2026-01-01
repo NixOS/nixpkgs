@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     cp google-authenticator $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/google/google-authenticator-libpam";
     description = "Two-step verification, with pam module";
@@ -38,5 +39,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aneeshusa ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/google/google-authenticator-libpam";
+    description = "Two-step verification, with pam module";
+    mainProgram = "google-authenticator";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aneeshusa ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

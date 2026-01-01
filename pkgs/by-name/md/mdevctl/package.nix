@@ -42,11 +42,20 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion $releaseDir/build/mdevctl-*/out/{lsmdev,mdevctl}.bash
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mdevctl/mdevctl";
     description = "Mediated device management utility for linux";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mdevctl/mdevctl";
+    description = "Mediated device management utility for linux";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ edwtjo ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

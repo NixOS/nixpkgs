@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Addons related to Chinese, including IME previous bundled inside fcitx4";
     mainProgram = "scel2org5";
@@ -80,5 +81,17 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Addons related to Chinese, including IME previous bundled inside fcitx4";
+    mainProgram = "scel2org5";
+    homepage = "https://github.com/fcitx/fcitx5-chinese-addons";
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
+    maintainers = with maintainers; [ poscat ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

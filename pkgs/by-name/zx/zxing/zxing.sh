@@ -1,5 +1,6 @@
 #! /bin/sh
 choice="$1";
+<<<<<<< HEAD
 [ "$#" = "0" ] || shift;
 case "$choice" in
     encode | create | write | CommandLineEncoder)
@@ -17,5 +18,21 @@ case "$choice" in
         ;;
     *)
         @out@/bin/zxing read "$choice" "$@";
+=======
+shift
+case "$choice" in
+    encode | create | write | CommandLineEncoder)
+        zxing-cmdline-encoder "$@";
+        ;;
+    decode | read | run | CommandLineRunner)
+        zxing-cmdline-runner "$@";
+        ;;
+    help | usage | --help | --usage | -h)
+        zxing read;
+        zxing write;
+        ;;
+    *)
+        zxing read "$choice" "$@"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ;;
 esac

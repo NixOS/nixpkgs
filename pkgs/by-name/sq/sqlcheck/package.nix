@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Automatically identify anti-patterns in SQL queries";
@@ -47,5 +48,15 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix ++ windows;
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ h7x4 ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Automatically identify anti-patterns in SQL queries";
+    mainProgram = "sqlcheck";
+    license = licenses.asl20;
+    platforms = with platforms; unix ++ windows;
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [ h7x4 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

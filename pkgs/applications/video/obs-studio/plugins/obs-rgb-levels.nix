@@ -20,11 +20,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple OBS Studio filter to adjust RGB levels";
     homepage = "https://github.com/wimpysworld/obs-rgb-levels";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Simple OBS Studio filter to adjust RGB levels";
+    homepage = "https://github.com/wimpysworld/obs-rgb-levels";
+    maintainers = with maintainers; [ flexiondotorg ];
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "SQLite ODB runtime library";
     longDescription = ''
       ODB is an object-relational mapping (ORM) system for C++. It provides
@@ -56,8 +60,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.codesynthesis.com/products/odb/";
     changelog = "https://git.codesynthesis.com/cgit/odb/libodb-sqlite/tree/NEWS";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ r-burns ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

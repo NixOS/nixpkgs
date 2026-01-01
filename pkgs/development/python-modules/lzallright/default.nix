@@ -41,13 +41,22 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       A Python 3.8+ binding for lzokay library which is an MIT licensed
       a minimal, C++14 implementation of the LZO compression format.
     '';
     homepage = "https://github.com/vlaci/lzallright";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vlaci ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ vlaci ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

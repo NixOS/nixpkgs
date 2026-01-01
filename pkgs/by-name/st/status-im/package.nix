@@ -41,10 +41,18 @@ appimageTools.wrapType2 {
     install -m 444 -D ${desktopEntry}/share/applications/status.desktop $out/share/applications/status.desktop
     install -m 444 -D ${icon} $out/share/icons/hicolor/512x512/apps/status.png
   '';
+<<<<<<< HEAD
   meta = {
     description = "Desktop client for the Status Network";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ a-kenji ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Desktop client for the Status Network";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ a-kenji ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

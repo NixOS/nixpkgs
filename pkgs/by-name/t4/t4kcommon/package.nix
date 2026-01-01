@@ -62,11 +62,20 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library of code shared between tuxmath and tuxtype";
     homepage = "https://github.com/tux4kids/t4kcommon";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library of code shared between tuxmath and tuxtype";
+    homepage = "https://github.com/tux4kids/t4kcommon";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

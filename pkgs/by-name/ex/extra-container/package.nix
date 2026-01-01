@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "extra-container";
+<<<<<<< HEAD
   version = "0.14";
+=======
+  version = "0.13";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "erikarvstedt";
     repo = "extra-container";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-XGp4HHH6D6ZKiO5RnMzqYJYnZB538EnEflvlTsOKpvo=";
+=======
+    hash = "sha256-vgh3TqfkFdnPxREBedw4MQehIDc3N8YyxBOB45n+AvU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildCommand = ''

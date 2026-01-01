@@ -350,7 +350,10 @@ in
           boot = {
             blacklistedKernelModules = [
               "nouveau"
+<<<<<<< HEAD
               "nova_core"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               "nvidiafb"
             ];
 

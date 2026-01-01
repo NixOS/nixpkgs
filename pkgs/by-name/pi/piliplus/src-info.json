@@ -1,6 +1,14 @@
 {
+<<<<<<< HEAD
   "rev": "3741fe54ff386f50c91e17b16046cb429648bb6a",
   "revCount": 4442,
   "commitDate": 1765360801,
   "hash": "sha256-Y+/ukiy4DE6ofcE+PDvRdmSpAOKG4pfg7QOPyyzLvFU="
+=======
+  "version": "1.1.4.10",
+  "rev": "4cf1c25b36d2d3bb7b1efa1b00b1d33c593ce4b0",
+  "revCount": 4215,
+  "commitDate": 1760358940,
+  "hash": "sha256-sToT5saB/cPSvyrOG4XfMianXXLfg3iQlvJvwtAf6b8="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

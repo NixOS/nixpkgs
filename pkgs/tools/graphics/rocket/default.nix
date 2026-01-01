@@ -27,6 +27,7 @@ mkDerivation {
     cp -r editor/editor $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for synchronizing music and visuals in demoscene productions";
     mainProgram = "editor";
@@ -34,5 +35,14 @@ mkDerivation {
     license = lib.licenses.zlib;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.dezgeg ];
+=======
+  meta = with lib; {
+    description = "Tool for synchronizing music and visuals in demoscene productions";
+    mainProgram = "editor";
+    homepage = "https://github.com/rocket/rocket";
+    license = licenses.zlib;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.dezgeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

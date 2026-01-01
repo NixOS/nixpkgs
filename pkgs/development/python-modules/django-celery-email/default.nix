@@ -41,10 +41,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "djcelery_email" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pmclanahan/django-celery-email";
     description = "Django email backend that uses a celery task for sending the email";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pmclanahan/django-celery-email";
+    description = "Django email backend that uses a celery task for sending the email";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -62,10 +62,17 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pronterface, Pronsole, and Printcore - Pure Python 3d printing host software";
     homepage = "https://github.com/kliment/Printrun";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Pronterface, Pronsole, and Printcore - Pure Python 3d printing host software";
+    homepage = "https://github.com/kliment/Printrun";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/kliment/Printrun/releases/tag/${src.tag}";
   };
 }

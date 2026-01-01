@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pkce" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to work with PKCE";
     homepage = "https://github.com/RomeoDespres/pkce";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to work with PKCE";
+    homepage = "https://github.com/RomeoDespres/pkce";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

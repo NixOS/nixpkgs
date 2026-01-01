@@ -40,10 +40,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "signedjson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sign JSON with Ed25519 signatures";
     homepage = "https://github.com/matrix-org/python-signedjson";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Sign JSON with Ed25519 signatures";
+    homepage = "https://github.com/matrix-org/python-signedjson";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

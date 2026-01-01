@@ -27,11 +27,20 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Check exhaustiveness of switch statements of enum-like constants in Go code";
     mainProgram = "exhaustive";
     homepage = "https://github.com/nishanths/exhaustive";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ meain ];
+=======
+  meta = with lib; {
+    description = "Check exhaustiveness of switch statements of enum-like constants in Go code";
+    mainProgram = "exhaustive";
+    homepage = "https://github.com/nishanths/exhaustive";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ meain ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

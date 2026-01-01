@@ -25,11 +25,19 @@ buildGoModule rec {
     "-X main.GitExactTag=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "MarkDown Renderer for the terminal";
     homepage = "https://github.com/MichaelMure/mdr";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "MarkDown Renderer for the terminal";
+    homepage = "https://github.com/MichaelMure/mdr";
+    license = licenses.mit;
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mdr";
   };
 }

@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lrcalc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Littlewood-Richardson Calculator bindings";
     homepage = "https://sites.math.rutgers.edu/~asbuch/lrcalc/";
     teams = [ lib.teams.sage ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Littlewood-Richardson Calculator bindings";
+    homepage = "https://sites.math.rutgers.edu/~asbuch/lrcalc/";
+    teams = [ teams.sage ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

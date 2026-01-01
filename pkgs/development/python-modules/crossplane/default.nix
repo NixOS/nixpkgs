@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crossplane" ];
 
+<<<<<<< HEAD
   meta = {
     description = "NGINX configuration file parser and builder";
     mainProgram = "crossplane";
     homepage = "https://github.com/nginxinc/crossplane";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kaction ];
+=======
+  meta = with lib; {
+    description = "NGINX configuration file parser and builder";
+    mainProgram = "crossplane";
+    homepage = "https://github.com/nginxinc/crossplane";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kaction ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

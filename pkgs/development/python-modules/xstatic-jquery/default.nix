@@ -18,10 +18,18 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://jquery.org";
     description = "jquery packaged static files for python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
+=======
+  meta = with lib; {
+    homepage = "https://jquery.org";
+    description = "jquery packaged static files for python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

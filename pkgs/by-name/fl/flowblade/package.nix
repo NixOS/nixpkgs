@@ -65,12 +65,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Multitrack Non-Linear Video Editor";
     homepage = "https://jliljebl.github.io/flowblade/";
     license = with lib.licenses; [ gpl3Plus ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ polygon ];
+=======
+  meta = with lib; {
+    description = "Multitrack Non-Linear Video Editor";
+    homepage = "https://jliljebl.github.io/flowblade/";
+    license = with licenses; [ gpl3Plus ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ polygon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "flowblade";
   };
 }

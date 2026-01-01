@@ -19,9 +19,16 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ requests ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert python requests request object to cURL command";
     homepage = "https://github.com/ofw/curlify";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Convert python requests request object to cURL command";
+    homepage = "https://github.com/ofw/curlify";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

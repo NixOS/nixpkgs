@@ -61,15 +61,26 @@ stdenv.mkDerivation {
         patchelf --set-rpath "$rpath:${rpathSDL}" $out/bin/ccutter
       '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tracker program for composing music for the SID chip";
     homepage = "https://github.com/theyamo/CheeseCutter/";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Tracker program for composing music for the SID chip";
+    homepage = "https://github.com/theyamo/CheeseCutter/";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"
       "x86_64-darwin"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ OPNA2608 ];
+=======
+    maintainers = with maintainers; [ OPNA2608 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

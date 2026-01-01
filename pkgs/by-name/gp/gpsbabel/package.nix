@@ -145,7 +145,11 @@ stdenv.mkDerivation rec {
       ''
   );
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Convert, upload and download data from GPS and Map programs";
     longDescription = ''
       GPSBabel converts waypoints, tracks, and routes between popular
@@ -166,9 +170,15 @@ stdenv.mkDerivation rec {
       waypoints, tracks, and routes.
     '';
     homepage = "https://www.gpsbabel.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gpsbabel";
   };
 }

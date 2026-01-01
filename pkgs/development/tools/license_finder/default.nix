@@ -14,11 +14,20 @@ bundlerEnv {
 
   passthru.updateScript = bundlerUpdateScript "license_finder";
 
+<<<<<<< HEAD
   meta = {
     description = "Find licenses for your project's dependencies";
     homepage = "https://github.com/pivotal/licensefinder";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Find licenses for your project's dependencies";
+    homepage = "https://github.com/pivotal/licensefinder";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

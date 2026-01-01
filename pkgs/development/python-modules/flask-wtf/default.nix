@@ -44,10 +44,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_wtf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple integration of Flask and WTForms";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Simple integration of Flask and WTForms";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mic92
       anthonyroussel
     ];

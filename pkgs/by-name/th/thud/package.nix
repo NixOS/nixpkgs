@@ -37,11 +37,19 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Generate directory thumbnails for GTK-based file browsers from images inside them";
     homepage = "https://github.com/donovanglover/thud";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ donovanglover ];
+=======
+  meta = with lib; {
+    description = "Generate directory thumbnails for GTK-based file browsers from images inside them";
+    homepage = "https://github.com/donovanglover/thud";
+    license = licenses.mit;
+    maintainers = with maintainers; [ donovanglover ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "thud";
   };
 }

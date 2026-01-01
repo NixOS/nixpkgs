@@ -30,11 +30,19 @@ buildPythonPackage rec {
   # pythonImportsCheck fails with:
   # django.core.exceptions.ImproperlyConfigured: Requested setting IPWARE_META_PRECEDENCE_ORDER, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
 
+<<<<<<< HEAD
   meta = {
     description = "Django application to retrieve user's IP address";
     homepage = "https://github.com/un33k/django-ipware";
     changelog = "https://github.com/un33k/django-ipware/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Django application to retrieve user's IP address";
+    homepage = "https://github.com/un33k/django-ipware";
+    changelog = "https://github.com/un33k/django-ipware/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

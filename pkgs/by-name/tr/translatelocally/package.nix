@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
         '';
   };
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "translateLocally";
     homepage = "https://translatelocally.com/";
@@ -101,5 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ euxane ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    mainProgram = "translateLocally";
+    homepage = "https://translatelocally.com/";
+    description = "Fast and secure translation on your local machine, powered by marian and Bergamot";
+    license = licenses.mit;
+    maintainers = with maintainers; [ euxane ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

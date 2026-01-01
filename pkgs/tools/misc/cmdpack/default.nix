@@ -36,6 +36,7 @@ let
         runHook postInstall
       '';
 
+<<<<<<< HEAD
       meta = {
         inherit description;
 
@@ -43,6 +44,15 @@ let
         platforms = lib.platforms.all;
         license = lib.licenses.gpl3Plus;
         maintainers = with lib.maintainers; [ zane ];
+=======
+      meta = with lib; {
+        inherit description;
+
+        homepage = "https://web.archive.org/web/20140330233023/http://www.neillcorlett.com/cmdpack/";
+        platforms = platforms.all;
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [ zane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in

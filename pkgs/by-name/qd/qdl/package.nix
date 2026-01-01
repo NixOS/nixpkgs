@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
+<<<<<<< HEAD
   version = "2.4";
+=======
+  version = "2.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-8jkuSNK7xTBUkBWzh766zKOlh+7pTr+e0xT1w3xifsw=";
+=======
+    hash = "sha256-aC5c22gSrQ6EKEZ0vNdfBQF+ZKRN3jrgTB1KUXGLEPA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

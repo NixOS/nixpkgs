@@ -34,11 +34,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "secure" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Adds optional security headers and cookie attributes for Python web frameworks";
     homepage = "https://github.com/TypeError/secure.py";
     changelog = "https://github.com/TypeError/secure/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Adds optional security headers and cookie attributes for Python web frameworks";
+    homepage = "https://github.com/TypeError/secure.py";
+    changelog = "https://github.com/TypeError/secure/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

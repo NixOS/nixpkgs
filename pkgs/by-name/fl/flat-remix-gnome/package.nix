@@ -39,11 +39,20 @@ stdenv.mkDerivation rec {
     rm $out/share/gnome-shell/gnome-shell-theme.gresource.old
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GNOME Shell theme inspired by material design";
     homepage = "https://drasite.com/flat-remix-gnome";
     license = lib.licenses.cc-by-sa-40;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.vanilla ];
+=======
+  meta = with lib; {
+    description = "GNOME Shell theme inspired by material design";
+    homepage = "https://drasite.com/flat-remix-gnome";
+    license = licenses.cc-by-sa-40;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.vanilla ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

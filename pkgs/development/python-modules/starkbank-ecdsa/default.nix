@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ellipticcurve" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python ECDSA library";
     homepage = "https://github.com/starkbank/ecdsa-python";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python ECDSA library";
+    homepage = "https://github.com/starkbank/ecdsa-python";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

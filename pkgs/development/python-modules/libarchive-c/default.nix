@@ -45,9 +45,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Changaco/python-libarchive-c";
     description = "Python interface to libarchive";
     license = lib.licenses.cc0;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Changaco/python-libarchive-c";
+    description = "Python interface to libarchive";
+    license = licenses.cc0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

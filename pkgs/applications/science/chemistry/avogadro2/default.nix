@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs = [ "--prefix PATH : ${lib.getBin openbabel}/bin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Molecule editor and visualizer";
     mainProgram = "avogadro2";
@@ -63,5 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/OpenChemistry/avogadroapp";
     inherit (mesa.meta) platforms;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Molecule editor and visualizer";
+    mainProgram = "avogadro2";
+    maintainers = with maintainers; [ sheepforce ];
+    homepage = "https://github.com/OpenChemistry/avogadroapp";
+    inherit (mesa.meta) platforms;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

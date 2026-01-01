@@ -39,11 +39,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google_crc32c" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper the google/crc32c hardware-based implementation of the CRC32C hashing algorithm";
     homepage = "https://github.com/googleapis/python-crc32c";
     changelog = "https://github.com/googleapis/python-crc32c/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
+=======
+  meta = with lib; {
+    description = "Wrapper the google/crc32c hardware-based implementation of the CRC32C hashing algorithm";
+    homepage = "https://github.com/googleapis/python-crc32c";
+    changelog = "https://github.com/googleapis/python-crc32c/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bashlex" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python parser for bash";
     license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/idank/bashlex";
     maintainers = with lib.maintainers; [ multun ];
+=======
+  meta = with lib; {
+    description = "Python parser for bash";
+    license = licenses.gpl3Plus;
+    homepage = "https://github.com/idank/bashlex";
+    maintainers = with maintainers; [ multun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

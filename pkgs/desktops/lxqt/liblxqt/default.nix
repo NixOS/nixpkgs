@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Core utility library for all LXQt components";
     mainProgram = "lxqt-backlight_backend";
@@ -60,5 +61,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    description = "Core utility library for all LXQt components";
+    mainProgram = "lxqt-backlight_backend";
+    homepage = "https://github.com/lxqt/liblxqt";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

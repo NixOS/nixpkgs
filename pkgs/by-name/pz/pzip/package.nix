@@ -27,11 +27,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast concurrent zip archiver and extractor";
     homepage = "https://github.com/ybirader/pzip";
     changelog = "https://github.com/ybirader/pzip/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Fast concurrent zip archiver and extractor";
+    homepage = "https://github.com/ybirader/pzip";
+    changelog = "https://github.com/ybirader/pzip/releases/tag/${src.rev}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "pzip";
   };

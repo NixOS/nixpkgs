@@ -64,13 +64,23 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast, compressed, persistent binary data store library for C";
     homepage = "https://www.blosc.org";
     changelog = "https://github.com/Blosc/c-blosc2/releases/tag/v${finalAttrs.version}";
     pkgConfigModules = [ "blosc2" ];
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ris ];
+=======
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

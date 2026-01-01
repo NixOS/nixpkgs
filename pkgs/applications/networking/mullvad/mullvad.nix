@@ -30,17 +30,28 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "mullvad";
+<<<<<<< HEAD
   version = "2025.14";
+=======
+  version = "2025.13";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";
     tag = version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-9HPOhhtbo7BocycuO7IgjyfWHXBh/5YQDNJ/VwKnKG0=";
   };
 
   cargoHash = "sha256-PzUVwx72qkUDKCZ8hfpVT0bqnuakaitPedInn/EfW3o=";
+=======
+    hash = "sha256-YDHO7NpZU5rxjCMpdKvpYcy0l8AEtiSN+fP2Ii8JXDQ=";
+  };
+
+  cargoHash = "sha256-XaVgQRJcIqeKgwxlJSrW6WI7GC02lX3NtTJOGo4irzg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cargoBuildFlags = [
     "-p mullvad-daemon --bin mullvad-daemon"
@@ -110,6 +121,10 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {

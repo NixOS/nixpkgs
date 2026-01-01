@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "usb" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python USB access module (wraps libusb 1.0)"; # can use other backends
     homepage = "https://pyusb.github.io/pyusb/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Python USB access module (wraps libusb 1.0)"; # can use other backends
+    homepage = "https://pyusb.github.io/pyusb/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

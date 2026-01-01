@@ -41,11 +41,19 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "strictoverflow";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dsheets/ocaml-sodium";
     description = "Binding to libsodium 1.0.9+";
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.rixed ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dsheets/ocaml-sodium";
+    description = "Binding to libsodium 1.0.9+";
+    inherit (ocaml.meta) platforms;
+    maintainers = [ maintainers.rixed ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast ocaml.version "5.0";
   };
 }

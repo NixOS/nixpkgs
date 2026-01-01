@@ -34,17 +34,28 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Alert on system resource saturation";
     longDescription = ''
       psi-notify can alert you when resources on your machine are becoming
       oversaturated, and allow you to take action before your system slows to a
       crawl.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     homepage = "https://github.com/cdown/psi-notify";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ eduarrrd ];
+=======
+    license = licenses.mit;
+    homepage = "https://github.com/cdown/psi-notify";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ eduarrrd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "psi-notify";
   };
 }

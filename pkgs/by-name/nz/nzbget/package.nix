@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) nzbget; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://nzbget.com/";
     changelog = "https://github.com/nzbgetcom/nzbget/releases/tag/v${finalAttrs.version}";
@@ -89,6 +90,18 @@ stdenv.mkDerivation (finalAttrs: {
       devusb
     ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    homepage = "https://nzbget.com/";
+    changelog = "https://github.com/nzbgetcom/nzbget/releases/tag/v${finalAttrs.version}";
+    license = licenses.gpl2Plus;
+    description = "Command line tool for downloading files from news servers";
+    maintainers = with maintainers; [
+      pSub
+      devusb
+    ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nzbget";
   };
 })

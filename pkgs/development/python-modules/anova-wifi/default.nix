@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anova_wifi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for reading anova sous vide api data";
     homepage = "https://github.com/Lash-L/anova_wifi";
     changelog = "https://github.com/Lash-L/anova_wifi/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ jamiemagee ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python package for reading anova sous vide api data";
+    homepage = "https://github.com/Lash-L/anova_wifi";
+    changelog = "https://github.com/Lash-L/anova_wifi/releases/tag/v${version}";
+    maintainers = with maintainers; [ jamiemagee ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

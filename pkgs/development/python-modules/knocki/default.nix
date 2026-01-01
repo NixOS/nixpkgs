@@ -48,11 +48,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "knocki" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asynchronous Python client for Knocki vibration / door sensors";
     homepage = "https://github.com/swan-solutions/knocki-homeassistant";
     changelog = "https://github.com/swan-solutions/knocki-homeassistant/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mindstorms6 ];
+=======
+  meta = with lib; {
+    description = "Asynchronous Python client for Knocki vibration / door sensors";
+    homepage = "https://github.com/swan-solutions/knocki-homeassistant";
+    changelog = "https://github.com/swan-solutions/knocki-homeassistant/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mindstorms6 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

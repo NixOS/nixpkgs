@@ -101,14 +101,24 @@ buildBazelPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     isIbusEngine = true;
     description = "Japanese input method from Google";
     mainProgram = "mozc_emacs_helper";
     homepage = "https://github.com/google/mozc";
+<<<<<<< HEAD
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.free;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pineapplehunter
     ];
   };

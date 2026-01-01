@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
 
   preInstall = ''export PREFIX="$out"'';
 
+<<<<<<< HEAD
   meta = {
     platforms = lib.platforms.all;
     description = "Convert opam file syntax to JSON";
     mainProgram = "opam2json";
     maintainers = [ lib.maintainers.balsoft ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    platforms = platforms.all;
+    description = "Convert opam file syntax to JSON";
+    mainProgram = "opam2json";
+    maintainers = [ maintainers.balsoft ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/tweag/opam2json";
   };
 }

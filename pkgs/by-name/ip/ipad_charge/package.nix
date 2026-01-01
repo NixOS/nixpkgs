@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,lib/udev/rules.d}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (src.meta) homepage;
     description = "Apple device USB charging utility for Linux";
     longDescription = ''
@@ -43,8 +47,13 @@ stdenv.mkDerivation rec {
       device connected to USB port. For a list of supported devices, see
       https://github.com/mkorenkov/ipad_charge#supported-devices.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ipad_charge";
   };
 }

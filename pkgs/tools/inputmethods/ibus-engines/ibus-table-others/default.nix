@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR
   '';
 
+<<<<<<< HEAD
   meta = {
     isIbusEngine = true;
     description = "Various table-based input methods for IBus";
@@ -37,6 +38,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    isIbusEngine = true;
+    description = "Various table-based input methods for IBus";
+    homepage = "https://github.com/moebiuscurve/ibus-table-others";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mudri
       McSinyx
     ];

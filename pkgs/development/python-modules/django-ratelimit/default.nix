@@ -46,11 +46,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cache-based rate-limiting for Django";
     homepage = "https://github.com/jsocol/django-ratelimit";
     changelog = "https://github.com/jsocol/django-ratelimit/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ derdennisop ];
+=======
+  meta = with lib; {
+    description = "Cache-based rate-limiting for Django";
+    homepage = "https://github.com/jsocol/django-ratelimit";
+    changelog = "https://github.com/jsocol/django-ratelimit/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ derdennisop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,9 +29,15 @@
 }:
 
 let
+<<<<<<< HEAD
   url = "https://app.hubstaff.com/download/11100-standard-linux-1-7-8-release/sh";
   version = "1.7.8-c835b2c2";
   sha256 = "sha256:0cv6b5rx1bjizwa22xlzmljwgcvm1mqyng79qqrdzmd0xy7c02pi";
+=======
+  url = "https://app.hubstaff.com/download/10606-standard-linux-1-7-5-release/sh";
+  version = "1.7.5-a68a2738";
+  sha256 = "sha256:19rp5xldhfx48v8hdbvxbvv1j2n3wn5rymm82gryz620kfiandfb";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   rpath = lib.makeLibraryPath [
     libX11
@@ -123,6 +129,7 @@ stdenv.mkDerivation {
     ${common-updater-scripts}/bin/update-source-version hubstaff "$version" "sha256:$sha256" "$installation_script_url"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Time tracking software";
     homepage = "https://hubstaff.com/";
@@ -130,6 +137,15 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Time tracking software";
+    homepage = "https://hubstaff.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       michalrus
     ];
   };

@@ -27,12 +27,21 @@ stdenv.mkDerivation (finalAttrs: {
     "-DROCT_INC_DIR=${rocmPackages.rocm-runtime}/include/libhsakmt"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bandwidth test for AMD GPUs supported by ROCm";
     homepage = "https://github.com/ROCm/rocm_bandwidth_test";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fangpen ];
     teams = [ lib.teams.rocm ];
+=======
+  meta = with lib; {
+    description = "Bandwidth test for AMD GPUs supported by ROCm";
+    homepage = "https://github.com/ROCm/rocm_bandwidth_test";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fangpen ];
+    teams = [ teams.rocm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 })

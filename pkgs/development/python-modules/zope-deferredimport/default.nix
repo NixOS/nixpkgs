@@ -1,7 +1,11 @@
 {
   lib,
   buildPythonPackage,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchPypi,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
   zope-proxy,
   unittestCheckHook,
@@ -9,6 +13,7 @@
 
 buildPythonPackage rec {
   pname = "zope-deferredimport";
+<<<<<<< HEAD
   version = "6.0";
   pyproject = true;
 
@@ -24,6 +29,17 @@ buildPythonPackage rec {
       --replace-fail "setuptools ==" "setuptools >="
   '';
 
+=======
+  version = "5.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    pname = "zope.deferredimport";
+    inherit version;
+    hash = "sha256-Orvw4YwfF2WRTs0dQbVJ5NBFshso5AZfsMHeCtc2ssM=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = [ zope-proxy ];

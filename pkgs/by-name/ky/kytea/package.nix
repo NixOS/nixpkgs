@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.phontron.com/kytea/";
     description = "General toolkit developed for analyzing text";
 
@@ -27,10 +31,17 @@ stdenv.mkDerivation rec {
       Chinese and other languages requiring word or morpheme segmentation.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.asl20;
 
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.asl20;
+
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

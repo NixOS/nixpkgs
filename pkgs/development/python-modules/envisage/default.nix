@@ -42,10 +42,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "envisage" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Framework for building applications whose functionalities can be extended by adding plug-ins";
     homepage = "https://github.com/enthought/envisage";
     license = lib.licenses.bsdOriginal;
+=======
+  meta = with lib; {
+    description = "Framework for building applications whose functionalities can be extended by adding plug-ins";
+    homepage = "https://github.com/enthought/envisage";
+    license = licenses.bsdOriginal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

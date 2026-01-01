@@ -56,12 +56,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Insert emoji anywhere, even in non-native apps - designed for elementary OS";
     homepage = "https://github.com/cassidyjames/ideogram";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Insert emoji anywhere, even in non-native apps - designed for elementary OS";
+    homepage = "https://github.com/cassidyjames/ideogram";
+    license = licenses.gpl2Plus;
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "com.github.cassidyjames.ideogram";
   };
 

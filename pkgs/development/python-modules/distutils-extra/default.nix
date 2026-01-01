@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "DistUtilsExtra" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Enhancements to Python's distutils";
     homepage = "https://launchpad.net/python-distutils-extra";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Enhancements to Python's distutils";
+    homepage = "https://launchpad.net/python-distutils-extra";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

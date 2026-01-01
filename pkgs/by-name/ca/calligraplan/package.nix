@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitLab,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   qt5,
   libsForQt5,
   cmake,
@@ -22,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-szPdRxbzJ2+nmgp+1FwmKZwHEDV8EtbDW/3jsw4J6HI=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       url = "https://invent.kde.org/office/calligraplan/-/commit/cdd85c895b487a8b3837bf8b864103997e0af544.patch";
@@ -29,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [
     qt5.qtbase
     libsForQt5.kdbusaddons

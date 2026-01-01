@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wavedrom" ];
 
+<<<<<<< HEAD
   meta = {
     description = "WaveDrom compatible Python command line";
     mainProgram = "wavedrompy";
     homepage = "https://github.com/wallento/wavedrompy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ airwoodix ];
+=======
+  meta = with lib; {
+    description = "WaveDrom compatible Python command line";
+    mainProgram = "wavedrompy";
+    homepage = "https://github.com/wallento/wavedrompy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ airwoodix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,7 +43,11 @@ stdenv.mkDerivation rec {
     libnsl
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Clients for ARGUS";
     longDescription = ''
       Clients for Audit Record Generation and
@@ -58,7 +62,12 @@ stdenv.mkDerivation rec {
       you will find Argus a useful tool.
     '';
     homepage = "http://qosient.com/argus";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

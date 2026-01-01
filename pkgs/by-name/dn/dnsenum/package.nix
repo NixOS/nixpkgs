@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     install -vD dns.txt -t $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/fwaeytens/dnsenum";
     description = "Tool to enumerate DNS information";
@@ -42,5 +43,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ c0bw3b ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/fwaeytens/dnsenum";
+    description = "Tool to enumerate DNS information";
+    mainProgram = "dnsenum";
+    maintainers = with maintainers; [ c0bw3b ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

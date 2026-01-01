@@ -48,11 +48,20 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal based Pokemon like game";
     mainProgram = "pokete";
     homepage = "https://lxgr-linux.github.io/pokete";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    description = "Terminal based Pokemon like game";
+    mainProgram = "pokete";
+    homepage = "https://lxgr-linux.github.io/pokete";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

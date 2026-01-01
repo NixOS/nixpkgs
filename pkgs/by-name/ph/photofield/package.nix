@@ -77,11 +77,20 @@ buildGoModule {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Experimental fast photo viewer";
     homepage = "https://github.com/SmilyOrg/photofield";
     license = lib.licenses.mit;
     mainProgram = "photofield";
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Experimental fast photo viewer";
+    homepage = "https://github.com/SmilyOrg/photofield";
+    license = licenses.mit;
+    mainProgram = "photofield";
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

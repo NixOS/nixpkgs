@@ -70,6 +70,7 @@ stdenv.mkDerivation (
 
     sourceRoot = "${finalAttrs.src.name}/lldb";
 
+<<<<<<< HEAD
     patches = [
       ./gnu-install-dirs.patch
     ]
@@ -78,6 +79,9 @@ stdenv.mkDerivation (
       # https://github.com/llvm/llvm-project/commit/bb59f04e7e75dcbe39f1bf952304a157f0035314
       ./lldb-add-include-cstdint.patch
     ];
+=======
+    patches = [ ./gnu-install-dirs.patch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     nativeBuildInputs = [
       cmake

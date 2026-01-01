@@ -24,8 +24,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kerberos" ];
 
+<<<<<<< HEAD
   meta = {
     description = "High-level interface to Kerberos";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "High-level interface to Kerberos";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

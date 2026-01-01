@@ -47,12 +47,21 @@ stdenv.mkDerivation rec {
     "--with-appdefaultdir=$out/share/X11/app-defaults"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple graphical text editor using Athena Widgets (Xaw)";
     homepage = "https://gitlab.freedesktop.org/xorg/app/xedit";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple graphical text editor using Athena Widgets (Xaw)";
+    homepage = "https://gitlab.freedesktop.org/xorg/app/xedit";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ shamilton ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "xedit";

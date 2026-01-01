@@ -31,11 +31,19 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to take all source code in a folder and render them to one image";
     homepage = "https://github.com/sloganking/codevis";
     changelog = "https://github.com/sloganking/codevis/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tool to take all source code in a folder and render them to one image";
+    homepage = "https://github.com/sloganking/codevis";
+    changelog = "https://github.com/sloganking/codevis/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "codevis";
   };

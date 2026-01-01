@@ -51,11 +51,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hypothesmith" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hypothesis strategies for generating Python programs, something like CSmith";
     homepage = "https://github.com/Zac-HD/hypothesmith";
     changelog = "https://github.com/Zac-HD/hypothesmith/blob/master/CHANGELOG.md";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "Hypothesis strategies for generating Python programs, something like CSmith";
+    homepage = "https://github.com/Zac-HD/hypothesmith";
+    changelog = "https://github.com/Zac-HD/hypothesmith/blob/master/CHANGELOG.md";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

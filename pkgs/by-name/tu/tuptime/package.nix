@@ -49,12 +49,21 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.tuptime;
 
+<<<<<<< HEAD
   meta = {
     description = "Total uptime & downtime statistics utility";
     homepage = "https://github.com/rfrail3/tuptime";
     changelog = "https://github.com/rfrail3/tuptime/blob/master/CHANGELOG";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Total uptime & downtime statistics utility";
+    homepage = "https://github.com/rfrail3/tuptime";
+    changelog = "https://github.com/rfrail3/tuptime/blob/master/CHANGELOG";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "tuptime";
   };

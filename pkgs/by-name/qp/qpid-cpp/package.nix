@@ -59,11 +59,19 @@ stdenv.mkDerivation rec {
     ]
   );
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://qpid.apache.org";
     description = "AMQP message broker and a C++ messaging API";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://qpid.apache.org";
+    description = "AMQP message broker and a C++ messaging API";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

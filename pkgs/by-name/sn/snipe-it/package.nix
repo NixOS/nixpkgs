@@ -21,7 +21,11 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-hqJUhjL4k6fC5ed8pFOb3Ym0CmelfVZYWqmMuTjHN/U=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-6ryHXXWtih/eHSQk36NSf4UjZZfUH+zjnyZoLnLNqHU=";
+=======
+  vendorHash = "sha256-DXkRKijjkT4GI0sMj3T8fD90weCLwe681yBqKs4/cVI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     snipe_it_out="$out/share/php/snipe-it"

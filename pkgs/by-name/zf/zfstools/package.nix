@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit version;
     inherit (src.meta) homepage;
     description = "OpenSolaris-compatible auto-snapshotting script for ZFS";
@@ -43,7 +47,12 @@ stdenv.mkDerivation rec {
       zfstools is an OpenSolaris-like and compatible auto snapshotting script
       for ZFS, which also supports auto snapshotting mysql databases.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+=======
+    license = licenses.bsd2;
+    platforms = platforms.linux ++ platforms.freebsd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

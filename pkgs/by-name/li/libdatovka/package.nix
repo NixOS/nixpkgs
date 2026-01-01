@@ -46,11 +46,20 @@ stdenv.mkDerivation rec {
     docbook_xsl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for accessing SOAP services of Czech government-provided Databox infomation system";
     homepage = "https://gitlab.nic.cz/datovka/libdatovka";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.ovlach ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Client library for accessing SOAP services of Czech government-provided Databox infomation system";
+    homepage = "https://gitlab.nic.cz/datovka/libdatovka";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.ovlach ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

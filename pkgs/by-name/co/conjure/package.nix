@@ -56,7 +56,11 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Magically transform your images";
     mainProgram = "conjure";
     longDescription = ''
@@ -67,7 +71,12 @@ python3Packages.buildPythonApplication rec {
       bindings from Wand.
     '';
     homepage = "https://github.com/nate-xyz/conjure";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ sund3RRR ];
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sund3RRR ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

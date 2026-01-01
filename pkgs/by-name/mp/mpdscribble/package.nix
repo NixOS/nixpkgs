@@ -48,12 +48,21 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux systemd;
 
+<<<<<<< HEAD
   meta = {
     description = "MPD client which submits info about tracks being played to a scrobbler";
     homepage = "https://www.musicpd.org/clients/mpdscribble/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.sohalt ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "MPD client which submits info about tracks being played to a scrobbler";
+    homepage = "https://www.musicpd.org/clients/mpdscribble/";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.sohalt ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mpdscribble";
   };
 }

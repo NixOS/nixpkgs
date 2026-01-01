@@ -28,10 +28,17 @@ buildPythonPackage rec {
   # tries to connect to lyrics.wikia.com
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pythonic Implementation of lyrics.wikia.com for getting lyrics of songs";
     homepage = "https://github.com/geekpradd/PyLyrics";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pythonic Implementation of lyrics.wikia.com for getting lyrics of songs";
+    homepage = "https://github.com/geekpradd/PyLyrics";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

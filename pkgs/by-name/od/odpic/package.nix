@@ -44,10 +44,17 @@ stdenv.mkDerivation {
     ''}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Oracle ODPI-C library";
     homepage = "https://oracle.github.io/odpi/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Oracle ODPI-C library";
+    homepage = "https://oracle.github.io/odpi/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

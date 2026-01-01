@@ -22,14 +22,22 @@ in
 
 buildPythonApplication rec {
   pname = "nitrokey-app2";
+<<<<<<< HEAD
   version = "2.4.3";
+=======
+  version = "2.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-mwcYjkyEP2itwdQ/xAG50uvw6zHfUacAecbDh86GNGA=";
+=======
+    hash = "sha256-nzhhtnKKOHA+Cw1y+BpYsyQklzkDnmFRKGIfaJ/dmaQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -72,12 +80,21 @@ buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "This application allows to manage Nitrokey 3 devices";
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
     changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "This application allows to manage Nitrokey 3 devices";
+    homepage = "https://github.com/Nitrokey/nitrokey-app2";
+    changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       _999eagle
       panicgh
     ];

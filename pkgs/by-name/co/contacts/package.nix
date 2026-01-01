@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     cp Products/Default/contacts $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Access contacts from the Mac address book from command-line";
     homepage = "http://www.gnufoo.org/contacts/contacts.html";
@@ -35,5 +36,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ jwiegley ];
     platforms = lib.platforms.darwin;
     hydraPlatforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Access contacts from the Mac address book from command-line";
+    homepage = "http://www.gnufoo.org/contacts/contacts.html";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ jwiegley ];
+    platforms = platforms.darwin;
+    hydraPlatforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

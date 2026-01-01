@@ -15,7 +15,11 @@
   qttools,
   wrapQtAppsHook,
   gitUpdater,
+<<<<<<< HEAD
   version ? "2.3.1",
+=======
+  version ? "2.3.0",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   qtx11extras ? null,
 }:
 
@@ -30,7 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash =
       {
         "1.4.0" = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
+<<<<<<< HEAD
         "2.3.1" = "sha256-2PDVNMBwzDpUOkZ7GnrWDMlXBeUgCyZ6vHXurW6fr4s=";
+=======
+        "2.3.0" = "sha256-A0kBwLiPvHIsJWQvg6lwb5lrojU8oDDQYHuC2pTXdPc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
       ."${finalAttrs.version}";
   };

@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libnacl" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for libsodium based on ctypes";
     homepage = "https://libnacl.readthedocs.io/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ xvapx ];
+=======
+  meta = with lib; {
+    description = "Python bindings for libsodium based on ctypes";
+    homepage = "https://libnacl.readthedocs.io/";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ xvapx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

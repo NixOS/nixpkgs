@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonfeed" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to process json feed";
     homepage = "https://pypi.org/project/jsonfeed/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to process json feed";
+    homepage = "https://pypi.org/project/jsonfeed/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

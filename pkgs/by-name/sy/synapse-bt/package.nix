@@ -24,10 +24,18 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "--all" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible and fast BitTorrent daemon";
     homepage = "https://synapse-bt.org/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ dywedir ];
+=======
+  meta = with lib; {
+    description = "Flexible and fast BitTorrent daemon";
+    homepage = "https://synapse-bt.org/";
+    license = licenses.isc;
+    maintainers = with maintainers; [ dywedir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

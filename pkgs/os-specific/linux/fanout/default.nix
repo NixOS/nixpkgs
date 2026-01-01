@@ -40,11 +40,20 @@ stdenv.mkDerivation {
 
   passthru.tests = { inherit (nixosTests) fanout; };
 
+<<<<<<< HEAD
   meta = {
     description = "Kernel-based publish-subscribe system";
     homepage = "https://github.com/bob-linuxtoys/fanout";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ therishidesai ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Kernel-based publish-subscribe system";
+    homepage = "https://github.com/bob-linuxtoys/fanout";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ therishidesai ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

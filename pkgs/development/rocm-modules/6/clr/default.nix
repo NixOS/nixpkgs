@@ -299,6 +299,7 @@ stdenv.mkDerivation (finalAttrs: {
       if supported == [ ] then localGpuTargets else lib.lists.intersectLists localGpuTargets supported;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
     homepage = "https://github.com/ROCm/clr";
@@ -306,5 +307,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
+    homepage = "https://github.com/ROCm/clr";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

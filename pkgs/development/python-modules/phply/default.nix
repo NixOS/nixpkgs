@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "phply" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lexer and parser for PHP source implemented using PLY";
     homepage = "https://github.com/viraptor/phply";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Lexer and parser for PHP source implemented using PLY";
+    homepage = "https://github.com/viraptor/phply";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

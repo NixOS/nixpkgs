@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     patchShebangs --build config/install-mod.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modular computation tool chain library";
     mainProgram = "mctc-convert";
@@ -76,5 +77,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Modular computation tool chain library";
+    mainProgram = "mctc-convert";
+    homepage = "https://github.com/grimme-lab/mctc-lib";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

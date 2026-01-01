@@ -39,12 +39,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "fortify" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open source replacement of the Xilinx bootgen application";
     homepage = "https://github.com/antmicro/zynq-mkbootimage";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.fsagbuya ];
+=======
+  meta = with lib; {
+    description = "Open source replacement of the Xilinx bootgen application";
+    homepage = "https://github.com/antmicro/zynq-mkbootimage";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.fsagbuya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mkbootimage";
   };
 })

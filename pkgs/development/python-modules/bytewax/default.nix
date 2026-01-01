@@ -84,7 +84,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-benchmark
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pytestFlags = [
     "--benchmark-disable"

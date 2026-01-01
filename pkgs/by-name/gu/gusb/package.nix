@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
     moveToOutput "share/doc" "$devdoc"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GLib libusb wrapper";
     mainProgram = "gusbcmd";
@@ -102,5 +103,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "GLib libusb wrapper";
+    mainProgram = "gusbcmd";
+    homepage = "https://github.com/hughsie/libgusb";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

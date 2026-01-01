@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GTK toolkit providing widgets for embedded maps";
     mainProgram = "shumate-demo";
@@ -102,5 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "GTK toolkit providing widgets for embedded maps";
+    mainProgram = "shumate-demo";
+    homepage = "https://gitlab.gnome.org/GNOME/libshumate";
+    license = licenses.lgpl21Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

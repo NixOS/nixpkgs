@@ -37,11 +37,20 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ xmlm ];
 
+<<<<<<< HEAD
   meta = {
     description = "OCaml module to decode the data of the Unicode character database from its XML representation";
     homepage = webpage;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "OCaml module to decode the data of the Unicode character database from its XML representation";
+    homepage = webpage;
+    inherit (ocaml.meta) platforms;
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

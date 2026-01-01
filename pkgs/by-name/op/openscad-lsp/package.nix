@@ -24,15 +24,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
 
   meta = {
+=======
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "LSP (Language Server Protocol) server for OpenSCAD";
     mainProgram = "openscad-lsp";
     homepage = "https://github.com/Leathong/openscad-LSP";
     changelog = "https://github.com/Leathong/openscad-LSP/releases/tag/${finalAttrs.src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       c-h-johnson
       curious
     ];

@@ -32,7 +32,11 @@ buildGoModule rec {
       "-extldflags '-static'"
     ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Versatile HTTP load testing tool";
     longDescription = ''
       Vegeta is a versatile HTTP load testing tool built out of a need to drill
@@ -41,8 +45,13 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/tsenart/vegeta/";
     changelog = "https://github.com/tsenart/vegeta/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmahut ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vegeta";
   };
 }

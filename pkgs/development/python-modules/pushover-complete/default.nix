@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pushover_complete" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for interacting with *all* aspects of the Pushover API";
     homepage = "https://github.com/scolby33/pushover_complete";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mic92 ];
+=======
+  meta = with lib; {
+    description = "Python package for interacting with *all* aspects of the Pushover API";
+    homepage = "https://github.com/scolby33/pushover_complete";
+    license = licenses.mit;
+    maintainers = [ maintainers.mic92 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

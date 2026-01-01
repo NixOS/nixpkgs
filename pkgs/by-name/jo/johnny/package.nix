@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://openwall.info/wiki/john/johnny";
     description = "Open Source GUI frontend for John the Ripper";
@@ -64,5 +65,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ Misaka13514 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://openwall.info/wiki/john/johnny";
+    description = "Open Source GUI frontend for John the Ripper";
+    mainProgram = "johnny";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ Misaka13514 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

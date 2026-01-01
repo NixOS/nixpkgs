@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     glib-networking
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Linux/macOS media player based on GStreamer and GTK";
     homepage = "https://philn.github.io/glide";
@@ -71,5 +72,15 @@ stdenv.mkDerivation rec {
     mainProgram = "glide";
     # Required gdk4-{wayland,x11} and gstreamer-gl not available on darwin
     platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Linux/macOS media player based on GStreamer and GTK";
+    homepage = "https://philn.github.io/glide";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aleksana ];
+    mainProgram = "glide";
+    # Required gdk4-{wayland,x11} and gstreamer-gl not available on darwin
+    platforms = subtractLists platforms.darwin platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

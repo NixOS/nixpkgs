@@ -6,7 +6,11 @@
   desktop-file-utils,
   fetchFromGitHub,
   gradle_8,
+<<<<<<< HEAD
   jdk17,
+=======
+  jdk11,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeBinaryWrapper,
   makeShellWrapper,
   nix-update-script,
@@ -14,30 +18,49 @@
   openssl,
   pkg-config,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   replaceVars,
   runCommand,
   rustPlatform,
   turbo,
   webkitgtk_4_1,
+<<<<<<< HEAD
   xcbuild,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
   gradle = gradle_8.override { java = jdk; };
+<<<<<<< HEAD
   jdk = jdk17;
+=======
+  jdk = jdk11;
+  pnpm = pnpm_9;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "modrinth-app-unwrapped";
+<<<<<<< HEAD
   version = "0.10.23";
+=======
+  version = "0.10.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "code";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Or2KkcZnZCZOnUd++SmDgbUOwa6ZmRDaoo7gF3XvN6I=";
+=======
+    hash = "sha256-XfJbjbVcP9N3exAhXQoMGpoHORpKAlb0dPhQq195roY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -67,17 +90,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '1.0.0-local' '${finalAttrs.version}'
   '';
 
+<<<<<<< HEAD
   cargoHash = "sha256-hWjoNwKA39YYhPSrQUNaM1nS+CtV9vff+aXpoQLPCOM=";
+=======
+  cargoHash = "sha256-jWMHii65hTnTmiBFHxZ4xO5V+Qt/MPCy75eJvnlyE4c=";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-jLuI8qNJgFkuBbKuBNKGuk/6v62iY7fNZX2t3U3olk0=";
+=======
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-7iqXuIQPbP2p26vrWDjMoyZBPpbVQpigYAylhIg8+ZY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -87,6 +122,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gradle
     nodejs
     pkg-config
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
   ]
@@ -94,6 +130,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper
     xcbuild
   ];
+=======
+    pnpm.configHook
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
 
@@ -127,8 +168,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     local nixGradleFlags=()
     concatTo nixGradleFlags gradleFlags gradleFlagsArray
     export NIX_GRADLEFLAGS_COMPILE="''${nixGradleFlags[@]}"
+<<<<<<< HEAD
 
     cp packages/app-lib/.env.prod packages/app-lib/.env
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   postInstall =
@@ -166,7 +210,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # This builds on architectures like aarch64, but the launcher itself does not support them yet.
     # Darwin is the only exception
     # See https://github.com/modrinth/code/issues/776#issuecomment-1742495678
+<<<<<<< HEAD
     broken = !stdenv.hostPlatform.isx86_64 || !stdenv.hostPlatform.isLinux;
+=======
+    broken = !stdenv.hostPlatform.isx86_64 && !stdenv.hostPlatform.isDarwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache

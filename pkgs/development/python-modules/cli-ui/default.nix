@@ -37,10 +37,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cli_ui" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Build Nice User Interfaces In The Terminal";
     homepage = "https://github.com/your-tools/python-cli-ui";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ slashformotion ];
+=======
+  meta = with lib; {
+    description = "Build Nice User Interfaces In The Terminal";
+    homepage = "https://github.com/your-tools/python-cli-ui";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ slashformotion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

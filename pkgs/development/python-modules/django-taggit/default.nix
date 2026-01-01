@@ -40,10 +40,18 @@ buildPythonPackage rec {
     ${python.interpreter} -m django test --settings=tests.settings
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple tagging for django";
     homepage = "https://github.com/jazzband/django-taggit";
     changelog = "https://github.com/jazzband/django-taggit/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Simple tagging for django";
+    homepage = "https://github.com/jazzband/django-taggit";
+    changelog = "https://github.com/jazzband/django-taggit/blob/${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

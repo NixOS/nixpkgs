@@ -32,12 +32,21 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Spawns lightweight nixos vms in a shell";
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Spawns lightweight nixos vms in a shell";
+    inherit (src.meta) homepage;
+    license = licenses.mit;
+    maintainers = with maintainers; [ mic92 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nixos-shell";
   };
 }

@@ -74,11 +74,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP/2-based RPC framework";
     homepage = "https://grpc.io/grpc/python/";
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "HTTP/2-based RPC framework";
+    homepage = "https://grpc.io/grpc/python/";
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

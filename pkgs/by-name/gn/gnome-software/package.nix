@@ -114,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "gnome-software"; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Software store that lets you install and update applications and system extensions";
     mainProgram = "gnome-software";
@@ -121,5 +122,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Software store that lets you install and update applications and system extensions";
+    mainProgram = "gnome-software";
+    homepage = "https://apps.gnome.org/Software/";
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

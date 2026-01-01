@@ -65,15 +65,25 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/lepton-eda";
     description = "Lepton Electronic Design Automation";
     longDescription = ''
       Lepton EDA is a suite of free software tools for designing electronics.
       It provides schematic capture, netlisting into over 30 netlist formats, and many other features.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ tesq0 ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ tesq0 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,9 +22,16 @@ stdenv.mkDerivation rec {
     nspr
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Secure PIN handling using NSS crypto";
     license = lib.licenses.mpl11;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Secure PIN handling using NSS crypto";
+    license = licenses.mpl11;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

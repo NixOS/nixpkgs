@@ -26,13 +26,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovn";
+<<<<<<< HEAD
   version = "25.09.2";
+=======
+  version = "25.09.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-JcOc9rNtpGhr+dn+dXltA+WTJZa3bEgqyS4zjlVM+Uc=";
+=======
+    hash = "sha256-DNaf3vWb6tlzViMEI02+3st/0AiMVAomSaiGplcjkIc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -45,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+<<<<<<< HEAD
     # Fix build failure due to make install race condition.
     (fetchpatch {
       url = "https://github.com/ovn-org/ovn/commit/d7c46f5d1f9b804ebc7b20b0edad4e11469a41da.patch";
@@ -65,6 +74,21 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix test failures due to spurious Broken pipe on AT_CHECK stderr.
     # Posted: https://patchwork.ozlabs.org/project/ovn/patch/20251213030322.91112-1-ihar.hrachyshka@gmail.com/
     ./0001-tests-Ignore-AT_CHECK-stderr-for-grep-.-grep-q.patch
+=======
+    # Fix test failure with musl libc.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/d0b187905c45ce039163d18cc82869918946a41c.patch";
+      hash = "sha256-mTpNpH1ZSSMLtpZmy6jKjGDu84jL0ECr+HVh1PQzaVA=";
+    })
+    # Fix sandbox test failure.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/b396babaa54ea0c8d943bbfef751dbdbf288c7af.patch";
+      hash = "sha256-RjWxT3EYKjGhtvCq3bAhKN9PrPTkSR72xPkQQ4SPWWU=";
+    })
+    # Fix build failure due to make install race condition.
+    # Posted at: https://patchwork.ozlabs.org/project/ovn/patch/20251012225908.37855-1-ihar.hrachyshka@gmail.com/
+    ./0001-build-Fix-race-condition-when-installing-ovn-detrace.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [
@@ -154,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     touch $OVS_RESOLV_CONF
   '';
 
+<<<<<<< HEAD
   checkPhase = ''
     runHook preCheck
 
@@ -166,6 +191,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru.updateScript = nix-update-script { };
 
   meta = {

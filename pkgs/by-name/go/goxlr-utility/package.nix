@@ -61,10 +61,18 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh  $completions_dir/_goxlr-daemon
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Unofficial GoXLR App replacement for Linux, Windows and MacOS";
     homepage = "https://github.com/GoXLR-on-Linux/goxlr-utility";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ errnoh ];
+=======
+  meta = with lib; {
+    description = "Unofficial GoXLR App replacement for Linux, Windows and MacOS";
+    homepage = "https://github.com/GoXLR-on-Linux/goxlr-utility";
+    license = licenses.mit;
+    maintainers = with maintainers; [ errnoh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

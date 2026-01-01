@@ -25,7 +25,11 @@ rustPlatform.buildRustPackage rec {
   # has not tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "i3wsr";
     description = "Automatically change i3 workspace names based on their contents";
     longDescription = ''
@@ -34,7 +38,12 @@ rustPlatform.buildRustPackage rec {
       window property for each window in a workspace.
     '';
     homepage = "https://github.com/roosta/i3wsr";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sebbadk ];
+=======
+    license = licenses.mit;
+    maintainers = [ maintainers.sebbadk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

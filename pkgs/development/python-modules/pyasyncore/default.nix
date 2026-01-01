@@ -23,10 +23,17 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "Make asyncore available for Python 3.12 onwards";
     homepage = "https://github.com/simonrob/pyasyncore";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    description = "Make asyncore available for Python 3.12 onwards";
+    homepage = "https://github.com/simonrob/pyasyncore";
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

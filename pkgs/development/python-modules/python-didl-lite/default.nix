@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "didl_lite" ];
 
+<<<<<<< HEAD
   meta = {
     description = "DIDL-Lite (Digital Item Declaration Language) tools for Python";
     homepage = "https://github.com/StevenLooman/python-didl-lite";
     changelog = "https://github.com/StevenLooman/python-didl-lite/blob/${version}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "DIDL-Lite (Digital Item Declaration Language) tools for Python";
+    homepage = "https://github.com/StevenLooman/python-didl-lite";
+    changelog = "https://github.com/StevenLooman/python-didl-lite/blob/${version}/CHANGES.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

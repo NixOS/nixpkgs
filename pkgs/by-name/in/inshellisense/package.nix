@@ -29,10 +29,18 @@ buildNpmPackage rec {
   makeCacheWritable = stdenv.hostPlatform.isDarwin;
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin cacert;
 
+<<<<<<< HEAD
   meta = {
     description = "IDE style command line auto complete";
     homepage = "https://github.com/microsoft/inshellisense";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.malo ];
+=======
+  meta = with lib; {
+    description = "IDE style command line auto complete";
+    homepage = "https://github.com/microsoft/inshellisense";
+    license = licenses.mit;
+    maintainers = [ maintainers.malo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

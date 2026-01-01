@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     url = "https://redwax.eu/dist/rs/";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "RedWax CA service modules of OCSP Online Certificate Validation";
     homepage = "https://redwax.eu";
@@ -39,5 +40,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dirkx ];
+=======
+  meta = with lib; {
+    description = "RedWax CA service modules of OCSP Online Certificate Validation";
+    homepage = "https://redwax.eu";
+    changelog = "https://source.redwax.eu/projects/RS/repos/mod_csr/browse/ChangeLog";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dirkx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -56,6 +56,7 @@ buildPythonPackage rec {
     "test_listdir" # accesses /usr/bin
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
@@ -63,6 +64,15 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python bindings for the low-level FUSE API";
+    homepage = "https://github.com/python-llfuse/python-llfuse";
+    changelog = "https://github.com/python-llfuse/python-llfuse/raw/release-${version}/Changes.rst";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       dotlambda
     ];

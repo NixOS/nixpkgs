@@ -31,7 +31,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "pydsdl/_test.py" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library to process Cyphal DSDL";
     longDescription = ''
       PyDSDL is a Cyphal DSDL compiler front-end implemented in Python. It accepts
@@ -42,7 +46,12 @@ buildPythonPackage rec {
       implementation.
     '';
     homepage = "https://pydsdl.readthedocs.io/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wucke13 ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ wucke13 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

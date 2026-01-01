@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension using KaTeX to render math in HTML";
     homepage = "https://github.com/hagenw/sphinxcontrib-katex";
     changelog = "https://github.com/hagenw/sphinxcontrib-katex/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Sphinx extension using KaTeX to render math in HTML";
+    homepage = "https://github.com/hagenw/sphinxcontrib-katex";
+    changelog = "https://github.com/hagenw/sphinxcontrib-katex/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

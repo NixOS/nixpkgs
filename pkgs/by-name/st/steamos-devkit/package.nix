@@ -128,11 +128,20 @@ python3.pkgs.buildPythonPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SteamOS Devkit Client";
     mainProgram = "steamos-devkit";
     homepage = "https://gitlab.steamos.cloud/devkit/steamos-devkit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ myaats ];
+=======
+  meta = with lib; {
+    description = "SteamOS Devkit Client";
+    mainProgram = "steamos-devkit";
+    homepage = "https://gitlab.steamos.cloud/devkit/steamos-devkit";
+    license = licenses.mit;
+    maintainers = with maintainers; [ myaats ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

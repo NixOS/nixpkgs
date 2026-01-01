@@ -20,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Header only library that can collect configuration options from command line arguments";
     homepage = "https://github.com/mhekkel/libmcfp";
@@ -27,5 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Header only library that can collect configuration options from command line arguments";
+    homepage = "https://github.com/mhekkel/libmcfp";
+    changelog = "https://github.com/mhekkel/libmcfp/blob/${finalAttrs.src.rev}/changelog";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ natsukium ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

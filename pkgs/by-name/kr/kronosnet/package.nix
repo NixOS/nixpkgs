@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "VPN on steroids";
     homepage = "https://kronosnet.org/";
@@ -59,5 +60,15 @@ stdenv.mkDerivation rec {
       gpl2Plus
     ];
     maintainers = with lib.maintainers; [ ryantm ];
+=======
+  meta = with lib; {
+    description = "VPN on steroids";
+    homepage = "https://kronosnet.org/";
+    license = with licenses; [
+      lgpl21Plus
+      gpl2Plus
+    ];
+    maintainers = with maintainers; [ ryantm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

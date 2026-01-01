@@ -36,11 +36,20 @@ buildPythonPackage rec {
     "test_connection_auth_error"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to fetch/receive and parse uplink messages from The Thinks Network";
     homepage = "https://github.com/angelnu/thethingsnetwork_python_client";
     changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to fetch/receive and parse uplink messages from The Thinks Network";
+    homepage = "https://github.com/angelnu/thethingsnetwork_python_client";
+    changelog = "https://github.com/angelnu/thethingsnetwork_python_client/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

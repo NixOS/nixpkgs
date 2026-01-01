@@ -24,10 +24,18 @@ buildDunePackage rec {
     libjack2
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savonet/ocaml-bjack";
     description = "Blocking API for the jack audio connection kit";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savonet/ocaml-bjack";
+    description = "Blocking API for the jack audio connection kit";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

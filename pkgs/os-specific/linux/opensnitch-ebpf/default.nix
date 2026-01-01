@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) opensnitch;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "eBPF process monitor module for OpenSnitch";
     homepage = "https://github.com/evilsocket/opensnitch";
@@ -72,5 +73,16 @@ stdenv.mkDerivation rec {
       grimmauld
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "eBPF process monitor module for OpenSnitch";
+    homepage = "https://github.com/evilsocket/opensnitch";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+      onny
+      grimmauld
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

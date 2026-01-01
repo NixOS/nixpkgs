@@ -61,13 +61,22 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/leona/helix-gpt";
     changelog = "https://github.com/leona/helix-gpt/releases/tag/${src.rev}";
     description = "Code completion LSP for Helix with support for Copilot + OpenAI";
     mainProgram = "helix-gpt";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ happysalada ];
     license = with lib.licenses; [ mit ];
+=======
+    maintainers = with maintainers; [ happysalada ];
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

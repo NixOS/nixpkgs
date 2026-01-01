@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Easy to setup Open Source client/server backup system";
     longDescription = "An easy to setup Open Source client/server backup system, that through a combination of image and file backups accomplishes both data safety and a fast restoration time";
@@ -42,5 +43,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.mgttlinger ];
+=======
+  meta = with lib; {
+    description = "Easy to setup Open Source client/server backup system";
+    longDescription = "An easy to setup Open Source client/server backup system, that through a combination of image and file backups accomplishes both data safety and a fast restoration time";
+    homepage = "https://www.urbackup.org/index.html";
+    license = licenses.agpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mgttlinger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

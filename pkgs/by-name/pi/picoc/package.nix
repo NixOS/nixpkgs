@@ -44,7 +44,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Very small C interpreter for scripting";
     mainProgram = "picoc";
     longDescription = ''
@@ -59,7 +63,12 @@ stdenv.mkDerivation {
     '';
     homepage = "https://gitlab.com/zsaleeba/picoc";
     downloadPage = "https://code.google.com/p/picoc/downloads/list";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

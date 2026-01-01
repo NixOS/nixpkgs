@@ -26,18 +26,30 @@
   sphinx,
   autoreconfHook,
   nixosTests,
+<<<<<<< HEAD
   knot-resolver_5,
+=======
+  knot-resolver,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   knot-dns,
   runCommandLocal,
 }:
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
+<<<<<<< HEAD
   version = "3.5.2";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
     sha256 = "6f577c247ef870a55fe3377246bc1c2d643c673cd32de6c26231ff51d3fc7093";
+=======
+  version = "3.5.1";
+
+  src = fetchurl {
+    url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
+    sha256 = "a614d5226ceed4b4cdd4a3badbb0297ea0f987f65948e4eb828119a3b5ac0a4b";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -113,7 +125,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
+<<<<<<< HEAD
     inherit knot-resolver_5;
+=======
+    inherit knot-resolver;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   }
   // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) knot kea;

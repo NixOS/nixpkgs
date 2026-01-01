@@ -57,7 +57,11 @@ stdenv.mkDerivation rec {
     ]
   );
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "R6RS/R7RS Scheme system";
     longDescription = ''
       Sagittarius Scheme is a free Scheme implementation supporting
@@ -77,8 +81,14 @@ stdenv.mkDerivation rec {
       -  Replaceable reader
     '';
     homepage = "https://bitbucket.org/ktakashi/sagittarius-scheme";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ abbe ];
+=======
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ abbe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

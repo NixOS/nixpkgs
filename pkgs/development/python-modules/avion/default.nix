@@ -40,10 +40,18 @@ buildPythonPackage rec {
   # bluepy/uuids.json is not found
   # pythonImportsCheck = [ "avion" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for controlling Avi-on Bluetooth dimmers";
     homepage = "https://github.com/mjg59/python-avion";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API for controlling Avi-on Bluetooth dimmers";
+    homepage = "https://github.com/mjg59/python-avion";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

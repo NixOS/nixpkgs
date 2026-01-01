@@ -11,19 +11,31 @@
   icoutils,
   umu-launcher,
   winetricks,
+<<<<<<< HEAD
+=======
+  curl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mangohud,
   gamescope,
   gamemode,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nero-umu";
+<<<<<<< HEAD
   version = "1.2.0";
+=======
+  version = "1.1.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "SeongGino";
     repo = "Nero-umu";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-dwM9ZRgNBLA16faO68pSnNsfWC4Naom6QRg1RYwXxLA=";
+=======
+    hash = "sha256-Cx2hN5LV7/EOXnn9RfIsj9OmnlM1oMZB7a535/hwTas=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   #Replace quazip git submodule with pre-packaged quazip
@@ -50,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     icoextract
     icoutils
     winetricks
+<<<<<<< HEAD
+=======
+    curl
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     umu-launcher
     mangohud
     gamescope

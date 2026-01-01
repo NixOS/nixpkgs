@@ -29,10 +29,17 @@ buildPythonPackage rec {
     inherit httpcore httpx wsproto;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Pure-Python, bring-your-own-I/O implementation of HTTP/1.1";
     homepage = "https://github.com/python-hyper/h11";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pure-Python, bring-your-own-I/O implementation of HTTP/1.1";
+    homepage = "https://github.com/python-hyper/h11";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

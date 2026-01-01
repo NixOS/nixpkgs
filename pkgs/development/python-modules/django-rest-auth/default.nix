@@ -44,10 +44,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rest_auth" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Django app that makes registration and authentication easy";
     homepage = "https://github.com/Tivix/django-rest-auth";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Django app that makes registration and authentication easy";
+    homepage = "https://github.com/Tivix/django-rest-auth";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

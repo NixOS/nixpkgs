@@ -26,11 +26,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Very small Elliptic Curve Cryptography library";
     homepage = "https://git.universe-factory.net/libuecc";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fpletz ];
+=======
+  meta = with lib; {
+    description = "Very small Elliptic Curve Cryptography library";
+    homepage = "https://git.universe-factory.net/libuecc";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,11 +20,19 @@ python3Packages.buildPythonApplication rec {
     pyserial
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "MicroPython development utility programs";
     homepage = "https://github.com/nickzoic/mpy-utils";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aciceri ];
+=======
+  meta = with lib; {
+    description = "MicroPython development utility programs";
+    homepage = "https://github.com/nickzoic/mpy-utils";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aciceri ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

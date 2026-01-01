@@ -22,10 +22,18 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "New test TCP program";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "New test TCP program";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

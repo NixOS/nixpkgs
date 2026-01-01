@@ -33,12 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_external_toc" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Sphinx extension that allows the site-map to be defined in a single YAML file";
     mainProgram = "sphinx-etoc";
     homepage = "https://github.com/executablebooks/sphinx-external-toc";
     changelog = "https://github.com/executablebooks/sphinx-external-toc/raw/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

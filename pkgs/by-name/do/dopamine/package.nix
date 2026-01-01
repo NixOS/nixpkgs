@@ -7,11 +7,19 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "dopamine";
+<<<<<<< HEAD
   version = "3.0.1";
 
   src = fetchurl {
     url = "https://github.com/digimezzo/dopamine/releases/download/v${version}/Dopamine-${version}.AppImage";
     hash = "sha256-crOW1I8YN7+OyolgeiVvBZ8Zsw0RNUjozmvGgQO1ymA=";
+=======
+  version = "3.0.0";
+
+  src = fetchurl {
+    url = "https://github.com/digimezzo/dopamine/releases/download/v${version}/Dopamine-${version}.AppImage";
+    hash = "sha256-kvXan5J+rxJ/ugcEz9xytq3eQG0saWrYZjF7O1d6rTA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ makeWrapper ];

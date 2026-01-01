@@ -26,10 +26,13 @@ stdenv.mkDerivation {
     # fix for CMake v4
     # https://github.com/sgan81/apfs-fuse/pull/211
     ./cmake-v4.patch
+<<<<<<< HEAD
 
     # fix for GCC 15
     # https://github.com/sgan81/apfs-fuse/pull/209
     ./add_cstdint_fix_gcc15.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -54,6 +57,7 @@ stdenv.mkDerivation {
     ln -s $out/bin/apfs-fuse $out/bin/mount.fuse.apfs-fuse
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sgan81/apfs-fuse";
     description = "FUSE driver for APFS (Apple File System)";
@@ -61,5 +65,14 @@ stdenv.mkDerivation {
     mainProgram = "apfs-fuse";
     maintainers = with lib.maintainers; [ ealasu ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sgan81/apfs-fuse";
+    description = "FUSE driver for APFS (Apple File System)";
+    license = licenses.gpl2Plus;
+    mainProgram = "apfs-fuse";
+    maintainers = with maintainers; [ ealasu ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

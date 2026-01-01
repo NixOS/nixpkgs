@@ -104,7 +104,11 @@ buildPythonPackage rec {
     setuptools
     tomli
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # cannot find distutils, and distutils cannot find types
@@ -140,6 +144,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/KotlinIsland/basedmypy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "mypy";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ PerchunPak ];
+=======
+    maintainers = with lib.maintainers; [ perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

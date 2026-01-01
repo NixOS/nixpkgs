@@ -66,7 +66,10 @@ let
   masterCfg = settingsFormat.generate "mfsmaster.cfg" cfg.master.settings;
   metaloggerCfg = settingsFormat.generate "mfsmetalogger.cfg" cfg.metalogger.settings;
   chunkserverCfg = settingsFormat.generate "mfschunkserver.cfg" cfg.chunkserver.settings;
+<<<<<<< HEAD
   guiCfg = settingsFormat.generate "mfsgui.cfg" cfg.cgiserver.settings;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   systemdService = name: extraConfig: configFile: {
     wantedBy = [ "multi-user.target" ];
@@ -204,8 +207,13 @@ in
 
       cgiserver = {
         enable = lib.mkEnableOption ''
+<<<<<<< HEAD
           MooseFS GUI server (mfsgui) for web interface.
           Warning: The GUI server interface should be properly secured from unauthorized access,
+=======
+          MooseFS CGI server for web interface.
+          Warning: The CGI server interface should be properly secured from unauthorized access,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           as it provides full control over your MooseFS installation.
         '';
 
@@ -219,6 +227,7 @@ in
           type = lib.types.submodule {
             freeformType = settingsFormat.type;
             options = {
+<<<<<<< HEAD
               DATA_PATH = lib.mkOption {
                 type = lib.types.str;
                 default = "/var/lib/mfs";
@@ -235,11 +244,27 @@ in
                 type = lib.types.port;
                 default = 9425;
                 description = "Port for GUI server to listen on.";
+=======
+              BIND_HOST = lib.mkOption {
+                type = lib.types.str;
+                default = "0.0.0.0";
+                description = "IP address to bind CGI server to.";
+              };
+
+              PORT = lib.mkOption {
+                type = lib.types.port;
+                default = 9425;
+                description = "Port for CGI server to listen on.";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               };
             };
           };
           default = { };
+<<<<<<< HEAD
           description = "GUI server configuration options.";
+=======
+          description = "CGI server configuration options.";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       };
     };
@@ -256,6 +281,7 @@ in
         || cfg.cgiserver.enable
       )
       {
+<<<<<<< HEAD
         warnings = [
           (lib.mkIf (!cfg.runAsUser) "Running MooseFS services as root is not recommended.")
         ];
@@ -267,6 +293,24 @@ in
               pkgs.writeText "mfsexports.cfg" (lib.concatStringsSep "\n" cfg.master.exports)
             );
           };
+=======
+        warnings = [ (lib.mkIf (!cfg.runAsUser) "Running MooseFS services as root is not recommended.") ];
+
+        services.moosefs = {
+          master.settings = lib.mkIf cfg.master.enable (
+            lib.mkMerge [
+              {
+                WORKING_USER = mfsUser;
+                EXPORTS_FILENAME = toString (
+                  pkgs.writeText "mfsexports.cfg" (lib.concatStringsSep "\n" cfg.master.exports)
+                );
+              }
+              (lib.mkIf cfg.cgiserver.enable {
+                MFSCGISERV = toString cfg.cgiserver.settings.PORT;
+              })
+            ]
+          );
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           metalogger.settings = lib.mkIf cfg.metalogger.enable {
             WORKING_USER = mfsUser;
@@ -280,10 +324,13 @@ in
               pkgs.writeText "mfshdd.cfg" (lib.concatStringsSep "\n" cfg.chunkserver.hdds)
             );
           };
+<<<<<<< HEAD
 
           cgiserver.settings = lib.mkIf cfg.cgiserver.enable {
             WORKING_USER = mfsUser;
           };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
 
         users =
@@ -311,9 +358,13 @@ in
             9421
           ])
           (lib.optional cfg.chunkserver.openFirewall 9422)
+<<<<<<< HEAD
           (lib.optional (
             cfg.cgiserver.enable && cfg.cgiserver.openFirewall
           ) cfg.cgiserver.settings.GUISERV_LISTEN_PORT)
+=======
+          (lib.optional (cfg.cgiserver.enable && cfg.cgiserver.openFirewall) cfg.cgiserver.settings.PORT)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ];
 
         systemd.tmpfiles.rules = [
@@ -325,9 +376,12 @@ in
 
           # Chunkserver directories
           (lib.optionalString cfg.chunkserver.enable "d ${cfg.chunkserver.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
+<<<<<<< HEAD
 
           # GUI server directories
           (lib.optionalString cfg.cgiserver.enable "d ${cfg.cgiserver.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser} -")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ]
         ++ lib.optionals (cfg.chunkserver.enable && cfg.chunkserver.hdds != null) (
           map (dir: "d ${dir} 0755 ${mfsUser} ${mfsUser} -") cfg.chunkserver.hdds
@@ -366,6 +420,7 @@ in
 
           (lib.mkIf cfg.cgiserver.enable {
             mfs-cgiserv = {
+<<<<<<< HEAD
               description = "MooseFS GUI Server";
               wantedBy = [ "multi-user.target" ];
               after = [ "mfs-master.service" ];
@@ -381,11 +436,25 @@ in
                 ExecStart = "${pkgs.moosefs}/bin/mfsgui -f -c ${guiCfg} start";
                 ExecStop = "${pkgs.moosefs}/bin/mfsgui -c ${guiCfg} stop";
                 ExecReload = "${pkgs.moosefs}/bin/mfsgui -c ${guiCfg} reload";
+=======
+              description = "MooseFS CGI Server";
+              wantedBy = [ "multi-user.target" ];
+              after = [ "mfs-master.service" ];
+
+              serviceConfig = {
+                Type = "simple";
+                ExecStart = "${pkgs.moosefs}/bin/mfscgiserv -D /var/lib/mfs -f start";
+                ExecStop = "${pkgs.moosefs}/bin/mfscgiserv -D /var/lib/mfs stop";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 Restart = "on-failure";
                 RestartSec = "30s";
                 User = mfsUser;
                 Group = mfsUser;
+<<<<<<< HEAD
                 WorkingDirectory = cfg.cgiserver.settings.DATA_PATH;
+=======
+                WorkingDirectory = "/var/lib/mfs";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               };
             };
           })

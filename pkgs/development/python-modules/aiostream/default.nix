@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiostream" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generator-based operators for asynchronous iteration";
     homepage = "https://aiostream.readthedocs.io";
     changelog = "https://github.com/vxgmichel/aiostream/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ rmcgibbo ];
+=======
+  meta = with lib; {
+    description = "Generator-based operators for asynchronous iteration";
+    homepage = "https://aiostream.readthedocs.io";
+    changelog = "https://github.com/vxgmichel/aiostream/releases/tag/${src.tag}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ rmcgibbo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

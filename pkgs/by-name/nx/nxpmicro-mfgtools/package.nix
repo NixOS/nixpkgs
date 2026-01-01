@@ -60,7 +60,11 @@ stdenv.mkDerivation rec {
       --bash ../snap/local/bash-completion/universal-update-utility
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Freescale/NXP I.MX chip image deploy tools";
     longDescription = ''
       UUU (Universal Update Utility) is a command line tool, evolved out of
@@ -74,12 +78,21 @@ stdenv.mkDerivation rec {
       script works on both OS.
     '';
     homepage = "https://github.com/NXPmicro/mfgtools";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bmilanov
       jraygauthier
     ];
     mainProgram = "uuu";
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

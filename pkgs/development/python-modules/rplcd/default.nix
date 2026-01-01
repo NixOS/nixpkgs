@@ -17,13 +17,22 @@ buildPythonPackage rec {
   # Disable check because it depends on a GPIO library
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/dbrgn/RPLCD";
     description = ''
       Raspberry Pi LCD library for the widely used Hitachi HD44780 controller
     '';
     mainProgram = "rplcd-tests";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

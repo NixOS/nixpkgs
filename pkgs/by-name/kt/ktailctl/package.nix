@@ -72,6 +72,7 @@ stdenv.mkDerivation {
     qtwayland
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GUI to monitor and manage Tailscale on your Linux desktop";
     homepage = "https://github.com/f-koehler/KTailctl";
@@ -79,5 +80,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ k900 ];
     mainProgram = "ktailctl";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "GUI to monitor and manage Tailscale on your Linux desktop";
+    homepage = "https://github.com/f-koehler/KTailctl";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ k900 ];
+    mainProgram = "ktailctl";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

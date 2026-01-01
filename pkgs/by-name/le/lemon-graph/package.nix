@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
     ./cmake_version.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://lemon.cs.elte.hu/trac/lemon";
     description = "Efficient library for combinatorial optimization tasks on graphs and networks";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ trepetti ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://lemon.cs.elte.hu/trac/lemon";
+    description = "Efficient library for combinatorial optimization tasks on graphs and networks";
+    license = licenses.boost;
+    maintainers = with maintainers; [ trepetti ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,10 +43,17 @@ stdenv.mkDerivation rec {
     pam
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.gnu.org/software/screen/";
     description = "Window manager that multiplexes a physical terminal";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/screen/";
+    description = "Window manager that multiplexes a physical terminal";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       GNU Screen is a full-screen window manager that multiplexes a physical
@@ -70,7 +77,11 @@ stdenv.mkDerivation rec {
       terminal.
     '';
 
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

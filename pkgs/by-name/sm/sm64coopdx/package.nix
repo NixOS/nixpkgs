@@ -3,9 +3,12 @@
   lib,
   makeWrapper,
   writeTextFile,
+<<<<<<< HEAD
   copyDesktopItems,
   makeDesktopItem,
   imagemagick,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   curl,
   hexdump,
@@ -40,22 +43,35 @@ in
 # note: there is a generic builder in pkgs/games/sm64ex/generic.nix that is meant to help build sm64ex and its forks; however sm64coopdx has departed significantly enough in its build that it doesn't make sense to use that other than the baseRom derivation
 stdenv.mkDerivation (finalAttrs: {
   pname = "sm64coopdx";
+<<<<<<< HEAD
   version = "1.4";
+=======
+  version = "1.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "coop-deluxe";
     repo = "sm64coopdx";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-ct7X6LCitk1QID00guvYOMfIwnZccMeXqXwUB3ioKh8=";
+=======
+    rev = "v1.3.2";
+    hash = "sha256-FHH3+pGowkT8asDmU9qxPNDKy4VPKlkA0X7e4gnX9KY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./no-update-check.patch ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
     imagemagick
   ];
+=======
+  nativeBuildInputs = [ makeWrapper ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = [
     curl
@@ -67,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
   ];
 
+<<<<<<< HEAD
   icon = "${finalAttrs.src}/res/icon.ico";
   desktopItems = [
     (makeDesktopItem {
@@ -78,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   enableParallelBuilding = true;
 
   makeFlags = [
@@ -110,12 +129,15 @@ stdenv.mkDerivation (finalAttrs: {
       cp $built/libdiscord_game_sdk* $share
     ''}
 
+<<<<<<< HEAD
     magick ${finalAttrs.icon} icon.png
     for size in 16 24 32 48 64 128 256 512; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
       magick icon-0.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/${finalAttrs.pname}.png
     done
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # coopdx always tries to load resources from the binary's directory, with no obvious way to change. Thus this small wrapper script to always run from the /share directory that has all the resources
     mkdir -p $out/bin
     makeWrapper $share/sm64coopdx $out/bin/sm64coopdx \

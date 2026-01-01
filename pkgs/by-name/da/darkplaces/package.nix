@@ -45,7 +45,11 @@ stdenv.mkDerivation {
       $out/bin/darkplaces
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.icculus.org/twilight/darkplaces/";
     description = "Quake 1 engine implementation by LadyHavoc";
     longDescription = ''
@@ -54,8 +58,14 @@ stdenv.mkDerivation {
       rendering features, and expanding upon the engine's native game code
       language QuakeC, as well as supporting additional map and model formats.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ necrophcodr ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ necrophcodr ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

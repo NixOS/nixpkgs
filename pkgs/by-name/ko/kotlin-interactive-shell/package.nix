@@ -35,7 +35,11 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Kotlin Language Interactive Shell";
     longDescription = ''
       The shell is an extensible implementation of Kotlin REPL with a rich set of features including:
@@ -45,8 +49,13 @@ maven.buildMavenPackage rec {
       - List declared symbols
     '';
     homepage = "https://github.com/Kotlin/kotlin-interactive-shell";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.starsep ];
+=======
+    license = licenses.asl20;
+    maintainers = [ maintainers.starsep ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = jre.meta.platforms;
     mainProgram = "ki";
   };

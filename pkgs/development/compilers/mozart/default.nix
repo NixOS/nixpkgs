@@ -16,8 +16,22 @@
 
 let
   stdenv = llvmPackages.stdenv;
+<<<<<<< HEAD
   pname = "mozart2";
   version = "2.0.1";
+=======
+
+in
+stdenv.mkDerivation rec {
+  pname = "mozart2";
+  version = "2.0.1";
+  name = "${pname}-${version}";
+
+  src = fetchurl {
+    url = "https://github.com/mozart/mozart2/releases/download/v${version}/${name}-Source.zip";
+    sha256 = "1mad9z5yzzix87cdb05lmif3960vngh180s2mb66cj5gwh5h9dll";
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # This is a workaround to avoid using sbt.
   # I guess it is acceptable to fetch the bootstrapping compiler in binary form.
@@ -25,6 +39,7 @@ let
     url = "https://github.com/layus/mozart2/releases/download/v2.0.0-beta.1/bootcompiler.jar";
     sha256 = "1hgh1a8hgzgr6781as4c4rc52m2wbazdlw3646s57c719g5xphjz";
   };
+<<<<<<< HEAD
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -33,6 +48,8 @@ stdenv.mkDerivation {
     url = "https://github.com/mozart/mozart2/releases/download/v${version}/${pname}-${version}-Source.zip";
     sha256 = "1mad9z5yzzix87cdb05lmif3960vngh180s2mb66cj5gwh5h9dll";
   };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   patches = [
     ./patch-limits.diff
@@ -86,6 +103,7 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.8.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open source implementation of Oz 3";
     maintainers = with lib.maintainers; [
@@ -95,6 +113,17 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd2;
     homepage = "https://mozart.github.io";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Open source implementation of Oz 3";
+    maintainers = with maintainers; [
+      layus
+      h7x4
+    ];
+    license = licenses.bsd2;
+    homepage = "https://mozart.github.io";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Trace/BPT trap: 5
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -103,7 +103,11 @@ let
     '';
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GUI application that allows to quickly and easily compare files and folders";
     longDescription = ''
       Beyond Compare is focused. Beyond Compare allows you to quickly and easily compare your files and folders.
@@ -111,9 +115,15 @@ let
       You can then merge the changes, synchronize your files, and generate reports for your records.
     '';
     homepage = "https://www.scootersoftware.com";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ktor
       arkivm
     ];

@@ -32,14 +32,24 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple PKCS11 provider for TPM chips";
     longDescription = ''
       A simple library for using the TPM chip to secure SSH keys.
     '';
     homepage = "https://github.com/ThomasHabets/simple-tpm-pk11";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

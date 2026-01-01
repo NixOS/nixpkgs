@@ -25,6 +25,7 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.26.4";
 in
 stdenv.mkDerivation {
@@ -33,6 +34,16 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnome/sources/clutter/${lib.versions.majorMinor version}/clutter-${version}.tar.xz";
+=======
+  pname = "clutter";
+  version = "1.26.4";
+in
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "1rn4cd1an6a9dfda884aqpcwcgq8dgydpqvb19nmagw4b70zlj4b";
   };
 
@@ -85,7 +96,11 @@ stdenv.mkDerivation {
 
   passthru = {
     updateScript = gnome.updateScript {
+<<<<<<< HEAD
       packageName = "clutter";
+=======
+      packageName = pname;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       versionPolicy = "odd-unstable";
     };
   };

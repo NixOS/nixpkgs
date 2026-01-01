@@ -52,10 +52,19 @@ buildPythonPackage rec {
   #  "dvc_ssh"
   # ];
 
+<<<<<<< HEAD
   meta = {
     description = "SSH plugin for dvc";
     homepage = "https://pypi.org/project/dvc-ssh/${version}";
     changelog = "https://github.com/iterative/dvc-ssh/releases/tag/${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "SSH plugin for dvc";
+    homepage = "https://pypi.org/project/dvc-ssh/${version}";
+    changelog = "https://github.com/iterative/dvc-ssh/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ melling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

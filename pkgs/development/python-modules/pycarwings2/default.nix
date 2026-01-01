@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycarwings2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interacting with the NissanConnect EV";
     homepage = "https://github.com/filcole/pycarwings2";
     changelog = "https://github.com/filcole/pycarwings2/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for interacting with the NissanConnect EV";
+    homepage = "https://github.com/filcole/pycarwings2";
+    changelog = "https://github.com/filcole/pycarwings2/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/ditaa"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Convert ascii art diagrams into proper bitmap graphics";
     homepage = "https://github.com/stathissideris/ditaa";
@@ -36,6 +37,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Convert ascii art diagrams into proper bitmap graphics";
+    homepage = "https://github.com/stathissideris/ditaa";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ditaa";
   };
 }

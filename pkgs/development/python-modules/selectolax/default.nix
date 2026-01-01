@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "selectolax";
+<<<<<<< HEAD
   version = "0.4.6";
+=======
+  version = "0.4.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rushter";
     repo = "selectolax";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-gOuuDzbVP5B72e4YHVGw942k2aqrNb/l4eB8DhsnHi8=";
+=======
+    hash = "sha256-Et4v105XW06uvzzwic2tBft8ljDurTWIiuKPjCXJbx8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -36,7 +44,20 @@ buildPythonPackage rec {
 
   buildInputs = [
     modest
+<<<<<<< HEAD
     lexbor
+=======
+    (lexbor.overrideAttrs (finalAttrs: {
+      version = "0-unstable-2025-11-24";
+      src = fetchFromGitHub {
+        owner = "lexbor";
+        repo = "lexbor";
+        rev = "7d726f1bed2f489e79751496c584304e6859ee1b";
+        hash = "sha256-vLP/YJWu1Z2kiT0sFLcMPjzMJHJe457oyPTIsxafTfc=";
+      };
+      meta.changelog = "https://github.com/lexbor/lexbor/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    }))
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [

@@ -66,6 +66,7 @@ in
         }
     '';
 
+<<<<<<< HEAD
     meta = {
       homepage = "http://www.brother.com/";
       description = "Brother ${model} printer driver";
@@ -74,6 +75,16 @@ in
       platforms = lib.platforms.linux;
       downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=gb&lang=en&prod=${model}_all&os=128";
       maintainers = with lib.maintainers; [ marcovergueira ];
+=======
+    meta = with lib; {
+      homepage = "http://www.brother.com/";
+      description = "Brother ${model} printer driver";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      license = licenses.unfree;
+      platforms = platforms.linux;
+      downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=gb&lang=en&prod=${model}_all&os=128";
+      maintainers = with maintainers; [ marcovergueira ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -114,6 +125,7 @@ in
       ln -s $out/opt/brother/Printers/${model}/cupswrapper/brother_${model}_printer_en.ppd $out/share/cups/model/
     '';
 
+<<<<<<< HEAD
     meta = {
       homepage = "http://www.brother.com/";
       description = "Brother ${model} printer CUPS wrapper driver";
@@ -122,6 +134,16 @@ in
       platforms = lib.platforms.linux;
       downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=gb&lang=en&prod=${model}_all&os=128";
       maintainers = with lib.maintainers; [ marcovergueira ];
+=======
+    meta = with lib; {
+      homepage = "http://www.brother.com/";
+      description = "Brother ${model} printer CUPS wrapper driver";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      license = licenses.unfree;
+      platforms = platforms.linux;
+      downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=gb&lang=en&prod=${model}_all&os=128";
+      maintainers = with maintainers; [ marcovergueira ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 }

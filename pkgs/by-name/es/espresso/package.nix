@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Multi-valued PLA minimization";
     # from manual
     longDescription = ''
@@ -37,13 +41,21 @@ stdenv.mkDerivation rec {
       heuristic Boolean minimization.
     '';
     homepage = "https://github.com/chipsalliance/espresso";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ pineapplehunter ];
+=======
+    maintainers = with maintainers; [ pineapplehunter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "espresso";
     platforms = lib.platforms.all;
 
     # The license is not provided in the GitHub repo,
     # so until there's an update on the license, it is marked as unfree.
     # See: https://github.com/chipsalliance/espresso/issues/4
+<<<<<<< HEAD
     license = lib.licenses.unfree;
+=======
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

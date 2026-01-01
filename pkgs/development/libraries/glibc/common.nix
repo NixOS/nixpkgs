@@ -341,7 +341,11 @@ stdenv.mkDerivation (
       doCheck = false; # fails
 
       meta =
+<<<<<<< HEAD
 
+=======
+        with lib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         {
           homepage = "https://www.gnu.org/software/libc/";
           description = "GNU C Library";
@@ -355,6 +359,7 @@ stdenv.mkDerivation (
             most systems with the Linux kernel.
           '';
 
+<<<<<<< HEAD
           license = lib.licenses.lgpl2Plus;
 
           maintainers = with lib.maintainers; [
@@ -362,6 +367,15 @@ stdenv.mkDerivation (
             connorbaker
           ];
           platforms = lib.platforms.linux;
+=======
+          license = licenses.lgpl2Plus;
+
+          maintainers = with maintainers; [
+            ma27
+            connorbaker
+          ];
+          platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         }
         // (args.meta or { });
     }

@@ -56,15 +56,25 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://sciter.com";
     description = "Embeddable HTML/CSS/JavaScript engine for modern UI development";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ leixb ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+    maintainers = with maintainers; [ leixb ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

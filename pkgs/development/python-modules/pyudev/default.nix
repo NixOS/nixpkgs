@@ -42,10 +42,18 @@ buildPythonPackage rec {
   # https://github.com/pyudev/pyudev/issues/187
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pyudev.readthedocs.org/";
     description = "Pure Python libudev binding";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ frogamic ];
+=======
+  meta = with lib; {
+    homepage = "https://pyudev.readthedocs.org/";
+    description = "Pure Python libudev binding";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ frogamic ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,10 +32,17 @@ buildPythonPackage rec {
   doCheck = false; # no tests on PyPi/GitHub
   pythonImportsCheck = [ "ipyvuetify" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jupyter widgets based on Vuetify UI Components";
     homepage = "https://github.com/mariobuikhuizen/ipyvuetify";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Jupyter widgets based on Vuetify UI Components";
+    homepage = "https://github.com/mariobuikhuizen/ipyvuetify";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

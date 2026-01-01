@@ -42,10 +42,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "progressbar" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Text progressbar library";
     homepage = "https://progressbar-2.readthedocs.io/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ashgillman ];
+=======
+  meta = with lib; {
+    description = "Text progressbar library";
+    homepage = "https://progressbar-2.readthedocs.io/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ashgillman ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

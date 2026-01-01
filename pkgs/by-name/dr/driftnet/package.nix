@@ -49,8 +49,11 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
     homepage = "https://github.com/deiv/driftnet";

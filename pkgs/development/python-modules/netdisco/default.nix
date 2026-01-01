@@ -37,10 +37,18 @@ buildPythonPackage rec {
     "netdisco.discovery"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to scan local network for services and devices";
     homepage = "https://github.com/home-assistant/netdisco";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python library to scan local network for services and devices";
+    homepage = "https://github.com/home-assistant/netdisco";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

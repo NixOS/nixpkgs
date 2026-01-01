@@ -3,8 +3,11 @@
   rustPlatform,
   lib,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenvNoCC,
   nodejs_22,
   ffmpeg,
@@ -37,8 +40,13 @@ let
       mainProgram = "izzy";
     };
   };
+<<<<<<< HEAD
   nodejs = nodejs_22;
   pnpm' = pnpm_9.override { nodejs = nodejs_22; };
+=======
+  pnpm = pnpm_9;
+  nodejs = nodejs_22;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "porn-vault";
@@ -51,17 +59,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-wQ3dqLc0l2BmLGDYrbWxX2mPwO/Tqz0fY/fOQTEUv24=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
+=======
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-Xr9tRiP1hW+aFs9FnPvPkeJ0/LtJI57cjWY5bZQaRTQ=";
   };
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm'
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     makeWrapper
   ];
 

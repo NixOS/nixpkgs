@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "15sgkdyijb7vbxpxjavh5qm5nvyii3fqcg9mzvw7fx8s6zmfwczp";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with gcc 15
     (fetchurl {
@@ -24,6 +25,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Explicitly link against libgcc_s, to work around the infamous
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lgcc_s";
@@ -41,16 +44,26 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) iftop; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Display bandwidth usage on a network interface";
     longDescription = ''
       iftop does for network usage what top(1) does for CPU usage. It listens
       to network traffic on a named interface and displays a table of current
       bandwidth usage by pairs of hosts.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     homepage = "http://ex-parrot.com/pdw/iftop/";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    homepage = "http://ex-parrot.com/pdw/iftop/";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "iftop";
   };

@@ -7,7 +7,11 @@
   aubio,
   boost,
   cmake,
+<<<<<<< HEAD
   ffmpeg_7,
+=======
+  ffmpeg,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fmt,
   gettext,
   glew,
@@ -84,7 +88,11 @@ stdenv.mkDerivation rec {
     SDL2
     aubio
     boost
+<<<<<<< HEAD
     ffmpeg_7
+=======
+    ffmpeg
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fmt
     glew
     glibmm
@@ -98,6 +106,7 @@ stdenv.mkDerivation rec {
     portaudio
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Karaoke, band and dancing game";
     mainProgram = "performous";
@@ -105,5 +114,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Karaoke, band and dancing game";
+    mainProgram = "performous";
+    homepage = "https://performous.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

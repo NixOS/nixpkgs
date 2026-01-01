@@ -53,7 +53,11 @@ buildPythonPackage rec {
     pkgs.graphviz
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # Error: invalid value 'x' for farg: loading 'x' as float
@@ -67,11 +71,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nutils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Numerical Utilities for Finite Element Analysis";
     changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
     homepage = "https://www.nutils.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
+=======
+  meta = with lib; {
+    description = "Numerical Utilities for Finite Element Analysis";
+    changelog = "https://github.com/evalf/nutils/releases/tag/${src.tag}";
+    homepage = "https://www.nutils.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Scriptkiddi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

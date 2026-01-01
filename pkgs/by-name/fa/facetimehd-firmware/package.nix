@@ -63,11 +63,19 @@ stdenvNoCC.mkDerivation {
     gunzip -c ${firmwareOut}.gz > $out/lib/firmware/facetimehd/${firmwareOut}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "facetimehd firmware";
     homepage = "https://support.apple.com/kb/DL1877";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "facetimehd firmware";
+    homepage = "https://support.apple.com/kb/DL1877";
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       womfoo
       grahamc
     ];

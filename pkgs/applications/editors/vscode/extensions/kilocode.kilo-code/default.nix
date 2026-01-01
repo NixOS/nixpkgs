@@ -3,8 +3,11 @@
   stdenvNoCC,
   fetchFromGitHub,
   pnpm,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   vscode-utils,
   nix-update-script,
@@ -23,7 +26,11 @@ let
       hash = "sha256-Dy0dd07pWsSbrO6BX7GEYf7CunXD0itaeIFRv9mQJks=";
     };
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
+=======
+    pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
       hash = "sha256-hxgzmJD+Sl7E+ape1M1/Xl8XLtAhtht3AE45zHFctsQ=";
@@ -31,7 +38,11 @@ let
 
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
+=======
+      pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pnpm
     ];
 
@@ -62,6 +73,17 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
 
   src = vsix;
 
+<<<<<<< HEAD
+=======
+  unpackPhase = ''
+    runHook preUnpack
+
+    unzip $src
+
+    runHook postUnpack
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru = {
     vsix = finalAttrs.src;
     updateScript = nix-update-script {

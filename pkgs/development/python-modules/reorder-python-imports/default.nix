@@ -34,11 +34,19 @@ buildPythonPackage rec {
   # and therefore fails the assertion
   disabledTests = [ "test_success_messages_are_printed_on_stderr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for automatically reordering python imports";
     homepage = "https://github.com/asottile/reorder_python_imports";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Tool for automatically reordering python imports";
+    homepage = "https://github.com/asottile/reorder_python_imports";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "reorder-python-imports";
   };
 }

@@ -11,14 +11,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
+<<<<<<< HEAD
   version = "1.146.0";
+=======
+  version = "1.143.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-b0nXhhgQgV0TZ0PGYexKxsb1s7PIe+5dqjOWJiVlWJY=";
+=======
+    hash = "sha256-QnJQ45ucziHmOkQdAT29szOljBExiIXZ2zvhiKYXBxI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -82,12 +90,15 @@ python3.pkgs.buildPythonApplication rec {
       xray
     ]);
 
+<<<<<<< HEAD
   # Remove after upstream bumps click > 8.1.8
   postPatch = ''
     substituteInPlace requirements/base.txt --replace-fail \
       'click==8.1.8' 'click==${python3.pkgs.click.version}'
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postFixup = ''
     # Disable telemetry: https://github.com/aws/aws-sam-cli/issues/1272
     wrapProgram $out/bin/sam \
@@ -131,9 +142,13 @@ python3.pkgs.buildPythonApplication rec {
     "tests/unit/lib/observability/cw_logs/"
     "tests/unit/lib/build_module/"
     # Disable flaky tests
+<<<<<<< HEAD
     "tests/unit/cli/test_main.py"
     "tests/unit/commands/samconfig/test_samconfig.py"
     "tests/unit/local/docker/test_lambda_image.py"
+=======
+    "tests/unit/lib/samconfig/test_samconfig.py"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   disabledTests = [

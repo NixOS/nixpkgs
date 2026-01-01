@@ -41,10 +41,17 @@ buildPythonPackage {
     rm test/{test_exempi,test_files}.py
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
+    description = "Python XMP Toolkit for working with metadata";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

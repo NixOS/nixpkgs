@@ -37,10 +37,17 @@ buildPythonPackage rec {
     py.test tests
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CTypes based LibRaw bindings for Python";
     homepage = "https://rawkit.readthedocs.org/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "CTypes based LibRaw bindings for Python";
+    homepage = "https://rawkit.readthedocs.org/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -28,6 +28,10 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Terraform Model Context Protocol (MCP) Server";

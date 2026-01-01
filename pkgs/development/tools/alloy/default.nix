@@ -47,7 +47,11 @@ let
         cp -r ${desktopItem}/share/applications $out/share
       '';
 
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = "Language & tool for relational models";
         longDescription = ''
           Alloy is a language for describing structures and a tool for exploring
@@ -60,10 +64,17 @@ let
         '';
         homepage = "https://alloytools.org/";
         downloadPage = "https://alloytools.org/download.html";
+<<<<<<< HEAD
         sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
         license = lib.licenses.mit;
         platforms = lib.platforms.unix;
         maintainers = with lib.maintainers; [ notbandali ];
+=======
+        sourceProvenance = with sourceTypes; [ binaryBytecode ];
+        license = licenses.mit;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ notbandali ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 

@@ -42,11 +42,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "virt.firmware.efi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for virtual machine firmware volumes";
     homepage = "https://gitlab.com/kraxel/virt-firmware";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tools for virtual machine firmware volumes";
+    homepage = "https://gitlab.com/kraxel/virt-firmware";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raitobezarius
     ];
   };

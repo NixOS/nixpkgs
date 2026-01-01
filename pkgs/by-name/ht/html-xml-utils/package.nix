@@ -20,10 +20,18 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for manipulating HTML and XML files";
     homepage = "https://www.w3.org/Tools/HTML-XML-utils/";
     license = lib.licenses.w3c;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Utilities for manipulating HTML and XML files";
+    homepage = "https://www.w3.org/Tools/HTML-XML-utils/";
+    license = licenses.w3c;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

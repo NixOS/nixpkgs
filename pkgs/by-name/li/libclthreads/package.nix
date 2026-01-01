@@ -34,11 +34,20 @@ stdenv.mkDerivation rec {
     ln $out/lib/libclthreads.so $out/lib/libclthreads.so.2
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Zita thread library";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Zita thread library";
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

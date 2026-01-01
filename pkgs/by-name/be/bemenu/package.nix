@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Cloudef/bemenu";
     description = "Dynamic menu library and client program inspired by dmenu";
@@ -88,5 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ crertel ];
     mainProgram = "bemenu";
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Cloudef/bemenu";
+    description = "Dynamic menu library and client program inspired by dmenu";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ crertel ];
+    mainProgram = "bemenu";
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

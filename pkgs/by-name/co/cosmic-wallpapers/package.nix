@@ -7,7 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-wallpapers";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "1.0.0-beta.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -23,6 +27,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
+<<<<<<< HEAD
+=======
+      "--version"
+      "unstable"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "--version-regex"
       "epoch-(.*)"
     ];

@@ -250,7 +250,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free and open source software for video recording and live streaming";
     longDescription = ''
       This project is a rewrite of what was formerly known as "Open Broadcaster
@@ -258,12 +262,20 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jb55
       materus
       fpletz
     ];
+<<<<<<< HEAD
     license = with lib.licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
+=======
+    license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"

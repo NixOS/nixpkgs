@@ -17,10 +17,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JZU0Xam4NPiOHdXDtJsTBjOQnaDWReSZMD33sQxeUzQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Ninja-compatible build system for high-level programming languages written in Rust";
     homepage = "https://github.com/raviqqe/turtle-build";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Ninja-compatible build system for high-level programming languages written in Rust";
+    homepage = "https://github.com/raviqqe/turtle-build";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       mit
     ];

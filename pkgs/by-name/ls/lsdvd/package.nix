@@ -17,11 +17,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdvdread ];
   nativeBuildInputs = [ pkg-config ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/projects/lsdvd/";
     description = "Display information about audio, video, and subtitle tracks on a DVD";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/lsdvd/";
+    description = "Display information about audio, video, and subtitle tracks on a DVD";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lsdvd";
   };
 }

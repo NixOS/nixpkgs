@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_vite" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Integration of ViteJS in a Django project";
     homepage = "https://github.com/MrBin99/django-vite";
     changelog = "https://github.com/MrBin99/django-vite/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sephi ];
+=======
+  meta = with lib; {
+    description = "Integration of ViteJS in a Django project";
+    homepage = "https://github.com/MrBin99/django-vite";
+    changelog = "https://github.com/MrBin99/django-vite/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sephi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

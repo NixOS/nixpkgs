@@ -47,11 +47,19 @@ rustPlatform.buildRustPackage rec {
     version = "leetcode ${version}";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Leetcode CLI utility";
     homepage = "https://github.com/clearloop/leetcode-cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ congee ];
+=======
+  meta = with lib; {
+    description = "Leetcode CLI utility";
+    homepage = "https://github.com/clearloop/leetcode-cli";
+    license = licenses.mit;
+    maintainers = with maintainers; [ congee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "leetcode";
   };
 }

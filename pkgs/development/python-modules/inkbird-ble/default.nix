@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inkbird_ble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Inkbird BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/inkbird-ble";
     changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Inkbird BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/inkbird-ble";
+    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

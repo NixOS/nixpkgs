@@ -41,11 +41,19 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/imgur-screenshot --prefix PATH ':' ${deps}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for easy screencapping and uploading to imgur";
     homepage = "https://github.com/jomo/imgur-screenshot/";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tool for easy screencapping and uploading to imgur";
+    homepage = "https://github.com/jomo/imgur-screenshot/";
+    platforms = platforms.linux;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "imgur-screenshot";
   };

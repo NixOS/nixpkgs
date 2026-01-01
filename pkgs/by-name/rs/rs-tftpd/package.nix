@@ -22,12 +22,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "TFTP Server Daemon implemented in Rust";
     homepage = "https://github.com/altugbakan/rs-tftpd";
     changelog = "https://github.com/altugbakan/rs-tftpd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "TFTP Server Daemon implemented in Rust";
+    homepage = "https://github.com/altugbakan/rs-tftpd";
+    changelog = "https://github.com/altugbakan/rs-tftpd/releases/tag/${finalAttrs.version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       adamcstephens
       matthewcroughan
     ];

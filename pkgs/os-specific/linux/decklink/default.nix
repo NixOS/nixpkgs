@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.blackmagicdesign.com/support/family/capture-and-playback";
     maintainers = [ lib.maintainers.naxdy ];
@@ -50,5 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Kernel module for the Blackmagic Design Decklink cards";
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.blackmagicdesign.com/support/family/capture-and-playback";
+    maintainers = [ maintainers.naxdy ];
+    license = licenses.unfree;
+    description = "Kernel module for the Blackmagic Design Decklink cards";
+    sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

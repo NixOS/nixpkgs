@@ -26,10 +26,18 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [ git ] ++ (with python3Packages; [ parameterized ]);
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool to delete merged Git branches";
     homepage = "https://github.com/hartwork/git-delete-merged-branches/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Command-line tool to delete merged Git branches";
+    homepage = "https://github.com/hartwork/git-delete-merged-branches/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

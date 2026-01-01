@@ -22,11 +22,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/wadahiro/keycloak-discord";
     description = "Keycloak Social Login extension for Discord";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mkg20001 ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/wadahiro/keycloak-discord";
+    description = "Keycloak Social Login extension for Discord";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mkg20001 ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

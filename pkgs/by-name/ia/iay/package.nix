@@ -31,11 +31,19 @@ rustPlatform.buildRustPackage rec {
     "AppKit"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Minimalistic, blazing-fast, and extendable prompt for bash and zsh";
     homepage = "https://github.com/aaqaishtyaq/iay";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Minimalistic, blazing-fast, and extendable prompt for bash and zsh";
+    homepage = "https://github.com/aaqaishtyaq/iay";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aaqaishtyaq
     ];
     mainProgram = "iay";

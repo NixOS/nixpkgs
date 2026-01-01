@@ -54,7 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ics" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Pythonic and easy iCalendar library (RFC 5545)";
     longDescription = ''
       Ics.py is a pythonic and easy iCalendar library. Its goals are to read and
@@ -62,7 +66,11 @@ buildPythonPackage rec {
     '';
     homepage = "http://icspy.readthedocs.org/";
     changelog = "https://github.com/ics-py/ics-py/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

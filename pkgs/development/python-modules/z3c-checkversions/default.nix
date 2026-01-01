@@ -30,11 +30,19 @@ buildPythonPackage rec {
     ${python.interpreter} -m zope.testrunner --test-path=src []
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/zopefoundation/z3c.checkversions";
     changelog = "https://github.com/zopefoundation/z3c.checkversions/blob/${version}/CHANGES.rst";
     description = "Find newer package versions on PyPI";
     mainProgram = "checkversions";
+<<<<<<< HEAD
     license = lib.licenses.zpl21;
+=======
+    license = licenses.zpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

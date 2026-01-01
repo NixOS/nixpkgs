@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorwlock" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read write lock for asyncio";
     homepage = "https://github.com/aio-libs/aiorwlock";
     changelog = "https://github.com/aio-libs/aiorwlock/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
+=======
+  meta = with lib; {
+    description = "Read write lock for asyncio";
+    homepage = "https://github.com/aio-libs/aiorwlock";
+    changelog = "https://github.com/aio-libs/aiorwlock/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ billhuang ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

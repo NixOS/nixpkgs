@@ -34,10 +34,18 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://libmemcached.org";
     description = "Open source C/C++ client library and tools for the memcached server";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "https://libmemcached.org";
+    description = "Open source C/C++ client library and tools for the memcached server";
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

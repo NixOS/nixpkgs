@@ -56,7 +56,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/libimobiledevice/libimobiledevice";
     description = "Software library that talks the protocols to support iPhone®, iPod Touch® and iPad® devices on Linux";
     longDescription = ''
@@ -71,8 +75,14 @@ stdenv.mkDerivation rec {
       development since August 2007 with the goal to bring support for these
       devices to the Linux Desktop.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ RossComputerGuy ];
+=======
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ RossComputerGuy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

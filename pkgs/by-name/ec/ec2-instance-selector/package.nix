@@ -8,13 +8,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "ec2-instance-selector";
+<<<<<<< HEAD
   version = "3.1.3";
+=======
+  version = "3.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ec2-instance-selector";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-lsd0ahIpN8l3qpXofA7Rjlg0f0J+GJtFiPAvo/wy6Mw=";
+=======
+    hash = "sha256-8tSZkh2ngOgfwup2nCiNXHFX2GhIVVW9PtLuGNP5yoo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-qrxYLnj8DEGNtIq6sC7xvNBLgguG/lj9YLqgLFumQtE=";
@@ -32,6 +40,10 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versionCheckKeepEnvironment = [ "HOME" ];
   doInstallCheck = true;
 

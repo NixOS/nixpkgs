@@ -49,11 +49,19 @@ let
 
     cmakeFlags = [ "-DBUILD_CPP_CL=OFF" ];
 
+<<<<<<< HEAD
     meta = {
       description = "Samples from the AMD APP SDK (with OpenCRun support)";
       homepage = "https://github.com/OpenCL/AMD_APP_samples";
       license = lib.licenses.bsd2;
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      description = "Samples from the AMD APP SDK (with OpenCRun support)";
+      homepage = "https://github.com/OpenCL/AMD_APP_samples";
+      license = licenses.bsd2;
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       teams = [ lib.teams.rocm ];
     };
   };
@@ -82,7 +90,12 @@ makeImpureTest {
     HelloWorld | grep HelloWorld
   '';
 
+<<<<<<< HEAD
   meta = {
     teams = [ lib.teams.rocm ];
+=======
+  meta = with lib; {
+    teams = [ teams.rocm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -198,10 +198,19 @@ buildPythonPackage rec {
   ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
   ++ lib.optional withTools "PyQt5.QtDesigner";
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for Qt5";
     homepage = "https://riverbankcomputing.com/";
     license = lib.licenses.gpl3Only;
     inherit (mesa.meta) platforms;
+=======
+  meta = with lib; {
+    description = "Python bindings for Qt5";
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl3Only;
+    inherit (mesa.meta) platforms;
+    maintainers = with maintainers; [ sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

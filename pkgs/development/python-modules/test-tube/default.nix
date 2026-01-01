@@ -37,10 +37,18 @@ buildPythonPackage rec {
     tensorboard
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/williamFalcon/test-tube";
     description = "Framework-agnostic library to track and parallelize hyperparameter search in machine learning experiments";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.tbenst ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/williamFalcon/test-tube";
+    description = "Framework-agnostic library to track and parallelize hyperparameter search in machine learning experiments";
+    license = licenses.mit;
+    maintainers = [ maintainers.tbenst ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

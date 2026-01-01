@@ -31,11 +31,20 @@ buildPythonPackage {
     py
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin for parallel and concurrent testing";
     homepage = "https://github.com/kevlened/pytest-parallelt";
     changelog = "https://github.com/kevlened/pytest-parallel/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin for parallel and concurrent testing";
+    homepage = "https://github.com/kevlened/pytest-parallelt";
+    changelog = "https://github.com/kevlened/pytest-parallel/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

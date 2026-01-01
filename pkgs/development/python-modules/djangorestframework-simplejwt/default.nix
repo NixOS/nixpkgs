@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rest_framework_simplejwt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "JSON Web Token authentication plugin for Django REST Framework";
     homepage = "https://github.com/davesque/django-rest-framework-simplejwt";
     changelog = "https://github.com/jazzband/djangorestframework-simplejwt/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arnoldfarkas ];
+=======
+  meta = with lib; {
+    description = "JSON Web Token authentication plugin for Django REST Framework";
+    homepage = "https://github.com/davesque/django-rest-framework-simplejwt";
+    changelog = "https://github.com/jazzband/djangorestframework-simplejwt/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ arnoldfarkas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

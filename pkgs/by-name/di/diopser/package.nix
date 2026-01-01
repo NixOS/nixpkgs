@@ -96,11 +96,20 @@ stdenv.mkDerivation {
     "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Totally original phase rotation plugin";
     homepage = "https://github.com/robbert-vdh/diopser";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Totally original phase rotation plugin";
+    homepage = "https://github.com/robbert-vdh/diopser";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -113,6 +113,7 @@ buildPythonPackage rec {
     "test_dataclass_utils.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Facebook AI Research Sequence-to-Sequence Toolkit";
     homepage = "https://github.com/pytorch/fairseq";
@@ -120,6 +121,15 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Facebook AI Research Sequence-to-Sequence Toolkit";
+    homepage = "https://github.com/pytorch/fairseq";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    hydraPlatforms = [ ];
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = true; # requires numpy1 which is incompatible with sacrebleu depending on numpy2
   };
 }

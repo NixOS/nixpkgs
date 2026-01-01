@@ -66,9 +66,16 @@ buildDunePackage rec {
     (if lib.versionAtLeast version "5.2" then ounit2 else ounit)
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library simplifying type-driven code generation on OCaml >=4.02";
     maintainers = [ lib.maintainers.maurer ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library simplifying type-driven code generation on OCaml >=4.02";
+    maintainers = [ maintainers.maurer ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

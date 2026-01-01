@@ -54,10 +54,18 @@ stdenv.mkDerivation rec {
     kcmutils
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Backup tool for KDE";
     homepage = "https://apps.kde.org/kup";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.pwoelfel ];
+=======
+  meta = with lib; {
+    description = "Backup tool for KDE";
+    homepage = "https://apps.kde.org/kup";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.pwoelfel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

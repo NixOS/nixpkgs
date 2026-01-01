@@ -33,9 +33,16 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
   nativeCheckInputs = [ zope-testing ];
 
+<<<<<<< HEAD
   meta = {
     description = "Documentation builder";
     homepage = "https://pypi.python.org/pypi/manuel";
     license = lib.licenses.zpl20;
+=======
+  meta = with lib; {
+    description = "Documentation builder";
+    homepage = "https://pypi.python.org/pypi/manuel";
+    license = licenses.zpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

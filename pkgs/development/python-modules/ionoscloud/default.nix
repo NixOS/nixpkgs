@@ -35,11 +35,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ionoscloud" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ionos-cloud/sdk-python";
     description = "Python API client for ionoscloud";
     changelog = "https://github.com/ionos-cloud/sdk-python/blob/v${version}/docs/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ionos-cloud/sdk-python";
+    description = "Python API client for ionoscloud";
+    changelog = "https://github.com/ionos-cloud/sdk-python/blob/v${version}/docs/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

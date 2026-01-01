@@ -21,10 +21,18 @@ buildPythonPackage rec {
   # therefore it fails on other systems
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/brettmclean/pad4pi";
     description = "Interrupt-based matrix keypad library for Raspberry Pi";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/brettmclean/pad4pi";
+    description = "Interrupt-based matrix keypad library for Raspberry Pi";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -19,11 +19,19 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
+<<<<<<< HEAD
   meta = {
     description = "GitHub contributions calender terminal viewer";
     homepage = "https://github.com/mrshmllow/gh-cal";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ loicreynier ];
+=======
+  meta = with lib; {
+    description = "GitHub contributions calender terminal viewer";
+    homepage = "https://github.com/mrshmllow/gh-cal";
+    license = licenses.mit;
+    maintainers = with maintainers; [ loicreynier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gh-cal";
   };
 }

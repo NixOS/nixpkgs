@@ -15,12 +15,17 @@
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
+<<<<<<< HEAD
   version = "2.41.1";
+=======
+  version = "2.40.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-pXge+/5Ti4+e0aSbWLg6roIcg+3foAvSHP/Obd0EiE4=";
   };
 
@@ -32,6 +37,11 @@ stdenv.mkDerivation rec {
     "-O"
   ];
 
+=======
+    sha256 = "sha256-3DfSGuTtM+h0IdtsIhLVXQxX5/Tj9G5Qcha3DWmyyq4=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     automake
     autoconf
@@ -41,7 +51,13 @@ stdenv.mkDerivation rec {
     pandoc
     which
   ];
+<<<<<<< HEAD
 
+=======
+  prePatch = ''
+    sed -i -e '/chown/d' -e '/chmod/d' libfuse/Makefile
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [
     attr
     libiconv
@@ -56,8 +72,11 @@ stdenv.mkDerivation rec {
     "XATTR_AVAILABLE=1"
     "PREFIX=/"
     "SBINDIR=/bin"
+<<<<<<< HEAD
     "CHMOD=true"
     "CHOWN=true"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
   enableParallelBuilding = true;
 

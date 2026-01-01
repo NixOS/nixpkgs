@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     "ZAZ_LIBS+=-lvorbisfile"
   ];
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
@@ -58,6 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
+    homepage = "https://zaz.sourceforge.net/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zaz";
   };
 })

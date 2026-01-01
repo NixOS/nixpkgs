@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       }"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.jetmore.org/john/code/swaks/";
     description = "Featureful, flexible, scriptable, transaction-oriented SMTP test tool";
@@ -42,6 +43,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://www.jetmore.org/john/code/swaks/";
+    description = "Featureful, flexible, scriptable, transaction-oriented SMTP test tool";
+    mainProgram = "swaks";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

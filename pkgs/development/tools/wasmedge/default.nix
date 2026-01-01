@@ -63,11 +63,20 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://wasmedge.org/";
     license = with lib.licenses; [ asl20 ];
     description = "Lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
     maintainers = with lib.maintainers; [ dit7ya ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://wasmedge.org/";
+    license = with licenses; [ asl20 ];
+    description = "Lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
+    maintainers = with maintainers; [ dit7ya ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

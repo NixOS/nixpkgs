@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fuse FS to mount a digital camera";
     mainProgram = "gphotofs";
@@ -32,6 +33,15 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Fuse FS to mount a digital camera";
+    mainProgram = "gphotofs";
+    homepage = "http://www.gphoto.org/";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl2
       gpl2
     ];

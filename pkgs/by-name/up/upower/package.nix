@@ -235,13 +235,23 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://upower.freedesktop.org/";
     changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${finalAttrs.version}/NEWS";
     description = "D-Bus service for power management";
     mainProgram = "upower";
+<<<<<<< HEAD
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+    teams = [ teams.freedesktop ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

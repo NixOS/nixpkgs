@@ -44,11 +44,19 @@ stdenv.mkDerivation rec {
       --replace-fail '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://dev.zuckschwerdt.org/openobex/";
     description = "Open source implementation of the Object Exchange (OBEX) protocol";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "http://dev.zuckschwerdt.org/openobex/";
+    description = "Open source implementation of the Object Exchange (OBEX) protocol";
+    platforms = platforms.linux;
+    license = licenses.lgpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "obex-check-device";
   };
 }

@@ -14,14 +14,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
+<<<<<<< HEAD
   version = "0.0.8";
+=======
+  version = "0.0.1-alpha.28";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-PSw+yRAj6i2qld+10FEMWRxOaqzqu+4CYJcO0PAgG0g=";
+=======
+    hash = "sha256-TZcbW9CCdScfqyHjam+ToDgiIJwcR7EYZGllWL7gVjw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,7 +43,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
+<<<<<<< HEAD
   cargoHash = "sha256-XRiIngGFG8j3zQd6QMAFoZ64M7X4NkXCwYiUKA6oefA=";
+=======
+  cargoHash = "sha256-KW8GYxSOVqInQ8hJNyu4RpU/c/mERl7zrnLLjnhYvYo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -56,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package=ty_test" # test framework tests
   ];
 
+<<<<<<< HEAD
   checkFlags = [
     # Flaky:
     # called `Result::unwrap()` on an `Err` value: Os { code: 26, kind: ExecutableFileBusy, message: "Text file busy" }
@@ -65,6 +78,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+=======
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
@@ -80,7 +97,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   );
 
   passthru = {
+<<<<<<< HEAD
     updateScript = nix-update-script { };
+=======
+    updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   meta = {

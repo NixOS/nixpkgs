@@ -32,11 +32,19 @@ python3Packages.buildPythonApplication {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility program to automatically encrypt outgoing emails with GPG";
     homepage = "https://infertux.com/labs/zeyple/";
     maintainers = with lib.maintainers; [ ettom ];
     license = lib.licenses.agpl3Plus;
+=======
+  meta = with lib; {
+    description = "Utility program to automatically encrypt outgoing emails with GPG";
+    homepage = "https://infertux.com/labs/zeyple/";
+    maintainers = with maintainers; [ ettom ];
+    license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zeyple";
   };
 }

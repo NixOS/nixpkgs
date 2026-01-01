@@ -63,10 +63,18 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Karras et al. (2022) diffusion models for PyTorch";
     homepage = "https://github.com/crowsonkb/k-diffusion";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    description = "Karras et al. (2022) diffusion models for PyTorch";
+    homepage = "https://github.com/crowsonkb/k-diffusion";
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

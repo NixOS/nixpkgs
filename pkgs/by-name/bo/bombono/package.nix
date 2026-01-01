@@ -89,11 +89,20 @@ stdenv.mkDerivation {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "DVD authoring program for personal computers";
     homepage = "https://www.bombono.org/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ symphorien ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "DVD authoring program for personal computers";
+    homepage = "https://www.bombono.org/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ symphorien ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

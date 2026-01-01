@@ -39,11 +39,19 @@ python3.pkgs.buildPythonApplication {
   # Project has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Command line nmap XML parser";
     homepage = "https://github.com/jonny1102/nmap-parse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Command line nmap XML parser";
+    homepage = "https://github.com/jonny1102/nmap-parse";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nmap-parse";
   };
 }

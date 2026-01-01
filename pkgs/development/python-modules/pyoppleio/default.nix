@@ -28,11 +28,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyoppleio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for interacting with OPPLE lights";
     homepage = "https://github.com/jedmeng/python-oppleio";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for interacting with OPPLE lights";
+    homepage = "https://github.com/jedmeng/python-oppleio";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "oppleio";
   };
 }

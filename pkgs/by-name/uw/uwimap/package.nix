@@ -74,11 +74,19 @@ stdenv.mkDerivation rec {
       tools/{an,ua} $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.washington.edu/imap/";
     description = "UW IMAP toolkit - IMAP-supporting software developed by the UW";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.washington.edu/imap/";
+    description = "UW IMAP toolkit - IMAP-supporting software developed by the UW";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {

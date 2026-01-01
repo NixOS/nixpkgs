@@ -39,10 +39,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "bpemb" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Byte-pair embeddings in 275 languages";
     homepage = "https://github.com/bheinzerling/bpemb";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
+=======
+  meta = with lib; {
+    description = "Byte-pair embeddings in 275 languages";
+    homepage = "https://github.com/bheinzerling/bpemb";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vizid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

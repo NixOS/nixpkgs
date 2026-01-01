@@ -110,7 +110,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tools for loading and managing Linux kernel modules";
     longDescription = ''
       kmod is a set of tools to handle common tasks with Linux kernel modules
@@ -121,11 +125,20 @@ stdenv.mkDerivation rec {
     homepage = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/";
     downloadPage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
     changelog = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/plain/NEWS?h=v${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ]; # GPLv2+ for tools
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ artturin ];
+=======
+    license = with licenses; [
+      lgpl21Plus
+      gpl2Plus
+    ]; # GPLv2+ for tools
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ artturin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

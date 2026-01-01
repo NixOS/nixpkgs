@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/selmf/unarr";
     description = "Lightweight decompression library with support for rar, tar and zip archives";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/selmf/unarr";
+    description = "Lightweight decompression library with support for rar, tar and zip archives";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

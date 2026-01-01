@@ -9,13 +9,21 @@
 # redumper is using C++ modules, this requires latest C++20 compiler and build tools
 llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
   pname = "redumper";
+<<<<<<< HEAD
   version = "666";
+=======
+  version = "665";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "superg";
     repo = "redumper";
     tag = "b${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-B5c7ISlQhLBsRYcoCG18uLWkeODJUDGoRAd9n8EejNA=";
+=======
+    hash = "sha256-eKoQuQD2Z2WzcyZNf/MloEoAH8SlwbKihCPON2Sj1NY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

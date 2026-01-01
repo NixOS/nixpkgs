@@ -30,10 +30,21 @@ buildGoModule rec {
 
   vendorHash = "sha256-2OZoSOUCkt94uG+54Dx/1di/RZxZ2UOsmTC6YDA5cKo=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/caddyserver/xcaddy";
     description = "Build Caddy with plugins";
     mainProgram = "xcaddy";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/caddyserver/xcaddy";
+    description = "Build Caddy with plugins";
+    mainProgram = "xcaddy";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      tjni
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

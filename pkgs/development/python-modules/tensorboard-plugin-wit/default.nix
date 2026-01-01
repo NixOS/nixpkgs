@@ -16,10 +16,18 @@ buildPythonPackage rec {
     sha256 = "0nv855qm2fav70lndsrv810pqgg41sbmd70fk86wk18ih825yxzf";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "What-If Tool TensorBoard plugin";
     homepage = "http://tensorflow.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
+=======
+  meta = with lib; {
+    description = "What-If Tool TensorBoard plugin";
+    homepage = "http://tensorflow.org";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ndl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

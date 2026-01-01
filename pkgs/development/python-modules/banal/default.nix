@@ -18,10 +18,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "banal" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Commons of banal micro-functions for Python";
     homepage = "https://github.com/pudo/banal";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Commons of banal micro-functions for Python";
+    homepage = "https://github.com/pudo/banal";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

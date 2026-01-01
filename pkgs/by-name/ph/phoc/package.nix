@@ -39,7 +39,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
+<<<<<<< HEAD
   version = "0.51.0";
+=======
+  version = "0.50.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -47,7 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phoc";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-6glG5QvphanjBvf9xKiXjkVceWBQ8EjFkRywdfYc7E4=";
+=======
+    hash = "sha256-Fq/XinXdFerzuutjXUGbpvAvJBt/23ISHvY5KfVgbFI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -104,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Wayland compositor for mobile phones like the Librem 5";
     mainProgram = "phoc";
@@ -114,5 +123,18 @@ stdenv.mkDerivation (finalAttrs: {
       armelclo
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Wayland compositor for mobile phones like the Librem 5";
+    mainProgram = "phoc";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      masipcat
+      zhaofengli
+      armelclo
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -46,10 +46,18 @@ mkCoqDerivation {
     mathcomp-character
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Formal proof of the Odd Order Theorem";
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.cecill-b;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Formal proof of the Odd Order Theorem";
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.cecill-b;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

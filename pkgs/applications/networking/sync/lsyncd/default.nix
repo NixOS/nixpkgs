@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     libxslt
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/axkibe/lsyncd";
     description = "Utility that synchronizes local directories with remote targets";
@@ -64,5 +65,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bobvanderlinden ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/axkibe/lsyncd";
+    description = "Utility that synchronizes local directories with remote targets";
+    mainProgram = "lsyncd";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ bobvanderlinden ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

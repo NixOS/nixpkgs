@@ -74,7 +74,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://mosh.org/";
     description = "Mobile shell (ssh replacement)";
     longDescription = ''
@@ -85,8 +89,14 @@ stdenv.mkDerivation rec {
       Mosh is a replacement for SSH. It's more robust and responsive,
       especially over Wi-Fi, cellular, and long-distance links.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ skeuchel ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ skeuchel ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

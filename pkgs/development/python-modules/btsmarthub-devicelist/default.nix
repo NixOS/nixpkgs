@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_btsmarthub2_detection_neither_router_present" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Retrieve a list of devices from a bt smarthub or bt smarthub 2 on a local network";
     homepage = "https://github.com/jxwolstenholme/btsmarthub_devicelist";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  meta = with lib; {
+    description = "Retrieve a list of devices from a bt smarthub or bt smarthub 2 on a local network";
+    homepage = "https://github.com/jxwolstenholme/btsmarthub_devicelist";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

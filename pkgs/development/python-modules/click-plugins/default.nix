@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extension module for click to enable registering CLI commands";
     homepage = "https://github.com/click-contrib/click-plugins";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Extension module for click to enable registering CLI commands";
+    homepage = "https://github.com/click-contrib/click-plugins";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

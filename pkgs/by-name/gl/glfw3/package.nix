@@ -42,7 +42,11 @@ stdenv.mkDerivation {
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
+<<<<<<< HEAD
   patches = [ ./x11.patch ] ++ (lib.optional withMinecraftPatch ./window-position.patch);
+=======
+  patches = [ ./x11.patch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   prePatch = lib.optionalString withMinecraftPatch ''
     patches+=(${minecraftPatches}/patches/*.patch)
   '';

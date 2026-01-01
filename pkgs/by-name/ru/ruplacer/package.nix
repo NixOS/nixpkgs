@@ -22,5 +22,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "ruplacer";
     homepage = "https://github.com/TankerHQ/ruplacer";
     license = lib.licenses.bsd3;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Scan a file to look for certain PDF keywords";
     homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
@@ -40,5 +41,14 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "pdfid";
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Scan a file to look for certain PDF keywords";
+    homepage = "https://blog.didierstevens.com/programs/pdf-tools/";
+    license = with licenses; [ free ];
+    mainProgram = "pdfid";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

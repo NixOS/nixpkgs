@@ -22,12 +22,20 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line, offline, access to HTTP status code, common header, and port references";
     mainProgram = "httpref";
     homepage = "https://github.com/dnnrly/httpref";
     changelog = "https://github.com/dnnrly/httpref/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -22,11 +22,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/MihailJP/MarathiCursive";
     description = "Modi script font with Graphite and OpenType support";
     maintainers = with lib.maintainers; [ mathnerd314 ];
     license = lib.licenses.mplus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/MihailJP/MarathiCursive";
+    description = "Modi script font with Graphite and OpenType support";
+    maintainers = with maintainers; [ mathnerd314 ];
+    license = licenses.mplus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -163,7 +163,11 @@ stdenv.mkDerivation (finalAttrs: {
     packageName = "gnome-builder";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "IDE for writing GNOME-based software";
     longDescription = ''
       Global search, auto-completion, source code map, documentation
@@ -176,9 +180,15 @@ stdenv.mkDerivation (finalAttrs: {
       appropriate dependencies loaded.
     '';
     homepage = "https://apps.gnome.org/Builder/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gnome-builder";
   };
 })

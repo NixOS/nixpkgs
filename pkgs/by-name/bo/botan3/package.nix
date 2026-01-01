@@ -184,16 +184,29 @@ stdenv.mkDerivation (finalAttrs: {
     static = pkgsStatic.botan3;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Cryptographic algorithms library";
     homepage = "https://botan.randombit.net";
     mainProgram = "botan";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cryptographic algorithms library";
+    homepage = "https://botan.randombit.net";
+    mainProgram = "botan";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raskin
       thillux
       nikstur
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     license = lib.licenses.bsd2;
+=======
+    platforms = platforms.unix ++ platforms.windows;
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

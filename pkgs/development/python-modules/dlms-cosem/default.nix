@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dlms_cosem" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to parse DLMS/COSEM";
     homepage = "https://github.com/pwitab/dlms-cosem";
     changelog = "https://github.com/pwitab/dlms-cosem/blob/${src.tag}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to parse DLMS/COSEM";
+    homepage = "https://github.com/pwitab/dlms-cosem";
+    changelog = "https://github.com/pwitab/dlms-cosem/blob/${src.tag}/HISTORY.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

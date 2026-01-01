@@ -9,12 +9,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quisk";
+<<<<<<< HEAD
   version = "4.2.50";
+=======
+  version = "4.2.48";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-HFZhVJxDUeFDFboWYGiuJYG8fb+xeWBKKi/6uBiDp84=";
+=======
+    hash = "sha256-5N8uogS/V5nwYhHsdsc81GgjS9NblLx3KpdoEaXtpJI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -36,7 +44,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "quisk" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "SDR transceiver for radios that use the Hermes protocol";
     longDescription = ''
       QUISK is a Software Defined Radio (SDR) transceiver. You supply radio
@@ -51,6 +63,7 @@ python3.pkgs.buildPythonApplication rec {
       programs like Fldigi and WSJT-X. Quisk can be connected to other software
       like N1MM+ and software that uses Hamlib.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     homepage = "https://james.ahlstrom.name/quisk/";
     maintainers = with lib.maintainers; [
@@ -58,5 +71,14 @@ python3.pkgs.buildPythonApplication rec {
       kashw2
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    homepage = "https://james.ahlstrom.name/quisk/";
+    maintainers = with maintainers; [
+      pulsation
+      kashw2
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

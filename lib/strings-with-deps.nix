@@ -43,7 +43,11 @@
 
 let
   inherit (lib)
+<<<<<<< HEAD
     concatMapStringsSep
+=======
+    concatStringsSep
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     head
     isAttrs
     listToAttrs
@@ -166,7 +170,11 @@ rec {
 
   textClosureMap =
     f: predefined: names:
+<<<<<<< HEAD
     concatMapStringsSep "\n" f (textClosureList predefined names);
+=======
+    concatStringsSep "\n" (map f (textClosureList predefined names));
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   noDepEntry = text: {
     inherit text;

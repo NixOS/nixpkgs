@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
     mainProgram = "cargo-dephell";
@@ -55,6 +56,17 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
+    mainProgram = "cargo-dephell";
+    homepage = "https://github.com/mimoo/cargo-dephell";
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
   };

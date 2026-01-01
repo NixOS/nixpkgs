@@ -33,15 +33,24 @@ rustPlatform.buildRustPackage rec {
     package = hwatch;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/blacknon/hwatch";
     description = "Modern alternative to the watch command";
     longDescription = ''
       A modern alternative to the watch command, records the differences in
       execution results and can check this differences at after.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hamburger1984 ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ hamburger1984 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hwatch";
   };
 }

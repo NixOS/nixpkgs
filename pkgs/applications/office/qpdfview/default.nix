@@ -64,12 +64,21 @@ mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-std=c++17";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tabbed document viewer";
     mainProgram = "qpdfview";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tabbed document viewer";
+    mainProgram = "qpdfview";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://launchpad.net/qpdfview";
   };
 }

@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pueblo";
+<<<<<<< HEAD
   version = "0.0.13";
+=======
+  version = "0.0.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +29,11 @@ buildPythonPackage rec {
   # should work for us as well.
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-EewRittG90ZHRklGtXHtEJ83DWzA6f0iKfX87YlmVgY=";
+=======
+    hash = "sha256-oo2RNJQUVDqxhfBI6h1KCAgsMjDe7ns3F9qD4eKLVic=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -43,10 +51,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pueblo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python toolbox library";
     homepage = "https://github.com/pyveci/pueblo";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "Python toolbox library";
+    homepage = "https://github.com/pyveci/pueblo";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

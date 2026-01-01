@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "emoji" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Emoji for Python";
     homepage = "https://github.com/carpedm20/emoji/";
     changelog = "https://github.com/carpedm20/emoji/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ joachifm ];
+=======
+  meta = with lib; {
+    description = "Emoji for Python";
+    homepage = "https://github.com/carpedm20/emoji/";
+    changelog = "https://github.com/carpedm20/emoji/blob/${src.tag}/CHANGES.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ joachifm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

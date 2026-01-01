@@ -22,7 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Monospace font with support for Korean and latin characters";
     longDescription = ''
       D2Coding is a monospace font developed by a Korean IT Company called Naver.
@@ -32,8 +36,13 @@ stdenvNoCC.mkDerivation rec {
       creator, with symbols for Powerline.
     '';
     homepage = "https://github.com/naver/d2codingfont";
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

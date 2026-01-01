@@ -74,11 +74,20 @@ buildPythonPackage rec {
     "tests/test_graph_split.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for CWL";
     homepage = "https://github.com/common-workflow-language/cwl-utils";
     changelog = "https://github.com/common-workflow-language/cwl-utils/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Utilities for CWL";
+    homepage = "https://github.com/common-workflow-language/cwl-utils";
+    changelog = "https://github.com/common-workflow-language/cwl-utils/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

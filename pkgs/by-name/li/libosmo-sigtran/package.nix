@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "SCCP + SIGTRAN (SUA/M3UA) libraries as well as OsmoSTP";
     mainProgram = "osmo-stp";
@@ -46,6 +47,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "SCCP + SIGTRAN (SUA/M3UA) libraries as well as OsmoSTP";
+    mainProgram = "osmo-stp";
+    homepage = "https://osmocom.org/projects/libosmo-sccp";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       markuskowa
     ];
   };

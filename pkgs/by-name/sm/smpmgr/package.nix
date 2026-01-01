@@ -7,14 +7,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "smpmgr";
+<<<<<<< HEAD
   version = "0.16.0";
+=======
+  version = "0.15.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpmgr";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-woQ8NxHZ9lYKvEFjGbvBu7/949bzAV6hs9t/3+N7bJc=";
+=======
+    hash = "sha256-ZIIHxQLBwd5OAxFqg0iOrdC7Xu3oZPHSJjdpo2CidAg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python3Packages; [
@@ -37,6 +45,10 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "smpmgr" ];
 

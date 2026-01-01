@@ -23,11 +23,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "merge3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of 3-way merge";
     mainProgram = "merge3";
     homepage = "https://github.com/breezy-team/merge3";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Python implementation of 3-way merge";
+    mainProgram = "merge3";
+    homepage = "https://github.com/breezy-team/merge3";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

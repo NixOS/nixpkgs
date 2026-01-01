@@ -32,11 +32,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Kubernetes namespace switcher";
     homepage = "https://github.com/blendle/kns";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ mmlb ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Kubernetes namespace switcher";
+    homepage = "https://github.com/blendle/kns";
+    license = licenses.isc;
+    maintainers = with maintainers; [ mmlb ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

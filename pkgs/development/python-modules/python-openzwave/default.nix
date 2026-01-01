@@ -53,10 +53,17 @@ buildPythonPackage rec {
   # no tests available
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the OpenZWave C++ library";
     homepage = "https://github.com/OpenZWave/python-openzwave";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Python wrapper for the OpenZWave C++ library";
+    homepage = "https://github.com/OpenZWave/python-openzwave";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     inherit (openzwave.meta) platforms;
   };

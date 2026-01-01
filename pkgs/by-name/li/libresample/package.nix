@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     platforms = lib.platforms.all;
     maintainers = [
+<<<<<<< HEAD
+=======
+      lib.maintainers.sander
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lib.maintainers.emily
     ];
     mainProgram = "resample-sndfile";

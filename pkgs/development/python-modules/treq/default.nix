@@ -56,10 +56,17 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/twisted/treq";
     description = "Requests-like API built on top of twisted.web's Agent";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/twisted/treq";
+    description = "Requests-like API built on top of twisted.web's Agent";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

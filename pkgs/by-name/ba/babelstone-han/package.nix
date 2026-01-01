@@ -26,6 +26,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Unicode CJK font with over 36000 Han characters";
     homepage = "https://www.babelstone.co.uk/Fonts/Han.html";
@@ -33,5 +34,14 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.arphicpl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ emily ];
+=======
+  meta = with lib; {
+    description = "Unicode CJK font with over 36000 Han characters";
+    homepage = "https://www.babelstone.co.uk/Fonts/Han.html";
+
+    license = licenses.arphicpl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ emily ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

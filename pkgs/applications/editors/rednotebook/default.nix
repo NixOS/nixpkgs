@@ -52,12 +52,21 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "rednotebook" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://rednotebook.sourceforge.io/";
     changelog = "https://github.com/jendrikseipp/rednotebook/blob/${src.tag}/CHANGELOG.md";
     description = "Modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://rednotebook.sourceforge.io/";
+    changelog = "https://github.com/jendrikseipp/rednotebook/blob/${src.tag}/CHANGELOG.md";
+    description = "Modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rednotebook";
   };
 }

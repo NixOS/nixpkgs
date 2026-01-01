@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple, lightweight C library for writing XMPP clients";
     longDescription = ''
       libstrophe is a lightweight XMPP client library written in C. It has
@@ -49,12 +53,21 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://strophe.im/libstrophe/";
     changelog = "https://github.com/strophe/libstrophe/blob/${src.rev}/ChangeLog";
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl3Only
       mit
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    license = with licenses; [
+      gpl3Only
+      mit
+    ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       devhell
       flosse
     ];

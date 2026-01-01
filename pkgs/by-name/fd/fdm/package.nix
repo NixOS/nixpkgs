@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     cp -R examples $out/share/doc/fdm
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mail fetching and delivery tool - should do the job of getmail and procmail";
     maintainers = with lib.maintainers; [ raskin ];
@@ -44,5 +45,14 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nicm/fdm";
     downloadPage = "https://github.com/nicm/fdm/releases";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Mail fetching and delivery tool - should do the job of getmail and procmail";
+    maintainers = with maintainers; [ raskin ];
+    platforms = with platforms; linux ++ darwin;
+    homepage = "https://github.com/nicm/fdm";
+    downloadPage = "https://github.com/nicm/fdm/releases";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

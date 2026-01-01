@@ -7,16 +7,27 @@
 
 buildGoModule rec {
   pname = "dnsx";
+<<<<<<< HEAD
   version = "1.2.3";
+=======
+  version = "1.2.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "dnsx";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-XtjNdqUS1l6Ct5s+OXmmwvpuckKTaHD2S4tn39Tvf1Y=";
   };
 
   vendorHash = "sha256-ng0S/oFnrSlJ6a2UIZ3IrZx0Tb8Mru9BOuHBqH/1ctU=";
+=======
+    hash = "sha256-v5GDDA+ubHtUtLvhe0Hwm6l3OqTcIFbdm6HuxxV2zco=";
+  };
+
+  vendorHash = "sha256-B9GwQaX/W2xjpIFicfFFGBcopxyhMKZZRKBPcQ/r5Oo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "cmd/dnsx" ];
 

@@ -19,10 +19,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.10)'
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmakeFlags = [
     "-DQT5_BUILD=1"
     "-DQt5Core_DIR=${qtbase.dev}/lib/cmake/Qt5Core"
@@ -35,11 +38,20 @@ stdenv.mkDerivation {
     cp ../libircclient/*.h $out/libirc/libircclient
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C++ IRC library written in Qt with support for data serialization";
     homepage = "https://github.com/grumpy-irc/libirc";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ fee1-dead ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "C++ IRC library written in Qt with support for data serialization";
+    homepage = "https://github.com/grumpy-irc/libirc";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ fee1-dead ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

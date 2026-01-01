@@ -21,9 +21,16 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/betamax/serializers";
     description = "Set of third-party serializers for Betamax";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/betamax/serializers";
+    description = "Set of third-party serializers for Betamax";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

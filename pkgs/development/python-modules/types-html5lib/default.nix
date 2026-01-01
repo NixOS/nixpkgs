@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "html5lib-stubs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Typing stubs for html5lib";
     homepage = "https://pypi.org/project/types-html5lib/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Typing stubs for html5lib";
+    homepage = "https://pypi.org/project/types-html5lib/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

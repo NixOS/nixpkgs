@@ -22,10 +22,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tibetan Machine - an OpenType Tibetan, Dzongkha and Ladakhi font";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Tibetan Machine - an OpenType Tibetan, Dzongkha and Ladakhi font";
+    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ serge ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

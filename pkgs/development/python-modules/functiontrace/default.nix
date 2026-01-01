@@ -32,11 +32,19 @@ buildPythonPackage rec {
       --prefix PATH : ${lib.makeBinPath [ functiontrace-server ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://functiontrace.com";
     description = "Python module for Functiontrace";
     license = lib.licenses.prosperity30;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://functiontrace.com";
+    description = "Python module for Functiontrace";
+    license = licenses.prosperity30;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mathiassven
       tehmatt
     ];

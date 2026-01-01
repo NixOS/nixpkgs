@@ -90,12 +90,21 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Libre and modular OSC / MIDI controller";
     homepage = "https://openstagecontrol.ammd.net/";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Libre and modular OSC / MIDI controller";
+    homepage = "https://openstagecontrol.ammd.net/";
+    license = licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "open-stage-control";
     # Depends on nodejs_18 that has been removed.
     broken = true;

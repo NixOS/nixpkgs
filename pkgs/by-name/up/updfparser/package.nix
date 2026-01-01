@@ -30,11 +30,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Very simple PDF parser";
     homepage = "https://forge.soutade.fr/soutade/updfparser";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ autumnal ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Very simple PDF parser";
+    homepage = "https://forge.soutade.fr/soutade/updfparser";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ autumnal ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

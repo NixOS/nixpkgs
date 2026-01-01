@@ -91,7 +91,11 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -120,11 +124,20 @@ buildPythonPackage rec {
     "test_TCPInterface"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API for talking to Meshtastic devices";
+    homepage = "https://github.com/meshtastic/python";
+    changelog = "https://github.com/meshtastic/python/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

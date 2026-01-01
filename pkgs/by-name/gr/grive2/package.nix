@@ -53,11 +53,19 @@ stdenv.mkDerivation rec {
     libiberty
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Console Google Drive client";
     homepage = "https://github.com/vitalif/grive2";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Console Google Drive client";
+    homepage = "https://github.com/vitalif/grive2";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "grive";
   };
 }

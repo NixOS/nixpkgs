@@ -33,12 +33,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_frontmatter" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mdformat plugin to ensure frontmatter is respected";
     homepage = "https://github.com/butler54/mdformat-frontmatter";
     changelog = "https://github.com/butler54/mdformat-frontmatter/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Mdformat plugin to ensure frontmatter is respected";
+    homepage = "https://github.com/butler54/mdformat-frontmatter";
+    changelog = "https://github.com/butler54/mdformat-frontmatter/blob/v{version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aldoborrero
       polarmutex
     ];

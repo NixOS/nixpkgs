@@ -1,7 +1,10 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchurl,
   autoreconfHook,
   cxxSupport ? true,
@@ -30,6 +33,7 @@ stdenv.mkDerivation (
     # configure checks to work incorrectly with clang 16.
     nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
     patches = [
       (fetchpatch {
         name = "gcc15.patch";
@@ -38,6 +42,9 @@ stdenv.mkDerivation (
       })
     ]
     ++ extraPatches;
+=======
+    patches = extraPatches;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     outputs = [
       "bin"
@@ -83,10 +90,13 @@ stdenv.mkDerivation (
       popd
     '';
 
+<<<<<<< HEAD
     NIX_CFLAGS_COMPILE = [
       "-Wno-error=incompatible-pointer-types"
     ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     configureFlags = [
       (if cxxSupport then "--enable-cxx" else "--disable-cxx")
       (if compat185 then "--enable-compat185" else "--disable-compat185")
@@ -111,11 +121,19 @@ stdenv.mkDerivation (
       make examples_c examples_cxx
     '';
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://www.oracle.com/database/technologies/related/berkeleydb.html";
       description = "Berkeley DB";
       license = license;
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      homepage = "https://www.oracle.com/database/technologies/related/berkeleydb.html";
+      description = "Berkeley DB";
+      license = license;
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   // drvArgs

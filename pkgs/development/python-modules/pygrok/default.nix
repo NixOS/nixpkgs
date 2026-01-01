@@ -25,11 +25,20 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     maintainers = with lib.maintainers; [ winpat ];
     description = "Python implementation of jordansissel's grok regular expression library";
     homepage = "https://github.com/garyelephant/pygrok";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ winpat ];
+    description = "Python implementation of jordansissel's grok regular expression library";
+    homepage = "https://github.com/garyelephant/pygrok";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

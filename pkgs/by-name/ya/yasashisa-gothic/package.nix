@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Free gothic style font by Fontna";
     homepage = "http://www.fontna.com/blog/379/";
@@ -40,5 +41,16 @@ stdenvNoCC.mkDerivation {
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ h7x4 ];
+=======
+  meta = with lib; {
+    description = "Free gothic style font by Fontna";
+    homepage = "http://www.fontna.com/blog/379/";
+    license = with licenses; [
+      ipa
+      mplus
+    ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ h7x4 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

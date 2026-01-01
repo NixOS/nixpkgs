@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modern and open-source cross-platform software for chips reverse engineering";
     mainProgram = "Degate";
@@ -74,5 +75,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    description = "Modern and open-source cross-platform software for chips reverse engineering";
+    mainProgram = "Degate";
+    homepage = "https://degate.readthedocs.io/";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

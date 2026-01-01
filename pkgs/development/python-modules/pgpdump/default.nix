@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # Disabling check because of: https://github.com/toofishes/python-pgpdump/issues/18
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for parsing PGP packets";
     homepage = "https://github.com/toofishes/python-pgpdump";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python library for parsing PGP packets";
+    homepage = "https://github.com/toofishes/python-pgpdump";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

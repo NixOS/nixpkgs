@@ -1,3 +1,7 @@
 source 'https://rubygems.org'
+<<<<<<< HEAD
 gem 'maid', '~> 0.11.2'
+=======
+gem 'maid', '~> 0.10.0'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 gem 'rake'

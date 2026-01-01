@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yeelight" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for controlling YeeLight RGB bulbs";
     homepage = "https://gitlab.com/stavros/python-yeelight/";
     changelog = "https://gitlab.com/stavros/python-yeelight/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    description = "Python library for controlling YeeLight RGB bulbs";
+    homepage = "https://gitlab.com/stavros/python-yeelight/";
+    changelog = "https://gitlab.com/stavros/python-yeelight/-/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

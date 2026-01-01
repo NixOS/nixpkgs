@@ -4,7 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   gitUpdater,
+<<<<<<< HEAD
   setuptools,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   zope-interface,
   twisted,
 }:
@@ -23,8 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-79Uu9zaBIuuc+1O5Y7Vp4Qg2/aOrwvmdi5G/4AvL+T4=";
   };
 
+<<<<<<< HEAD
   build-system = [ setuptools ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dependencies = [
     zope-interface
     twisted

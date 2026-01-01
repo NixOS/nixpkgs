@@ -43,13 +43,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-telephony-service";
+<<<<<<< HEAD
   version = "0.6.2";
+=======
+  version = "0.6.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-telephony-service";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-CNtJPMust7zCuoXw/CpaK4NVXijTXA3Xs4YMJiZyxes=";
+=======
+    hash = "sha256-7WKKRUEEF3NL8S1xg8E1WcD3dGasrw49pydeC4CyL+c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

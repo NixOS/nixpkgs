@@ -34,7 +34,11 @@ buildPythonPackage rec {
     "test_import_from_url"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library for managing a hosts file";
     longDescription = ''
       python-hosts is a Python library for managing a hosts file. It enables you to add
@@ -42,7 +46,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/jonhadfield/python-hosts";
     changelog = "https://github.com/jonhadfield/python-hosts/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ psyanticy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

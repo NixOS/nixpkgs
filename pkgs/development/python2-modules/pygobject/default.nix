@@ -53,10 +53,17 @@ buildPythonPackage rec {
     chmod a-x $out/share/pygobject/*/codegen/*.py
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for GLib";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://pygobject.readthedocs.io/";
+    description = "Python bindings for GLib";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

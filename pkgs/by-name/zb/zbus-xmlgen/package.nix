@@ -25,11 +25,20 @@ rustPlatform.buildRustPackage rec {
         --prefix PATH : ${lib.makeBinPath [ rustfmt ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://crates.io/crates/zbus_xmlgen";
     description = "D-Bus XML interface Rust code generator";
     mainProgram = "zbus-xmlgen";
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://crates.io/crates/zbus_xmlgen";
+    description = "D-Bus XML interface Rust code generator";
+    mainProgram = "zbus-xmlgen";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -68,6 +68,7 @@ in
     };
   };
   serviceOpts = {
+<<<<<<< HEAD
     script = ''
       passwordfile="$CREDENTIALS_DIRECTORY/password-file"
       if [ -e "$passwordfile" ]; then
@@ -82,6 +83,12 @@ in
         "password-file:${config.services.prometheus.exporters.deluge.delugePasswordFile}"
       ];
 
+=======
+    serviceConfig = {
+      ExecStart = ''
+        ${pkgs.prometheus-deluge-exporter}/bin/deluge-exporter
+      '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       Environment = [
         "LISTEN_PORT=${toString cfg.port}"
         "LISTEN_ADDRESS=${toString cfg.listenAddress}"
@@ -96,6 +103,12 @@ in
       ++ lib.optionals cfg.exportPerTorrentMetrics [
         "PER_TORRENT_METRICS=1"
       ];
+<<<<<<< HEAD
+=======
+      EnvironmentFile = lib.optionalString (
+        cfg.delugePasswordFile != null
+      ) "/etc/deluge-exporter/password";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 }

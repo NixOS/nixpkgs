@@ -73,17 +73,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://orama-interactive.itch.io/pixelorama";
     description = "Free & open-source 2D sprite editor, made with the Godot Engine";
     changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://orama-interactive.itch.io/pixelorama";
+    description = "Free & open-source 2D sprite editor, made with the Godot Engine";
+    changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ felschr ];
+=======
+    maintainers = with maintainers; [ felschr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pixelorama";
   };
 })

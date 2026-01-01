@@ -23,10 +23,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Discover and load entry points from installed packages";
     homepage = "https://github.com/takluyver/entrypoints";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Discover and load entry points from installed packages";
+    homepage = "https://github.com/takluyver/entrypoints";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -22,7 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://velvetyne.fr/fonts/hyper-scrypt/";
     description = "Modern stencil typeface inspired by stained glass technique";
     longDescription = ''
@@ -40,7 +44,12 @@ stdenvNoCC.mkDerivation rec {
       allowing some neat alignements between shapes in multi lines
       layouts.
     '';
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

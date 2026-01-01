@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oletools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to analyze MS OLE2 files and MS Office documents";
     homepage = "https://github.com/decalage2/oletools";
@@ -58,5 +59,15 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to analyze MS OLE2 files and MS Office documents";
+    homepage = "https://github.com/decalage2/oletools";
+    license = with licenses; [
+      bsd2 # and
+      mit
+    ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

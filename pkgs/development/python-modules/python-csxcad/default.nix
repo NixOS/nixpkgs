@@ -32,11 +32,20 @@ buildPythonPackage rec {
     "-R${openems}/lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to CSXCAD";
     homepage = "http://openems.de/index.php/Main_Page.html";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ matthuszagh ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Python interface to CSXCAD";
+    homepage = "http://openems.de/index.php/Main_Page.html";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ matthuszagh ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

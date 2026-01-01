@@ -45,12 +45,21 @@ stdenv.mkDerivation rec {
     "DESTDIR=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper for 'diff' that produces the same output but with pretty 'syntax' highlighting";
     homepage = "https://www.colordiff.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Wrapper for 'diff' that produces the same output but with pretty 'syntax' highlighting";
+    homepage = "https://www.colordiff.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "colordiff";
   };
 }

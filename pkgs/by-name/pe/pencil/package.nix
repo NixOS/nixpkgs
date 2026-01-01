@@ -123,6 +123,7 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : $out/opt/pencil
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "GUI prototyping/mockup tool";
     mainProgram = "pencil";
@@ -130,10 +131,23 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2; # Commercial license is also available
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "GUI prototyping/mockup tool";
+    mainProgram = "pencil";
+    homepage = "https://pencil.evolus.vn/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl2; # Commercial license is also available
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       prikhi
       mrVanDalo
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

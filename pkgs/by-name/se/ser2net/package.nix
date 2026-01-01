@@ -34,12 +34,21 @@ stdenv.mkDerivation rec {
     libyaml
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Serial to network connection server";
     homepage = "https://github.com/cminyard/ser2net";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ emantor ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Serial to network connection server";
+    homepage = "https://github.com/cminyard/ser2net";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ emantor ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ser2net";
   };
 }

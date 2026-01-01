@@ -36,7 +36,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Quickly find duplicate files";
     mainProgram = "duff";
     longDescription = ''
@@ -44,7 +48,12 @@ stdenv.mkDerivation {
       a given set of files.
     '';
     homepage = "https://github.com/elmindreda/duff";
+<<<<<<< HEAD
     license = lib.licenses.zlib;
     platforms = lib.platforms.all;
+=======
+    license = licenses.zlib;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,12 +29,21 @@ stdenv.mkDerivation {
     glibmm
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/PiyushXCoder/powermode-indicator";
     description = "Tray tool for power profiles management";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.aacebedo ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/PiyushXCoder/powermode-indicator";
+    description = "Tray tool for power profiles management";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.aacebedo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "powermode-indicator";
   };
 }

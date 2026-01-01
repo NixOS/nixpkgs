@@ -73,6 +73,10 @@ stdenv.mkDerivation {
     license = lib.licenses.unfreeRedistributable;
     homepage = "http://advsys.net/ken/utils.htm";
     platforms = lib.attrNames platforms;
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pngout";
   };
 }

@@ -23,7 +23,11 @@
 
 buildPythonPackage rec {
   pname = "pylint";
+<<<<<<< HEAD
   version = "4.0.2";
+=======
+  version = "3.3.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +36,11 @@ buildPythonPackage rec {
     owner = "pylint-dev";
     repo = "pylint";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-DzS5ORhFWmA+eEhGDdpXdHLgWTfw198S7pQueBk44Cw=";
+=======
+    hash = "sha256-EMLnwFurIhTdUJqy9/DLTuucDhlmA5fCPZZ6TA87nEU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

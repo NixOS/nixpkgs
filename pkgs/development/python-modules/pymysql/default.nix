@@ -24,10 +24,18 @@ buildPythonPackage rec {
   # Wants to connect to MySQL
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python MySQL Client";
     homepage = "https://github.com/PyMySQL/PyMySQL";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kalbasit ];
+=======
+  meta = with lib; {
+    description = "Pure Python MySQL Client";
+    homepage = "https://github.com/PyMySQL/PyMySQL";
+    license = licenses.mit;
+    maintainers = [ maintainers.kalbasit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,10 +30,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Improved PLY implementation of lex and yacc for Python 3";
     homepage = "https://github.com/dabeaz/sly";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Improved PLY implementation of lex and yacc for Python 3";
+    homepage = "https://github.com/dabeaz/sly";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -32,12 +32,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lossy compression of PNG images";
     homepage = "https://github.com/foobaz/pngloss";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ _2gn ];
+=======
+  meta = with lib; {
+    description = "Lossy compression of PNG images";
+    homepage = "https://github.com/foobaz/pngloss";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ _2gn ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pngloss";
   };
 }

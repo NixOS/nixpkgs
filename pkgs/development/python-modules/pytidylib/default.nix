@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for HTML Tidy (tidylib) on Python 2 and 3";
     homepage = "https://countergram.github.io/pytidylib/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ layus ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for HTML Tidy (tidylib) on Python 2 and 3";
+    homepage = "https://countergram.github.io/pytidylib/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ layus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -41,12 +41,21 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # https://github.com/click-contrib/click-repl/issues/128
     broken = lib.versionAtLeast click.version "8.2.0";
     homepage = "https://github.com/click-contrib/click-repl";
     description = "Subcommand REPL for click apps";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twey ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ twey ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

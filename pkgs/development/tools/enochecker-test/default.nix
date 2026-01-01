@@ -58,12 +58,21 @@ buildPythonApplication rec {
   # tests require network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Automatically test services/checker using the enochecker API";
     mainProgram = "enochecker_test";
     homepage = "https://github.com/enowars/enochecker_test";
     changelog = "https://github.com/enowars/enochecker_test/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fwc ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ fwc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

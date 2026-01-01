@@ -14,13 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
+<<<<<<< HEAD
   version = "0.3.2";
+=======
+  version = "0.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-JPFQsu5vLSesgpbX79Z5e0GGFIsC4PUJuZQS8a5Oq2c=";
+=======
+    hash = "sha256-y1z1MlwbKGpvtgt4OZtfvxvsOSE6RhnsWUeaRvu7etU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -61,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

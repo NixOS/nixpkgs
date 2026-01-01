@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "packageVersion": "146.0.1-1",
   "source": {
     "rev": "146.0.1-1",
@@ -7,5 +8,15 @@
   "firefox": {
     "version": "146.0.1",
     "hash": "sha512-rpW4bkg/6/jf7INHdI3ZBI7X1/hFJQ4HqoBI4rNR2mH288X4O7DQxy4adexhtg5Zu+aWOfDzNTKRD/i/XKBzlA=="
+=======
+  "packageVersion": "145.0.1-2",
+  "source": {
+    "rev": "145.0.1-2",
+    "hash": "sha256-yqOl0kPaRdthFHopGsPs4patzTmy0mzGaUg0sab5LG4="
+  },
+  "firefox": {
+    "version": "145.0.1",
+    "hash": "sha512-bgUv7kbDGyaWulQD+QXguUsIzjVFiM1jFdVO4dz/m4KDXWTqWldZbfsYZt0VGKKZZv2qvbTDg4EDNEvS3BjHLQ=="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   }
 }

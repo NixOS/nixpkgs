@@ -81,11 +81,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "SystemVerilog support plugin for Yosys";
     homepage = "https://github.com/chipsalliance/synlig";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hzeller ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "SystemVerilog support plugin for Yosys";
+    homepage = "https://github.com/chipsalliance/synlig";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hzeller ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

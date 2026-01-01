@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Show the weather in the terminal, in style";
     homepage = "https://github.com/gourlaysama/girouette";
@@ -38,6 +39,17 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Show the weather in the terminal, in style";
+    homepage = "https://github.com/gourlaysama/girouette";
+    changelog = "https://github.com/gourlaysama/girouette/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       linuxissuper
       cafkafk
     ];

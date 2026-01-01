@@ -35,12 +35,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py3langid" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fork of the language identification tool langid.py, featuring a modernized codebase and faster execution times";
     mainProgram = "langid";
     homepage = "https://github.com/adbar/py3langid";
     changelog = "https://github.com/adbar/py3langid/blob/v${version}/HISTORY.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jokatzke ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jokatzke ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

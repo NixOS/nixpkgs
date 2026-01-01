@@ -38,11 +38,19 @@ buildGoModule rec {
     $out/bin/tea man --out $out/share/man/man1/tea.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Gitea official CLI client";
     homepage = "https://gitea.com/gitea/tea";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Gitea official CLI client";
+    homepage = "https://gitea.com/gitea/tea";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       j4m3s
       techknowlogick
     ];

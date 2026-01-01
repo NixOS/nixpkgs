@@ -41,11 +41,20 @@ buildPythonPackage {
     "test/test_dataset.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for working with the MUSCIMA++ dataset of handwritten music notation";
     homepage = "https://github.com/hajicj/muscima";
     changelog = "https://github.com/hajicj/muscima/blob/${rev}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ piegames ];
+=======
+  meta = with lib; {
+    description = "Tools for working with the MUSCIMA++ dataset of handwritten music notation";
+    homepage = "https://github.com/hajicj/muscima";
+    changelog = "https://github.com/hajicj/muscima/blob/${rev}/CHANGES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ piegames ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

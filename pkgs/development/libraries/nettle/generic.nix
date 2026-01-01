@@ -40,7 +40,11 @@ stdenv.mkDerivation {
 
   patches = lib.optional (stdenv.hostPlatform.system == "i686-cygwin") ./cygwin.patch;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Cryptographic library";
 
     longDescription = ''
@@ -66,11 +70,20 @@ stdenv.mkDerivation {
       I/O.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
 
     homepage = "https://www.lysator.liu.se/~nisse/nettle/";
 
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.vcunat ];
+=======
+    license = licenses.gpl2Plus;
+
+    homepage = "https://www.lysator.liu.se/~nisse/nettle/";
+
+    platforms = platforms.all;
+    maintainers = [ maintainers.vcunat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

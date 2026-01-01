@@ -29,11 +29,20 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mlarchive2maildir" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/flokli/mlarchive2maildir";
     description = "Imports mail from (pipermail) archives into a maildir";
     mainProgram = "mlarchive2maildir";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/flokli/mlarchive2maildir";
+    description = "Imports mail from (pipermail) archives into a maildir";
+    mainProgram = "mlarchive2maildir";
+    license = licenses.mit;
+    maintainers = with maintainers; [ flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

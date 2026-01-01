@@ -22,11 +22,20 @@ mkDerivation {
 
   buildInputs = [ standard-library ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gallais.github.io/agdarsec/";
     description = "Total Parser Combinators in Agda";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ turion ];
+=======
+  meta = with lib; {
+    homepage = "https://gallais.github.io/agdarsec/";
+    description = "Total Parser Combinators in Agda";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ turion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -37,7 +37,11 @@ stdenvNoCC.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/PhrozenByte/rmtrash";
     description = "Trash-put made compatible with GNUs rm and rmdir";
     longDescription = ''
@@ -45,8 +49,14 @@ stdenvNoCC.mkDerivation rec {
       way that is, otherwise as `trash-put` itself, compatible to GNUs `rm`
       and `rmdir`.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ peelz ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ peelz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,12 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "guessit" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library that extracts as much information as possible from a video filename";
     mainProgram = "guessit";
     homepage = "https://guessit-io.github.io/guessit/";
     changelog = "https://github.com/guessit-io/guessit/raw/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Only;
+=======
+    license = licenses.lgpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -61,10 +61,17 @@ buildDunePackage rec {
     xmlm
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/logseq/mldoc";
     description = "Another Emacs Org-mode and Markdown parser";
     license = lib.licenses.agpl3Only;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/logseq/mldoc";
+    description = "Another Emacs Org-mode and Markdown parser";
+    license = licenses.agpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

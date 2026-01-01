@@ -82,7 +82,11 @@ stdenv.mkDerivation rec {
     ln -s "$rules" "$out/etc/udev/rules.d/"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free and Open On-Chip Debugging, In-System Programming and Boundary-Scan Testing";
     mainProgram = "openocd";
     longDescription = ''
@@ -95,11 +99,20 @@ stdenv.mkDerivation rec {
       GNU GDB program.
     '';
     homepage = "https://openocd.sourceforge.net/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       bjornfor
       prusnak
     ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      bjornfor
+      prusnak
+    ];
+    platforms = platforms.unix ++ platforms.windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

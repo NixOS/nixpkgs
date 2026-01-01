@@ -29,10 +29,13 @@ stdenv.mkDerivation {
     # https://github.com/9fans/plan9port/commit/540caa5873bcc3bc2a0e1896119f5b53a0e8e630
     # https://github.com/9fans/plan9port/commit/323e1a8fac276f008e6d5146a83cbc88edeabc87
     ./getcallerpc-use-macro-or-stub.patch
+<<<<<<< HEAD
     # fix build with c23
     #   dd.c:315:30: error: expected identifier or '*' before 'true'
     #   n5.c:690:22: error: lvalue required as left operand of assignment
     ./fix-build-with-c23.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ patches;
 

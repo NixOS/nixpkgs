@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lxqt/lxqt-build-tools";
     description = "Various packaging tools and scripts for LXQt applications";
@@ -72,5 +73,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-build-tools";
+    description = "Various packaging tools and scripts for LXQt applications";
+    mainProgram = "lxqt-transupdate";
+    license = licenses.lgpl21Plus;
+    platforms = with platforms; unix;
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

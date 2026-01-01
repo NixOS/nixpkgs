@@ -71,8 +71,11 @@ stdenv.mkDerivation {
 
   outputs = [
     "out"
+<<<<<<< HEAD
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "openjo"
     "openja"
   ];
@@ -85,6 +88,7 @@ stdenv.mkDerivation {
     "-DBuildJK2SPEngine:BOOL=ON"
     "-DBuildJK2SPGame:BOOL=ON"
     "-DBuildJK2SPRdVanilla:BOOL=ON"
+<<<<<<< HEAD
   ]
   # Otherwise will fall with `not found <fp.h>`
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -150,15 +154,51 @@ stdenv.mkDerivation {
 
       popd
     done
+=======
+  ];
+
+  postInstall = ''
+    mkdir -p $out/bin $openja/bin $openjo/bin
+    mkdir -p $openja/share/applications $openjo/share/applications
+    mkdir -p $openja/share/icons/hicolor/128x128/apps $openjo/share/icons/hicolor/128x128/apps
+    mkdir -p $openja/opt $openjo/opt
+    mv $out/opt/JediAcademy $openja/opt/
+    mv $out/opt/JediOutcast $openjo/opt/
+    jaPrefix=$openja/opt/JediAcademy
+    joPrefix=$openjo/opt/JediOutcast
+
+    makeWrapper $jaPrefix/openjk.* $openja/bin/jamp --chdir "$jaPrefix"
+    makeWrapper $jaPrefix/openjk_sp.* $openja/bin/jasp --chdir "$jaPrefix"
+    makeWrapper $jaPrefix/openjkded.* $openja/bin/openjkded --chdir "$jaPrefix"
+    makeWrapper $joPrefix/openjo_sp.* $openjo/bin/josp --chdir "$joPrefix"
+
+    cp $src/shared/icons/OpenJK_Icon_128.png $openjo/share/icons/hicolor/128x128/apps
+    cp $src/shared/icons/OpenJK_Icon_128.png $openja/share/icons/hicolor/128x128/apps
+    ln -s ${jamp}/share/applications/* $openja/share/applications
+    ln -s ${jasp}/share/applications/* $openja/share/applications
+    ln -s ${josp}/share/applications/* $openjo/share/applications
+    ln -s $openja/bin/* $out/bin
+    ln -s $openjo/bin/* $out/bin
+    rm -rf $out/opt
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source engine for Star Wars Jedi Academy game";
     homepage = "https://github.com/JACoders/OpenJK";
     license = lib.licenses.gpl2Only;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ r4v3n6101 ];
+=======
+  meta = with lib; {
+    description = "Open-source engine for Star Wars Jedi Academy game";
+    homepage = "https://github.com/JACoders/OpenJK";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

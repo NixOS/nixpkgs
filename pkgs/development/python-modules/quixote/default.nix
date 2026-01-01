@@ -30,10 +30,18 @@ buildPythonPackage rec {
     "quixote/ptl/test/test_ptl.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small and flexible Python Web application framework";
     homepage = "https://pypi.org/project/Quixote/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Small and flexible Python Web application framework";
+    homepage = "https://pypi.org/project/Quixote/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

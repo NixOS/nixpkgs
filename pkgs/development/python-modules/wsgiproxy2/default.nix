@@ -27,10 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wsgiproxy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP proxying tools for WSGI apps";
     homepage = "https://wsgiproxy2.readthedocs.io/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "HTTP proxying tools for WSGI apps";
+    homepage = "https://wsgiproxy2.readthedocs.io/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

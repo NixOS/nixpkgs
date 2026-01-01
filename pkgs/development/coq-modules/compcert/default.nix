@@ -138,12 +138,21 @@ let
       "man"
     ];
 
+<<<<<<< HEAD
     meta = {
       description = "Formally verified C compiler";
       homepage = "https://compcert.org";
       license = lib.licenses.inria-compcert;
       platforms = builtins.attrNames targets;
       maintainers = with lib.maintainers; [
+=======
+    meta = with lib; {
+      description = "Formally verified C compiler";
+      homepage = "https://compcert.org";
+      license = licenses.inria-compcert;
+      platforms = builtins.attrNames targets;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         thoughtpolice
         jwiegley
         vbgl

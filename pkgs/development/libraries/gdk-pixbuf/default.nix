@@ -169,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     moduleDir = "${finalAttrs.passthru.binaryDir}/loaders";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library for image loading and manipulation";
     homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
@@ -177,5 +178,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gdk-pixbuf-thumbnailer";
     pkgConfigModules = [ "gdk-pixbuf-2.0" ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for image loading and manipulation";
+    homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
+    license = licenses.lgpl21Plus;
+    teams = [ teams.gnome ];
+    mainProgram = "gdk-pixbuf-thumbnailer";
+    pkgConfigModules = [ "gdk-pixbuf-2.0" ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

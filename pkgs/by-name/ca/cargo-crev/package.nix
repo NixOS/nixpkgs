@@ -45,16 +45,28 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ gitMinimal ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cryptographically verifiable code review system for the cargo (Rust) package manager";
     mainProgram = "cargo-crev";
     homepage = "https://github.com/crev-dev/cargo-crev";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Cryptographically verifiable code review system for the cargo (Rust) package manager";
+    mainProgram = "cargo-crev";
+    homepage = "https://github.com/crev-dev/cargo-crev";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       mit
       mpl20
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       b4dm4n
       matthiasbeyer
     ];

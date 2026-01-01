@@ -30,7 +30,11 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -47,11 +51,19 @@ rustPlatform.buildRustPackage rec {
   # fails with sandbox
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Automatically trims your branches whose tracking remote refs are merged or gone";
     homepage = "https://github.com/foriequal0/git-trim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cafkafk ];
+=======
+  meta = with lib; {
+    description = "Automatically trims your branches whose tracking remote refs are merged or gone";
+    homepage = "https://github.com/foriequal0/git-trim";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cafkafk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-trim";
   };
 }

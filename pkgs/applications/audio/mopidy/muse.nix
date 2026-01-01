@@ -30,10 +30,17 @@ pythonPackages.buildPythonApplication rec {
   # has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Mopidy web client with Snapcast support";
     homepage = "https://github.com/cristianpb/muse";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Mopidy web client with Snapcast support";
+    homepage = "https://github.com/cristianpb/muse";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -28,7 +28,11 @@ stdenv.mkDerivation {
     chmod +x $out/bin/flockit
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "LD_PRELOAD shim to add file locking to programs that don't do it (I'm looking at you, rsync!)";
     mainProgram = "flockit";
     longDescription = ''
@@ -50,8 +54,14 @@ stdenv.mkDerivation {
       https://www.swiftstack.com/blog/2012/08/15/old-school-monkeypatching/
     '';
     homepage = "https://github.com/smerritt/flockit";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.basvandijk ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.basvandijk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

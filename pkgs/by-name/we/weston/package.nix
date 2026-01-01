@@ -129,7 +129,11 @@ stdenv.mkDerivation rec {
 
   passthru.providedSessions = [ "weston" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lightweight and functional Wayland compositor";
     longDescription = ''
       Weston is the reference implementation of a Wayland compositor, as well
@@ -142,10 +146,17 @@ stdenv.mkDerivation rec {
       provided.
     '';
     homepage = "https://gitlab.freedesktop.org/wayland/weston";
+<<<<<<< HEAD
     license = lib.licenses.mit; # Expat version
     platforms = lib.platforms.linux;
     mainProgram = "weston";
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit; # Expat version
+    platforms = platforms.linux;
+    mainProgram = "weston";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       qyliss
     ];
   };

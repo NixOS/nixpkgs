@@ -48,11 +48,20 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/adoptware/pinball";
     description = "Emilia Pinball simulator";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ qyliss ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/adoptware/pinball";
+    description = "Emilia Pinball simulator";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ qyliss ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

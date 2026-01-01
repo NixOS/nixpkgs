@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   pkg-config,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenv,
   fetchurl,
   ncurses,
@@ -12,6 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "calcurse";
+<<<<<<< HEAD
   version = "4.8.2";
 
   src = fetchurl {
@@ -21,6 +25,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkg-config
+=======
+  version = "4.8.1";
+
+  src = fetchurl {
+    url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
+    hash = "sha256-2GuzcBT9abjYPMuQSsl5xrjd9Z7j28gPWidFJeTVgwo=";
+  };
+
+  buildInputs = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ncurses
     gettext
     python3

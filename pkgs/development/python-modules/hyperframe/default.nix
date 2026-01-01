@@ -22,10 +22,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyperframe" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP/2 framing layer for Python";
     homepage = "https://github.com/python-hyper/hyperframe/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "HTTP/2 framing layer for Python";
+    homepage = "https://github.com/python-hyper/hyperframe/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

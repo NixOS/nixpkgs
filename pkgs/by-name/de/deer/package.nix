@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
     cp deer $out/share/zsh/site-functions/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Ranger-like file navigation for zsh";
     homepage = "https://github.com/Vifon/deer";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Ranger-like file navigation for zsh";
+    homepage = "https://github.com/Vifon/deer";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

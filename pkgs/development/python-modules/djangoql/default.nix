@@ -26,10 +26,18 @@ buildPythonPackage rec {
     ${python.executable} test_project/manage.py test core.tests
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced search language for Django";
     homepage = "https://github.com/ivelum/djangoql";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erikarvstedt ];
+=======
+  meta = with lib; {
+    description = "Advanced search language for Django";
+    homepage = "https://github.com/ivelum/djangoql";
+    license = licenses.mit;
+    maintainers = with maintainers; [ erikarvstedt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

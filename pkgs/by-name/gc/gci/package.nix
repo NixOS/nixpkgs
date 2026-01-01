@@ -16,10 +16,18 @@ buildGo124Module rec {
 
   vendorHash = "sha256-NWVhuJAWwZ9EPLq/PY8nqqRXXPgahGdFNVqBTDvCnMw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Controls golang package import order and makes it always deterministic";
     homepage = "https://github.com/daixiang0/gci";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ krostar ];
+=======
+  meta = with lib; {
+    description = "Controls golang package import order and makes it always deterministic";
+    homepage = "https://github.com/daixiang0/gci";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ krostar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

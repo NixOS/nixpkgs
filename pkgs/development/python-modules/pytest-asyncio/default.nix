@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
+<<<<<<< HEAD
   version = "1.3.0"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+=======
+  version = "1.2.0"; # N.B.: when updating, tests bleak and aioesphomeapi tests
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-asyncio";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MWKMJkvxdvuOyxE8rNlf15j7C+MwJibnNsbfS0biKwo=";
+=======
+    hash = "sha256-27FCV7zgFGe/Q0fkYyh5Z05foVGhbKBRPTH4UK/tW5A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -31,6 +39,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
+<<<<<<< HEAD
   dependencies =
     lib.optionals (pythonOlder "3.11") [
       backports-asyncio-runner
@@ -38,6 +47,14 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.13") [
       typing-extensions
     ];
+=======
+  dependencies = [
+    backports-asyncio-runner
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
+    typing-extensions
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     mkdir $testout
@@ -49,11 +66,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_asyncio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for testing asyncio code with pytest";
     homepage = "https://github.com/pytest-dev/pytest-asyncio";
     changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/${src.tag}/docs/reference/changelog.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Library for testing asyncio code with pytest";
+    homepage = "https://github.com/pytest-dev/pytest-asyncio";
+    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/${src.tag}/docs/reference/changelog.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

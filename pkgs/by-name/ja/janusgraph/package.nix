@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     cd "$TMPDIR"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source, distributed graph database";
     homepage = "https://janusgraph.org/";
@@ -49,5 +50,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.ners ];
+=======
+  meta = with lib; {
+    description = "Open-source, distributed graph database";
+    homepage = "https://janusgraph.org/";
+    mainProgram = "janusgraph-server";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.ners ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

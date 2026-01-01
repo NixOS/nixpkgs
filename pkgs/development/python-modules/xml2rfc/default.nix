@@ -77,15 +77,24 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xml2rfc" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool generating IETF RFCs and drafts from XML sources";
     mainProgram = "xml2rfc";
     homepage = "https://github.com/ietf-tools/xml2rfc";
     changelog = "https://github.com/ietf-tools/xml2rfc/blob/${src.tag}/CHANGELOG.md";
     # Well, parts might be considered unfree, if being strict; see:
     # http://metadata.ftp-master.debian.org/changelogs/non-free/x/xml2rfc/xml2rfc_2.9.6-1_copyright
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       vcunat
       yrashk
     ];

@@ -42,10 +42,18 @@ rustPlatform.buildRustPackage {
     cp coldclear.h $out/include
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tetris AI";
     homepage = "https://github.com/26F-Studio/cold-clear";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ chayleaf ];
+=======
+  meta = with lib; {
+    description = "Tetris AI";
+    homepage = "https://github.com/26F-Studio/cold-clear";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ chayleaf ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

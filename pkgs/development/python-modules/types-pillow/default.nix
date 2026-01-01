@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PIL-stubs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Typing stubs for Pillow";
     homepage = "https://github.com/python/typeshed";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ arjan-s ];
+=======
+  meta = with lib; {
+    description = "Typing stubs for Pillow";
+    homepage = "https://github.com/python/typeshed";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ arjan-s ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

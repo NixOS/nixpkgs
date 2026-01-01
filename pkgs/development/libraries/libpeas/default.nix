@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GObject-based plugins engine";
     mainProgram = "peas-demo";
@@ -105,5 +106,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "GObject-based plugins engine";
+    mainProgram = "peas-demo";
+    homepage = "https://gitlab.gnome.org/GNOME/libpeas";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

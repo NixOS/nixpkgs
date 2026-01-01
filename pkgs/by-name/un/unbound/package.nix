@@ -52,18 +52,29 @@
   nix-update-script,
   # for passthru.tests
   gnutls,
+<<<<<<< HEAD
   versionCheckHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
+<<<<<<< HEAD
   version = "1.24.2";
+=======
+  version = "1.24.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
     tag = "release-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-kyTcDmNGKJuOMZ7cxIWh6o7aasRUoAB4M0tIG81BQsE=";
+=======
+    hash = "sha256-meWgu1UGhR9d8wVb8guqbnGE3UHs6uJHR20iDFnIThQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -203,12 +214,15 @@ stdenv.mkDerivation (finalAttrs: {
       ) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'"
     ) (builtins.filter (p: p != null) finalAttrs.buildInputs);
 
+<<<<<<< HEAD
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = "-V";
   doInstallCheck = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
@@ -226,9 +240,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Validating, recursive, and caching DNS resolver";
     license = lib.licenses.bsd3;
     homepage = "https://www.unbound.net";
+<<<<<<< HEAD
     changelog = "https://github.com/NLnetLabs/unbound/releases/tag/release-${finalAttrs.version}";
     maintainers = with lib.maintainers; [ Scrumplex ];
     mainProgram = "unbound";
+=======
+    maintainers = with lib.maintainers; [ Scrumplex ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = with lib.platforms; unix ++ windows;
   };
 })

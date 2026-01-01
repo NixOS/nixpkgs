@@ -44,11 +44,20 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple OpenGL core profile loading";
     homepage = "https://github.com/skaslev/gl3w";
     license = lib.licenses.unlicense;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple OpenGL core profile loading";
+    homepage = "https://github.com/skaslev/gl3w";
+    license = licenses.unlicense;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

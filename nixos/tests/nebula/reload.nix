@@ -66,13 +66,21 @@ in
       lighthouse.succeed(
           "mkdir -p /etc/nebula",
           'nebula-cert ca -duration $((10*365*24*60))m -name "Smoke Test" -out-crt /etc/nebula/ca.crt -out-key /etc/nebula/ca.key',
+<<<<<<< HEAD
           'nebula-cert sign -duration $((365*24*60))m -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "lighthouse" -groups "lighthouse" -networks "10.0.100.1/24" -out-crt /etc/nebula/lighthouse.crt -out-key /etc/nebula/lighthouse.key',
+=======
+          'nebula-cert sign -duration $((365*24*60))m -ca-crt /etc/nebula/ca.crt -ca-key /etc/nebula/ca.key -name "lighthouse" -groups "lighthouse" -ip "10.0.100.1/24" -out-crt /etc/nebula/lighthouse.crt -out-key /etc/nebula/lighthouse.key',
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           'chown -R nebula-smoke:nebula-smoke /etc/nebula'
       )
 
       # Restart nebula to pick up the keys.
       lighthouse.systemctl("restart nebula@smoke.service")
+<<<<<<< HEAD
       lighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
+=======
+      lighthouse.succeed("ping -c5 10.0.100.1")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       # Verify that nebula's ssh interface is up.
       lighthouse.succeed("${pkgs.nmap}/bin/nmap 127.0.0.1 | grep 2222/tcp")

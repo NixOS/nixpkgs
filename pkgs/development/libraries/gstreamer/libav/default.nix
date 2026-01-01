@@ -64,11 +64,19 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "FFmpeg plugin for GStreamer";
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "FFmpeg plugin for GStreamer";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

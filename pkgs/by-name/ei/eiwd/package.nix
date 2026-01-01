@@ -81,10 +81,18 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a test/* $test/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/illiliti/eiwd/";
     description = "Fork of iwd (wifi daemon) which does not require dbus";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/illiliti/eiwd/";
+    description = "Fork of iwd (wifi daemon) which does not require dbus";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

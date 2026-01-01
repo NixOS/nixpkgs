@@ -6,11 +6,19 @@ let
   topic = "foo.bar";
 
 in
+<<<<<<< HEAD
 { lib, ... }:
 {
   name = "nats";
   meta = {
     maintainers = with lib.maintainers; [ c0deaddict ];
+=======
+{ pkgs, lib, ... }:
+{
+  name = "nats";
+  meta = with pkgs.lib; {
+    maintainers = with maintainers; [ c0deaddict ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes =

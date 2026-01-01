@@ -117,12 +117,21 @@ python3.pkgs.buildPythonApplication rec {
     command = "HOME=$TMPDIR whipper --version";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/whipper-team/whipper";
     description = "CD ripper aiming for accuracy over speed";
     maintainers = with lib.maintainers; [ emily ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/whipper-team/whipper";
+    description = "CD ripper aiming for accuracy over speed";
+    maintainers = with maintainers; [ emily ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "whipper";
   };
 }

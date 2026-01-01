@@ -21,9 +21,16 @@ buildPythonPackage rec {
   # Tests not included in PyPI tarball
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Few extensions to pyyaml";
     homepage = "https://github.com/asottile/aspy.yaml";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Few extensions to pyyaml";
+    homepage = "https://github.com/asottile/aspy.yaml";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

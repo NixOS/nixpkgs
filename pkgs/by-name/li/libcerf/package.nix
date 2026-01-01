@@ -25,11 +25,20 @@ stdenv.mkDerivation rec {
     inherit gnuplot;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Complex error (erf), Dawson, Faddeeva, and Voigt function library";
     homepage = "https://jugit.fz-juelich.de/mlz/libcerf";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Complex error (erf), Dawson, Faddeeva, and Voigt function library";
+    homepage = "https://jugit.fz-juelich.de/mlz/libcerf";
+    license = licenses.mit;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

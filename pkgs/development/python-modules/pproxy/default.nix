@@ -37,7 +37,11 @@ buildPythonPackage rec {
     daemon = [ python-daemon ];
   };
 
+<<<<<<< HEAD
   nativeCheckInputs = lib.concatAttrValues optional-dependencies;
+=======
+  nativeCheckInputs = lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "pproxy" ];
 
@@ -56,11 +60,19 @@ buildPythonPackage rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Proxy server that can tunnel among remote servers by regex rules";
     mainProgram = "pproxy";
     homepage = "https://github.com/qwj/python-proxy";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Proxy server that can tunnel among remote servers by regex rules";
+    mainProgram = "pproxy";
+    homepage = "https://github.com/qwj/python-proxy";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

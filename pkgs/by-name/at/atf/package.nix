@@ -1,7 +1,10 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   darwin,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
@@ -9,11 +12,15 @@
   gitUpdater,
 }:
 
+<<<<<<< HEAD
 let
   # atf is a dependency of libiconv. Avoid an infinite recursion with `pkgsStatic` by using a bootstrap stdenv.
   stdenv' = if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation (finalAttrs: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "atf";
   version = "0.23";
 
@@ -31,12 +38,20 @@ stdenv'.mkDerivation (finalAttrs: {
         --replace-fail 'atf_test_program{name="srcdir_test"}' ""
     ''
     # These tests fail on Darwin.
+<<<<<<< HEAD
     + lib.optionalString (finalAttrs.doInstallCheck && stdenv'.hostPlatform.isDarwin) ''
+=======
+    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isDarwin) ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       substituteInPlace atf-c/detail/process_test.c \
         --replace-fail 'ATF_TP_ADD_TC(tp, status_coredump);' ""
     ''
     # This test fails on Linux.
+<<<<<<< HEAD
     + lib.optionalString (finalAttrs.doInstallCheck && stdenv'.hostPlatform.isLinux) ''
+=======
+    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isLinux) ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       substituteInPlace atf-c/detail/fs_test.c \
         --replace-fail 'ATF_TP_ADD_TC(tp, eaccess);' ""
     '';

@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Daemon that displays passive pop-up notifications";
     mainProgram = "notify-osd";
@@ -56,5 +57,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.imalison ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Daemon that displays passive pop-up notifications";
+    mainProgram = "notify-osd";
+    homepage = "https://launchpad.net/notify-osd";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.imalison ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

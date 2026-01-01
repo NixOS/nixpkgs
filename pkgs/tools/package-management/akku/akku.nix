@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     extraArgs = [ "--version=branch" ];
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://akkuscm.org/";
     description = "Language package manager for Scheme";
@@ -50,6 +51,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://akkuscm.org/";
+    description = "Language package manager for Scheme";
+    changelog = "https://gitlab.com/akkuscm/akku/-/raw/v${version}/NEWS.md";
+    platforms = platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nagy
       konst-aa
     ];

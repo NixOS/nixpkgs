@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "greeneye.monitor" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Receive data packets from GreenEye Monitor";
     homepage = "https://github.com/jkeljo/greeneye-monitor";
     changelog = "https://github.com/jkeljo/greeneye-monitor/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Receive data packets from GreenEye Monitor";
+    homepage = "https://github.com/jkeljo/greeneye-monitor";
+    changelog = "https://github.com/jkeljo/greeneye-monitor/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

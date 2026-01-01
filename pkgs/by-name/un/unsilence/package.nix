@@ -33,11 +33,20 @@ python3Packages.buildPythonPackage rec {
 
   pythonRelaxDeps = [ "rich" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lagmoellertim/unsilence";
     description = "Console Interface and Library to remove silent parts of a media file";
     mainProgram = "unsilence";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ esau79p ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lagmoellertim/unsilence";
+    description = "Console Interface and Library to remove silent parts of a media file";
+    mainProgram = "unsilence";
+    license = licenses.mit;
+    maintainers = with maintainers; [ esau79p ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

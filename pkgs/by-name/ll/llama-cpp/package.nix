@@ -3,7 +3,10 @@
   autoAddDriverRunpath,
   cmake,
   fetchFromGitHub,
+<<<<<<< HEAD
   installShellFiles,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
   stdenv,
 
@@ -74,13 +77,21 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
+<<<<<<< HEAD
   version = "7581";
+=======
+  version = "6981";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-8xQ6Azdr2Nwn+2EYAn/YDGLDRI6hqKVQsBDmfa7f5uk=";
+=======
+    hash = "sha256-0WtiHDlMeb+m2XcMwkPFY1mtwVTwRJUoxQSwzpiRbts=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -90,7 +101,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+<<<<<<< HEAD
     installShellFiles
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ninja
     pkg-config
   ]
@@ -153,10 +167,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/include
     cp $src/include/llama.h $out/include/
+<<<<<<< HEAD
 
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ''
   + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
 
@@ -186,7 +203,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       dit7ya
       philiptaron
       xddxdd
+<<<<<<< HEAD
       yuannan
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;

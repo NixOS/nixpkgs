@@ -84,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r barrage sounds images $out/share/games/torus-trooper/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/tt_e.html";
     description = "Fast-paced abstract scrolling shooter game";
@@ -91,5 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/windows/tt_e.html";
+    description = "Fast-paced abstract scrolling shooter game";
+    mainProgram = "torus-trooper";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

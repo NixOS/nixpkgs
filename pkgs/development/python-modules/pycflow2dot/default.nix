@@ -34,11 +34,19 @@ buildPythonPackage rec {
     make all
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Layout C call graphs from cflow using GraphViz dot";
     mainProgram = "cflow2dot";
     homepage = "https://github.com/johnyf/pycflow2dot";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Layout C call graphs from cflow using GraphViz dot";
+    mainProgram = "cflow2dot";
+    homepage = "https://github.com/johnyf/pycflow2dot";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

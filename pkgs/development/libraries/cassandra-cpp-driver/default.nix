@@ -1,6 +1,9 @@
 {
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   lib,
   stdenv,
   cmake,
@@ -21,6 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GuvmKHJknudyn7ahrn/8+kKUA4NW5UjCfkYoX3aTE+Q=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/apache/cassandra-cpp-driver/pull/580
     (fetchpatch {
@@ -30,6 +34,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -49,16 +55,27 @@ stdenv.mkDerivation rec {
     )
     ++ [ "-DLIBUV_INCLUDE_DIR=${lib.getDev libuv}/include" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "DataStax CPP cassandra driver";
     longDescription = ''
       A modern, feature-rich and highly tunable C/C++ client
       library for Apache Cassandra 2.1+ using exclusively Cassandra’s
       binary protocol and Cassandra Query Language v3.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [ asl20 ];
     platforms = lib.platforms.x86_64;
     homepage = "https://docs.datastax.com/en/developer/cpp-driver/";
     maintainers = [ lib.maintainers.npatsakula ];
+=======
+    license = with licenses; [ asl20 ];
+    platforms = platforms.x86_64;
+    homepage = "https://docs.datastax.com/en/developer/cpp-driver/";
+    maintainers = [ maintainers.npatsakula ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

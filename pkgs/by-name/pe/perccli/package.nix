@@ -49,15 +49,25 @@ stdenvNoCC.mkDerivation rec {
   # Not needed because the binary is statically linked
   dontFixup = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Perccli Support for PERC RAID controllers";
 
     # Must be updated with every release
     homepage = "https://www.dell.com/support/home/en-us/drivers/driversdetails?driverid=tdghn";
 
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ panicgh ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ panicgh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

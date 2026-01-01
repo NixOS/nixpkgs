@@ -50,10 +50,17 @@ buildDunePackage rec {
     result
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Network device for reading and writing Ethernet frames via then Xen netfront/netback protocol";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Network device for reading and writing Ethernet frames via then Xen netfront/netback protocol";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/mirage/mirage-net-xen";
   };
 }

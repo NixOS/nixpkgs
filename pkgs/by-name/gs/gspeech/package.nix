@@ -79,11 +79,20 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal GUI for the Text To Speech 'Svox Pico'. Read clipboard or selected text in different languages and manage it : pause, stop, replay";
     homepage = "https://github.com/mothsART/gSpeech";
     maintainers = with lib.maintainers; [ mothsart ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Minimal GUI for the Text To Speech 'Svox Pico'. Read clipboard or selected text in different languages and manage it : pause, stop, replay";
+    homepage = "https://github.com/mothsART/gSpeech";
+    maintainers = with maintainers; [ mothsart ];
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

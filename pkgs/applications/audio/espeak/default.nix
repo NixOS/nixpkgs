@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     makeFlags="PREFIX=$out DATADIR=$out/share/espeak-data"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Compact open source software speech synthesizer";
     mainProgram = "espeak";
     homepage = "https://espeak.sourceforge.net/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Compact open source software speech synthesizer";
+    mainProgram = "espeak";
+    homepage = "https://espeak.sourceforge.net/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -2,7 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoreconfHook,
   pkg-config,
   docSupport ? true,
@@ -21,6 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qbiri549fma8c72nmj3cpz3sn1vc256kfafnygkmkzg7wdmgi7r";
   };
 
+<<<<<<< HEAD
   patches = [
     # fix build with GCC 15 by removing unneeded argument
     (fetchpatch {
@@ -29,6 +33,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   outputs = [ "out" ] ++ lib.optional docSupport "doc";
 
   nativeBuildInputs = [
@@ -48,11 +54,20 @@ stdenv.mkDerivation rec {
     cp -r docs/html $doc/share/libexsid/doc/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Driver for exSID USB";
     homepage = "http://hacks.slashdirt.org/hw/exsid/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Driver for exSID USB";
+    homepage = "http://hacks.slashdirt.org/hw/exsid/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

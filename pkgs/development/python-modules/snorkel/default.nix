@@ -61,11 +61,20 @@ buildPythonPackage {
   ]
   ++ dask.optional-dependencies.distributed;
 
+<<<<<<< HEAD
   meta = {
     description = "System for quickly generating training data with weak supervision";
     homepage = "https://github.com/snorkel-team/snorkel";
     changelog = "https://github.com/snorkel/snorkel/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "System for quickly generating training data with weak supervision";
+    homepage = "https://github.com/snorkel-team/snorkel";
+    changelog = "https://github.com/snorkel/snorkel/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

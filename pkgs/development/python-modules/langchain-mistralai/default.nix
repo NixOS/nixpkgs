@@ -24,14 +24,22 @@
 
 buildPythonPackage rec {
   pname = "langchain-mistralai";
+<<<<<<< HEAD
   version = "1.1.1";
+=======
+  version = "1.0.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-mistralai==${version}";
+<<<<<<< HEAD
     hash = "sha256-cdUl6LusttH6c0tBvaxQR5UGHjwyubKELCDv61VQ6Qo=";
+=======
+    hash = "sha256-o9xIIcqsuTgWMeluk3EMY3hbB3wGjhYYfzbHizpNTo8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/libs/partners/mistralai";
@@ -57,8 +65,11 @@ buildPythonPackage rec {
   disabledTests = [
     # Comparison error due to message formatting differences
     "test__convert_dict_to_message_tool_call"
+<<<<<<< HEAD
     # Fails when langchain-core gets ahead of this package
     "test_serdes"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pythonImportsCheck = [ "langchain_mistralai" ];

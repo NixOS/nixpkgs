@@ -38,14 +38,22 @@
 
 buildPythonPackage rec {
   pname = "plotly";
+<<<<<<< HEAD
   version = "6.5.0";
+=======
+  version = "6.3.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-JWb5bAu74j63E5tp8wmLjuWZqFAMpkg8utxM74VaGqA=";
+=======
+    hash = "sha256-zwJTesrtLreu7To795wJmowgZ3c4d0mHUaLt3C9Fqd8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -90,7 +98,11 @@ buildPythonPackage rec {
     which
     xarray
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # failed pinning test, sensitive to dep versions

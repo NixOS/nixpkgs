@@ -42,12 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_cache" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Defined interface for working with a cache of jupyter notebooks";
     mainProgram = "jcache";
     homepage = "https://github.com/executablebooks/jupyter-cache";
     changelog = "https://github.com/executablebooks/jupyter-cache/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

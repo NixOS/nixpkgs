@@ -37,6 +37,7 @@ stdenvNoCC.mkDerivation rec {
 
   postFixup = "gtk-update-icon-cache $out/share/icons/Arc";
 
+<<<<<<< HEAD
   meta = {
     description = "Arc icon theme";
     homepage = "https://github.com/horst3180/arc-icon-theme";
@@ -44,5 +45,14 @@ stdenvNoCC.mkDerivation rec {
     # moka-icon-theme dependency is restricted to linux
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    description = "Arc icon theme";
+    homepage = "https://github.com/horst3180/arc-icon-theme";
+    license = licenses.gpl3;
+    # moka-icon-theme dependency is restricted to linux
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

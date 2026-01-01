@@ -8,7 +8,10 @@
   ocamlPackages,
   ltl2ba,
   coq,
+<<<<<<< HEAD
   dune,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   why3,
   gdk-pixbuf,
   wrapGAppsHook3,
@@ -65,16 +68,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     wrapGAppsHook3
+<<<<<<< HEAD
     dune
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ (with ocamlPackages; [
     ocaml
     findlib
+<<<<<<< HEAD
+=======
+    dune_3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     menhir
   ]);
 
   buildInputs = with ocamlPackages; [
+<<<<<<< HEAD
     camlzip
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     dune-site
     dune-configurator
     ocamlgraph

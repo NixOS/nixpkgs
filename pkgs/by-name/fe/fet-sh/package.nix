@@ -23,12 +23,21 @@ stdenvNoCC.mkDerivation rec {
     install -m755 -D fet.sh $out/bin/fet.sh
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fetch written in posix shell without any external commands";
     homepage = "https://github.com/6gk/fet.sh";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ elkowar ];
+=======
+  meta = with lib; {
+    description = "Fetch written in posix shell without any external commands";
+    homepage = "https://github.com/6gk/fet.sh";
+    license = licenses.isc;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ elkowar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fet.sh";
   };
 }

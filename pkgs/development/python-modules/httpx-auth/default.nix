@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Authentication classes to be used with httpx";
     homepage = "https://github.com/Colin-b/httpx_auth";
     changelog = "https://github.com/Colin-b/httpx_auth/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Authentication classes to be used with httpx";
+    homepage = "https://github.com/Colin-b/httpx_auth";
+    changelog = "https://github.com/Colin-b/httpx_auth/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

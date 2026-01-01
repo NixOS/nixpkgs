@@ -29,12 +29,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "litemapy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to read and edit Litematica's schematic file format";
     homepage = "https://github.com/SmylerMC/litemapy";
     changelog = "https://github.com/SmylerMC/litemapy/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python library to read and edit Litematica's schematic file format";
+    homepage = "https://github.com/SmylerMC/litemapy";
+    changelog = "https://github.com/SmylerMC/litemapy/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gdd
       kuflierl
     ];

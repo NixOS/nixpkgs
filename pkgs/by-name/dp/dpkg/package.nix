@@ -125,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
 
   setupHook = ./setup-hook.sh;
 
@@ -134,6 +135,18 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+=======
+  versionCheckProgramArg = "--version";
+
+  setupHook = ./setup-hook.sh;
+
+  meta = with lib; {
+    description = "Debian package manager";
+    homepage = "https://wiki.debian.org/Teams/Dpkg";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ siriobalmelli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dpkg";
   };
 })

@@ -33,14 +33,24 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://coreruleset.org";
     description = ''
       The OWASP ModSecurity Core Rule Set is a set of generic attack detection
       rules for use with ModSecurity or compatible web application firewalls.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ izorkin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

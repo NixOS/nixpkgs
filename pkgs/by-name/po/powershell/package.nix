@@ -138,6 +138,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET";
     homepage = "https://microsoft.com/PowerShell";
@@ -146,6 +147,16 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = builtins.attrNames passthru.sources;
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    description = "Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET";
+    homepage = "https://microsoft.com/PowerShell";
+    license = licenses.mit;
+    mainProgram = "pwsh";
+    maintainers = with maintainers; [ wegank ];
+    platforms = builtins.attrNames passthru.sources;
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       binaryBytecode
       binaryNativeCode
     ];

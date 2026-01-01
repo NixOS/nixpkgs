@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goodwe" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for connecting to GoodWe inverter";
     homepage = "https://github.com/marcelblijleven/goodwe";
     changelog = "https://github.com/marcelblijleven/goodwe/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for connecting to GoodWe inverter";
+    homepage = "https://github.com/marcelblijleven/goodwe";
+    changelog = "https://github.com/marcelblijleven/goodwe/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

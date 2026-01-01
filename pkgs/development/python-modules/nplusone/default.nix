@@ -78,11 +78,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nplusone" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Detecting the n+1 queries problem in Python";
     homepage = "https://github.com/jmcarp/nplusone";
     maintainers = with lib.maintainers; [ cript0nauta ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Detecting the n+1 queries problem in Python";
+    homepage = "https://github.com/jmcarp/nplusone";
+    maintainers = with maintainers; [ cript0nauta ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast django.version "4";
   };
 }

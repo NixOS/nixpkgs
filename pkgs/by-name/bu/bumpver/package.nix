@@ -47,11 +47,19 @@ python3.pkgs.buildPythonApplication rec {
     "test_parse_default_pattern"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bump version numbers in project files";
     homepage = "https://pypi.org/project/bumpver/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kfollesdal ];
+=======
+  meta = with lib; {
+    description = "Bump version numbers in project files";
+    homepage = "https://pypi.org/project/bumpver/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kfollesdal ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bumpver";
   };
 }

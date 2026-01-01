@@ -340,7 +340,11 @@ in
             };
             mailer = {
               ENABLED = true;
+<<<<<<< HEAD
               PROTOCOL = "sendmail";
+=======
+              MAILER_TYPE = "sendmail";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               FROM = "do-not-reply@example.org";
               SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
             };
@@ -801,9 +805,15 @@ in
       // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
     };
 
+<<<<<<< HEAD
     services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.server.START_SSH_SERVER or false) [
       "GIT_PROTOCOL"
     ];
+=======
+    services.openssh.settings.AcceptEnv = mkIf (
+      !cfg.settings.server.START_SSH_SERVER or false
+    ) "GIT_PROTOCOL";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     users.users = mkIf (cfg.user == "forgejo") {
       forgejo = {
@@ -849,5 +859,13 @@ in
   };
 
   meta.doc = ./forgejo.md;
+<<<<<<< HEAD
   meta.maintainers = lib.teams.forgejo.members;
+=======
+  meta.maintainers = with lib.maintainers; [
+    bendlas
+    emilylange
+    pyrox0
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

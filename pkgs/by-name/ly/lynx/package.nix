@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
+<<<<<<< HEAD
       "https://invisible-island.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
+=======
+      "ftp://ftp.invisible-island.net/lynx/tarballs/lynx${version}.tar.bz2"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "https://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2"
     ];
     hash = "sha256-c3S4mTbZkWaeEB9Ol/LJWSA24ejNqnuvwlmnerb7B84=";
@@ -52,12 +56,21 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
     mainProgram = "lynx";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

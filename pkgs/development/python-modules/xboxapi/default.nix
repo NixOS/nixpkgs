@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xboxapi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python XBOX One API wrapper";
     homepage = "https://github.com/mKeRix/xboxapi-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python XBOX One API wrapper";
+    homepage = "https://github.com/mKeRix/xboxapi-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

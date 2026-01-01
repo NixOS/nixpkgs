@@ -100,7 +100,11 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://aquasecurity.github.io/tracee/latest/";
     changelog = "https://github.com/aquasecurity/tracee/releases/tag/v${version}";
     description = "Linux Runtime Security and Forensics using eBPF";
@@ -112,13 +116,21 @@ buildGoModule rec {
       is delivered as a Docker image that monitors the OS and detects suspicious
       behavior based on a pre-defined set of behavioral patterns.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # general license
       asl20
       # pkg/ebpf/c/*
       gpl2Plus
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ jk ];
+=======
+    maintainers = with maintainers; [ jk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

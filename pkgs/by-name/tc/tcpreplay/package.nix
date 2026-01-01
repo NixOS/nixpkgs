@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "--with-tcpdump=${tcpdump}/bin/tcpdump"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Suite of utilities for editing and replaying network traffic";
     homepage = "https://tcpreplay.appneta.com/";
@@ -43,5 +44,16 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ eleanor ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Suite of utilities for editing and replaying network traffic";
+    homepage = "https://tcpreplay.appneta.com/";
+    license = with licenses; [
+      bsdOriginalUC
+      gpl3Only
+    ];
+    maintainers = with maintainers; [ eleanor ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -37,11 +37,19 @@ in
 
   config = lib.mkIf cfg.enable {
 
+<<<<<<< HEAD
     environment.systemPackages = with pkgs; [
       tumbler
     ];
 
     services.dbus.packages = with pkgs; [
+=======
+    environment.systemPackages = with pkgs.xfce; [
+      tumbler
+    ];
+
+    services.dbus.packages = with pkgs.xfce; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tumbler
     ];
 

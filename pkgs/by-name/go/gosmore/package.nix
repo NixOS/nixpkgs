@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     "--binary"
   ]; # patch has dos style eol
 
+<<<<<<< HEAD
   meta = {
     description = "Open Street Map viewer";
     mainProgram = "gosmore";
@@ -50,5 +51,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Open Street Map viewer";
+    mainProgram = "gosmore";
+    homepage = "https://sourceforge.net/projects/gosmore/";
+    maintainers = with maintainers; [
+      raskin
+    ];
+    platforms = platforms.linux;
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
     ./ciao-boot.sh install
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ciao-lang.org/";
     description = "General purpose, multi-paradigm programming language in the Prolog family";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ suhr ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://ciao-lang.org/";
+    description = "General purpose, multi-paradigm programming language in the Prolog family";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ suhr ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/ciao.x86_64-darwin
   };
 }

@@ -48,11 +48,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textual_universal_directorytree" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Textual plugin for a DirectoryTree compatible with remote filesystems";
     homepage = "https://github.com/juftin/textual-universal-directorytree";
     changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Textual plugin for a DirectoryTree compatible with remote filesystems";
+    homepage = "https://github.com/juftin/textual-universal-directorytree";
+    changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

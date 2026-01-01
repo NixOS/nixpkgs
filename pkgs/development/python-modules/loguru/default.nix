@@ -3,20 +3,37 @@
   stdenv,
   buildPythonPackage,
   colorama,
+<<<<<<< HEAD
   fetchFromGitHub,
   fetchpatch,
+=======
+  exceptiongroup,
+  fetchFromGitHub,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   flit-core,
   freezegun,
   pytest-mypy-plugins,
   pytest-xdist,
   pytestCheckHook,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "loguru";
   version = "0.7.3";
+<<<<<<< HEAD
   pyproject = true;
 
+=======
+
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "Delgan";
     repo = "loguru";
@@ -24,6 +41,7 @@ buildPythonPackage rec {
     hash = "sha256-tccEzzs9TtFAZM9s43cskF9llc81Ng28LqedjLiE1m4=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       # python 3.14 compat
@@ -32,6 +50,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ flit-core ];
 
   nativeCheckInputs = [
@@ -40,7 +60,12 @@ buildPythonPackage rec {
     colorama
     freezegun
     pytest-mypy-plugins
+<<<<<<< HEAD
   ];
+=======
+  ]
+  ++ lib.optional (pythonOlder "3.10") exceptiongroup;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_multiprocessing.py" ];
 

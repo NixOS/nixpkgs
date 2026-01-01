@@ -34,6 +34,7 @@ buildPythonPackage rec {
     drafts = [ pycryptodome ];
   };
 
+<<<<<<< HEAD
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "joserfc" ];
@@ -43,6 +44,17 @@ buildPythonPackage rec {
     description = "Implementations of JOSE RFCs in Python";
     homepage = "https://github.com/authlib/joserfc";
     license = lib.licenses.bsd3;
+=======
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "joserfc" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/authlib/joserfc/blob/${src.tag}/docs/changelog.rst";
+    description = "Implementations of JOSE RFCs in Python";
+    homepage = "https://github.com/authlib/joserfc";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

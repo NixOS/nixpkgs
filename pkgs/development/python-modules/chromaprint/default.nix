@@ -25,11 +25,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "chromaprint" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Facilitate effortless color terminal output";
     homepage = "https://pypi.org/project/${pname}/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Facilitate effortless color terminal output";
+    homepage = "https://pypi.org/project/${pname}/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dschrempf
       peterhoeg
     ];

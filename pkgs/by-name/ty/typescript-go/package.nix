@@ -10,17 +10,30 @@ let
 in
 buildGoModule {
   pname = "typescript-go";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-19";
+=======
+  version = "0-unstable-2025-11-24";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typescript-go";
+<<<<<<< HEAD
     rev = "d9178cc1fef3cedc3c1a48a652e63dd83310ea20";
     hash = "sha256-W6EIyS/EpqkN45vK30qrS7dc2zMUsjkrDGzMJ4eHADE=";
     fetchSubmodules = false;
   };
 
   vendorHash = "sha256-1uZemqPsDxiYRVjLlC/UUP4ZXVCjocIBCj9uCzQHmog=";
+=======
+    rev = "bd7c18dc8ed3c5ed960d72f1e329353f0a594bcc";
+    hash = "sha256-RbLplpBIf7K576T6nN8EBr2TPoPuk8O9SbZ/VMHq3aw=";
+    fetchSubmodules = false;
+  };
+
+  vendorHash = "sha256-1QEwrFS4Qesp2CwzcsuMP8mLQlXKzfNaM9PFMEfDYxk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"

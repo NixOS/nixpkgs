@@ -28,9 +28,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rethinkdb" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python driver library for the RethinkDB database server";
     homepage = "https://github.com/RethinkDB/rethinkdb-python";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python driver library for the RethinkDB database server";
+    homepage = "https://github.com/RethinkDB/rethinkdb-python";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

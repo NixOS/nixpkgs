@@ -54,11 +54,20 @@ buildPythonPackage rec {
     phonenumberslite = [ phonenumberslite ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Django model and form field for normalised phone numbers using python-phonenumbers";
     homepage = "https://github.com/stefanfoulis/django-phonenumber-field/";
     changelog = "https://github.com/stefanfoulis/django-phonenumber-field/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephi ];
+=======
+  meta = with lib; {
+    description = "Django model and form field for normalised phone numbers using python-phonenumbers";
+    homepage = "https://github.com/stefanfoulis/django-phonenumber-field/";
+    changelog = "https://github.com/stefanfoulis/django-phonenumber-field/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sephi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

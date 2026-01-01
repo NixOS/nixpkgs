@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   config,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -9,11 +12,19 @@
   setuptools-scm,
 
   # dependencies
+<<<<<<< HEAD
+=======
+  airportsdata,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cloudpickle,
   datasets,
   diskcache,
   genson,
   interegular,
+<<<<<<< HEAD
+=======
+  iso3166,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   jinja2,
   jsonschema,
   lark,
@@ -22,10 +33,16 @@
   outlines-core,
   pycountry,
   pydantic,
+<<<<<<< HEAD
+=======
+  referencing,
+  requests,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   torch,
   transformers,
 
   # tests
+<<<<<<< HEAD
   airportsdata,
   anthropic,
   google-genai,
@@ -33,6 +50,12 @@
   jax,
   llama-cpp-python,
   mistralai,
+=======
+  anthropic,
+  google-genai,
+  jax,
+  llama-cpp-python,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ollama,
   openai,
   pytest-asyncio,
@@ -43,14 +66,22 @@
 
 buildPythonPackage rec {
   pname = "outlines";
+<<<<<<< HEAD
   version = "1.2.9";
+=======
+  version = "1.2.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outlines-dev";
     repo = "outlines";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-QuS8IokiOPJeh59+W4FLoE9dvBCChf2li70+Ex3aIwg=";
+=======
+    hash = "sha256-t1YSkFC56De9HkdDJN9WIpKDdHxZRfGRbFOtAiJxKUI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -59,11 +90,19 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+<<<<<<< HEAD
+=======
+    airportsdata
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cloudpickle
     datasets
     diskcache
     genson
     interegular
+<<<<<<< HEAD
+=======
+    iso3166
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     jinja2
     jsonschema
     lark
@@ -72,10 +111,16 @@ buildPythonPackage rec {
     outlines-core
     pycountry
     pydantic
+<<<<<<< HEAD
+=======
+    referencing
+    requests
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     torch
     transformers
   ];
 
+<<<<<<< HEAD
   # llama_cpp dependency cannot be imported when cudaSupport is enabled as it tries to load libcuda.so.1.
   # This library is provided by the nvidia driver at runtime, but isn't available in the sandbox.
   pythonImportsCheck = lib.optionals (!config.cudaSupport) [
@@ -92,6 +137,15 @@ buildPythonPackage rec {
     jax
     llama-cpp-python
     mistralai
+=======
+  pythonImportsCheck = [ "outlines" ];
+
+  nativeCheckInputs = [
+    anthropic
+    google-genai
+    jax
+    llama-cpp-python
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ollama
     openai
     pytest-asyncio
@@ -176,6 +230,7 @@ buildPythonPackage rec {
     "test_openai_simple_vision"
     "test_openai_simple_vision_pydantic"
     "test_openai_streaming"
+<<<<<<< HEAD
 
     # RuntimeError: Mistral API error: [Errno -3] Temporary failure in name resolution
     "test_mistral_async_call"
@@ -198,6 +253,8 @@ buildPythonPackage rec {
     "test_mistral_streaming"
     "test_mistral_vision"
     "test_mistral_vision_pydantic"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   disabledTestPaths = [

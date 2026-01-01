@@ -20,6 +20,7 @@ stdenv.mkDerivation {
     cp -ar . $out/share/frogatto/modules/frogatto4
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/frogatto/frogatto";
     description = "Data files to the frogatto game";
@@ -28,5 +29,15 @@ stdenv.mkDerivation {
       unfree
     ];
     maintainers = with lib.maintainers; [ astro ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/frogatto/frogatto";
+    description = "Data files to the frogatto game";
+    license = with licenses; [
+      cc-by-30
+      unfree
+    ];
+    maintainers = with maintainers; [ astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

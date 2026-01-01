@@ -33,12 +33,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Automated C-Lightning Node Manager";
     homepage = "https://github.com/ZmnSCPxj/clboss";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Automated C-Lightning Node Manager";
+    homepage = "https://github.com/ZmnSCPxj/clboss";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "clboss";
   };
 }

@@ -40,11 +40,19 @@ stdenv.mkDerivation rec {
         mkdir -p $out/bin && cp raxmlHPC-PTHREADS-SSE3 $out/bin
       '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for Phylogenetic Analysis and Post-Analysis of Large Phylogenies";
     license = lib.licenses.gpl3;
     homepage = "https://sco.h-its.org/exelixis/web/software/raxml/";
     maintainers = [ lib.maintainers.unode ];
+=======
+  meta = with lib; {
+    description = "Tool for Phylogenetic Analysis and Post-Analysis of Large Phylogenies";
+    license = licenses.gpl3;
+    homepage = "https://sco.h-its.org/exelixis/web/software/raxml/";
+    maintainers = [ maintainers.unode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

@@ -26,7 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymata_express" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python Asyncio Arduino Firmata Client";
     longDescription = ''
       Pymata-Express is a Python Firmata Protocol client. When used in conjunction
@@ -34,7 +38,12 @@ buildPythonPackage rec {
       hardware remotely over a serial link.
     '';
     homepage = "https://mryslab.github.io/pymata-express/";
+<<<<<<< HEAD
     license = with lib.licenses; [ agpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ agpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

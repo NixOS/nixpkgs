@@ -44,7 +44,11 @@
   imagemagick,
   imlib2,
   vips,
+<<<<<<< HEAD
   xfwm4,
+=======
+  xfce,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -212,11 +216,16 @@ stdenv.mkDerivation (finalAttrs: {
         vips
         ;
       inherit (enlightenment) efl;
+<<<<<<< HEAD
       inherit xfwm4;
+=======
+      inherit (xfce) xfwm4;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ffmpeg = ffmpeg.override { withSvg = true; };
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Small library to render SVG images to Cairo surfaces";
     homepage = "https://gitlab.gnome.org/GNOME/librsvg";
@@ -224,5 +233,14 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     mainProgram = "rsvg-convert";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Small library to render SVG images to Cairo surfaces";
+    homepage = "https://gitlab.gnome.org/GNOME/librsvg";
+    license = licenses.lgpl2Plus;
+    teams = [ teams.gnome ];
+    mainProgram = "rsvg-convert";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

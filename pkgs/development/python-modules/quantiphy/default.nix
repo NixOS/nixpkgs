@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "quantiphy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for physical quantities (numbers with units)";
     homepage = "https://quantiphy.readthedocs.io";
     changelog = "https://github.com/KenKundert/quantiphy/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "Module for physical quantities (numbers with units)";
+    homepage = "https://quantiphy.readthedocs.io";
+    changelog = "https://github.com/KenKundert/quantiphy/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

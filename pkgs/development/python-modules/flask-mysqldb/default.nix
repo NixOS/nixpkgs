@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "MySQL connection support for Flask";
     homepage = "https://github.com/alexferl/flask-mysqldb";
     changelog = "https://github.com/alexferl/flask-mysqldb/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ netali ];
+=======
+  meta = with lib; {
+    description = "MySQL connection support for Flask";
+    homepage = "https://github.com/alexferl/flask-mysqldb";
+    changelog = "https://github.com/alexferl/flask-mysqldb/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ netali ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

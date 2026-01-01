@@ -31,15 +31,26 @@ stdenv.mkDerivation rec {
     "KVER=${kernel.modDirVersion}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Linux driver for setting the backlight brightness on laptops using NVIDIA GPU";
     homepage = "https://github.com/yorickvP/nvidiabl";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Linux driver for setting the backlight brightness on laptops using NVIDIA GPU";
+    homepage = "https://github.com/yorickvP/nvidiabl";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ yorickvp ];
+=======
+    maintainers = with maintainers; [ yorickvp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = kernel.kernelAtLeast "5.18";
   };
 }

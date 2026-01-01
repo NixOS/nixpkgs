@@ -32,12 +32,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Intel® 64 and IA-32 processor microcode tool";
     mainProgram = "iucode_tool";
     homepage = "https://gitlab.com/iucode-tool/iucode-tool";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Intel® 64 and IA-32 processor microcode tool";
+    mainProgram = "iucode_tool";
+    homepage = "https://gitlab.com/iucode-tool/iucode-tool";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"

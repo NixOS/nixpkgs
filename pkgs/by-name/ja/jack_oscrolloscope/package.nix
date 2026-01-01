@@ -33,11 +33,19 @@ stdenv.mkDerivation rec {
     mv jack_oscrolloscope $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple waveform viewer for JACK";
     mainProgram = "jack_oscrolloscope";
     homepage = "http://das.nasophon.de/jack_oscrolloscope";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "Simple waveform viewer for JACK";
+    mainProgram = "jack_oscrolloscope";
+    homepage = "http://das.nasophon.de/jack_oscrolloscope";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

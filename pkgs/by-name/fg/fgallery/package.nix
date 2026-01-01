@@ -74,12 +74,21 @@ stdenv.mkDerivation rec {
         }"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Static photo gallery generator";
     homepage = "https://www.thregr.org/~wavexx/software/fgallery/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Static photo gallery generator";
+    homepage = "https://www.thregr.org/~wavexx/software/fgallery/";
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fgallery";
   };
 }

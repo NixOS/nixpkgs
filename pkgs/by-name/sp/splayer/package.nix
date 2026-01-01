@@ -3,8 +3,11 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   electron,
   makeWrapper,
@@ -12,13 +15,20 @@
   makeDesktopItem,
   nix-update-script,
 }:
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
   version = "3.0.0-beta.7";
+=======
+stdenv.mkDerivation (final: {
+  pname = "splayer";
+  version = "3.0.0-beta.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
     hash = "sha256-W4XvYQ0O3Qnr9kRxTxt21UkU5dw66ww1qpIY3ph3elE=";
@@ -38,6 +48,23 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pnpmConfigHook
     pnpm_10
+=======
+    tag = "v${final.version}";
+    fetchSubmodules = false;
+    hash = "sha256-glYq0rHEV2xWoKznpMIU6klUxk1lXYOq4TBRuyTQgOM=";
+  };
+
+  pnpm = pnpm_10;
+
+  pnpmDeps = final.pnpm.fetchDeps {
+    inherit (final) pname version src;
+    fetcherVersion = 2;
+    hash = "sha256-ZyQcuZYwfc0a5PgfYgvp2GdfV3cBf5sb8oxJtI4+kp4=";
+  };
+
+  nativeBuildInputs = [
+    final.pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
     makeWrapper
     copyDesktopItems
@@ -99,8 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
         "Audio"
         "Music"
       ];
+<<<<<<< HEAD
       mimeTypes = [ "x-scheme-handler/orpheus" ];
       extraConfig.X-KDE-Protocols = "orpheus";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     })
   ];
 

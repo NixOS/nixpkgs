@@ -42,10 +42,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fiblary3" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/graham33/fiblary";
     description = "Fibaro Home Center API Python Library";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ graham33 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/graham33/fiblary";
+    description = "Fibaro Home Center API Python Library";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ graham33 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

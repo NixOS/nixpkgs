@@ -2,7 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   replaceVars,
   cmake,
   ninja,
@@ -31,12 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+<<<<<<< HEAD
     # Fix build with gcc 15 by adding missing cstdint header
     (fetchpatch {
       url = "https://github.com/google/libultrahdr/commit/5fa99b5271a3c80a13c78062d7adc6310222dd8e.patch";
       hash = "sha256-o6lbDOdx+ZrCy/Iq02WjM9Tas8C5P/FMwUtXMUCoZGY=";
     })
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (replaceVars ./gtest.patch {
       GTEST_INCLUDE_DIRS = "${lib.getDev gtest}/include";
     })

@@ -44,12 +44,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "liccheck" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Check python packages from requirement.txt and report issues";
     homepage = "https://github.com/dhatim/python-license-check";
     changelog = "https://github.com/dhatim/python-license-check/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Check python packages from requirement.txt and report issues";
+    homepage = "https://github.com/dhatim/python-license-check";
+    changelog = "https://github.com/dhatim/python-license-check/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "liccheck";
   };
 }

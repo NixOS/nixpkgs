@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) sddm; };
 
+<<<<<<< HEAD
   meta = {
     description = "QML based X11 display manager";
     homepage = "https://github.com/sddm/sddm";
@@ -117,5 +118,16 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "QML based X11 display manager";
+    homepage = "https://github.com/sddm/sddm";
+    maintainers = with maintainers; [
+      ttuegel
+      k900
+    ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

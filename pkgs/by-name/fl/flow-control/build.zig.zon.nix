@@ -89,6 +89,7 @@ let
 in
 linkFarm name [
   {
+<<<<<<< HEAD
     name = "flow_syntax-0.1.0-X8jOoU8VAQCOYNTiuB7y2aIBP1V3OXXHa8WvE3eXtpDK";
     path = fetchZigArtifact {
       name = "syntax";
@@ -165,6 +166,71 @@ linkFarm name [
       url = "git+https://github.com/neurocyte/zig-tracy#67070c146104d93fd3bed5091738f22e33e13bce";
       hash = "sha256-YcSgPAQo/4+mrKkJS5UAn7z5xZjeb8kKIWrBK3yXhQ4=";
       rev = "67070c146104d93fd3bed5091738f22e33e13bce";
+=======
+    name = "N-V-__8AANMzUiemOR2eNnrtlMmAGHFqij6VYtDUiaFfn6Dw";
+    path = fetchZigArtifact {
+      name = "tree_sitter";
+      url = "https://github.com/neurocyte/tree-sitter/releases/download/master-1c3ad59bd98ee430b166054030dac4c46d641e39/source.tar.gz";
+      hash = "sha256-pIgKBT8RUAS4oeaSot9Rvy4FpYVHeG3oeaBM0rsJg+k=";
+    };
+  }
+  {
+    name = "cbor-1.0.0-RcQE_HvqAACcrLH7t3IDZOshgY2xqJA_UX330MvwSepb";
+    path = fetchZigArtifact {
+      name = "cbor";
+      url = "https://github.com/neurocyte/cbor/archive/1fccb83c70cd84e1dff57cc53f7db8fb99909a94.tar.gz";
+      hash = "sha256-c0wlwa+jdqC2b2CfbLsb/l3vXVBnK7WkzUH7F49xqic=";
+    };
+  }
+  {
+    name = "flags-0.8.0-AAAAAJV0AACuGBBnpUnHqZzAhoGTp4ibFROBQQQZGRqx";
+    path = fetchZigArtifact {
+      name = "flags";
+      url = "https://github.com/n0s4/flags/archive/372501d1576b5723829bcba98e41361132c7b618.tar.gz";
+      hash = "sha256-PBwUqM4wTYwKyY584K0MPo5aorYflYrYi1dJm8zwI2Y=";
+    };
+  }
+  {
+    name = "dizzy-1.0.0-AAAAAM1wAAAiDbx_6RwcVEOBk8p2XOu8t9WPNc3K7kBK";
+    path = fetchZigArtifact {
+      name = "dizzy";
+      url = "https://github.com/neurocyte/dizzy/archive/455d18369cbb2a0458ba70be919cd378338d695e.tar.gz";
+      hash = "sha256-PKCqS8/sEieEA3ZONEsBHq+am02JRHG9waYzn2GnYgI=";
+    };
+  }
+  {
+    name = "thespian-0.0.1-owFOjk0aBgC8w9ibeiVdhftyEIaVIHCnubsJWfkktE8v";
+    path = fetchZigArtifact {
+      name = "thespian";
+      url = "git+https://github.com/neurocyte/thespian#f2980d3a747abdf0d18a01596dd8b953dd3e6243";
+      hash = "sha256-b9tDjLa1uyaeQ0HSkCkuiIPVFI2e6AmMk2zwuFNxN/U=";
+      rev = "f2980d3a747abdf0d18a01596dd8b953dd3e6243";
+    };
+  }
+  {
+    name = "cbor-1.0.0-RcQE_JEoAQA8hP-nnKcQjGZa-5T3JO4cLhnNhrAdzPGf";
+    path = fetchZigArtifact {
+      name = "cbor";
+      url = "git+https://github.com/neurocyte/cbor#3bdf25183ec3644445ef6a8457c4a3f5f73b622b";
+      hash = "sha256-WH0vq6GPiqh+lax2q2eg5AlSQKwPnjy97OyvCScuDMk=";
+      rev = "3bdf25183ec3644445ef6a8457c4a3f5f73b622b";
+    };
+  }
+  {
+    name = "asio-1.30.2-tLhDdyKA4QBqQFDrsuK_hO1HfqX-DQMl-Sku7yy4vUfM";
+    path = fetchZigArtifact {
+      name = "asio";
+      url = "https://github.com/neurocyte/asio/archive/24d28864ec5aae6146d88a172288e3bf3f099734.tar.gz";
+      hash = "sha256-CPU+Ka5V+2ooaY8kfKM9q1AjJ11rujHFFnCjyn5hZFo=";
+    };
+  }
+  {
+    name = "zig_tracy-0.0.3-5-cp3JZ2AAC6j-gWFhPKXyF6WASJpCzQeNy7Bi712t1a";
+    path = fetchZigArtifact {
+      name = "tracy";
+      url = "https://github.com/neurocyte/zig-tracy/archive/82f18a661af17089198fb7c489ef253f02b939b5.tar.gz";
+      hash = "sha256-87iK+rmBvZY70c8ypqgtRgw5YWoahZ0ss+0HDzdQgaM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   {
@@ -176,6 +242,7 @@ linkFarm name [
     };
   }
   {
+<<<<<<< HEAD
     name = "N-V-__8AAKhUIwB6OywBocsytyvp6XiVu4fZwzFJHjumxGLY";
     path = fetchZigArtifact {
       name = "themes";
@@ -233,6 +300,64 @@ linkFarm name [
       url = "git+https://github.com/marlersoft/zigwin32?ref=main#5587b16fa040573846a6bf531301f6206d31a6bf";
       hash = "sha256-GIH6aO8yEWKKvIr4syG6aYViXi2whIg4feWox7f9ZSM=";
       rev = "5587b16fa040573846a6bf531301f6206d31a6bf";
+=======
+    name = "N-V-__8AAJiAIgDMVIi8CRb_xko9_qVQ-UiQzd5FTBBr0aPa";
+    path = fetchZigArtifact {
+      name = "themes";
+      url = "https://github.com/neurocyte/flow-themes/releases/download/master-952f9f630ea9544088fd30293666ee0650b7a690/flow-themes.tar.gz";
+      hash = "sha256-yFgIYMmdYoqnysAZ4MaawFAtAJk0ktXXD0IR287LTYw=";
+    };
+  }
+  {
+    name = "fuzzig-0.1.1-AAAAALNIAQBmbHr-MPalGuR393Vem2pTQXI7_LXeNJgX";
+    path = fetchZigArtifact {
+      name = "fuzzig";
+      url = "https://github.com/fjebaker/fuzzig/archive/44c04733c7c0fee3db83672aaaaf4ed03e943156.tar.gz";
+      hash = "sha256-wGcJpiW0unNSgX5i9sNuUyqKVFDECcadN7dgbx/SKVg=";
+    };
+  }
+  {
+    name = "vaxis-0.5.1-BWNV_AsQCQDvfb-li1CZEOBG_YsteinP9qI-PpV47-jf";
+    path = fetchZigArtifact {
+      name = "vaxis";
+      url = "git+https://github.com/neurocyte/libvaxis?ref=main#846ddb8bf483e8a7eb25628d6c34ba7e781155b6";
+      hash = "sha256-RFZ8XXYoaIQMJkIgmo1YY+3HYSlArHWNSEYPv8fSGpU=";
+      rev = "846ddb8bf483e8a7eb25628d6c34ba7e781155b6";
+    };
+  }
+  {
+    name = "zigimg-0.1.0-8_eo2nWlEgCddu8EGLOM_RkYshx3sC8tWv-yYA4-htS6";
+    path = fetchZigArtifact {
+      name = "zigimg";
+      url = "git+https://github.com/zigimg/zigimg#74caab5edd7c5f1d2f7d87e5717435ce0f0affa1";
+      hash = "sha256-/07Aq+f4SU1PgZaOXyDc32xjJ2ufMTseGXpFsx8llFY=";
+      rev = "74caab5edd7c5f1d2f7d87e5717435ce0f0affa1";
+    };
+  }
+  {
+    name = "zg-0.14.0-oGqU3KEFswIffnDu8eAE2XlhzwcfgjwtM6akIc5L7cEV";
+    path = fetchZigArtifact {
+      name = "zg";
+      url = "git+https://codeberg.org/atman/zg#0b05141b033043c5f7bcd72048a48eef6531ea6c";
+      hash = "sha256-PLntlktC5RI4CN88oo5+0CliUu4b4O65Ubf6jr8U9xY=";
+      rev = "0b05141b033043c5f7bcd72048a48eef6531ea6c";
+    };
+  }
+  {
+    name = "zeit-0.0.0-AAAAACVbAgAiIzg1rccZU1qOfO_dKQKme7-37xmEQcqc";
+    path = fetchZigArtifact {
+      name = "zeit";
+      url = "https://github.com/rockorager/zeit/archive/8fd203f85f597f16e0a525c1f1ca1e0bffded809.tar.gz";
+      hash = "sha256-2UIdeG6QTZoLL6NkUQIvaO+O6xpoy9nWhua/5Qyv4To=";
+    };
+  }
+  {
+    name = "zigwin32-25.0.28-preview-AAAAAEEl_AMhnKSs-lgEyjmUX5JVTpNQewd8A2Bbekwc";
+    path = fetchZigArtifact {
+      name = "win32";
+      url = "https://github.com/marlersoft/zigwin32/archive/e8739b32a33ce48a3286aba31918b26a9dfc6ef0.tar.gz";
+      hash = "sha256-WSN9jOkey4dzLnhT68tOJyfnws/Ki7fnb4W+LDrPLwc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
 ]

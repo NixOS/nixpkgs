@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphlib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Backport of the Python 3.9 graphlib module for Python 3.6+";
     homepage = "https://github.com/mariushelf/graphlib_backport";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ t4ccer ];
+=======
+  meta = with lib; {
+    description = "Backport of the Python 3.9 graphlib module for Python 3.6+";
+    homepage = "https://github.com/mariushelf/graphlib_backport";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ t4ccer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

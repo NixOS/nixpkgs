@@ -95,7 +95,11 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Non-Linear video editor utilizing the power of GStreamer";
     homepage = "http://pitivi.org/";
     longDescription = ''
@@ -103,9 +107,15 @@ python3.pkgs.buildPythonApplication rec {
       It aims to be an intuitive and flexible application
       that can appeal to newbies and professionals alike.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pitivi";
   };
 }

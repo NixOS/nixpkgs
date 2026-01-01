@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruamel.yaml" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Add dump_to_string/dumps method that returns YAML document as string";
     homepage = "https://sourceforge.net/projects/ruamel-yaml-string/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fbeffa ];
+=======
+  meta = with lib; {
+    description = "Add dump_to_string/dumps method that returns YAML document as string";
+    homepage = "https://sourceforge.net/projects/ruamel-yaml-string/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fbeffa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

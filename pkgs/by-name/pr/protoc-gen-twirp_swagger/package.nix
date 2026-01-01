@@ -19,11 +19,20 @@ buildGoModule {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Swagger generator for twirp";
     mainProgram = "protoc-gen-twirp_swagger";
     homepage = "https://github.com/elliots/protoc-gen-twirp_swagger";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jojosch ];
+=======
+  meta = with lib; {
+    description = "Swagger generator for twirp";
+    mainProgram = "protoc-gen-twirp_swagger";
+    homepage = "https://github.com/elliots/protoc-gen-twirp_swagger";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jojosch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

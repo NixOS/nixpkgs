@@ -19,7 +19,11 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Program that allows to copy/paste from a terminal using osc-52 control sequences";
     longDescription = ''
       oscclip provides two commands: osc-copy and osc-paste. These commands allow to interact with the clipboard through the terminal directly.
@@ -27,8 +31,13 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/rumpelsepp/oscclip";
 
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rumpelsepp
       traxys
     ];

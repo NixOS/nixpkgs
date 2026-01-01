@@ -29,10 +29,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "serializable" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Base class with serialization methods for user-defined Python objects";
     homepage = "https://github.com/iskandr/serializable";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
+=======
+  meta = with lib; {
+    description = "Base class with serialization methods for user-defined Python objects";
+    homepage = "https://github.com/iskandr/serializable";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ samuela ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

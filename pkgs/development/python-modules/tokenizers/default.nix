@@ -76,14 +76,22 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
+<<<<<<< HEAD
   version = "0.22.2";
+=======
+  version = "0.22.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-krc+FUA5H3J7L4D1xyjyFMpjXMU8TEfwdfRT4+uvti8=";
+=======
+    hash = "sha256-1ijP16Fw/dRgNXXX9qEymXNaamZmlNFqbfZee82Qz6c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -93,7 +101,11 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
+<<<<<<< HEAD
     hash = "sha256-anYZ7M5OvLOOHDy+sLuZlHQ/cNTk6xHksBHSHa75iY4=";
+=======
+    hash = "sha256-CKbnFtwsEtJ11Wnn8JFpHd7lnUzQMTwJ1DmmB44qciM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/bindings/python";

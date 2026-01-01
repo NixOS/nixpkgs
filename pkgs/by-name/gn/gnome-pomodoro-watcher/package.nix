@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-eqkdiNww0CBZ0ZfoirZSvpL7i/4b1XjN3NZFPOGkPko=";
 
+<<<<<<< HEAD
   meta = {
     description = "Helper tool to watch GNOME Pomodoro timer";
     homepage = "https://github.com/sei40kr/gnome-pomodoro-watcher";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sei40kr ];
+=======
+  meta = with lib; {
+    description = "Helper tool to watch GNOME Pomodoro timer";
+    homepage = "https://github.com/sei40kr/gnome-pomodoro-watcher";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sei40kr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gnome-pomodoro-watcher";
   };
 }

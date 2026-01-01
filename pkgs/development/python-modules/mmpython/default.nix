@@ -19,9 +19,16 @@ buildPythonPackage rec {
 
   disabled = isPyPy || isPy3k;
 
+<<<<<<< HEAD
   meta = {
     description = "Media Meta Data retrieval framework";
     homepage = "https://sourceforge.net/projects/mmpython/";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "Media Meta Data retrieval framework";
+    homepage = "https://sourceforge.net/projects/mmpython/";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-A6a7yjxenB/7sfdfoIaJAxdkw0ouNinZtahNMRAytwA=";
+=======
+    hash = "sha256-riuSByvMpbukA+pwbzecnyUvZGtPR6lLEA1s2oBnI+A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

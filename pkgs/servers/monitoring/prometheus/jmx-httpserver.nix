@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     makeWrapper "${jre}/bin/java" $out/bin/jmx_prometheus_httpserver --add-flags "-jar $out/libexec/$jarName"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/prometheus/jmx_exporter";
     description = "Process for exposing JMX Beans via HTTP for Prometheus consumption";
@@ -37,5 +38,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.offline ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/prometheus/jmx_exporter";
+    description = "Process for exposing JMX Beans via HTTP for Prometheus consumption";
+    mainProgram = "jmx_prometheus_httpserver";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.offline ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysignalclirestapi" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/bbernhard/pysignalclirestapi/releases/tag/${version}";
     description = "Small python library for the Signal Cli REST API";
     homepage = "https://github.com/bbernhard/pysignalclirestapi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/bbernhard/pysignalclirestapi/releases/tag/${version}";
+    description = "Small python library for the Signal Cli REST API";
+    homepage = "https://github.com/bbernhard/pysignalclirestapi";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

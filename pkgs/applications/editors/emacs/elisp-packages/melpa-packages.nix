@@ -549,10 +549,14 @@ let
           # Telega has a server portion for it's network protocol
           # elisp error
           telega = (ignoreCompilationError super.telega).overrideAttrs (old: {
+<<<<<<< HEAD
             buildInputs = old.buildInputs ++ [
               pkgs.tdlib
               pkgs.zlib
             ];
+=======
+            buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
 
             postPatch = ''
@@ -1252,7 +1256,11 @@ let
           # TODO report to upstream
           global-tags = addPackageRequires super.global-tags [ self.s ];
 
+<<<<<<< HEAD
           gnosis = ignoreCompilationError (mkHome super.gnosis); # doing db stuff when compiling
+=======
+          gnosis = mkHome super.gnosis;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           go = ignoreCompilationError super.go; # elisp error
 
@@ -1459,8 +1467,11 @@ let
 
           mu4e-views = addPackageRequires super.mu4e-views [ self.mu4e ];
 
+<<<<<<< HEAD
           mu4e-walk = addPackageRequires super.mu4e-walk [ self.mu4e ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           # https://github.com/magnars/multifiles.el/issues/9
           multifiles = addPackageRequires super.multifiles [ self.dash ];
 
@@ -1672,6 +1683,21 @@ let
 
           scad-preview = ignoreCompilationError super.scad-preview; # elisp error
 
+<<<<<<< HEAD
+=======
+          sdml-mode = super.sdml-mode.overrideAttrs (
+            finalAttrs: previousAttrs: {
+              patches = previousAttrs.patches or [ ] ++ [
+                (pkgs.fetchpatch {
+                  name = "make-pretty-hydra-optional.patch";
+                  url = "https://github.com/sdm-lang/emacs-sdml-mode/pull/3/commits/2368afe31c72073488411540e212c70aae3dd468.patch";
+                  hash = "sha256-Wc4pquKV9cTRey9SdjY++UgcP+pGI0hVOOn1Cci8dpk=";
+                })
+              ];
+            }
+          );
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           # https://github.com/wanderlust/semi/pull/29
           # missing optional dependencies
           semi = addPackageRequires super.semi [ self.bbdb-vcard ];
@@ -1764,6 +1790,7 @@ let
 
           workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
 
+<<<<<<< HEAD
           ws-butler = super.ws-butler.overrideAttrs (old: {
             # work around https://github.com/NixOS/nixpkgs/issues/436534
             src = pkgs.fetchFromSavannah {
@@ -1772,6 +1799,8 @@ let
             };
           });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           # https://github.com/nicklanasa/xcode-mode/issues/28
           xcode-mode = addPackageRequires super.xcode-mode [ self.hydra ];
 

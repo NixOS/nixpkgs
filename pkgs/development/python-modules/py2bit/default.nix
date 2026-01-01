@@ -35,5 +35,9 @@ buildPythonPackage rec {
       A python extension, written in C, for quick access to 2bit files. The extension uses lib2bit for file access.
     '';
     license = lib.licenses.mit;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ scalavision ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

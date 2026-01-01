@@ -50,11 +50,20 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getInclude kissfft}/include/kissfft";
 
+<<<<<<< HEAD
   meta = {
     description = "C++ library of functions for DSP and Music Informatics purposes";
     homepage = "https://code.soundsoftware.ac.uk/projects/qm-dsp";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C++ library of functions for DSP and Music Informatics purposes";
+    homepage = "https://code.soundsoftware.ac.uk/projects/qm-dsp";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -2,7 +2,10 @@
   lib,
   buildDunePackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ocaml,
   ppxlib,
   ounit,
@@ -39,10 +42,14 @@ buildDunePackage rec {
   pname = "ppx_deriving_yojson";
   inherit (param) version;
 
+<<<<<<< HEAD
   patches = fetchpatch {
     url = "https://github.com/ocaml-ppx/ppx_deriving_yojson/commit/1bbbe2c4c5822c4297b0b812c59a155cf96c5089.patch";
     hash = "sha256-jYW2/Ix6T94vfI2mGnIkYSG1rjsWEsnOPA1mufP3sd4=";
   };
+=======
+  minimalOCamlVersion = "4.07";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
@@ -58,7 +65,11 @@ buildDunePackage rec {
   ]
   ++ param.propagatedBuildInputs or [ ];
 
+<<<<<<< HEAD
   doCheck = true;
+=======
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit (param) checkInputs;
 
   meta = {

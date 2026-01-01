@@ -62,9 +62,16 @@ buildPythonPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://htseq.readthedocs.io/";
     description = "Framework to work with high-throughput sequencing data";
     maintainers = with lib.maintainers; [ unode ];
+=======
+  meta = with lib; {
+    homepage = "https://htseq.readthedocs.io/";
+    description = "Framework to work with high-throughput sequencing data";
+    maintainers = with maintainers; [ unode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

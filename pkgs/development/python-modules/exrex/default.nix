@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "exrex" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Irregular methods on regular expressions";
     homepage = "https://github.com/asciimoo/exrex";
     license = with lib.licenses; [ agpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Irregular methods on regular expressions";
+    homepage = "https://github.com/asciimoo/exrex";
+    license = with licenses; [ agpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -10,13 +10,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtutilities";
+<<<<<<< HEAD
   version = "6.18.4";
+=======
+  version = "6.18.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "qtutilities";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-IZDEtytcH+edJNoMaSWKQDMmPpiQH5QNJWLKaRKCWhU=";
+=======
+    hash = "sha256-x9el1oUyl2xrpehhR9uuexVBErSWudPB56ZpU91zZew=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -35,11 +43,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Martchus/qtutilities";
     description = "Common Qt related C++ classes and routines used by @Martchus' applications such as dialogs, widgets and models Topics";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Martchus/qtutilities";
+    description = "Common Qt related C++ classes and routines used by @Martchus' applications such as dialogs, widgets and models Topics";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ doronbehar ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

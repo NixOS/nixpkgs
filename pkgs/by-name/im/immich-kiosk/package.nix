@@ -4,24 +4,37 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
 buildGoModule rec {
   pname = "immich-kiosk";
   version = "0.28.1";
+=======
+}:
+
+buildGoModule rec {
+  pname = "immich-kiosk";
+  version = "0.26.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-9ZKjhCmOL2fjGOjdzgVG7/aq6SdBJCG/+bFrlHdkll4=";
+=======
+    hash = "sha256-NsnJa5+P0xm12o7HAmfD8+w3H46f5WR2GO78My+YAi0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Delete vendor directory to regenerate it consistently across platforms
   postPatch = ''
     rm -rf vendor
   '';
+<<<<<<< HEAD
   vendorHash = "sha256-5y//CdHgQjNJayNI/jzdD5WPa4XlIxMonqkPc/kJp8c=";
 
   pnpmDeps = fetchPnpmDeps {
@@ -33,6 +46,14 @@ buildGoModule rec {
     pnpm = pnpm_9;
     sourceRoot = "${src.name}/frontend";
     hash = "sha256-FThVaNUUE3QCbq0iPRCet4SnlHCCQaw3N5PThKSM1ek=";
+=======
+  vendorHash = "sha256-Mx6dCC8xRTfE/7j4chLtdKzQLHQE9y+xtEasWPtn94k=";
+
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit pname version src;
+    sourceRoot = "${src.name}/frontend";
+    hash = "sha256-En3y1fQRtwJm8fwxZ/VWuRfm1zPcnlDBuMNcY5WtxqM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 2;
   };
 
@@ -41,6 +62,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
   ];
@@ -49,6 +71,15 @@ buildGoModule rec {
   # Don't run pnpm in this phase - filter out pnpmConfigHook
   overrideModAttrs = oldAttrs: {
     nativeBuildInputs = builtins.filter (drv: drv != pnpmConfigHook) (
+=======
+    pnpm_9.configHook
+  ];
+
+  # Generate templ templates during vendor hash calculation
+  # Don't run pnpm in this phase - filter out pnpm.configHook
+  overrideModAttrs = oldAttrs: {
+    nativeBuildInputs = builtins.filter (drv: drv != pnpm_9.configHook) (
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       oldAttrs.nativeBuildInputs or [ ]
     );
     preBuild = ''

@@ -47,10 +47,17 @@ buildPythonPackage rec {
   # Fix random seed during tests
   pytestFlags = [ "--randomly-seed=0" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Machine Learning, Randomized Optimization and SEarch";
     homepage = "https://github.com/gkhayes/mlrose";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Machine Learning, Randomized Optimization and SEarch";
+    homepage = "https://github.com/gkhayes/mlrose";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

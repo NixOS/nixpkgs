@@ -26,11 +26,19 @@ let
 
     doCheck = false;
 
+<<<<<<< HEAD
     meta = {
       description = "Simple and easy way to embed static files into Go binaries";
       homepage = "https://github.com/gobuffalo/packr";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ mmahut ];
+=======
+    meta = with lib; {
+      description = "Simple and easy way to embed static files into Go binaries";
+      homepage = "https://github.com/gobuffalo/packr";
+      license = licenses.mit;
+      maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       # golang.org/x/sys needs to be updated due to:
       #
@@ -58,11 +66,19 @@ let
 
     doCheck = false;
 
+<<<<<<< HEAD
     meta = {
       description = "Simple and easy way to embed static files into Go binaries";
       homepage = "https://github.com/gobuffalo/packr";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ mmahut ];
+=======
+    meta = with lib; {
+      description = "Simple and easy way to embed static files into Go binaries";
+      homepage = "https://github.com/gobuffalo/packr";
+      license = licenses.mit;
+      maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       # golang.org/x/sys needs to be updated due to:
       #

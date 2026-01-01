@@ -50,9 +50,16 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ bignums ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to certify primality using Pocklington certificate and Elliptic Curve Certificate";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "Library to certify primality using Pocklington certificate and Elliptic Curve Certificate";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

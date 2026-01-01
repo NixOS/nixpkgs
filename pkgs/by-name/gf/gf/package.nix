@@ -16,13 +16,22 @@
 
 stdenv.mkDerivation {
   pname = "gf";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-25";
+=======
+  version = "0-unstable-2025-11-09";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     repo = "gf";
     owner = "nakst";
+<<<<<<< HEAD
     rev = "a8c0fb67756c043d63832c008e3ad12132b121cb";
     hash = "sha256-OJE51lVkHWAgo7u/SX46s3pzQBeMW3zViiXJnB86bpo=";
+=======
+    rev = "64e7ece68a61d90db0dcc11a6d6eecab04af8561";
+    hash = "sha256-BvPgBJ/2pEoe4hIgqYi5JXI0ihOJkc/pXAJK/Kf9lVg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -71,6 +80,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { extraArgs = lib.singleton "--version=branch"; };
 
+<<<<<<< HEAD
   meta = {
     description = "GDB Frontend";
     homepage = "https://github.com/nakst/gf";
@@ -78,5 +88,14 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "gf2";
     maintainers = with lib.maintainers; [ _0xd61 ];
+=======
+  meta = with lib; {
+    description = "GDB Frontend";
+    homepage = "https://github.com/nakst/gf";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    mainProgram = "gf2";
+    maintainers = with maintainers; [ _0xd61 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

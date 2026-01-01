@@ -107,11 +107,20 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tracer callback/activity library";
     homepage = "https://github.com/ROCm/roctracer";
     license = with lib.licenses; [ mit ]; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tracer callback/activity library";
+    homepage = "https://github.com/ROCm/roctracer";
+    license = with licenses; [ mit ]; # mitx11
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

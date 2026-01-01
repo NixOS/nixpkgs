@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
     install -D -m 0444 icon/icon.svg $out/share/icons/hicolor/scalable/apps/tracy.svg
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Real time, nanosecond resolution, remote telemetry frame profiler for games and other applications";
     homepage = "https://github.com/wolfpld/tracy";
@@ -126,5 +127,17 @@ stdenv.mkDerivation rec {
       nagisa
     ];
     platforms = lib.platforms.linux ++ lib.optionals (!withWayland) lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Real time, nanosecond resolution, remote telemetry frame profiler for games and other applications";
+    homepage = "https://github.com/wolfpld/tracy";
+    license = licenses.bsd3;
+    mainProgram = "tracy";
+    maintainers = with maintainers; [
+      mpickering
+      nagisa
+    ];
+    platforms = platforms.linux ++ lib.optionals (!withWayland) platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

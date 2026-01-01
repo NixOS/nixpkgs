@@ -17,12 +17,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-8Omw8IsmoFYPBB6q1EAAbcBhTjBWfCChV2MhX9ImY8Y=";
 
+<<<<<<< HEAD
   meta = {
     description = "Tool and Cargo subcommand that helps you find out what takes most of the space in your executable";
     homepage = "https://github.com/RazrFalcon/cargo-bloat";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool and Cargo subcommand that helps you find out what takes most of the space in your executable";
+    homepage = "https://github.com/RazrFalcon/cargo-bloat";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       xrelkd
       matthiasbeyer
     ];

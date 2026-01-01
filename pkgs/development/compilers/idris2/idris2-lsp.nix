@@ -52,12 +52,21 @@ let
         --suffix IDRIS2_PACKAGE_PATH ':' "${globalLibrariesPath}"
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "Language Server for Idris2";
       mainProgram = "idris2-lsp";
       homepage = "https://github.com/idris-community/idris2-lsp";
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ mattpolzin ];
+=======
+    meta = with lib; {
+      description = "Language Server for Idris2";
+      mainProgram = "idris2-lsp";
+      homepage = "https://github.com/idris-community/idris2-lsp";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ mattpolzin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

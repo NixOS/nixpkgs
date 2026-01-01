@@ -28,10 +28,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bit pack/unpack package";
     homepage = "https://github.com/eerimoq/bitstruct";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
+=======
+  meta = with lib; {
+    description = "Python bit pack/unpack package";
+    homepage = "https://github.com/eerimoq/bitstruct";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jakewaksbaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

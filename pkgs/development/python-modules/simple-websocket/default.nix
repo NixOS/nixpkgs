@@ -35,11 +35,20 @@ buildPythonPackage rec {
     "SimpleWebSocketClientTestCase"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple WebSocket server and client for Python";
     homepage = "https://github.com/miguelgrinberg/simple-websocket";
     changelog = "https://github.com/miguelgrinberg/simple-websocket/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Simple WebSocket server and client for Python";
+    homepage = "https://github.com/miguelgrinberg/simple-websocket";
+    changelog = "https://github.com/miguelgrinberg/simple-websocket/blob/${version}/CHANGES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

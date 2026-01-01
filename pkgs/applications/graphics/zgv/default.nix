@@ -50,12 +50,21 @@ stdenv.mkDerivation rec {
     cp src/zgv $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.svgalib.org/rus/zgv/";
     description = "Picture viewer with a thumbnail-based selector";
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://www.svgalib.org/rus/zgv/";
+    description = "Picture viewer with a thumbnail-based selector";
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zgv";
   };
 }

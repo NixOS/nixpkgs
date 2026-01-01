@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     cairo
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/mildlyparallel/pscircle";
     description = "Visualize Linux processes in a form of a radial tree";
@@ -36,5 +37,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.ldesgoui ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/mildlyparallel/pscircle";
+    description = "Visualize Linux processes in a form of a radial tree";
+    mainProgram = "pscircle";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.ldesgoui ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

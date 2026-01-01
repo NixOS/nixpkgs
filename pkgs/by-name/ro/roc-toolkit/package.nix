@@ -83,11 +83,20 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-lpthread";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Roc is a toolkit for real-time audio streaming over the network";
     homepage = "https://github.com/roc-streaming/roc-toolkit";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ bgamari ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Roc is a toolkit for real-time audio streaming over the network";
+    homepage = "https://github.com/roc-streaming/roc-toolkit";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ bgamari ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

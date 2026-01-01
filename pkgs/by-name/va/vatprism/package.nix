@@ -31,15 +31,23 @@ let
     libXtst
     fontconfig
   ];
+<<<<<<< HEAD
   jdkWithFX = jdk.override { enableJavaFX = true; };
 in
 maven.buildMavenPackage rec {
   pname = "vatprism";
   version = "0.3.6";
+=======
+in
+maven.buildMavenPackage rec {
+  pname = "vatprism";
+  version = "0.3.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "marvk";
     repo = "vatprism";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-A9HvO+tUrb/h9YZAKfTlgr+qxX7ucN/VJt4lRL94Ygg=";
   };
 
@@ -52,6 +60,11 @@ maven.buildMavenPackage rec {
           '<mvvmfx.version>1.8.0</mvvmfx.version>'
     '';
 
+=======
+    hash = "sha256-ofEwHUCm79roHe2bawmKFw2QHhIonnlkFG5nhE6uN+g=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
@@ -69,11 +82,19 @@ maven.buildMavenPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   mvnHash = # OpenJFX artifacts are platform dependent
     if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
       "sha256-gerjxTj8UQEVthMO3unWPEG7SPseMt5JPPureC/wUsw="
     else
       "sha256-LoOiLisqc99gIGClpVe8tq5/2prmyyOzLDkpmuSgwVo=";
+=======
+  mvnHash =
+    if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
+      "sha256-x0nFt2C7dZqMdllI1+Io9SPBY2J/dVgBTVb9T24vFFI="
+    else
+      "sha256-9uyNCUqnMgpiwm2kz544pWNB/SkRpASm2Dln0e4yZos=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   installPhase = ''
     runHook preInstall
@@ -88,6 +109,7 @@ maven.buildMavenPackage rec {
 
     # create a wrapper that will automatically set the classpath
     # this should be the paths from the dependency derivation
+<<<<<<< HEAD
     makeWrapper ${lib.getExe jdkWithFX} $out/bin/vatprism \
         --add-flags --add-exports=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED \
         --add-flags --add-exports=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED \
@@ -97,12 +119,20 @@ maven.buildMavenPackage rec {
         --add-flags --add-opens=javafx.controls/javafx.scene.control.skin=ALL-UNNAMED \
         --add-flags "-jar $out/vatsim-map-${version}-fat.jar" \
         --set JAVA_HOME ${jdkWithFX.home} \
+=======
+    makeWrapper ${jdk}/bin/java $out/bin/vatprism \
+        --add-flags "-jar $out/vatsim-map-${version}-fat.jar" \
+        --set JAVA_HOME ${jdk.home} \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         --suffix LD_LIBRARY_PATH : ${libPath}
     runHook postInstall
   '';
 
   meta = {
+<<<<<<< HEAD
     changelog = "https://github.com/marvk/vatprism/raw/${src.rev}/CHANGELOG.md";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "VATSIM map and data explorer";
     longDescription = ''
       VATprism is a VATSIM Map and VATSIM Data Explorer, VATSIM being the

@@ -4,21 +4,44 @@
   fetchFromGitHub,
   gevent,
   pytestCheckHook,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gipc";
+<<<<<<< HEAD
   version = "1.8.0";
   pyproject = true;
 
+=======
+  version = "1.6.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "jgehrcke";
     repo = "gipc";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-P3soMA/EBMuhkXQsiLv9gnDBfo9XGosKnSMi+EZ0gaM=";
   };
 
+=======
+    hash = "sha256-eYE7A1VDJ0NSshvdJKxPwGyVdW6BnyWoRSR1i1iTr8Y=";
+  };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "gevent>=1.5,<=23.9.1" "gevent>=1.5"
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = [ gevent ];
@@ -45,7 +68,11 @@ buildPythonPackage rec {
     "test_write_closewrite_read"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Gevent-cooperative child processes and IPC";
     longDescription = ''
       Usage of Python's multiprocessing package in a gevent-powered
@@ -57,7 +84,11 @@ buildPythonPackage rec {
     '';
     homepage = "http://gehrcke.de/gipc";
     changelog = "https://github.com/jgehrcke/gipc/blob/${version}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

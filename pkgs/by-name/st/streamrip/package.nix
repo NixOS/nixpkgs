@@ -62,10 +62,17 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Scriptable music downloader for Qobuz, Tidal, SoundCloud, and Deezer";
     homepage = "https://github.com/nathom/streamrip";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Scriptable music downloader for Qobuz, Tidal, SoundCloud, and Deezer";
+    homepage = "https://github.com/nathom/streamrip";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "rip";
   };

@@ -105,11 +105,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI client for ExpressVPN";
     homepage = "https://www.expressvpn.com";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ yureien ];
+=======
+  meta = with lib; {
+    description = "CLI client for ExpressVPN";
+    homepage = "https://www.expressvpn.com";
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ yureien ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

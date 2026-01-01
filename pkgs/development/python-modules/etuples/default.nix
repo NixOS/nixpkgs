@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "etuples" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python S-expression emulation using tuple-like objects";
     homepage = "https://github.com/pythological/etuples";
     changelog = "https://github.com/pythological/etuples/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Etjean ];
+=======
+  meta = with lib; {
+    description = "Python S-expression emulation using tuple-like objects";
+    homepage = "https://github.com/pythological/etuples";
+    changelog = "https://github.com/pythological/etuples/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ Etjean ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

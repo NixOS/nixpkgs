@@ -20,14 +20,25 @@ stdenv.mkDerivation rec {
     cp -r shaders *.json $out/share/${pname}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/iwalton3/default-shader-pack";
     description = "Preconfigured set of MPV shaders and configurations for MPV Shim media clients";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/iwalton3/default-shader-pack";
+    description = "Preconfigured set of MPV shaders and configurations for MPV Shim media clients";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Plus
       mit
       unlicense
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ devusb ];
+=======
+    maintainers = with maintainers; [ devusb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

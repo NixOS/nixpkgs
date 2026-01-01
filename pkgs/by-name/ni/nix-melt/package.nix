@@ -31,12 +31,21 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion artifacts/nix-melt.{bash,fish} --zsh artifacts/_nix-melt
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Ranger-like flake.lock viewer";
     mainProgram = "nix-melt";
     homepage = "https://github.com/nix-community/nix-melt";
     changelog = "https://github.com/nix-community/nix-melt/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+    license = licenses.mpl20;
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

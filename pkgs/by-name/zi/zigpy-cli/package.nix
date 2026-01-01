@@ -6,14 +6,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zigpy-cli";
+<<<<<<< HEAD
   version = "1.2.1";
+=======
+  version = "1.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cli";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-vY6mv5R7A4kVg4Z4nWdm5hgQv6fewyIbOrvhDUuiXa0=";
+=======
+    hash = "sha256-X4sH2UOF0xHzjT1enohg7JKi+5lQ6wnJBIn09jK5Db8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -50,13 +58,23 @@ python3.pkgs.buildPythonApplication rec {
     "zigpy_cli"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line interface for zigpy";
     mainProgram = "zigpy";
     homepage = "https://github.com/zigpy/zigpy-cli";
     changelog = "https://github.com/zigpy/zigpy-cli/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

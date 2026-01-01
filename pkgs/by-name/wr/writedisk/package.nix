@@ -19,11 +19,20 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small utility for writing a disk image to a USB drive";
     homepage = "https://github.com/nicholasbishop/writedisk";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ devhell ];
+=======
+  meta = with lib; {
+    description = "Small utility for writing a disk image to a USB drive";
+    homepage = "https://github.com/nicholasbishop/writedisk";
+    platforms = platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ devhell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

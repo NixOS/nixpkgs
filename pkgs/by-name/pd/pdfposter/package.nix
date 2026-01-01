@@ -41,11 +41,20 @@ buildPythonApplication rec {
     "pdftools.pdfposter.cmd"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Split large pages of a PDF into smaller ones for poster printing";
     mainProgram = "pdfposter";
     homepage = "https://pdfposter.readthedocs.io";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wamserma ];
+=======
+  meta = with lib; {
+    description = "Split large pages of a PDF into smaller ones for poster printing";
+    mainProgram = "pdfposter";
+    homepage = "https://pdfposter.readthedocs.io";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wamserma ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

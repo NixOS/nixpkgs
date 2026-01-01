@@ -55,11 +55,19 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "OPC UA GUI Client";
     homepage = "https://github.com/FreeOpcUa/opcua-client-gui";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "OPC UA GUI Client";
+    homepage = "https://github.com/FreeOpcUa/opcua-client-gui";
+    platforms = platforms.unix;
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "opcua-client";
   };

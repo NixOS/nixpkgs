@@ -80,11 +80,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pikepdf" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pikepdf/pikepdf";
+    description = "Read and write PDFs with Python, powered by qpdf";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/pikepdf/pikepdf/blob/${src.tag}/docs/releasenotes/version${lib.versions.major version}.md";
   };
 }

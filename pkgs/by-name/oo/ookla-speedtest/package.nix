@@ -51,12 +51,21 @@ stdenv.mkDerivation {
     install -D speedtest.5 $out/share/man/man5/speedtest.5
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line internet speedtest tool by Ookla";
     homepage = "https://www.speedtest.net/apps/cli";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ kranzes ];
+=======
+  meta = with lib; {
+    description = "Command line internet speedtest tool by Ookla";
+    homepage = "https://www.speedtest.net/apps/cli";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ kranzes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.attrNames srcs;
     mainProgram = "speedtest";
   };

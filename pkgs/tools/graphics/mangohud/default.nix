@@ -24,8 +24,15 @@
   unzip,
   wayland,
   libXNVCtrl,
+<<<<<<< HEAD
   spdlog,
   libxkbcommon,
+=======
+  nlohmann_json,
+  spdlog,
+  libxkbcommon,
+  glew,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   glfw,
   libXrandr,
   x11Support ? true,
@@ -93,14 +100,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
+<<<<<<< HEAD
   version = "0.8.2";
+=======
+  version = "0.8.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-BZ3R7D2zOlg69rx4y2FzzjpXuPOv913TOz9kSvRN+Wg=";
+=======
+    hash = "sha256-FvPhnOvcYE8vVB5R+ZRmuZxrC9U4GA338V7VAuUlHCE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -188,6 +203,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus
+<<<<<<< HEAD
+=======
+    nlohmann_json
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     spdlog
   ]
   ++ lib.optional waylandSupport wayland
@@ -195,6 +214,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional nvidiaSupport libXNVCtrl
   ++ lib.optional (x11Support || waylandSupport) libxkbcommon
   ++ lib.optionals mangoappSupport [
+<<<<<<< HEAD
+=======
+    glew
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     glfw
     libXrandr
   ];
@@ -238,6 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
     homepage = "https://github.com/flightlessmango/MangoHud";
@@ -245,6 +269,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
+    homepage = "https://github.com/flightlessmango/MangoHud";
+    changelog = "https://github.com/flightlessmango/MangoHud/releases/tag/v${finalAttrs.version}";
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kira-bruneau
       zeratax
     ];

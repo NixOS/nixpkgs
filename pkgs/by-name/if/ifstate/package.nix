@@ -13,13 +13,21 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "2.2.3";
+=======
+  version = "2.2.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "liske";
     repo = "ifstate";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-gDeMVnseOLBGpyyjE/L60ujp0LZGf3uzlKfPiQB4VHA=";
+=======
+    hash = "sha256-L79DZbkf+Yob1kfIKvHeUEvPfSbWfS0TTP0UYlkLzjI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   docs = stdenv.mkDerivation {
     pname = "ifstate-docs";
@@ -33,9 +41,13 @@ let
       (
         [
           mkdocs-material
+<<<<<<< HEAD
           mike
           mkdocs-glightbox
           mkdocs-macros-plugin
+=======
+          mkdocs-glightbox
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           mkdocs-minify-plugin
         ]
         ++ mkdocs-material.optional-dependencies.imaging

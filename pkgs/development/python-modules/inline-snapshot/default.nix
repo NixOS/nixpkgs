@@ -58,7 +58,11 @@ buildPythonPackage rec {
     pytestCheckHook
     time-machine
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   optional-dependencies = {
     black = [ black ];
@@ -72,11 +76,20 @@ buildPythonPackage rec {
     "tests/test_typing.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Create and update inline snapshots in Python tests";
     homepage = "https://github.com/15r10nk/inline-snapshot/";
     changelog = "https://github.com/15r10nk/inline-snapshot/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Create and update inline snapshots in Python tests";
+    homepage = "https://github.com/15r10nk/inline-snapshot/";
+    changelog = "https://github.com/15r10nk/inline-snapshot/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

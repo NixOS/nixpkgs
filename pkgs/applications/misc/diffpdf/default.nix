@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mkDerivation,
   fetchurl,
   fetchpatch,
@@ -41,6 +44,7 @@ mkDerivation rec {
     lrelease diffpdf.pro
   '';
 
+<<<<<<< HEAD
   installPhase =
     if stdenv.isDarwin then
       ''
@@ -70,6 +74,30 @@ mkDerivation rec {
         Terminal=false
         EOF
       '';
+=======
+  installPhase = ''
+    mkdir -p $out/bin $out/share/man/man1
+
+    install -Dpm755 -D diffpdf $out/bin/diffpdf
+    install -Dpm644 -D diffpdf.1 $out/share/man/man1/diffpdf.1
+
+    install -dpm755 $out/share/doc/${pname}-${version} $out/share/licenses/${pname}-${version} $out/share/icons $out/share/pixmaps $out/share/applications
+    install -Dpm644 CHANGES README help.html $out/share/doc/${pname}-${version}/
+    install -Dpm644 gpl-2.0.txt $out/share/licenses/${pname}-${version}/
+    install -Dpm644 images/icon.png $out/share/pixmaps/diffpdf.png
+
+    cat > $out/share/applications/diffpdf.desktop <<EOF
+    [Desktop Entry]
+    Type=Application
+    Version=1.0
+    Name=diffpdf
+    Icon=diffpdf
+    Comment=PDF diffing tool
+    Exec=$out/bin/diffpdf
+    Terminal=false
+    EOF
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     homepage = "http://www.qtrac.eu/diffpdf.html";
@@ -77,6 +105,10 @@ mkDerivation rec {
     mainProgram = "diffpdf";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = with lib.platforms; unix;
+=======
+    platforms = with lib.platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

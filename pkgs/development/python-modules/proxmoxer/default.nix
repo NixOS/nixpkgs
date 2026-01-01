@@ -53,11 +53,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proxmoxer" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for Proxmox API v2";
     homepage = "https://github.com/proxmoxer/proxmoxer";
     changelog = "https://github.com/proxmoxer/proxmoxer/releases/tag/${version}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for Proxmox API v2";
+    homepage = "https://github.com/proxmoxer/proxmoxer";
+    changelog = "https://github.com/proxmoxer/proxmoxer/releases/tag/${version}";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

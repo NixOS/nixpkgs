@@ -77,11 +77,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful to-do & task management app with seamless cloud synchronization across all your devices";
     homepage = "https://ticktick.com/home/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Powerful to-do & task management app with seamless cloud synchronization across all your devices";
+    homepage = "https://ticktick.com/home/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hbjydev
       jonocodes
     ];
@@ -89,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

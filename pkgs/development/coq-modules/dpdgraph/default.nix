@@ -74,10 +74,17 @@ in
 
   extraInstallFlags = [ "BINDIR=$(out)/bin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Build dependency graphs between Coq objects";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    description = "Build dependency graphs between Coq objects";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }).overrideAttrs
   (

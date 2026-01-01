@@ -34,10 +34,18 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "This is the Microsoft Azure Data Migration Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/datamigration/azure-mgmt-datamigration";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
+=======
+  meta = with lib; {
+    description = "This is the Microsoft Azure Data Migration Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/datamigration/azure-mgmt-datamigration";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maxwilson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

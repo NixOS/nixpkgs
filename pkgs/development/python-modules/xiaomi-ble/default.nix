@@ -19,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "1.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +32,11 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Ix49ypsw8Ii7pkpznzNqP97vJ/x1QBEaAis8R/kOJe0=";
+=======
+    hash = "sha256-elPT+hwnFoy62CbpKsaTLP8D+Pui6BD2De7oJistM0w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ poetry-core ];
@@ -54,11 +62,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xiaomi_ble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Xiaomi BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/xiaomi-ble";
     changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Xiaomi BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/xiaomi-ble";
+    changelog = "https://github.com/Bluetooth-Devices/xiaomi-ble/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

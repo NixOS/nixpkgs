@@ -6,22 +6,36 @@
   nix-update-script,
   pkg-config,
   openssl,
+<<<<<<< HEAD
   installShellFiles,
   writableTmpDirAsHomeHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alistral";
+<<<<<<< HEAD
   version = "0.6.3";
+=======
+  version = "0.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "RustyNova016";
     repo = "Alistral";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-lbdyE/k28fJzrOQEKDL8ZLnm6tNcAM4tsfHpcGlJB9s=";
   };
 
   cargoHash = "sha256-smoUGJSMmRKdnUz4L+LvPOH/A6CHVmkiHxdyesu+BTw=";
+=======
+    hash = "sha256-IJ12v/mmrs6jW6jWPHEjtS74lSLWSIvJejQz4BTFbEQ=";
+  };
+
+  cargoHash = "sha256-x695jOKR/s5J/51LUqPlNMgGzsoq8D8KR9gLjyLPfkA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildNoDefaultFeatures = true;
   # Would be cleaner with an "--all-features" option
@@ -29,12 +43,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+<<<<<<< HEAD
   ]
   ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
     # When invoked in postInstall, alistral tries to write logfiles to its config dir on invocation, and fails if it can't find a writable one.
     # The config dir falls back to a directory relative to $HOME on both Darwin and Linux, so setting a writable $HOME is enough.
     writableTmpDirAsHomeHook
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -46,6 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd alistral \
       --bash <($out/bin/alistral --generate bash) \
@@ -53,6 +71,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/alistral --generate zsh)
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "https://rustynova016.github.io/Alistral/";
     changelog = "https://github.com/RustyNova016/Alistral/blob/${finalAttrs.src.tag}/CHANGELOG.md";

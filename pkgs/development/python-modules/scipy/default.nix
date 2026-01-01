@@ -106,7 +106,10 @@ buildPythonPackage {
   # that override globally the `numpy` attribute to point to `numpy_1`.
   postPatch = ''
     substituteInPlace pyproject.toml \
+<<<<<<< HEAD
       --replace-fail "Cython>=3.0.8,<3.2.0" "Cython>=3.0.8" \
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       --replace-fail "numpy>=2.0.0,<2.6" numpy
   '';
 
@@ -159,6 +162,7 @@ buildPythonPackage {
       "test_uint64_max"
       "test_large_m4" # https://github.com/scipy/scipy/issues/22466
     ]
+<<<<<<< HEAD
     ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
       # https://github.com/scipy/scipy/issues/24090
       "test_cython_api"
@@ -168,6 +172,8 @@ buildPythonPackage {
       "test_hyp0f1_gh5764"
       "test_simple_det_shapes_real_complex"
     ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ lib.optionals (python.isPy311) [
       # https://github.com/scipy/scipy/issues/22789 Observed only with Python 3.11
       "test_funcs"

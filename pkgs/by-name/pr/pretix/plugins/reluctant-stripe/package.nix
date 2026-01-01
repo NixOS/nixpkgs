@@ -29,10 +29,18 @@ buildPythonPackage {
     "pretix_reluctant_stripe"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Nudge users to not use Stripe as a payment provider";
     homepage = "https://github.com/metarheinmain/pretix-reluctant-stripe";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Nudge users to not use Stripe as a payment provider";
+    homepage = "https://github.com/metarheinmain/pretix-reluctant-stripe";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

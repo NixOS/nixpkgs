@@ -22,10 +22,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/qwerasd205/PixelCode";
     description = "Pixel font designed to actually be good for programming";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ mattpolzin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/qwerasd205/PixelCode";
+    description = "Pixel font designed to actually be good for programming";
+    license = licenses.ofl;
+    maintainers = with maintainers; [ mattpolzin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

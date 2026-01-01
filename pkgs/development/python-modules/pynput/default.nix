@@ -58,11 +58,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Library to control and monitor input devices";
     homepage = "https://github.com/moses-palmer/pynput";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ nickhu ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Library to control and monitor input devices";
+    homepage = "https://github.com/moses-palmer/pynput";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ nickhu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

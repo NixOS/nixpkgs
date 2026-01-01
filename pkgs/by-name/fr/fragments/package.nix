@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/World/Fragments";
     description = "Easy to use BitTorrent client for the GNOME desktop environment";
@@ -80,6 +81,17 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/World/Fragments";
+    description = "Easy to use BitTorrent client for the GNOME desktop environment";
+    maintainers = with maintainers; [
+      emilytrau
+    ];
+    teams = [ lib.teams.gnome-circle ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fragments";
   };
 }

@@ -33,11 +33,19 @@ stdenv.mkDerivation rec {
     "-Duse_internal_lhapdf=OFF"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Monte Carlo for FeMtobarn processes";
     homepage = "https://mcfm.fnal.gov";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Monte Carlo for FeMtobarn processes";
+    homepage = "https://mcfm.fnal.gov";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.x86_64;
   };
 }

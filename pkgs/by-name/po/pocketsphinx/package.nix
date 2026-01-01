@@ -59,17 +59,29 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Small speech recognizer";
     homepage = "https://github.com/cmusphinx/pocketsphinx";
     changelog = "https://github.com/cmusphinx/pocketsphinx/blob/v${finalAttrs.version}/NEWS";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Small speech recognizer";
+    homepage = "https://github.com/cmusphinx/pocketsphinx";
+    changelog = "https://github.com/cmusphinx/pocketsphinx/blob/v${finalAttrs.version}/NEWS";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd2
       bsd3
       mit
     ];
     pkgConfigModules = [ "pocketsphinx" ];
     mainProgram = "pocketsphinx";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ jopejoe1 ];
+=======
+    maintainers = with maintainers; [ jopejoe1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

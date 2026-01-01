@@ -12,7 +12,10 @@
   libllvm,
   version,
   devExtraCmakeFlags ? [ ],
+<<<<<<< HEAD
   getVersionFile,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,12 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./gnu-install-dirs.patch
+<<<<<<< HEAD
   ]
   ++ lib.optional (lib.versionOlder release_version "20") [
     # Fix build with gcc15
     # https://github.com/llvm/llvm-project/commit/41eb186fbb024898bacc2577fa3b88db0510ba1f
     # https://github.com/llvm/llvm-project/commit/101109fc5460d5bb9bb597c6ec77f998093a6687
     (getVersionFile "mlir/mlir-add-include-cstdint.patch")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [

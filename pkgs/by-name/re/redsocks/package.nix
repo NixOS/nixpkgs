@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
     description = "Transparent redirector of any TCP connection to proxy";
     homepage = "https://darkk.net.ru/redsocks/";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.ekleog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
     mainProgram = "redsocks";
   };

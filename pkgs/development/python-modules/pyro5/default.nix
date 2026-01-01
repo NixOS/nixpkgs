@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Pyro5" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed object middleware for Python (RPC)";
     homepage = "https://github.com/irmen/Pyro5";
     changelog = "https://github.com/irmen/Pyro5/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Distributed object middleware for Python (RPC)";
+    homepage = "https://github.com/irmen/Pyro5";
+    changelog = "https://github.com/irmen/Pyro5/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

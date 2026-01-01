@@ -26,10 +26,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (weechat.meta) platforms;
     description = "This simple weechat plugin allows you to compose messages in your $EDITOR";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eraserhd ];
+=======
+  meta = with lib; {
+    inherit (weechat.meta) platforms;
+    description = "This simple weechat plugin allows you to compose messages in your $EDITOR";
+    license = licenses.mit;
+    maintainers = with maintainers; [ eraserhd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

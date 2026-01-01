@@ -39,6 +39,7 @@ buildPythonPackage rec {
     "test_invalid_file_urls"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for version handling of modules";
     homepage = "https://github.com/aboutcode-org/packvers";
@@ -48,5 +49,16 @@ buildPythonPackage rec {
       bsd2
     ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for version handling of modules";
+    homepage = "https://github.com/aboutcode-org/packvers";
+    changelog = "https://github.com/nexB/packvers/blob/${version}/CHANGELOG.rst";
+    license = with licenses; [
+      asl20 # and
+      bsd2
+    ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

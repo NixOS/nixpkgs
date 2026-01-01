@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Electronegativity equilibration model for atomic partial charges";
     mainProgram = "multicharge";
@@ -82,5 +83,14 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/grimme-lab/multicharge";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Electronegativity equilibration model for atomic partial charges";
+    mainProgram = "multicharge";
+    license = licenses.asl20;
+    homepage = "https://github.com/grimme-lab/multicharge";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

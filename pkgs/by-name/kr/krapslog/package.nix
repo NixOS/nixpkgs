@@ -21,11 +21,19 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
+<<<<<<< HEAD
   meta = {
     description = "Visualize a log file with sparklines";
     homepage = "https://github.com/acj/krapslog-rs";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ yanganto ];
+=======
+  meta = with lib; {
+    description = "Visualize a log file with sparklines";
+    homepage = "https://github.com/acj/krapslog-rs";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ yanganto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "krapslog";
   };
 }

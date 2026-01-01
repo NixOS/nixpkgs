@@ -45,12 +45,17 @@ let
   '';
 
   core = stdenv.mkDerivation {
+<<<<<<< HEAD
     inherit
       pname
       version
       src
       patches
       ;
+=======
+    name = "${pname}-${version}";
+    inherit src patches;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     postPatch = commonPostPatch + ''
       substituteInPlace CMakeLists.txt \
         --replace-fail "cmake_minimum_required(VERSION 3.02)" "cmake_minimum_required(VERSION 3.10)"
@@ -78,6 +83,7 @@ let
 
     passthru = { inherit python; };
 
+<<<<<<< HEAD
     meta = {
       description = "SMT solver for Monotonic Theories";
       mainProgram = "monosat";
@@ -85,6 +91,15 @@ let
       license = if includeGplCode then lib.licenses.gpl2 else lib.licenses.mit;
       homepage = "https://github.com/sambayless/monosat";
       maintainers = [ lib.maintainers.acairncross ];
+=======
+    meta = with lib; {
+      description = "SMT solver for Monotonic Theories";
+      mainProgram = "monosat";
+      platforms = platforms.unix;
+      license = if includeGplCode then licenses.gpl2 else licenses.mit;
+      homepage = "https://github.com/sambayless/monosat";
+      maintainers = [ maintainers.acairncross ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

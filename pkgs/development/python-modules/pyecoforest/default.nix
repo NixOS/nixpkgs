@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyecoforest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for interacting with Ecoforest devices";
     homepage = "https://github.com/pjanuario/pyecoforest";
     changelog = "https://github.com/pjanuario/pyecoforest/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for interacting with Ecoforest devices";
+    homepage = "https://github.com/pjanuario/pyecoforest";
+    changelog = "https://github.com/pjanuario/pyecoforest/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,10 +22,18 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for working with embedded signatures in Mach-O files";
     homepage = "https://github.com/thefloweringash/sigtool";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Tool for working with embedded signatures in Mach-O files";
+    homepage = "https://github.com/thefloweringash/sigtool";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

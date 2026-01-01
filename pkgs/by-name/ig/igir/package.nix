@@ -50,13 +50,23 @@ buildNpmPackage rec {
   # Irrelevant to our use
   autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Video game ROM collection manager to help filter, sort, patch, archive, and report on collections on any OS";
     mainProgram = "igir";
     homepage = "https://igir.io";
     changelog = "https://github.com/emmercm/igir/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mjm ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ mjm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

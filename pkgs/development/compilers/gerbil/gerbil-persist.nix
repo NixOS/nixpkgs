@@ -27,11 +27,20 @@
     sha256 = "1c1h1yp7gf23r3asxppgga4j4jmy4l9rlbb7vw9jcwvl8d30yrab";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Gerbil Persist: Persistent data and activities";
     homepage = "https://github.com/fare/gerbil-persist";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "Gerbil Persist: Persistent data and activities";
+    homepage = "https://github.com/fare/gerbil-persist";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

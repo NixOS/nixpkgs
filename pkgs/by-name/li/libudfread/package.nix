@@ -16,11 +16,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "UDF reader";
     homepage = "https://code.videolan.org/videolan/libudfread";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ chkno ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "UDF reader";
+    homepage = "https://code.videolan.org/videolan/libudfread";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ chkno ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

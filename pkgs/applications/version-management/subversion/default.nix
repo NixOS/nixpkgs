@@ -159,6 +159,7 @@ let
 
         passthru.tests = { inherit (nixosTests) svnserve; };
 
+<<<<<<< HEAD
         meta = {
           description = "Version control system intended to be a compelling replacement for CVS in the open source community";
           license = lib.licenses.asl20;
@@ -166,6 +167,15 @@ let
           mainProgram = "svn";
           maintainers = with lib.maintainers; [ lovek323 ];
           platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+        meta = with lib; {
+          description = "Version control system intended to be a compelling replacement for CVS in the open source community";
+          license = licenses.asl20;
+          homepage = "https://subversion.apache.org/";
+          mainProgram = "svn";
+          maintainers = with maintainers; [ lovek323 ];
+          platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
 
       }

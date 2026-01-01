@@ -9,16 +9,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-applet-minimon";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "0.9.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "minimon-applet";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Vxbzg7LHD+gYOeS+KHbV1zo17O0BsDLgQayYS0yBIOM=";
   };
 
   cargoHash = "sha256-VmpzzEe6rE2LbaH1wZH37FoLJ93y4VIK8KiVDzT/Wj8=";
+=======
+    hash = "sha256-tUAp6GN5oJYhALjTpEELMOEBpfao5D9B0hl2ecNtwMg=";
+  };
+
+  cargoHash = "sha256-qgqlEufv9vLLIOcDLiX76xRcXal1Q0S5726ua+8R8Ek=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     just

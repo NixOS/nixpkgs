@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/notandy/ympd";
     description = "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
     maintainers = [ lib.maintainers.siddharthist ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/notandy/ympd";
+    description = "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
+    maintainers = [ maintainers.siddharthist ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ympd";
   };
 }

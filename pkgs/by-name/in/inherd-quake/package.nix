@@ -25,11 +25,19 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Knowledge management meta-framework for geeks";
     homepage = "https://github.com/phodal/quake";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.elliot ];
+=======
+  meta = with lib; {
+    description = "Knowledge management meta-framework for geeks";
+    homepage = "https://github.com/phodal/quake";
+    license = licenses.mit;
+    maintainers = [ maintainers.elliot ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "quake";
   };
 }

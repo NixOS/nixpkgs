@@ -58,7 +58,11 @@ buildPythonPackage rec {
     respx
     time-machine
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # presumably regressed in pytest-asyncio 0.23.0
@@ -72,12 +76,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bimmer_connected" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/bimmerconnected/bimmer_connected/releases/tag/${version}";
     description = "Library to read data from the BMW Connected Drive portal";
     mainProgram = "bimmerconnected";
     homepage = "https://github.com/bimmerconnected/bimmer_connected";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

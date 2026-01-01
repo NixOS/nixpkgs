@@ -21,10 +21,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "GDB script to enhance debugging of a QEMU-based virtual machine";
     homepage = "https://github.com/martinradev/gdb-pt-dump";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ msanft ];
+=======
+  meta = with lib; {
+    description = "GDB script to enhance debugging of a QEMU-based virtual machine";
+    homepage = "https://github.com/martinradev/gdb-pt-dump";
+    license = licenses.mit;
+    maintainers = with maintainers; [ msanft ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

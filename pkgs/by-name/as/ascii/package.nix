@@ -31,13 +31,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Interactive ASCII name and synonym chart";
     mainProgram = "ascii";
     homepage = "http://www.catb.org/~esr/ascii/";
     changelog = "https://gitlab.com/esr/ascii/-/blob/${finalAttrs.version}/NEWS.adoc";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

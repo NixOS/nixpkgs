@@ -48,10 +48,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "threadpoolctl" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/joblib/threadpoolctl";
     description = "Helpers to limit number of threads used in native libraries";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/joblib/threadpoolctl";
+    description = "Helpers to limit number of threads used in native libraries";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

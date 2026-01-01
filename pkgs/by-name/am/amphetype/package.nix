@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
   lib,
   copyDesktopItems,
   fetchFromGitLab,
+=======
+  copyDesktopItems,
+  fetchFromGitLab,
+  lib,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeDesktopItem,
   python3Packages,
   qt5,
@@ -29,6 +35,10 @@ python3Packages.buildPythonApplication {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
+=======
+    qt5.qtbase
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     qt5.qtwayland
   ];
 
@@ -42,11 +52,20 @@ python3Packages.buildPythonApplication {
     translitcodec
   ];
 
+<<<<<<< HEAD
   makeWrapperArgs = [
     "\${qtWrapperArgs[@]}"
   ];
 
   # no tests
+=======
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doCheck = false;
 
   desktopItems = [
@@ -63,11 +82,20 @@ python3Packages.buildPythonApplication {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     inherit description;
     mainProgram = "amphetype";
     homepage = "https://gitlab.com/franksh/amphetype";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ rycee ];
+=======
+  meta = with lib; {
+    inherit description;
+    mainProgram = "amphetype";
+    homepage = "https://gitlab.com/franksh/amphetype";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ rycee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

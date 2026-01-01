@@ -22,11 +22,20 @@ python3Packages.buildPythonPackage rec {
     install -t $out/share/man/man1 -m 444 pydf.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Colourised df(1)-clone";
     homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/pydf/";
     mainProgram = "pydf";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ monsieurp ];
+=======
+  meta = with lib; {
+    description = "Colourised df(1)-clone";
+    homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/pydf/";
+    mainProgram = "pydf";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ monsieurp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

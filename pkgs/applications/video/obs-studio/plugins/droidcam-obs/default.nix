@@ -2,9 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
   obs-studio,
   ffmpeg,
+=======
+  obs-studio,
+  ffmpeg_7,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libjpeg,
   libimobiledevice,
   libusbmuxd,
@@ -22,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-hxG/v15Q4D+6LU4BNV6ErSa1WvPk4kMPl07pIqiMcc4=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with ffmpeg 8 / libavcodec 62
     # TODO: Drop this once v2.4.3+ is released
@@ -31,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preBuild = ''
     mkdir ./build
   '';
@@ -41,7 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     libusbmuxd
     libplist
     obs-studio
+<<<<<<< HEAD
     ffmpeg
+=======
+    ffmpeg_7
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [
@@ -57,7 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     "IMOBILEDEV_DIR=${lib.getDev libimobiledevice}"
     "IMOBILEDEV_DIR=${lib.getLib libimobiledevice}"
     "LIBOBS_INCLUDES=${obs-studio}/include/obs"
+<<<<<<< HEAD
     "FFMPEG_INCLUDES=${lib.getLib ffmpeg}"
+=======
+    "FFMPEG_INCLUDES=${lib.getLib ffmpeg_7}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "LIBUSBMUXD=libusbmuxd-2.0"
     "LIBIMOBILEDEV=libimobiledevice-1.0"
   ];

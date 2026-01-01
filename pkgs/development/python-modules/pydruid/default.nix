@@ -42,7 +42,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pycurl
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "pydruid" ];
 
@@ -53,10 +57,18 @@ buildPythonPackage rec {
     # druid has a `cli` extra, but it doesn't work with nixpkgs pygments
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple API to create, execute, and analyze Druid queries";
     homepage = "https://github.com/druid-io/pydruid";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "Simple API to create, execute, and analyze Druid queries";
+    homepage = "https://github.com/druid-io/pydruid";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

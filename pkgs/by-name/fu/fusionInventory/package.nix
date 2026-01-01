@@ -96,10 +96,18 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.fusioninventory.org";
     description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.phile314 ];
+=======
+  meta = with lib; {
+    homepage = "https://www.fusioninventory.org";
+    description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
+    license = lib.licenses.gpl2Only;
+    maintainers = [ maintainers.phile314 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

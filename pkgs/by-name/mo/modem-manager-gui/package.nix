@@ -71,7 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs man/manhelper.py
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "App to send/receive SMS, make USSD requests, control mobile data usage and more";
     longDescription = ''
       A simple GTK based GUI compatible with Modem manager, Wader and oFono
@@ -80,12 +84,21 @@ stdenv.mkDerivation (finalAttrs: {
       messages, control mobile traffic consumption and more.
     '';
     homepage = "https://linuxonly.ru/page/modem-manager-gui";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       ahuzik
       galagora
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+      ahuzik
+      galagora
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "modem-manager-gui";
   };
 })

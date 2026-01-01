@@ -41,10 +41,17 @@ buildPythonPackage rec {
     inherit ipython;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Matplotlib Inline Back-end for IPython and Jupyter";
     homepage = "https://github.com/ipython/matplotlib-inline";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Matplotlib Inline Back-end for IPython and Jupyter";
+    homepage = "https://github.com/ipython/matplotlib-inline";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -58,12 +58,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nameko" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Microservices framework that lets service developers concentrate on application logic and encourages testability";
     mainProgram = "nameko";
     homepage = "https://www.nameko.io/";
     changelog = "https://github.com/nameko/nameko/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siddharthdhakane ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ siddharthdhakane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

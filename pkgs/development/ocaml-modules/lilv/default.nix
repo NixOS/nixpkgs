@@ -28,10 +28,18 @@ buildDunePackage rec {
     lilv
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savonet/ocaml-lilv";
     description = "OCaml bindings for lilv";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savonet/ocaml-lilv";
+    description = "OCaml bindings for lilv";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,10 +27,17 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Inventory synchronization tool between Netbox and Netshot";
     homepage = "https://github.com/scaleway/netbox2netshot";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Inventory synchronization tool between Netbox and Netshot";
+    homepage = "https://github.com/scaleway/netbox2netshot";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "netbox2netshot";
   };

@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ds_store" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/al45tair/ds_store";
     description = "Manipulate Finder .DS_Store files from Python";
     mainProgram = "ds_store";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/al45tair/ds_store";
+    description = "Manipulate Finder .DS_Store files from Python";
+    mainProgram = "ds_store";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -13,7 +13,11 @@
 set -eu
 
 # Supported platforms
+<<<<<<< HEAD
 ARCHS="x86 x86_64"
+=======
+ARCHS="x86"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 KERNELS="linux"
 COMPILERS="mescc gcc"
 

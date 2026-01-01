@@ -56,11 +56,20 @@ stdenv.mkDerivation rec {
     "-Dintrospection=false"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/totem-pl-parser";
     description = "Simple GObject-based library to parse and save a host of playlist formats";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/totem-pl-parser";
+    description = "Simple GObject-based library to parse and save a host of playlist formats";
+    teams = [ teams.gnome ];
+    license = licenses.lgpl2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

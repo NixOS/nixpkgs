@@ -25,11 +25,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyaml" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PyYAML-based module to produce pretty and readable YAML-serialized data";
     mainProgram = "pyaml";
     homepage = "https://github.com/mk-fg/pretty-yaml";
     license = lib.licenses.wtfpl;
+=======
+  meta = with lib; {
+    description = "PyYAML-based module to produce pretty and readable YAML-serialized data";
+    mainProgram = "pyaml";
+    homepage = "https://github.com/mk-fg/pretty-yaml";
+    license = licenses.wtfpl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

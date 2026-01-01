@@ -38,11 +38,19 @@ stdenv.mkDerivation rec {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Perhaps the smallest useful terminal multiplexer in the world";
     homepage = "https://github.com/deadpixi/mtm";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Perhaps the smallest useful terminal multiplexer in the world";
+    homepage = "https://github.com/deadpixi/mtm";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "mtm";
   };

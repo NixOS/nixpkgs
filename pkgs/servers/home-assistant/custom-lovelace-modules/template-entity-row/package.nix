@@ -26,6 +26,7 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/thomasloven/lovelace-template-entity-row/releases/tag/${src.rev}";
     description = "Display whatever you want in an entities card row";
@@ -33,5 +34,14 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/thomasloven/lovelace-template-entity-row/releases/tag/${src.rev}";
+    description = "Display whatever you want in an entities card row";
+    homepage = "https://github.com/thomasloven/lovelace-template-entity-row";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,10 +33,18 @@ buildPythonPackage {
     pillow
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Application to display XY position and RGB color information for the pixel currently under the mouse. Works on Python 2 and 3";
     homepage = "https://github.com/asweigart/mouseinfo";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ lucasew ];
+=======
+  meta = with lib; {
+    description = "Application to display XY position and RGB color information for the pixel currently under the mouse. Works on Python 2 and 3";
+    homepage = "https://github.com/asweigart/mouseinfo";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ lucasew ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

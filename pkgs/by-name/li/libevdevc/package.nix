@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ChromiumOS libevdev. Renamed to avoid conflicts with the standard libevdev found in Linux distros";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     homepage = "https://chromium.googlesource.com/chromiumos/platform/libevdev/";
     maintainers = with lib.maintainers; [ kcalvinalvin ];
+=======
+  meta = with lib; {
+    description = "ChromiumOS libevdev. Renamed to avoid conflicts with the standard libevdev found in Linux distros";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    homepage = "https://chromium.googlesource.com/chromiumos/platform/libevdev/";
+    maintainers = with maintainers; [ kcalvinalvin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

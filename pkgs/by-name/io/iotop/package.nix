@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "iotop" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to find out the processes doing the most IO";
     homepage = "http://guichaz.free.fr/iotop";
@@ -35,5 +36,14 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "iotop";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool to find out the processes doing the most IO";
+    homepage = "http://guichaz.free.fr/iotop";
+    license = licenses.gpl2Plus;
+    mainProgram = "iotop";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

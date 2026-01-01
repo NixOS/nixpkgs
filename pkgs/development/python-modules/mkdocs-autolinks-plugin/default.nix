@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_autolinks_plugin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "MkDocs plugin that simplifies relative linking between documents";
     homepage = "https://github.com/zachhannum/mkdocs-autolinks-plugin";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lucas-deangelis ];
+=======
+  meta = with lib; {
+    description = "MkDocs plugin that simplifies relative linking between documents";
+    homepage = "https://github.com/zachhannum/mkdocs-autolinks-plugin";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lucas-deangelis ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -38,9 +38,14 @@ stdenv.mkDerivation {
   # Some gnulib tests fail
   # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714
   # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
+<<<<<<< HEAD
   # - when building on Darwin (cross-compilation): test-nl_langinfo-mt fails
   postPatch =
     if stdenv.hostPlatform.isMusl || stdenv.buildPlatform.isDarwin then
+=======
+  postPatch =
+    if stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ''
         sed -i 's:gnulib-tests::g' Makefile.in
       ''
@@ -80,11 +85,14 @@ stdenv.mkDerivation {
     export MKDIR_P="mkdir -p"
   '';
 
+<<<<<<< HEAD
   configureFlags =
     # Work around build failure caused by the gnulib workaround for
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870. remove after GCC 15
     lib.optional stdenv.hostPlatform.isCygwin "gl_cv_clean_version_stddef=yes";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   enableParallelBuilding = true;
 
   # Fix reference to sh in bootstrap-tools, and invoke grep via
@@ -98,11 +106,19 @@ stdenv.mkDerivation {
     chmod +x $out/bin/egrep $out/bin/fgrep
   '';
 
+<<<<<<< HEAD
   env = lib.optionalAttrs (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) {
     NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
 
   meta = {
+=======
+  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+    NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  };
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.gnu.org/software/grep/";
     description = "GNU implementation of the Unix grep command";
 
@@ -112,6 +128,7 @@ stdenv.mkDerivation {
       prints the matching lines.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
 
     maintainers = [
@@ -119,6 +136,15 @@ stdenv.mkDerivation {
       lib.maintainers.m00wl
     ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+
+    maintainers = [
+      maintainers.das_j
+      maintainers.m00wl
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "grep";
   };
 

@@ -105,8 +105,14 @@ buildGoModule rec {
     changelog = "https://github.com/Aylur/ags/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
       PerchunPak
       johnrtitor
+=======
+      foo-dogsquared
+      johnrtitor
+      perchun
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "ags";
     platforms = lib.platforms.linux;

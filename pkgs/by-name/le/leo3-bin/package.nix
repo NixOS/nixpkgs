@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/leo3"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automated theorem prover for classical higher-order logic with choice";
     mainProgram = "leo3";
@@ -31,6 +32,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Automated theorem prover for classical higher-order logic with choice";
+    mainProgram = "leo3";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://page.mi.fu-berlin.de/lex/leo3/";
   };
 }

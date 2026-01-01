@@ -35,10 +35,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscreenshot" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python screenshot";
     homepage = "https://github.com/ponty/pyscreenshot";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python screenshot";
+    homepage = "https://github.com/ponty/pyscreenshot";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

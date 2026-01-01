@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pulp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to generate MPS or LP files";
     mainProgram = "pulptest";
     homepage = "https://github.com/coin-or/pulp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teto ];
+=======
+  meta = with lib; {
+    description = "Module to generate MPS or LP files";
+    mainProgram = "pulptest";
+    homepage = "https://github.com/coin-or/pulp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ teto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

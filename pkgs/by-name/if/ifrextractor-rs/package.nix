@@ -23,11 +23,20 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Rust utility to extract UEFI IFR data into human-readable text";
     mainProgram = "ifrextractor";
     homepage = "https://github.com/LongSoft/IFRExtractor-RS";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jiegec ];
+=======
+  meta = with lib; {
+    description = "Rust utility to extract UEFI IFR data into human-readable text";
+    mainProgram = "ifrextractor";
+    homepage = "https://github.com/LongSoft/IFRExtractor-RS";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ jiegec ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

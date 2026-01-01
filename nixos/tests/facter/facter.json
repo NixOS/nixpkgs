@@ -14,6 +14,7 @@
         "model": 33
       }
     ],
+<<<<<<< HEAD
     "graphics_card": [
       {
         "driver_modules": [
@@ -26,6 +27,8 @@
         "model": "Test Monitor"
       }
     ],
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "system": {
       "form_factor": "desktop"
     }

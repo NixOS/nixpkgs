@@ -42,11 +42,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Universal schema language and a collection of tools built around it. These are the ocaml bindings";
     homepage = "https://piqi.org";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.maurer ];
+=======
+  meta = with lib; {
+    description = "Universal schema language and a collection of tools built around it. These are the ocaml bindings";
+    homepage = "https://piqi.org";
+    license = licenses.asl20;
+    maintainers = [ maintainers.maurer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "piqic-ocaml";
   };
 }

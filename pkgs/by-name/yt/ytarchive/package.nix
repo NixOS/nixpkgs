@@ -31,10 +31,17 @@ buildGoModule rec {
     wrapProgram $out/bin/ytarchive --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Kethsar/ytarchive";
     description = "Garbage Youtube livestream downloader";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Kethsar/ytarchive";
+    description = "Garbage Youtube livestream downloader";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "ytarchive";
   };

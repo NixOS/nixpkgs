@@ -57,12 +57,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of Adobe's ADEPT protocol for ePub/PDF DRM";
     homepage = "https://forge.soutade.fr/soutade/libgourou";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ autumnal ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Implementation of Adobe's ADEPT protocol for ePub/PDF DRM";
+    homepage = "https://forge.soutade.fr/soutade/libgourou";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ autumnal ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 })

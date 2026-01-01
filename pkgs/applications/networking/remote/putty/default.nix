@@ -62,7 +62,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
@@ -70,7 +74,12 @@ stdenv.mkDerivation rec {
       It is written and maintained primarily by Simon Tatham.
     '';
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/putty/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+=======
+    license = licenses.mit;
+    platforms = platforms.unix ++ platforms.windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

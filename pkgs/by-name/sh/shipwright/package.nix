@@ -124,7 +124,10 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-TEP2YNKUuAnvLg+aDOkMmYfPQIjUXWYOhprfqsr8EgQ=";
     fetchSubmodules = true;
+<<<<<<< HEAD
     fetchTags = true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     deepClone = true;
     postFetch = ''
       cd $out
@@ -289,7 +292,14 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PC port of Ocarina of Time with modern controls, widescreen, high-resolution, and more";
     mainProgram = "soh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ matteopacini ];
+=======
+    maintainers = with lib.maintainers; [
+      j0lol
+      matteopacini
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = with lib.licenses; [
       # OTRExporter, OTRGui, ZAPDTR, libultraship
       mit

@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/homewsn/whsniff";
     description = "Packet sniffer for 802.15.4 wireless networks";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ snicket2100 ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/homewsn/whsniff";
+    description = "Packet sniffer for 802.15.4 wireless networks";
+    mainProgram = "whsniff";
+    maintainers = with maintainers; [ snicket2100 ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

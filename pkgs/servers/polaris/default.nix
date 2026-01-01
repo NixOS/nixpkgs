@@ -52,7 +52,11 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = nixosTests.polaris;
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Self-host your music collection, and access it from any computer and mobile device";
     longDescription = ''
       Polaris is a FOSS music streaming application, designed to let you enjoy your music collection
@@ -61,9 +65,15 @@ rustPlatform.buildRustPackage rec {
       The only requirement is that your computer stays on while it streams your music!
     '';
     homepage = "https://github.com/agersant/polaris";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "polaris";
   };
 }

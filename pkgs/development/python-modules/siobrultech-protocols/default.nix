@@ -34,11 +34,20 @@ buildPythonPackage rec {
     "siobrultech_protocols.gem.protocol"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sans-I/O Python client library for Brultech Devices";
     homepage = "https://github.com/sdwilsh/siobrultech-protocols";
     changelog = "https://github.com/sdwilsh/siobrultech-protocols/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Sans-I/O Python client library for Brultech Devices";
+    homepage = "https://github.com/sdwilsh/siobrultech-protocols";
+    changelog = "https://github.com/sdwilsh/siobrultech-protocols/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

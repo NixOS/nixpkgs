@@ -74,11 +74,20 @@ stdenv.mkDerivation rec {
     cp ${incfile} make.inc
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Matrix Algebra on GPU and Multicore Architectures, OpenCL port";
     license = lib.licenses.bsd3;
     homepage = "https://icl.cs.utk.edu/magma/index.html";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ volhovm ];
+=======
+  meta = with lib; {
+    description = "Matrix Algebra on GPU and Multicore Architectures, OpenCL port";
+    license = licenses.bsd3;
+    homepage = "https://icl.cs.utk.edu/magma/index.html";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ volhovm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
     "sbin=$(out)/bin"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Small 'net top' tool, grouping bandwidth by process";
     longDescription = ''
       NetHogs is a small 'net top' tool. Instead of breaking the traffic down
@@ -43,10 +47,17 @@ stdenv.mkDerivation rec {
       identify programs that have gone wild and are suddenly taking up your
       bandwidth.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/raboof/nethogs#readme";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.rycee ];
+=======
+    license = licenses.gpl2Plus;
+    homepage = "https://github.com/raboof/nethogs#readme";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.rycee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nethogs";
   };
 }

@@ -58,7 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     metafont
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Scalable PostScript Fonts for MetaFont";
     longDescription = ''
       mftrace is a small Python program that lets you trace a TeX bitmap
@@ -66,11 +70,20 @@ stdenv.mkDerivation (finalAttrs: {
       TTF (TrueType) font.
     '';
     homepage = "https://lilypond.org/mftrace/";
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl2Only
       mit
     ];
     maintainers = with lib.maintainers; [ xworld21 ];
     platforms = lib.platforms.all;
+=======
+    license = with licenses; [
+      gpl2Only
+      mit
+    ];
+    maintainers = with maintainers; [ xworld21 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

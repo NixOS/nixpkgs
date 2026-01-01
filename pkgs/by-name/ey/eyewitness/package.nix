@@ -64,6 +64,7 @@ python3Packages.buildPythonApplication rec {
     runHook postFixup
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Take screenshots of websites, and identify admin interfaces";
     homepage = "https://github.com/redsiege/EyeWitness";
@@ -72,5 +73,15 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "eye-witness";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Take screenshots of websites, and identify admin interfaces";
+    homepage = "https://github.com/redsiege/EyeWitness";
+    changelog = "https://github.com/redsiege/EyeWitness/blob/${src.rev}/CHANGELOG";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ tochiaha ];
+    mainProgram = "eye-witness";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

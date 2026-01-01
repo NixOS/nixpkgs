@@ -26,7 +26,11 @@ buildGoModule rec {
     mv $GOPATH/bin/{cli,netassert}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/controlplaneio/netassert";
     changelog = "https://github.com/controlplaneio/netassert/blob/${src.rev}/CHANGELOG.md";
     description = "Command line utility to test network connectivity between kubernetes objects";
@@ -35,8 +39,13 @@ buildGoModule rec {
       It currently supports Deployment, Pod, Statefulset and Daemonset.
       You can check the traffic flow between these objects or from these objects to a remote host or an IP address.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jk ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "netassert";
   };
 }

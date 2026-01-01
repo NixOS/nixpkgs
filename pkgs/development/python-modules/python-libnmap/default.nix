@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libnmap" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to run nmap scans, parse and diff scan results";
     homepage = "https://github.com/savon-noir/python-libnmap";
     changelog = "https://github.com/savon-noir/python-libnmap/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to run nmap scans, parse and diff scan results";
+    homepage = "https://github.com/savon-noir/python-libnmap";
+    changelog = "https://github.com/savon-noir/python-libnmap/blob/${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

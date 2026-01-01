@@ -36,11 +36,20 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of libSegFault.so with Boost.stracktrace";
     homepage = "https://github.com/jonathanpoelen/libsegfault";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Implementation of libSegFault.so with Boost.stracktrace";
+    homepage = "https://github.com/jonathanpoelen/libsegfault";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

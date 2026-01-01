@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   pythonAtLeast,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   hatchling,
@@ -144,10 +147,13 @@ buildPythonPackage rec {
   pytestFlags = [
     "--benchmark-disable"
     "-Wignore::FutureWarning"
+<<<<<<< HEAD
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
     "-Wignore::DeprecationWarning"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   enabledTestMarks = testBackends ++ [ "core" ];
@@ -183,6 +189,7 @@ buildPythonPackage rec {
 
     # assert 0 == 3 (tests edge case behavior of databases)
     "test_self_join_with_generated_keys"
+<<<<<<< HEAD
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # ExceptionGroup: multiple unraisable exception warnings (4 sub-exceptions)
@@ -193,6 +200,8 @@ buildPythonPackage rec {
     "test_error_message"
     "test_error_message_when_constructing_literal"
     "test_signature_from_callable_with_keyword_only_arguments"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # patch out tests that check formatting with black

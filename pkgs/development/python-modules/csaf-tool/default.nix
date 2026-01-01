@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ versionCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "CSAF generator and validator";
     homepage = "https://github.com/anthonyharrison/csaf";
     changelog = "https://github.com/anthonyharrison/csaf/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ teatwig ];
+=======
+  meta = with lib; {
+    description = "CSAF generator and validator";
+    homepage = "https://github.com/anthonyharrison/csaf";
+    changelog = "https://github.com/anthonyharrison/csaf/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ teatwig ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

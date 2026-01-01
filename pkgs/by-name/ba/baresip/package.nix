@@ -31,14 +31,22 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "4.4.0";
+=======
+  version = "4.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "baresip";
 
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-/4XFuOKE/VCIkue9QGwNK/MxkeBU8XoyfLPZd6WAuNg=";
+=======
+    hash = "sha256-kC1pqquIddjqIvGSIE9Rzlvr6qzTXF+mFsZlIzFBExI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [

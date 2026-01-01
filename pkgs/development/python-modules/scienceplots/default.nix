@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "Matplotlib styles for scientific plotting";
     homepage = "https://github.com/garrettj403/SciencePlots";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kilimnik ];
+=======
+  meta = with lib; {
+    description = "Matplotlib styles for scientific plotting";
+    homepage = "https://github.com/garrettj403/SciencePlots";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kilimnik ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

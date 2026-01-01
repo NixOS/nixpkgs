@@ -27,10 +27,18 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Block-oriented, in-memory buffer transformation, compression, and decompression functions";
     homepage = "https://www.lfd.uci.edu/~gohlke/";
     maintainers = [ lib.maintainers.tbenst ];
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Block-oriented, in-memory buffer transformation, compression, and decompression functions";
+    homepage = "https://www.lfd.uci.edu/~gohlke/";
+    maintainers = [ maintainers.tbenst ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

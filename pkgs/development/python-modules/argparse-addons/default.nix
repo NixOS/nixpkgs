@@ -17,11 +17,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argparse_addons" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Additional Python argparse types and actions";
     homepage = "https://github.com/eerimoq/argparse_addons";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Additional Python argparse types and actions";
+    homepage = "https://github.com/eerimoq/argparse_addons";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       frogamic
       sbruder
     ];

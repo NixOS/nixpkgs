@@ -20,11 +20,20 @@ buildGoModule rec {
   # The tests try to connect to a Nomad cluster.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Open source templating and deployment tool for HashiCorp Nomad jobs";
     mainProgram = "levant";
     homepage = "https://github.com/hashicorp/levant";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ max-niederman ];
+=======
+  meta = with lib; {
+    description = "Open source templating and deployment tool for HashiCorp Nomad jobs";
+    mainProgram = "levant";
+    homepage = "https://github.com/hashicorp/levant";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ max-niederman ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

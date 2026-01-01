@@ -33,11 +33,19 @@ stdenv.mkDerivation rec {
   # There are no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Parser for VCalendar and ICalendar files, usable from the command line";
     homepage = "https://waynemorrison.com/software/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Parser for VCalendar and ICalendar files, usable from the command line";
+    homepage = "https://waynemorrison.com/software/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vcal";
   };
 }

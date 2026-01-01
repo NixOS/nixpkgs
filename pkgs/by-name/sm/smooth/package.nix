@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Object-oriented class library for C++ application development";
     mainProgram = "smooth-translator";
@@ -58,5 +59,14 @@ stdenv.mkDerivation rec {
     homepage = "http://www.smooth-project.org/";
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Object-oriented class library for C++ application development";
+    mainProgram = "smooth-translator";
+    license = licenses.artistic2;
+    homepage = "http://www.smooth-project.org/";
+    maintainers = with maintainers; [ shamilton ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

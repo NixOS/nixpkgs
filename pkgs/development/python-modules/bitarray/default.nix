@@ -28,10 +28,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bitarray" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Efficient arrays of booleans";
     homepage = "https://github.com/ilanschnell/bitarray";
     changelog = "https://github.com/ilanschnell/bitarray/raw/${version}/CHANGE_LOG";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    description = "Efficient arrays of booleans";
+    homepage = "https://github.com/ilanschnell/bitarray";
+    changelog = "https://github.com/ilanschnell/bitarray/raw/${version}/CHANGE_LOG";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

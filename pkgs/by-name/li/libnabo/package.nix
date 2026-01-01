@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Fast K Nearest Neighbor library for low-dimensional spaces";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ cryptix ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Fast K Nearest Neighbor library for low-dimensional spaces";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ cryptix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

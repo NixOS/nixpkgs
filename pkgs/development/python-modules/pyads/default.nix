@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyads" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for TwinCAT ADS library";
     homepage = "https://github.com/MrLeeh/pyads";
     changelog = "https://github.com/stlehmann/pyads/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for TwinCAT ADS library";
+    homepage = "https://github.com/MrLeeh/pyads";
+    changelog = "https://github.com/stlehmann/pyads/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Pythonic library for reading/modifying/writing Gerber/Excellon/IPC-356 files";
     mainProgram = "gerbonara";
     homepage = "https://github.com/jaseg/gerbonara";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ wulfsta ];
+=======
+  meta = with lib; {
+    description = "Pythonic library for reading/modifying/writing Gerber/Excellon/IPC-356 files";
+    mainProgram = "gerbonara";
+    homepage = "https://github.com/jaseg/gerbonara";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ wulfsta ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -16,8 +16,13 @@ buildPythonPackage {
   # Pypi source package doesn't contain tests
   src = fetchFromGitHub {
     owner = "dorianbrown";
+<<<<<<< HEAD
     repo = "rank_bm25";
     tag = version;
+=======
+    repo = "rank-bm25";
+    rev = version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-+BxQBflMm2AvCLAFFj52Jpkqn+KErwYXU1wztintgOg=";
   };
 
@@ -32,11 +37,20 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "rank_bm25" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of BM25 Algorithms in Python";
     homepage = "https://github.com/dorianbrown/rank_bm25";
     changelog = "https://github.com/dorianbrown/rank_bm25/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Collection of BM25 Algorithms in Python";
+    homepage = "https://github.com/dorianbrown/rank_bm25";
+    changelog = "https://github.com/dorianbrown/rank_bm25/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,11 +17,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-ARPrArvCgxLdCaiUdJyjB/9GbbldnMXwFbyYubbsqxc=";
 
+<<<<<<< HEAD
   meta = {
     description = "Automated authorization test tool";
     mainProgram = "authz0";
     homepage = "https://github.com/hahwul/authz0";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Automated authorization test tool";
+    mainProgram = "authz0";
+    homepage = "https://github.com/hahwul/authz0";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

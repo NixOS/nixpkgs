@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Chris Colins' General User soundfont player LV2 plugin";
@@ -37,5 +38,14 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    description = "Chris Colins' General User soundfont player LV2 plugin";
+    homepage = "https://x42-plugins.com/x42/x42-gmsynth";
+    maintainers = with maintainers; [ orivej ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -53,11 +53,14 @@ stdenv.mkDerivation {
       url = "https://github.com/gentoo/gentoo/raw/a2eb7e103ec985ff90f59e722e0a8a43373972a2/dev-debug/ltrace/files/ltrace-0.7.3-print-test-pie.patch";
       hash = "sha256-QRsUoN3WLzfiY5GDPwVYXtJPFMJt6rcc6eE96SAtI6Q=";
     })
+<<<<<<< HEAD
     # fix pointer conversion warning with Gcc15
     (fetchurl {
       url = "https://gitlab.com/cespedes/ltrace/-/commit/d888b448740abd4d5846535ef1dc5ba1c74a134a.patch";
       hash = "sha256-9XAeulMUUvLh6Q9ppSL6d5kA2UPPyzCjwibcXH260Bo=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   doCheck = true;
@@ -73,12 +76,21 @@ stdenv.mkDerivation {
       make check
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library call tracer";
     mainProgram = "ltrace";
     homepage = "https://www.ltrace.org/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Library call tracer";
+    mainProgram = "ltrace";
+    homepage = "https://www.ltrace.org/";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

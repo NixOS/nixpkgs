@@ -68,10 +68,17 @@ buildGoModule rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Scan QR codes on screen and from camera, the result is in your clipboard";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MatthieuBarthel ];
+=======
+  meta = with lib; {
+    description = "Scan QR codes on screen and from camera, the result is in your clipboard";
+    license = licenses.mit;
+    maintainers = with maintainers; [ MatthieuBarthel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.com/imatt-foss/clipqr";
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "clipqr";

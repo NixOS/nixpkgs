@@ -14,10 +14,17 @@ mkDiscoursePlugin {
     rev = "fa1d661004ca99036ff628a9c4be12a81265d784";
     sha256 = "sha256-2DYrYgC3H+e8USoo1MbJin1f5tshIUsQa6J7avnpvEc=";
   };
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jonmbake/discourse-ldap-auth";
     maintainers = with lib.maintainers; [ ryantm ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jonmbake/discourse-ldap-auth";
+    maintainers = with maintainers; [ ryantm ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Discourse plugin to enable LDAP/Active Directory authentication";
   };
 }

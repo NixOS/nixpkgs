@@ -8,14 +8,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lue";
+<<<<<<< HEAD
   version = "0.4.0";
+=======
+  version = "0.3.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "superstarryeyes";
     repo = "lue";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-T7uh9PSCTkT+jYxQYC4ebPkabDz3pc6JjCGtgNatIAM=";
+=======
+    hash = "sha256-D1y7nu3WIsnShy2ruyF06iVusD8leuaAUi0M8I1hVqQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python3.pkgs; [

@@ -136,6 +136,7 @@ let
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://nordpass.com/";
       description = "Secure and simple password manager for a stress-free online experience";
@@ -144,6 +145,16 @@ let
       maintainers = with lib.maintainers; [ coconnor ];
       platforms = [ "x86_64-linux" ];
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+    meta = with lib; {
+      homepage = "https://nordpass.com/";
+      description = "Secure and simple password manager for a stress-free online experience";
+      license = licenses.unfree;
+      mainProgram = "nordpass";
+      maintainers = with maintainers; [ coconnor ];
+      platforms = [ "x86_64-linux" ];
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

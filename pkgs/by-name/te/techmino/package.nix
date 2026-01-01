@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     inherit description;
     downloadPage = "https://github.com/26F-Studio/Techmino/releases";
@@ -78,5 +79,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     mainProgram = "techmino";
     maintainers = with lib.maintainers; [ chayleaf ];
+=======
+  meta = with lib; {
+    inherit description;
+    downloadPage = "https://github.com/26F-Studio/Techmino/releases";
+    homepage = "https://github.com/26F-Studio/Techmino/";
+    license = licenses.lgpl3;
+    mainProgram = "techmino";
+    maintainers = with maintainers; [ chayleaf ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

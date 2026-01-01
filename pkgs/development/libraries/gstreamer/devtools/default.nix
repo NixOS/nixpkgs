@@ -127,11 +127,19 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Integration testing infrastructure for the GStreamer framework";
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Integration testing infrastructure for the GStreamer framework";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

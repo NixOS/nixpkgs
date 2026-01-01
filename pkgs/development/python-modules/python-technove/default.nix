@@ -48,11 +48,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "technove" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to interact with TechnoVE local device API";
     homepage = "https://github.com/Moustachauve/pytechnove";
     changelog = "https://github.com/Moustachauve/pytechnove/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library to interact with TechnoVE local device API";
+    homepage = "https://github.com/Moustachauve/pytechnove";
+    changelog = "https://github.com/Moustachauve/pytechnove/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

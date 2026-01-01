@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bch" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/hardwario/bch-control-tool";
     description = "HARDWARIO Hub Control Tool";
@@ -41,5 +42,14 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/hardwario/bch-control-tool";
+    description = "HARDWARIO Hub Control Tool";
+    mainProgram = "bch";
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ cynerd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

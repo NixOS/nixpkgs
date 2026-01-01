@@ -1,19 +1,27 @@
 {
   lib,
   nix,
+<<<<<<< HEAD
   nix-update-script,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nps";
+<<<<<<< HEAD
   version = "0.2.12";
+=======
+  version = "0.2.9";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "OleMussmann";
     repo = "nps";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-kOVpn13lJYeO/99e39c0wbe7qcKHyMj5v4prBtZ3N7s=";
   };
 
@@ -23,6 +31,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+=======
+    hash = "sha256-q/PkigsNAI7MCmeDFBMGuZJFXVL95pQCNOVhNvBH9dc=";
+  };
+
+  cargoHash = "sha256-MThyvhzZXRM4l0K8csLDldMVKiDxKZ5EIFATGVpGpVc=";
+
+  nativeCheckInputs = [ nix ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Cache the nix package list, query and sort results by relevance";
     longDescription = ''
@@ -41,10 +58,14 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/OleMussmann/nps";
     license = lib.licenses.mit;
     mainProgram = "nps";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       mdaniels5757
       olemussmann
     ];
+=======
+    maintainers = with lib.maintainers; [ olemussmann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 }

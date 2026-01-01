@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sionescu/libfixposix";
     description = "Thin wrapper over POSIX syscalls and some replacement functionality";
@@ -32,5 +33,16 @@ stdenv.mkDerivation rec {
       raskin
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sionescu/libfixposix";
+    description = "Thin wrapper over POSIX syscalls and some replacement functionality";
+    license = licenses.boost;
+    maintainers = with maintainers; [
+      orivej
+      raskin
+    ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

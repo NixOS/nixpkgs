@@ -44,11 +44,20 @@ stdenvNoCC.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source Pan-CJK serif typeface";
     homepage = "https://github.com/ichitenfont/I.Ming";
     license = lib.licenses.ipa;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.linsui ];
+=======
+  meta = with lib; {
+    description = "Open source Pan-CJK serif typeface";
+    homepage = "https://github.com/ichitenfont/I.Ming";
+    license = licenses.ipa;
+    platforms = platforms.all;
+    maintainers = [ maintainers.linsui ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

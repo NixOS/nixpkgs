@@ -49,12 +49,21 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/jborean93/pyspnego/blob/${src.tag}/CHANGELOG.md";
     description = "Python SPNEGO authentication library";
     mainProgram = "pyspnego-parse";
     homepage = "https://github.com/jborean93/pyspnego";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

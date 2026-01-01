@@ -64,7 +64,11 @@ stdenv.mkDerivation {
     cp -a README $out/doc/README.driver
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.openprinting.org/driver/epson-201106w";
     description = "Epson printer driver (BX535WD, BX630FW, BX635FWD, ME940FW, NX530, NX635, NX635, SX535WD, WorkForce 545, WorkForce 645";
     longDescription = ''
@@ -86,11 +90,20 @@ stdenv.mkDerivation {
           drivers = [ pkgs.epson-201106w ];
         };
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
       lgpl21
       epson
     ];
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nphilou ];
+=======
+    license = with licenses; [
+      lgpl21
+      epson
+    ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.nphilou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

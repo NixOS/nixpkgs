@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   checkPhase = "./test/tests.sh";
 
+<<<<<<< HEAD
   meta = {
     description = "Map lines from stdin to commands";
     mainProgram = "map";
@@ -33,5 +34,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ pogobanane ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Map lines from stdin to commands";
+    mainProgram = "map";
+    homepage = "https://github.com/soveran/map";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ pogobanane ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

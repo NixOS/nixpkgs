@@ -26,11 +26,19 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-Platform Passwords & Secrets Vault";
     mainProgram = "buttercup-desktop";
     homepage = "https://buttercup.pw";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Cross-Platform Passwords & Secrets Vault";
+    mainProgram = "buttercup-desktop";
+    homepage = "https://buttercup.pw";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

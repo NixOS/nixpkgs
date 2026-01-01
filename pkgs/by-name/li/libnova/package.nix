@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Celestial Mechanics, Astrometry and Astrodynamics Library";
     mainProgram = "libnovaconfig";
@@ -29,5 +30,16 @@ stdenv.mkDerivation rec {
       returntoreality
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Celestial Mechanics, Astrometry and Astrodynamics Library";
+    mainProgram = "libnovaconfig";
+    homepage = "http://libnova.sf.net";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      returntoreality
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

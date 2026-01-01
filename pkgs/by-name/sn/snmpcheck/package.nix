@@ -26,10 +26,17 @@ stdenv.mkDerivation rec {
     cp $src $out/bin/snmp-check
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "SNMP enumerator";
     homepage = "http://www.nothink.org/codes/snmpcheck/";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "SNMP enumerator";
+    homepage = "http://www.nothink.org/codes/snmpcheck/";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "snmp-check";
   };
 }

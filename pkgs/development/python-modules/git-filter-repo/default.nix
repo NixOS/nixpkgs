@@ -43,6 +43,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "git_filter_repo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Quickly rewrite git repository history";
     homepage = "https://github.com/newren/git-filter-repo";
@@ -52,6 +53,17 @@ buildPythonPackage rec {
       gpl2Plus
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Quickly rewrite git repository history";
+    homepage = "https://github.com/newren/git-filter-repo";
+    changelog = "https://github.com/newren/git-filter-repo/releases/tag/v${version}";
+    license = with licenses; [
+      mit # or
+      gpl2Plus
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aiotter
       fab
     ];

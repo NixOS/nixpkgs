@@ -8,18 +8,32 @@
   cacert,
 }:
 
+<<<<<<< HEAD
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fh";
   version = "0.1.27";
+=======
+rustPlatform.buildRustPackage rec {
+  pname = "fh";
+  version = "0.1.26";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-EUCV7/J9wJRroCGW5JqonFJIqcvJEBAwB7l3eWYxiSk=";
   };
 
   cargoHash = "sha256-HOQqUNd0I85lAD6YVWT9baEj31JpjIgq9Ujfn4ys/3o=";
+=======
+    rev = "v${version}";
+    hash = "sha256-cHXpTe5tAXrAwVu5+ZTb3pzHIqAk353GnNFPvComIfQ=";
+  };
+
+  cargoHash = "sha256-HwFehxL01pwT93jjVvCU9BXhaHhCDbox50ecXpod3Mo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,6 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
@@ -54,3 +69,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "fh";
   };
 })
+=======
+  meta = with lib; {
+    description = "Official FlakeHub CLI";
+    homepage = "https://github.com/DeterminateSystems/fh";
+    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
+    license = licenses.asl20;
+    maintainers = [ ];
+    mainProgram = "fh";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

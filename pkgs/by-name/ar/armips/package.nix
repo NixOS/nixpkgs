@@ -1,11 +1,19 @@
 {
+<<<<<<< HEAD
   clangStdenv,
+=======
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   lib,
   fetchFromGitHub,
   cmake,
 }:
 
+<<<<<<< HEAD
 clangStdenv.mkDerivation rec {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "armips";
   version = "0.11.0";
 
@@ -41,11 +49,20 @@ clangStdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Kingcom/armips";
     description = "Assembler for various ARM and MIPS platforms";
     mainProgram = "armips";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marius851000 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Kingcom/armips";
+    description = "Assembler for various ARM and MIPS platforms";
+    mainProgram = "armips";
+    license = licenses.mit;
+    maintainers = with maintainers; [ marius851000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

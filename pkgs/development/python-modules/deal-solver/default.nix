@@ -52,11 +52,20 @@ buildPythonPackage rec {
     "test_fuzz_math_floats"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Z3-powered solver (theorem prover) for deal";
     homepage = "https://github.com/life4/deal-solver";
     changelog = "https://github.com/life4/deal-solver/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Z3-powered solver (theorem prover) for deal";
+    homepage = "https://github.com/life4/deal-solver";
+    changelog = "https://github.com/life4/deal-solver/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

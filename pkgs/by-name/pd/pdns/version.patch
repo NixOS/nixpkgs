@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 --- a/pdns/version.cc
 +++ b/pdns/version.cc
 @@ -180,7 +180,7 @@ string getBuildConfiguration()
@@ -6,6 +7,18 @@
    // NOLINTEND(cppcoreguidelines-macro-usage)
 -  ret << "Configured with: " << escape_quotes(PDNS_CONFIG_ARGS) << endl;
 +  ret << "Configured with: " << "redacted to reduce closure size" << endl;
+=======
+diff --git a/pdns/version.cc b/pdns/version.cc
+index d8f5d40..1368481 100644
+--- a/pdns/version.cc
++++ b/pdns/version.cc
+@@ -155,7 +155,7 @@ void showBuildConfiguration()
+ #ifdef PDNS_CONFIG_ARGS
+ #define double_escape(s) #s
+ #define escape_quotes(s) double_escape(s)
+-  g_log<<Logger::Warning<<"Configured with: "<<escape_quotes(PDNS_CONFIG_ARGS)<<endl;
++  g_log<<Logger::Warning<<"Configured with: "<<"redacted"<<endl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  #undef escape_quotes
  #undef double_escape
  #endif

@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     cp -r "${rimeDataDrv}/share/rime-data/." $out/share/rime-data/
   '';
 
+<<<<<<< HEAD
   meta = {
     isIbusEngine = true;
     description = "Rime input method engine for IBus";
@@ -61,5 +62,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pmy ];
+=======
+  meta = with lib; {
+    isIbusEngine = true;
+    description = "Rime input method engine for IBus";
+    homepage = "https://rime.im/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pmy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

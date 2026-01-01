@@ -43,11 +43,20 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH ":" ${libGL}/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Space battle game with gravity as the main theme";
     mainProgram = "nw";
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Space battle game with gravity as the main theme";
+    mainProgram = "nw";
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

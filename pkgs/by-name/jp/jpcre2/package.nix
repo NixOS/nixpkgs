@@ -19,10 +19,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pcre2 ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://docs.neuzunix.com/jpcre2/latest/";
     description = "C++ wrapper for PCRE2 Library";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://docs.neuzunix.com/jpcre2/latest/";
+    description = "C++ wrapper for PCRE2 Library";
+    platforms = lib.platforms.all;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

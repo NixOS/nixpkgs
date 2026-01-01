@@ -86,7 +86,11 @@ in
             }
             ''
               echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
+<<<<<<< HEAD
               mandb -C man.conf -pscq
+=======
+              mandb -C man.conf -psc >/dev/null 2>&1
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             '';
       in
       ''

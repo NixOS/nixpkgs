@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Process fork/exec/exit monitoring tool";
     mainProgram = "forkstat";
@@ -28,5 +29,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ womfoo ];
+=======
+  meta = with lib; {
+    description = "Process fork/exec/exit monitoring tool";
+    mainProgram = "forkstat";
+    homepage = "https://github.com/ColinIanKing/forkstat";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ womfoo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

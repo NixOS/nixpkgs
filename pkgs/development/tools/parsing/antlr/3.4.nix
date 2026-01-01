@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
 
   inherit jre;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Powerful parser generator";
     longDescription = ''
       ANTLR (ANother Tool for Language Recognition) is a powerful parser
@@ -38,8 +42,14 @@ stdenv.mkDerivation rec {
       walk parse trees.
     '';
     homepage = "https://www.antlr.org/";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

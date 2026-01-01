@@ -78,11 +78,20 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required (VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ericwa.github.io/ericw-tools/";
     description = "Map compile tools for Quake and Hexen 2";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://ericwa.github.io/ericw-tools/";
+    description = "Map compile tools for Quake and Hexen 2";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ astro ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

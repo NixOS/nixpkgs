@@ -25,10 +25,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "coapthon" ];
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Python3 library to the CoAP protocol compliant with the RFC";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urbas ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Python3 library to the CoAP protocol compliant with the RFC";
+    license = licenses.mit;
+    maintainers = with maintainers; [ urbas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

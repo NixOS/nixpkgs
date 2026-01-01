@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ujson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Ultra fast JSON encoder and decoder";
     homepage = "https://github.com/ultrajson/ultrajson";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Ultra fast JSON encoder and decoder";
+    homepage = "https://github.com/ultrajson/ultrajson";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

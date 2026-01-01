@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "configclass" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python to class to hold configuration values";
     homepage = "https://github.com/schettino72/configclass/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Python to class to hold configuration values";
+    homepage = "https://github.com/schettino72/configclass/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

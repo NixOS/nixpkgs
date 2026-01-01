@@ -28,8 +28,13 @@ stdenv.mkDerivation rec {
     cp Protocol $out/share/${pname}/
   '';
 
+<<<<<<< HEAD
   meta = {
     maintainers = with lib.maintainers; [ clkamp ];
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ clkamp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for tunneling TCP connections via HTTP GET requests";
     longDescription = ''
       The http2tcp tools allow to tunnel tcp connections (presumably
@@ -42,7 +47,12 @@ stdenv.mkDerivation rec {
       network outages, rapidly changing IP address, etc).
     '';
     homepage = "https://www.linta.de/~aehlig/http2tcp/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+    license = licenses.bsd3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

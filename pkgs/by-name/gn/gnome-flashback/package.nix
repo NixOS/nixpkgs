@@ -98,10 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   env = {
     PKG_CONFIG_LIBGNOME_PANEL_LAYOUTSDIR = "${placeholder "out"}/share/gnome-panel/layouts";
     PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
   };
+=======
+  PKG_CONFIG_LIBGNOME_PANEL_LAYOUTSDIR = "${placeholder "out"}/share/gnome-panel/layouts";
+  PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -209,13 +214,23 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GNOME 2.x-like session for GNOME 3";
     mainProgram = "gnome-flashback";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-flashback";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

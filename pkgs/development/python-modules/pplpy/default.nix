@@ -65,10 +65,18 @@ buildPythonPackage rec {
     inherit sage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for ppl";
     homepage = "https://gitlab.com/videlec/pplpy";
     teams = [ lib.teams.sage ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Python wrapper for ppl";
+    homepage = "https://gitlab.com/videlec/pplpy";
+    teams = [ teams.sage ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

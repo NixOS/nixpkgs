@@ -31,11 +31,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "certipy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utility to create and sign CAs and certificates";
     homepage = "https://github.com/LLNL/certipy";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ isgy ];
+=======
+  meta = with lib; {
+    description = "Utility to create and sign CAs and certificates";
+    homepage = "https://github.com/LLNL/certipy";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ isgy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "certipy";
   };
 }

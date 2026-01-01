@@ -81,16 +81,29 @@ stdenv.mkDerivation rec {
     installManPage ./openrussian.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Offline Console Russian Dictionary (based on openrussian.org)";
     homepage = "https://github.com/rhaberkorn/openrussian-cli";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Offline Console Russian Dictionary (based on openrussian.org)";
+    homepage = "https://github.com/rhaberkorn/openrussian-cli";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Only
       mit
       cc-by-sa-40
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ zane ];
     mainProgram = "openrussian";
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ zane ];
+    mainProgram = "openrussian";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

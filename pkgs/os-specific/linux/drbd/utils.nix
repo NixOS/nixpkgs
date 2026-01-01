@@ -116,12 +116,21 @@ stdenv.mkDerivation rec {
 
   passthru.tests.drbd = nixosTests.drbd;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://linbit.com/drbd/";
     description = "Distributed Replicated Block Device, a distributed storage system for Linux (userspace utilities)";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://linbit.com/drbd/";
+    description = "Distributed Replicated Block Device, a distributed storage system for Linux (userspace utilities)";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ryantm
       astro
       birkb

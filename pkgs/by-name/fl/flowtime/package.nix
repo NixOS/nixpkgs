@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     gst-plugins-base
   ]);
 
+<<<<<<< HEAD
   meta = {
     description = "Get what motivates you done, without losing concentration";
     mainProgram = "flowtime";
@@ -57,5 +58,17 @@ stdenv.mkDerivation rec {
       pokon548
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Get what motivates you done, without losing concentration";
+    mainProgram = "flowtime";
+    homepage = "https://github.com/Diego-Ivan/Flowtime";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      foo-dogsquared
+      pokon548
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

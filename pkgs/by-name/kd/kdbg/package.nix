@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.kdbg.org/";
     description = ''
       A graphical user interface to gdb, the GNU debugger. It provides an
@@ -48,6 +52,11 @@ stdenv.mkDerivation rec {
       stepping through code.
     '';
     mainProgram = "kdbg";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
+=======
+    license = licenses.gpl2;
+    maintainers = [ maintainers.catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

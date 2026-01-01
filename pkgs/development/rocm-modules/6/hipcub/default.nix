@@ -89,11 +89,20 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Thin wrapper library on top of rocPRIM or CUB";
     homepage = "https://github.com/ROCm/hipCUB";
     license = with lib.licenses; [ bsd3 ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Thin wrapper library on top of rocPRIM or CUB";
+    homepage = "https://github.com/ROCm/hipCUB";
+    license = with licenses; [ bsd3 ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

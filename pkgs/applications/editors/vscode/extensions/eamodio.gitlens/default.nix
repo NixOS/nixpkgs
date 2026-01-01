@@ -4,8 +4,11 @@
   stdenv,
   fetchFromGitHub,
   pnpm,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   vscode-utils,
   nix-update-script,
@@ -13,7 +16,11 @@
 
 let
   vsix = stdenv.mkDerivation (finalAttrs: {
+<<<<<<< HEAD
     name = "gitlens-${finalAttrs.version}.vsix";
+=======
+    name = "gitlens-${finalAttrs.version}.zip";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pname = "gitlens-vsix";
     version = "17.7.1";
 
@@ -24,7 +31,11 @@ let
       hash = "sha256-9XEv50WIG1BJenY9MswES6d72Ead2VqW5dgBr7Eu8ek=";
     };
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
+=======
+    pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
       hash = "sha256-QHITHoaz/lzZ3Th/YPlQayFMU9rtlnAZWEYkLyBuAkc=";
@@ -38,7 +49,11 @@ let
 
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
+=======
+      pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pnpm
     ];
 

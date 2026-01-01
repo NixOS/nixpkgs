@@ -56,12 +56,21 @@ stdenv.mkDerivation {
     simple-execution = callPackage ./tests.nix { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Semantic parser for C";
     homepage = "https://git.kernel.org/pub/scm/devel/sparse/sparse.git/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Semantic parser for C";
+    homepage = "https://git.kernel.org/pub/scm/devel/sparse/sparse.git/";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       jkarlson
     ];

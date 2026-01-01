@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hsh" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform command line application that generates file hash digests and performs file integrity checks via file hash digest comparisons";
     homepage = "https://github.com/chrissimpkins/hsh";
     downloadPage = "https://github.com/chrissimpkins/hsh/releases";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lucasew ];
+=======
+  meta = with lib; {
+    description = "Cross-platform command line application that generates file hash digests and performs file integrity checks via file hash digest comparisons";
+    homepage = "https://github.com/chrissimpkins/hsh";
+    downloadPage = "https://github.com/chrissimpkins/hsh/releases";
+    license = licenses.mit;
+    maintainers = [ maintainers.lucasew ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

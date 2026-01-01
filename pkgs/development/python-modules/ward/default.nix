@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ward" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Test framework for Python";
     homepage = "https://github.com/darrenburns/ward";
@@ -56,5 +57,17 @@ buildPythonPackage rec {
     # Old requirements (cucumber-tag-expressions and rich)
     # https://github.com/darrenburns/ward/issues/380
     broken = lib.versionAtLeast rich.version "13.0.0";
+=======
+  meta = with lib; {
+    description = "Test framework for Python";
+    homepage = "https://github.com/darrenburns/ward";
+    changelog = "https://github.com/darrenburns/ward/releases/tag/release%2F${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+    mainProgram = "ward";
+    # Old requirements (cucumber-tag-expressions and rich)
+    # https://github.com/darrenburns/ward/issues/380
+    broken = versionAtLeast rich.version "13.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

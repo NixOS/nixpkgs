@@ -19,11 +19,19 @@ let
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://plik.root.gg/";
     description = "Scalable & friendly temporary file upload system";
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://plik.root.gg/";
+    description = "Scalable & friendly temporary file upload system";
+    maintainers = [ ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "plik";
   };
 

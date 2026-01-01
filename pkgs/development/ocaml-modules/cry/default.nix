@@ -21,10 +21,18 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.12";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savonet/ocaml-cry";
     description = "OCaml client for the various icecast & shoutcast source protocols";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savonet/ocaml-cry";
+    description = "OCaml client for the various icecast & shoutcast source protocols";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

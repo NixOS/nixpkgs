@@ -22,10 +22,18 @@ stdenvNoCC.mkDerivation {
     install -Dpm644 $src $out/lib/udev/rules.d/70-meletrix.rules
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "udev rules to configure Meletrix keyboards";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "udev rules to configure Meletrix keyboards";
+    license = licenses.cc0;
+    maintainers = with maintainers; [ Scrumplex ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

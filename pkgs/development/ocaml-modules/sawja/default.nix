@@ -47,11 +47,19 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ javalib ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
     homepage = "http://sawja.inria.fr/";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "Library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
+    homepage = "http://sawja.inria.fr/";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (ocaml.meta) platforms;
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };

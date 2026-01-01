@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
       popd
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Portable DjVu viewer (Qt5)";
     mainProgram = "djview";
@@ -75,6 +76,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Portable DjVu viewer (Qt5)";
+    mainProgram = "djview";
+    homepage = "https://djvu.sourceforge.net/djview4.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       Anton-Latukha
       bryango
     ];

@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "leetgo";
+<<<<<<< HEAD
   version = "1.4.16";
+=======
+  version = "1.4.15";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "leetgo";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-rhMEeVkH9Z0pvtOtxooZKaiIQYyc067vqdSB9SIvqxg=";
   };
 
   vendorHash = "sha256-nKGLjpxtjcoR1mO1/ZhDoLubzfkws2nE5qvk2jqYGf4=";
+=======
+    hash = "sha256-9GM4V7NOYMsvWwBgJSnGl4/S+UexdlVL/NyIiMRnL8A=";
+  };
+
+  vendorHash = "sha256-I3H2uVIvOGM6aQelM/69LpwJvg3TBZwq3i4R913etH4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ installShellFiles ];
 

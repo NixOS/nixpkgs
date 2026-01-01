@@ -39,12 +39,21 @@ stdenv.mkDerivation rec {
     libglut
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://geuz.org/gl2ps";
     description = "OpenGL to PostScript printing library";
     platforms = lib.platforms.all;
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "http://geuz.org/gl2ps";
+    description = "OpenGL to PostScript printing library";
+    platforms = platforms.all;
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raskin
       twhitehead
     ];

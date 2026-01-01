@@ -11,14 +11,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nix-update";
+<<<<<<< HEAD
   version = "1.14.0";
+=======
+  version = "1.13.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-update";
+<<<<<<< HEAD
     tag = "v${version}";
     hash = "sha256-l6EvOXUZcbx712WYN3L4y8Qdim9sEISH06CWxgav6cQ=";
+=======
+    tag = version;
+    hash = "sha256-b/Ymvz4Un67j7UulzBJtmKrwcchpEE/si/QOn/m8m80=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ python3Packages.setuptools ];

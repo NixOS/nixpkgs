@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorussound" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/noahhusby/aiorussound/releases/tag/${src.tag}";
     description = "Async python package for interfacing with Russound RIO hardware";
     homepage = "https://github.com/noahhusby/aiorussound";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/noahhusby/aiorussound/releases/tag/${src.tag}";
+    description = "Async python package for interfacing with Russound RIO hardware";
+    homepage = "https://github.com/noahhusby/aiorussound";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

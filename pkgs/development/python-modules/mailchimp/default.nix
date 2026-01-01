@@ -22,9 +22,16 @@ buildPythonPackage rec {
     sed -i 's/==/>=/' setup.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI client and Python API library for the MailChimp email platform";
     homepage = "http://apidocs.mailchimp.com/api/2.0/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "CLI client and Python API library for the MailChimp email platform";
+    homepage = "http://apidocs.mailchimp.com/api/2.0/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

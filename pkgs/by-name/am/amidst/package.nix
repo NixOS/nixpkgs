@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/lib/amidst/amidst.jar"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/toolbox4minecraft/amidst";
     description = "Advanced Minecraft Interface and Data/Structure Tracking";
@@ -40,5 +41,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/toolbox4minecraft/amidst";
+    description = "Advanced Minecraft Interface and Data/Structure Tracking";
+    mainProgram = "amidst";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

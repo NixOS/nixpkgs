@@ -29,10 +29,18 @@ buildPythonPackage rec {
     "pretix_pages"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin to add static pages to your pretix event";
     homepage = "https://github.com/pretix/pretix-pages";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Plugin to add static pages to your pretix event";
+    homepage = "https://github.com/pretix/pretix-pages";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

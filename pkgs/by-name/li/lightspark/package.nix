@@ -59,12 +59,21 @@ stdenv.mkDerivation rec {
     glibmm
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open source Flash Player implementation";
     homepage = "https://lightspark.github.io/";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ jchw ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open source Flash Player implementation";
+    homepage = "https://lightspark.github.io/";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ jchw ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lightspark";
   };
 }

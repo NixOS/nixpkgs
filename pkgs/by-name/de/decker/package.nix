@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://beyondloom.com/decker";
     description = "Multimedia platform for creating and sharing interactive documents";
@@ -82,5 +83,14 @@ stdenv.mkDerivation rec {
     mainProgram = "decker";
     platforms = lib.platforms.all;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://beyondloom.com/decker";
+    description = "Multimedia platform for creating and sharing interactive documents";
+    license = licenses.mit;
+    mainProgram = "decker";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ foo-dogsquared ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

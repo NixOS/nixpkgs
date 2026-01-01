@@ -35,11 +35,19 @@
     # No tests
     doCheck = false;
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot UI";
       teams = [ lib.teams.buildbot ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot UI";
+      teams = [ teams.buildbot ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -58,11 +66,19 @@
     # No tests
     doCheck = false;
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot Console View Plugin";
       teams = [ lib.teams.buildbot ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Console View Plugin";
+      teams = [ teams.buildbot ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -81,11 +97,19 @@
     # No tests
     doCheck = false;
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot Waterfall View Plugin";
       teams = [ lib.teams.buildbot ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Waterfall View Plugin";
+      teams = [ teams.buildbot ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -104,11 +128,19 @@
     # No tests
     doCheck = false;
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot Grid View Plugin";
       teams = [ lib.teams.buildbot ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Grid View Plugin";
+      teams = [ teams.buildbot ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -127,11 +159,19 @@
     # No tests
     doCheck = false;
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot WSGI dashboards Plugin";
       teams = [ lib.teams.buildbot ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot WSGI dashboards Plugin";
+      teams = [ teams.buildbot ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -155,12 +195,21 @@
     # No tests
     doCheck = false;
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://buildbot.net/";
       description = "Buildbot Badges Plugin";
       maintainers = [ lib.maintainers.julienmalka ];
       teams = [ lib.teams.buildbot ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot Badges Plugin";
+      maintainers = [ maintainers.julienmalka ];
+      teams = [ teams.buildbot ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

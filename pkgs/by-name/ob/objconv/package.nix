@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     mv objconv-instructions.pdf $out/doc/objconv
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Object and executable file converter, modifier and disassembler";
     mainProgram = "objconv";
@@ -44,5 +45,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Object and executable file converter, modifier and disassembler";
+    mainProgram = "objconv";
+    homepage = "https://www.agner.org/optimize/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -53,10 +53,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ipytablewidgets" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Traitlets and widgets to efficiently data tables (e.g. Pandas DataFrame) using the jupyter notebook";
     homepage = "https://github.com/progressivis/ipytablewidgets";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Traitlets and widgets to efficiently data tables (e.g. Pandas DataFrame) using the jupyter notebook";
+    homepage = "https://github.com/progressivis/ipytablewidgets";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Xrandr clone for wlroots compositors";
     homepage = "https://gitlab.freedesktop.org/emersion/wlr-randr";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ma27 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Xrandr clone for wlroots compositors";
+    homepage = "https://gitlab.freedesktop.org/emersion/wlr-randr";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ma27 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wlr-randr";
   };
 }

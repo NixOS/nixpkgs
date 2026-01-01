@@ -22,10 +22,18 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ faad2 ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savonet/ocaml-faad";
     description = "Bindings for the faad library which provides functions for decoding AAC audio files";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savonet/ocaml-faad";
+    description = "Bindings for the faad library which provides functions for decoding AAC audio files";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -49,13 +49,23 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "atomix"; };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Puzzle game where you move atoms to build a molecule";
     mainProgram = "atomix";
     homepage = "https://gitlab.gnome.org/GNOME/atomix";
     changelog = "https://gitlab.gnome.org/GNOME/atomix/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

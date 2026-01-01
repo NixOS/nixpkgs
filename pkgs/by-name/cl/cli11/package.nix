@@ -30,11 +30,20 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Command line parser for C++11";
     homepage = "https://github.com/CLIUtils/CLI11";
     platforms = lib.platforms.unix;
     maintainers = [ ];
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Command line parser for C++11";
+    homepage = "https://github.com/CLIUtils/CLI11";
+    platforms = platforms.unix;
+    maintainers = [ ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -29,11 +29,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
+<<<<<<< HEAD
   version = "9.20.16";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
     hash = "sha256-A//Mek/LfDm4KzS+G6K1n2wZG8eVxZNVMNXr5jCjUtY=";
+=======
+  version = "9.20.15";
+
+  src = fetchurl {
+    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
+    hash = "sha256-1is4+uSLqD/KYYERLQxxAY2LDyzihdx53GoDZ3Isyrs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -159,15 +167,26 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    homepage = "https://www.isc.org/bind/";
+    description = "Domain name server";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     outputsToInstall = [
       "out"

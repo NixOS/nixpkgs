@@ -30,12 +30,24 @@ let
     name = "${toolName}-${version}";
 
     meta =
+<<<<<<< HEAD
 
       {
         homepage = "http://bitscope.com/software/";
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
         license = lib.licenses.unfree;
         platforms = [ "x86_64-linux" ];
+=======
+      with lib;
+      {
+        homepage = "http://bitscope.com/software/";
+        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+        license = licenses.unfree;
+        platforms = [ "x86_64-linux" ];
+        maintainers = with maintainers; [
+          vidbina
+        ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
       // (attrs.meta or { });
 

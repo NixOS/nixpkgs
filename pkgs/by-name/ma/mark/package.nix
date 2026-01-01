@@ -8,16 +8,27 @@
 # https://github.com/kovetskiy/mark/pull/581#issuecomment-2797872996
 buildGoModule rec {
   pname = "mark";
+<<<<<<< HEAD
   version = "15.2.0";
+=======
+  version = "15.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "kovetskiy";
     repo = "mark";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ZvFaSoD9nQtxc5ONWneVgpAfX3f7sS0lBSMXqhABn8o=";
   };
 
   vendorHash = "sha256-3hfeh7PRzsPfQ+aLPV44ExXum6lG6Huvc7itRIn8mNo=";
+=======
+    sha256 = "sha256-7aOzl1+Nihj2UiAAaoQAtTlxr1FSOS/0fYmeg/dYukc=";
+  };
+
+  vendorHash = "sha256-jbaDk28NIPqjf5fLOJZnsShVw5Ni14JS4J+T0GKNTbQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"
@@ -37,12 +48,21 @@ buildGoModule rec {
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
     ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for syncing your markdown documentation with Atlassian Confluence pages";
     mainProgram = "mark";
     homepage = "https://github.com/kovetskiy/mark";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool for syncing your markdown documentation with Atlassian Confluence pages";
+    mainProgram = "mark";
+    homepage = "https://github.com/kovetskiy/mark";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rguevara84
       wrbbz
     ];

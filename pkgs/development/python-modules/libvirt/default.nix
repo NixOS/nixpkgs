@@ -39,10 +39,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://libvirt.org/python.html";
     description = "Libvirt Python bindings";
     license = lib.licenses.lgpl2;
     maintainers = [ lib.maintainers.fpletz ];
+=======
+  meta = with lib; {
+    homepage = "https://libvirt.org/python.html";
+    description = "Libvirt Python bindings";
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.fpletz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

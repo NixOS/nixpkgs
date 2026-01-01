@@ -22,9 +22,15 @@ mkCoqDerivation {
   releaseRev = v: "v${v}";
   mlPlugin = true;
   propagatedBuildInputs = [ unicoq ];
+<<<<<<< HEAD
   meta = {
     description = "Typed tactic language for Coq";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Typed tactic language for Coq";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   preBuild = ''
     coq_makefile -f _CoqProject -o Makefile

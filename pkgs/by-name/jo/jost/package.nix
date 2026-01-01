@@ -21,10 +21,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/indestructible-type/Jost";
     description = "Sans serif font by Indestructible Type";
     license = lib.licenses.ofl;
     maintainers = [ lib.maintainers.ar1a ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/indestructible-type/Jost";
+    description = "Sans serif font by Indestructible Type";
+    license = licenses.ofl;
+    maintainers = [ maintainers.ar1a ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

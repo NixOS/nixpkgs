@@ -60,11 +60,19 @@ buildPythonPackage rec {
     "google.cloud.bigquery_storage_v1beta2"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "BigQuery Storage API API client library";
     homepage = "https://github.com/googleapis/python-bigquery-storage";
     changelog = "https://github.com/googleapis/python-bigquery-storage/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "BigQuery Storage API API client library";
+    homepage = "https://github.com/googleapis/python-bigquery-storage";
+    changelog = "https://github.com/googleapis/python-bigquery-storage/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "fixup_bigquery_storage_v1_keywords.py";
   };

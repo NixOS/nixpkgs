@@ -20,10 +20,18 @@ buildGoModule rec {
   # Don't compile the documentation stuff
   subPackages = [ "cmd/kubectl-dba" ];
 
+<<<<<<< HEAD
   meta = {
     description = "kubectl plugin for KubeDB by AppsCode";
     homepage = "https://github.com/kubedb/cli";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.starcraft66 ];
+=======
+  meta = with lib; {
+    description = "kubectl plugin for KubeDB by AppsCode";
+    homepage = "https://github.com/kubedb/cli";
+    license = licenses.unfree;
+    maintainers = [ maintainers.starcraft66 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

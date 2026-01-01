@@ -41,12 +41,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "msoffcrypto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python tool and library for decrypting MS Office files with passwords or other keys";
     homepage = "https://github.com/nolze/msoffcrypto-tool";
     changelog = "https://github.com/nolze/msoffcrypto-tool/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python tool and library for decrypting MS Office files with passwords or other keys";
+    homepage = "https://github.com/nolze/msoffcrypto-tool";
+    changelog = "https://github.com/nolze/msoffcrypto-tool/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "msoffcrypto-tool";
   };
 }

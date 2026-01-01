@@ -28,11 +28,19 @@ python3.pkgs.buildPythonPackage {
 
   pythonImportsCheck = [ "dictcc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unofficial command line client for dict.cc";
     mainProgram = "dict.cc.py";
     homepage = "https://github.com/rbaron/dict.cc.py";
     license = with lib.licenses; [ cc0 ];
+=======
+  meta = with lib; {
+    description = "Unofficial command line client for dict.cc";
+    mainProgram = "dict.cc.py";
+    homepage = "https://github.com/rbaron/dict.cc.py";
+    license = with licenses; [ cc0 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

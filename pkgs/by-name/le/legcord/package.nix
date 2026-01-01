@@ -2,8 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm,
   nodejs,
   electron,
@@ -27,8 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
     # we use a script wrapper here for environment variable expansion at runtime
     # https://github.com/NixOS/nixpkgs/issues/172583
@@ -45,7 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
     hash = "sha256-D+GPJn3qpIax+YNcLqLX71bobDdfQXyGiJ6b5PiJqC4=";

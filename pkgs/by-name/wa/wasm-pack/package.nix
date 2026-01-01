@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
   # Disabling check here to work with build sandboxing.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Utility that builds rust-generated WebAssembly package";
     mainProgram = "wasm-pack";
@@ -40,5 +41,16 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = [ lib.maintainers.dhkl ];
+=======
+  meta = with lib; {
+    description = "Utility that builds rust-generated WebAssembly package";
+    mainProgram = "wasm-pack";
+    homepage = "https://github.com/rustwasm/wasm-pack";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = [ maintainers.dhkl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

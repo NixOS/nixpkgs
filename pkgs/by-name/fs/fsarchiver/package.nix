@@ -50,7 +50,11 @@ stdenv.mkDerivation {
     libgpg-error
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "File system archiver for linux";
     longDescription = ''
       FSArchiver is a system tool that allows you to save the contents of a
@@ -62,9 +66,15 @@ stdenv.mkDerivation {
       corrupt, you just loose the current file, not the whole archive.
     '';
     homepage = "https://www.fsarchiver.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.lgpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fsarchiver";
   };
 }

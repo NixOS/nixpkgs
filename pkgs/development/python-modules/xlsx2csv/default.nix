@@ -23,11 +23,20 @@ buildPythonPackage rec {
     wheel
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dilshod/xlsx2csv";
     description = "Convert xlsx to csv";
     mainProgram = "xlsx2csv";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jb55 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dilshod/xlsx2csv";
+    description = "Convert xlsx to csv";
+    mainProgram = "xlsx2csv";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jb55 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

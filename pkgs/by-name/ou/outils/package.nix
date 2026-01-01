@@ -26,10 +26,17 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/leahneukirchen/outils";
     description = "Port of OpenBSD-exclusive tools such as `calendar`, `vis`, and `signify`";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/leahneukirchen/outils";
+    description = "Port of OpenBSD-exclusive tools such as `calendar`, `vis`, and `signify`";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       beerware
       bsd2
       bsd3
@@ -38,7 +45,12 @@ stdenv.mkDerivation rec {
       mit
       publicDomain
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ somasis ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ somasis ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

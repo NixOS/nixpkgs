@@ -32,16 +32,28 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Linux kernel modules for LTTng tracing";
     homepage = "https://lttng.org/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Linux kernel modules for LTTng tracing";
+    homepage = "https://lttng.org/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl21Only
       gpl2Only
       mit
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken =
       (lib.versions.majorMinor kernel.modDirVersion) == "5.10"
       || (lib.versions.majorMinor kernel.modDirVersion) == "5.4";

@@ -43,13 +43,23 @@ stdenv.mkDerivation {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "Tools and Clang plugins for developing code with GLib";
     homepage = "https://gitlab.freedesktop.org/tartan/tartan";
     changelog = "https://gitlab.freedesktop.org/tartan/tartan/-/blob/main/NEWS";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jtojnar ];
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

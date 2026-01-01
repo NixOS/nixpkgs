@@ -122,6 +122,10 @@ buildPythonPackage rec {
     mainProgram = "bokeh";
     homepage = "https://github.com/bokeh/bokeh";
     license = lib.licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stduritemplate" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Std-uritemplate implementation for Python";
     homepage = "https://github.com/std-uritemplate/std-uritemplate";
     changelog = "https://github.com/std-uritemplate/std-uritemplate/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Std-uritemplate implementation for Python";
+    homepage = "https://github.com/std-uritemplate/std-uritemplate";
+    changelog = "https://github.com/std-uritemplate/std-uritemplate/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

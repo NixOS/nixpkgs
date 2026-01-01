@@ -32,6 +32,7 @@ buildGoModule rec {
     wrapProgram $out/bin/${meta.mainProgram} --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Web framework for Go";
     homepage = "https://pushup.adhoc.dev/";
@@ -39,5 +40,14 @@ buildGoModule rec {
     changelog = "https://github.com/adhocteam/pushup/blob/${src.rev}/CHANGELOG.md";
     mainProgram = "pushup";
     maintainers = with lib.maintainers; [ paulsmith ];
+=======
+  meta = with lib; {
+    description = "Web framework for Go";
+    homepage = "https://pushup.adhoc.dev/";
+    license = licenses.mit;
+    changelog = "https://github.com/adhocteam/pushup/blob/${src.rev}/CHANGELOG.md";
+    mainProgram = "pushup";
+    maintainers = with maintainers; [ paulsmith ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -78,7 +78,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Brazillian government application for reporting income tax";
     longDescription = ''
       Brazillian government application for reporting income tax.
@@ -86,10 +90,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       IRFP - Imposto de Renda Pessoa Física - Receita Federal do Brasil.
     '';
     homepage = "https://www.gov.br/receitafederal/pt-br";
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.unfree;
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       atila
     ];
     mainProgram = "irpf";

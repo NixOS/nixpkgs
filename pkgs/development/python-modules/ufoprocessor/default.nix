@@ -43,10 +43,18 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Read, write and generate UFOs with designspace data";
     homepage = "https://github.com/LettError/ufoProcessor";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Read, write and generate UFOs with designspace data";
+    homepage = "https://github.com/LettError/ufoProcessor";
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

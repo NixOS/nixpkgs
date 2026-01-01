@@ -40,17 +40,28 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "VNC client web application";
     homepage = "https://novnc.com";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "VNC client web application";
+    homepage = "https://novnc.com";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mpl20
       ofl
       bsd3
       bsd2
       mit
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ neverbehave ];
+=======
+    maintainers = with maintainers; [ neverbehave ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "novnc";
   };
 }

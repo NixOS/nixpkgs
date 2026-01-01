@@ -94,7 +94,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "build" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pyproject-build";
     description = "Simple, correct PEP517 package builder";
     longDescription = ''
@@ -103,8 +107,14 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pypa/build";
     changelog = "https://github.com/pypa/build/blob/${src.tag}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.fab ];
     teams = [ lib.teams.python ];
+=======
+    license = licenses.mit;
+    maintainers = [ maintainers.fab ];
+    teams = [ teams.python ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

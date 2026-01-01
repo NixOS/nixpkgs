@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/zipkin-server \
       --add-flags "-cp $out/share/java/zipkin-server-${version}-exec.jar org.springframework.boot.loader.JarLauncher"
   '';
+<<<<<<< HEAD
   meta = {
     description = "Distributed tracing system";
     homepage = "https://zipkin.io/";
@@ -28,6 +29,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.hectorj ];
+=======
+  meta = with lib; {
+    description = "Distributed tracing system";
+    homepage = "https://zipkin.io/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.hectorj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zipkin-server";
   };
 }

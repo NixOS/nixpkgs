@@ -10,16 +10,27 @@
 
 buildGoModule (finalAttrs: {
   pname = "s-search";
+<<<<<<< HEAD
   version = "0.7.5";
+=======
+  version = "0.7.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "zquestz";
     repo = "s";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-aK1M9ypEX1Hl7+poK4czZan/Bqe5+giDiTtlPVjErHY=";
   };
 
   vendorHash = "sha256-GEpBdCByMrCR7doDvp/eVKQzH8Z2kCqetwFivkkUDVU=";
+=======
+    hash = "sha256-bcJeNUGTcXAwB+/xly3AMJE3BTjqiC6QvuqgfDgZZrk=";
+  };
+
+  vendorHash = "sha256-0E/9fONanSxb2Tv5wKIpf1J/A6Hdge23xy3r6pFyV9E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"

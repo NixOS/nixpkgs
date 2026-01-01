@@ -22,10 +22,18 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dinosaure/overlap";
     description = "Minimal library to know that 2 bigarray share physically the same memory or not";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dinosaure/overlap";
+    description = "Minimal library to know that 2 bigarray share physically the same memory or not";
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

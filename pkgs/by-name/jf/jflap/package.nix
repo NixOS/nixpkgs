@@ -60,12 +60,21 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GUI tool for experimenting with formal languages topics";
     homepage = "https://www.jflap.org/";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "GUI tool for experimenting with formal languages topics";
+    homepage = "https://www.jflap.org/";
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       grnnja
     ];
     platforms = jre8.meta.platforms;

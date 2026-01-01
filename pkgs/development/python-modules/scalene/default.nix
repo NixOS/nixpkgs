@@ -106,13 +106,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scalene" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "High-resolution, low-overhead CPU, GPU, and memory profiler for Python with AI-powered optimization suggestions";
     homepage = "https://github.com/plasma-umass/scalene";
     changelog = "https://github.com/plasma-umass/scalene/releases/tag/v${version}";
     mainProgram = "scalene";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarahec ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sarahec ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # The scalene doesn't seem to account for arm64 linux
       "aarch64-linux"

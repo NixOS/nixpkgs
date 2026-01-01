@@ -29,16 +29,28 @@ stdenv.mkDerivation {
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
   ) "-U__ARM_NEON__";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Samsung/rlottie";
     description = "Platform independent standalone c++ library for rendering vector based animations and art in realtime";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Samsung/rlottie";
+    description = "Platform independent standalone c++ library for rendering vector based animations and art in realtime";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       bsd3
       mpl11
       ftl
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ CRTified ];
+=======
+    platforms = platforms.all;
+    maintainers = with maintainers; [ CRTified ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

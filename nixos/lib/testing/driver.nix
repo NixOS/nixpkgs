@@ -9,7 +9,11 @@ let
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
+<<<<<<< HEAD
   testDriver = hostPkgs.python3Packages.callPackage ../test-driver {
+=======
+  testDriver = hostPkgs.callPackage ../test-driver {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (config) enableOCR extraPythonPackages;
     qemu_pkg = config.qemu.package;
     imagemagick_light = hostPkgs.imagemagick_light.override { inherit (hostPkgs) libtiff; };

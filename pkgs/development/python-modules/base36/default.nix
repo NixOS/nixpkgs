@@ -28,10 +28,18 @@ buildPythonPackage rec {
   enabledTestPaths = [ "test_base36.py" ];
   pythonImportsCheck = [ "base36" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation for the positional numeral system using 36 as the radix";
     homepage = "https://github.com/tonyseek/python-base36";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python implementation for the positional numeral system using 36 as the radix";
+    homepage = "https://github.com/tonyseek/python-base36";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

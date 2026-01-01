@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysatochip" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple python library to communicate with a Satochip hardware wallet";
     homepage = "https://github.com/Toporin/pysatochip";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ oxalica ];
+=======
+  meta = with lib; {
+    description = "Simple python library to communicate with a Satochip hardware wallet";
+    homepage = "https://github.com/Toporin/pysatochip";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ oxalica ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

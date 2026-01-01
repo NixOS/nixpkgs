@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xz" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python library for seeking within compressed xz files";
     homepage = "https://github.com/Rogdham/python-xz";
@@ -32,5 +33,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Pure Python library for seeking within compressed xz files";
+    homepage = "https://github.com/Rogdham/python-xz";
+    changelog = "https://github.com/Rogdham/python-xz/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with lib.maintainers; [ mxmlnkn ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

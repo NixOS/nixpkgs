@@ -23,16 +23,28 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Calamares modules for NixOS";
     homepage = "https://github.com/NixOS/calamares-nixos-extensions";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Calamares modules for NixOS";
+    homepage = "https://github.com/NixOS/calamares-nixos-extensions";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       # assets
       cc-by-40
       cc-by-sa-40
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ vlinkz ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ vlinkz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

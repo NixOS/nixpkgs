@@ -48,12 +48,21 @@ stdenv.mkDerivation rec {
     installManPage man/wofi*
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Launcher/menu program for wlroots based wayland compositors such as sway";
     homepage = "https://hg.sr.ht/~scoopta/wofi";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Launcher/menu program for wlroots based wayland compositors such as sway";
+    homepage = "https://hg.sr.ht/~scoopta/wofi";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wofi";
   };
 }

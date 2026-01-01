@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     install -vD hyx $out/bin/hyx
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Minimalistic but powerful Linux console hex editor";
     mainProgram = "hyx";
@@ -29,5 +30,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "Minimalistic but powerful Linux console hex editor";
+    mainProgram = "hyx";
+    homepage = "https://yx7.cc/code/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

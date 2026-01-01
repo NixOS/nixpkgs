@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Process monitoring tool";
     mainProgram = "health-check";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Process monitoring tool";
+    mainProgram = "health-check";
+    homepage = "https://github.com/ColinIanKing/health-check";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dtzWill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

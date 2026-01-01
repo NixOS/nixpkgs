@@ -17,13 +17,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-wK2ZMqxgSLGhM7TsztFkZHB2+WnT+8Tjd3UrFdIvGpI=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast semantic linter for Nix using tree-sitter";
     mainProgram = "nixpkgs-lint";
     homepage = "https://github.com/nix-community/nixpkgs-lint";
     changelog = "https://github.com/nix-community/nixpkgs-lint/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       artturin
     ];
   };

@@ -41,12 +41,21 @@ stdenv.mkDerivation rec {
     moveToOutput bin/pcre2-config "$dev"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.pcre.org/";
     description = "Perl Compatible Regular Expressions";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ttuegel ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.pcre.org/";
+    description = "Perl Compatible Regular Expressions";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ttuegel ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "libpcre2-posix"
       "libpcre2-8"

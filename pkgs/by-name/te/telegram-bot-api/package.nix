@@ -35,6 +35,10 @@ stdenv.mkDerivation {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Telegram Bot API server";

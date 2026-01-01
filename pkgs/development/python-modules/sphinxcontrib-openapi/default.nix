@@ -37,10 +37,18 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
     license = lib.licenses.bsd0;
     maintainers = [ lib.maintainers.flokli ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
+    description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
+    license = licenses.bsd0;
+    maintainers = [ maintainers.flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

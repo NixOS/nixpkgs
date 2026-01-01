@@ -34,12 +34,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert ebooks to Morse MP3s/OGGs";
     homepage = "https://fkurz.net/ham/ebook2cw.html";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ earldouglas ];
+=======
+  meta = with lib; {
+    description = "Convert ebooks to Morse MP3s/OGGs";
+    homepage = "https://fkurz.net/ham/ebook2cw.html";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ earldouglas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ebook2cw";
   };
 }

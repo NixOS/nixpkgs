@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities from sensAI, the Python library for sensible AI";
     homepage = "https://github.com/opcode81/sensAI-utils";
     changelog = "https://github.com/opcode81/sensAI-utils/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
+=======
+  meta = with lib; {
+    description = "Utilities from sensAI, the Python library for sensible AI";
+    homepage = "https://github.com/opcode81/sensAI-utils";
+    changelog = "https://github.com/opcode81/sensAI-utils/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ derdennisop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,11 +22,19 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://fontlibrary.org/en/font/minecraftia";
     description = "Cool Minecraft font";
     license = lib.licenses.cc-by-sa-30;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://fontlibrary.org/en/font/minecraftia";
+    description = "Cool Minecraft font";
+    license = licenses.cc-by-sa-30;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ gepbird ];
   };
 }

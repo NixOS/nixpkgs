@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Create highly optimized Animated PNG files from PNG/TGA images";
     mainProgram = "apngasm";
@@ -42,6 +43,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.zlib;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Create highly optimized Animated PNG files from PNG/TGA images";
+    mainProgram = "apngasm";
+    homepage = "https://apngasm.sourceforge.net/";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

@@ -31,11 +31,20 @@ buildPythonPackage rec {
     "test_is_literal_or_name"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to remove unused imports and unused variables";
     mainProgram = "autoflake";
     homepage = "https://github.com/myint/autoflake";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yuriaisaka ];
+=======
+  meta = with lib; {
+    description = "Tool to remove unused imports and unused variables";
+    mainProgram = "autoflake";
+    homepage = "https://github.com/myint/autoflake";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yuriaisaka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -169,14 +169,22 @@ runCommand drvName
     passthru = {
       unwrapped = androidStudioForPlatform;
     };
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Official IDE for Android platform development";
       longDescription = ''
         Android Studio for Platform (ASfP) is the version of the Android Studio IDE
         for Android Open Source Project (AOSP) platform developers who build with the Soong build system.
       '';
       homepage = "https://developer.android.com/studio/platform.html";
+<<<<<<< HEAD
       license = with lib.licenses; [
+=======
+      license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         asl20
         unfree
       ]; # The code is under Apache-2.0, but:
@@ -188,8 +196,13 @@ runCommand drvName
       # binaries are also distributed as proprietary software (unlike the
       # source-code itself).
       platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [ robbins ];
       teams = [ lib.teams.android ];
+=======
+      maintainers = with maintainers; [ robbins ];
+      teams = [ teams.android ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = pname;
     };
   }

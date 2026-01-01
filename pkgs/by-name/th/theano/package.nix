@@ -25,6 +25,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/akryukov/theano";
     description = "Old-style font designed from historic samples";
@@ -34,5 +35,16 @@ stdenvNoCC.mkDerivation rec {
     ];
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/akryukov/theano";
+    description = "Old-style font designed from historic samples";
+    maintainers = with maintainers; [
+      raskin
+      rycee
+    ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

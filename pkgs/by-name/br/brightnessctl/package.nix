@@ -46,12 +46,21 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Hummer12007/brightnessctl";
     description = "This program allows you read and control device brightness";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ megheaiulian ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Hummer12007/brightnessctl";
+    description = "This program allows you read and control device brightness";
+    license = licenses.mit;
+    maintainers = with maintainers; [ megheaiulian ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "brightnessctl";
   };
 

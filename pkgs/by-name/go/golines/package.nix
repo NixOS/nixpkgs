@@ -17,6 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-94IXh9iBAE0jJXovaElY8oFdXE6hxYg0Ww0ZEHLnEwc=";
 
+<<<<<<< HEAD
   subPackages = [
     "."
   ];
@@ -26,6 +27,13 @@ buildGoModule rec {
     homepage = "https://github.com/segmentio/golines";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ meain ];
+=======
+  meta = with lib; {
+    description = "Golang formatter that fixes long lines";
+    homepage = "https://github.com/segmentio/golines";
+    license = licenses.mit;
+    maintainers = with maintainers; [ meain ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "golines";
   };
 }

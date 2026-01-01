@@ -70,7 +70,11 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # See https://github.com/NixOS/nixpkgs/issues/381908 and https://github.com/NixOS/nixpkgs/issues/385450.
   pytestFlags = [ "--timeout=600" ];

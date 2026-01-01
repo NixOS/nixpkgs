@@ -39,12 +39,21 @@ stdenv.mkDerivation rec {
     ntk
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://openavproductions.com/luppp/"; # https does not work
     description = "Music creation tool, intended for live use";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ prusnak ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://openavproductions.com/luppp/"; # https does not work
+    description = "Music creation tool, intended for live use";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ prusnak ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "luppp";
   };
 }

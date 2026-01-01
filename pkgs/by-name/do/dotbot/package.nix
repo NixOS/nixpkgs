@@ -6,14 +6,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dotbot";
+<<<<<<< HEAD
   version = "1.24.0";
+=======
+  version = "1.23.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anishathalye";
     repo = "dotbot";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-HlCq9ek/419A+bgwtbRr45Q2RqPPv38QKSV+CwzihFc=";
+=======
+    hash = "sha256-Yq6mpBUokt4Zi84xyA5bayW1WLXEUXFev2aDJ/q/Fgo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   preCheck = ''

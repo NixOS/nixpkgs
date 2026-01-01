@@ -79,12 +79,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }/bin/update-tideways-probe";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tideways PHP Probe";
     homepage = "https://tideways.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ shyim ];
+=======
+  meta = with lib; {
+    description = "Tideways PHP Probe";
+    homepage = "https://tideways.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ shyim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 })

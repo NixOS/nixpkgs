@@ -2,8 +2,11 @@
   lib,
   stdenv,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs_22,
   fetchFromGitHub,
   nix-update-script,
@@ -12,9 +15,12 @@
   discord-canary,
   discord-development,
 }:
+<<<<<<< HEAD
 let
   pnpm' = pnpm_10.override { nodejs = nodejs_22; };
 in
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
   version = "1.3.33";
@@ -28,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs_22
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm'
   ];
@@ -35,6 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
+=======
+    pnpm_10.configHook
+  ];
+
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs) pname version src;
+
+    buildInputs = [ nodejs_22 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     fetcherVersion = 2;
     hash = "sha256-PRlgwyePFpFdQRcojGDEC4ESZEGTJf1Ad9EFgm8hmKY=";
@@ -73,7 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     );
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Discord client modification, focused on enhancing user and developer experience";
     longDescription = ''
       Moonlight is a ***passion project***—yet another Discord client mod—focused on providing a decent user
@@ -84,8 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://moonlight-mod.github.io/using/install/#nix";
     changelog = "https://raw.githubusercontent.com/moonlight-mod/moonlight/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
 
+<<<<<<< HEAD
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ilys
       FlameFlag
     ];

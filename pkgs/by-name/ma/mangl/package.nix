@@ -37,12 +37,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/zigalenarcic/mangl";
     description = "Graphical man page viewer based on the mandoc library";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nrabulinski ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/zigalenarcic/mangl";
+    description = "Graphical man page viewer based on the mandoc library";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ nrabulinski ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mangl";
   };
 }

@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Software Token for Linux/UNIX";
     homepage = "https://github.com/cernekee/stoken";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Software Token for Linux/UNIX";
+    homepage = "https://github.com/cernekee/stoken";
+    license = licenses.lgpl21Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

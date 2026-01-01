@@ -17,12 +17,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-eXTdPtcsWhsABZU6kRzZ6eF1VaabouZwLAFI9KpAx98=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "CLI for organizing Tailwind CSS classes";
     mainProgram = "rustywind";
     homepage = "https://github.com/avencera/rustywind";
     changelog = "https://github.com/avencera/rustywind/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -35,7 +35,12 @@ mkMesonDerivation (
 
     workDir = ./.;
 
+<<<<<<< HEAD
     nativeBuildInputs = [
+=======
+    # Hack for sake of the dev shell
+    passthru.externalNativeBuildInputs = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       meson
       ninja
       pkg-config
@@ -52,8 +57,14 @@ mkMesonDerivation (
       # For `script` command (ensuring a TTY)
       # TODO use `unixtools` to be precise over which executables instead?
       util-linux
+<<<<<<< HEAD
     ]
     ++ [
+=======
+    ];
+
+    nativeBuildInputs = finalAttrs.passthru.externalNativeBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nix-cli
     ];
 

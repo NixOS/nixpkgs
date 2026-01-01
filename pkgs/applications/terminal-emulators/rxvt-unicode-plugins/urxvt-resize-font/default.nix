@@ -21,11 +21,20 @@ stdenv.mkDerivation {
     cp resize-font $out/lib/urxvt/perl
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "URxvt Perl extension for resizing the font";
     homepage = "https://github.com/simmel/urxvt-resize-font";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "URxvt Perl extension for resizing the font";
+    homepage = "https://github.com/simmel/urxvt-resize-font";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rnhmjoj ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

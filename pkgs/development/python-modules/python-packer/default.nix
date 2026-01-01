@@ -27,10 +27,18 @@ buildPythonPackage rec {
   # Tests requires network connections
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Interface for packer.io";
     homepage = "https://github.com/nir0s/python-packer";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ psyanticy ];
+=======
+  meta = with lib; {
+    description = "Interface for packer.io";
+    homepage = "https://github.com/nir0s/python-packer";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ psyanticy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

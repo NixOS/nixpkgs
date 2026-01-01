@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://libndp.org/";
     description = "Library for Neighbor Discovery Protocol";
@@ -41,6 +42,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    homepage = "http://libndp.org/";
+    description = "Library for Neighbor Discovery Protocol";
+    mainProgram = "ndptool";
+    platforms = platforms.linux;
+    maintainers = [ ];
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

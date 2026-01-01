@@ -52,11 +52,20 @@ stdenv.mkDerivation rec {
     cp demo/chipmunk_demos $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast and lightweight 2D game physics library";
     mainProgram = "chipmunk_demos";
     homepage = "http://chipmunk2d.net/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix; # supports Windows and MacOS as well, but those require more work
+=======
+  meta = with lib; {
+    description = "Fast and lightweight 2D game physics library";
+    mainProgram = "chipmunk_demos";
+    homepage = "http://chipmunk2d.net/";
+    license = licenses.mit;
+    platforms = platforms.unix; # supports Windows and MacOS as well, but those require more work
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

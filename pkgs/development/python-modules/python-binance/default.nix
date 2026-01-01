@@ -81,9 +81,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "binance" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Binance Exchange API python implementation for automated trading";
     homepage = "https://github.com/sammchardy/python-binance";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Binance Exchange API python implementation for automated trading";
+    homepage = "https://github.com/sammchardy/python-binance";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

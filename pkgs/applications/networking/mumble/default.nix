@@ -37,7 +37,11 @@
   microsoft-gsl,
   nlohmann_json,
   xar,
+<<<<<<< HEAD
   makeBinaryWrapper,
+=======
+  makeWrapper,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -57,7 +61,10 @@ let
           python3
           qt5.wrapQtAppsHook
           qt5.qttools
+<<<<<<< HEAD
           makeBinaryWrapper
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ]
         ++ (overrides.nativeBuildInputs or [ ]);
 
@@ -87,6 +94,7 @@ let
 
         passthru.tests.connectivity = nixosTests.mumble;
 
+<<<<<<< HEAD
         meta = {
           description = "Low-latency, high quality voice chat software";
           homepage = "https://mumble.info";
@@ -96,6 +104,17 @@ let
             lilacious
           ];
           platforms = lib.platforms.linux ++ (overrides.platforms or [ ]);
+=======
+        meta = with lib; {
+          description = "Low-latency, high quality voice chat software";
+          homepage = "https://mumble.info";
+          license = licenses.bsd3;
+          maintainers = with maintainers; [
+            felixsinger
+            lilacious
+          ];
+          platforms = platforms.linux ++ (overrides.platforms or [ ]);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       }
     );
@@ -108,6 +127,12 @@ let
       platforms = lib.platforms.darwin;
       nativeBuildInputs = [
         qt5.qttools
+<<<<<<< HEAD
+=======
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        makeWrapper
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
 
       buildInputs = [
@@ -171,11 +196,19 @@ let
         mv $out/Mumble.app $out/Applications/Mumble.app
 
         # ensure that the app can be started from the shell
+<<<<<<< HEAD
         makeBinaryWrapper $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
       '';
 
       postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
         wrapProgramBinary $out/bin/mumble \
+=======
+        makeWrapper $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
+      '';
+
+      postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+        wrapProgram $out/bin/mumble \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath (
               lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire

@@ -31,11 +31,19 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun --no-sandbox' 'Exec=jbrowse-desktop'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Next-generation genome browser";
     mainProgram = "jbrowse-desktop";
     homepage = "https://jbrowse.org/jb2/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Next-generation genome browser";
+    mainProgram = "jbrowse-desktop";
+    homepage = "https://jbrowse.org/jb2/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

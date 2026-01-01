@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
     chmod a+x $out/bin/ecoPCRFormat
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Electronic PCR software tool";
     longDescription = ''
       ecoPCR is an electronic PCR software developed by the LECA. It
@@ -49,7 +53,11 @@ stdenv.mkDerivation rec {
       developed using the ecoPrimers software.
     '';
     homepage = "https://git.metabarcoding.org/obitools/ecopcr/wikis/home";
+<<<<<<< HEAD
     license = lib.licenses.cecill20;
+=======
+    license = licenses.cecill20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

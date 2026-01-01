@@ -24,11 +24,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "SN Pro Font Family";
     homepage = "https://github.com/supernotes/sn-pro";
     license = lib.licenses.ofl;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "SN Pro Font Family";
+    homepage = "https://github.com/supernotes/sn-pro";
+    license = licenses.ofl;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

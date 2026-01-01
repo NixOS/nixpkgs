@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fivem" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for interacting with FiveM servers";
     homepage = "https://github.com/Sander0542/fivem-api";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for interacting with FiveM servers";
+    homepage = "https://github.com/Sander0542/fivem-api";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

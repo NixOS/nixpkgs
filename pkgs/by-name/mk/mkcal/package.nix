@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkcal";
+<<<<<<< HEAD
   version = "0.7.30";
+=======
+  version = "0.7.29";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = "mkcal";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-Sr4THufulhpTOXvMEUG1BA41Lcky34AGALxJojR7sac=";
+=======
+    hash = "sha256-H7TWu6tTh1vBmFx7kRpyijLCg0xs+dYIEJAERBEGh8g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [

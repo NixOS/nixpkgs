@@ -22,11 +22,20 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Smart pointer constructs for the (GNU) C programming language";
     homepage = "https://github.com/Snaipe/libcsptr";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.fragamus ];
+=======
+  meta = with lib; {
+    description = "Smart pointer constructs for the (GNU) C programming language";
+    homepage = "https://github.com/Snaipe/libcsptr";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.fragamus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

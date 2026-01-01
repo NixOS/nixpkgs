@@ -60,12 +60,21 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI downloader optimized for speed and early preview";
     homepage = "https://saldl.github.io";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ zowoq ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "CLI downloader optimized for speed and early preview";
+    homepage = "https://saldl.github.io";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ zowoq ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "saldl";
   };
 }

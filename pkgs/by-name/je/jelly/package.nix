@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication {
   # the build to fail
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Recreational programming language inspired by J";
     mainProgram = "jelly";
@@ -32,5 +33,14 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.tckmn ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Recreational programming language inspired by J";
+    mainProgram = "jelly";
+    homepage = "https://github.com/DennisMitchell/jellylanguage";
+    license = licenses.mit;
+    maintainers = [ maintainers.tckmn ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,14 +29,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cloup" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/janLuke/cloup";
     description = "Click extended with option groups, constraints, aliases, help themes";
     changelog = "https://github.com/janluke/cloup/releases/tag/v${version}";
     longDescription = ''
       Enriches Click with option groups, constraints, command aliases, help sections for subcommands, themes for --help and other stuff.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

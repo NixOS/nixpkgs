@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "html5tagger" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Create HTML documents from Python";
     homepage = "https://github.com/sanic-org/html5tagger";
     license = lib.licenses.unlicense;
+=======
+  meta = with lib; {
+    description = "Create HTML documents from Python";
+    homepage = "https://github.com/sanic-org/html5tagger";
+    license = licenses.unlicense;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

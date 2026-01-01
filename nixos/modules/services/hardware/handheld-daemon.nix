@@ -7,6 +7,7 @@
 with lib;
 let
   cfg = config.services.handheld-daemon;
+<<<<<<< HEAD
 in
 {
   imports = [
@@ -17,6 +18,14 @@ in
       "package"
     ] "Adjustor is now part of handheld-daemon package, so it can't be overriden")
   ];
+=======
+  hhdPackage = cfg.package.override {
+    withAdjustor = cfg.adjustor.enable;
+    adjustor = cfg.adjustor.package;
+  };
+in
+{
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   options.services.handheld-daemon = {
     enable = mkEnableOption "Handheld Daemon";
     package = mkPackageOption pkgs "handheld-daemon" { };
@@ -28,6 +37,10 @@ in
 
     adjustor = {
       enable = mkEnableOption "Handheld Daemon TDP control plugin";
+<<<<<<< HEAD
+=======
+      package = mkPackageOption pkgs "adjustor" { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       loadAcpiCallModule = mkOption {
         type = types.bool;
         description = ''
@@ -49,7 +62,11 @@ in
     services.handheld-daemon.ui.enable = mkDefault true;
     services.handheld-daemon.adjustor.loadAcpiCallModule = mkDefault cfg.adjustor.enable;
     environment.systemPackages = [
+<<<<<<< HEAD
       cfg.package
+=======
+      hhdPackage
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ]
     ++ lib.optional cfg.ui.enable cfg.ui.package;
     services.udev.packages = [ cfg.package ];
@@ -67,17 +84,24 @@ in
 
       restartIfChanged = true;
 
+<<<<<<< HEAD
       environment = {
         HHD_ADJ_DISABLE = mkIf (!cfg.adjustor.enable) "1";
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       path = mkIf cfg.ui.enable [
         cfg.ui.package
         pkgs.lsof
       ];
 
       serviceConfig = {
+<<<<<<< HEAD
         ExecStart = "${lib.getExe cfg.package} --user ${cfg.user}";
+=======
+        ExecStart = "${lib.getExe hhdPackage} --user ${cfg.user}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         Nice = "-12";
         Restart = "on-failure";
         RestartSec = "10";

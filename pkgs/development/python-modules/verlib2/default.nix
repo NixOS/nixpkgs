@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "verlib2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Standalone variant of packaging.version, without anything else";
     homepage = "https://pypi.org/project/verlib2/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "Standalone variant of packaging.version, without anything else";
+    homepage = "https://pypi.org/project/verlib2/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

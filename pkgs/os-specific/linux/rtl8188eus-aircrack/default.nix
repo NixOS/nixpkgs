@@ -34,11 +34,19 @@ stdenv.mkDerivation {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "RealTek RTL8188eus WiFi driver with monitor mode & frame injection support";
     homepage = "https://github.com/aircrack-ng/rtl8188eus";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ moni ];
+=======
+  meta = with lib; {
+    description = "RealTek RTL8188eus WiFi driver with monitor mode & frame injection support";
+    homepage = "https://github.com/aircrack-ng/rtl8188eus";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken =
       ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened)
       || kernel.kernelAtLeast "6.17";

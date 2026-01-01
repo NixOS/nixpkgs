@@ -40,15 +40,27 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C/C++ implementation of a Sass compiler";
     homepage = "https://github.com/sass/libsass";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "C/C++ implementation of a Sass compiler";
+    homepage = "https://github.com/sass/libsass";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       codyopel
       offline
     ];
     pkgConfigModules = [ "libsass" ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

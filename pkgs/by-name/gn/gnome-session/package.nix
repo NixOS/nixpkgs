@@ -123,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GNOME session manager";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-session";
@@ -130,5 +131,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GNOME session manager";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-session";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-session/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

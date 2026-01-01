@@ -38,11 +38,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Infiniband subnet manager";
     homepage = "https://www.openfabrics.org/";
     license = lib.licenses.gpl2Only; # dual licensed as 2-clause BSD
     maintainers = [ lib.maintainers.aij ];
+=======
+  meta = with lib; {
+    description = "Infiniband subnet manager";
+    homepage = "https://www.openfabrics.org/";
+    license = licenses.gpl2Only; # dual licensed as 2-clause BSD
+    maintainers = [ maintainers.aij ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

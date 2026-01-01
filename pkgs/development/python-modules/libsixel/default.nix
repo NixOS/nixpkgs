@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libsixel" ];
 
+<<<<<<< HEAD
   meta = {
     description = "SIXEL graphics encoder/decoder implementation";
     homepage = "https://github.com/libsixel/libsixel";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rmcgibbo ];
+=======
+  meta = with lib; {
+    description = "SIXEL graphics encoder/decoder implementation";
+    homepage = "https://github.com/libsixel/libsixel";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rmcgibbo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

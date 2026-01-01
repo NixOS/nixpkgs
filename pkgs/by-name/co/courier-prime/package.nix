@@ -21,11 +21,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Monospaced font designed specifically for screenplays";
     homepage = "https://github.com/quoteunquoteapps/CourierPrime";
     license = lib.licenses.ofl;
     maintainers = [ lib.maintainers.austinbutler ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Monospaced font designed specifically for screenplays";
+    homepage = "https://github.com/quoteunquoteapps/CourierPrime";
+    license = licenses.ofl;
+    maintainers = [ maintainers.austinbutler ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

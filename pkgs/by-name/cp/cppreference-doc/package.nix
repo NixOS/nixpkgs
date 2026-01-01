@@ -26,11 +26,20 @@ stdenvNoCC.mkDerivation rec {
 
   passthru = { inherit pname version; };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ standard library reference";
     homepage = "https://en.cppreference.com";
     license = lib.licenses.cc-by-sa-30;
     maintainers = with lib.maintainers; [ panicgh ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C++ standard library reference";
+    homepage = "https://en.cppreference.com";
+    license = licenses.cc-by-sa-30;
+    maintainers = with maintainers; [ panicgh ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

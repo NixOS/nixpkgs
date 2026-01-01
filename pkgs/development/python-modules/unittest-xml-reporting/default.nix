@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xmlrunner" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unittest-based test runner with Ant/JUnit like XML reporting";
     homepage = "https://github.com/xmlrunner/unittest-xml-reporting";
     changelog = "https://github.com/xmlrunner/unittest-xml-reporting/releases/tag/${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ rprospero ];
+=======
+  meta = with lib; {
+    description = "Unittest-based test runner with Ant/JUnit like XML reporting";
+    homepage = "https://github.com/xmlrunner/unittest-xml-reporting";
+    changelog = "https://github.com/xmlrunner/unittest-xml-reporting/releases/tag/${version}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ rprospero ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

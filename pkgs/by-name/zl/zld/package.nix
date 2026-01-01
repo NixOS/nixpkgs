@@ -17,12 +17,21 @@ stdenv.mkDerivation rec {
     cp zld $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Faster version of Apple's linker";
     homepage = "https://github.com/michaeleisel/zld";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.rgnns ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Faster version of Apple's linker";
+    homepage = "https://github.com/michaeleisel/zld";
+    license = licenses.mit;
+    maintainers = [ maintainers.rgnns ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hydraPlatforms = [ ];
   };
 }

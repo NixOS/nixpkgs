@@ -24,11 +24,20 @@ buildPythonPackage rec {
     python -c 'import bsdiff4; bsdiff4.test()'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Binary diff and patch using the BSDIFF4-format";
     homepage = "https://github.com/ilanschnell/bsdiff4";
     changelog = "https://github.com/ilanschnell/bsdiff4/blob/${version}/CHANGELOG.txt";
     license = lib.licenses.bsdProtection;
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    description = "Binary diff and patch using the BSDIFF4-format";
+    homepage = "https://github.com/ilanschnell/bsdiff4";
+    changelog = "https://github.com/ilanschnell/bsdiff4/blob/${version}/CHANGELOG.txt";
+    license = licenses.bsdProtection;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

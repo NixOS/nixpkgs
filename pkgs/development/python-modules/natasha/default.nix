@@ -34,10 +34,18 @@ buildPythonPackage rec {
   enabledTestPaths = [ "tests/" ];
   pythonImportsCheck = [ "natasha" ];
 
+<<<<<<< HEAD
   meta = {
     description = "NLP framework for Russian language";
     homepage = "https://github.com/natasha/natasha";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ npatsakula ];
+=======
+  meta = with lib; {
+    description = "NLP framework for Russian language";
+    homepage = "https://github.com/natasha/natasha";
+    license = licenses.mit;
+    maintainers = with maintainers; [ npatsakula ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1,8 +1,11 @@
 {
   lib,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   stdenv,
   makeWrapper,
@@ -29,9 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-a3lhQ33Zb+vSu1sQjuqO3bITiQEIOVyFTecmJAhJROU=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
+=======
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-3df72m/ARgfelBLE6Bhi8+ThHytowVOBL2Ndk7auDgg=";
   };
@@ -43,8 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.distutils
     nodejs
     makeWrapper
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   preBuild = ''

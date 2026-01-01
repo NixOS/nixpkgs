@@ -17,7 +17,11 @@ let
 in
 buildPythonPackage rec {
   pname = "reportlab";
+<<<<<<< HEAD
   version = "4.4.5";
+=======
+  version = "4.4.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -25,7 +29,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-BFfWQqp233s2sCNTSZBMWNj5xgaockVu0EQ2qvrcFRA=";
+=======
+    hash = "sha256-BzsJddq2lTas0yUYWOawUk7T4IfnHx0NGJWstQrPnHs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -56,11 +64,19 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://hg.reportlab.com/hg-public/reportlab/file/tip/CHANGES.md";
     description = "Open Source Python library for generating PDFs and graphics";
     homepage = "https://www.reportlab.com/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://hg.reportlab.com/hg-public/reportlab/file/tip/CHANGES.md";
+    description = "Open Source Python library for generating PDFs and graphics";
+    homepage = "https://www.reportlab.com/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -76,7 +76,10 @@ $pcMap{"xinerama"} = "libXinerama";
 $pcMap{"xkbfile"} = "libxkbfile";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
+<<<<<<< HEAD
 $pcMap{"xorg-server"} = "xorgserver";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 $pcMap{"xp"} = "libXp";
 $pcMap{"xpm"} = "libXpm";
 $pcMap{"xpresent"} = "libXpresent";
@@ -335,8 +338,11 @@ print OUT <<EOF;
   lib,
   appres,
   bdftopcf,
+<<<<<<< HEAD
   bitmap,
   editres,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   font-adobe-100dpi,
   font-adobe-75dpi,
   font-adobe-utopia-100dpi,
@@ -371,12 +377,18 @@ print OUT <<EOF;
   font-screen-cyrillic,
   font-sony-misc,
   font-sun-misc,
+<<<<<<< HEAD
   fonttosfnt,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   font-util,
   font-winitzki-cyrillic,
   font-xfree86-type1,
   gccmakedep,
+<<<<<<< HEAD
   iceauth,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ico,
   imake,
   libapplewm,
@@ -433,10 +445,15 @@ print OUT <<EOF;
   luit,
   makedepend,
   mkfontscale,
+<<<<<<< HEAD
   oclock,
   pixman,
   sessreg,
   setxkbmap,
+=======
+  pixman,
+  sessreg,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   smproxy,
   tab-window-manager,
   transset,
@@ -453,8 +470,11 @@ print OUT <<EOF;
   xconsole,
   xcursorgen,
   xcursor-themes,
+<<<<<<< HEAD
   xdm,
   xdpyinfo,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   xdriinfo,
   xev,
   xeyes,
@@ -476,18 +496,27 @@ print OUT <<EOF;
   xorg-cf-files,
   xorg-docs,
   xorgproto,
+<<<<<<< HEAD
   xorg-server,
   xorg-sgml-doctools,
   xprop,
   xrandr,
   xrdb,
+=======
+  xorg-sgml-doctools,
+  xprop,
+  xrandr,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   xrefresh,
   xset,
   xsetroot,
   xsm,
   xstdcmap,
   xtrans,
+<<<<<<< HEAD
   xvfb,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   xvinfo,
   xwininfo,
   xwud,
@@ -498,11 +527,15 @@ self: with self; {
   inherit
     appres
     bdftopcf
+<<<<<<< HEAD
     bitmap
     editres
     fonttosfnt
     gccmakedep
     iceauth
+=======
+    gccmakedep
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ico
     imake
     libdmx
@@ -517,10 +550,15 @@ self: with self; {
     luit
     makedepend
     mkfontscale
+<<<<<<< HEAD
     oclock
     pixman
     sessreg
     setxkbmap
+=======
+    pixman
+    sessreg
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     smproxy
     transset
     viewres
@@ -533,8 +571,11 @@ self: with self; {
     xcompmgr
     xconsole
     xcursorgen
+<<<<<<< HEAD
     xdm
     xdpyinfo
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     xdriinfo
     xev
     xeyes
@@ -555,14 +596,20 @@ self: with self; {
     xorgproto
     xprop
     xrandr
+<<<<<<< HEAD
     xrdb
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     xrefresh
     xset
     xsetroot
     xsm
     xstdcmap
     xtrans
+<<<<<<< HEAD
     xvfb
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     xvinfo
     xwininfo
     xwud
@@ -653,7 +700,10 @@ self: with self; {
   xcursorthemes = xcursor-themes;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
+<<<<<<< HEAD
   xorgserver = xorg-server;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   xorgsgmldoctools = xorg-sgml-doctools;
 
 EOF

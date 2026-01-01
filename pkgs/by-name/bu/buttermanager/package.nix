@@ -45,11 +45,19 @@ python3Packages.buildPythonApplication rec {
     install -Dm444 packaging/buttermanager.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Btrfs tool for managing snapshots, balancing filesystems and upgrading the system safetly";
     homepage = "https://github.com/egara/buttermanager";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ t4ccer ];
+=======
+  meta = with lib; {
+    description = "Btrfs tool for managing snapshots, balancing filesystems and upgrading the system safetly";
+    homepage = "https://github.com/egara/buttermanager";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ t4ccer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "buttermanager";
   };
 }

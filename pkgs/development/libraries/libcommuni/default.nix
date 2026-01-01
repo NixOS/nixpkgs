@@ -56,10 +56,19 @@ stdenv.mkDerivation rec {
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = "rm -rf lib";
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform IRC framework written with Qt";
     homepage = "https://communi.github.io";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Cross-platform IRC framework written with Qt";
+    homepage = "https://communi.github.io";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ hrdinka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

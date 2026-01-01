@@ -77,6 +77,7 @@ buildPythonPackage rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for Enlightenment Foundation Libraries";
     homepage = "https://github.com/DaveMDS/python-efl";
@@ -90,5 +91,20 @@ buildPythonPackage rec {
       ftrvxmtrx
     ];
     teams = [ lib.teams.enlightenment ];
+=======
+  meta = with lib; {
+    description = "Python bindings for Enlightenment Foundation Libraries";
+    homepage = "https://github.com/DaveMDS/python-efl";
+    platforms = platforms.linux;
+    license = with licenses; [
+      gpl3
+      lgpl3
+    ];
+    maintainers = with maintainers; [
+      matejc
+      ftrvxmtrx
+    ];
+    teams = [ teams.enlightenment ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

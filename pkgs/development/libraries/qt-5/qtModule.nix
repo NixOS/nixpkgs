@@ -114,6 +114,10 @@ mkDerivation (
       maintainers = with maintainers; [
         qknight
         ttuegel
+<<<<<<< HEAD
+=======
+        periklis
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         bkchr
       ];
       platforms = platforms.unix;

@@ -50,6 +50,7 @@ buildPythonPackage rec {
     pycryptodome
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "adb_shell" ];
@@ -59,5 +60,16 @@ buildPythonPackage rec {
     homepage = "https://github.com/JeffLIrion/adb_shell";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "adb_shell" ];
+
+  meta = with lib; {
+    description = "Python implementation of ADB with shell and FileSync functionality";
+    homepage = "https://github.com/JeffLIrion/adb_shell";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-characters"; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://apps.gnome.org/Characters/";
     description = "Simple utility application to find and insert unusual characters";
@@ -71,5 +72,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://apps.gnome.org/Characters/";
+    description = "Simple utility application to find and insert unusual characters";
+    mainProgram = "gnome-characters";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

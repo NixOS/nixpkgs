@@ -78,7 +78,11 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/iputils/iputils";
     changelog = "https://github.com/iputils/iputils/releases/tag/${version}";
     description = "Set of small useful utilities for Linux networking";
@@ -90,11 +94,19 @@ stdenv.mkDerivation rec {
       - ping: send ICMP ECHO_REQUEST to network hosts
       - tracepath: traces path to a network host discovering MTU along this path
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl2Plus
       bsd3
     ];
     platforms = lib.platforms.linux;
+=======
+    license = with licenses; [
+      gpl2Plus
+      bsd3
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

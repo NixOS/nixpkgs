@@ -1,6 +1,10 @@
 {
   lib,
   fetchurl,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ncurses,
   pcre2,
   stdenv,
@@ -44,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   meta = {
@@ -53,7 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "less";
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
       mdaniels5757
+=======
+      # not active
+      dtzWill
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = lib.platforms.unix;
   };

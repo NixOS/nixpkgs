@@ -128,6 +128,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) libreswan libreswan-nat; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://libreswan.org";
     description = "Free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
@@ -137,6 +138,17 @@ stdenv.mkDerivation rec {
       mpl20
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://libreswan.org";
+    description = "Free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
+    platforms = platforms.linux ++ platforms.freebsd;
+    license = with licenses; [
+      gpl2Plus
+      mpl20
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rnhmjoj
     ];
     mainProgram = "ipsec";

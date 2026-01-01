@@ -72,7 +72,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$out/share/"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Challenging 2D motocross platform game, where physics play an important role";
     mainProgram = "xmoto";
     longDescription = ''
@@ -80,11 +84,20 @@ stdenv.mkDerivation rec {
       You need to control your bike to its limits, if you want to have a chance to finish the most difficult challenges.
     '';
     homepage = "https://xmoto.tuxfamily.org";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       raskin
       pSub
     ];
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Plus;
+=======
+    maintainers = with maintainers; [
+      raskin
+      pSub
+    ];
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

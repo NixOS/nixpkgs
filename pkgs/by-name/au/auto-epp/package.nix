@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "auto-epp";
     homepage = "https://github.com/jothi-prasath/auto-epp";
@@ -30,5 +31,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lamarios ];
+=======
+  meta = with lib; {
+    mainProgram = "auto-epp";
+    homepage = "https://github.com/jothi-prasath/auto-epp";
+    description = "Energy performance preference tuner for AMD processors when amd_pstate=active";
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.lamarios ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

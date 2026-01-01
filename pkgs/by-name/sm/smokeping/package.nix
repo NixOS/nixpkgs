@@ -40,7 +40,10 @@ stdenv.mkDerivation rec {
     NetOpenSSH
     NetSNMP
     LWP
+<<<<<<< HEAD
     LWPProtocolHttps
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     IOTty
     fping
     NetDNS

@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     perl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Find and recover deleted files on block devices";
     mainProgram = "magicrescue";
@@ -38,5 +39,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Find and recover deleted files on block devices";
+    mainProgram = "magicrescue";
+    homepage = "https://github.com/jbj/magicrescue";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

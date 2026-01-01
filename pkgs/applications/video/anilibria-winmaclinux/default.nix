@@ -104,11 +104,19 @@ mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/anilibria/anilibria-winmaclinux";
     description = "AniLibria cross platform desktop client";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/anilibria/anilibria-winmaclinux";
+    description = "AniLibria cross platform desktop client";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (qtbase.meta) platforms;
     mainProgram = "AniLibria";
   };

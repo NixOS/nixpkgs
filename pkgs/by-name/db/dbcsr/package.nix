@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dbcsr";
+<<<<<<< HEAD
   version = "2.9.1";
+=======
+  version = "2.8.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "dbcsr";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-F6EvpsPAJJvmEZQKJDW2Mk4Yo8VsQCD4CE2IqxpjyN8=";
+=======
+    hash = "sha256-YXySNw3+DiY7E57W1ypeWLyawwcWVGlmTM4Kgj7Nnmo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -76,10 +84,18 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed Block Compressed Sparse Row matrix library";
     license = lib.licenses.gpl2Only;
     homepage = "https://github.com/cp2k/dbcsr";
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Distributed Block Compressed Sparse Row matrix library";
+    license = licenses.gpl2Only;
+    homepage = "https://github.com/cp2k/dbcsr";
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

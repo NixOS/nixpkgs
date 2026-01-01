@@ -64,7 +64,11 @@ stdenv.mkDerivation {
     install boxfs boxfs-init $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "FUSE file system for box.com accounts";
     longDescription = ''
       Store files on box.com (an account is required). The first time you run
@@ -74,7 +78,12 @@ stdenv.mkDerivation {
       unmount the file system with `fusermount -u mountpoint`.
     '';
     homepage = "https://github.com/drotiro/boxfs2";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

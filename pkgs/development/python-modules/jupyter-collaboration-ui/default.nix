@@ -9,13 +9,21 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration-ui";
+<<<<<<< HEAD
   version = "2.2.0";
+=======
+  version = "2.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_collaboration_ui";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-ZQHBVZ/yMxWE+hg8OLIzTBiGdh5xy+CvjV9SXyXqM20=";
+=======
+    hash = "sha256-Eajdc0AI47AtxLUW4xwxCZw3G/1aiKCa8Mnh7bYq00s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

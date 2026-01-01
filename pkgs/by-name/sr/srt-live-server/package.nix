@@ -34,11 +34,20 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source low latency livestreaming server, based on Secure Reliable Tranport (SRT)";
     license = lib.licenses.mit;
     homepage = "https://github.com/Edward-Wu/srt-live-server";
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open-source low latency livestreaming server, based on Secure Reliable Tranport (SRT)";
+    license = licenses.mit;
+    homepage = "https://github.com/Edward-Wu/srt-live-server";
+    maintainers = with maintainers; [ shamilton ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

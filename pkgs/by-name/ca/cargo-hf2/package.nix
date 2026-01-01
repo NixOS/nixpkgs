@@ -21,11 +21,20 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libusb1 ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo Subcommand for Microsoft HID Flashing Library for UF2 Bootloaders";
     mainProgram = "cargo-hf2";
     homepage = "https://lib.rs/crates/cargo-hf2";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ astrobeastie ];
+=======
+  meta = with lib; {
+    description = "Cargo Subcommand for Microsoft HID Flashing Library for UF2 Bootloaders";
+    mainProgram = "cargo-hf2";
+    homepage = "https://lib.rs/crates/cargo-hf2";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ astrobeastie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

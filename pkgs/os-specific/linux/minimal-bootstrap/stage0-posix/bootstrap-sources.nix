@@ -4,10 +4,17 @@
 
 rec {
   name = "stage0-posix-${version}-source";
+<<<<<<< HEAD
   version = "1.9.1";
   rev = "Release_${version}";
   outputHashAlgo = "sha256";
   outputHash = "sha256-UNoyb2teqH26VM7YoOcazyqZ0AlDae045aWc31ZHFdw=";
+=======
+  version = "1.6.0";
+  rev = "Release_${version}";
+  outputHashAlgo = "sha256";
+  outputHash = "sha256-epUaShjKiAd749ICvc6rS6WhUkS8R4heKuPdwUjEtsQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   /*
     Since `make-minimal-bootstrap-sources` requires nixpkgs and nix it

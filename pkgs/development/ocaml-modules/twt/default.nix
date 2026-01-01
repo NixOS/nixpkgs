@@ -35,11 +35,19 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+<<<<<<< HEAD
   meta = {
     description = "“The Whitespace Thing” for OCaml";
     homepage = "http://people.csail.mit.edu/mikelin/ocaml+twt/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "“The Whitespace Thing” for OCaml";
+    homepage = "http://people.csail.mit.edu/mikelin/ocaml+twt/";
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ocaml+twt";
     broken = lib.versionAtLeast ocaml.version "5.0";
     inherit (ocaml.meta) platforms;

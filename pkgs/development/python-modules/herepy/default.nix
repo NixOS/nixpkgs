@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "herepy" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/abdullahselek/HerePy/releases/tag/${version}";
     description = "Library that provides a Python interface to the HERE APIs";
     homepage = "https://github.com/abdullahselek/HerePy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/abdullahselek/HerePy/releases/tag/${version}";
+    description = "Library that provides a Python interface to the HERE APIs";
+    homepage = "https://github.com/abdullahselek/HerePy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "haphilipsjs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to interact with Philips TVs with jointSPACE API";
     homepage = "https://github.com/danielperna84/ha-philipsjs";
     changelog = "https://github.com/danielperna84/ha-philipsjs/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to interact with Philips TVs with jointSPACE API";
+    homepage = "https://github.com/danielperna84/ha-philipsjs";
+    changelog = "https://github.com/danielperna84/ha-philipsjs/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

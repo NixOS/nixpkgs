@@ -94,7 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/GrapheneOS/hardened_malloc";
     description = "Hardened allocator designed for modern systems";
     mainProgram = "preload-hardened-malloc";
@@ -103,8 +107,13 @@ stdenv.mkDerivation (finalAttrs: {
       along with various extensions. It provides substantial hardening against heap
       corruption vulnerabilities yet aims to provide decent overall performance.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

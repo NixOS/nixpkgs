@@ -45,11 +45,19 @@ stdenv.mkDerivation {
 
   doCheck = false; # fails. needs DRI access
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/i-rinat/libvdpau-va-gl";
     description = "VDPAU driver with OpenGL/VAAPI backend";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/i-rinat/libvdpau-va-gl";
+    description = "VDPAU driver with OpenGL/VAAPI backend";
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.johnrtitor ];
   };
 }

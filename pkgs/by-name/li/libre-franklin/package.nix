@@ -24,11 +24,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Reinterpretation and expansion based on the 1912 Morris Fuller Benton’s classic";
     homepage = "https://github.com/impallari/Libre-Franklin";
     license = lib.licenses.ofl;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Reinterpretation and expansion based on the 1912 Morris Fuller Benton’s classic";
+    homepage = "https://github.com/impallari/Libre-Franklin";
+    license = licenses.ofl;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

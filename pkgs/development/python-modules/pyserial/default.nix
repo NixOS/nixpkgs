@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "serial" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python serial port extension";
     homepage = "https://github.com/pyserial/pyserial";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ makefu ];
+=======
+  meta = with lib; {
+    description = "Python serial port extension";
+    homepage = "https://github.com/pyserial/pyserial";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,11 +45,20 @@ rustPlatform.buildRustPackage rec {
   # GTK fails to initialize
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "GUI for neovim, without any web bloat";
     mainProgram = "gnvim";
     homepage = "https://github.com/vhakulinen/gnvim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ minijackson ];
+=======
+  meta = with lib; {
+    description = "GUI for neovim, without any web bloat";
+    mainProgram = "gnvim";
+    homepage = "https://github.com/vhakulinen/gnvim";
+    license = licenses.mit;
+    maintainers = with maintainers; [ minijackson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

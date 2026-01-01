@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Prerelease reports incorrect version
   dontVersionCheck = true;

@@ -112,18 +112,33 @@ stdenv.mkDerivation {
     tagFormat = "";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";
     homepage = "https://libfive.com/";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";
+    homepage = "https://libfive.com/";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hodapp
       kovirobi
       wulfsta
     ];
+<<<<<<< HEAD
     license = with lib.licenses; [
       mpl20
       gpl2Plus
     ];
     platforms = with lib.platforms; all;
+=======
+    license = with licenses; [
+      mpl20
+      gpl2Plus
+    ];
+    platforms = with platforms; all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

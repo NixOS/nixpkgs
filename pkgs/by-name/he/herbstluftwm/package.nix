@@ -127,11 +127,20 @@ stdenv.mkDerivation rec {
     tests.herbstluftwm = nixosTests.herbstluftwm;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Manual tiling window manager for X";
     homepage = "https://herbstluftwm.org/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thibautmarty ];
+=======
+  meta = with lib; {
+    description = "Manual tiling window manager for X";
+    homepage = "https://herbstluftwm.org/";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thibautmarty ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -25,6 +25,7 @@ buildGoModule rec {
     "protoc-gen-twirp"
   ];
 
+<<<<<<< HEAD
   meta = {
     # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
     broken = true;
@@ -33,5 +34,13 @@ buildGoModule rec {
     homepage = "https://github.com/twitchtv/twirp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jojosch ];
+=======
+  meta = with lib; {
+    description = "Simple RPC framework with protobuf service definitions";
+    mainProgram = "protoc-gen-twirp";
+    homepage = "https://github.com/twitchtv/twirp";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jojosch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

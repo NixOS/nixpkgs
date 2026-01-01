@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyperscan" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hyperscan binding for Python, which supports vectorscan";
     homepage = "https://vlaci.github.io/pyperscan/";
@@ -48,6 +49,18 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Hyperscan binding for Python, which supports vectorscan";
+    homepage = "https://vlaci.github.io/pyperscan/";
+    changelog = "https://github.com/vlaci/pyperscan/releases/tag/${src.rev}";
+    platforms = platforms.unix;
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tnias
       vlaci
     ];

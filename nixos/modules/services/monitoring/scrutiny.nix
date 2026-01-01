@@ -6,6 +6,10 @@
   ...
 }:
 let
+<<<<<<< HEAD
+=======
+  inherit (lib) maintainers;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf mkMerge;
   inherit (lib.options)
@@ -204,7 +208,10 @@ in
 
       systemd.services.scrutiny = {
         description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
+<<<<<<< HEAD
         enableStrictShellChecks = true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ] ++ lib.optional cfg.influxdb.enable "influxdb2.service";
         wants = lib.optional cfg.influxdb.enable "influxdb2.service";
@@ -217,7 +224,11 @@ in
           ${genJqSecretsReplacementSnippet cfg.settings "/run/scrutiny/config.yaml"}
         '';
         postStart = ''
+<<<<<<< HEAD
           for _ in $(seq 300); do
+=======
+          for i in $(seq 300); do
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               if "${lib.getExe pkgs.curl}" --fail --silent --head "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}" >/dev/null; then
                   echo "Scrutiny is ready (port is open)"
                   exit 0
@@ -251,7 +262,10 @@ in
       systemd = {
         services.scrutiny-collector = {
           description = "Scrutiny Collector Service";
+<<<<<<< HEAD
           enableStrictShellChecks = true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           after = lib.optional cfg.enable "scrutiny.service";
           wants = lib.optional cfg.enable "scrutiny.service";
           environment = {

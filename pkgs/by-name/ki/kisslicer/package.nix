@@ -55,12 +55,21 @@ stdenv.mkDerivation rec {
       --run "mkdir -p ${inidir}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Convert STL files into Gcode";
     homepage = "http://www.kisslicer.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.cransom ];
+=======
+  meta = with lib; {
+    description = "Convert STL files into Gcode";
+    homepage = "http://www.kisslicer.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.cransom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
     install -m644 doc/marst.pdf -Dt $out/share/doc/${pname}/
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.gnu.org/software/marst/";
     description = "Algol-60-to-C translator";
     longDescription = ''
@@ -48,8 +52,14 @@ stdenv.mkDerivation rec {
       - the converter, MACVT, that allows to convert existing Algol 60 programs
         from some other representations to MARST representation.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

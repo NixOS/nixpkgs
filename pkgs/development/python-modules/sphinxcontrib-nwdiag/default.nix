@@ -30,10 +30,17 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx nwdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-nwdiag";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Sphinx nwdiag extension";
+    homepage = "https://github.com/blockdiag/sphinxcontrib-nwdiag";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

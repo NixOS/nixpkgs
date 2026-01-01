@@ -57,12 +57,21 @@ buildGoModule rec {
 
   passthru.tests.minio = nixosTests.minio;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.minio.io/";
     description = "S3-compatible object storage server";
     mainProgram = "minio";
     changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ bachp ];
     license = lib.licenses.agpl3Plus;
+=======
+    maintainers = with maintainers; [ bachp ];
+    license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

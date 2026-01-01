@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) nyxt; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
     mainProgram = "nyxt";
@@ -118,5 +119,17 @@ stdenv.mkDerivation (finalAttrs: {
       dariof4
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
+    mainProgram = "nyxt";
+    homepage = "https://nyxt.atlas.engineer";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+      lewo
+      dariof4
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

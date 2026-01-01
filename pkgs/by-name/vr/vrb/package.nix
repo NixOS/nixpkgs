@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     cp -p vrb/man/man3/*.3 $out/share/man/man3/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Virtual ring buffer library written in C";
     mainProgram = "vbuf";
@@ -34,5 +35,14 @@ stdenv.mkDerivation rec {
     homepage = "http://vrb.sourceforge.net/";
     maintainers = [ lib.maintainers.bobvanderlinden ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Virtual ring buffer library written in C";
+    mainProgram = "vbuf";
+    license = licenses.lgpl21;
+    homepage = "http://vrb.sourceforge.net/";
+    maintainers = [ maintainers.bobvanderlinden ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

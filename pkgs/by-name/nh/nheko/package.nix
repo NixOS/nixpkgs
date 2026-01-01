@@ -105,16 +105,30 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
     license = lib.licenses.gpl3Plus;
     mainProgram = "nheko";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Desktop client for the Matrix protocol";
+    homepage = "https://github.com/Nheko-Reborn/nheko";
+    license = licenses.gpl3Plus;
+    mainProgram = "nheko";
+    maintainers = with maintainers; [
+      ekleog
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fpletz
       rebmit
       rnhmjoj
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

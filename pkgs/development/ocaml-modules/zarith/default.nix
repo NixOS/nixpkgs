@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 
+<<<<<<< HEAD
   meta = {
     description = "Fast, arbitrary precision OCaml integers";
     homepage = "https://github.com/ocaml/Zarith";
@@ -46,6 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2;
     inherit (ocaml.meta) platforms;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fast, arbitrary precision OCaml integers";
+    homepage = "https://github.com/ocaml/Zarith";
+    changelog = "https://github.com/ocaml/Zarith/raw/${finalAttrs.src.rev}/Changes";
+    license = licenses.lgpl2;
+    inherit (ocaml.meta) platforms;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       vbgl
     ];

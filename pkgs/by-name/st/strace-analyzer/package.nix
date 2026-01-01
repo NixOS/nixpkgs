@@ -26,11 +26,20 @@ rustPlatform.buildRustPackage rec {
     "--skip=analysis::tests::analyze_dd"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Analyzes strace output";
     mainProgram = "strace-analyzer";
     homepage = "https://github.com/wookietreiber/strace-analyzer";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Analyzes strace output";
+    mainProgram = "strace-analyzer";
+    homepage = "https://github.com/wookietreiber/strace-analyzer";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

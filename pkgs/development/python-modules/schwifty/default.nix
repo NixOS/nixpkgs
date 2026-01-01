@@ -52,6 +52,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "schwifty" ];
@@ -62,5 +63,17 @@ buildPythonPackage rec {
     homepage = "https://github.com/mdomke/schwifty";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ milibopp ];
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "schwifty" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/mdomke/schwifty/blob/${version}/CHANGELOG.rst";
+    description = "Validate/generate IBANs and BICs";
+    homepage = "https://github.com/mdomke/schwifty";
+    license = licenses.mit;
+    maintainers = with maintainers; [ milibopp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

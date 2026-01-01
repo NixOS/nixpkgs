@@ -7,7 +7,10 @@ import shlex
 import subprocess
 from collections.abc import Sequence
 from dataclasses import dataclass
+<<<<<<< HEAD
 from ipaddress import AddressValueError, IPv6Address
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 from typing import Final, Self, TypedDict, Unpack
 
 from . import tmpdir
@@ -64,6 +67,7 @@ class Remote:
                         "'--ask-sudo-password' option instead"
                     )
 
+<<<<<<< HEAD
     def ssh_host(self) -> str:
         """Fix up host string for SSH.
 
@@ -81,6 +85,8 @@ class Remote:
         except AddressValueError:
             return self.host
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 # Not exhaustive, but we can always extend it later.
 class RunKwargs(TypedDict, total=False):
@@ -130,7 +136,11 @@ def run_wrapper(
             "ssh",
             *remote.opts,
             *SSH_DEFAULT_OPTS,
+<<<<<<< HEAD
             remote.ssh_host(),
+=======
+            remote.host,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             "--",
             # SSH will join the parameters here and pass it to the shell, so we
             # need to quote it to avoid issues.
@@ -205,7 +215,11 @@ def _kill_long_running_ssh_process(args: Args, remote: Remote) -> None:
                 "ssh",
                 *remote.opts,
                 *SSH_DEFAULT_OPTS,
+<<<<<<< HEAD
                 remote.ssh_host(),
+=======
+                remote.host,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 "--",
                 "pkill",
                 "--signal",

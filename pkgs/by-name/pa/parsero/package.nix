@@ -30,11 +30,19 @@ python3Packages.buildPythonApplication {
   # Project has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Robots.txt audit tool";
     homepage = "https://github.com/behindthefirewalls/Parsero";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Robots.txt audit tool";
+    homepage = "https://github.com/behindthefirewalls/Parsero";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       emilytrau
       fab
     ];

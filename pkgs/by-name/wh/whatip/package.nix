@@ -54,6 +54,7 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Info on your IP";
     mainProgram = "whatip";
@@ -61,5 +62,14 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
+=======
+  meta = with lib; {
+    description = "Info on your IP";
+    mainProgram = "whatip";
+    homepage = "https://gitlab.gnome.org/GabMus/whatip";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ zendo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

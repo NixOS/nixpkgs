@@ -23,11 +23,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Clean and sharp X11/Wayland cursor theme";
     homepage = "https://www.gnome-look.org/p/999999/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zaninime ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Clean and sharp X11/Wayland cursor theme";
+    homepage = "https://www.gnome-look.org/p/999999/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zaninime ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

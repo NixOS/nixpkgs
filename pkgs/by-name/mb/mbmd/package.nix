@@ -32,11 +32,19 @@ buildGoModule {
 
   env.CGO_ENABLED = 0; # NOTE: Pure Go
 
+<<<<<<< HEAD
   meta = {
     description = "ModBus Measurement Daemon - simple reading of data from ModBus meters and grid inverters";
     homepage = "https://github.com/volkszaehler/mbmd";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tsandrini ];
+=======
+  meta = with lib; {
+    description = "ModBus Measurement Daemon - simple reading of data from ModBus meters and grid inverters";
+    homepage = "https://github.com/volkszaehler/mbmd";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ tsandrini ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mbmd";
   };
 }

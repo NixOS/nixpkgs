@@ -24,12 +24,21 @@ stdenv.mkDerivation {
     install -Dm 555 username-anarchy $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/urbanadventurer/username-anarchy/";
     description = "Username generator tool for penetration testing";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.akechishiro ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/urbanadventurer/username-anarchy/";
+    description = "Username generator tool for penetration testing";
+    license = licenses.mit;
+    maintainers = [ maintainers.akechishiro ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "username-anarchy";
   };
 }

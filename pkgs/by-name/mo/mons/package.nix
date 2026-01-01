@@ -89,12 +89,21 @@ resholve.mkDerivation {
     "PREFIX="
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "POSIX Shell script to quickly manage 2-monitors display";
     homepage = "https://github.com/Ventto/mons.git";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thiagokokada ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "POSIX Shell script to quickly manage 2-monitors display";
+    homepage = "https://github.com/Ventto/mons.git";
+    license = licenses.mit;
+    maintainers = with maintainers; [ thiagokokada ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mons";
   };
 }

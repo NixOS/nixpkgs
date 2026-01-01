@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-D0Exfm6NRRedncDAgC3MgfagzsM0Dsc7X0i9arYYOgc=";
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo extension for running Criterion.rs benchmarks";
     mainProgram = "cargo-criterion";
@@ -26,6 +27,17 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cargo extension for running Criterion.rs benchmarks";
+    mainProgram = "cargo-criterion";
+    homepage = "https://github.com/bheisler/cargo-criterion";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       humancalico
       matthiasbeyer
     ];

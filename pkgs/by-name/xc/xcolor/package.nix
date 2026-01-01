@@ -58,11 +58,19 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight color picker for X11";
     homepage = "https://github.com/Soft/xcolor";
     maintainers = with lib.maintainers; [ moni ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Lightweight color picker for X11";
+    homepage = "https://github.com/Soft/xcolor";
+    maintainers = with lib.maintainers; [ moni ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xcolor";
   };
 }

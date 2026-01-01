@@ -37,10 +37,17 @@ buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "EncryptedLinksTo from Nixops 1 module port";
     homepage = "https://github.com/nix-community/nixops-encrypted-links";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "EncryptedLinksTo from Nixops 1 module port";
+    homepage = "https://github.com/nix-community/nixops-encrypted-links";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -24,7 +24,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.theleagueofmoveabletype.com/orbitron";
     downloadPage = "https://www.theleagueofmoveabletype.com/orbitron/download";
     description = "Geometric sans-serif for display purposes by Matt McInerney";
@@ -45,8 +49,13 @@ stdenvNoCC.mkDerivation {
       course Orbitron could also be used on the posters for the movies
       portraying this inevitable future.
     '';
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [
       minijackson
     ];

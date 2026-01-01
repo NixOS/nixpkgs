@@ -10,6 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-workspaces";
+<<<<<<< HEAD
   version = "0.4.2";
 
   src = fetchCrate {
@@ -18,6 +19,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-eaTLKQdz8Kyee7Bhub/OBueteeQ8jY36g4DgqctrToY=";
+=======
+  version = "0.4.1";
+
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-5heOf74OUsnrG+vt9AdMXV7uRxqKYs0KRE7qm0irmC0=";
+  };
+
+  cargoHash = "sha256-Is2ddCrg+dP0TSw3EUl057RA0L2VW4mPttg2eAtC0j4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config

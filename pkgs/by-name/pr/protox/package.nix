@@ -6,6 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protox";
+<<<<<<< HEAD
   version = "0.9.1";
 
   src = fetchCrate {
@@ -14,6 +15,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-Xcvl8c99M34sNd1R52M9eE2hh4lnbKL7vRHorlcJGss=";
+=======
+  version = "0.9.0";
+
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-7vXh4wedBskF9qtAVZn0mevzUoy7rlBCnxqzKU6NXwQ=";
+  };
+
+  cargoHash = "sha256-+F4R99YsWUjJukEtAEeH/N/J3YqnhJ/YcATfbPOFjuo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildFeatures = [ "bin" ];
 

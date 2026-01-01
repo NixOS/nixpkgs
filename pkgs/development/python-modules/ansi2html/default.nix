@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansi2html" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert text with ANSI color codes to HTML";
     mainProgram = "ansi2html";
     homepage = "https://github.com/ralphbean/ansi2html";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Convert text with ANSI color codes to HTML";
+    mainProgram = "ansi2html";
+    homepage = "https://github.com/ralphbean/ansi2html";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

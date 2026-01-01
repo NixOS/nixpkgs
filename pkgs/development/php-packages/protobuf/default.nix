@@ -12,10 +12,18 @@ buildPecl {
 
   buildInputs = [ pcre2 ];
 
+<<<<<<< HEAD
   meta = {
     description = "Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data";
     license = lib.licenses.bsd3;
     homepage = "https://developers.google.com/protocol-buffers/";
     teams = [ lib.teams.php ];
+=======
+  meta = with lib; {
+    description = "Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data";
+    license = licenses.bsd3;
+    homepage = "https://developers.google.com/protocol-buffers/";
+    teams = [ teams.php ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

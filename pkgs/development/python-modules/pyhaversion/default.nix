@@ -52,11 +52,20 @@ buildPythonPackage rec {
     "test_etag"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to the newest version number of Home Assistant";
     homepage = "https://github.com/ludeeus/pyhaversion";
     changelog = "https://github.com/ludeeus/pyhaversion/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ makefu ];
+=======
+  meta = with lib; {
+    description = "Python module to the newest version number of Home Assistant";
+    homepage = "https://github.com/ludeeus/pyhaversion";
+    changelog = "https://github.com/ludeeus/pyhaversion/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

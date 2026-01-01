@@ -82,12 +82,21 @@ stdenv.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Backup tool for btrfs subvolumes";
     homepage = "https://digint.ch/btrbk";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ asymmetric ];
+=======
+  meta = with lib; {
+    description = "Backup tool for btrfs subvolumes";
+    homepage = "https://digint.ch/btrbk";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ asymmetric ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "btrbk";
   };
 }

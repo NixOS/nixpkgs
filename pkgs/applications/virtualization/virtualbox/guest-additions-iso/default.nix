@@ -14,6 +14,10 @@ fetchurl {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2;
     maintainers = [
+<<<<<<< HEAD
+=======
+      lib.maintainers.sander
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lib.maintainers.friedrichaltheide
     ];
     platforms = [

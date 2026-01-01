@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath runtimeDeps} --suffix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Install nixos everywhere via ssh";
     homepage = "https://github.com/nix-community/nixos-anywhere";
@@ -60,6 +61,19 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.lassulus
       lib.maintainers.phaer
       lib.maintainers.Enzime
+=======
+  meta = with lib; {
+    description = "Install nixos everywhere via ssh";
+    homepage = "https://github.com/nix-community/nixos-anywhere";
+    mainProgram = "nixos-anywhere";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [
+      maintainers.mic92
+      maintainers.lassulus
+      maintainers.phaer
+      maintainers.Enzime
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 })

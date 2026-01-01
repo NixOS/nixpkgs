@@ -27,12 +27,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Attach KISS TNC devices as network interfaces";
     homepage = "https://github.com/markqvist/tncattach";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarcasticadmin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Attach KISS TNC devices as network interfaces";
+    homepage = "https://github.com/markqvist/tncattach";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sarcasticadmin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tncattach";
   };
 }

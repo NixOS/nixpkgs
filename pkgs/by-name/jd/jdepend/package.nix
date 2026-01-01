@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/clarkware/jdepend/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Traverses Java class file directories and generates design quality metrics for each Java package";
@@ -55,5 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/clarkware/jdepend/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    description = "Traverses Java class file directories and generates design quality metrics for each Java package";
+    homepage = "http://www.clarkware.com/software/JDepend.html";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

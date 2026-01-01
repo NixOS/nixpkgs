@@ -3,8 +3,11 @@
   stdenv,
   nodejs,
   pnpm_8,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   npmHooks,
 }:
@@ -19,14 +22,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VZRHpy0OTmoQyOEa0vIJl/VkV52r0HEtTzY1fjr6yQ0=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm_8.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
+<<<<<<< HEAD
     pnpm = pnpm_8;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 2;
     hash = "sha256-wQ9dcqY7BVXc7wpsHlYNpc7utL1+MkdTCu77Wh8+QWc=";
   };
@@ -35,8 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_8
+=======
+    pnpm_8.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildPhase = ''

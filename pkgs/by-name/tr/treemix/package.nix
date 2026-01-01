@@ -22,11 +22,20 @@ stdenv.mkDerivation rec {
     boost
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Inference of patterns of population splitting and mixing from genome-wide allele frequency data";
     homepage = "https://bitbucket.org/nygcresearch/treemix/wiki/Home";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Inference of patterns of population splitting and mixing from genome-wide allele frequency data";
+    homepage = "https://bitbucket.org/nygcresearch/treemix/wiki/Home";
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

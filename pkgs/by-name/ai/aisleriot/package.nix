@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/aisleriot";
     description = "Collection of patience games written in guile scheme";
@@ -66,5 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/aisleriot";
+    description = "Collection of patience games written in guile scheme";
+    mainProgram = "sol";
+    teams = [ teams.gnome ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

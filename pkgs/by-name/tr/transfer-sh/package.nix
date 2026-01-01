@@ -26,13 +26,22 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Easy and fast file sharing and pastebin server with access from the command-line";
     homepage = "https://github.com/dutchcoders/transfer.sh";
     changelog = "https://github.com/dutchcoders/transfer.sh/releases";
     mainProgram = "transfer.sh";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ocfox
       pinpox
     ];

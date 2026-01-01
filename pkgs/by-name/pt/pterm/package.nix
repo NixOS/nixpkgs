@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal emulator for the Cyber1 mainframe-based CYBIS system";
     homepage = "https://www.cyber1.org/";
@@ -48,6 +49,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sarcasticadmin ];
     mainProgram = "pterm";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Terminal emulator for the Cyber1 mainframe-based CYBIS system";
+    homepage = "https://www.cyber1.org/";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ sarcasticadmin ];
+    mainProgram = "pterm";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

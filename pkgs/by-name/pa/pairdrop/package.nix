@@ -43,7 +43,11 @@ buildNpmPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Local file sharing in your browser";
     mainProgram = "pairdrop";
     longDescription = ''
@@ -51,8 +55,13 @@ buildNpmPackage rec {
       Send images, documents or text via peer to peer connection to devices in the same local network/Wi-Fi or to paired devices.
     '';
     homepage = "https://github.com/schlagmichdoch/PairDrop";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       diogotcorreia
       dit7ya
     ];

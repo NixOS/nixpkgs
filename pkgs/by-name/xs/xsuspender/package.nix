@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ procps ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Auto-suspend inactive X11 applications";
     mainProgram = "xsuspender";
@@ -54,5 +55,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Auto-suspend inactive X11 applications";
+    mainProgram = "xsuspender";
+    homepage = "https://kernc.github.io/xsuspender/";
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ offline ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.splint.org/";
     description = "Annotation-assisted lightweight static analyzer for C";
     mainProgram = "splint";
@@ -33,7 +37,12 @@ stdenv.mkDerivation rec {
       checking than can be done by any standard lint.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

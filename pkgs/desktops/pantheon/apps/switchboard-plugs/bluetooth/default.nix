@@ -52,12 +52,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Switchboard Bluetooth Plug";
     homepage = "https://github.com/elementary/settings-bluetooth";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Switchboard Bluetooth Plug";
+    homepage = "https://github.com/elementary/settings-bluetooth";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

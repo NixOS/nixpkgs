@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       libaosd is an advanced on screen display library.
 
@@ -49,8 +53,14 @@ stdenv.mkDerivation rec {
     '';
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/atheme-legacy/libaosd";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ unode ];
     platforms = with lib.platforms; unix;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ unode ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

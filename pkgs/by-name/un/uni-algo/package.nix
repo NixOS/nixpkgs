@@ -18,11 +18,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unicode Algorithms Implementation for C/C++";
     homepage = "https://github.com/uni-algo/uni-algo";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ typedrat ];
+=======
+  meta = with lib; {
+    description = "Unicode Algorithms Implementation for C/C++";
+    homepage = "https://github.com/uni-algo/uni-algo";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ typedrat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

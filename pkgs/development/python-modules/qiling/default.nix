@@ -50,11 +50,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qiling" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Qiling Advanced Binary Emulation Framework";
     homepage = "https://qiling.io/";
     changelog = "https://github.com/qilingframework/qiling/releases/tag/${version}";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Qiling Advanced Binary Emulation Framework";
+    homepage = "https://qiling.io/";
+    changelog = "https://github.com/qilingframework/qiling/releases/tag/${version}";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = true;
     maintainers = [ ];
   };

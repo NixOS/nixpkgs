@@ -39,7 +39,11 @@ buildGoModule rec {
     patchShebangs $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/ethersphere/bee";
     description = "Ethereum Swarm Bee";
     longDescription = ''
@@ -51,7 +55,11 @@ buildGoModule rec {
 
       Bee is a Swarm node implementation, written in Go.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [ bsd3 ];
+=======
+    license = with licenses; [ bsd3 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

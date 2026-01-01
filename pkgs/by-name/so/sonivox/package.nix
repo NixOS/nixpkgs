@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pedrolcl/sonivox";
     description = "MIDI synthesizer library";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pedrolcl/sonivox";
+    description = "MIDI synthesizer library";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -47,12 +47,21 @@ rustPlatform.buildRustPackage rec {
     libresolv
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal user interface for GnuPG";
     homepage = "https://github.com/orhun/gpg-tui";
     changelog = "https://github.com/orhun/gpg-tui/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Terminal user interface for GnuPG";
+    homepage = "https://github.com/orhun/gpg-tui";
+    changelog = "https://github.com/orhun/gpg-tui/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dotlambda
       matthiasbeyer
     ];

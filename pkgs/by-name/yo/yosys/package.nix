@@ -76,7 +76,10 @@ let
           --set NIX_YOSYS_PLUGIN_DIRS $out/share/yosys/plugins \
           ${module_flags}
       '';
+<<<<<<< HEAD
       meta.mainProgram = "yosys";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     });
 
   allPlugins = {
@@ -197,7 +200,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/YosysHQ/yosys/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     mainProgram = "yosys";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [
       shell
       thoughtpolice

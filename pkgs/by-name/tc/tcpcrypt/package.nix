@@ -43,11 +43,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://tcpcrypt.org/";
     description = "Fast TCP encryption";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    homepage = "http://tcpcrypt.org/";
+    description = "Fast TCP encryption";
+    platforms = platforms.all;
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

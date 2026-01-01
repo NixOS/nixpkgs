@@ -24,11 +24,20 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-tls" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Free, secure, production-quality and standard-conformant FTP server";
     homepage = "https://www.pureftpd.org";
     license = lib.licenses.isc; # with some parts covered by BSD3(?)
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Free, secure, production-quality and standard-conformant FTP server";
+    homepage = "https://www.pureftpd.org";
+    license = licenses.isc; # with some parts covered by BSD3(?)
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

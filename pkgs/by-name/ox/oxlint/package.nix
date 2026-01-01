@@ -35,6 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -44,7 +48,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/oxc-project/oxc";
     changelog = "https://github.com/oxc-project/oxc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ iamanaws ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "oxlint";
   };
 })

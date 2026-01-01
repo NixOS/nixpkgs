@@ -5,6 +5,10 @@
   fetchFromGitHub,
   fetchpatch,
   makeWrapper,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   coreutils,
   dmidecode,
   findutils,
@@ -42,7 +46,11 @@ perlPackages.buildPerlPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ makeWrapper ];
+=======
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs =
     with perlPackages;
@@ -93,7 +101,14 @@ perlPackages.buildPerlPackage rec {
         util-linux # last, lsblk, mount
       ];
     in
+<<<<<<< HEAD
     ''
+=======
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      shortenPerlShebang $out/bin/ocsinventory-agent
+    ''
+    + ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       wrapProgram $out/bin/ocsinventory-agent --prefix PATH : ${lib.makeBinPath runtimeDependencies}
     '';
 

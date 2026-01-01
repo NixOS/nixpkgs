@@ -56,6 +56,7 @@ stdenv.mkDerivation {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generic drawing program tailored to circuit diagrams";
     mainProgram = "xcircuit";
@@ -63,6 +64,15 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Generic drawing program tailored to circuit diagrams";
+    mainProgram = "xcircuit";
+    homepage = "http://opencircuitdesign.com/xcircuit";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       john-shaffer
       spacefrogg
       thoughtpolice

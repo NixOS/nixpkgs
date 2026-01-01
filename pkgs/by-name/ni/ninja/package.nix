@@ -21,7 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
   version =
     {
       "1.11" = "1.11.1";
+<<<<<<< HEAD
       latest = "1.13.2";
+=======
+      latest = "1.13.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     .${ninjaRelease};
 
@@ -33,7 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
       {
         # TODO: Remove Ninja 1.11 as soon as possible.
         "1.11" = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
+<<<<<<< HEAD
         latest = "sha256-D9HsIjv8EJ1qAdXFAKy260K77cCvopgQ2Fx6uXpt6VI=";
+=======
+        latest = "sha256-GhAF5wUT19E02ZekW+ywsCMVGYrt56hES+MHCH4lNG4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
       .${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
   };
@@ -129,6 +137,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       thoughtpolice
       bjornfor
+<<<<<<< HEAD
+=======
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 })

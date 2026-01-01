@@ -22,10 +22,17 @@
   wirelesstools,
   hicolor-icon-theme,
   wrapGAppsHook3,
+<<<<<<< HEAD
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+  mateUpdateScript,
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "mate-applets";
   version = "1.28.1";
   outputs = [
@@ -34,7 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-applets-${finalAttrs.version}.tar.xz";
+=======
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "pZZxQVJ9xbFy0yKmADwjruwlMWD2ULs2QwoG3a76fi4=";
   };
 
@@ -72,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/mate-applets";
     odd-unstable = true;
@@ -90,3 +102,19 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "Applets for use with the MATE panel";
+    mainProgram = "mate-cpufreq-selector";
+    homepage = "https://mate-desktop.org";
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
+    platforms = platforms.linux;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -87,7 +87,10 @@ in
       contents."/etc/unl0kr.conf".source = settingsFormat.generate "unl0kr.conf" cfg.settings;
       storePaths = with pkgs; [
         libinput
+<<<<<<< HEAD
         libinput.out
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         xkeyboard_config
         (lib.getExe' cfg.package "unl0kr")
         "${cfg.package}/libexec/unl0kr-agent"

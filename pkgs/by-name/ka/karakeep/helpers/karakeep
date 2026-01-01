@@ -1,3 +1,9 @@
 #!/usr/bin/env bash
 set -eu -o pipefail
+<<<<<<< HEAD
 exec @NODEJS@/bin/node "@KARAKEEP_LIB_PATH@"/apps/cli/dist/index.mjs "$@"
+=======
+KARAKEEP_LIB_PATH=
+NODEJS=
+exec "$NODEJS/bin/node" "$KARAKEEP_LIB_PATH/apps/cli/dist/index.mjs" "$@"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

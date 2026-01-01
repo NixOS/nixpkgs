@@ -19,9 +19,16 @@ buildPythonPackage rec {
   # circular dependencies for tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Backport of linecache to older supported Pythons";
     homepage = "https://github.com/testing-cabal/linecache2";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    description = "Backport of linecache to older supported Pythons";
+    homepage = "https://github.com/testing-cabal/linecache2";
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

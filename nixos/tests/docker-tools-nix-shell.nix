@@ -17,7 +17,11 @@ in
       { ... }:
       {
         virtualisation = {
+<<<<<<< HEAD
           diskSize = 8000;
+=======
+          diskSize = 4000;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           docker.enable = true;
         };
       };

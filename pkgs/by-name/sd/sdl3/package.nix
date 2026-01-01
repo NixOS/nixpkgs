@@ -61,7 +61,11 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
+<<<<<<< HEAD
   version = "3.2.28";
+=======
+  version = "3.2.26";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "lib"
@@ -74,14 +78,28 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-nfnvzog1bON2IaBOeWociV82lmRY+qXgdeXBe6GYlww=";
+=======
+    hash = "sha256-edcub/zeho4mB3tItp+PSD5l+H6jUPm3seiBP6ppT0k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch =
     # Tests timeout on Darwin
+<<<<<<< HEAD
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
+=======
+    # `testtray` loads assets from a relative path, which we are patching to be absolute
+    lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+      substituteInPlace test/CMakeLists.txt \
+        --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
+
+      substituteInPlace test/testtray.c \
+        --replace-warn '../test/' '${placeholder "installedTests"}/share/assets/'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/video/wayland/SDL_waylandmessagebox.c \
@@ -167,9 +185,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_TESTS" true)
     (lib.cmakeBool "SDL_INSTALL_TESTS" true)
     (lib.cmakeBool "SDL_DEPS_SHARED" false)
+<<<<<<< HEAD
 
     # Only ppc64le baseline guarantees AltiVec
     (lib.cmakeBool "SDL_ALTIVEC" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++
     lib.optionals

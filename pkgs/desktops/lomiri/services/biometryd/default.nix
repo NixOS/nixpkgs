@@ -25,13 +25,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biometryd";
+<<<<<<< HEAD
   version = "0.3.3";
+=======
+  version = "0.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/biometryd";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-MIyWGd4No4Qj8oEH1FQYCE4rQhyetwiAf1y6em4zk2A=";
+=======
+    hash = "sha256-OTK+JAm8MnlQGZwcKJPh+N1OfUOko24G+IU9GUBjOjI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [

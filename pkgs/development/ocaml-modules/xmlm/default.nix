@@ -32,11 +32,19 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
+<<<<<<< HEAD
   meta = {
     description = "OCaml streaming codec to decode and encode the XML data format";
     homepage = webpage;
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "OCaml streaming codec to decode and encode the XML data format";
+    homepage = webpage;
+    license = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xmltrip";
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.05";

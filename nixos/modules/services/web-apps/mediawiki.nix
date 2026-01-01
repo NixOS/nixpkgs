@@ -40,10 +40,15 @@ let
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";
 
+<<<<<<< HEAD
   toolsPath = pkgs.symlinkJoin {
     name = "mediawiki-path";
     paths = cfg.path;
   };
+=======
+  # https://www.mediawiki.org/wiki/Compatibility
+  php = pkgs.php82;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
@@ -54,10 +59,13 @@ let
       mkdir -p $out
       cp -r * $out/
 
+<<<<<<< HEAD
       substituteInPlace $out/share/mediawiki/includes/config-schema.php \
         --replace-fail "/usr/bin/" "${toolsPath}/bin/" \
         --replace-fail "\$path/" "${toolsPath}/bin/"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # try removing directories before symlinking to allow overwriting any builtin extension or skin
       ${concatStringsSep "\n" (
         mapAttrsToList (k: v: ''
@@ -85,11 +93,19 @@ let
       }
       ''
         mkdir -p $out/bin
+<<<<<<< HEAD
         makeWrapper ${cfg.phpPackage}/bin/php $out/bin/mediawiki-maintenance \
           --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
           --add-flags ${pkg}/share/mediawiki/maintenance/run.php
 
         for i in changePassword createAndPromote deleteUserEmail renameUser resetUserEmail userOptions edit nukePage update importDump run; do
+=======
+        makeWrapper ${php}/bin/php $out/bin/mediawiki-maintenance \
+          --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
+          --add-flags ${pkg}/share/mediawiki/maintenance/run.php
+
+        for i in changePassword createAndPromote deleteUserEmail resetUserEmail userOptions edit nukePage update importDump run; do
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           script="$out/bin/mediawiki-$i"
         cat <<'EOF' >"$script"
         #!${pkgs.runtimeShell}
@@ -121,7 +137,11 @@ let
   mediawikiConfig = pkgs.writeTextFile {
     name = "LocalSettings.php";
     checkPhase = ''
+<<<<<<< HEAD
       ${cfg.phpPackage}/bin/php --syntax-check "$target"
+=======
+      ${php}/bin/php --syntax-check "$target"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '';
     text = ''
       <?php
@@ -196,6 +216,10 @@ let
         ''}
 
         $wgUseImageMagick = true;
+<<<<<<< HEAD
+=======
+        $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         # InstantCommons allows wiki to use images from https://commons.wikimedia.org
         $wgUseInstantCommons = false;
@@ -231,6 +255,13 @@ let
         $wgRightsText = "";
         $wgRightsIcon = "";
 
+<<<<<<< HEAD
+=======
+        # Path to the GNU diff3 utility. Used for conflict resolution.
+        $wgDiff = "${pkgs.diffutils}/bin/diff";
+        $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         # Enabled skins.
         ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
 
@@ -248,6 +279,10 @@ let
   withTrailingSlash = str: if lib.hasSuffix "/" str then str else "${str}/";
 in
 {
+<<<<<<< HEAD
+=======
+  # interface
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   options = {
     services.mediawiki = {
 
@@ -255,11 +290,14 @@ in
 
       package = mkPackageOption pkgs "mediawiki" { };
 
+<<<<<<< HEAD
       # https://www.mediawiki.org/wiki/Compatibility#PHP
       phpPackage = mkPackageOption pkgs "php" {
         default = "php83";
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       finalPackage = mkOption {
         type = types.package;
         readOnly = true;
@@ -342,6 +380,7 @@ in
         description = "Contact address for password reset.";
       };
 
+<<<<<<< HEAD
       path = mkOption {
         type = types.listOf types.package;
         defaultText = lib.literalExpression "with pkgs; [ diffutils imagemagick ]";
@@ -349,6 +388,8 @@ in
         description = "Extra packages to add to the PATH of phpfpm-pool.";
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       skins = mkOption {
         default = { };
         type = types.attrsOf types.path;
@@ -466,7 +507,11 @@ in
           defaultText = literalExpression "true";
           description = ''
             Create the database and database user locally.
+<<<<<<< HEAD
             This currently only applies if database type "mysql" or "postgres" is selected.
+=======
+            This currently only applies if database type "mysql" is selected.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           '';
         };
       };
@@ -542,6 +587,10 @@ in
     )
   ];
 
+<<<<<<< HEAD
+=======
+  # implementation
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   config = mkIf cfg.enable {
 
     assertions = [
@@ -565,6 +614,7 @@ in
       }
     ];
 
+<<<<<<< HEAD
     services.mediawiki = {
       path = with pkgs; [
         diffutils
@@ -575,6 +625,12 @@ in
         Timeless = "${cfg.package}/share/mediawiki/skins/Timeless";
         Vector = "${cfg.package}/share/mediawiki/skins/Vector";
       };
+=======
+    services.mediawiki.skins = {
+      MonoBook = "${cfg.package}/share/mediawiki/skins/MonoBook";
+      Timeless = "${cfg.package}/share/mediawiki/skins/Timeless";
+      Vector = "${cfg.package}/share/mediawiki/skins/Vector";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     services.mysql = mkIf (cfg.database.type == "mysql" && cfg.database.createLocally) {
@@ -605,7 +661,11 @@ in
     services.phpfpm.pools.mediawiki = {
       inherit user group;
       phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
+<<<<<<< HEAD
       phpPackage = cfg.phpPackage;
+=======
+      phpPackage = php;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       settings =
         (
           if (cfg.webserver == "apache") then
@@ -729,8 +789,13 @@ in
         fi
 
         echo "exit( \$this->getPrimaryDB()->tableExists( 'user' ) ? 1 : 0 );" | \
+<<<<<<< HEAD
         ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
         ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+=======
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/run.php eval --conf ${mediawikiConfig} && \
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \
@@ -752,7 +817,11 @@ in
           ${lib.escapeShellArg cfg.name} \
           admin
 
+<<<<<<< HEAD
         ${cfg.phpPackage}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
+=======
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick --skip-external-dependencies
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       '';
 
       serviceConfig = {

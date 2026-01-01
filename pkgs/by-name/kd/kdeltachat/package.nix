@@ -68,6 +68,7 @@ stdenv.mkDerivation {
     qtmultimedia
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Delta Chat client using Kirigami framework";
     mainProgram = "kdeltachat";
@@ -75,5 +76,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Delta Chat client using Kirigami framework";
+    mainProgram = "kdeltachat";
+    homepage = "https://git.sr.ht/~link2xt/kdeltachat";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

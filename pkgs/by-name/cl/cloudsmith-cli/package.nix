@@ -6,14 +6,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cloudsmith-cli";
+<<<<<<< HEAD
   version = "1.8.7";
+=======
+  version = "1.8.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloudsmith-io";
     repo = "cloudsmith-cli";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-xUaa1B6f6W0Q/9q8sztFoCxEaxqXajImROC1sJb0Zdk=";
+=======
+    hash = "sha256-PYqOj6nHjJrG7Ndc5vm//E8mjk4xZFVQopFqiWtH5ZQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -60,10 +68,13 @@ python3Packages.buildPythonApplication rec {
     cd "$out"
   '';
 
+<<<<<<< HEAD
   disabledTests = [
     "TestMainCommand"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "https://help.cloudsmith.io/docs/cli/";
     description = "Cloudsmith Command Line Interface";

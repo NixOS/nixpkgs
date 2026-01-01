@@ -62,16 +62,28 @@ stdenv.mkDerivation rec {
   # https://github.com/Mbed-TLS/mbedtls/issues/4980
   enableParallelChecking = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.trustedfirmware.org/projects/mbed-tls/";
     changelog = "https://github.com/Mbed-TLS/mbedtls/blob/${pname}-${version}/ChangeLog";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
     license = [
+<<<<<<< HEAD
       lib.licenses.asl20 # or
       lib.licenses.gpl2Plus
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ raphaelr ];
+=======
+      licenses.asl20 # or
+      licenses.gpl2Plus
+    ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ raphaelr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     knownVulnerabilities = lib.optionals (lib.versionOlder version "3.0") [
       "Mbed TLS 2 is not maintained anymore. Please migrate to newer versions"
     ];

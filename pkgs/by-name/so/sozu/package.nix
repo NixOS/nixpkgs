@@ -41,6 +41,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sozu-proxy/sozu/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gaelreyrol
     ];
     mainProgram = "sozu";

@@ -57,16 +57,29 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple integrated development environment for Java";
     homepage = "https://www.greenfoot.org/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Simple integrated development environment for Java";
+    homepage = "https://www.greenfoot.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       classpathException20
     ];
     mainProgram = "greenfoot";
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.chvp ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = [ maintainers.chvp ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

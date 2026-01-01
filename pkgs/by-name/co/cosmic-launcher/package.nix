@@ -11,17 +11,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-launcher";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "1.0.0-beta.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-launcher";
     tag = "epoch-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-BEBlBUWp7r95ErC7+aeSfxyexM8oocZHN2V+ZkPNqBo=";
   };
 
   cargoHash = "sha256-bmQ8Ni0sR9gfttsEhh9LNbWmTdOkW/JSMEzOf+kvN98=";
+=======
+    hash = "sha256-lVNvmpiShkdT+VZMxV1bvYyC17edaepwlkmOvNMng8k=";
+  };
+
+  cargoHash = "sha256-pHW7kBbEQ8P9Ugkgzn1olSlMCeetuNQ2jMJyEteoeIo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     just
@@ -51,9 +62,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+<<<<<<< HEAD
 
     updateScript = nix-update-script {
       extraArgs = [
+=======
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "--version-regex"
         "epoch-(.*)"
       ];

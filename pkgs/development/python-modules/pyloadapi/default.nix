@@ -49,11 +49,20 @@ buildPythonPackage rec {
     "tests/test_cli.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple wrapper for pyLoad's API";
     homepage = "https://github.com/tr4nt0r/pyloadapi";
     changelog = "https://github.com/tr4nt0r/pyloadapi/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Simple wrapper for pyLoad's API";
+    homepage = "https://github.com/tr4nt0r/pyloadapi";
+    changelog = "https://github.com/tr4nt0r/pyloadapi/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

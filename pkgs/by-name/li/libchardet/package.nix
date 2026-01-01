@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Mozilla's Universal Charset Detector C/C++ API";
     mainProgram = "chardet-config";
@@ -31,5 +32,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl11;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Mozilla's Universal Charset Detector C/C++ API";
+    mainProgram = "chardet-config";
+    homepage = "ftp://ftp.oops.org/pub/oops/libchardet/index.html";
+    license = licenses.mpl11;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

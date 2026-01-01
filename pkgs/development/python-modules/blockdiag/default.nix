@@ -80,6 +80,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blockdiag" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
@@ -88,5 +89,15 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "blockdiag";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
+    homepage = "http://blockdiag.com/";
+    changelog = "https://github.com/blockdiag/blockdiag/blob/${version}/CHANGES.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "blockdiag";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

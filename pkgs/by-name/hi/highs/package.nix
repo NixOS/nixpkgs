@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ERGO-Code/HiGHS";
     description = "Linear optimization software";
@@ -41,6 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     mainProgram = "highs";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ERGO-Code/HiGHS";
+    description = "Linear optimization software";
+    license = licenses.mit;
+    platforms = platforms.all;
+    mainProgram = "highs";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       galabovaa
       silky
     ];

@@ -40,10 +40,17 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to run a PostreSQL query and output the result as CSV";
     homepage = "https://github.com/fphilipe/psql2csv";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tool to run a PostreSQL query and output the result as CSV";
+    homepage = "https://github.com/fphilipe/psql2csv";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     inherit (postgresql.meta) platforms;
     mainProgram = "psql2csv";

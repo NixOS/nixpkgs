@@ -16,17 +16,28 @@
   nodejs,
   pkg-config,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   glib,
   kdePackages,
   libayatana-appindicator,
   libsForQt5,
+<<<<<<< HEAD
   libsoup_3,
   openssl,
   webkitgtk_4_1,
 }:
+=======
+  libsoup,
+  openssl,
+  webkitgtk_4_1,
+}:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 rustPlatform.buildRustPackage {
   inherit version src meta;
   pname = "${pname}-unwrapped";
@@ -36,6 +47,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = vendor-hash;
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit
       pname
@@ -43,6 +55,10 @@ rustPlatform.buildRustPackage {
       src
       ;
     pnpm = pnpm_9;
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = pnpm-hash;
   };
@@ -100,13 +116,21 @@ rustPlatform.buildRustPackage {
     moreutils
     nodejs
     pkg-config
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
     libayatana-appindicator
+<<<<<<< HEAD
     libsoup_3
+=======
+    libsoup
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     openssl
     webkitgtk_4_1
   ];

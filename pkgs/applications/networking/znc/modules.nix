@@ -95,6 +95,10 @@ in
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+        hrdinka
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         szlend
         cybershadow
       ];
@@ -197,6 +201,10 @@ in
       description = "Advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
       license = lib.licenses.asl20;
+<<<<<<< HEAD
+=======
+      maintainers = with lib.maintainers; [ hrdinka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

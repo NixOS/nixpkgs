@@ -40,13 +40,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
+<<<<<<< HEAD
   version = "26.2.0-57363";
+=======
+  version = "26.1.2-57293";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
+<<<<<<< HEAD
     hash = "sha256-vxSLyqpKaf8azw0RvKMBHNa2x50HM6wwt+iH9rMyZQE=";
+=======
+    hash = "sha256-0sL6uKYw/D7gYYZyAWkxcP/KbJ1rBnlXIKYDu6MlTLQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   hardeningDisable = [
@@ -159,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
@@ -168,5 +177,16 @@ stdenv.mkDerivation (finalAttrs: {
       codgician
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Parallels Tools for Linux guests";
+    homepage = "https://parallels.com";
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      wegank
+      codgician
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

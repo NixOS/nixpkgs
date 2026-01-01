@@ -34,12 +34,21 @@ toPythonModule (
 
     cmakeFlags = [ "-DPYTHON_EXECUTABLE=${lib.getExe python.pythonOnBuildForHost}" ];
 
+<<<<<<< HEAD
     meta = {
       description = "Kinematics and Dynamics Library (Python bindings)";
       homepage = "https://www.orocos.org/kdl.html";
       license = lib.licenses.lgpl21Only;
       maintainers = with lib.maintainers; [ lopsided98 ];
       platforms = lib.platforms.all;
+=======
+    meta = with lib; {
+      description = "Kinematics and Dynamics Library (Python bindings)";
+      homepage = "https://www.orocos.org/kdl.html";
+      license = licenses.lgpl21Only;
+      maintainers = with maintainers; [ lopsided98 ];
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
 )

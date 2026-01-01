@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ gtest ];
   enableParallelChecking = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Fork of the popular zip manipulation library found in the zlib distribution";
     homepage = "https://github.com/zlib-ng/minizip-ng";
@@ -73,5 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
       ris
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Fork of the popular zip manipulation library found in the zlib distribution";
+    homepage = "https://github.com/zlib-ng/minizip-ng";
+    license = licenses.zlib;
+    maintainers = with maintainers; [
+      ris
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

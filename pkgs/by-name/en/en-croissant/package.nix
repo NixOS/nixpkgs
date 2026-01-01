@@ -5,8 +5,11 @@
   fetchFromGitHub,
 
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   cargo-tauri_1,
   pkg-config,
@@ -18,6 +21,10 @@
   # webkitgtk_4_0,
   gst_all_1,
 }:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 rustPlatform.buildRustPackage rec {
   pname = "en-croissant";
   version = "0.11.1";
@@ -29,6 +36,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-EiGML3oFCJR4TZkd+FekUrJwCYe/nGdWD9mAtKKtITQ=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit
       pname
@@ -36,6 +44,10 @@ rustPlatform.buildRustPackage rec {
       src
       ;
     pnpm = pnpm_9;
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-hvWXSegUWJvwCU5NLb2vqnl+FIWpCLxw96s9NUIgJTI=";
   };
@@ -47,8 +59,12 @@ rustPlatform.buildRustPackage rec {
   buildAndTestSubdir = cargoRoot;
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
     cargo-tauri_1.hook
     pkg-config

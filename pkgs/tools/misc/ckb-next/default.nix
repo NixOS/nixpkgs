@@ -72,11 +72,19 @@ stdenv.mkDerivation rec {
       --replace-fail "/usr/bin/env sed" "${lib.getExe gnused}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Driver and configuration tool for Corsair keyboards and mice";
     homepage = "https://github.com/ckb-next/ckb-next";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Driver and configuration tool for Corsair keyboards and mice";
+    homepage = "https://github.com/ckb-next/ckb-next";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ckb-next";
     maintainers = [ ];
   };

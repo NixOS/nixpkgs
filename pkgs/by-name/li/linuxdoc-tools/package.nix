@@ -76,7 +76,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withLatex [ texliveMedium ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Toolset for processing LinuxDoc DTD SGML files";
     longDescription = ''
       A collection of text formatters which understands a LinuxDoc DTD SGML
@@ -87,12 +91,21 @@ stdenv.mkDerivation rec {
       documents written in LinuxDoc DTD sgml source.
     '';
     homepage = "https://gitlab.com/agmartin/linuxdoc-tools";
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Plus
       mit
       sgmlug
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ p-h ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ p-h ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,6 +31,7 @@ stdenv.mkDerivation {
 
   passthru.driverPath = "/lib/libfprint-2/tod-1";
 
+<<<<<<< HEAD
   meta = {
     description = "Goodix driver module for libfprint-2-tod Touch OEM Driver";
     homepage = "https://git.launchpad.net/~oem-solutions-engineers/libfprint-2-tod1-goodix/+git/libfprint-2-tod1-goodix/";
@@ -38,5 +39,14 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ grahamc ];
+=======
+  meta = with lib; {
+    description = "Goodix driver module for libfprint-2-tod Touch OEM Driver";
+    homepage = "https://git.launchpad.net/~oem-solutions-engineers/libfprint-2-tod1-goodix/+git/libfprint-2-tod1-goodix/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ grahamc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

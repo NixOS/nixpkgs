@@ -31,10 +31,18 @@ buildPythonPackage rec {
   enabledTestPaths = [ "i18n/tests/run_tests.py" ];
   pythonImportsCheck = [ "i18n" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easy to use i18n library";
     homepage = "https://github.com/danhper/python-i18n";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ emilytrau ];
+=======
+  meta = with lib; {
+    description = "Easy to use i18n library";
+    homepage = "https://github.com/danhper/python-i18n";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

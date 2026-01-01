@@ -32,10 +32,17 @@ buildPythonPackage rec {
     "test_train_labels_has_right_size"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python utilities to download and parse the MNIST dataset";
     homepage = "https://github.com/datapythonista/mnist";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python utilities to download and parse the MNIST dataset";
+    homepage = "https://github.com/datapythonista/mnist";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

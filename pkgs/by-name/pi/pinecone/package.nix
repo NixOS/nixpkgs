@@ -17,11 +17,19 @@ buildGo124Module {
 
   vendorHash = "sha256-+P10K7G0UwkbCGEi6sYTQSqO7LzIf/xmaHIr7v110Ao=";
 
+<<<<<<< HEAD
   meta = {
     description = "Peer-to-peer overlay routing for the Matrix ecosystem";
     homepage = "https://matrix-org.github.io/pinecone/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ networkexception ];
+=======
+  meta = with lib; {
+    description = "Peer-to-peer overlay routing for the Matrix ecosystem";
+    homepage = "https://matrix-org.github.io/pinecone/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ networkexception ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pinecone";
   };
 }

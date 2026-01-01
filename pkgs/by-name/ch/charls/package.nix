@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
   # but the recommended `charlstest -unittest` fails with an inscrutable C++ IO error
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/team-charls/charls";
     description = "JPEG-LS library implementation in C++";
     maintainers = with lib.maintainers; [ bcdarwin ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/team-charls/charls";
+    description = "JPEG-LS library implementation in C++";
+    maintainers = with maintainers; [ bcdarwin ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

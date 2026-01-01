@@ -38,15 +38,25 @@ buildGoModule rec {
       --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh --skip-update-check)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Box blurb edited from the AUR package circleci-cli
     description = ''
       Command to enable you to reproduce the CircleCI environment locally and
       run jobs as if they were running on the hosted CirleCI application.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ synthetica ];
     mainProgram = "circleci";
     license = lib.licenses.mit;
+=======
+    maintainers = with maintainers; [ synthetica ];
+    mainProgram = "circleci";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://circleci.com/";
   };
 }

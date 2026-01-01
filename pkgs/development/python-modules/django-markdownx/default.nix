@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markdownx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Comprehensive Markdown plugin built for Django";
     homepage = "https://github.com/neutronX/django-markdownx/";
     changelog = "https://github.com/neutronX/django-markdownx/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ derdennisop ];
+=======
+  meta = with lib; {
+    description = "Comprehensive Markdown plugin built for Django";
+    homepage = "https://github.com/neutronX/django-markdownx/";
+    changelog = "https://github.com/neutronX/django-markdownx/releases/tag/${src.tag}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ derdennisop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

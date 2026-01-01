@@ -45,11 +45,19 @@ stdenv.mkDerivation rec {
   # tests fail on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "GNU Guile library providing bindings to lzlib";
     homepage = "https://notabug.org/guile-lzlib/guile-lzlib";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "GNU Guile library providing bindings to lzlib";
+    homepage = "https://notabug.org/guile-lzlib/guile-lzlib";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ foo-dogsquared ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 }

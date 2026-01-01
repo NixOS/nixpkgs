@@ -85,11 +85,20 @@ stdenv.mkDerivation rec {
     install --mode=444 -D 'client/scripts/boinc-client.service' "$out/etc/systemd/system/boinc.service"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Free software for distributed and grid computing";
     homepage = "https://boinc.berkeley.edu/";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    description = "Free software for distributed and grid computing";
+    homepage = "https://boinc.berkeley.edu/";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

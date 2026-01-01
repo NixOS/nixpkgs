@@ -82,10 +82,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "amqtt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python MQTT client and broker implementation";
     homepage = "https://amqtt.readthedocs.io/";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python MQTT client and broker implementation";
+    homepage = "https://amqtt.readthedocs.io/";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

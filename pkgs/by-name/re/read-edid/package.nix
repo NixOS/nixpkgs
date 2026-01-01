@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCLASSICBUILD=${if stdenv.hostPlatform.isx86 then "ON" else "OFF"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for reading and parsing EDID data from monitors";
     homepage = "http://www.polypux.org/projects/read-edid/";
     license = lib.licenses.bsd2; # Quoted: "This is an unofficial license. Let's call it BSD-like."
     maintainers = [ lib.maintainers.dezgeg ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool for reading and parsing EDID data from monitors";
+    homepage = "http://www.polypux.org/projects/read-edid/";
+    license = licenses.bsd2; # Quoted: "This is an unofficial license. Let's call it BSD-like."
+    maintainers = [ maintainers.dezgeg ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,14 +39,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notebook_shim" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Switch frontends to Jupyter Server";
     longDescription = ''
       This project provides a way for JupyterLab and other frontends to switch
       to Jupyter Server for their Python Web application backend.
     '';
     homepage = "https://github.com/jupyter/notebook_shim";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

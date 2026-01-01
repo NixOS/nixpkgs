@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "luftdaten" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for interacting with luftdaten.info";
     homepage = "https://github.com/home-assistant-ecosystem/python-luftdaten";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python API for interacting with luftdaten.info";
+    homepage = "https://github.com/home-assistant-ecosystem/python-luftdaten";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dotlambda
       fab
     ];

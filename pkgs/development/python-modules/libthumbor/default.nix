@@ -31,10 +31,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libthumbor" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python extension to thumbor";
     homepage = "https://github.com/heynemann/libthumbor";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python extension to thumbor";
+    homepage = "https://github.com/heynemann/libthumbor";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

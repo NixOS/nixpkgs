@@ -6,7 +6,10 @@
   pkg-config,
   autoreconfHook,
   autoconf-archive,
+<<<<<<< HEAD
   gettext,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ncurses,
   db,
   popt,
@@ -80,7 +83,10 @@ stdenv.mkDerivation {
     })
 
     ./use-ax-check-compile-flag.patch
+<<<<<<< HEAD
     ./fix_gettext_0_25.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optional pulseSupport ./pulseaudio.patch;
 
@@ -92,7 +98,10 @@ stdenv.mkDerivation {
     pkg-config
     autoreconfHook
     autoconf-archive
+<<<<<<< HEAD
     gettext
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -155,6 +164,7 @@ stdenv.mkDerivation {
     "--without-rcc"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal audio player designed to be powerful and easy to use";
     homepage = "http://moc.daper.net/";
@@ -164,6 +174,18 @@ stdenv.mkDerivation {
       pSub
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Terminal audio player designed to be powerful and easy to use";
+    homepage = "http://moc.daper.net/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      aethelz
+      pSub
+      jagajaga
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mocp";
   };
 }

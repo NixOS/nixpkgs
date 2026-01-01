@@ -1,5 +1,6 @@
 {
   lib,
+<<<<<<< HEAD
   makeWrapper,
   python3,
   nixosTests,
@@ -73,11 +74,36 @@ maven.buildMavenPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
+=======
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  openjdk17,
+  python3,
+  unzip,
+  nixosTests,
+}:
+stdenv.mkDerivation rec {
+  pname = "nzbhydra2";
+  version = "8.0.0";
+
+  src = fetchzip {
+    url = "https://github.com/theotherp/nzbhydra2/releases/download/v${version}/nzbhydra2-${version}-generic.zip";
+    hash = "sha256-I/85BhIF7ROktMWijlaVwL3CrHrWtrJr3ETt3gF8yE4=";
+    stripRoot = false;
+  };
+
+  nativeBuildInputs = [
+    openjdk17
+    makeWrapper
+    unzip
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   installPhase = ''
     runHook preInstall
 
+<<<<<<< HEAD
     install -d -m 755 "$out/lib/${pname}/lib"
     cp -rt "$out/lib/${pname}/lib" core/target/*-exec.jar
     touch "$out/lib/${pname}/readme.md"
@@ -86,6 +112,15 @@ maven.buildMavenPackage rec {
     makeWrapper ${lib.getExe python3} "$out/bin/nzbhydra2" \
       --add-flags "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py" \
       --prefix PATH ":" ${lib.getBin jdk}/bin
+=======
+    install -d -m 755 "$out/lib/nzbhydra2"
+    cp -dpr --no-preserve=ownership "lib" "readme.md" "$out/lib/nzbhydra2"
+    install -D -m 755 "nzbhydra2wrapperPy3.py" "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py"
+
+    makeWrapper ${python3}/bin/python $out/bin/nzbhydra2 \
+      --add-flags "$out/lib/nzbhydra2/nzbhydra2wrapperPy3.py" \
+      --prefix PATH ":" ${openjdk17}/bin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     runHook postInstall
   '';
@@ -98,10 +133,14 @@ maven.buildMavenPackage rec {
     description = "Usenet meta search";
     homepage = "https://github.com/theotherp/nzbhydra2";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       matteopacini
       tmarkus
     ];
+=======
+    maintainers = with lib.maintainers; [ matteopacini ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
     mainProgram = "nzbhydra2";
   };

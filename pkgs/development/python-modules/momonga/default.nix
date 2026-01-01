@@ -8,14 +8,22 @@
 
 buildPythonPackage rec {
   pname = "momonga";
+<<<<<<< HEAD
   version = "0.3.0";
+=======
+  version = "0.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbtk";
     repo = "momonga";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ZzQPJcvjRuRjU/u8KjxZ0C4XUb4fbVkLIcsf2JmzDRA=";
+=======
+    hash = "sha256-afPTJH1cVG4Ts6k1GwTJmSZgVZa0ejUERWgNumIUkbs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

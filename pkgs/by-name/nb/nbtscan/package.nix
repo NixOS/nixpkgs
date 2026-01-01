@@ -18,6 +18,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Scan networks searching for NetBIOS information";
     mainProgram = "nbtscan";
@@ -25,5 +26,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Scan networks searching for NetBIOS information";
+    mainProgram = "nbtscan";
+    homepage = "https://github.com/resurrecting-open-source-projects/nbtscan";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

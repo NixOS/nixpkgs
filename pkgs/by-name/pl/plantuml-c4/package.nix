@@ -75,6 +75,7 @@ stdenv.mkDerivation {
         plantuml sprites.puml -o $out
       '';
 
+<<<<<<< HEAD
   meta = {
     description = "PlantUML bundled with C4-Plantuml and plantuml sprites library";
     mainProgram = "plantuml";
@@ -85,5 +86,17 @@ stdenv.mkDerivation {
       anthonyroussel
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "PlantUML bundled with C4-Plantuml and plantuml sprites library";
+    mainProgram = "plantuml";
+    homepage = "https://github.com/plantuml-stdlib/C4-PlantUML";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      tfc
+      anthonyroussel
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

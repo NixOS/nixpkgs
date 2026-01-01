@@ -24,11 +24,20 @@ buildDunePackage rec {
 
   doCheck = false; # prevent running slow benchmarks
 
+<<<<<<< HEAD
   meta = {
     description = "Library for multicore parallel programming";
     downloadPage = "https://github.com/rdicosmo/parmap";
     homepage = "https://rdicosmo.github.io/parmap";
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Library for multicore parallel programming";
+    downloadPage = "https://github.com/rdicosmo/parmap";
+    homepage = "https://rdicosmo.github.io/parmap";
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

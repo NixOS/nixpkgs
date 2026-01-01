@@ -23,11 +23,20 @@ buildGoModule rec {
       --replace '0.0.0-unknown' '${version}'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/fgrosse/prox";
     description = "Process runner for Procfile-based applications";
     mainProgram = "prox";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ lucperkins ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/fgrosse/prox";
+    description = "Process runner for Procfile-based applications";
+    mainProgram = "prox";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ lucperkins ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

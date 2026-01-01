@@ -17,11 +17,19 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-7Wdf8NaizgIExeX+Kc8wn5f20al0bnxRpFoPy6p40jw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight JSON Resume builder, no-frills alternative to resume-cli";
     homepage = "https://github.com/rbardini/resumed";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Lightweight JSON Resume builder, no-frills alternative to resume-cli";
+    homepage = "https://github.com/rbardini/resumed";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "resumed";
   };
 }

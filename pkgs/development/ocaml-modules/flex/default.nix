@@ -18,10 +18,18 @@ buildDunePackage {
 
   nativeBuildInputs = [ reason ];
 
+<<<<<<< HEAD
   meta = {
     description = "Native Reason implementation of CSS Flexbox layout. An Yoga project port";
     homepage = "https://github.com/jordwalke/flex";
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Native Reason implementation of CSS Flexbox layout. An Yoga project port";
+    homepage = "https://github.com/jordwalke/flex";
+    maintainers = [ ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

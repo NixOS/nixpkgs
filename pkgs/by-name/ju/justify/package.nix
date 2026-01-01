@@ -27,6 +27,7 @@ stdenv.mkDerivation {
     install -D justify $out/bin/justify
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://tildegit.org/jns/justify";
     description = "Simple text alignment tool that supports left/right/center/fill justify alignment";
@@ -34,5 +35,14 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     mainProgram = "justify";
     maintainers = with lib.maintainers; [ xfnw ];
+=======
+  meta = with lib; {
+    homepage = "https://tildegit.org/jns/justify";
+    description = "Simple text alignment tool that supports left/right/center/fill justify alignment";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    mainProgram = "justify";
+    maintainers = with maintainers; [ xfnw ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

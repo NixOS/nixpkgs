@@ -36,9 +36,12 @@ buildPythonPackage rec {
     flit-core
   ];
 
+<<<<<<< HEAD
   pythonRemoveDeps = [
     "tfp-nightly"
   ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dependencies = [
     absl-py
     chex

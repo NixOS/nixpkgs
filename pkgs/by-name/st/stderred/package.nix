@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
+<<<<<<< HEAD
   meta = {
     description = "Colorize all stderr output that goes to terminal, making it distinguishable from stdout";
     homepage = "https://github.com/sickill/stderred";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vojta001 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Colorize all stderr output that goes to terminal, making it distinguishable from stdout";
+    homepage = "https://github.com/sickill/stderred";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vojta001 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

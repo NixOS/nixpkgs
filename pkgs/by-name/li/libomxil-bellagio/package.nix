@@ -44,11 +44,20 @@ stdenv.mkDerivation rec {
       in
       "-Wno-error=absolute-value -Wno-error=enum-conversion -Wno-error=logical-not-parentheses -Wno-error=non-literal-null-conversion${lib.optionalString isLLVM17 " -Wno-error=unused-but-set-variable"}";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://omxil.sourceforge.net/";
     description = "Opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
     mainProgram = "omxregister-bellagio";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://omxil.sourceforge.net/";
+    description = "Opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
+    mainProgram = "omxregister-bellagio";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

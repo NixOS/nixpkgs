@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     "--with-lapack=-llapack"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Just Another Gibbs Sampler";
     mainProgram = "jags";
@@ -35,5 +36,14 @@ stdenv.mkDerivation rec {
     homepage = "http://mcmc-jags.sourceforge.net";
     maintainers = [ lib.maintainers.andres ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Just Another Gibbs Sampler";
+    mainProgram = "jags";
+    license = licenses.gpl2;
+    homepage = "http://mcmc-jags.sourceforge.net";
+    maintainers = [ maintainers.andres ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

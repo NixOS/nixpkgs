@@ -47,11 +47,20 @@ buildPythonPackage rec {
     "py4j"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client for connecting to remote Databricks clusters";
     homepage = "https://pypi.org/project/databricks-connect";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.databricks;
     maintainers = with lib.maintainers; [ kfollesdal ];
+=======
+  meta = with lib; {
+    description = "Client for connecting to remote Databricks clusters";
+    homepage = "https://pypi.org/project/databricks-connect";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.databricks;
+    maintainers = with maintainers; [ kfollesdal ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

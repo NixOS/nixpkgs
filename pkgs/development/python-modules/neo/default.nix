@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "neo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Package for representing electrophysiology data";
     homepage = "https://neuralensemble.org/neo/";
     changelog = "https://neo.readthedocs.io/en/${src.tag}/releases/${src.tag}.html";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Package for representing electrophysiology data";
+    homepage = "https://neuralensemble.org/neo/";
+    changelog = "https://neo.readthedocs.io/en/${src.tag}/releases/${src.tag}.html";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

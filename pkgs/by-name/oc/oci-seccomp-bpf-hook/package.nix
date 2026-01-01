@@ -52,14 +52,24 @@ buildGoModule rec {
     installManPage docs/*.[1-9]
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/containers/oci-seccomp-bpf-hook";
     description = ''
       OCI hook to trace syscalls and generate a seccomp profile
     '';
     mainProgram = "oci-seccomp-bpf-hook";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ saschagrunert ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ saschagrunert ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

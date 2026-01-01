@@ -47,12 +47,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform benchmark";
     homepage = "https://geekbench.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.michalrus ];
+=======
+  meta = with lib; {
+    description = "Cross-platform benchmark";
+    homepage = "https://geekbench.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.michalrus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "geekbench4";
   };

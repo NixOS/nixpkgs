@@ -51,11 +51,19 @@ rustPlatform.buildRustPackage rec {
         -t $out/share/icons/hicolor/scalable/apps
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple but powerful and fast bulk file renamer";
     homepage = "https://github.com/qarmin/szyszka";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
+=======
+  meta = with lib; {
+    description = "Simple but powerful and fast bulk file renamer";
+    homepage = "https://github.com/qarmin/szyszka";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kranzes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "szyszka";
   };
 }

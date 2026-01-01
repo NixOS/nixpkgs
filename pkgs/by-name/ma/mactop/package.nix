@@ -25,6 +25,10 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Terminal-based monitoring tool 'top' designed to display real-time metrics for Apple Silicon chips";

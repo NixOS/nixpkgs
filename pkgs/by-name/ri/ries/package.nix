@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://mrob.com/pub/ries/";
     description = "Tool to produce a list of equations that approximately solve to a given number";
@@ -22,5 +23,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ symphorien ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://mrob.com/pub/ries/";
+    description = "Tool to produce a list of equations that approximately solve to a given number";
+    mainProgram = "ries";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ symphorien ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

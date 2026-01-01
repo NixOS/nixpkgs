@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoconf,
   bison,
   boost,
@@ -71,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     gputils
   ];
 
+<<<<<<< HEAD
   patches = [
     # Fix build with gcc15
     # https://sourceforge.net/p/sdcc/bugs/3846/
@@ -81,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # sdcc 4.5.0 massively rewrote sim/ucsim/Makefile.in, and lost the `.PHONY`
   # rule in the process. As a result, on macOS (which uses a case-insensitive
   # filesystem), the INSTALL file keeps the `install` target in the ucsim

@@ -46,6 +46,7 @@ mkDerivation rec {
     ln -s ${desktopItem}/share $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Native desktop app for Pleroma and Mastodon servers";
     mainProgram = "Michabo";
@@ -53,5 +54,14 @@ mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Native desktop app for Pleroma and Mastodon servers";
+    mainProgram = "Michabo";
+    homepage = "https://git.pleroma.social/kaniini/michabo";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

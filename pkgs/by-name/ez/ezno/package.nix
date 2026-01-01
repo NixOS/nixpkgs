@@ -22,12 +22,20 @@ rustPlatform.buildRustPackage rec {
     "ezno"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "JavaScript compiler and TypeScript checker with a focus on static analysis and runtime performance";
     mainProgram = "ezno";
     homepage = "https://github.com/kaleidawave/ezno";
     changelog = "https://github.com/kaleidawave/ezno/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

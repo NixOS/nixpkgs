@@ -56,14 +56,24 @@ stdenv.mkDerivation rec {
       cp -rv "${desktopItem}/share/applications" "$out/share"
     '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Project scheduling and management";
     homepage = "https://www.ganttproject.biz/";
     downloadPage = "https://www.ganttproject.biz/download";
     # GanttProject itself is GPL3+. All bundled libraries are declared
     # ‘GPL3-compatible’. See ${downloadPage} for detailed information.
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.vidbina ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ganttproject";
   };
 }

@@ -51,12 +51,21 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Userspace library for the Linux io_uring API";
     homepage = "https://github.com/axboe/liburing";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Userspace library for the Linux io_uring API";
+    homepage = "https://github.com/axboe/liburing";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       nickcao
     ];

@@ -10,16 +10,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
+<<<<<<< HEAD
   version = "0.9.3";
+=======
+  version = "0.9.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-MVj+GcSt0Q9bWLz7MpCIj9MtnHh/GRB3p+DapMPLxeY=";
   };
 
   cargoHash = "sha256-Ikur9G6oSdKbK7gdZozBkplUjPfSjIABTVHjX7UPPvc=";
+=======
+    hash = "sha256-FFbRopIaAOpfb+Wbj+EUXRr89EQE108h8OMn+fpL+ew=";
+  };
+
+  cargoHash = "sha256-JYvITscH1K6xLE6XZpMrEFZWcbue7x7xuPxVQW/Vjb0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cargoPatches = [ ./Cargo.patch ];
 
@@ -60,6 +71,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

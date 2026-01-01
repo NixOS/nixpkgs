@@ -18,23 +18,39 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
+<<<<<<< HEAD
   version = "25.3.1";
+=======
+  version = "25.2.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src =
     let
       inherit (stdenvNoCC.hostPlatform) system;
       selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
       suffix = selectSystem {
+<<<<<<< HEAD
         x86_64-linux = "linux.gtk.x86_64.tar.gz";
         aarch64-linux = "linux.gtk.aarch64.tar.gz";
+=======
+        x86_64-linux = "linux.gtk.x86_64-nojdk.tar.gz";
+        aarch64-linux = "linux.gtk.aarch64-nojdk.tar.gz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         x86_64-darwin = "macos-x86_64.dmg";
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
+<<<<<<< HEAD
         x86_64-linux = "sha256-+9bKKfLFR+9iBv/Sgwbd/gVpUa2c4uvkZGzx61x5bJ8=";
         aarch64-linux = "sha256-sfrytO39RnqODECo0CPj2tusvZBIo5I9KuRqzoLbE0M=";
         x86_64-darwin = "sha256-74EMwaG2xmH2gEyhcwqZKgVzNOup81DG8T8DmELN53g=";
         aarch64-darwin = "sha256-cJ9hS/jQySoGbXd0yLmBNlVak8OOnMW2ToXojnx9Th4=";
+=======
+        x86_64-linux = "sha256-ADF7uFUZjzKaTQFAtqG0O81Yk8SvBh86SsyIOiSp1fY=";
+        aarch64-linux = "sha256-VNip5eplQ2vxi+eKHKGaBbMZ5QPS7GaoGdcZWr+abDM=";
+        x86_64-darwin = "sha256-Wu5rFiQBDR2AcJyj8ySWXR9P3GaClWzkqGRc3ZfOgIU=";
+        aarch64-darwin = "sha256-YhV70euhBuzpwPyb1CEtDsaAZqBDN1J/rw5oTOW4+ss=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     in
     fetchurl {
@@ -76,9 +92,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
     rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
     popd
+<<<<<<< HEAD
 
     # remove the bundled JRE
     rm -r ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}jre/
+=======
+  ''
+  # remove the bundled JRE on Darwin
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    rm -r Contents/Eclipse/jre/
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   installPhase =

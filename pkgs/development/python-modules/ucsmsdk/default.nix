@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ucsmsdk" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python SDK for Cisco UCS";
     homepage = "https://github.com/CiscoUcs/ucsmsdk";
     changelog = "https://github.com/CiscoUcs/ucsmsdk/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Python SDK for Cisco UCS";
+    homepage = "https://github.com/CiscoUcs/ucsmsdk";
+    changelog = "https://github.com/CiscoUcs/ucsmsdk/blob/${src.tag}/HISTORY.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

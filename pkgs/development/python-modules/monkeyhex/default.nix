@@ -23,10 +23,18 @@ buildPythonPackage rec {
   # Verify import still works.
   pythonImportsCheck = [ "monkeyhex" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small library to assist users of the python shell who work in contexts where printed numbers are more usefully viewed in hexadecimal";
     homepage = "https://github.com/rhelmot/monkeyhex";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pamplemousse ];
+=======
+  meta = with lib; {
+    description = "Small library to assist users of the python shell who work in contexts where printed numbers are more usefully viewed in hexadecimal";
+    homepage = "https://github.com/rhelmot/monkeyhex";
+    license = licenses.mit;
+    maintainers = [ maintainers.pamplemousse ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

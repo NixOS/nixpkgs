@@ -27,10 +27,17 @@ buildPythonPackage rec {
     ${python.interpreter} -c 'import vsts.version; print(vsts.version.VERSION)'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python APIs for interacting with and managing Azure DevOps";
     homepage = "https://github.com/microsoft/azure-devops-python-api";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python APIs for interacting with and managing Azure DevOps";
+    homepage = "https://github.com/microsoft/azure-devops-python-api";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

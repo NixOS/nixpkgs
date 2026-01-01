@@ -131,13 +131,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Twitch.tv browser for Streamlink";
     longDescription = "Browse Twitch.tv and watch streams in your videoplayer of choice";
     homepage = "https://streamlink.github.io/streamlink-twitch-gui/";
     downloadPage = "https://github.com/streamlink/streamlink-twitch-gui/releases";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "streamlink-twitch-gui";
     maintainers = [ ];
     platforms = [

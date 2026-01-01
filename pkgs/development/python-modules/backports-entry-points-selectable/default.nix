@@ -31,11 +31,19 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "backports" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/jaraco/backports.entry_points_selectable/blob/v${version}/CHANGES.rst";
     description = "Compatibility shim providing selectable entry points for older implementations";
     homepage = "https://github.com/jaraco/backports.entry_points_selectable";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/jaraco/backports.entry_points_selectable/blob/v${version}/CHANGES.rst";
+    description = "Compatibility shim providing selectable entry points for older implementations";
+    homepage = "https://github.com/jaraco/backports.entry_points_selectable";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

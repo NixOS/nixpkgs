@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "e3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generic testsuite framework in Python";
     changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/${src.tag}";
@@ -34,5 +35,14 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ heijligen ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Generic testsuite framework in Python";
+    changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/${src.tag}";
+    homepage = "https://github.com/AdaCore/e3-testsuite/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ heijligen ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

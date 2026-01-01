@@ -27,10 +27,18 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Daemon for the Taproot Assets protocol specification";
     homepage = "https://github.com/lightninglabs/taproot-assets";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Daemon for the Taproot Assets protocol specification";
+    homepage = "https://github.com/lightninglabs/taproot-assets";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

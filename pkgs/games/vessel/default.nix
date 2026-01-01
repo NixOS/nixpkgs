@@ -87,7 +87,11 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/Vessel
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fluid physics based puzzle game";
     longDescription = ''
       Living liquid machines have overrun this world of unstoppable progress,
@@ -96,8 +100,13 @@ stdenv.mkDerivation rec {
       to life, and all the consequences that ensue.
     '';
     homepage = "http://www.strangeloopgames.com";
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ jcumming ];
+=======
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jcumming ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

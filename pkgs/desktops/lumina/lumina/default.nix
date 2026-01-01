@@ -99,7 +99,11 @@ mkDerivation rec {
 
   passthru.providedSessions = [ "Lumina-DE" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lightweight, portable desktop environment";
     longDescription = ''
       The Lumina Desktop Environment is a lightweight system interface
@@ -107,8 +111,14 @@ mkDerivation rec {
       is based on QT5.
     '';
     homepage = "https://lumina-desktop.org";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.lumina ];
+=======
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    teams = [ teams.lumina ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

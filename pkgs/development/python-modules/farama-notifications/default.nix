@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "farama_notifications" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Allows for providing notifications on import to all Farama Packages";
     homepage = "https://github.com/Farama-Foundation/Farama-Notifications";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    description = "Allows for providing notifications on import to all Farama Packages";
+    homepage = "https://github.com/Farama-Foundation/Farama-Notifications";
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

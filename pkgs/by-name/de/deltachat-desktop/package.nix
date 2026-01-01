@@ -1,7 +1,11 @@
 {
   lib,
   copyDesktopItems,
+<<<<<<< HEAD
   electron_39,
+=======
+  electron_37,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   deltachat-rpc-server,
   makeDesktopItem,
@@ -9,8 +13,11 @@
   nodejs,
   pkg-config,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python3,
   rustPlatform,
   stdenv,
@@ -21,16 +28,25 @@
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
+<<<<<<< HEAD
     version = "2.35.0";
+=======
+    version = "2.25.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     src = fetchFromGitHub {
       owner = "chatmail";
       repo = "core";
       tag = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-tcH9F+FKXfFozk6PcbEE37HFIojhDR672bfcPXfKnCs=";
+=======
+      hash = "sha256-ULOnR1YvNmKr7iEuf8cZ+WgN4JRIG3md9gwyXK81vPQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
       pname = "chatmail-core";
       inherit version src;
+<<<<<<< HEAD
       hash = "sha256-p1E7K1EiEftpNSyE41LpMYmkZwjeasZzrXbYxKK/IgI=";
     };
   };
@@ -39,11 +55,23 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
   version = "2.35.0";
+=======
+      hash = "sha256-EkYlG32EhtIFFDpVgbKw8TSqHhPHgxd6Kh3wYN4Moq8=";
+    };
+  };
+  electron = electron_37;
+  pnpm = pnpm_9;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "deltachat-desktop";
+  version = "2.25.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-TAuluFfJnaTdgWHtA+Oif7RYneiE+16onjqjgo4QI/8=";
   };
 
@@ -52,6 +80,15 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm = pnpm_9;
     fetcherVersion = 2;
     hash = "sha256-9J7UJbIm9V12nWQvelgIhezVMg1yGPFFB3DXlzB/DFc=";
+=======
+    hash = "sha256-xaeO1mHqJJwEMAuuzlKnFP9TiPYPygGAV+26QdXoAxk=";
+  };
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-aih6WusKV44Wu9eF8te5t/liEcPB1pnYRganlJSSnXg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -59,8 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pkg-config
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -86,7 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
       = ${lib.versions.major electron.version} \
       || (echo 'error: electron version doesn not match package-lock.json' && exit 1)
 
+<<<<<<< HEAD
     pnpm --filter=@deltachat-desktop/target-electron build4production
+=======
+    pnpm -w build:electron
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
     pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
@@ -134,7 +179,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
+<<<<<<< HEAD
       "application/x-webxdc"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "x-scheme-handler/openpgp4fpr"
       "x-scheme-handler/dcaccount"
       "x-scheme-handler/dclogin"

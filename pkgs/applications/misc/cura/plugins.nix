@@ -31,10 +31,17 @@ let
         cp -rv . $out/lib/cura/plugins/OctoPrintPlugin/
       '';
 
+<<<<<<< HEAD
       meta = {
         description = "Enables printing directly to OctoPrint and monitoring the process";
         homepage = "https://github.com/fieldOfView/Cura-OctoPrintPlugin";
         license = lib.licenses.agpl3Plus;
+=======
+      meta = with lib; {
+        description = "Enables printing directly to OctoPrint and monitoring the process";
+        homepage = "https://github.com/fieldOfView/Cura-OctoPrintPlugin";
+        license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         maintainers = [ ];
       };
     };
@@ -70,10 +77,17 @@ let
         cp -rv . $out/lib/cura/plugins/RawMouse/
       '';
 
+<<<<<<< HEAD
       meta = {
         description = "Cura plugin for HID mice such as 3Dconnexion spacemouse";
         homepage = "https://github.com/smartavionics/RawMouse";
         license = lib.licenses.agpl3Plus;
+=======
+      meta = with lib; {
+        description = "Cura plugin for HID mice such as 3Dconnexion spacemouse";
+        homepage = "https://github.com/smartavionics/RawMouse";
+        license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         maintainers = [ ];
       };
     };

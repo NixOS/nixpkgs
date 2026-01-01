@@ -67,11 +67,20 @@ buildPythonPackage rec {
     "tests/client/test_http.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/crate/crate-python";
     description = "Python client library for CrateDB";
     changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.txt";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/crate/crate-python";
+    description = "Python client library for CrateDB";
+    changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.txt";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

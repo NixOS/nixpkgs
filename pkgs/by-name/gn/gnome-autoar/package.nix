@@ -54,10 +54,17 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    platforms = platforms.linux;
+    teams = [ teams.gnome ];
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library to integrate compressed files management with GNOME";
   };
 }

@@ -57,10 +57,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "desmume" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to interface with DeSmuME, the Nintendo DS emulator";
     homepage = "https://github.com/SkyTemple/py-desmume";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
+=======
+  meta = with lib; {
+    description = "Python library to interface with DeSmuME, the Nintendo DS emulator";
+    homepage = "https://github.com/SkyTemple/py-desmume";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ marius851000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

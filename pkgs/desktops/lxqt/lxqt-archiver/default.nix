@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lxqt/lxqt-archiver/";
     description = "Archive tool for the LXQt desktop environment";
@@ -56,5 +57,15 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     maintainers = with lib.maintainers; [ jchw ];
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-archiver/";
+    description = "Archive tool for the LXQt desktop environment";
+    mainProgram = "lxqt-archiver";
+    license = licenses.gpl2Plus;
+    platforms = with platforms; unix;
+    maintainers = with maintainers; [ jchw ];
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

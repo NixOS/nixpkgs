@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.test" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Testing support by jaraco";
     homepage = "https://github.com/jaraco/jaraco.test";
     changelog = "https://github.com/jaraco/jaraco.test/blob/${src.rev}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Testing support by jaraco";
+    homepage = "https://github.com/jaraco/jaraco.test";
+    changelog = "https://github.com/jaraco/jaraco.test/blob/${src.rev}/NEWS.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

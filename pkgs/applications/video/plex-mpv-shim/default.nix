@@ -53,12 +53,21 @@ buildPythonApplication {
   # does not contain tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/iwalton3/plex-mpv-shim";
     description = "Allows casting of videos to MPV via the Plex mobile and web app";
     maintainers = with lib.maintainers; [ devusb ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/iwalton3/plex-mpv-shim";
+    description = "Allows casting of videos to MPV via the Plex mobile and web app";
+    maintainers = with maintainers; [ devusb ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "plex-mpv-shim";
   };
 }

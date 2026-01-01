@@ -98,13 +98,23 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.gnome.org/GNOME/gnome-robots";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-robots/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Avoid the robots and make them crash into each other";
     mainProgram = "gnome-robots";
+<<<<<<< HEAD
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+    teams = [ teams.gnome ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

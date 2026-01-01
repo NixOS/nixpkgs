@@ -43,11 +43,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slicedimage" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to access sliced imaging data";
     mainProgram = "slicedimage";
     homepage = "https://github.com/spacetx/slicedimage";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library to access sliced imaging data";
+    mainProgram = "slicedimage";
+    homepage = "https://github.com/spacetx/slicedimage";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -38,9 +38,15 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/test_mypy.py" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://stuvel.eu/rsa";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://stuvel.eu/rsa";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Pure-Python RSA implementation";
   };
 }

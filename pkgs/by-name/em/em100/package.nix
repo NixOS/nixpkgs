@@ -40,12 +40,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.coreboot.org";
     description = "Open source tool for the EM100 SPI flash emulator";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ felixsinger ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.coreboot.org";
+    description = "Open source tool for the EM100 SPI flash emulator";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ felixsinger ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "em100";
   };
 }

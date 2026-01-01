@@ -18,14 +18,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cobang";
+<<<<<<< HEAD
   version = "2.3.1";
+=======
+  version = "1.9.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-8qnF1w4zNYdH3QrzBnNjsPnOSMMD48H2tcTxPkemGEM=";
+=======
+    hash = "sha256-jF6hWpOPbJKRyUWRyZdp4OziCdJupyFpNdrsiOdjByA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -58,7 +66,10 @@ python3Packages.buildPythonApplication rec {
     pillow
     pygobject3
     python-zbar
+<<<<<<< HEAD
     qrcode
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # Wrapping this manually for SVG recognition

@@ -21,7 +21,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Typeface designed for source code";
     longDescription = ''
       Hack is hand groomed and optically balanced to be a workhorse face for
@@ -40,8 +44,14 @@ stdenvNoCC.mkDerivation rec {
       and may be modified to derive new typeface branches. The full text of
       the license is available in LICENSE.md" (From the GitHub page)
     */
+<<<<<<< HEAD
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ dywedir ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.free;
+    maintainers = with maintainers; [ dywedir ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

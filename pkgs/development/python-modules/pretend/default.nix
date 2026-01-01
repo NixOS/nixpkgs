@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretend" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for stubbing";
     homepage = "https://github.com/alex/pretend";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Module for stubbing";
+    homepage = "https://github.com/alex/pretend";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

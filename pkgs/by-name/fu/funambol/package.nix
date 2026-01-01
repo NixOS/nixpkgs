@@ -29,10 +29,18 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SyncML client sdk by Funambol project";
     homepage = "https://www.funambol.com";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "SyncML client sdk by Funambol project";
+    homepage = "https://www.funambol.com";
+    license = licenses.agpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

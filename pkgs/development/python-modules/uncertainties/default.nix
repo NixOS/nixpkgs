@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   setuptools,
@@ -27,6 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-YapujmwTlmUfTQwHsuh01V+jqsBbTd0Q9adGNiE8Go0=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       # python 3.14 compat
@@ -35,6 +39,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     setuptools
     setuptools-scm

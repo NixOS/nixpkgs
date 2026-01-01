@@ -25,12 +25,21 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sample Rate Converter for audio";
     homepage = "https://libsndfile.github.io/libsamplerate/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Sample Rate Converter for audio";
+    homepage = "https://libsndfile.github.io/libsamplerate/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Linker is unhappy with the `.def` file.
     broken = stdenv.hostPlatform.isMinGW;
   };

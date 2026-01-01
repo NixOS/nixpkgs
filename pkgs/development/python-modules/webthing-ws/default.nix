@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webthing_ws" ];
 
+<<<<<<< HEAD
   meta = {
     description = "WebThing WebSocket consumer and API client";
     homepage = "https://github.com/home-assistant-ecosystem/webthing-ws";
     changelog = "https://github.com/home-assistant-ecosystem/webthing-ws/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "WebThing WebSocket consumer and API client";
+    homepage = "https://github.com/home-assistant-ecosystem/webthing-ws";
+    changelog = "https://github.com/home-assistant-ecosystem/webthing-ws/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

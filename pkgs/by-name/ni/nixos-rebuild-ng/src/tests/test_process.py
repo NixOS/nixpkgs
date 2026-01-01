@@ -140,6 +140,7 @@ def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
             opts=["-f", "foo", "-b", "bar", "-t"],
             sudo_password="password",
         )
+<<<<<<< HEAD
 
 
 def test_ssh_host() -> None:
@@ -160,3 +161,5 @@ def test_ssh_host() -> None:
         remote = m.Remote.from_arg(host_input, None, False)
         assert remote is not None
         assert remote.ssh_host() == expected
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

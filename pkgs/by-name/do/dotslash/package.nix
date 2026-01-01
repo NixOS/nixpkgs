@@ -26,7 +26,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://dotslash-cli.com";
     description = "Simplified multi-platform executable deployment";
     longDescription = ''
@@ -38,11 +42,19 @@ rustPlatform.buildRustPackage rec {
       your developers seamlessly get the tools they need, ensuring consistent
       builds across platforms.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20 # or
       mit
     ];
     mainProgram = "dotslash";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

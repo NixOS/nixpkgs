@@ -31,10 +31,18 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Script used to obtain source hashes for dockerTools.pullImage";
     mainProgram = "nix-prefetch-docker";
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Script used to obtain source hashes for dockerTools.pullImage";
+    mainProgram = "nix-prefetch-docker";
+    maintainers = with maintainers; [ offline ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,6 +29,10 @@ rustPlatform.buildRustPackage rec {
     description = "Mirror installed software on multiple machines";
     homepage = "https://github.com/tversteeg/emplace";
     license = lib.licenses.agpl3Plus;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "emplace";
   };
 }

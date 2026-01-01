@@ -34,11 +34,19 @@ rustPlatform.buildRustPackage rec {
     package = porsmo;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Pomodoro cli app in rust with timer and countdown";
     homepage = "https://github.com/ColorCookie-dev/porsmo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MoritzBoehme ];
+=======
+  meta = with lib; {
+    description = "Pomodoro cli app in rust with timer and countdown";
+    homepage = "https://github.com/ColorCookie-dev/porsmo";
+    license = licenses.mit;
+    maintainers = with maintainers; [ MoritzBoehme ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "porsmo";
   };
 }

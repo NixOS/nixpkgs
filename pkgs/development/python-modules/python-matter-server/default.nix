@@ -7,7 +7,10 @@
   replaceVars,
   buildNpmPackage,
   python,
+<<<<<<< HEAD
   home-assistant-chip-wheels,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build
   setuptools,
@@ -37,12 +40,17 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "8.1.2";
+=======
+  version = "8.1.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-vnI57h/aesnaDYorq1PzcMCLmV0z0ZBJvMg4Nzh1Dtc=";
   };
 
@@ -52,12 +60,31 @@ let
 
     dontConfigure = true;
     dontBuild = true;
+=======
+    hash = "sha256-vTJGe6OGFM+q9+iovsQMPwkrHNg2l4pw9BFEtSA/vmA=";
+  };
+
+  paaCerts = stdenvNoCC.mkDerivation rec {
+    pname = "matter-server-paa-certificates";
+    version = "1.4.0.0";
+
+    src = fetchFromGitHub {
+      owner = "project-chip";
+      repo = "connectedhomeip";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-uJyStkwynPCm1B2ZdnDC6IAGlh+BKGfJW7tU4tULHFo=";
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out
+<<<<<<< HEAD
       cp connectedhomeip/credentials/development/paa-root-certs/* $out/
+=======
+      cp $src/credentials/development/paa-root-certs/* $out/
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       runHook postInstall
     '';
@@ -163,7 +190,11 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck =
     let

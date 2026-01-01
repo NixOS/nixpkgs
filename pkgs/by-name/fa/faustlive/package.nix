@@ -85,7 +85,11 @@ stdenv.mkDerivation rec {
 
   postPatch = "cd Build";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Standalone just-in-time Faust compiler";
     mainProgram = "FaustLive";
     longDescription = ''
@@ -94,7 +98,12 @@ stdenv.mkDerivation rec {
       efficiency of a compiled language. It's ideal for fast prototyping.
     '';
     homepage = "https://faust.grame.fr/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ magnetophon ];
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ magnetophon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

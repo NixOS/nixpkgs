@@ -39,11 +39,19 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.hammerlab.org/docs/sosa/master/index.html";
     description = "Sane OCaml String API";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.alexfmpe ];
+=======
+  meta = with lib; {
+    homepage = "http://www.hammerlab.org/docs/sosa/master/index.html";
+    description = "Sane OCaml String API";
+    license = licenses.isc;
+    maintainers = [ maintainers.alexfmpe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = !(lib.versionOlder ocaml.version "4.02");
   };
 }

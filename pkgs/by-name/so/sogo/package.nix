@@ -108,14 +108,25 @@ clangStdenv.mkDerivation rec {
 
   passthru.tests.sogo = nixosTests.sogo;
 
+<<<<<<< HEAD
   meta = {
     description = "Very fast and scalable modern collaboration suite (groupware)";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Very fast and scalable modern collaboration suite (groupware)";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Only
       lgpl21Only
     ];
     homepage = "https://sogo.nu/";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jceb ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jceb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

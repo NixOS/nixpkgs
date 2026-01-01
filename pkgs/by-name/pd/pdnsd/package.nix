@@ -31,11 +31,19 @@ stdenv.mkDerivation rec {
   # fix ipv6 on darwin
   CPPFLAGS = "-D__APPLE_USE_RFC_3542";
 
+<<<<<<< HEAD
   meta = {
     description = "Permanent DNS caching";
     homepage = "http://members.home.nl/p.a.rombouts/pdnsd";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Permanent DNS caching";
+    homepage = "http://members.home.nl/p.a.rombouts/pdnsd";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

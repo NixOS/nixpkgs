@@ -12,7 +12,11 @@
   configText ? "",
 }:
 let
+<<<<<<< HEAD
   version = "2512";
+=======
+  version = "2506";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -39,8 +43,13 @@ let
     pname = "omnissa-horizon-files";
     inherit version;
     src = fetchurl {
+<<<<<<< HEAD
       url = "https://download3.omnissa.com/software/CART26FQ4_LIN_2512_TARBALL/Omnissa-Horizon-Client-Linux-2512-8.17.0-20187591429.tar.gz";
       hash = "sha256-dYvP3W/tciqwazuVu4ib9gB98JUJykczd7sPCUih/Ew=";
+=======
+      url = "https://download3.omnissa.com/software/CART26FQ2_LIN_2506_TARBALL/Omnissa-Horizon-Client-Linux-2506-8.16.0-16536624989.tar.gz";
+      sha256 = "5515e79188e2605ced5a95c3a3829865b567be5d7a8de00a57455f7b5b2ae392";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -154,6 +163,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     inherit mainProgram;
     description = "Allows you to connect to your Omnissa Horizon virtual desktop";
@@ -161,5 +171,14 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ mhutter ];
+=======
+  meta = with lib; {
+    inherit mainProgram;
+    description = "Allows you to connect to your Omnissa Horizon virtual desktop";
+    homepage = "https://www.omnissa.com/products/horizon-8/";
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ mhutter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

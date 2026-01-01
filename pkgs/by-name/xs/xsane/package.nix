@@ -128,11 +128,21 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.sane-project.org/";
     description = "Graphical scanning frontend for sane";
     mainProgram = "xsane";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://www.sane-project.org/";
+    description = "Graphical scanning frontend for sane";
+    mainProgram = "xsane";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ melling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

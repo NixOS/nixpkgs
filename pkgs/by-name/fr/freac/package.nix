@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Audio converter and CD ripper with support for various popular formats and encoders";
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.freac.org/";
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Audio converter and CD ripper with support for various popular formats and encoders";
+    license = licenses.gpl2Plus;
+    homepage = "https://www.freac.org/";
+    maintainers = with maintainers; [ shamilton ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

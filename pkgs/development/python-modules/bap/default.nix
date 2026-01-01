@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages";
     homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
     maintainers = [ lib.maintainers.maurer ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages";
+    homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
+    maintainers = [ maintainers.maurer ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

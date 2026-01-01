@@ -70,11 +70,20 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "XML-based Nix-friendly data integration library";
     homepage = "https://github.com/svanderburg/libnixxml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomberek ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "XML-based Nix-friendly data integration library";
+    homepage = "https://github.com/svanderburg/libnixxml";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomberek ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

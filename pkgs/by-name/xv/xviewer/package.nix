@@ -29,13 +29,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xviewer";
+<<<<<<< HEAD
   version = "3.4.15";
+=======
+  version = "3.4.13";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xviewer";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-fAB7nbkGx6aNKwRA01013hAiGJ8pEovI0WClOqT0D10=";
+=======
+    hash = "sha256-g7ifQ+2FeZzpWfKgtFrWj0YDOB0++s6KGffHhvqGNQE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -84,6 +92,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "xviewer";
@@ -92,5 +101,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ tu-maurice ];
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    description = "Generic image viewer from Linux Mint";
+    mainProgram = "xviewer";
+    homepage = "https://github.com/linuxmint/xviewer";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ tu-maurice ];
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

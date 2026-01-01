@@ -4,7 +4,11 @@
   fetchFromGitHub,
 }:
 let
+<<<<<<< HEAD
   version = "1.2.16";
+=======
+  version = "1.2.14";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 python3Packages.buildPythonApplication {
   pname = "mktxp";
@@ -15,7 +19,11 @@ python3Packages.buildPythonApplication {
     owner = "akpw";
     repo = "mktxp";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-jxXpgHSwqtbaj2oyPyWif8rr4fZNNo+ACRTFZ7aWQPc=";
+=======
+    hash = "sha256-4+0aw/r71FcVrxASco3AkYzi7zbFeiEkJB7acGdb1FQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = with python3Packages; [

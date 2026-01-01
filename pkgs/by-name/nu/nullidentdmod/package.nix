@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     install -Dm755 nullidentdmod $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple identd that just replies with a random string or customized userid";
     mainProgram = "nullidentdmod";
@@ -28,5 +29,14 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Ranthrall/nullidentdmod";
     maintainers = with lib.maintainers; [ das_j ];
     platforms = lib.platforms.linux; # Must be run by systemd
+=======
+  meta = with lib; {
+    description = "Simple identd that just replies with a random string or customized userid";
+    mainProgram = "nullidentdmod";
+    license = licenses.gpl2Plus;
+    homepage = "https://github.com/Ranthrall/nullidentdmod";
+    maintainers = with maintainers; [ das_j ];
+    platforms = platforms.linux; # Must be run by systemd
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

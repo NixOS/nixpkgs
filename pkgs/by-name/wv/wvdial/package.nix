@@ -16,8 +16,11 @@ stdenv.mkDerivation {
     owner = "retronetworking";
     repo = "wvdial";
     rev = "42d084173cc939586c1963b8835cb00ec56b2823";
+<<<<<<< HEAD
     # "download .tar.gz" has been disabled
     forceFetchGit = true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-q7pFvpJvv+ZvbN4xxolI9ZRULr+N5sqO9BOXUqSG5v4=";
   };
 

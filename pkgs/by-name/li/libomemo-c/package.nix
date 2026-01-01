@@ -36,10 +36,18 @@ stdenv.mkDerivation rec {
     "-Dtests=false"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fork of libsignal-protocol-c adding support for OMEMO XEP-0384 0.5.0+";
     homepage = "https://github.com/dino/libomemo-c";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.astro ];
+=======
+  meta = with lib; {
+    description = "Fork of libsignal-protocol-c adding support for OMEMO XEP-0384 0.5.0+";
+    homepage = "https://github.com/dino/libomemo-c";
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

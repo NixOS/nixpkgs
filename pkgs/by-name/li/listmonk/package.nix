@@ -46,9 +46,14 @@ buildGoModule (finalAttrs: {
         "queries.sql"
         "permissions.json"
         "static/public:/public"
+<<<<<<< HEAD
         "${finalAttrs.passthru.frontend}/altcha.umd.js:/public/static/altcha.umd.js"
         "static/email-templates"
         "${finalAttrs.passthru.frontend}/admin:/admin"
+=======
+        "static/email-templates"
+        "${finalAttrs.passthru.frontend}:/admin"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "i18n:/i18n"
       ];
     in

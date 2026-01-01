@@ -6,12 +6,19 @@
 
   # build-system
   cython,
+<<<<<<< HEAD
   numpy,
   setuptools,
 
   # non-Python dependencies
   gdal-cpp,
 
+=======
+  gdal,
+  numpy,
+  setuptools,
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # dependencies
   affine,
   attrs,
@@ -38,27 +45,44 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
+<<<<<<< HEAD
   version = "1.4.4";
+=======
+  version = "1.4.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-6y55JJ3R/JEEneM10UPHIDpSopaybY5XHJPiU+77ke4=";
+=======
+    hash = "sha256-InejYBRa4i0E2GxEWbtBpaErtcoYrhtypAlRtMlUoDk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+<<<<<<< HEAD
       --replace-fail "cython~=3.1.0" cython
+=======
+      --replace-fail "cython~=3.0.2" cython
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   build-system = [
     cython
+<<<<<<< HEAD
+=======
+    gdal
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     numpy
     setuptools
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     gdal-cpp # for gdal-config
   ];
@@ -71,6 +95,8 @@ buildPythonPackage rec {
     "click"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dependencies = [
     affine
     attrs
@@ -98,6 +124,10 @@ buildPythonPackage rec {
     shapely
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     rm -r rasterio # prevent importing local rasterio

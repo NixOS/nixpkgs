@@ -54,10 +54,17 @@ buildPythonPackage rec {
     "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python 2 bindings for cairo";
     homepage = "https://pycairo.readthedocs.io/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Python 2 bindings for cairo";
+    homepage = "https://pycairo.readthedocs.io/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl21Only
       mpl11
     ];

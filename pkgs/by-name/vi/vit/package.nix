@@ -41,6 +41,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "vit" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/scottkosty/vit";
     description = "Visual Interactive Taskwarrior";
@@ -48,5 +49,14 @@ buildPythonApplication rec {
     maintainers = with lib.maintainers; [ arcnmx ];
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/scottkosty/vit";
+    description = "Visual Interactive Taskwarrior";
+    mainProgram = "vit";
+    maintainers = with maintainers; [ arcnmx ];
+    platforms = platforms.all;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

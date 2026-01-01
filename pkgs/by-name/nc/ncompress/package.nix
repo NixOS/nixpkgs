@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Yhs3C5/kR7Ve56E84usYJprxIMAIwXVahLi1N9TIfj0=";
   };
 
+<<<<<<< HEAD
   patches = [
     # dependencies for gcc15 patch
     (fetchpatch {
@@ -36,6 +40,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeFlags = [ "PREFIX=$(out)" ];
   installTargets = "install_core";
 
@@ -43,10 +49,18 @@ stdenv.mkDerivation rec {
     mv $out/bin/uncompress $out/bin/uncompress-ncompress
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://vapier.github.io/ncompress/";
     license = lib.licenses.publicDomain;
     description = "Fast, simple LZW file compressor";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://ncompress.sourceforge.net/";
+    license = licenses.publicDomain;
+    description = "Fast, simple LZW file compressor";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

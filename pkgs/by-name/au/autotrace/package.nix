@@ -38,12 +38,21 @@ stdenv.mkDerivation rec {
     pstoedit
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/autotrace/autotrace";
     description = "Utility for converting bitmap into vector graphics";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ hodapp ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/autotrace/autotrace";
+    description = "Utility for converting bitmap into vector graphics";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ hodapp ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "autotrace";
   };
 }

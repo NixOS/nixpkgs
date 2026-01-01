@@ -31,12 +31,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://samy.pl/pwnat/";
     description = "ICMP NAT to NAT client-server communication";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = with lib.platforms; linux;
+=======
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pwnat";
   };
 }

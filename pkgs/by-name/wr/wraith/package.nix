@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
     ln -s wraith $out/bin/hub
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "IRC channel management bot written purely in C/C++";
     longDescription = ''
@@ -47,8 +51,14 @@ stdenv.mkDerivation rec {
       to fix its runtime dependenices.
     '';
     homepage = "https://wraith.botpack.net/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ elitak ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ elitak ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

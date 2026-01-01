@@ -29,11 +29,19 @@ buildGoModule rec {
     command = "AWS_SHARED_CREDENTIALS_FILE=/dev/null aws-rotate-key --version";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Easily rotate your AWS key";
     homepage = "https://github.com/Fullscreen/aws-rotate-key";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mbode ];
+=======
+  meta = with lib; {
+    description = "Easily rotate your AWS key";
+    homepage = "https://github.com/Fullscreen/aws-rotate-key";
+    license = licenses.mit;
+    maintainers = [ maintainers.mbode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aws-rotate-key";
   };
 }

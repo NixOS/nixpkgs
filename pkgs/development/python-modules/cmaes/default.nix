@@ -39,11 +39,20 @@ buildPythonPackage rec {
     "test_cma_tell"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for CMA evolution strategy";
     homepage = "https://github.com/CyberAgentAILab/cmaes";
     changelog = "https://github.com/CyberAgentAILab/cmaes/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Python library for CMA evolution strategy";
+    homepage = "https://github.com/CyberAgentAILab/cmaes";
+    changelog = "https://github.com/CyberAgentAILab/cmaes/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

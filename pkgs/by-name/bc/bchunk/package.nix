@@ -28,11 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://he.fi/bchunk/";
     description = "Program that converts CD images in BIN/CUE format into a set of ISO and CDR tracks";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "http://he.fi/bchunk/";
+    description = "Program that converts CD images in BIN/CUE format into a set of ISO and CDR tracks";
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bchunk";
   };
 })

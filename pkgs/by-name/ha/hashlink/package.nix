@@ -66,16 +66,28 @@ stdenv.mkDerivation rec {
       cp -r ../other/haxelib/* "${haxelibPath}"
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Virtual machine for Haxe";
     mainProgram = "hl";
     homepage = "https://hashlink.haxe.org/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Virtual machine for Haxe";
+    mainProgram = "hl";
+    homepage = "https://hashlink.haxe.org/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       iblech
       locallycompact
       logo

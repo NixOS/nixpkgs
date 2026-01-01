@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
+<<<<<<< HEAD
   version = "0.33.0";
+=======
+  version = "0.32.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-3JcE963GSAUs82OF59Yf7PjQV0FHKsCYx+q3TWQsHpY=";
+=======
+    hash = "sha256-DFJfuDOzcVdiXLv5EzO5TL3UJLCZPM1bTZharp2ww5U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 

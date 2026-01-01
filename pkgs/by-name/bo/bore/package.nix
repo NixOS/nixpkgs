@@ -49,10 +49,17 @@ rustPlatform.buildRustPackage rec {
     | grep -q ';; NoError #0 Query 0 0 0 0 flags'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "DNS query tool";
     homepage = "https://crates.io/crates/bore";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "DNS query tool";
+    homepage = "https://crates.io/crates/bore";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "bore";
     broken = stdenv.hostPlatform.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident

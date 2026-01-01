@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "telegram.client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for the Telegram's tdlib";
     homepage = "https://github.com/alexander-akhmetov/python-telegram";
     changelog = "https://github.com/alexander-akhmetov/python-telegram/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Python client for the Telegram's tdlib";
+    homepage = "https://github.com/alexander-akhmetov/python-telegram";
+    changelog = "https://github.com/alexander-akhmetov/python-telegram/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

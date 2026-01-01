@@ -27,10 +27,18 @@ buildPythonPackage rec {
   # tests connect to openai
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Easily trim 'messages' arrays for use with GPTs";
     homepage = "https://github.com/KillianLucas/tokentrim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Easily trim 'messages' arrays for use with GPTs";
+    homepage = "https://github.com/KillianLucas/tokentrim";
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

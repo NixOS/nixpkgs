@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lxqt/lximage-qt";
     description = "Image viewer and screenshot tool for lxqt";
@@ -59,5 +60,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lxqt/lximage-qt";
+    description = "Image viewer and screenshot tool for lxqt";
+    mainProgram = "lximage-qt";
+    license = licenses.gpl2Plus;
+    platforms = with platforms; unix;
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

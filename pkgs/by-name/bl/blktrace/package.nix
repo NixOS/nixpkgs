@@ -23,10 +23,18 @@ stdenv.mkDerivation rec {
     "CC:=$(CC)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Block layer IO tracing mechanism";
     maintainers = with lib.maintainers; [ nickcao ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Block layer IO tracing mechanism";
+    maintainers = with maintainers; [ nickcao ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

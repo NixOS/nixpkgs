@@ -16,12 +16,21 @@ rebar3Relx rec {
     tag = "v${version}";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/WhatsApp/erlfmt";
     description = "Automated code formatter for Erlang";
     mainProgram = "erlfmt";
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/WhatsApp/erlfmt";
+    description = "Automated code formatter for Erlang";
+    mainProgram = "erlfmt";
+    platforms = platforms.unix;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ dlesl ];
   };
 }

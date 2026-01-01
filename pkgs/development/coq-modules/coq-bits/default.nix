@@ -43,9 +43,16 @@ mkCoqDerivation {
     stdlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Formalization of bitset operations in Coq";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ptival ];
+=======
+  meta = with lib; {
+    description = "Formalization of bitset operations in Coq";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ptival ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

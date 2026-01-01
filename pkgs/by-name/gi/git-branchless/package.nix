@@ -67,12 +67,21 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_switch_auto_switch_interactive"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
     license = lib.licenses.gpl2Only;
     mainProgram = "git-branchless";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
+    homepage = "https://github.com/arxanas/git-branchless";
+    license = licenses.gpl2Only;
+    mainProgram = "git-branchless";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nh2
       hmenke
       bryango

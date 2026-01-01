@@ -50,10 +50,18 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/balta2ar/brotab";
     description = "Control your browser's tabs from the command line";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/balta2ar/brotab";
+    description = "Control your browser's tabs from the command line";
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

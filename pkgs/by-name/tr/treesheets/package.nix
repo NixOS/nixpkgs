@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free Form Data Organizer";
     mainProgram = "TreeSheets";
 
@@ -62,8 +66,14 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://strlen.com/treesheets/";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.unix;
     license = lib.licenses.zlib;
+=======
+    maintainers = with maintainers; [ obadz ];
+    platforms = platforms.unix;
+    license = licenses.zlib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

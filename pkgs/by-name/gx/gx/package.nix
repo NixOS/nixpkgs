@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Packaging tool built around IPFS";
     homepage = "https://github.com/whyrusleeping/gx";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zimbatm ];
+=======
+  meta = with lib; {
+    description = "Packaging tool built around IPFS";
+    homepage = "https://github.com/whyrusleeping/gx";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zimbatm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gx";
   };
 }

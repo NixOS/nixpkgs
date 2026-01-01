@@ -27,10 +27,18 @@ buildPythonPackage rec {
     inherit sage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Extension class to allocate memory easily with cython";
     homepage = "https://github.com/sagemath/memory_allocator/";
     teams = [ lib.teams.sage ];
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Extension class to allocate memory easily with cython";
+    homepage = "https://github.com/sagemath/memory_allocator/";
+    teams = [ teams.sage ];
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

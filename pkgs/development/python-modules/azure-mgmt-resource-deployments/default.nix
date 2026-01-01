@@ -45,11 +45,19 @@ buildPythonPackage rec {
     "azure.mgmt.resource.deployments.models"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-resource-deployments";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource-deployments_${version}/sdk/resources/azure-mgmt-resource-deployments/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure SDK for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/resources/azure-mgmt-resource-deployments";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-resource-deployments_${version}/sdk/resources/azure-mgmt-resource-deployments/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = azure-cli.meta.maintainers;
   };
 }

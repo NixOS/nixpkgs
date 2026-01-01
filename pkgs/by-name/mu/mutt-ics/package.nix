@@ -21,11 +21,20 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mutt_ics" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dmedvinsky/mutt-ics";
     description = "Tool to show calendar event details in Mutt";
     mainProgram = "mutt-ics";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mh182 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dmedvinsky/mutt-ics";
+    description = "Tool to show calendar event details in Mutt";
+    mainProgram = "mutt-ics";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mh182 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

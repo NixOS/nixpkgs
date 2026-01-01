@@ -52,11 +52,20 @@ buildPythonPackage rec {
   # Module has no test
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with Gophish";
     homepage = "https://github.com/gophish/api-client-python";
     changelog = "https://github.com/gophish/api-client-python/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with Gophish";
+    homepage = "https://github.com/gophish/api-client-python";
+    changelog = "https://github.com/gophish/api-client-python/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

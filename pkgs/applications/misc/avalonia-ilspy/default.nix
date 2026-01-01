@@ -108,21 +108,36 @@ buildDotnetModule rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = ".NET assembly browser and decompiler";
     homepage = "https://github.com/icsharpcode/AvaloniaILSpy";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = ".NET assembly browser and decompiler";
+    homepage = "https://github.com/icsharpcode/AvaloniaILSpy";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       # third party dependencies
       lgpl21Only
       mspl
     ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [
+=======
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fromSource
       binaryBytecode
       binaryNativeCode
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       AngryAnt
       emilytrau
     ];

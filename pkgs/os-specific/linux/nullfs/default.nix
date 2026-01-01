@@ -38,11 +38,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Virtual black hole file system that behaves like /dev/null";
     homepage = "https://github.com/abbbi/nullfsvfs";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ callumio ];
+=======
+  meta = with lib; {
+    description = "Virtual black hole file system that behaves like /dev/null";
+    homepage = "https://github.com/abbbi/nullfsvfs";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ callumio ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

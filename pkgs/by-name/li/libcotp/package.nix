@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C library that generates TOTP and HOTP";
     homepage = "https://github.com/paolostivanin/libcotp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ alexbakker ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C library that generates TOTP and HOTP";
+    homepage = "https://github.com/paolostivanin/libcotp";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ alexbakker ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -21,17 +21,29 @@ in
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
+<<<<<<< HEAD
   version = "6.3.1.4";
+=======
+  version = "6.2.2.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-o95wYtSXLsBSMAPhVQeLBtgPqae/KihOR35QNRMXMjY=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
+=======
+    hash = "sha256-FV9dYp3E8MHra5pyrh8dqZ/85TDwNbdiLV/XdAWiJsg=";
+  };
+
+  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nugetDeps = ./deps.json;
 
@@ -52,7 +64,11 @@ buildDotnetModule rec {
     "-p:RuntimeIdentifiers="
   ];
   dotnetBuildFlags = [
+<<<<<<< HEAD
     "--framework=net10.0"
+=======
+    "--framework=net9.0"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
   dotnetInstallFlags = dotnetBuildFlags;
 
@@ -100,11 +116,20 @@ buildDotnetModule rec {
     ui = callPackage ./web-ui { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = lib.licenses.asl20;
     mainProgram = "ArchiSteamFarm";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
+    homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
+    license = licenses.asl20;
+    mainProgram = "ArchiSteamFarm";
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Differentiable ODE solvers with full GPU support and O(1)-memory backpropagation";
     homepage = "https://github.com/rtqichen/torchdiffeq";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    description = "Differentiable ODE solvers with full GPU support and O(1)-memory backpropagation";
+    homepage = "https://github.com/rtqichen/torchdiffeq";
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

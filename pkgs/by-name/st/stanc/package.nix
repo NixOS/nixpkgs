@@ -29,11 +29,20 @@ ocamlPackages.buildDunePackage rec {
     cmdliner
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/stan-dev/stanc3";
     description = "Stan compiler and utilities";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/stan-dev/stanc3";
+    description = "Stan compiler and utilities";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

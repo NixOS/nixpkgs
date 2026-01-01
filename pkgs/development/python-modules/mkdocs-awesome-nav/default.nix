@@ -16,14 +16,22 @@
 }:
 buildPythonPackage rec {
   pname = "mkdocs-awesome-nav";
+<<<<<<< HEAD
   version = "3.3.0";
+=======
+  version = "3.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lukasgeiter";
     repo = "mkdocs-awesome-nav";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-guv+c4QwaATYEZ6XcWVZaOcZ7U9oLsW+RdWBtB1Xrnc=";
+=======
+    hash = "sha256-JeVOJl26ooAZ2xbmyOqSKRa/5Dbu5BXov3ZS6sXgnnU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ flit-core ];
@@ -54,11 +62,20 @@ buildPythonPackage rec {
     "tests/compatibility/test_static_i18n_suffix.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin for customizing the navigation structure of your MkDocs site";
     homepage = "https://github.com/lukasgeiter/mkdocs-awesome-nav";
     changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/blob/${src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phaer ];
+=======
+  meta = with lib; {
+    description = "Plugin for customizing the navigation structure of your MkDocs site";
+    homepage = "https://github.com/lukasgeiter/mkdocs-awesome-nav";
+    changelog = "https://github.com/lukasgeiter/mkdocs-awesome-nav/blob/${src.tag}/CHANGELOG";
+    license = licenses.mit;
+    maintainers = with maintainers; [ phaer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

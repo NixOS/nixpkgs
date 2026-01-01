@@ -41,11 +41,19 @@ python3Packages.buildPythonApplication {
     "-v"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/donnemartin/haxor-news";
     description = "Browse Hacker News like a haxor";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/donnemartin/haxor-news";
+    description = "Browse Hacker News like a haxor";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

@@ -58,12 +58,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radiomics" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://pyradiomics.readthedocs.io";
     description = "Extraction of Radiomics features from 2D and 3D images and binary masks";
     mainProgram = "pyradiomics";
     changelog = "https://github.com/AIM-Harvard/pyradiomics/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

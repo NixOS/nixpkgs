@@ -41,6 +41,10 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Extensible command line tool or library to format yaml files";

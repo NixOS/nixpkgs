@@ -79,7 +79,11 @@ stdenv.mkDerivation {
     ${cleanPackaging.checkForRemainingFiles}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "BNF wrangling and railroad diagrams";
     mainProgram = "kgt";
     longDescription = ''
@@ -89,9 +93,15 @@ stdenv.mkDerivation {
       Output: Various BNF-like syntaxes, AST dumps, and Railroad Syntax Diagrams
     '';
     homepage = "https://github.com/katef/kgt";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ Profpatsch ];
+=======
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ Profpatsch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

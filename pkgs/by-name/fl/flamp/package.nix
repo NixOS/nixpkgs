@@ -30,12 +30,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Digital modem program";
     homepage = "https://sourceforge.net/projects/fldigi/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ stteague ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Digital modem program";
+    homepage = "https://sourceforge.net/projects/fldigi/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ stteague ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.system == "x86_64-darwin";
     mainProgram = "flamp";
   };

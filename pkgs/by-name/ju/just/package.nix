@@ -17,7 +17,11 @@
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 let
+<<<<<<< HEAD
   version = "1.45.0";
+=======
+  version = "1.43.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -34,10 +38,17 @@ rustPlatform.buildRustPackage {
     owner = "casey";
     repo = "just";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-D+xMPpn8JLX88eIO9zY051K81KPGBhcFvhBIwuTDymk=";
   };
 
   cargoHash = "sha256-zokI+mWyI/HmzP7GuO59usEsscl3tpeyhNT2tXmLny8=";
+=======
+    hash = "sha256-ma1P8mcSnU/G/B/pN2tDEVokP+fGShGFodS2TG4wyQY=";
+  };
+
+  cargoHash = "sha256-nT5GTAvj2+ytbOpRNNVardchK1aXPCiJGSUp5ZoBCVA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -91,8 +102,13 @@ rustPlatform.buildRustPackage {
       # No linkcheck in sandbox
       echo 'optional = true' >> book/en/book.toml
       mdbook build book/en
+<<<<<<< HEAD
       mkdir -p $doc/share/doc/$name/html
       mv ./book/en/build/* $doc/share/doc/$name/html
+=======
+      mkdir -p $doc/share/doc/$name
+      mv ./book/en/build/html $doc/share/doc/$name
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ''
     + lib.optionalString installManPages ''
       $out/bin/just --man > ./just.1

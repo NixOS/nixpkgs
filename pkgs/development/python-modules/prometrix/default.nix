@@ -52,17 +52,29 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "prometrix" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Unified Prometheus client";
     longDescription = ''
       This Python package provides a unified Prometheus client that can be used
       to connect to and query various types of Prometheus instances.
     '';
     homepage = "https://github.com/robusta-dev/prometrix";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
     # prometheus-api-client 0.5.5 is not working
     # https://github.com/robusta-dev/prometrix/issues/14
     broken = lib.versionAtLeast prometheus-api-client.version "0.5.3";
+=======
+    license = licenses.mit;
+    maintainers = [ ];
+    # prometheus-api-client 0.5.5 is not working
+    # https://github.com/robusta-dev/prometrix/issues/14
+    broken = versionAtLeast prometheus-api-client.version "0.5.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

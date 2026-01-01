@@ -9,6 +9,11 @@ let
   cfg = config.programs.xastir;
 in
 {
+<<<<<<< HEAD
+=======
+  meta.maintainers = with lib.maintainers; [ melling ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   options.programs.xastir = {
     enable = lib.mkEnableOption "Xastir Graphical APRS client";
   };

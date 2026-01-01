@@ -103,12 +103,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.classicube.net/";
     description = "Lightweight, custom Minecraft Classic/ClassiCube client with optional additions written from scratch in C";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ _360ied ];
+=======
+  meta = with lib; {
+    homepage = "https://www.classicube.net/";
+    description = "Lightweight, custom Minecraft Classic/ClassiCube client with optional additions written from scratch in C";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ _360ied ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ClassiCube";
   };
 }

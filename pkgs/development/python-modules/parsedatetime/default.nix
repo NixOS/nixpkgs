@@ -32,10 +32,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "parsedatetime" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parse human-readable date/time text";
     homepage = "https://github.com/bear/parsedatetime";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Parse human-readable date/time text";
+    homepage = "https://github.com/bear/parsedatetime";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

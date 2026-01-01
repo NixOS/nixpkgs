@@ -47,16 +47,29 @@ buildPythonPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "qcelemental" ];
 
   meta = {
+=======
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "qcelemental" ];
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "Periodic table, physical constants and molecule parsing for quantum chemistry";
     homepage = "https://github.com/MolSSI/QCElemental";
     changelog = "https://github.com/MolSSI/QCElemental/blob/v${version}/docs/changelog.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sheepforce ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -42,18 +42,30 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tld" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Extracts the top level domain (TLD) from the URL given";
     mainProgram = "update-tld-names";
     homepage = "https://github.com/barseghyanartur/tld";
     changelog = "https://github.com/barseghyanartur/tld/blob/${version}/CHANGELOG.rst";
     # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
     # MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl21Plus
       mpl11
       gpl2Only
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ fab ];
+=======
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

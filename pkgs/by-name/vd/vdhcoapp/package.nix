@@ -72,12 +72,21 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Companion application for the Video DownloadHelper browser add-on";
     homepage = "https://www.downloadhelper.net/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ hannesgith ];
+=======
+  meta = with lib; {
+    description = "Companion application for the Video DownloadHelper browser add-on";
+    homepage = "https://www.downloadhelper.net/";
+    license = licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ hannesgith ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vdhcoapp";
   };
 }

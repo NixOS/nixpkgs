@@ -19,9 +19,15 @@ mkDerivation rec {
     qttools
   ];
 
+<<<<<<< HEAD
   meta = {
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.k900 ];
+=======
+  meta = with lib; {
+    license = [ licenses.mit ];
+    maintainers = [ maintainers.k900 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Framework for collecting user feedback for apps via telemetry and surveys";
   };
 }

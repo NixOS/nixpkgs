@@ -19,11 +19,20 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ midea-beautiful-air ];
 
+<<<<<<< HEAD
   meta = {
     description = "Home Assistant custom component adding support for controlling Midea air conditioners and dehumidifiers on local network";
     homepage = "https://github.com/nbogojevic/homeassistant-midea-air-appliances-lan";
     changelog = "https://github.com/nbogojevic/homeassistant-midea-air-appliances-lan/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ k900 ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Home Assistant custom component adding support for controlling Midea air conditioners and dehumidifiers on local network";
+    homepage = "https://github.com/nbogojevic/homeassistant-midea-air-appliances-lan";
+    changelog = "https://github.com/nbogojevic/homeassistant-midea-air-appliances-lan/releases/tag/v${version}";
+    maintainers = with maintainers; [ k900 ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,17 @@ stdenv.mkDerivation {
     cp rowhammer_test double_sided_rowhammer $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Test DRAM for bit flips caused by the rowhammer problem";
     homepage = "https://github.com/google/rowhammer-test";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Test DRAM for bit flips caused by the rowhammer problem";
+    homepage = "https://github.com/google/rowhammer-test";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [
       "x86_64-linux"

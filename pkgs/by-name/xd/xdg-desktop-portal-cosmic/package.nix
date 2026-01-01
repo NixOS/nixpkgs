@@ -3,7 +3,10 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+<<<<<<< HEAD
   glib,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libcosmicAppHook,
   pkg-config,
   util-linux,
@@ -17,13 +20,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "1.0.0-beta.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
     tag = "epoch-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-T4uFt0Z7SEdsmr2HQvxGeo+b9+BdshNUUKYMfRhXLSk=";
   };
 
@@ -31,6 +39,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   separateDebugInfo = true;
   strictDeps = true;
+=======
+    hash = "sha256-oqggnwDzmi6ES3o3Pt51QwZUuqtqlbrMxFGaftyqgRo=";
+  };
+
+  cargoHash = "sha256-CqzM1hVdY3+NhH58NDlOaFVU1na/bkh6fI9rAp2Vwog=";
+
+  separateDebugInfo = true;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     libcosmicAppHook
@@ -40,7 +56,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     glib
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libgbm
     pipewire
   ];
@@ -79,9 +98,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+<<<<<<< HEAD
 
     updateScript = nix-update-script {
       extraArgs = [
+=======
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "--version-regex"
         "epoch-(.*)"
       ];

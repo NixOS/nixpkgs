@@ -35,12 +35,21 @@ buildPythonPackage rec {
   # Network discovery doesn't work in the sandbox for darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";
     homepage = "https://gitlab.com/MatthiasLohr/tololib";
     changelog = "https://gitlab.com/MatthiasLohr/tololib/-/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";
+    homepage = "https://gitlab.com/MatthiasLohr/tololib";
+    changelog = "https://gitlab.com/MatthiasLohr/tololib/-/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tolo-cli";
   };
 }

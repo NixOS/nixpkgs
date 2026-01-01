@@ -54,6 +54,7 @@ let
         }
         // d
       ) s.mysql_databases;
+<<<<<<< HEAD
     })
     // (lib.optionalAttrs (s ? sqlite_databases && s.sqlite_databases != [ ]) {
       sqlite_databases = map (
@@ -64,6 +65,8 @@ let
         }
         // d
       ) s.sqlite_databases;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     });
 
   repository =

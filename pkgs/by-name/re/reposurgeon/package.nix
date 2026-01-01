@@ -4,6 +4,7 @@
   buildGoModule,
   asciidoctor,
   ruby,
+<<<<<<< HEAD
   which,
 }:
 
@@ -23,13 +24,30 @@ buildGoModule (finalAttrs: {
   '';
 
   vendorHash = "sha256-4bNhAWkO84imCaBzjBxNCOzG2A/z4lhqvu51wF2GVUo=";
+=======
+}:
+
+buildGoModule rec {
+  pname = "reposurgeon";
+  version = "4.26";
+
+  src = fetchurl {
+    url = "http://www.catb.org/~esr/reposurgeon/reposurgeon-${version}.tar.xz";
+    sha256 = "sha256-FuL5pvIM468hEm6rUBKGW6+WlYv4DPHNnpwpRGzMwlY=";
+  };
+
+  vendorHash = "sha256-QpgRCnsOOZujE405dCe+PYg/zNkqnrfZFfbBFo7adjY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "." ];
 
   nativeBuildInputs = [
     asciidoctor
     ruby
+<<<<<<< HEAD
     which
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postBuild = ''
@@ -48,4 +66,8 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [ dfoxfranke ];
     platforms = lib.platforms.all;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -45,10 +45,17 @@ buildPythonPackage rec {
     "test_extend_enum_shadow_property_stdlib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";
     homepage = "https://github.com/ethanfurman/aenum";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";
+    homepage = "https://github.com/ethanfurman/aenum";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

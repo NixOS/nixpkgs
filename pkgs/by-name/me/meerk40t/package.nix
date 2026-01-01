@@ -40,7 +40,11 @@ python3Packages.buildPythonApplication rec {
       setuptools
       wxpython
     ]
+<<<<<<< HEAD
     ++ lib.concatAttrValues optional-dependencies;
+=======
+    ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   optional-dependencies = with python3Packages; {
     cam = [
@@ -81,5 +85,9 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "meerk40t";
     homepage = "https://github.com/meerk40t/meerk40t";
     license = lib.licenses.mit;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

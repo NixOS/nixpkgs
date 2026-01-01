@@ -20,11 +20,19 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Friends don't let friends leak secrets on their terminal window";
     homepage = "https://github.com/SpectralOps/senv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Friends don't let friends leak secrets on their terminal window";
+    homepage = "https://github.com/SpectralOps/senv";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # needs golang.org/x/sys bump
     mainProgram = "senv";
   };

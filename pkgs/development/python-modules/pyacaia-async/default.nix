@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyacaia_async" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with Acaia scales";
     homepage = "https://github.com/zweckj/pyacaia_async";
@@ -41,5 +42,15 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with Acaia scales";
+    homepage = "https://github.com/zweckj/pyacaia_async";
+    license = with licenses; [
+      gpl3Only
+      mit
+    ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

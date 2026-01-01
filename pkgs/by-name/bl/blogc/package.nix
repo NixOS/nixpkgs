@@ -39,11 +39,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Blog compiler";
     license = lib.licenses.bsd3;
     homepage = "https://blogc.rgm.io";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Blog compiler";
+    license = licenses.bsd3;
+    homepage = "https://blogc.rgm.io";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
     "--with-libwrap=no"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Protocol for authentication, authorization and accounting (AAA) services for routers and network devices";
     homepage = "http://www.shrubbery.net/tac_plus/";
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Protocol for authentication, authorization and accounting (AAA) services for routers and network devices";
+    homepage = "http://www.shrubbery.net/tac_plus/";
+    license = licenses.free;
+    maintainers = with maintainers; [ _0x4A6F ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

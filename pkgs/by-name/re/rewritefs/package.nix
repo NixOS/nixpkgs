@@ -31,11 +31,20 @@ stdenv.mkDerivation {
 
   preConfigure = "substituteInPlace Makefile --replace /usr/local $out";
 
+<<<<<<< HEAD
   meta = {
     description = "FUSE filesystem intended to be used like Apache mod_rewrite";
     homepage = "https://github.com/sloonz/rewritefs";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "FUSE filesystem intended to be used like Apache mod_rewrite";
+    homepage = "https://github.com/sloonz/rewritefs";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ rnhmjoj ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

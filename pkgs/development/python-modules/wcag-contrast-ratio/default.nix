@@ -25,10 +25,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wcag_contrast_ratio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for computing contrast ratios, as required by WCAG 2.0";
     homepage = "https://github.com/gsnedders/wcag-contrast-ratio";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library for computing contrast ratios, as required by WCAG 2.0";
+    homepage = "https://github.com/gsnedders/wcag-contrast-ratio";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

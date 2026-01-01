@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netdata_pandas" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to pull data from the netdata REST API into a pandas dataframe";
     homepage = "https://github.com/netdata/netdata-pandas";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ raitobezarius ];
+=======
+  meta = with lib; {
+    description = "Library to pull data from the netdata REST API into a pandas dataframe";
+    homepage = "https://github.com/netdata/netdata-pandas";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raitobezarius ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

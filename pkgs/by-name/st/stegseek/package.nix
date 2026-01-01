@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
   # tests get stuck on aarch64-linux
   doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "Tool to crack steganography";
     longDescription = ''
@@ -42,8 +46,13 @@ stdenv.mkDerivation rec {
       used to extract hidden data from files.
     '';
     homepage = "https://github.com/RickdeJager/stegseek";
+<<<<<<< HEAD
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "stegseek";
   };
 }

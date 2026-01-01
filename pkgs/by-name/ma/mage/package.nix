@@ -25,11 +25,20 @@ buildGoModule rec {
     "-X github.com/magefile/mage/mage.timestamp=1970-01-01T00:00:00Z"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Make/Rake-like Build Tool Using Go";
     mainProgram = "mage";
     homepage = "https://magefile.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ swdunlop ];
+=======
+  meta = with lib; {
+    description = "Make/Rake-like Build Tool Using Go";
+    mainProgram = "mage";
+    homepage = "https://magefile.org/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ swdunlop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

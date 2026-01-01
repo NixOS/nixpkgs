@@ -2,6 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # nativeBuildInputs
   setuptools,
   # nativeCheckInputs
@@ -22,14 +26,26 @@
 
 buildPythonPackage rec {
   pname = "lastversion";
+<<<<<<< HEAD
   version = "3.5.12";
   pyproject = true;
 
+=======
+  version = "3.5.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "dvershinin";
     repo = "lastversion";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-0yq4rH5okkfbZRxIowClVSV9ihFMCnhRxqwUpMPFDyk=";
+=======
+    hash = "sha256-z3QrtnhIgXLVyaDNm0XqaVqZb05K3pq8mbweTpphdBQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

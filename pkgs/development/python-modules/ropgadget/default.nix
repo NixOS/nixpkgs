@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ropgadget" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
     mainProgram = "ROPgadget";
     homepage = "http://shell-storm.org/project/ROPgadget/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bennofs ];
+=======
+  meta = with lib; {
+    description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
+    mainProgram = "ROPgadget";
+    homepage = "http://shell-storm.org/project/ROPgadget/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bennofs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,11 +29,20 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/containers/gvisor-tap-vsock/releases/tag/${src.rev}";
     description = "Network stack based on gVisor";
     homepage = "https://github.com/containers/gvisor-tap-vsock";
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/containers/gvisor-tap-vsock/releases/tag/${src.rev}";
+    description = "Network stack based on gVisor";
+    homepage = "https://github.com/containers/gvisor-tap-vsock";
+    license = licenses.asl20;
+    teams = [ teams.podman ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

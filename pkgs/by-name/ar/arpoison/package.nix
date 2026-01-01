@@ -25,12 +25,21 @@ stdenv.mkDerivation rec {
     cp arpoison.8.gz $out/share/man/man8
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "UNIX arp cache update utility";
     homepage = "http://www.arpoison.net/";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = [ lib.maintainers.michalrus ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "UNIX arp cache update utility";
+    homepage = "http://www.arpoison.net/";
+    license = with licenses; [ gpl2Only ];
+    maintainers = [ maintainers.michalrus ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "arpoison";
   };
 }

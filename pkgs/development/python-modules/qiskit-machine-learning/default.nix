@@ -83,13 +83,21 @@ buildPythonPackage rec {
     "test_qgan_training"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = true; # incompatible with qiskit >= 2.0 (see https://github.com/Qiskit/qiskit-machine-learning/issues/934)
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

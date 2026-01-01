@@ -50,10 +50,18 @@ buildPythonPackage rec {
                     and not test_rsyncignore"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
+    homepage = "https://github.com/pytest-dev/pytest-xdist";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

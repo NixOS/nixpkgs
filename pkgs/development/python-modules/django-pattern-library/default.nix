@@ -49,11 +49,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pattern_library" ];
 
+<<<<<<< HEAD
   meta = {
     description = "UI pattern libraries for Django templates";
     homepage = "https://github.com/torchbox/django-pattern-library/";
     changelog = "https://github.com/torchbox/django-pattern-library/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
+=======
+  meta = with lib; {
+    description = "UI pattern libraries for Django templates";
+    homepage = "https://github.com/torchbox/django-pattern-library/";
+    changelog = "https://github.com/torchbox/django-pattern-library/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sephi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

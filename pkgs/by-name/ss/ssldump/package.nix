@@ -31,15 +31,24 @@ stdenv.mkDerivation {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "SSLv3/TLS network protocol analyzer";
     homepage = "https://ssldump.sourceforge.net";
     license = with lib.licenses; [
       bsdOriginal
       bsdOriginalShortened
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ aycanirican ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ aycanirican ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ssldump";
   };
 }

@@ -4,7 +4,11 @@ buildcpath() {
   local path after
   while (( $# )); do
     case $1 in
+<<<<<<< HEAD
         -isystem|-cxx-isystem)
+=======
+        -isystem)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             shift
             path=$path${path:+':'}$1
             ;;

@@ -4,8 +4,13 @@
   lib,
   ncurses,
   openssl,
+<<<<<<< HEAD
   cjson,
   enchant,
+=======
+  aspell,
+  cjson,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gnutls,
   gettext,
   zlib,
@@ -21,7 +26,11 @@
   guileSupport ? true,
   guile,
   luaSupport ? true,
+<<<<<<< HEAD
   lua5_3,
+=======
+  lua5,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   perlSupport ? true,
   perl,
   pythonSupport ? true,
@@ -76,7 +85,11 @@ let
       name = "lua";
       enabled = luaSupport;
       cmakeFlag = "ENABLE_LUA";
+<<<<<<< HEAD
       buildInputs = [ lua5_3 ];
+=======
+      buildInputs = [ lua5 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     {
       name = "python";
@@ -105,11 +118,19 @@ assert lib.all (p: p.enabled -> !(builtins.elem null p.buildInputs)) plugins;
 
 stdenv.mkDerivation rec {
   pname = "weechat";
+<<<<<<< HEAD
   version = "4.8.1";
 
   src = fetchurl {
     url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
     hash = "sha256-56wfvMcUWO1keq2odHmQkFy1v7k/2MzMvCqWlnOkKFo=";
+=======
+  version = "4.7.2";
+
+  src = fetchurl {
+    url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
+    hash = "sha256-ZmJL2QWm21igiTv73du4+kF7l6q0qa+MFA4LKc66JWk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Why is this needed? https://github.com/weechat/weechat/issues/2031
@@ -144,8 +165,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     openssl
+<<<<<<< HEAD
     cjson
     enchant
+=======
+    aspell
+    cjson
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     gnutls
     gettext
     zlib
@@ -174,6 +200,10 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = writeScript "update-weechat" ''
     #!/usr/bin/env nix-shell

@@ -115,7 +115,11 @@ in
       KEEP_FULL_TOPIC = toConfigBoolean cfg.keepFullTopic;
       LOG_LEVEL = cfg.logLevel;
       LOG_MQTT_MESSAGE = toConfigBoolean cfg.logMqttMessage;
+<<<<<<< HEAD
       MQTT_IGNORED_TOPICS = toConfigList cfg.mqttIgnoredTopics;
+=======
+      MQTT_IGNORED_TOPIC = toConfigList cfg.mqttIgnoredTopics;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       MQTT_ADDRESS = cfg.mqttAddress;
       MQTT_PORT = toString cfg.mqttPort;
       MQTT_TOPIC = cfg.mqttTopic;

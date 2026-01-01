@@ -13,7 +13,10 @@
   filelock,
   writableTmpDirAsHomeHook,
   nix-update-script,
+<<<<<<< HEAD
   beetcamp ? null, # For `passthru.tests`.
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -40,15 +43,22 @@ buildPythonPackage {
   ];
 
   dependencies = [
+<<<<<<< HEAD
+=======
+    beets
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     httpx
     packaging
     pycountry
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     beets
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
     pytestCheckHook
@@ -62,6 +72,7 @@ buildPythonPackage {
     "test_get_html"
   ];
 
+<<<<<<< HEAD
   passthru = {
     updateScript = nix-update-script { };
     tests = {
@@ -75,6 +86,9 @@ buildPythonPackage {
       };
     };
   };
+=======
+  passthru.updateScript = nix-update-script { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Bandcamp autotagger source for beets (http://beets.io)";

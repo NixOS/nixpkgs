@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical network monitoring and documentation tool";
     mainProgram = "jnetmap";
@@ -43,5 +44,16 @@ stdenv.mkDerivation rec {
     # Upstream supports macOS and Windows too.
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Graphical network monitoring and documentation tool";
+    mainProgram = "jnetmap";
+    homepage = "http://www.rakudave.ch/jnetmap/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl3Plus;
+    # Upstream supports macOS and Windows too.
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

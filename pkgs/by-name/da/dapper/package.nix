@@ -20,6 +20,7 @@ buildGoModule rec {
     substituteInPlace main.go --replace 0.0.0 ${version}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Docker build wrapper";
     mainProgram = "dapper";
@@ -27,5 +28,14 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ kuznero ];
+=======
+  meta = with lib; {
+    description = "Docker build wrapper";
+    mainProgram = "dapper";
+    homepage = "https://github.com/rancher/dapper";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ kuznero ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -35,12 +35,21 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.normaliz.uni-osnabrueck.de/";
     description = "Open source tool for computations in affine monoids, vector configurations, lattice polytopes, and rational cones";
     maintainers = with lib.maintainers; [ yannickulrich ];
     platforms = with lib.platforms; unix ++ windows;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://www.normaliz.uni-osnabrueck.de/";
+    description = "Open source tool for computations in affine monoids, vector configurations, lattice polytopes, and rational cones";
+    maintainers = with maintainers; [ yannickulrich ];
+    platforms = with platforms; unix ++ windows;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "normaliz";
   };
 })

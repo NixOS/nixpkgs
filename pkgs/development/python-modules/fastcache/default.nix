@@ -22,10 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastcache" ];
 
+<<<<<<< HEAD
   meta = {
     description = "C implementation of Python3 lru_cache";
     homepage = "https://github.com/pbrady/fastcache";
     changelog = "https://github.com/pbrady/fastcache/blob/v${version}/CHANGELOG";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "C implementation of Python3 lru_cache";
+    homepage = "https://github.com/pbrady/fastcache";
+    changelog = "https://github.com/pbrady/fastcache/blob/v${version}/CHANGELOG";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,17 +27,29 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
+<<<<<<< HEAD
   version = "3.51.1";
+=======
+  version = "3.50.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-TyRFzXBHlyTTKtAV7H/Tf7tvYTABO9S/vIDDK+tCt+A=";
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
     hash = "sha256-cygHoBzJ/K8ftBxw5Bam7dUVlXeI89Wud/7J2BtuIns=";
+=======
+    hash = "sha256-o9tYehuS7l3awvZrPttBsm+chnJ1eC1Gw6CIl31qWxg=";
+  };
+  docsrc = fetchurl {
+    url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
+    hash = "sha256-+KA89GFQAxDHp4XJ1vhhIayUZWAZgs3Kxt4MWYfb/C8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -144,15 +156,26 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     mainProgram = "sqlite3";
     maintainers = with lib.maintainers; [ np ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+=======
+    license = licenses.publicDomain;
+    mainProgram = "sqlite3";
+    maintainers = with maintainers; [ np ];
+    platforms = platforms.unix ++ platforms.windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "sqlite3" ];
   };
 }

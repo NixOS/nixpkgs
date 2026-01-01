@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "html_text" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extract text from HTML";
     homepage = "https://github.com/zytedata/html-text";
     changelog = "https://github.com/zytedata/html-text/blob/${version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Extract text from HTML";
+    homepage = "https://github.com/zytedata/html-text";
+    changelog = "https://github.com/zytedata/html-text/blob/${version}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

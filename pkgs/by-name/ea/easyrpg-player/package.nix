@@ -120,12 +120,21 @@ stdenv.mkDerivation rec {
   enableParallelChecking = true;
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+<<<<<<< HEAD
   meta = {
     description = "RPG Maker 2000/2003 and EasyRPG games interpreter";
     homepage = "https://easyrpg.org/";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "RPG Maker 2000/2003 and EasyRPG games interpreter";
+    homepage = "https://easyrpg.org/";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = lib.optionalString stdenv.hostPlatform.isDarwin "EasyRPG Player";
   };
 }

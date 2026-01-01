@@ -22,12 +22,21 @@ stdenv.mkDerivation {
     mv evhz $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Show mouse refresh rate under linux + evdev";
     homepage = "https://git.sr.ht/~iank/evhz";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ Tungsten842 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Show mouse refresh rate under linux + evdev";
+    homepage = "https://git.sr.ht/~iank/evhz";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ Tungsten842 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "evhz";
   };
 }

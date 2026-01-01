@@ -53,10 +53,18 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) twingate; };
 
+<<<<<<< HEAD
   meta = {
     description = "Twingate Client";
     homepage = "https://twingate.com";
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    description = "Twingate Client";
+    homepage = "https://twingate.com";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ tonyshkurenko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

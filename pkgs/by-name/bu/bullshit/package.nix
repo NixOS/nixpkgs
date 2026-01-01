@@ -34,12 +34,21 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Nonsense phrase generator";
     mainProgram = "bullshit";
     homepage = "https://github.com/fceschmidt/bullshit-arch";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ krloer ];
+=======
+  meta = with lib; {
+    description = "Nonsense phrase generator";
+    mainProgram = "bullshit";
+    homepage = "https://github.com/fceschmidt/bullshit-arch";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ krloer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (gawk.meta) platforms;
   };
 }

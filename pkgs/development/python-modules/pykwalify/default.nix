@@ -42,7 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykwalify" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/Grokzen/pykwalify";
     description = "YAML/JSON validation library";
     mainProgram = "pykwalify";
@@ -62,7 +66,12 @@ buildPythonPackage rec {
       The schema this library is based on and extended from:
       http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ siriobalmelli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/gcolor3-color-selection.c --replace "libportal/portal-gtk3.h" "libportal-gtk3/portal-gtk3.h"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple color chooser written in GTK3";
     mainProgram = "gcolor3";
@@ -54,5 +55,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple color chooser written in GTK3";
+    mainProgram = "gcolor3";
+    homepage = "https://gitlab.gnome.org/World/gcolor3";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

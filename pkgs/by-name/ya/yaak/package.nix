@@ -15,9 +15,12 @@
   pango,
   cairo,
   pixman,
+<<<<<<< HEAD
   librsvg,
   gdk-pixbuf,
   adwaita-icon-theme,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   protobuf,
   perl,
   makeWrapper,
@@ -26,7 +29,10 @@
   lld,
   wasm-pack,
   wasm-bindgen-cli_0_2_100,
+<<<<<<< HEAD
   wrapGAppsHook3,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -61,7 +67,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lld
     wasm-pack
     wasm-bindgen-cli_0_2_100
+<<<<<<< HEAD
     wrapGAppsHook3
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -71,9 +80,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pango
     cairo
     pixman
+<<<<<<< HEAD
     librsvg
     gdk-pixbuf
     adwaita-icon-theme
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
@@ -84,6 +96,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.NPM_CONFIG_IGNORE_SCRIPTS = "true";
 
   postPatch = ''
+<<<<<<< HEAD
     substituteInPlace package.json \
       --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
 
@@ -94,6 +107,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false' \
       --replace-fail '"https://update.yaak.app/check/{{target}}/{{arch}}/{{current_version}}"' '"https://non.existent.domain"'
 
+=======
+    substituteInPlace src-tauri/tauri.conf.json \
+      --replace-fail '"0.0.0"' '"${finalAttrs.version}"'
+    substituteInPlace src-tauri/tauri.commercial.conf.json \
+      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false' \
+      --replace-fail '"https://update.yaak.app/check/{{target}}/{{arch}}/{{current_version}}"' '"https://non.existent.domain"'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     substituteInPlace package.json \
       --replace-fail '"bootstrap:vendor-node": "node scripts/vendor-node.cjs",' "" \
       --replace-fail '"bootstrap:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
@@ -141,8 +161,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/yaak-app \
       --inherit-argv0 \
+<<<<<<< HEAD
       --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1 \
       --set-default WEBKIT_DISABLE_COMPOSITING_MODE 1
+=======
+      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru.updateScript = nix-update-script { };

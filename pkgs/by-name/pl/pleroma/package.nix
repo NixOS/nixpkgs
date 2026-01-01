@@ -194,15 +194,27 @@ beamPackages.mixRelease rec {
     inherit mixNixDeps;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "ActivityPub microblogging server";
+    homepage = "https://git.pleroma.social/pleroma/pleroma";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       picnoir
       kloenk
       yayayayaka
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

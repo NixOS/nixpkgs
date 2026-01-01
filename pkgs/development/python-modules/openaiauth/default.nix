@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "OpenAIAuth" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for authenticating with the OpenAI API";
     homepage = "https://github.com/acheong08/OpenAIAuth";
     changelog = "https://github.com/acheong08/OpenAIAuth/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ logger ];
+=======
+  meta = with lib; {
+    description = "Library for authenticating with the OpenAI API";
+    homepage = "https://github.com/acheong08/OpenAIAuth";
+    changelog = "https://github.com/acheong08/OpenAIAuth/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ logger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

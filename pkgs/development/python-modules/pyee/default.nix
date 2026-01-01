@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyee" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Port of Node.js's EventEmitter to Python";
     homepage = "https://github.com/jfhbrook/pyee";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kmein ];
+=======
+  meta = with lib; {
+    description = "Port of Node.js's EventEmitter to Python";
+    homepage = "https://github.com/jfhbrook/pyee";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kmein ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

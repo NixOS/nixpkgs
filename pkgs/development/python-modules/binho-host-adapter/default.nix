@@ -21,10 +21,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "binhoHostAdapter" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for Binho Multi-Protocol USB Host Adapters";
     homepage = "https://github.com/adafruit/Adafruit_Python_PlatformDetect";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for Binho Multi-Protocol USB Host Adapters";
+    homepage = "https://github.com/adafruit/Adafruit_Python_PlatformDetect";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

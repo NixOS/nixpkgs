@@ -44,7 +44,11 @@ replaceVarsWith {
     modDirVersion = if modDirVersion != "" then modDirVersion else "unknown";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Print certain system information (hardcoded with lib/system values)";
     mainProgram = "uname";
     longDescription = ''
@@ -56,8 +60,14 @@ replaceVarsWith {
       not intercept these calls, builds made on different kernels will produce
       different results.
     '';
+<<<<<<< HEAD
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ artturin ];
     platforms = lib.platforms.all;
+=======
+    license = [ licenses.mit ];
+    maintainers = with maintainers; [ artturin ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

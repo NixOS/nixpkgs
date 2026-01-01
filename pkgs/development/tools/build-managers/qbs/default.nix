@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
     qtscript
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool that helps simplify the build process for developing projects across multiple platforms";
     homepage = "https://wiki.qt.io/Qbs";
     license = lib.licenses.lgpl3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool that helps simplify the build process for developing projects across multiple platforms";
+    homepage = "https://wiki.qt.io/Qbs";
+    license = licenses.lgpl3;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

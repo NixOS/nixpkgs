@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Modern and easy-to-use crypto library";
     homepage = "https://doc.libsodium.org/";
@@ -46,5 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ raskin ];
     pkgConfigModules = [ "libsodium" ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Modern and easy-to-use crypto library";
+    homepage = "https://doc.libsodium.org/";
+    license = licenses.isc;
+    maintainers = with maintainers; [ raskin ];
+    pkgConfigModules = [ "libsodium" ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

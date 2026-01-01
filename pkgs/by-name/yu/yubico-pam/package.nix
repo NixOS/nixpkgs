@@ -37,11 +37,19 @@ stdenv.mkDerivation rec {
     libykclient
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Yubico PAM module";
     mainProgram = "ykpamcfg";
     homepage = "https://developers.yubico.com/yubico-pam";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Yubico PAM module";
+    mainProgram = "ykpamcfg";
+    homepage = "https://developers.yubico.com/yubico-pam";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

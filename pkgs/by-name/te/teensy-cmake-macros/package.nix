@@ -34,11 +34,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CMake macros for building teensy projects";
     platforms = lib.platforms.all;
     homepage = "https://github.com/newdigate/teensy-cmake-macros";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.michaeldonovan ];
+=======
+  meta = with lib; {
+    description = "CMake macros for building teensy projects";
+    platforms = platforms.all;
+    homepage = "https://github.com/newdigate/teensy-cmake-macros";
+    license = licenses.mit;
+    maintainers = [ maintainers.michaeldonovan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

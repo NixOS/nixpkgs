@@ -38,7 +38,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/omnilib/sphinx-mdinclude";
     changelog = "https://github.com/omnilib/sphinx-mdinclude/blob/v${version}/CHANGELOG.md";
     description = "Sphinx extension for including or writing pages in Markdown format";
@@ -50,8 +54,13 @@ buildPythonPackage rec {
 
       sphinx-mdinclude is a fork of m2r and m2r2, focused only on providing a Sphinx extension.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       flokli
       JulianFP
     ];

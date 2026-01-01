@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/zlint";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # `zig build` produces a lot more artifacts, just copy over the ones we want
   installPhase = ''

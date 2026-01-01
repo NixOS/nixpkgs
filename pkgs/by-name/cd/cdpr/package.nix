@@ -33,12 +33,21 @@ stdenv.mkDerivation rec {
     install -Dm755 cdpr $out/bin/cdpr
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cisco Discovery Protocol Reporter";
     homepage = "https://cdpr.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sgo ];
+=======
+  meta = with lib; {
+    description = "Cisco Discovery Protocol Reporter";
+    homepage = "https://cdpr.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.sgo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cdpr";
   };
 }

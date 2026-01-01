@@ -46,10 +46,13 @@ stdenv.mkDerivation {
     texinfo
   ];
 
+<<<<<<< HEAD
   # Fix build with gcc15
   # https://savannah.nongnu.org/bugs/index.php?66726
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   configureFlags = [
     "--with-editor=${nano}/bin/nano"
 
@@ -72,10 +75,18 @@ stdenv.mkDerivation {
 
   doCheck = false; # fails 1 of 1 tests
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://cvs.nongnu.org";
     description = "Concurrent Versions System - a source control system";
     license = lib.licenses.gpl2Plus; # library is GPLv2, main is GPLv1
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://cvs.nongnu.org";
+    description = "Concurrent Versions System - a source control system";
+    license = licenses.gpl2Plus; # library is GPLv2, main is GPLv1
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

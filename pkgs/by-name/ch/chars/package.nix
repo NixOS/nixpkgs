@@ -22,11 +22,20 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Commandline tool to display information about unicode characters";
     mainProgram = "chars";
     homepage = "https://github.com/antifuchs/chars";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bbigras ];
+=======
+  meta = with lib; {
+    description = "Commandline tool to display information about unicode characters";
+    mainProgram = "chars";
+    homepage = "https://github.com/antifuchs/chars";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bbigras ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

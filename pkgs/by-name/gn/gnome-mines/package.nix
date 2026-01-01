@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-mines";
     description = "Clear hidden mines from a minefield";
@@ -59,5 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-mines";
+    description = "Clear hidden mines from a minefield";
+    mainProgram = "gnome-mines";
+    teams = [ teams.gnome ];
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -81,6 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   meta = {

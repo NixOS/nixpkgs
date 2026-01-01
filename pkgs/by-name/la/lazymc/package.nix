@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Remote wake-up daemon for minecraft servers";
     homepage = "https://github.com/timvisee/lazymc";
@@ -29,6 +30,17 @@ rustPlatform.buildRustPackage rec {
       dandellion
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Remote wake-up daemon for minecraft servers";
+    homepage = "https://github.com/timvisee/lazymc";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+      h7x4
+      dandellion
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lazymc";
   };
 }

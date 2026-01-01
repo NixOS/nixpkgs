@@ -15,7 +15,10 @@
   jsonschema,
   pydantic,
   pydantic-settings,
+<<<<<<< HEAD
   pyjwt,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python-multipart,
   sse-starlette,
   starlette,
@@ -42,14 +45,22 @@
 
 buildPythonPackage rec {
   pname = "mcp";
+<<<<<<< HEAD
   version = "1.25.0";
+=======
+  version = "1.15.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-fSQCvKaNMeCzguM2tcTJJlAeZQmzSJmbfEK35D8pQcs=";
+=======
+    hash = "sha256-pvbrNkGfQaZX95JZyYXuuH2gMzWouuGXjaDxPyKW0Zw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''
@@ -80,7 +91,10 @@ buildPythonPackage rec {
     jsonschema
     pydantic
     pydantic-settings
+<<<<<<< HEAD
     pyjwt
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python-multipart
     sse-starlette
     starlette
@@ -111,7 +125,11 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # attempts to run the package manager uv

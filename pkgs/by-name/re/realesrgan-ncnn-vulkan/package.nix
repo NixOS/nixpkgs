@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     patchelf $out/bin/realesrgan-ncnn-vulkan --add-needed libvulkan.so
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "NCNN implementation of Real-ESRGAN. Real-ESRGAN aims at developing Practical Algorithms for General Image Restoration";
     homepage = "https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan";
@@ -75,6 +76,17 @@ stdenv.mkDerivation rec {
       iynaix
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "NCNN implementation of Real-ESRGAN. Real-ESRGAN aims at developing Practical Algorithms for General Image Restoration";
+    homepage = "https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      tilcreator
+      iynaix
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "realesrgan-ncnn-vulkan";
   };
 }

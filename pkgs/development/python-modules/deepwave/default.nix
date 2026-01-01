@@ -63,11 +63,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deepwave" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wave propagation modules for PyTorch";
     homepage = "https://github.com/ar4/deepwave";
     license = lib.licenses.mit;
     platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
     maintainers = with lib.maintainers; [ atila ];
+=======
+  meta = with lib; {
+    description = "Wave propagation modules for PyTorch";
+    homepage = "https://github.com/ar4/deepwave";
+    license = licenses.mit;
+    platforms = intersectLists platforms.x86_64 platforms.linux;
+    maintainers = with maintainers; [ atila ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,6 +23,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Dancing Script";
     longDescription = "A lively casual script where the letters bounce and change size slightly.";
@@ -30,5 +31,14 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ wdavidw ];
+=======
+  meta = with lib; {
+    description = "Dancing Script";
+    longDescription = "A lively casual script where the letters bounce and change size slightly.";
+    homepage = "https://github.com/impallari/DancingScript";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wdavidw ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

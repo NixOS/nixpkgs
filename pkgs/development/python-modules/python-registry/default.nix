@@ -38,11 +38,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Registry" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to parse the Windows Registry hives";
     homepage = "https://github.com/williballenthin/python-registry";
     changelog = "https://github.com/williballenthin/python-registry/releases/tag/${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Module to parse the Windows Registry hives";
+    homepage = "https://github.com/williballenthin/python-registry";
+    changelog = "https://github.com/williballenthin/python-registry/releases/tag/${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "freezegun-stubs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Typing stubs for freezegun";
     homepage = "https://github.com/python/typeshed";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "Typing stubs for freezegun";
+    homepage = "https://github.com/python/typeshed";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

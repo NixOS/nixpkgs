@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Modern IRC client written in GTK";
     mainProgram = "srain";
@@ -60,5 +61,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wineee ];
+=======
+  meta = with lib; {
+    description = "Modern IRC client written in GTK";
+    mainProgram = "srain";
+    homepage = "https://srain.silverrainz.me";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wineee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -58,11 +58,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycddl" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the Rust cddl crate";
     homepage = "https://gitlab.com/tahoe-lafs/pycddl";
     changelog = "https://gitlab.com/tahoe-lafs/pycddl/-/tree/v${version}#release-notes";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.exarkun ];
+=======
+  meta = with lib; {
+    description = "Python bindings for the Rust cddl crate";
+    homepage = "https://gitlab.com/tahoe-lafs/pycddl";
+    changelog = "https://gitlab.com/tahoe-lafs/pycddl/-/tree/v${version}#release-notes";
+    license = licenses.mit;
+    maintainers = [ maintainers.exarkun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

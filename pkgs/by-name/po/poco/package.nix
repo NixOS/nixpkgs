@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pocoproject.org/";
     description = "Cross-platform C++ libraries with a network/internet focus";
@@ -115,5 +116,16 @@ stdenv.mkDerivation rec {
       tomodachi94
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://pocoproject.org/";
+    description = "Cross-platform C++ libraries with a network/internet focus";
+    license = licenses.boost;
+    maintainers = with maintainers; [
+      orivej
+      tomodachi94
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

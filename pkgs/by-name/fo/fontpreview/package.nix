@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/sdushantha/fontpreview";
     description = "Highly customizable and minimal font previewer written in bash";
     longDescription = ''
@@ -51,9 +55,15 @@ stdenv.mkDerivation rec {
       all of the variables in this tool can be changed using the commandline
       flags or you can configure them using environment variables.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.erictapen ];
+=======
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fontpreview";
   };
 }

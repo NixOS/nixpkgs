@@ -29,11 +29,19 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "cliche" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Build a simple command-line interface from your functions :computer:";
     mainProgram = "cliche";
     homepage = "https://github.com/kootenpv/cliche";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Build a simple command-line interface from your functions :computer:";
+    mainProgram = "cliche";
+    homepage = "https://github.com/kootenpv/cliche";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

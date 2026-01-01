@@ -36,11 +36,20 @@ buildPythonPackage rec {
     scipy
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/quadprog/quadprog";
     changelog = "https://github.com/quadprog/quadprog/releases/tag/v${version}";
     description = "Quadratic Programming Solver";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/quadprog/quadprog";
+    changelog = "https://github.com/quadprog/quadprog/releases/tag/v${version}";
+    description = "Quadratic Programming Solver";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvis" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/WestHealth/pyvis";
     description = "Python package for creating and visualizing interactive network graphs";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/WestHealth/pyvis";
+    description = "Python package for creating and visualizing interactive network graphs";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

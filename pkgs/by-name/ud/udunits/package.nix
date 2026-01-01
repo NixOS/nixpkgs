@@ -32,7 +32,11 @@ stdenv.mkDerivation {
     expat
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.unidata.ucar.edu/software/udunits/";
     description = "C-based package for the programatic handling of units of physical quantities";
     longDescription = ''
@@ -43,9 +47,15 @@ stdenv.mkDerivation {
       also contains a command-line utility for investigating units and
       converting values.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "udunits2";
   };
 }

@@ -46,11 +46,19 @@ buildGoModule rec {
     command = "oneshot version";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "First-come first-served single-fire HTTP server";
     homepage = "https://www.oneshot.uno/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ milibopp ];
+=======
+  meta = with lib; {
+    description = "First-come first-served single-fire HTTP server";
+    homepage = "https://www.oneshot.uno/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ milibopp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "oneshot";
   };
 }

@@ -14,11 +14,20 @@ stdenv.mkDerivation rec {
     sha256 = "0br5nvlna86k4ya4q13gz0i7nlmk225lqmpfiqlkldxkr473kf0s";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight Gopher server";
     homepage = "https://gofish.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Lightweight Gopher server";
+    homepage = "https://gofish.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

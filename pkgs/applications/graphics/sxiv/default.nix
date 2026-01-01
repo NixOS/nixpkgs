@@ -36,12 +36,20 @@ stdenv.mkDerivation rec {
     install -Dt $out/share/applications sxiv.desktop
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple X Image Viewer";
     homepage = "https://github.com/muennich/sxiv";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ h7x4 ];
+=======
+    maintainers = with maintainers; [ h7x4 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sxiv";
   };
 }

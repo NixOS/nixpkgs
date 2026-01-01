@@ -47,6 +47,7 @@ buildPythonPackage rec {
     fastapi
     uvicorn
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aioprometheus" ];
@@ -57,5 +58,17 @@ buildPythonPackage rec {
     changelog = "https://github.com/claws/aioprometheus/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "aioprometheus" ];
+
+  meta = with lib; {
+    description = "Prometheus Python client library for asyncio-based applications";
+    homepage = "https://github.com/claws/aioprometheus";
+    changelog = "https://github.com/claws/aioprometheus/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

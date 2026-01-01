@@ -55,11 +55,20 @@ stdenv.mkDerivation {
     cp -r VST3/Delay\ Architect.vst3 $out/lib/vst3
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jpcima/DelayArchitect";
     description = "Visual, musical editor for delay effects";
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jpcima/DelayArchitect";
+    description = "Visual, musical editor for delay effects";
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.all;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

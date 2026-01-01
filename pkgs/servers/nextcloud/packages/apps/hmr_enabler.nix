@@ -18,7 +18,12 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerNoDev = false;
+<<<<<<< HEAD
   vendorHash = "sha256-js9O89jIRxX2DKI+LYjL3d9RsLdzUB4iUNUgngTryz8=";
+=======
+
+  vendorHash = "sha256-KWvHgPeTLy/a6NusLpKBgYJWjSzc+MNF7cE5u31JqKs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     chmod -R u+w $out/share

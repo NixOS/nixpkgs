@@ -35,16 +35,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "BLAKE2 cryptographic hash function";
     mainProgram = "b2sum";
     homepage = "https://blake2.net";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "BLAKE2 cryptographic hash function";
+    mainProgram = "b2sum";
+    homepage = "https://blake2.net";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       cc0
       openssl
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ kirelagin ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ kirelagin ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

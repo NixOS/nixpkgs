@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Small little utility to run a couple of executables under a new DBus session for testing";
     mainProgram = "dbus-test-runner";
@@ -83,6 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.lomiri ];
+=======
+  meta = with lib; {
+    description = "Small little utility to run a couple of executables under a new DBus session for testing";
+    mainProgram = "dbus-test-runner";
+    homepage = "https://launchpad.net/dbus-test-runner";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    teams = [ teams.lomiri ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "dbustest-1"
     ];

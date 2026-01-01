@@ -44,12 +44,21 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/devpi/devpi";
     description = "Utilities jointly used by devpi-server and devpi-client";
     changelog = "https://github.com/devpi/devpi/blob/common-${version}/common/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/devpi/devpi";
+    description = "Utilities jointly used by devpi-server and devpi-client";
+    changelog = "https://github.com/devpi/devpi/blob/common-${version}/common/CHANGELOG";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lewo
       makefu
     ];

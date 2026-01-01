@@ -42,11 +42,20 @@ buildPythonPackage rec {
     "test_api_http_response_error"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for the official Notion API";
     homepage = "https://github.com/ramnes/notion-sdk-py";
     changelog = "https://github.com/ramnes/notion-sdk-py/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "Python client for the official Notion API";
+    homepage = "https://github.com/ramnes/notion-sdk-py";
+    changelog = "https://github.com/ramnes/notion-sdk-py/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

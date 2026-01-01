@@ -20,10 +20,17 @@ stdenv.mkDerivation {
     cp -p zdc zdu $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://web.archive.org/web/20160316212948/http://cis.poly.edu/zdelta/";
     platforms = lib.platforms.all;
     license = lib.licenses.zlib;
+=======
+  meta = with lib; {
+    homepage = "https://web.archive.org/web/20160316212948/http://cis.poly.edu/zdelta/";
+    platforms = platforms.all;
+    license = licenses.zlib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # last successful hydra build on darwin was in 2024
     broken = stdenv.hostPlatform.isDarwin;
   };

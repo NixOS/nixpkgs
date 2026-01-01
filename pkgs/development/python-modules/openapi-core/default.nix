@@ -40,6 +40,7 @@ buildPythonPackage rec {
     hash = "sha256-Q7Z6bq8TztNm2QLL7g23rOGnXVfiTDjquHAhcSWYlC4=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     # https://github.com/python-openapi/openapi-core/issues/1009
     substituteInPlace tests/unit/extensions/test_factories.py \
@@ -47,6 +48,8 @@ buildPythonPackage rec {
                      'assert str(test_model_class.__dataclass_fields__["name"].type) == str(Any)'
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
@@ -90,7 +93,11 @@ buildPythonPackage rec {
     responses
     webob
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTestPaths = [
     # Requires secrets and additional configuration
@@ -103,11 +110,20 @@ buildPythonPackage rec {
     "openapi_core.validation.response.validators"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
     description = "Client-side and server-side support for the OpenAPI Specification v3";
     homepage = "https://github.com/python-openapi/openapi-core";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
+    description = "Client-side and server-side support for the OpenAPI Specification v3";
+    homepage = "https://github.com/python-openapi/openapi-core";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

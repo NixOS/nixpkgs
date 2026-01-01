@@ -27,10 +27,18 @@ stdenv.mkDerivation {
     ++ lib.optional enableEmu "--enable-emu"
     ++ lib.optional enableSpy "--enable-spy";
 
+<<<<<<< HEAD
   meta = {
     description = "Netgear switch (NSDP) administration tool";
     homepage = "https://www.netgeek.ovh/wiki/projets:ngadmin";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.astro ];
+=======
+  meta = with lib; {
+    description = "Netgear switch (NSDP) administration tool";
+    homepage = "https://www.netgeek.ovh/wiki/projets:ngadmin";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

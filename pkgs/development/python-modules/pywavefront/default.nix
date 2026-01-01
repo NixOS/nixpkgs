@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywavefront" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for importing Wavefront .obj files";
     homepage = "https://github.com/pywavefront/PyWavefront";
     changelog = "https://github.com/pywavefront/PyWavefront/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+  meta = with lib; {
+    description = "Python library for importing Wavefront .obj files";
+    homepage = "https://github.com/pywavefront/PyWavefront";
+    changelog = "https://github.com/pywavefront/PyWavefront/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

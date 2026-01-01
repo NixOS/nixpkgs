@@ -89,11 +89,19 @@ buildPythonPackage rec {
                   $out/${python.sitePackages}/${pname}-${version}.pth
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GTK 2 Python bindings";
     homepage = "https://gitlab.gnome.org/Archive/pygtk";
     platforms = lib.platforms.all;
     license = with lib.licenses; [ lgpl21Plus ];
+=======
+  meta = with lib; {
+    description = "GTK 2 Python bindings";
+    homepage = "https://gitlab.gnome.org/Archive/pygtk";
+    platforms = platforms.all;
+    license = with licenses; [ lgpl21Plus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ bryango ];
   };
 }

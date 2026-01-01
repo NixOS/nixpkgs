@@ -97,11 +97,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.gupnp.org/";
     description = "Implementation of the UPnP specification";
     mainProgram = "gupnp-binding-tool-1.2";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://www.gupnp.org/";
+    description = "Implementation of the UPnP specification";
+    mainProgram = "gupnp-binding-tool-1.2";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

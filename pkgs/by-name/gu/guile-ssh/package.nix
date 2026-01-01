@@ -57,12 +57,22 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bindings to Libssh for GNU Guile";
     homepage = "https://github.com/artyom-poptsov/guile-ssh";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       ethancedwards8
+=======
+  meta = with lib; {
+    description = "Bindings to Libssh for GNU Guile";
+    homepage = "https://github.com/artyom-poptsov/guile-ssh";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      ethancedwards8
+      foo-dogsquared
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = guile.meta.platforms;
   };

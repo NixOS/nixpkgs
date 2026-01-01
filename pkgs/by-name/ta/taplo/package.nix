@@ -11,7 +11,10 @@
   # passthru dependencies
   nix-update-script,
   runCommand,
+<<<<<<< HEAD
   makeBinaryWrapper,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   toml-test,
 
   # Optional feature
@@ -56,6 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {
@@ -68,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           # Some of the failures are reported issues, others may not be.
           # https://github.com/tamasfe/taplo/issues/486
           skips = [
+<<<<<<< HEAD
             "invalid/table/append-with-dotted-keys-04"
             "invalid/table/super-twice"
             "valid/array/array"
@@ -94,20 +102,37 @@ rustPlatform.buildRustPackage (finalAttrs: {
             "valid/spec-example-1"
             "valid/spec-example-1-compact"
             "valid/string/quoted-unicode"
+=======
+            "valid/comment/nonascii"
+            "valid/datetime/edge"
+            "valid/key/quoted-unicode"
+            "valid/string/quoted-unicode"
+            "invalid/control/multi-cr"
+            "invalid/control/rawmulti-cr"
+            "invalid/table/super-twice"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ];
         in
         runCommand "taplo-toml-test"
           {
             nativeBuildInputs = [
+<<<<<<< HEAD
               makeBinaryWrapper
+=======
+              finalAttrs.finalPackage
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               toml-test
             ];
           }
           ''
+<<<<<<< HEAD
             makeWrapper ${lib.getExe finalAttrs.finalPackage} ./taplo-toml-test --add-flag toml-test
             toml-test test -decoder=./taplo-toml-test -toml=1.0 ${
               lib.concatMapStringsSep " " (a: "-skip ${a}") skips
             }
+=======
+            toml-test taplo ${lib.concatMapStringsSep " " (a: "-skip ${a}") skips} -- toml-test
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             touch "$out"
           '';
     };

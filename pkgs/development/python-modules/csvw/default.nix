@@ -56,10 +56,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "csvw" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CSV on the Web";
     homepage = "https://github.com/cldf/csvw";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "CSV on the Web";
+    homepage = "https://github.com/cldf/csvw";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

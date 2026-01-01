@@ -60,10 +60,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "milc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Opinionated Batteries-Included Python 3 CLI Framework";
     mainProgram = "milc-color";
     homepage = "https://milc.clueboard.co";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Opinionated Batteries-Included Python 3 CLI Framework";
+    mainProgram = "milc-color";
+    homepage = "https://milc.clueboard.co";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

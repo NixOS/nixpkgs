@@ -2,7 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   asio_1_32_0,
+=======
+  asio,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   boost,
   check,
   openssl,
@@ -25,8 +29,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+<<<<<<< HEAD
     # depends on io_service
     asio_1_32_0
+=======
+    asio
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     boost.dev
     check
     openssl
@@ -47,6 +55,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) mariadb-galera;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Galera 3 wsrep provider library";
     mainProgram = "garbd";
@@ -55,6 +64,16 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ izorkin ];
     teams = [ lib.teams.helsinki-systems ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Galera 3 wsrep provider library";
+    mainProgram = "garbd";
+    homepage = "https://galeracluster.com/";
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ izorkin ];
+    teams = [ teams.helsinki-systems ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

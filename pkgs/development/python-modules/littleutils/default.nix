@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "littleutils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small collection of Python utility functions";
     homepage = "https://github.com/alexmojaki/littleutils";
     changelog = "https://github.com/alexmojaki/littleutils/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Small collection of Python utility functions";
+    homepage = "https://github.com/alexmojaki/littleutils";
+    changelog = "https://github.com/alexmojaki/littleutils/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

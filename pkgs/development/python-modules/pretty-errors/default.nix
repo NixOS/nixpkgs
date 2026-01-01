@@ -30,10 +30,18 @@ buildPythonPackage rec {
   # No test
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Prettifies Python exception output to make it legible";
     homepage = "https://pypi.org/project/pretty-errors/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    description = "Prettifies Python exception output to make it legible";
+    homepage = "https://pypi.org/project/pretty-errors/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

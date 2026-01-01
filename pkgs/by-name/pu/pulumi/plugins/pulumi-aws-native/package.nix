@@ -26,12 +26,21 @@ mkPulumiPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Native AWS Pulumi Provider";
     mainProgram = "pulumi-resource-aws-native";
     homepage = "https://github.com/pulumi/pulumi-aws-native";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Native AWS Pulumi Provider";
+    mainProgram = "pulumi-resource-aws-native";
+    homepage = "https://github.com/pulumi/pulumi-aws-native";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       veehaitch
     ];
   };

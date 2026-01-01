@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "http_sf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to parse and serialise HTTP structured field values";
     homepage = "https://github.com/mnot/http-sf";
     changelog = "https://github.com/mnot/http-sf/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to parse and serialise HTTP structured field values";
+    homepage = "https://github.com/mnot/http-sf";
+    changelog = "https://github.com/mnot/http-sf/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

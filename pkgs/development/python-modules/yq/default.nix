@@ -47,11 +47,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yq" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line YAML/XML/TOML processor - jq wrapper for YAML, XML, TOML documents";
     homepage = "https://github.com/kislyuk/yq";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Command-line YAML/XML/TOML processor - jq wrapper for YAML, XML, TOML documents";
+    homepage = "https://github.com/kislyuk/yq";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       SuperSandro2000
     ];
     mainProgram = "yq";

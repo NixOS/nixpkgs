@@ -164,6 +164,7 @@ stdenv.mkDerivation rec {
   #    scan_devices.o: file not recognized: file format not recognized
   enableParallelBuilding = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://xiph.org/paranoia";
     description = "Tool and library for reading digital audio from CDs";
@@ -172,6 +173,16 @@ stdenv.mkDerivation rec {
       lgpl21Plus
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://xiph.org/paranoia";
+    description = "Tool and library for reading digital audio from CDs";
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cdparanoia";
   };
 }

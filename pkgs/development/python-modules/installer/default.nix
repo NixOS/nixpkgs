@@ -21,6 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-thHghU+1Alpay5r9Dc3v7ATRFfYKV8l9qR0nbGOOX/A=";
   };
 
+<<<<<<< HEAD
   patches =
     lib.optionals (pythonAtLeast "3.13") [
       # Fix compatibility with Python 3.13
@@ -32,6 +33,13 @@ buildPythonPackage rec {
       # https://github.com/pypa/installer/pull/258
       ./cross.patch
     ];
+=======
+  patches = lib.optionals (pythonAtLeast "3.13") [
+    # Fix compatibility with Python 3.13
+    # https://github.com/pypa/installer/pull/201
+    ./python313-compat.patch
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ flit-core ];
 
@@ -56,6 +64,7 @@ buildPythonPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Low-level library for installing a Python package from a wheel distribution";
     homepage = "https://github.com/pypa/installer";
@@ -63,5 +72,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.cpcloud ];
     teams = [ lib.teams.python ];
+=======
+  meta = with lib; {
+    description = "Low-level library for installing a Python package from a wheel distribution";
+    homepage = "https://github.com/pypa/installer";
+    changelog = "https://github.com/pypa/installer/blob/${src.rev}/docs/changelog.md";
+    license = licenses.mit;
+    maintainers = [ maintainers.cpcloud ];
+    teams = [ teams.python ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

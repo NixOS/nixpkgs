@@ -42,11 +42,20 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "PKCS#11 wrapper for Python";
     homepage = "https://github.com/LudovicRousseau/PyKCS11";
     changelog = "https://github.com/LudovicRousseau/PyKCS11/releases/tag/${version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ hulr ];
+=======
+  meta = with lib; {
+    description = "PKCS#11 wrapper for Python";
+    homepage = "https://github.com/LudovicRousseau/PyKCS11";
+    changelog = "https://github.com/LudovicRousseau/PyKCS11/releases/tag/${version}";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ hulr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

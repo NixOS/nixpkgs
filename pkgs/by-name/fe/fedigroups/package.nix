@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://git.ondrovo.com/MightyPork/group-actor#fedi-groups";
     downloadPage = "https://git.ondrovo.com/MightyPork/group-actor/releases";
@@ -39,6 +40,15 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://git.ondrovo.com/MightyPork/group-actor#fedi-groups";
+    downloadPage = "https://git.ondrovo.com/MightyPork/group-actor/releases";
+    description = "Approximation of groups usable with Fediverse software that implements the Mastodon client API";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fedigroups";
   };
 }

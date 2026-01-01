@@ -24,11 +24,19 @@ buildGoModule {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Fork of esbuild maintained by netlify";
     homepage = "https://github.com/netlify/esbuild";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ roberth ];
+=======
+  meta = with lib; {
+    description = "Fork of esbuild maintained by netlify";
+    homepage = "https://github.com/netlify/esbuild";
+    license = licenses.mit;
+    maintainers = with maintainers; [ roberth ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "esbuild";
   };
 }

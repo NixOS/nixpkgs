@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gitsweep" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool that helps you clean up Git branches";
     mainProgram = "git-sweep";
     homepage = "https://github.com/arc90/git-sweep";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "Command-line tool that helps you clean up Git branches";
+    mainProgram = "git-sweep";
+    homepage = "https://github.com/arc90/git-sweep";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

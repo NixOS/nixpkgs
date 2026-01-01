@@ -47,15 +47,25 @@ stdenv.mkDerivation rec {
     export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Network bandwidth monitor";
     homepage = "https://github.com/tgraf/bmon";
     # Licensed under BSD and MIT
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.BSD
     #  - https://github.com/tgraf/bmon/blob/master/LICENSE.MIT
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       pSub
     ];

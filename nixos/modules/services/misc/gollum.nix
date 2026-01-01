@@ -18,11 +18,14 @@ in
       ]
       "MathJax rendering might be discontinued in the future, use services.gollum.math instead to enable KaTeX rendering or file a PR if you really need Mathjax"
     )
+<<<<<<< HEAD
     (lib.mkRemovedOptionModule [
       "services"
       "gollum"
       "local-time"
     ] "Set the value in services.gollum.extraConfig")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   options.services.gollum = {
@@ -43,6 +46,7 @@ in
     extraConfig = lib.mkOption {
       type = lib.types.lines;
       default = "";
+<<<<<<< HEAD
       example = ''
         wiki_options = {
           show_local_time: true
@@ -50,6 +54,8 @@ in
 
         Precious::App.set(:wiki_options, wiki_options)
       '';
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Content of the configuration file";
     };
 
@@ -99,6 +105,15 @@ in
       description = "Disable editing pages";
     };
 
+<<<<<<< HEAD
+=======
+    local-time = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Use the browser's local timezone instead of the server's for displaying dates.";
+    };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     branch = lib.mkOption {
       type = lib.types.str;
       default = "master";
@@ -165,6 +180,10 @@ in
             ${lib.optionalString cfg.emoji "--emoji"} \
             ${lib.optionalString cfg.h1-title "--h1-title"} \
             ${lib.optionalString cfg.no-edit "--no-edit"} \
+<<<<<<< HEAD
+=======
+            ${lib.optionalString cfg.local-time "--local-time"} \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             ${lib.optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
             ${lib.optionalString (cfg.user-icons != null) "--user-icons ${cfg.user-icons}"} \
             ${cfg.stateDir}

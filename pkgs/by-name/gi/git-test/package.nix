@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Test your commits";
     homepage = "https://github.com/spotify/git-test";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Test your commits";
+    homepage = "https://github.com/spotify/git-test";
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-test";
   };
 }

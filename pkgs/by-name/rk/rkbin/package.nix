@@ -30,11 +30,19 @@ stdenvNoCC.mkDerivation {
     TPL_RK3588 = "${rkbin}/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.18.bin";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Rockchip proprietary bootloader blobs";
     homepage = "https://github.com/rockchip-linux/rkbin";
     license = lib.licenses.unfreeRedistributableFirmware;
     maintainers = with lib.maintainers; [ thefossguy ];
+=======
+  meta = with lib; {
+    description = "Rockchip proprietary bootloader blobs";
+    homepage = "https://github.com/rockchip-linux/rkbin";
+    license = licenses.unfreeRedistributableFirmware;
+    maintainers = with maintainers; [ thefossguy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 }

@@ -11,12 +11,21 @@ let
     nativeBuildInputs = [ unzip ];
     dontBuild = true;
     dontFixup = true;
+<<<<<<< HEAD
     meta = {
       description = "NLTK Data";
       homepage = "https://github.com/nltk/nltk_data";
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [
+=======
+    meta = with lib; {
+      description = "NLTK Data";
+      homepage = "https://github.com/nltk/nltk_data";
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         bengsparks
         happysalada
       ];

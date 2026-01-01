@@ -51,7 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     libhandy
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Nonograms puzzle game";
     mainProgram = "com.github.jeremypw.gnonograms";
     longDescription = ''
@@ -60,9 +64,16 @@ stdenv.mkDerivation (finalAttrs: {
       * Draw puzzles
       * Generate random puzzles of chosen difficulty
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     homepage = "https://github.com/jeremypw/gnonograms";
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
+    homepage = "https://github.com/jeremypw/gnonograms";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

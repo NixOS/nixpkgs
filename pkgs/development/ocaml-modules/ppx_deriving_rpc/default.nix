@@ -33,10 +33,18 @@ buildDunePackage {
   ];
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mirage/ocaml-rpc";
     description = "Ppx deriver for ocaml-rpc";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vyorkin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mirage/ocaml-rpc";
+    description = "Ppx deriver for ocaml-rpc";
+    license = licenses.isc;
+    maintainers = [ maintainers.vyorkin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

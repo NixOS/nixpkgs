@@ -46,10 +46,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "claripy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python abstraction layer for constraint solvers";
     homepage = "https://github.com/angr/claripy";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python abstraction layer for constraint solvers";
+    homepage = "https://github.com/angr/claripy";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

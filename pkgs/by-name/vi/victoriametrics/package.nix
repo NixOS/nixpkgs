@@ -13,13 +13,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
+<<<<<<< HEAD
   version = "1.132.0";
+=======
+  version = "1.130.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-s/RgWc8mJDsU9BL/HPCIGc/cy0Jsg5jxUPuDUcPLymI=";
+=======
+    hash = "sha256-upviz4MDwEXzIs21mPwa5TgKywfXiRcsZfdF/d3w/Ao=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = null;
@@ -54,7 +62,11 @@ buildGoModule (finalAttrs: {
 
     # Relax go version to major.minor
     sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' go.mod
+<<<<<<< HEAD
     sed -i -E 's/^(## explicit; go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
+=======
+    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
@@ -77,7 +89,13 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
+<<<<<<< HEAD
     tests = lib.recurseIntoAttrs nixosTests.victoriametrics;
+=======
+    tests = {
+      inherit (nixosTests) victoriametrics;
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     updateScript = ./update.sh;
   };
 

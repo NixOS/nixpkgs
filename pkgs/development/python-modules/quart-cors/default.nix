@@ -41,11 +41,20 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Quart-CORS is an extension for Quart to enable and control Cross Origin Resource Sharing, CORS";
     homepage = "https://github.com/pgjones/quart-cors/";
     changelog = "https://github.com/pgjones/quart-cors/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Quart-CORS is an extension for Quart to enable and control Cross Origin Resource Sharing, CORS";
+    homepage = "https://github.com/pgjones/quart-cors/";
+    changelog = "https://github.com/pgjones/quart-cors/blob/${src.rev}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -64,6 +64,7 @@ else
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
       broken = true; # Not compatible with solo5 ≥ 0.7
       description = "Freestanding OCaml runtime";
@@ -72,6 +73,16 @@ else
       homepage = "https://github.com/mirage/ocaml-freestanding";
       platforms = map ({ arch, os }: "${arch}-${os}") (
         lib.cartesianProduct {
+=======
+    meta = with lib; {
+      broken = true; # Not compatible with solo5 ≥ 0.7
+      description = "Freestanding OCaml runtime";
+      license = licenses.mit;
+      maintainers = [ maintainers.sternenseemann ];
+      homepage = "https://github.com/mirage/ocaml-freestanding";
+      platforms = map ({ arch, os }: "${arch}-${os}") (
+        cartesianProduct {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           arch = [
             "aarch64"
             "x86_64"

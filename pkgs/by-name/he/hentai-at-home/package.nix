@@ -56,11 +56,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ehwiki.org/wiki/Hentai@Home";
     description = "Open-source P2P gallery distribution system which reduces the load on the E-Hentai Galleries";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ terrorjack ];
+=======
+  meta = with lib; {
+    homepage = "https://ehwiki.org/wiki/Hentai@Home";
+    description = "Open-source P2P gallery distribution system which reduces the load on the E-Hentai Galleries";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ terrorjack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "HentaiAtHome";
     platforms = jdk_headless.meta.platforms;
   };

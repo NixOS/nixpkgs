@@ -41,11 +41,19 @@ rec {
     postFixup = ''
       patchelf --set-rpath "$(patchelf --print-rpath $out):${lib.makeLibraryPath [ openssl ]}" $out
     '';
+<<<<<<< HEAD
     meta = {
       description = "RecordReplay internal recording library";
       homepage = "https://www.replay.io/";
       license = lib.licenses.unfree;
       maintainers = with lib.maintainers; [ phryneas ];
+=======
+    meta = with lib; {
+      description = "RecordReplay internal recording library";
+      homepage = "https://www.replay.io/";
+      license = lib.licenses.unfree;
+      maintainers = with maintainers; [ phryneas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = [ "x86_64-linux" ];
     };
   };
@@ -79,7 +87,11 @@ rec {
 
     passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Time Travel Debugger for Web Development";
       longDescription = ''
         Replay allows you to record and replay web applications with familiar browser dev tools.
@@ -91,7 +103,11 @@ rec {
       downloadPage = "https://www.replay.io/";
       mainProgram = "replay-io";
       license = lib.licenses.mpl20;
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [ phryneas ];
+=======
+      maintainers = with maintainers; [ phryneas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = [ "x86_64-linux" ];
     };
   };
@@ -122,12 +138,21 @@ rec {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine, patched for replay";
       homepage = "https://github.com/RecordReplay/node";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ phryneas ];
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      description = "Event-driven I/O framework for the V8 JavaScript engine, patched for replay";
+      homepage = "https://github.com/RecordReplay/node";
+      license = licenses.mit;
+      maintainers = with maintainers; [ phryneas ];
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "replay-node";
     };
   };
@@ -159,7 +184,11 @@ rec {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Time Travel Debugger for Web Development - Node Command Line";
       longDescription = ''
         The Replay Node Command Line allows you to record node applications and debug them
@@ -171,7 +200,11 @@ rec {
       homepage = "https://www.replay.io/";
       mainProgram = "replay-node";
       license = lib.licenses.bsd3;
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [ phryneas ];
+=======
+      maintainers = with maintainers; [ phryneas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = [ "x86_64-linux" ];
       sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     };

@@ -63,11 +63,19 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
     description = "POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "http://gondor.apana.org.au/~herbert/dash/";
+    description = "POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
+    platforms = platforms.unix;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd3
       gpl2Plus
     ];

@@ -14,14 +14,18 @@ let
 
   # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
+<<<<<<< HEAD
   #
   # Overridings specified through `overridePythonAttrs` will always be applied
   # before those specified by `overrideAttrs`, even if invoked after them.
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeOverridablePythonPackage =
     f:
     lib.mirrorFunctionArgs f (
       origArgs:
       let
+<<<<<<< HEAD
         result = f origArgs;
         overrideWith = newArgs: origArgs // lib.toFunction newArgs origArgs;
       in
@@ -31,6 +35,24 @@ let
           overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
           overrideAttrs =
             newArgs: makeOverridablePythonPackage (args: (f args).overrideAttrs newArgs) origArgs;
+=======
+        args = lib.fix (
+          lib.extends (_: previousAttrs: {
+            passthru = (previousAttrs.passthru or { }) // {
+              overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+            };
+          }) (_: origArgs)
+        );
+        result = f args;
+        overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
+      in
+      if builtins.isAttrs result then
+        result
+      else if builtins.isFunction result then
+        {
+          overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+          __functor = self: result;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         }
       else
         result
@@ -38,13 +60,18 @@ let
     // {
       # Support overriding `f` itself, e.g. `buildPythonPackage.override { }`.
       # Ensure `makeOverridablePythonPackage` is applied to the result.
+<<<<<<< HEAD
       override = lib.mirrorFunctionArgs f.override (
         newArgs: makeOverridablePythonPackage (f.override newArgs)
       );
+=======
+      override = lib.mirrorFunctionArgs f.override (fdrv: makeOverridablePythonPackage (f.override fdrv));
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
   overrideStdenvCompat =
     f:
+<<<<<<< HEAD
     lib.fix (
       f':
       lib.mirrorFunctionArgs f (
@@ -62,6 +89,22 @@ let
         override = lib.mirrorFunctionArgs f.override (newArgs: overrideStdenvCompat (f.override newArgs));
       }
     );
+=======
+    lib.setFunctionArgs (
+      args:
+      if !(lib.isFunction args) && (args ? stdenv) then
+        lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
+          Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
+            buildPythonPackage.override { stdenv = customStdenv; } { }
+        '' (f.override { stdenv = args.stdenv; } args)
+      else
+        f args
+    ) (removeAttrs (lib.functionArgs f) [ "stdenv" ])
+    // {
+      # Intentionally drop the effect of overrideStdenvCompat when calling `buildPython*.override`.
+      inherit (f) override;
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   mkPythonDerivation =
     if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;

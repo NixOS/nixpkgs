@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hatch_regex_commit" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hatch plugin to create a commit and tag when bumping version";
     homepage = "https://github.com/frankie567/hatch-regex-commit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Hatch plugin to create a commit and tag when bumping version";
+    homepage = "https://github.com/frankie567/hatch-regex-commit";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

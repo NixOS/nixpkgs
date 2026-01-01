@@ -1,7 +1,10 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   build,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   cargo,
   cmake,
@@ -16,7 +19,11 @@
   rustc,
   rustPlatform,
   runCommand,
+<<<<<<< HEAD
   setuptools,
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mimalloc,
   jemalloc,
   rust-jemalloc-sys,
@@ -41,7 +48,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.36.1";
+=======
+  version = "1.31.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
@@ -51,26 +62,54 @@ in
 buildPythonPackage rec {
   pname = "polars";
   inherit version;
+<<<<<<< HEAD
   pyproject = true;
+=======
+  format = "setuptools";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     tag = "py-${version}";
+<<<<<<< HEAD
     hash = "sha256-0usMg/xQZOzrLf2gIfNFtzj96cYVzq5gFaKTFLqyfK0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     hash = "sha256-20AI4AGSxnmYitQjfwTFwxMBplEqvN4WXPFdoqJBgSg=";
+=======
+    hash = "sha256-OZ7guV/uxa3jGesAh+ubrFjQSNVp5ImfXfPAQxagTj0=";
+  };
+
+  patches = [
+    ./avx512.patch
+  ];
+
+  # Do not type-check assertions because some of them use unstable features (`is_none_or`)
+  postPatch = ''
+    while IFS= read -r -d "" path ; do
+      sed -i 's \(\s*\)debug_assert! \1#[cfg(debug_assertions)]\n\1debug_assert! ' "$path"
+    done < <( find -iname '*.rs' -print0 )
+  '';
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-yGTXUW6IVa+nRpmnkEl20/RJ/mxTSAaokETT8QLE+Ns=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+<<<<<<< HEAD
   build-system = [
     setuptools
     build
   ];
+=======
+  build-system = [ rustPlatform.maturinBuildHook ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     cargo
@@ -79,7 +118,10 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     rustPlatform.cargoBuildHook
     rustPlatform.cargoInstallHook
+<<<<<<< HEAD
     rustPlatform.maturinBuildHook
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rustc
   ];
 
@@ -95,8 +137,17 @@ buildPythonPackage rec {
     # https://discourse.nixos.org/t/nixpkgs-rustplatform-and-nightly/22870
     RUSTC_BOOTSTRAP = true;
 
+<<<<<<< HEAD
     RUSTFLAGS = lib.concatStringsSep " " (
       lib.optionals (polarsMemoryAllocator.pname == "mimalloc") [
+=======
+    # Several `debug_assert!` statements use the unstable `Option::is_none_or` method
+    RUSTFLAGS = lib.concatStringsSep " " (
+      [
+        "-Cdebug_assertions=n"
+      ]
+      ++ lib.optionals (polarsMemoryAllocator.pname == "mimalloc") [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "--cfg use_mimalloc"
       ]
     );
@@ -107,6 +158,7 @@ buildPythonPackage rec {
 
   maturinBuildFlags = [
     "-m"
+<<<<<<< HEAD
     "py-polars/runtime/polars-runtime-32/Cargo.toml"
   ];
 
@@ -118,6 +170,26 @@ buildPythonPackage rec {
   # Fails on polars -> polars-runtime-32 dependency between the two wheels
   dontCheckRuntimeDeps = true;
 
+=======
+    "py-polars/Cargo.toml"
+  ];
+
+  postInstall = ''
+    # Move polars.abi3.so -> polars.so
+    local polarsSo=""
+    local soName=""
+    while IFS= read -r -d "" p ; do
+      polarsSo=$p
+      soName="$(basename "$polarsSo")"
+      [[ "$soName" == polars.so ]] && break
+    done < <( find "$out" -iname "polars*.so" -print0 )
+    [[ -z "''${polarsSo:-}" ]] && echo "polars.so not found" >&2 && exit 1
+    if [[ "$soName" != polars.so ]] ; then
+      mv "$polarsSo" "$(dirname "$polarsSo")/polars.so"
+    fi
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonImportsCheck = [
     "polars"
   ];
@@ -202,7 +274,10 @@ buildPythonPackage rec {
         ps.nest-asyncio
         ps.numpy
         ps.openpyxl
+<<<<<<< HEAD
         ps.orjson
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ps.pandas
         ps.pyarrow
         ps.pydantic
@@ -261,16 +336,25 @@ buildPythonPackage rec {
       "test_scan_credential_provider"
       "test_scan_credential_provider_serialization"
 
+<<<<<<< HEAD
       # Only connecting to localhost, but http URL scheme is disallowed
       "test_scan_delta_loads_aws_profile_endpoint_url"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # ModuleNotFoundError: ADBC 'adbc_driver_sqlite.dbapi' driver not detected.
       "test_read_database"
       "test_read_database_parameterised_uri"
 
       # Untriaged
+<<<<<<< HEAD
       "test_async_index_error_25209"
       "test_parquet_schema_correctness"
+=======
+      "test_pickle_lazyframe_nested_function_udf"
+      "test_serde_udf"
+      "test_hash_struct"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     disabledTestPaths = [
       "tests/benchmark"
@@ -279,11 +363,23 @@ buildPythonPackage rec {
       # Internet access
       "tests/unit/io/cloud/test_credential_provider.py"
 
+<<<<<<< HEAD
       # adbc
       "tests/unit/io/database/test_read.py"
 
       # Requires pydantic 2.12
       "tests/unit/io/test_iceberg.py"
+=======
+      # Wrong altair version
+      "tests/unit/operations/namespaces/test_plot.py"
+
+      # adbc
+      "tests/unit/io/database/test_read.py"
+
+      # Untriaged
+      "tests/unit/cloud/test_prepare_cloud_plan.py"
+      "tests/unit/io/cloud/test_cloud.py"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     installPhase = "touch $out";

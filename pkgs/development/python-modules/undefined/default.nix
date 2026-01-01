@@ -19,10 +19,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "undefined" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Like `None`, but different in several ways";
     homepage = "https://github.com/Carreau/undefined";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Like `None`, but different in several ways";
+    homepage = "https://github.com/Carreau/undefined";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

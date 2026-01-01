@@ -28,10 +28,17 @@ rustPlatform.buildRustPackage rec {
   # tests fail for unknown reasons on aarch64-darwin
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
+<<<<<<< HEAD
   meta = {
     description = "Example-based texture synthesis written in Rust";
     homepage = "https://github.com/embarkstudios/texture-synthesis";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Example-based texture synthesis written in Rust";
+    homepage = "https://github.com/embarkstudios/texture-synthesis";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit # or
       asl20
     ];

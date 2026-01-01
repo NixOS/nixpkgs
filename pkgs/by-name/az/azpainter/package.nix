@@ -61,12 +61,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Full color painting software for illustration drawing";
     homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "Full color painting software for illustration drawing";
+    homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dtzWill ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "azpainter";
   };
 }

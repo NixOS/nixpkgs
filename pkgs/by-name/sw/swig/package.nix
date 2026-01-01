@@ -49,7 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://swig.org/";
     # Different types of licenses available: https://www.swig.org/Release/LICENSE .
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "swig";
     platforms = with lib.platforms; linux ++ darwin;
   };

@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin/networkaudiod $out/bin/networkaudiod
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.signalyst.com/index.html";
     description = "Network Audio Adapter daemon";
@@ -74,6 +75,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ lovesegfault ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.signalyst.com/index.html";
+    description = "Network Audio Adapter daemon";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ lovesegfault ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "networkaudiod";
   };
 }

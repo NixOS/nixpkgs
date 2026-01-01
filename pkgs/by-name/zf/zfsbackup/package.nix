@@ -26,12 +26,21 @@ buildGoModule rec {
   # Tests require loading the zfs kernel module.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Backup ZFS snapshots to cloud storage such as Google, Amazon, Azure, etc";
     homepage = "https://github.com/someone1/zfsbackup-go";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Backup ZFS snapshots to cloud storage such as Google, Amazon, Azure, etc";
+    homepage = "https://github.com/someone1/zfsbackup-go";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zfsbackup-go";
   };
 }

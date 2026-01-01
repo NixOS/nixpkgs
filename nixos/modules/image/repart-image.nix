@@ -37,7 +37,10 @@
   split,
   seed,
   definitionsDirectory,
+<<<<<<< HEAD
   imageSize ? "auto",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   sectorSize,
   mkfsEnv ? { },
   createEmpty ? true,
@@ -171,7 +174,11 @@ stdenvNoCC.mkDerivation (
     systemdRepartFlags = [
       "--architecture=${systemdArch}"
       "--dry-run=no"
+<<<<<<< HEAD
       "--size=${imageSize}"
+=======
+      "--size=auto"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "--definitions=${finalAttrs.finalRepartDefinitions}"
       "--split=${lib.boolToString split}"
       "--json=pretty"

@@ -9,7 +9,11 @@
   libiconv,
   cargo,
   gcc,
+<<<<<<< HEAD
   mold-unwrapped,
+=======
+  mold,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rustc,
   nix-update-script,
 
@@ -75,7 +79,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
                 gcc
                 rustc
               ]
+<<<<<<< HEAD
               ++ lib.optional withMold mold-unwrapped
+=======
+              ++ lib.optional withMold mold
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             )
           } \
           --set-default RUST_SRC_PATH "$RUST_SRC_PATH"

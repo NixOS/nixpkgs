@@ -30,10 +30,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "videoprops" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Get video properties";
     homepage = "https://github.com/mvasilkov/python-get-video-properties";
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Get video properties";
+    homepage = "https://github.com/mvasilkov/python-get-video-properties";
+    license = licenses.mit;
+    maintainers = with maintainers; [ globin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

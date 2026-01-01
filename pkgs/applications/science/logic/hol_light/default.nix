@@ -9,7 +9,10 @@
   zarith,
   camlp5,
   camlp-streams,
+<<<<<<< HEAD
   bash,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -53,8 +56,11 @@ stdenv.mkDerivation {
 
   patches = [ ./0004-Fix-compilation-with-camlp5-7.11.patch ];
 
+<<<<<<< HEAD
   buildInputs = [ bash ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -74,12 +80,21 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/hol_light"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive theorem prover based on Higher-Order Logic";
     homepage = "http://www.cl.cam.ac.uk/~jrh13/hol-light/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Interactive theorem prover based on Higher-Order Logic";
+    homepage = "http://www.cl.cam.ac.uk/~jrh13/hol-light/";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       vbgl
     ];

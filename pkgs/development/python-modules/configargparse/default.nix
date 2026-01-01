@@ -31,7 +31,11 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # regex mismatch
@@ -40,11 +44,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "configargparse" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Drop-in replacement for argparse";
     homepage = "https://github.com/bw2/ConfigArgParse";
     changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Drop-in replacement for argparse";
+    homepage = "https://github.com/bw2/ConfigArgParse";
+    changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${src.tag}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

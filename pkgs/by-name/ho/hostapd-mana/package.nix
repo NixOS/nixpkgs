@@ -81,11 +81,20 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sensepost/hostapd-mana";
     description = "Featureful rogue wifi access point tool";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bbjubjub ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sensepost/hostapd-mana";
+    description = "Featureful rogue wifi access point tool";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bbjubjub ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

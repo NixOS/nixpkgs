@@ -29,11 +29,20 @@ buildPythonPackage rec {
     inherit mashumaro pydantic;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Backported and Experimental Type Hints for Python";
     changelog = "https://github.com/python/typing_extensions/blob/${version}/CHANGELOG.md";
     homepage = "https://github.com/python/typing";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ pmiddend ];
+=======
+  meta = with lib; {
+    description = "Backported and Experimental Type Hints for Python";
+    changelog = "https://github.com/python/typing_extensions/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/python/typing";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ pmiddend ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

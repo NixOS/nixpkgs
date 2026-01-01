@@ -10,16 +10,27 @@
 
 buildGoModule rec {
   pname = "kube-linter";
+<<<<<<< HEAD
   version = "0.8.1";
+=======
+  version = "0.7.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "kube-linter";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-UUg7QOu+G5g8cj1C2q9G6km002kqOjOiesdFGy8BqgI=";
   };
 
   vendorHash = "sha256-A8aNyMX9WtDDuqy6qOHTQkLnuckcsHEKZ3mfnC4Rx2s=";
+=======
+    sha256 = "sha256-wniDoImqawTdjkd/XnkeiUTMoz5WJNpRs1ZgM1Xy1hw=";
+  };
+
+  vendorHash = "sha256-ui6AECWJhYso3KDbX8EonML4wvbDs3cijG2yWb3KoKA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   excludedPackages = [ "tool-imports" ];
 

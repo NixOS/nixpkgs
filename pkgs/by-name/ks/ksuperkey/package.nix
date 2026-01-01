@@ -30,12 +30,21 @@ stdenv.mkDerivation rec {
     libXi
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to be able to bind the super key as a key rather than a modifier";
     homepage = "https://github.com/hanschen/ksuperkey";
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool to be able to bind the super key as a key rather than a modifier";
+    homepage = "https://github.com/hanschen/ksuperkey";
+    license = licenses.gpl3;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ksuperkey";
   };
 }

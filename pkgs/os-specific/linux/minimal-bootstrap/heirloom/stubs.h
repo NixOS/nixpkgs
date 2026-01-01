@@ -1,11 +1,19 @@
 #include <getopt.h>
 extern int optopt;
 
+<<<<<<< HEAD
 static int ftruncate(int fd, int offset) {
   return -1;
 }
 
 static int getsid (int pid) {
+=======
+int ftruncate(int fd, int offset) {
+  return -1;
+}
+
+int getsid (int pid) {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   return -1;
 }
 
@@ -21,13 +29,18 @@ static int isblank(int c)
 int lstat (char const *file_name, struct stat *statbuf);
 
 #include <fcntl.h>
+<<<<<<< HEAD
 static int mkstemp(char *t)
+=======
+int mkstemp(char *t)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 {
   mktemp(t);
   int fd = open(t, O_CREAT|O_RDWR|O_TRUNC, 0600);
   return fd;
 }
 
+<<<<<<< HEAD
 static int strncasecmp(char *a, char *b, size_t n) {
   while (n > 0 && (*a || *b)) {
       if (toupper(*a) < toupper(*b)) {
@@ -41,6 +54,19 @@ static int strncasecmp(char *a, char *b, size_t n) {
   return 0;
 }
 
+=======
+int putenv(char *string)
+{
+  return 0;
+}
+
+char* realpath (char* path, char* resolved) {
+  return NULL;
+}
+
+#define strncasecmp(a,b,n) strncmp(strupr(a),strupr(b),n)
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 #define nlink_t unsigned long
 

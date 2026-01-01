@@ -31,11 +31,20 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/elf2nucleus --completions zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Integrate micronucleus into the cargo buildsystem, flash an AVR firmware from an elf file";
     mainProgram = "elf2nucleus";
     homepage = "https://github.com/kpcyrd/elf2nucleus";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.marble ];
+=======
+  meta = with lib; {
+    description = "Integrate micronucleus into the cargo buildsystem, flash an AVR firmware from an elf file";
+    mainProgram = "elf2nucleus";
+    homepage = "https://github.com/kpcyrd/elf2nucleus";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.marble ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

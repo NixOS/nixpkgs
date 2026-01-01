@@ -90,7 +90,11 @@ buildPythonPackage rec {
     pytestCheckHook
     parameterized
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
@@ -125,6 +129,7 @@ buildPythonPackage rec {
   # multiple tests exceed max open files on hydra builders
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
+<<<<<<< HEAD
   meta = {
     description = "Uncompromising Python code formatter";
     homepage = "https://github.com/psf/black";
@@ -132,6 +137,15 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     mainProgram = "black";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Uncompromising Python code formatter";
+    homepage = "https://github.com/psf/black";
+    changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
+    license = licenses.mit;
+    mainProgram = "black";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sveitser
       autophagy
     ];

@@ -47,11 +47,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.functools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Additional functools in the spirit of stdlib's functools";
     homepage = "https://github.com/jaraco/jaraco.functools";
     changelog = "https://github.com/jaraco/jaraco.functools/blob/v${version}/NEWS.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Additional functools in the spirit of stdlib's functools";
+    homepage = "https://github.com/jaraco/jaraco.functools";
+    changelog = "https://github.com/jaraco/jaraco.functools/blob/v${version}/NEWS.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

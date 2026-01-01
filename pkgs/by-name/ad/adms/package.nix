@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoreconfHook,
   flex,
   bison,
@@ -24,6 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i37c9k6q1iglmzp9736rrgsnx7sw8xn3djqbbjw29zsyl3pf62c";
   };
 
+<<<<<<< HEAD
   patches = [
     # fix build with c23
     #   admsXml.c:645:8: error: too many arguments to function 'verilogaparse'; expected 0, have 1
@@ -33,6 +37,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     flex

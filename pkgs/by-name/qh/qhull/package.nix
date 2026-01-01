@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
         'cmake_minimum_required(VERSION 3.5...4.0)'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.qhull.org/";
     description = "Compute the convex hull, Delaunay triangulation, Voronoi diagram and more";
     license = lib.licenses.qhull;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "http://www.qhull.org/";
+    description = "Compute the convex hull, Delaunay triangulation, Voronoi diagram and more";
+    license = licenses.qhull;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

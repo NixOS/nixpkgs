@@ -13,13 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xwayland-satellite";
+<<<<<<< HEAD
   version = "0.8";
+=======
+  version = "0.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xwayland-satellite";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Qz1WvGdawnoz4dG3JtCtlParmdQHM5xu6osnXeVOqYI=";
+=======
+    hash = "sha256-m+9tUfsmBeF2Gn4HWa6vSITZ4Gz1eA1F5Kh62B0N4oE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -27,7 +35,11 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/local/bin' "$out/bin"
   '';
 
+<<<<<<< HEAD
   cargoHash = "sha256-HGrMjNIsUqh8AFtSABk615x4B9ygrVEn26V0G1kX/nA=";
+=======
+  cargoHash = "sha256-2+qQSCyWOtOJ4fTVCHbvHYO+k4vxC2nbEOJMdjQZOgY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     makeBinaryWrapper

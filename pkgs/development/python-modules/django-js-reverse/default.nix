@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_js_reverse" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Javascript URL handling for Django";
     homepage = "https://django-js-reverse.readthedocs.io/";
     changelog = "https://github.com/vintasoftware/django-js-reverse/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Javascript URL handling for Django";
+    homepage = "https://django-js-reverse.readthedocs.io/";
+    changelog = "https://github.com/vintasoftware/django-js-reverse/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

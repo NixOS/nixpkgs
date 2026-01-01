@@ -36,12 +36,21 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command line client for the blink(1) notification light";
     homepage = "https://blink1.thingm.com/";
     license = with lib.licenses; [ cc-by-sa-40 ];
     maintainers = with lib.maintainers; [ cransom ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Command line client for the blink(1) notification light";
+    homepage = "https://blink1.thingm.com/";
+    license = with licenses; [ cc-by-sa-40 ];
+    maintainers = with maintainers; [ cransom ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "blink1-tool";
   };
 }

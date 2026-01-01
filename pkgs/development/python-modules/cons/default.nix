@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cons" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of Lisp/Scheme-like cons in Python";
     homepage = "https://github.com/pythological/python-cons";
     changelog = "https://github.com/pythological/python-cons/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Etjean ];
+=======
+  meta = with lib; {
+    description = "Implementation of Lisp/Scheme-like cons in Python";
+    homepage = "https://github.com/pythological/python-cons";
+    changelog = "https://github.com/pythological/python-cons/releases/tag/${src.tag}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ Etjean ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,6 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "simpful" ];
@@ -55,6 +56,18 @@ buildPythonPackage rec {
     changelog = "https://github.com/aresio/simpful/releases/tag/${version}";
     license = with lib.licenses; [ lgpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "simpful" ];
+
+  meta = with lib; {
+    description = "Library for fuzzy logic";
+    homepage = "https://github.com/aresio/simpful";
+    changelog = "https://github.com/aresio/simpful/releases/tag/${version}";
+    license = with licenses; [ lgpl3Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

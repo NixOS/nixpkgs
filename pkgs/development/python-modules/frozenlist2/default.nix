@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frozenlist2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Immutable list for Python";
     homepage = "https://github.com/rohanpm/frozenlist2";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ t4ccer ];
+=======
+  meta = with lib; {
+    description = "Immutable list for Python";
+    homepage = "https://github.com/rohanpm/frozenlist2";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ t4ccer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 diff --git a/src/meshlab/CMakeLists.txt b/src/meshlab/CMakeLists.txt
 index 89d9c9316..e9209573e 100644
 --- a/src/meshlab/CMakeLists.txt
@@ -7,6 +8,14 @@ index 89d9c9316..e9209573e 100644
  		MACOSX_BUNDLE_COPYRIGHT "Copyright VCG-ISTI-CNR © 2005-2021. All rights reserved."
  		)
 -	
+=======
+--- src/meshlab/CMakeLists.txt.orig	2025-10-05 23:04:12.786192073 +0200
++++ src/meshlab/CMakeLists.txt	2025-10-05 23:04:16.379256637 +0200
+@@ -92,9 +92,6 @@
+ 		MACOSX_BUNDLE_COPYRIGHT "Copyright VCG-ISTI-CNR © 2005-2021. All rights reserved."
+ 		)
+ 	
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 -	set_additional_settings_info_plist(
 -		TARGET meshlab
 -		FILE ${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)

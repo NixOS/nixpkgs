@@ -166,6 +166,10 @@ stdenv.mkDerivation rec {
     mainProgram = "guix";
     maintainers = with lib.maintainers; [
       cafkafk
+<<<<<<< HEAD
+=======
+      foo-dogsquared
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hpfr
     ];
     platforms = lib.platforms.linux;

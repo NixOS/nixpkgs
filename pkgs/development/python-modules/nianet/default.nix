@@ -56,11 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nianet" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Designing and constructing neural network topologies using nature-inspired algorithms";
     homepage = "https://github.com/SasoPavlic/NiaNet";
     changelog = "https://github.com/SasoPavlic/NiaNet/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ firefly-cpp ];
+=======
+  meta = with lib; {
+    description = "Designing and constructing neural network topologies using nature-inspired algorithms";
+    homepage = "https://github.com/SasoPavlic/NiaNet";
+    changelog = "https://github.com/SasoPavlic/NiaNet/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ firefly-cpp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

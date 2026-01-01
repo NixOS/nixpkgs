@@ -21,6 +21,7 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tomnomnom/assetfinder";
     description = "Find domains and subdomains related to a given domain";
@@ -32,5 +33,18 @@ buildGoModule rec {
       binaryNativeCode
     ];
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tomnomnom/assetfinder";
+    description = "Find domains and subdomains related to a given domain";
+    mainProgram = "assetfinder";
+    maintainers = with maintainers; [ shard7 ];
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -60,11 +60,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, modern libpng alternative";
     homepage = "https://libspng.org/";
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ humancalico ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Simple, modern libpng alternative";
+    homepage = "https://libspng.org/";
+    license = with licenses; [ bsd2 ];
+    maintainers = with maintainers; [ humancalico ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

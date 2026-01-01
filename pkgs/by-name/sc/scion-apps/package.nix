@@ -48,11 +48,19 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Public repository for SCION applications";
     homepage = "https://github.com/netsec-ethz/scion-apps";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Public repository for SCION applications";
+    homepage = "https://github.com/netsec-ethz/scion-apps";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthewcroughan
       sarcasticadmin
     ];

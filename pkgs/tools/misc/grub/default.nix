@@ -26,7 +26,10 @@
   runtimeShell,
   zfs ? null,
   efiSupport ? false,
+<<<<<<< HEAD
   ieee1275Support ? false,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   zfsSupport ? false,
   xenSupport ? false,
   xenPvhSupport ? false,
@@ -62,11 +65,14 @@ let
     riscv64-linux.target = "riscv64";
   };
 
+<<<<<<< HEAD
   ieee1275SystemsBuild = {
     x86_64-linux.target = "i386";
     powerpc64-linux.target = "powerpc";
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   xenSystemsBuild = {
     i686-linux.target = "i386";
     x86_64-linux.target = "x86_64";
@@ -80,7 +86,11 @@ let
   inPCSystems = lib.any (system: stdenv.hostPlatform.system == system) (lib.attrNames pcSystems);
 
   gnulib = fetchgit {
+<<<<<<< HEAD
     url = "https://git.savannah.gnu.org/git/gnulib.git";
+=======
+    url = "https://https.git.savannah.gnu.org/git/gnulib.git";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # NOTE: keep in sync with bootstrap.conf!
     rev = "9f48fb992a3d7e96610c4ce8be969cff2d61a01b";
     hash = "sha256-mzbF66SNqcSlI+xmjpKpNMwzi13yEWoc1Fl7p4snTto=";
@@ -96,6 +106,7 @@ let
 in
 
 assert zfsSupport -> zfs != null;
+<<<<<<< HEAD
 assert lib.asserts.assertMsg (
   lib.lists.length (
     lib.lists.filter (x: x) [
@@ -106,13 +117,21 @@ assert lib.asserts.assertMsg (
     ]
   ) <= 1 # (0 == pc)
 ) "Only <= 1 of grub2's platform-related *Support options may be enabled at the same time";
+=======
+assert !(efiSupport && (xenSupport || xenPvhSupport));
+assert !(xenSupport && xenPvhSupport);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 stdenv.mkDerivation rec {
   pname = "grub";
   version = "2.12";
 
   src = fetchgit {
+<<<<<<< HEAD
     url = "https://git.savannah.gnu.org/git/grub.git";
+=======
+    url = "https://https.git.savannah.gnu.org/git/grub.git";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     tag = "grub-${version}";
     hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
@@ -524,6 +543,7 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=c448f511e74cb7c776b314fcb7943f98d3f22b6d";
       hash = "sha256-64gMhCEW0aYHt46crX/qN/3Hj8MgvWLazgQlVXqe8LE=";
     })
+<<<<<<< HEAD
     # https://lists.gnu.org/archive/html/grub-devel/2025-11/msg00155.html
     (fetchpatch {
       name = "1_commands_test_fix_error_in_recursion_depth_calculation.patch";
@@ -583,6 +603,8 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ac1512b872af8567b408518a7efa01607a0219ae";
       hash = "sha256-deyp6Yatlgv86bYMt7WcWhKg8J6StDPUEy4UPHqJYIc=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch =
@@ -691,10 +713,13 @@ stdenv.mkDerivation rec {
     "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"
     "--program-prefix="
   ]
+<<<<<<< HEAD
   ++ lib.optionals ieee1275Support [
     "--with-platform=ieee1275"
     "--target=${ieee1275SystemsBuild.${stdenv.hostPlatform.system}.target}"
   ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optionals xenSupport [
     "--with-platform=xen"
     "--target=${xenSystemsBuild.${stdenv.hostPlatform.system}.target}"
@@ -708,8 +733,11 @@ stdenv.mkDerivation rec {
   grubTarget =
     if efiSupport then
       "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
+<<<<<<< HEAD
     else if ieee1275Support then
       "${ieee1275SystemsBuild.${stdenv.hostPlatform.system}.target}-ieee1275"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     else
       lib.optionalString inPCSystems "${pcSystems.${stdenv.hostPlatform.system}.target}-pc";
 
@@ -731,7 +759,11 @@ stdenv.mkDerivation rec {
     nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GNU GRUB, the Grand Unified Boot Loader";
 
     longDescription = ''
@@ -748,19 +780,30 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/grub/";
 
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
+=======
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     platforms =
       if efiSupport then
         lib.attrNames efiSystemsBuild
+<<<<<<< HEAD
       else if ieee1275Support then
         lib.attrNames ieee1275SystemsBuild
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       else if xenSupport then
         lib.attrNames xenSystemsBuild
       else if xenPvhSupport then
         lib.attrNames xenPvhSystemsBuild
       else
+<<<<<<< HEAD
         lib.platforms.gnu ++ lib.platforms.linux;
+=======
+        platforms.gnu ++ platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     maintainers = [ ];
   };

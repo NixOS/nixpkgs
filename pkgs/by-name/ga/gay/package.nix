@@ -15,11 +15,19 @@ python3Packages.buildPythonApplication rec {
 
   build-system = [ python3Packages.setuptools ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ms-jpq/gay";
     description = "Colour your text / terminal to be more gay";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ CodeLongAndProsper90 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ms-jpq/gay";
+    description = "Colour your text / terminal to be more gay";
+    license = licenses.mit;
+    maintainers = with maintainers; [ CodeLongAndProsper90 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gay";
   };
 }

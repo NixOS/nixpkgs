@@ -24,10 +24,17 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Installer for BetterDiscord";
     homepage = "https://betterdiscord.app";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Installer for BetterDiscord";
+    homepage = "https://betterdiscord.app";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "betterdiscord-installer";

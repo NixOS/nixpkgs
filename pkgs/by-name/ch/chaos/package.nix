@@ -29,6 +29,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Tool to communicate with Chaos DNS API";
     homepage = "https://github.com/projectdiscovery/chaos-client";

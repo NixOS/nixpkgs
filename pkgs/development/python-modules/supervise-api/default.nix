@@ -34,5 +34,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/catern/supervise";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

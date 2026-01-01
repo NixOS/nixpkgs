@@ -22,11 +22,19 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/DmitrySoshnikov/syntax";
     description = "Syntactic analysis toolkit, language-agnostic parser generator";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ h7x4 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/DmitrySoshnikov/syntax";
+    description = "Syntactic analysis toolkit, language-agnostic parser generator";
+    license = licenses.mit;
+    maintainers = with maintainers; [ h7x4 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "syntax-cli";
     broken = stdenv.hostPlatform.isDarwin;
   };

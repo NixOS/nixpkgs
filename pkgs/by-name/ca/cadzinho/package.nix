@@ -57,12 +57,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Minimalist computer aided design (CAD) software";
     homepage = "https://github.com/zecruel/CadZinho";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Minimalist computer aided design (CAD) software";
+    homepage = "https://github.com/zecruel/CadZinho";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cadzinho";
   };
 }

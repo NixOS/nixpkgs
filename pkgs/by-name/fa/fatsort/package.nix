@@ -37,12 +37,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://fatsort.sourceforge.net/";
     description = "Sorts FAT partition table, for devices that don't do sorting of files";
     maintainers = [ lib.maintainers.kovirobi ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://fatsort.sourceforge.net/";
+    description = "Sorts FAT partition table, for devices that don't do sorting of files";
+    maintainers = [ maintainers.kovirobi ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fatsort";
   };
 }

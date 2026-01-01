@@ -53,7 +53,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "YANG data modelling language parser and toolkit";
     longDescription = ''
       libyang is a YANG data modelling language parser and toolkit written (and
@@ -61,8 +65,14 @@ stdenv.mkDerivation rec {
       sysrepo or FRRouting projects.
     '';
     homepage = "https://github.com/CESNET/libyang";
+<<<<<<< HEAD
     license = with lib.licenses; [ bsd3 ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ woffs ];
+=======
+    license = with licenses; [ bsd3 ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ woffs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

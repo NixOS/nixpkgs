@@ -56,7 +56,11 @@ buildPythonPackage rec {
     pytest-vcr
     requests-mock
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # disabledTests = [
   #   "test_notifications_dismiss_pre_2_9_2"
@@ -67,11 +71,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mastodon" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/halcy/Mastodon.py/blob/${src.tag}/CHANGELOG.rst";
     description = "Python wrapper for the Mastodon API";
     homepage = "https://github.com/halcy/Mastodon.py";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/halcy/Mastodon.py/blob/${src.tag}/CHANGELOG.rst";
+    description = "Python wrapper for the Mastodon API";
+    homepage = "https://github.com/halcy/Mastodon.py";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

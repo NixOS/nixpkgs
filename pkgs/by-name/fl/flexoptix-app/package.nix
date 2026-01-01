@@ -20,9 +20,15 @@ let
     hash = "sha256-/1ZtJT+1IMyYqw3N0bVJ/T3vbmex169lzx+SlY5WsnA=";
   };
 
+<<<<<<< HEAD
   appimageContents = (appimageTools.extract { inherit pname version src; }).overrideAttrs (old: {
     buildCommand = ''
       ${old.buildCommand}
+=======
+  appimageContents = (appimageTools.extract { inherit pname version src; }).overrideAttrs (oA: {
+    buildCommand = ''
+      ${oA.buildCommand}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       # Remove left-over node-gyp executable symlinks
       # https://github.com/nodejs/node-gyp/issues/2713

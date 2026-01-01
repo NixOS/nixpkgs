@@ -48,11 +48,19 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GTK application for browsing and installing fonts from Google's font archive";
     homepage = "https://github.com/mmstick/fontfinder";
     changelog = "https://github.com/mmstick/fontfinder/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "GTK application for browsing and installing fonts from Google's font archive";
+    homepage = "https://github.com/mmstick/fontfinder";
+    changelog = "https://github.com/mmstick/fontfinder/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "fontfinder-gtk";
   };

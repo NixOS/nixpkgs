@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.stream" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module with routines for handling streaming data";
     homepage = "https://github.com/jaraco/jaraco.stream";
     changelog = "https://github.com/jaraco/jaraco.stream/blob/v${version}/NEWS.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Module with routines for handling streaming data";
+    homepage = "https://github.com/jaraco/jaraco.stream";
+    changelog = "https://github.com/jaraco/jaraco.stream/blob/v${version}/NEWS.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

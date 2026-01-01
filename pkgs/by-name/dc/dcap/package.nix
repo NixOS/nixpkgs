@@ -49,14 +49,25 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "dCache access protocol client library";
     homepage = "https://github.com/dCache/dcap";
     changelog = "https://github.com/dCache/dcap/blob/master/ChangeLog";
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Only;
     platforms = lib.platforms.all;
     mainProgram = "dccp";
     maintainers = with lib.maintainers; [ ShamrockLee ];
+=======
+    license = licenses.lgpl2Only;
+    platforms = platforms.all;
+    mainProgram = "dccp";
+    maintainers = with maintainers; [ ShamrockLee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

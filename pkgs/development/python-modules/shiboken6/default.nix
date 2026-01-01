@@ -77,6 +77,9 @@ stdenv'.mkDerivation (finalAttrs: {
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
     maintainers = [ ];
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     mainProgram = "shiboken6";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

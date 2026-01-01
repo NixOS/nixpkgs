@@ -1,20 +1,32 @@
 diff --git a/src/hatch/env/virtual.py b/src/hatch/env/virtual.py
+<<<<<<< HEAD
 index 72605e58..546b6ad1 100644
 --- a/src/hatch/env/virtual.py
 +++ b/src/hatch/env/virtual.py
 @@ -108,26 +108,7 @@ class VirtualEnvironment(EnvironmentInterface):
+=======
+index 285edb32..90bd94e6 100644
+--- a/src/hatch/env/virtual.py
++++ b/src/hatch/env/virtual.py
+@@ -106,26 +106,7 @@ class VirtualEnvironment(EnvironmentInterface):
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
          if self.explicit_uv_path:
              return self.explicit_uv_path
  
 -        from hatch.env.internal import is_default_environment
 -
+<<<<<<< HEAD
 -        env_name = "hatch-uv"
+=======
+-        env_name = 'hatch-uv'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 -        if not (
 -            # Prevent recursive loop
 -            self.name == env_name
 -            # Only if dependencies have been set by the user
 -            or is_default_environment(env_name, self.app.project.config.internal_envs[env_name])
 -        ):
+<<<<<<< HEAD
 -            uv_env = self.app.project.get_environment(env_name)
 -            self.app.project.prepare_environment(uv_env)
 -            with uv_env:
@@ -32,12 +44,32 @@ index 72605e58..546b6ad1 100644
      def distributions(self) -> InstalledDistributions:
 diff --git a/src/hatch/venv/core.py b/src/hatch/venv/core.py
 index d8c6379e..874f8936 100644
+=======
+-            uv_env = self.app.get_environment(env_name)
+-            self.app.prepare_environment(uv_env)
+-            with uv_env:
+-                return self.platform.modules.shutil.which('uv')
+-
+-        import sysconfig
+-
+-        scripts_dir = sysconfig.get_path('scripts')
+-        old_path = os.environ.get('PATH', os.defpath)
+-        new_path = f'{scripts_dir}{os.pathsep}{old_path}'
+-        return self.platform.modules.shutil.which('uv', path=new_path)
++        return '@uv@'
+ 
+     @staticmethod
+     def get_option_types() -> dict:
+diff --git a/src/hatch/venv/core.py b/src/hatch/venv/core.py
+index d1303f03..e1e60871 100644
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 --- a/src/hatch/venv/core.py
 +++ b/src/hatch/venv/core.py
 @@ -131,7 +131,7 @@ class TempVirtualEnv(VirtualEnv):
  
  class UVVirtualEnv(VirtualEnv):
      def create(self, python, *, allow_system_packages=False):
+<<<<<<< HEAD
 -        command = [os.environ.get("HATCH_UV", "uv"), "venv", str(self.directory), "--python", python]
 +        command = [os.environ.get("HATCH_UV", "@uv@"), "venv", str(self.directory), "--python", python]
          if allow_system_packages:
@@ -56,3 +88,23 @@ index 44681a10..d7e91d36 100644
  
  
  @pytest.fixture(scope="session")
+=======
+-        command = [os.environ.get('HATCH_UV', 'uv'), 'venv', str(self.directory), '--python', python]
++        command = [os.environ.get('HATCH_UV', '@uv@'), 'venv', str(self.directory), '--python', python]
+         if allow_system_packages:
+             command.append('--system-site-packages')
+ 
+diff --git a/tests/conftest.py b/tests/conftest.py
+index e8fe663a..6066316d 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -203,7 +203,7 @@ def python_on_path():
+ 
+ @pytest.fixture(scope='session', autouse=True)
+ def uv_on_path():
+-    return shutil.which('uv')
++    return '@uv@'
+ 
+ 
+ @pytest.fixture(scope='session')
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -46,10 +46,18 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "docs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Integration of factory_boy into the pytest runner";
     homepage = "https://pytest-factoryboy.readthedocs.io/en/latest/";
     maintainers = with lib.maintainers; [ winpat ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Integration of factory_boy into the pytest runner";
+    homepage = "https://pytest-factoryboy.readthedocs.io/en/latest/";
+    maintainers = with maintainers; [ winpat ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

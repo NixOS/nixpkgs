@@ -44,11 +44,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keycloak" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
     changelog = "https://github.com/marcospereirampj/python-keycloak/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Provides access to the Keycloak API";
+    homepage = "https://github.com/marcospereirampj/python-keycloak";
+    changelog = "https://github.com/marcospereirampj/python-keycloak/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

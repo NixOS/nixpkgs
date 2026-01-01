@@ -75,15 +75,27 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Stream movies and TV shows from Jellyfin";
     homepage = "https://www.delfin.avery.cafe/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Stream movies and TV shows from Jellyfin";
+    homepage = "https://www.delfin.avery.cafe/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       colinsane
       avery
     ];
     mainProgram = "delfin";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

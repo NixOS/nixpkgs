@@ -31,11 +31,20 @@ buildPythonPackage rec {
   # build this package so we have to disable the test suite :(
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Human friendly output for text interfaces using Python";
     mainProgram = "humanfriendly";
     homepage = "https://humanfriendly.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ montag451 ];
+=======
+  meta = with lib; {
+    description = "Human friendly output for text interfaces using Python";
+    mainProgram = "humanfriendly";
+    homepage = "https://humanfriendly.readthedocs.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ montag451 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

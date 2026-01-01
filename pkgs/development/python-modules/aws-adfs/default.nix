@@ -65,11 +65,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aws_adfs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tool to ease AWS CLI authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
     changelog = "https://github.com/venth/aws-adfs/releases/tag/${src.tag}";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    description = "Command line tool to ease AWS CLI authentication against ADFS";
+    homepage = "https://github.com/venth/aws-adfs";
+    changelog = "https://github.com/venth/aws-adfs/releases/tag/${src.tag}";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aws-adfs";
   };
 }

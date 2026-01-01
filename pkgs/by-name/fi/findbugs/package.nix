@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Static analysis tool to find bugs in Java programs automatically";
     homepage = "https://findbugs.sourceforge.net/";
@@ -46,5 +47,14 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.lgpl3;
+=======
+  meta = with lib; {
+    description = "Static analysis tool to find bugs in Java programs automatically";
+    homepage = "https://findbugs.sourceforge.net/";
+    maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.lgpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

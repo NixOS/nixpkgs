@@ -11,7 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ell";
+<<<<<<< HEAD
   version = "0.81";
+=======
+  version = "0.80";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -22,7 +26,11 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-NopI9aDtpEbf2JlboLTIg/9zXaZelfYhF0/RgwUgakI=";
+=======
+    hash = "sha256-B7Dz5H49d8kQaHfPQt7Y3f9D6EdqLOBMK+378g4E46U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -66,6 +74,10 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       mic92
+<<<<<<< HEAD
+=======
+      dtzWill
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

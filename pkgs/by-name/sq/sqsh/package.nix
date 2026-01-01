@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line tool for querying Sybase/MSSQL databases";
     mainProgram = "sqsh";
     longDescription = ''
@@ -57,8 +61,14 @@ stdenv.mkDerivation rec {
       it is intended as a replacement for the venerable 'isql' program supplied
       by Sybase.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     homepage = "https://sourceforge.net/projects/sqsh/";
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2;
+    homepage = "https://sourceforge.net/projects/sqsh/";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

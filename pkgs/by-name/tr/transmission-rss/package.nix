@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
 
   meta = {
@@ -31,6 +32,15 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/herlon214/transmission-rss";
     maintainers = with lib.maintainers; [ icewind1991 ];
     license = lib.licenses.mit;
+=======
+  OPENSSL_NO_VENDOR = 1;
+
+  meta = with lib; {
+    description = "Add torrents to transmission based on RSS list";
+    homepage = "https://github.com/herlon214/transmission-rss";
+    maintainers = with maintainers; [ icewind1991 ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "transmission-rss";
   };
 }

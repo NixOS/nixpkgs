@@ -43,11 +43,20 @@ stdenv.mkDerivation rec {
     "-DRTAUDIO_API_CORE=${if coreaudioSupport then "ON" else "OFF"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of C++ classes that provide a cross platform API for realtime audio input/output";
     homepage = "https://www.music.mcgill.ca/~gary/rtaudio/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Set of C++ classes that provide a cross platform API for realtime audio input/output";
+    homepage = "https://www.music.mcgill.ca/~gary/rtaudio/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -138,6 +138,7 @@ let
         (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
 
         ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
+<<<<<<< HEAD
             --retry 5 --retry-delay 1 --retry-all-errors \
             "$@"
     }
@@ -158,6 +159,14 @@ let
         }
       )
     } \
+=======
+            --retry 1000 --retry-delay 1 --retry-all-errors \
+            "$@"
+    }
+    curl -d ${lib.escapeShellArg (builtins.toJSON { deviceID = IDsToDelete.device; })} \
+        -X POST 127.0.0.1:8384/rest/config/devices
+    curl -d ${lib.escapeShellArg (builtins.toJSON { id = IDsToDelete.folder; })} \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         -X POST 127.0.0.1:8384/rest/config/folders
   '';
 in

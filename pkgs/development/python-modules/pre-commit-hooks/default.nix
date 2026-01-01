@@ -50,11 +50,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pre_commit_hooks" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Some out-of-the-box hooks for pre-commit";
     homepage = "https://github.com/pre-commit/pre-commit-hooks";
     changelog = "https://github.com/pre-commit/pre-commit-hooks/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kalbasit ];
+=======
+  meta = with lib; {
+    description = "Some out-of-the-box hooks for pre-commit";
+    homepage = "https://github.com/pre-commit/pre-commit-hooks";
+    changelog = "https://github.com/pre-commit/pre-commit-hooks/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kalbasit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

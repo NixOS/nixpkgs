@@ -110,6 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/luarocks";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # unpack hook for src.rock and rockspec files
   setupHook = ./setup-hook.sh;
@@ -130,15 +134,26 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Package manager for Lua";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Package manager for Lua";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raskin
       teto
     ];
     mainProgram = "luarocks";
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "http://luarocks.org/releases/";
   };
 })

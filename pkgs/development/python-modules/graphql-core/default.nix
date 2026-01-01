@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphql" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/graphql-python/graphql-core/releases/tag/${src.tag}";
     description = "Port of graphql-js to Python";
     homepage = "https://github.com/graphql-python/graphql-core";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/graphql-python/graphql-core/releases/tag/${src.tag}";
+    description = "Port of graphql-js to Python";
+    homepage = "https://github.com/graphql-python/graphql-core";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

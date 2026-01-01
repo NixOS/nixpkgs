@@ -7,6 +7,10 @@
   menhirLib,
   ppx_deriving_yojson,
   visitors,
+<<<<<<< HEAD
+=======
+  yojson,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 lib.throwIf (lib.versionAtLeast ocaml.version "5.4")
@@ -32,6 +36,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.4")
       menhirLib
       ppx_deriving_yojson
       visitors
+<<<<<<< HEAD
     ];
 
     meta = {
@@ -39,5 +44,15 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.4")
       description = "Static parser for POSIX Shell";
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [ niols ];
+=======
+      yojson
+    ];
+
+    meta = with lib; {
+      homepage = "https://github.com/colis-anr/${pname}";
+      description = "Static parser for POSIX Shell";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ niols ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }

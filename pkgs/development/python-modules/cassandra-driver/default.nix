@@ -6,6 +6,10 @@
   cython,
   eventlet,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   geomet,
   gevent,
   gremlinpython,
@@ -16,6 +20,10 @@
   pytz,
   pyyaml,
   scales,
+<<<<<<< HEAD
+=======
+  six,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   sure,
   twisted,
   setuptools,
@@ -24,16 +32,35 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
+<<<<<<< HEAD
   version = "3.29.3";
+=======
+  version = "3.29.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-VynrUc7gqAi061FU2ln4B1fK4NaSUcjSgH1i1JQpmvk=";
   };
 
+=======
+    hash = "sha256-RX9GLk2admzRasmP7LCwIfsJIt8TC/9rWhIcoTqS0qc=";
+  };
+
+  patches = [
+    # https://github.com/datastax/python-driver/pull/1242
+    (fetchpatch {
+      name = "Maintain-compatibility-with-CPython-3.13.patch";
+      url = "https://github.com/datastax/python-driver/commit/b144a84a1f97002c4545b335efaac719519cd9fa.patch";
+      hash = "sha256-60ki6i1SiGxK+J4x/8voS7Hh2x249ykpjU9EMYKD8kc=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonRelaxDeps = [ "geomet" ];
 
   build-system = [
@@ -45,6 +72,7 @@ buildPythonPackage rec {
   buildInputs = [ libev ];
 
   dependencies = [
+<<<<<<< HEAD
     geomet
   ];
 
@@ -57,13 +85,23 @@ buildPythonPackage rec {
     twisted = [ twisted ];
   };
 
+=======
+    six
+    geomet
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeCheckInputs = [
     pytestCheckHook
     pytz
     pyyaml
     sure
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # This is used to determine the version of cython that can be used
   CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
@@ -72,8 +110,11 @@ buildPythonPackage rec {
     export CASS_DRIVER_BUILD_CONCURRENCY=$NIX_BUILD_CORES
   '';
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
   preCheck =
@@ -118,6 +159,18 @@ buildPythonPackage rec {
     "test_nts_token_performance"
   ];
 
+<<<<<<< HEAD
+=======
+  optional-dependencies = {
+    cle = [ cryptography ];
+    eventlet = [ eventlet ];
+    gevent = [ gevent ];
+    graph = [ gremlinpython ];
+    metrics = [ scales ];
+    twisted = [ twisted ];
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";

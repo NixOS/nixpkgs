@@ -84,13 +84,23 @@ buildPythonPackage rec {
     inherit gurobipy numpy;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://python-mip.com/";
     description = "Collection of Python tools for the modeling and solution of Mixed-Integer Linear programs (MIPs)";
     downloadPage = "https://github.com/coin-or/python-mip/releases";
     changelog = "https://github.com/coin-or/python-mip/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.epl20;
     broken = stdenv.hostPlatform.isAarch64;
     maintainers = with lib.maintainers; [ nessdoor ];
+=======
+    license = licenses.epl20;
+    broken = stdenv.hostPlatform.isAarch64;
+    maintainers = with maintainers; [ nessdoor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -63,11 +63,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_continuum" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Versioning and auditing extension for SQLAlchemy";
     homepage = "https://github.com/kvesteri/sqlalchemy-continuum/";
     changelog = "https://github.com/kvesteri/sqlalchemy-continuum/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Versioning and auditing extension for SQLAlchemy";
+    homepage = "https://github.com/kvesteri/sqlalchemy-continuum/";
+    changelog = "https://github.com/kvesteri/sqlalchemy-continuum/blob/${version}/CHANGES.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

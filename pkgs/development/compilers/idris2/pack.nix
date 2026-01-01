@@ -5,7 +5,10 @@
   clang,
   chez,
   gmp,
+<<<<<<< HEAD
   gnumake,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   zsh,
   makeBinaryWrapper,
   stdenv,
@@ -169,12 +172,21 @@ let
 
   packPkg = buildIdris {
     ipkgName = "pack";
+<<<<<<< HEAD
     version = "2025-12-27";
     src = fetchFromGitHub {
       owner = "stefan-hoeck";
       repo = "idris2-pack";
       rev = "cd512a0bf61a6effacc24060bb04106a849df0fe";
       hash = "sha256-309k3ALAnCno8C09Fy7zz/oiSCzKI2ZbH5WFn6QIwF0=";
+=======
+    version = "2025-11-06";
+    src = fetchFromGitHub {
+      owner = "stefan-hoeck";
+      repo = "idris2-pack";
+      rev = "37787fa16550ef761d3242bf8ccb8ab672d9f2d1";
+      hash = "sha256-pvunaZSXj5Ee0utBFZfagxRKFuoSBxeU0IN7VTc56rY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     idrisLibraries = [
       idris2Api
@@ -190,7 +202,10 @@ let
       gmp
       clang
       chez
+<<<<<<< HEAD
       gnumake
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
 
@@ -202,7 +217,10 @@ let
             [
               clang
               chez
+<<<<<<< HEAD
               gnumake
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             ]
             ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ]
           )

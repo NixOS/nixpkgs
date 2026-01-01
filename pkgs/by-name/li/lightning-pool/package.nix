@@ -27,10 +27,18 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightning Pool Client";
     homepage = "https://github.com/lightninglabs/pool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ proofofkeags ];
+=======
+  meta = with lib; {
+    description = "Lightning Pool Client";
+    homepage = "https://github.com/lightninglabs/pool";
+    license = licenses.mit;
+    maintainers = with maintainers; [ proofofkeags ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

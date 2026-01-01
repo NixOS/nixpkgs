@@ -68,11 +68,20 @@ stdenv.mkDerivation {
     # Suppress incompatible function pointer error in clang due to libxml2 2.12 const changes
     + lib.optionalString stdenv.cc.isClang " -Wno-error=incompatible-function-pointer-types";
 
+<<<<<<< HEAD
   meta = {
     description = "Modular music composer for Linux";
     homepage = "https://www.buzztrax.org/";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.bendlas ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Modular music composer for Linux";
+    homepage = "https://www.buzztrax.org/";
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.bendlas ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

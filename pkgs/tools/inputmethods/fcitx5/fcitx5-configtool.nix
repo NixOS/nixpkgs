@@ -31,13 +31,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-configtool";
+<<<<<<< HEAD
   version = "5.1.12";
+=======
+  version = "5.1.11";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-XwVvkxG5627E5BE2Yp0w/mFjaG1nYa0Olm8Gz6V4+eA=";
+=======
+    hash = "sha256-SEQelUMigcqs0C+jY+A/dfncEogzU1e5tjP+wK+MylM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cmakeFlags = [
@@ -85,12 +93,21 @@ stdenv.mkDerivation rec {
     ]
   );
 
+<<<<<<< HEAD
   meta = {
     description = "Configuration Tool for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-configtool";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Configuration Tool for Fcitx5";
+    homepage = "https://github.com/fcitx/fcitx5-configtool";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ poscat ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fcitx5-config-qt";
   };
 }

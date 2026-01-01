@@ -89,14 +89,24 @@ stdenv.mkDerivation rec {
       "${gnused}/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       docbook2X is a software package that converts DocBook documents
       into the traditional Unix man page format and the GNU Texinfo
       format.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     homepage = "https://docbook2x.sourceforge.net/";
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    homepage = "https://docbook2x.sourceforge.net/";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

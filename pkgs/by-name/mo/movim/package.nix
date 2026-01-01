@@ -88,7 +88,11 @@ php.buildComposerProject2 (finalAttrs: {
     ++ lib.optional minify.style.enable lightningcss
     ++ lib.optional minify.svg.enable scour;
 
+<<<<<<< HEAD
   vendorHash = "sha256-8tEs+kQGB0pmhEQndOOOUDTFkIq+OvyKTmi9YAvK6qc=";
+=======
+  vendorHash = "sha256-t95OVDUb7hJfbokFhSOyGP02laVcTTJX7bK/reYJ99I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;

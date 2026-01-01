@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "entrypoint2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easy to use command-line interface for python modules";
     homepage = "https://github.com/ponty/entrypoint2/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ austinbutler ];
+=======
+  meta = with lib; {
+    description = "Easy to use command-line interface for python modules";
+    homepage = "https://github.com/ponty/entrypoint2/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ austinbutler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

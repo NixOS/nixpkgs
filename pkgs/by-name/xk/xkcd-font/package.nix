@@ -24,11 +24,19 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Xkcd font";
     homepage = "https://github.com/ipython/xkcd-font";
     license = lib.licenses.cc-by-nc-30;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Xkcd font";
+    homepage = "https://github.com/ipython/xkcd-font";
+    license = licenses.cc-by-nc-30;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

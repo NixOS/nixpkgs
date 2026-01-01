@@ -7,14 +7,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
+<<<<<<< HEAD
   version = "0.46.2";
+=======
+  version = "0.43.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-wQ+tu6XotTN/QcemTGzeN6/pcuEb4aRJkZROQ3liY9I=";
+=======
+    hash = "sha256-DHuNhizYDY/z3DPAPPOgGWn1m86yGHamiVCHGxlaC1w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     leaveDotGit = true;
   };
 

@@ -56,12 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tern" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Software composition analysis tool and Python library that generates a Software Bill of Materials for container images and Dockerfiles";
     mainProgram = "tern";
     homepage = "https://github.com/tern-tools/tern";
     changelog = "https://github.com/tern-tools/tern/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
+=======
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

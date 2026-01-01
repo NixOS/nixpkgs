@@ -17,17 +17,29 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
+<<<<<<< HEAD
     version = "9.2.1";
+=======
+    version = "9.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = fetchurl (
       {
         "aarch64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
+<<<<<<< HEAD
           sha256 = "sha256-1hSGR68v2azRT2PsthXKjEekGekgAv0FFESrXK6vGs0=";
         };
         "x86_64-linux" = {
           url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
           sha256 = "sha256-/H/x069JA9MtrfILos5KRT0IKOHKOuS7nI1ZspizvvA=";
+=======
+          sha256 = "sha256-QeeJe9pvwjgLrIRv2YuC5CE2EHevGfLP3c+eI6R80I0=";
+        };
+        "x86_64-linux" = {
+          url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
+          sha256 = "sha256-MmUq6dV4/cDeeC0UL240U+yYcqBsi1vqB0BwPKWoDdc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
@@ -157,7 +169,11 @@ let
       };
     };
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
       mainProgram = "documentserver-prepare4shutdown.sh";
       longDescription = ''
@@ -165,13 +181,22 @@ let
         fully compatible with Office Open XML formats: .docx, .xlsx, .pptx and enabling collaborative editing in real time.
       '';
       homepage = "https://github.com/ONLYOFFICE/DocumentServer";
+<<<<<<< HEAD
       license = lib.licenses.agpl3Plus;
+=======
+      license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
       ];
+<<<<<<< HEAD
       sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       maintainers = with lib.maintainers; [ raboof ];
+=======
+      sourceProvenance = [ sourceTypes.binaryNativeCode ];
+      maintainers = with maintainers; [ raboof ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

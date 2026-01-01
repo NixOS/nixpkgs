@@ -173,11 +173,19 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Git for operating system binaries";
     homepage = "https://ostreedev.github.io/ostree/";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Git for operating system binaries";
+    homepage = "https://ostreedev.github.io/ostree/";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

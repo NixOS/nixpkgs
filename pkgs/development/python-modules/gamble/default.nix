@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gamble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of gambling classes/tools";
     homepage = "https://github.com/jpetrucciani/gamble";
     changelog = "https://github.com/jpetrucciani/gamble/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "Collection of gambling classes/tools";
+    homepage = "https://github.com/jpetrucciani/gamble";
+    changelog = "https://github.com/jpetrucciani/gamble/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -38,9 +38,17 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "s4cmd" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bloomreach/s4cmd";
     description = "Super S3 command line tool";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bloomreach/s4cmd";
+    description = "Super S3 command line tool";
+    license = licenses.asl20;
+    maintainers = [ maintainers.bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

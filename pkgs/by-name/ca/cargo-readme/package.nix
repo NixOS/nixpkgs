@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
     "--lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generate README.md from docstrings";
     mainProgram = "cargo-readme";
@@ -32,6 +33,17 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Generate README.md from docstrings";
+    mainProgram = "cargo-readme";
+    homepage = "https://github.com/livioribeiro/cargo-readme";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       baloo
       matthiasbeyer
     ];

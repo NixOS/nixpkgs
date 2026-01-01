@@ -39,7 +39,11 @@ buildPythonPackage rec {
     });
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/pyparsing/pyparsing";
     description = "Python library for creating PEG parsers";
     longDescription = ''
@@ -48,7 +52,12 @@ buildPythonPackage rec {
       regular expressions. The pyparsing module provides a library of classes
       that client code uses to construct the grammar directly in Python code.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

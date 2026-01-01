@@ -64,11 +64,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "detect_secrets" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
     changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Enterprise friendly way of detecting and preventing secrets in code";
+    homepage = "https://github.com/Yelp/detect-secrets";
+    changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${src.tag}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

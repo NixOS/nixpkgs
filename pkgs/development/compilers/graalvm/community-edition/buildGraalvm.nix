@@ -254,20 +254,34 @@ let
       // (args.passhtru or { });
 
       meta =
+<<<<<<< HEAD
 
+=======
+        with lib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         (
           {
             homepage = "https://www.graalvm.org/";
             description = "High-Performance Polyglot VM";
+<<<<<<< HEAD
             license = with lib.licenses; [
+=======
+            license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               upl
               gpl2
               classpathException20
               bsd3
             ];
+<<<<<<< HEAD
             sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
             mainProgram = "java";
             teams = [ lib.teams.graalvm-ce ];
+=======
+            sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+            mainProgram = "java";
+            teams = [ teams.graalvm-ce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           }
           // (args.meta or { })
         );

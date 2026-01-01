@@ -23,14 +23,22 @@
 let
   self = buildPythonPackage rec {
     pname = "jaxtyping";
+<<<<<<< HEAD
     version = "0.3.4";
+=======
+    version = "0.3.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "google";
       repo = "jaxtyping";
       tag = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-u9JsZm5uz2XXQnhgRe5P/fJrKKnyIMdCTnBLCbW+kAw=";
+=======
+      hash = "sha256-92wvnlaGVppu8qNo8f7zw7be788hj8Mdi8KDfNQllwU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     build-system = [ hatchling ];

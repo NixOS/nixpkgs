@@ -56,11 +56,19 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Warp speed Data Transfer";
     homepage = "https://github.com/facebook/wdt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Warp speed Data Transfer";
+    homepage = "https://github.com/facebook/wdt";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

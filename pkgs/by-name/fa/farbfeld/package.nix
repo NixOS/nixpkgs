@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/2ff" --prefix PATH : "${file}/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Suckless image format with conversion tools";
     homepage = "https://tools.suckless.org/farbfeld/";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "Suckless image format with conversion tools";
+    homepage = "https://tools.suckless.org/farbfeld/";
+    license = licenses.isc;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

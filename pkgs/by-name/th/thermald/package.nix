@@ -66,11 +66,19 @@ stdenv.mkDerivation rec {
     cp ./data/thermal-conf.xml $out/etc/thermald/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Thermal Daemon";
     homepage = "https://github.com/intel/thermal_daemon";
     changelog = "https://github.com/intel/thermal_daemon/blob/master/README.txt";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Thermal Daemon";
+    homepage = "https://github.com/intel/thermal_daemon";
+    changelog = "https://github.com/intel/thermal_daemon/blob/master/README.txt";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -40,11 +40,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ecos" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface for ECOS";
     homepage = "https://github.com/embotech/ecos-python";
     changelog = "https://github.com/embotech/ecos-python/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Python interface for ECOS";
+    homepage = "https://github.com/embotech/ecos-python";
+    changelog = "https://github.com/embotech/ecos-python/releases/tag/v${version}";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

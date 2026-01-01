@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and secure Gemini server";
     homepage = "https://gmid.omarpolo.com/";
@@ -36,5 +37,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Simple and secure Gemini server";
+    homepage = "https://gmid.omarpolo.com/";
+    changelog = "https://gmid.omarpolo.com/changelog.html";
+    license = licenses.isc;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

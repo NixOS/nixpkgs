@@ -52,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical app to display power status of mobile Linux platforms";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/powersupply";
@@ -59,5 +60,14 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "powersupply";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    description = "Graphical app to display power status of mobile Linux platforms";
+    homepage = "https://gitlab.postmarketos.org/postmarketOS/powersupply";
+    license = licenses.mit;
+    mainProgram = "powersupply";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

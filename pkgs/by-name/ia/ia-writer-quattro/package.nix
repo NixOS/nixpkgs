@@ -26,11 +26,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "iA Writer Quattro Typeface";
     homepage = "https://github.com/iaolo/iA-Fonts";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.x0ba ];
+=======
+  meta = with lib; {
+    description = "iA Writer Quattro Typeface";
+    homepage = "https://github.com/iaolo/iA-Fonts";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.x0ba ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

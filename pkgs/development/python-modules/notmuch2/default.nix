@@ -38,10 +38,18 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "notmuch2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pythonic bindings for the notmuch mail database using CFFI";
     homepage = "https://notmuchmail.org/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ teto ];
+=======
+  meta = with lib; {
+    description = "Pythonic bindings for the notmuch mail database using CFFI";
+    homepage = "https://notmuchmail.org/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ teto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

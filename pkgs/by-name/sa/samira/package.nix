@@ -83,6 +83,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # the libsteam_api.so supports only x86_64-linux
     platforms = [ "x86_64-linux" ];
     mainProgram = "samira";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ PerchunPak ];
+=======
+    maintainers = with lib.maintainers; [ perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -28,7 +28,10 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "httpx"
     "responses"
+<<<<<<< HEAD
     "test-results-parser"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "tree-sitter"
   ];
 

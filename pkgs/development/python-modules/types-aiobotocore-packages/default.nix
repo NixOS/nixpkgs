@@ -51,11 +51,19 @@ let
 
       pythonImportsCheck = [ "types_aiobotocore_${toUnderscore serviceName}" ];
 
+<<<<<<< HEAD
       meta = {
         description = "Type annotations for aiobotocore ${serviceName}";
         homepage = "https://github.com/youtype/mypy_boto3_builder";
         license = lib.licenses.mit;
         maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+      meta = with lib; {
+        description = "Type annotations for aiobotocore ${serviceName}";
+        homepage = "https://github.com/youtype/mypy_boto3_builder";
+        license = licenses.mit;
+        maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in

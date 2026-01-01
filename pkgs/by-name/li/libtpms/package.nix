@@ -41,10 +41,18 @@ stdenv.mkDerivation rec {
     "--with-tpm2"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for software emulation of a Trusted Platform Module (TPM 1.2 and TPM 2.0)";
     homepage = "https://github.com/stefanberger/libtpms";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.baloo ];
+=======
+  meta = with lib; {
+    description = "Library for software emulation of a Trusted Platform Module (TPM 1.2 and TPM 2.0)";
+    homepage = "https://github.com/stefanberger/libtpms";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.baloo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

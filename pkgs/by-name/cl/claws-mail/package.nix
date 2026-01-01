@@ -343,6 +343,7 @@ stdenv.mkDerivation rec {
     cp claws-mail.desktop $out/share/applications
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "User-friendly, lightweight, and fast email client";
     mainProgram = "claws-mail";
@@ -351,6 +352,18 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       fpletz
+=======
+  meta = with lib; {
+    description = "User-friendly, lightweight, and fast email client";
+    mainProgram = "claws-mail";
+    homepage = "https://www.claws-mail.org/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      fpletz
+      globin
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       oxzi
       ajs124
     ];

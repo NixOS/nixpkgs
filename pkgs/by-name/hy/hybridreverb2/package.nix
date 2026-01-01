@@ -81,12 +81,21 @@ stdenv.mkDerivation rec {
     cp  -r ${impulseDB}/* $out/share/HybridReverb2/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jpcima/HybridReverb2";
     description = "Reverb effect using hybrid impulse convolution";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jpcima/HybridReverb2";
+    description = "Reverb effect using hybrid impulse convolution";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "HybridReverb2";
   };
 }

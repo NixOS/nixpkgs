@@ -33,12 +33,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Touch calibrator for libinput";
     mainProgram = "xlibinput_calibrator";
     homepage = "https://github.com/kreijack/xlibinput_calibrator";
     changelog = "https://github.com/kreijack/xlibinput_calibrator/blob/${src.rev}/Changelog";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ atemu ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ atemu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

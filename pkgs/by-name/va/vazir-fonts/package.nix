@@ -25,11 +25,19 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rastikerdar/vazir-font";
     description = "Persian (Farsi) Font - قلم (فونت) فارسی وزیر";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rastikerdar/vazir-font";
+    description = "Persian (Farsi) Font - قلم (فونت) فارسی وزیر";
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

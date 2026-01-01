@@ -17,10 +17,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "morphys" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Smart conversions between unicode and bytes types";
     homepage = "https://github.com/mkalinski/morphys";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rakesh4g ];
+=======
+  meta = with lib; {
+    description = "Smart conversions between unicode and bytes types";
+    homepage = "https://github.com/mkalinski/morphys";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rakesh4g ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

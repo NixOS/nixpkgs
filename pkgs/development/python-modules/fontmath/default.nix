@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of objects that implement fast font, glyph, etc. math";
     homepage = "https://github.com/robotools/fontMath/";
     changelog = "https://github.com/robotools/fontMath/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Collection of objects that implement fast font, glyph, etc. math";
+    homepage = "https://github.com/robotools/fontMath/";
+    changelog = "https://github.com/robotools/fontMath/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

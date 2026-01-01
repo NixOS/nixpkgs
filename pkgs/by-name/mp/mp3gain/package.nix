@@ -36,12 +36,21 @@ stdenv.mkDerivation rec {
     install -vD mp3gain "$out/bin/mp3gain"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lossless mp3 normalizer with statistical analysis";
     homepage = "https://mp3gain.sourceforge.net/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ devhell ];
+=======
+  meta = with lib; {
+    description = "Lossless mp3 normalizer with statistical analysis";
+    homepage = "https://mp3gain.sourceforge.net/";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ devhell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mp3gain";
   };
 }

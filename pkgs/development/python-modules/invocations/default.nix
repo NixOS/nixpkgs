@@ -69,11 +69,20 @@ buildPythonPackage rec {
     "status_"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Common/best-practice Invoke tasks and collections";
     homepage = "https://invocations.readthedocs.io/";
     changelog = "https://github.com/pyinvoke/invocations/blob/${version}/docs/changelog.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ samuela ];
+=======
+  meta = with lib; {
+    description = "Common/best-practice Invoke tasks and collections";
+    homepage = "https://invocations.readthedocs.io/";
+    changelog = "https://github.com/pyinvoke/invocations/blob/${version}/docs/changelog.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ samuela ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

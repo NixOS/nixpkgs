@@ -74,11 +74,20 @@ buildPythonPackage rec {
     "test_rendering"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "No effort, no worry, maximum performance";
     homepage = "https://github.com/noripyt/django-cachalot";
     changelog = "https://github.com/noripyt/django-cachalot/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "No effort, no worry, maximum performance";
+    homepage = "https://github.com/noripyt/django-cachalot";
+    changelog = "https://github.com/noripyt/django-cachalot/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

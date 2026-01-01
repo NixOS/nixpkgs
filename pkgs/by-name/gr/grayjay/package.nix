@@ -35,13 +35,21 @@
   _experimental-update-script-combinators,
 }:
 let
+<<<<<<< HEAD
   version = "13";
+=======
+  version = "10";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-AKFPPfz5Cbk6fI0H6E3Q+KUvPW4YbVSKcQZUrJCyHeE=";
+=======
+    hash = "sha256-ap0NnjyBjvyFjHPu9vACQMoOXqwz90/8QqSfPFqfh5U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -52,7 +60,11 @@ let
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
+<<<<<<< HEAD
     npmDepsHash = "sha256-3nPzQcDWhPCdLrPvwGY+K0t1OSxWrVwQ3hH7i0eynRU=";
+=======
+    npmDepsHash = "sha256-3RMUV6o6422PEuqYg7B+y6JjlaiHDhnwsgsaKEbu5BM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     installPhase = ''
       runHook preInstall
@@ -181,10 +193,17 @@ buildDotnetModule (finalAttrs: {
         "--subpackage"
         "frontend"
         "--url"
+<<<<<<< HEAD
         "https://gitlab.futo.org/api/v4/projects/videostreaming%2FGrayjay%2EDesktop/repository/archive.tar.gz?sha=refs%2Ftags%2F10"
       ];
     })
     finalAttrs.passthru.fetch-deps
+=======
+        "https://github.com/futo-org/Grayjay.Desktop"
+      ];
+    })
+    (finalAttrs.passthru.fetch-deps)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {
@@ -198,10 +217,14 @@ buildDotnetModule (finalAttrs: {
     '';
     homepage = "https://grayjay.app/desktop/";
     license = lib.licenses.sfl;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       kruziikrel13
       samfundev
     ];
+=======
+    maintainers = with lib.maintainers; [ samfundev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "Grayjay";
   };

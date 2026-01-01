@@ -43,12 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reqif" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library for ReqIF format";
     mainProgram = "reqif";
     homepage = "https://github.com/strictdoc-project/reqif";
     changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

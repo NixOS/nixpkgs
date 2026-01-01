@@ -61,12 +61,21 @@ stdenv.mkDerivation rec {
       --add-flags "--atprc $out/etc/leoatprc"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "High-performance typed higher order prover";
     mainProgram = "leo";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "High-performance typed higher order prover";
+    mainProgram = "leo";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.leoprover.org/";
   };
 }

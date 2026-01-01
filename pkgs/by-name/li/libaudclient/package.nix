@@ -22,11 +22,20 @@ stdenv.mkDerivation rec {
     dbus-glib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Legacy D-Bus client library for Audacious";
     homepage = "https://audacious-media-player.org/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Legacy D-Bus client library for Audacious";
+    homepage = "https://audacious-media-player.org/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

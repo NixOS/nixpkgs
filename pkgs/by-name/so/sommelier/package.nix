@@ -56,6 +56,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.py;
 
+<<<<<<< HEAD
   meta = {
     # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
     broken = true;
@@ -64,6 +65,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://chromium.googlesource.com/chromiumos/platform2/+/refs/heads/main/vm_tools/sommelier/";
+    description = "Nested Wayland compositor with support for X11 forwarding";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sommelier";
   };
 }

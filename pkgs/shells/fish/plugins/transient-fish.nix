@@ -14,10 +14,18 @@ buildFishPlugin {
     hash = "sha256-rEkCimnkxcydKRI2y4DxEM7FD7F2/cGTZJN2Edq/Acc=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Fish plugin to enable a transient prompt";
     homepage = "https://github.com/zzhaolei/transient.fish";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iynaix ];
+=======
+  meta = with lib; {
+    description = "Fish plugin to enable a transient prompt";
+    homepage = "https://github.com/zzhaolei/transient.fish";
+    license = licenses.mit;
+    maintainers = with maintainers; [ iynaix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

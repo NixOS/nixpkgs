@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "psnawp";
+<<<<<<< HEAD
   version = "3.0.1";
+=======
+  version = "3.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitea {
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "YoshikageKira";
     repo = "psnawp";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-qENKZC5U4jedl2RvmIGk52r0Vd/oMLEcp6DERYLctAs=";
+=======
+    hash = "sha256-JS8VGwIsCr21rwjXCRUXsoVHfFyLTZtgp+ZJcXWCCsQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ poetry-core ];

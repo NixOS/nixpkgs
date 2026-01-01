@@ -42,10 +42,18 @@ buildKodiAddon rec {
     mv /build/source/addon.xml $out${addonDir}/${namespace}/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.plex.tv";
     description = "Unofficial Plex for Kodi add-on";
     license = lib.licenses.gpl2Only;
     maintainers = lib.teams.kodi.members;
+=======
+  meta = with lib; {
+    homepage = "https://www.plex.tv";
+    description = "Unofficial Plex for Kodi add-on";
+    license = licenses.gpl2Only;
+    maintainers = teams.kodi.members;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

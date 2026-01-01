@@ -31,11 +31,19 @@ buildPythonPackage rec {
   # Needs /dev/i2c-1
   # pythonImportsCheck = [ "lcd_i2c" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for interacting with an I2C LCD screen through Python";
     homepage = "https://pypi.org/project/lcd-i2c/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oliver-koss ];
+=======
+  meta = with lib; {
+    description = "Library for interacting with an I2C LCD screen through Python";
+    homepage = "https://pypi.org/project/lcd-i2c/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ oliver-koss ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lcd-i2c";
   };
 }

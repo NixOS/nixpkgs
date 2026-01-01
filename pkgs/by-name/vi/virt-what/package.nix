@@ -13,12 +13,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1Nm9nUrlkJVZdEP6xmNJUxXH60MwuHKqXwYt84rGm/E=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Detect if running in a virtual machine and prints its type";
     homepage = "https://people.redhat.com/~rjones/virt-what/";
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Detect if running in a virtual machine and prints its type";
+    homepage = "https://people.redhat.com/~rjones/virt-what/";
+    maintainers = with maintainers; [ fpletz ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "virt-what";
   };
 }

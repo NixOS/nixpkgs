@@ -81,18 +81,27 @@ let
   ];
 in
 mkDerivation rec {
+<<<<<<< HEAD
   version = "3.44.5";
   pname = "qgis-unwrapped";
   outputs = [
     "out"
     "man"
   ];
+=======
+  version = "3.44.4";
+  pname = "qgis-unwrapped";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
+<<<<<<< HEAD
     hash = "sha256-VrI3pk7Qi0A9D7ONl18YeX9cFS6NfSU2Hvrzx8JIoXo=";
+=======
+    hash = "sha256-G9atxBBANlUDGl39bkwTo6L04/+0o5A5ake4KvIY70E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {
@@ -185,7 +194,11 @@ mkDerivation rec {
   dontWrapGApps = true; # wrapper params passed below
 
   postFixup = lib.optionalString withGrass ''
+<<<<<<< HEAD
     # GRASS has to be available on the command line even though we baked in
+=======
+    # GRASS has to be availble on the command line even though we baked in
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # the path at build time using GRASS_PREFIX.
     # Using wrapGAppsHook also prevents file dialogs from crashing the program
     # on non-NixOS.
@@ -199,11 +212,21 @@ mkDerivation rec {
   # >9k objects, >3h build time on a normal build slot
   requiredSystemFeatures = [ "big-parallel" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.geospatial ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Free and Open Source Geographic Information System";
+    homepage = "https://www.qgis.org";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lsix ];
+    teams = [ teams.geospatial ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

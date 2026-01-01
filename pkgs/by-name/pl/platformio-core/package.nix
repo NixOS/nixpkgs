@@ -1,6 +1,10 @@
 {
   lib,
+<<<<<<< HEAD
   python3,
+=======
+  python3Packages,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   fetchpatch,
   installShellFiles,
@@ -11,6 +15,7 @@
   udevCheckHook,
 }:
 
+<<<<<<< HEAD
 let
   python = python3.override {
     self = python;
@@ -28,6 +33,8 @@ let
   };
   python3Packages = python.pkgs;
 in
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";
@@ -233,13 +240,22 @@ buildPythonApplication rec {
     python = python3Packages.python;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/platformio/platformio-core/releases/tag/${src.tag}";
     description = "Open source ecosystem for IoT development";
     downloadPage = "https://github.com/platformio/platformio-core";
     homepage = "https://platformio.org";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mog
       makefu
     ];

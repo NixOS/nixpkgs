@@ -56,11 +56,20 @@ python3Packages.buildPythonApplication rec {
       qt6.qtwayland
     ];
 
+<<<<<<< HEAD
   meta = {
     description = "GUI for reading and writing GB and GBA cartridges with the GBxCart RW";
     homepage = "https://github.com/lesserkuma/FlashGBX";
     license = lib.licenses.gpl3Only;
     mainProgram = "flashgbx";
     maintainers = with lib.maintainers; [ grahamnorris ];
+=======
+  meta = with lib; {
+    description = "GUI for reading and writing GB and GBA cartridges with the GBxCart RW";
+    homepage = "https://github.com/lesserkuma/FlashGBX";
+    license = licenses.gpl3Only;
+    mainProgram = "flashgbx";
+    maintainers = with maintainers; [ grahamnorris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,11 +23,19 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jsonnet package manager";
     homepage = "https://github.com/jsonnet-bundler/jsonnet-bundler";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ preisschild ];
+=======
+  meta = with lib; {
+    description = "Jsonnet package manager";
+    homepage = "https://github.com/jsonnet-bundler/jsonnet-bundler";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ preisschild ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jb";
   };
 }

@@ -8,18 +8,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmake";
+<<<<<<< HEAD
   version = "3.0.5";
+=======
+  version = "3.0.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "xmake-io";
     repo = "xmake";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-rmChbjWRFL2vchifupLBraalMHYze035xjLNLCYzwm8=";
+=======
+    hash = "sha256-0Hh7XqKAt0yrg1GejEZmKpY3c8EvK7Z2eBS8GNaxYlg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = nix-update-script { };

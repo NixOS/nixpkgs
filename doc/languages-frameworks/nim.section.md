@@ -20,7 +20,11 @@ buildNimPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "inv2004";
     repo = "ttop";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
+=======
+    rev = "v${finalAttrs.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = lib.fakeHash;
   };
 
@@ -74,7 +78,11 @@ buildNimSbom (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~ehmry";
     repo = "nim_lk";
+<<<<<<< HEAD
     tag = finalAttrs.version;
+=======
+    rev = finalAttrs.version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = lib.fakeHash;
   };
   buildInputs = [ openssl ];
@@ -93,7 +101,11 @@ The `buildNimPackage` and `buildNimSbom` functions generate flags and additional
 ```nix
 pkgs.nitter.overrideNimAttrs {
   # using a different source which has different dependencies from the standard package
+<<<<<<< HEAD
   src = pkgs.fetchFromGitHub {
+=======
+  src = pkgs.fetchFromGithub {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # …
   };
   # new lock file generated from the source

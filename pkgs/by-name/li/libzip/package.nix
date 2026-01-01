@@ -55,12 +55,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://libzip.org/";
     description = "C library for reading, creating and modifying zip archives";
     license = lib.licenses.bsd3;
     pkgConfigModules = [ "libzip" ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://libzip.org/";
+    description = "C library for reading, creating and modifying zip archives";
+    license = licenses.bsd3;
+    pkgConfigModules = [ "libzip" ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/nih-at/libzip/blob/v${finalAttrs.version}/NEWS.md";
   };
 })

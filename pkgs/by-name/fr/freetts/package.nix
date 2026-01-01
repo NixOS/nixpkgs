@@ -55,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://freetts.sourceforge.net";
     license = lib.licenses.bsdOriginal;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # jsapi.jar is bundled in a self-extracting shell-script

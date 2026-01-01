@@ -47,7 +47,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Solarized versions of Numix GTK2 and GTK3 theme";
     longDescription = ''
       This is a fork of the Numix GTK theme that replaces the colors of the theme
@@ -56,8 +60,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Ferdi265/numix-solarized-gtk-theme";
     downloadPage = "https://github.com/Ferdi265/numix-solarized-gtk-theme/releases";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.offline ];
+=======
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

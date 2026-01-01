@@ -40,11 +40,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Small LD_PRELOAD library to disable fsync and friends";
     homepage = "https://www.flamingspork.com/projects/libeatmydata/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "eatmydata";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Small LD_PRELOAD library to disable fsync and friends";
+    homepage = "https://www.flamingspork.com/projects/libeatmydata/";
+    license = licenses.gpl3Plus;
+    mainProgram = "eatmydata";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

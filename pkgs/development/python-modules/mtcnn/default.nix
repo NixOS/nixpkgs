@@ -46,6 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # Failing since keras 3.13.0.
     # ValueError: Exception encountered when calling Conv2D.call().
@@ -55,6 +56,8 @@ buildPythonPackage rec {
     "test_detect_no_faces"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "MTCNN face detection implementation for TensorFlow";
     homepage = "https://github.com/ipazc/mtcnn";

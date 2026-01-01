@@ -255,6 +255,7 @@
       "mini_portile2"
       "racc"
     ];
+<<<<<<< HEAD
     groups = [ "default" ];
     platforms = [ ];
     source = {
@@ -263,6 +264,19 @@
       type = "gem";
     };
     version = "1.18.10";
+=======
+    groups = [
+      "default"
+      "development"
+    ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0rb306hbky6cxfyc8vrwpvl40fdapjvhsk62h08gg9wwbn3n8x4c";
+      type = "gem";
+    };
+    version = "1.18.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   octokit = {
     dependencies = [

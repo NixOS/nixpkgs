@@ -21,11 +21,19 @@ rustPlatform.buildRustPackage {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Efficient way to filter duplicate lines from input, à la uniq";
     mainProgram = "runiq";
     homepage = "https://github.com/whitfin/runiq";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Efficient way to filter duplicate lines from input, à la uniq";
+    mainProgram = "runiq";
+    homepage = "https://github.com/whitfin/runiq";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

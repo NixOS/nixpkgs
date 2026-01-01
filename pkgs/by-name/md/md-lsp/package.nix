@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-YS7ANZlxlRpl4ww/EJM57MTb+5WAW4mH6cQoziFCv18=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = nix-update-script {

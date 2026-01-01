@@ -41,12 +41,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Extensible cross-language static code analyzer";
     homepage = "https://pmd.github.io/";
     changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Extensible cross-language static code analyzer";
+    homepage = "https://pmd.github.io/";
+    changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";
+    platforms = platforms.unix;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsdOriginal
       asl20
     ];

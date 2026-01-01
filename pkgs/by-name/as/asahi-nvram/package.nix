@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-NW/puo/Xoum7DjSQjBgilQcKbY3mAfVgXxUK6+1H1JI=";
   cargoDepsName = pname;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to read and write nvram variables on ARM Macs";
     homepage = "https://crates.io/crates/asahi-nvram";
@@ -23,5 +24,14 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lukaslihotzki ];
     mainProgram = "asahi-nvram";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool to read and write nvram variables on ARM Macs";
+    homepage = "https://crates.io/crates/asahi-nvram";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lukaslihotzki ];
+    mainProgram = "asahi-nvram";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

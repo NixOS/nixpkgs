@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "General MIDI-compliant bank, aimed at enhancing the realism of your MIDI files and arrangements";
     homepage = "http://www.arachnosoft.com/main/soundfont.php";
     license = lib.licenses.unfree;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mrtnvgr ];
+=======
+  meta = with lib; {
+    description = "General MIDI-compliant bank, aimed at enhancing the realism of your MIDI files and arrangements";
+    homepage = "http://www.arachnosoft.com/main/soundfont.php";
+    license = licenses.unfree;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ mrtnvgr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

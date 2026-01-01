@@ -22,7 +22,11 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     $out/bin/codebraid --help > /dev/null
   '';
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/gpoore/codebraid";
     description = ''
       Live code in Pandoc Markdown.
@@ -39,8 +43,13 @@ python3Packages.buildPythonApplication rec {
       R, Bash, and JavaScript. Code can also be executed using Jupyter kernels,
       with support for rich output like plots.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ synthetica ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ synthetica ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "codebraid";
   };
 }

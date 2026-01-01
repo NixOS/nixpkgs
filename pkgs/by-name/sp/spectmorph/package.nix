@@ -36,14 +36,25 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Allows to analyze samples of musical instruments, and to combine them (morphing) to construct hybrid sounds";
     homepage = "https://spectmorph.org";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Allows to analyze samples of musical instruments, and to combine them (morphing) to construct hybrid sounds";
+    homepage = "https://spectmorph.org";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.magnetophon ];
+=======
+    maintainers = [ maintainers.magnetophon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

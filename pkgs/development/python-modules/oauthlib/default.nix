@@ -43,7 +43,11 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # too narrow time comparison issues
@@ -61,11 +65,20 @@ buildPythonPackage rec {
       ;
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/oauthlib/oauthlib/blob/${src.tag}/CHANGELOG.rst";
     description = "Generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
     homepage = "https://github.com/oauthlib/oauthlib";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ prikhi ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/oauthlib/oauthlib/blob/${src.tag}/CHANGELOG.rst";
+    description = "Generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
+    homepage = "https://github.com/oauthlib/oauthlib";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ prikhi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

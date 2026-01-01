@@ -6,7 +6,11 @@
   pkg-config,
   anytype-heart,
   libsecret,
+<<<<<<< HEAD
   electron,
+=======
+  electron_37,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? "",
@@ -14,23 +18,39 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "anytype";
+<<<<<<< HEAD
   version = "0.53.1";
+=======
+  version = "0.50.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-GDx40UA+Grc/xvlfwqtN1WNonm9c0dci1rereWpfhjs=";
+=======
+    hash = "sha256-HLYYuMtgvF0UHHnThEWSpLIZEvLxNrOtkoXEhSAT24A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
+<<<<<<< HEAD
     rev = "f9dc9286757c2544fe801a1e31067cbe708cc6f1";
     hash = "sha256-/rZCpeKGtPttYbuJbhbOV4P1sXSvIYve0WO/SL20isw=";
   };
 
   npmDepsHash = "sha256-hJJK/RJnSm8QpjGcnxUsemrAsRNYCHSGSH8iUZZYXJI=";
+=======
+    rev = "aaa83aae39a7dbf59c3c8580be4700edf7481893";
+    hash = "sha256-MOR7peovTYYQR96lOoxyETY0aOH6KcB9vXCqpXKxI/4=";
+  };
+
+  npmDepsHash = "sha256-ohlHY7zw+GyaNuwI2t7dQj1bQkXH//LiyiHyi2B+/9I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -44,7 +64,11 @@ buildNpmPackage (finalAttrs: {
 
   npmFlags = [
     # keytar needs to be built against electron's ABI
+<<<<<<< HEAD
     "--nodedir=${electron.headers}"
+=======
+    "--nodedir=${electron_37.headers}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   patches = [
@@ -87,7 +111,11 @@ buildNpmPackage (finalAttrs: {
 
     cp LICENSE.md $out/share
 
+<<<<<<< HEAD
     makeWrapper '${lib.getExe electron}' $out/bin/anytype \
+=======
+    makeWrapper '${lib.getExe electron_37}' $out/bin/anytype \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags $out/lib/anytype/ \

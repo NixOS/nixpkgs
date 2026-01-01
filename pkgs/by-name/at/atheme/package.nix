@@ -47,11 +47,20 @@ stdenv.mkDerivation rec {
     "--enable-reproducible-builds"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of services for IRC networks";
     homepage = "https://atheme.github.io/";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ leo60228 ];
+=======
+  meta = with lib; {
+    description = "Set of services for IRC networks";
+    homepage = "https://atheme.github.io/";
+    license = licenses.isc;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ leo60228 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

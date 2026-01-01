@@ -53,6 +53,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tree_sitter_languages" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Binary Python wheels for all tree sitter languages";
     homepage = "https://github.com/grantjenks/py-tree-sitter-languages";
@@ -60,5 +61,14 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     # https://github.com/grantjenks/py-tree-sitter-languages/issues/67
     broken = lib.versionAtLeast tree-sitter.version "0.22";
+=======
+  meta = with lib; {
+    description = "Binary Python wheels for all tree sitter languages";
+    homepage = "https://github.com/grantjenks/py-tree-sitter-languages";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ doronbehar ];
+    # https://github.com/grantjenks/py-tree-sitter-languages/issues/67
+    broken = versionAtLeast tree-sitter.version "0.22";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

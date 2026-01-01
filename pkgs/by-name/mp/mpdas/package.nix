@@ -31,12 +31,21 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Music Player Daemon AudioScrobbler";
     homepage = "https://50hz.ws/mpdas/";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.taketwo ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Music Player Daemon AudioScrobbler";
+    homepage = "https://50hz.ws/mpdas/";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.taketwo ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mpdas";
   };
 }

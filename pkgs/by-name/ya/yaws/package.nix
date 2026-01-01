@@ -32,12 +32,21 @@ stdenv.mkDerivation rec {
     sed -i "s#which #type -P #" $out/bin/yaws
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Webserver for dynamic content written in Erlang";
     mainProgram = "yaws";
     homepage = "https://github.com/erlyaws/yaws";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Webserver for dynamic content written in Erlang";
+    mainProgram = "yaws";
+    homepage = "https://github.com/erlyaws/yaws";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 

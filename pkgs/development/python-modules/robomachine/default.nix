@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "robomachine" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Test data generator for Robot Framework";
     homepage = "https://github.com/mkorpela/RoboMachine";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Test data generator for Robot Framework";
+    homepage = "https://github.com/mkorpela/RoboMachine";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

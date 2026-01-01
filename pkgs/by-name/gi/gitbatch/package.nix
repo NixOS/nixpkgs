@@ -36,12 +36,21 @@ buildGoModule rec {
     "-skip=Test(Run|Start|(Fetch|Pull)With(Go|)Git)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Running git UI commands";
     homepage = "https://github.com/isacikgoz/gitbatch";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teto ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Running git UI commands";
+    homepage = "https://github.com/isacikgoz/gitbatch";
+    license = licenses.mit;
+    maintainers = with maintainers; [ teto ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gitbatch";
   };
 }

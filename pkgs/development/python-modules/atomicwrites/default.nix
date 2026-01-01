@@ -19,9 +19,16 @@ buildPythonPackage rec {
   doCheck = false;
   nativeCheckInputs = [ pytest ];
 
+<<<<<<< HEAD
   meta = {
     description = "Atomic file writes on POSIX";
     homepage = "https://pypi.python.org/pypi/atomicwrites";
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Atomic file writes on POSIX";
+    homepage = "https://pypi.python.org/pypi/atomicwrites";
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

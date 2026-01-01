@@ -25,11 +25,19 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rinchsan/gosimports";
     description = "Simpler goimports";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ maolonglong ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rinchsan/gosimports";
+    description = "Simpler goimports";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ maolonglong ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gosimports";
   };
 }

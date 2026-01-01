@@ -34,12 +34,21 @@ stdenv.mkDerivation rec {
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "OpenBSD VMM Control Interface (vmmci) for Linux";
     homepage = "https://github.com/voutilad/virtio_vmmci";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ qbit ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "OpenBSD VMM Control Interface (vmmci) for Linux";
+    homepage = "https://github.com/voutilad/virtio_vmmci";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ qbit ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   enableParallelBuilding = true;

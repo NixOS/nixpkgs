@@ -358,13 +358,21 @@
 
 buildPythonPackage rec {
   pname = "boto3-stubs";
+<<<<<<< HEAD
   version = "1.42.19";
+=======
+  version = "1.41.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     pname = "boto3_stubs";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-nCLpxZHcOdfxLncUjn5SJo0R9F7DVs3EIEukEuXJAqE=";
+=======
+    hash = "sha256-3hzThIpkfZpuj18QAKxWnncGZLAy2aplrY7Q5fKsfyI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -1090,11 +1098,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "boto3-stubs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Type annotations for boto3";
     homepage = "https://pypi.org/project/boto3-stubs/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Type annotations for boto3";
+    homepage = "https://pypi.org/project/boto3-stubs/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fab
       mbalatsko
     ];

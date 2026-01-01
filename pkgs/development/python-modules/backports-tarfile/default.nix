@@ -56,10 +56,17 @@ let
 
     passthru.tests.pytest = self.overridePythonAttrs { doCheck = true; };
 
+<<<<<<< HEAD
     meta = {
       description = "Backport of CPython tarfile module";
       homepage = "https://github.com/jaraco/backports.tarfile";
       license = lib.licenses.mit;
+=======
+    meta = with lib; {
+      description = "Backport of CPython tarfile module";
+      homepage = "https://github.com/jaraco/backports.tarfile";
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maintainers = [ ];
     };
   };

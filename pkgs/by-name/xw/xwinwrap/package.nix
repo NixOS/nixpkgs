@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
     mv */xwinwrap $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Utility that allows you to use an animated X window as the wallpaper";
     longDescription = ''
       XWinWrap is a small utility written a loooong time ago that allowed you to
@@ -57,10 +61,17 @@ stdenv.mkDerivation rec {
       weekend by fixing the above problems and also add a few features. And here
       it is, in its new avatar “Shantz XWinWrap”.
     '';
+<<<<<<< HEAD
     license = lib.licenses.hpnd;
     homepage = "https://shantanugoel.com/2008/09/03/shantz-xwinwrap/";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.hpnd;
+    homepage = "https://shantanugoel.com/2008/09/03/shantz-xwinwrap/";
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xwinwrap";
   };
 }

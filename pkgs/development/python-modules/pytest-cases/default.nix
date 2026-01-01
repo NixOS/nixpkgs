@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_cases" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Separate test code from test cases in pytest";
     homepage = "https://github.com/smarie/python-pytest-cases";
     changelog = "https://github.com/smarie/python-pytest-cases/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Separate test code from test cases in pytest";
+    homepage = "https://github.com/smarie/python-pytest-cases";
+    changelog = "https://github.com/smarie/python-pytest-cases/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

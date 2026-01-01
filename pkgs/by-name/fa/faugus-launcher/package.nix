@@ -1,5 +1,9 @@
 {
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  gamemode,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gobject-introspection,
   icoextract,
   imagemagick,
@@ -17,20 +21,31 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "faugus-launcher";
+<<<<<<< HEAD
   version = "1.11.8";
+=======
+  version = "1.10.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
     repo = "faugus-launcher";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-VgafXX8EuX0WOpG0cxBNlUdLL4HrrcpdblpCMxka2ms=";
+=======
+    hash = "sha256-FmbAlvjzUEjKDFEI1O9TJGpKl8/WJaCYUVT75+oG2vc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
     gobject-introspection
+<<<<<<< HEAD
     meson
     ninja
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     wrapGAppsHook3
   ];
 
@@ -38,6 +53,14 @@ python3Packages.buildPythonApplication rec {
     libayatana-appindicator
   ];
 
+<<<<<<< HEAD
+=======
+  build-system = [
+    meson
+    ninja
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dependencies = with python3Packages; [
     filelock
     pillow
@@ -56,7 +79,13 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace faugus_run.py \
       --replace-fail "PathManager.find_binary('faugus-components')" "'$out/bin/.faugus-components-wrapped'" \
+<<<<<<< HEAD
       --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'"
+=======
+      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'" \
+      --replace-fail "PathManager.find_library('libgamemode.so.0')" "'${lib.getLib gamemode}/lib/libgamemode.so.0'" \
+      --replace-fail "PathManager.find_library('libgamemodeauto.so.0')" "'${lib.getLib gamemode}/lib/libgamemodeauto.so.0'"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   dontWrapGApps = true;

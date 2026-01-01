@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uart_devices" ];
 
+<<<<<<< HEAD
   meta = {
     description = "UART Devices for Linux";
     homepage = "https://github.com/bdraco/uart-devices";
@@ -37,5 +38,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "UART Devices for Linux";
+    homepage = "https://github.com/bdraco/uart-devices";
+    changelog = "https://github.com/bdraco/uart-devices/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

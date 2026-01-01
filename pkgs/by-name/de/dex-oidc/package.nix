@@ -44,11 +44,19 @@ buildGoModule (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
     homepage = "https://github.com/dexidp/dex";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
+    homepage = "https://github.com/dexidp/dex";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       benley
       techknowlogick
     ];

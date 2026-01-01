@@ -42,12 +42,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gitlab" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interact with GitLab API";
     homepage = "https://github.com/python-gitlab/python-gitlab";
     changelog = "https://github.com/python-gitlab/python-gitlab/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    description = "Interact with GitLab API";
+    homepage = "https://github.com/python-gitlab/python-gitlab";
+    changelog = "https://github.com/python-gitlab/python-gitlab/blob/v${version}/CHANGELOG.md";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gitlab";
   };
 }

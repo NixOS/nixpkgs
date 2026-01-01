@@ -37,16 +37,29 @@ stdenv.mkDerivation rec {
     libuv
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GE / Honeywell / Bull DPS-8/M mainframe simulator";
     homepage = "https://gitlab.com/dps8m/dps8m";
     changelog = "https://gitlab.com/dps8m/dps8m/-/wikis/DPS8M-${src.rev}-Release-Notes";
     license = lib.licenses.icu;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "GE / Honeywell / Bull DPS-8/M mainframe simulator";
+    homepage = "https://gitlab.com/dps8m/dps8m";
+    changelog = "https://gitlab.com/dps8m/dps8m/-/wikis/DPS8M-${src.rev}-Release-Notes";
+    license = licenses.icu;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthewcroughan
       sarcasticadmin
     ];
     mainProgram = "dps8m";
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

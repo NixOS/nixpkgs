@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "View and edit tags for various audio files";
     mainProgram = "easytag";
@@ -79,5 +80,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ matteopacini ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "View and edit tags for various audio files";
+    mainProgram = "easytag";
+    homepage = "https://gitlab.gnome.org/GNOME/easytag";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ matteopacini ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

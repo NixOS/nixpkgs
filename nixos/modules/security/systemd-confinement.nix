@@ -128,9 +128,17 @@ in
             lib.mkIf config.confinement.enable {
               serviceConfig = {
                 ReadOnlyPaths = [ "+/" ];
+<<<<<<< HEAD
                 RuntimeDirectory = [ "confinement/%n" ];
                 RootDirectory = "/run/confinement/%n";
                 InaccessiblePaths = [ "-+/run/confinement/%n" ];
+=======
+                RuntimeDirectory = [ "confinement/${mkPathSafeName name}" ];
+                RootDirectory = "/run/confinement/${mkPathSafeName name}";
+                InaccessiblePaths = [
+                  "-+/run/confinement/${mkPathSafeName name}"
+                ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 PrivateMounts = lib.mkDefault true;
 
                 # https://github.com/NixOS/nixpkgs/issues/14645 is a future attempt

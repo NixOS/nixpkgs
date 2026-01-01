@@ -15,7 +15,10 @@
   wayland-scanner,
   wrapGAppsNoGuiHook,
   librsvg,
+<<<<<<< HEAD
   libjxl,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation rec {
@@ -60,13 +63,20 @@ stdenv.mkDerivation rec {
         extraLoaders = [
           librsvg
           webp-pixbuf-loader
+<<<<<<< HEAD
           libjxl
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ];
       }
     }"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Wallpaper tool for Wayland compositors";
     inherit (src.meta) homepage;
     longDescription = ''
@@ -74,11 +84,20 @@ stdenv.mkDerivation rec {
       Wayland compositor which implements the following Wayland protocols:
       wlr-layer-shell, xdg-output, and xdg-shell.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     mainProgram = "swaybg";
     maintainers = with lib.maintainers; [
       ryan4yin
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    mainProgram = "swaybg";
+    maintainers = with maintainers; [
+      ryan4yin
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

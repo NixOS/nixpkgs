@@ -81,14 +81,24 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "liana-gui";
     description = "Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
     homepage = "https://wizardsardine.com/liana";
     changelog = "https://github.com/wizardsardine/liana/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dunxen ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dunxen ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

@@ -41,10 +41,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycron" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple cron-like parser for Python, which determines if current datetime matches conditions";
     license = lib.licenses.mit;
     homepage = "https://github.com/kipe/pycron";
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Simple cron-like parser for Python, which determines if current datetime matches conditions";
+    license = licenses.mit;
+    homepage = "https://github.com/kipe/pycron";
+    maintainers = with maintainers; [ globin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

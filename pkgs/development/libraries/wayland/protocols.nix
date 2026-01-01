@@ -14,22 +14,33 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland-protocols";
+<<<<<<< HEAD
   version = "1.46";
+=======
+  version = "1.45";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   doCheck =
     stdenv.hostPlatform == stdenv.buildPlatform
     &&
       # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
       stdenv.hostPlatform.linker == "bfd"
+<<<<<<< HEAD
     &&
       # Even with bfd linker, the above issue occurs on platforms with stricter linker requirements
       # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48#note_1453201
       !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     && lib.meta.availableOn stdenv.hostPlatform wayland;
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${finalAttrs.pname}/-/releases/${finalAttrs.version}/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-/Q3gVqiV+ki9GqXwuN/u1FQQG4i8fhxhqVNCLrcdsWc=";
+=======
+    hash = "sha256-TSsqnj4JnQF9yBB78cM00nu4fZ5K/xmgyNhW0XzUHvA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''

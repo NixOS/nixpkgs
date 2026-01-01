@@ -30,10 +30,18 @@ buildPythonPackage rec {
     tomli
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hatch plugin to develop and package Odoo projects";
     homepage = "https://github.com/acsone/hatch-odoo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yajo ];
+=======
+  meta = with lib; {
+    description = "Hatch plugin to develop and package Odoo projects";
+    homepage = "https://github.com/acsone/hatch-odoo";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yajo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://get-coursier.io/";
     description = "Scala library to fetch dependencies from Maven / Ivy repositories";
@@ -75,5 +76,17 @@ stdenv.mkDerivation rec {
       adelbertc
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://get-coursier.io/";
+    description = "Scala library to fetch dependencies from Maven / Ivy repositories";
+    mainProgram = "cs";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      adelbertc
+      nequissimus
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -129,7 +129,11 @@ stdenv.mkDerivation {
     num
     re
     sexplib
+<<<<<<< HEAD
     yojson_2
+=======
+    yojson
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ])
   ++ (lib.optionals (gnat_version == "14") [
     gpr2_24_2_next
@@ -163,11 +167,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Software development technology specifically designed for engineering high-reliability applications";
     homepage = "https://github.com/AdaCore/spark2014";
     maintainers = [ lib.maintainers.jiegec ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Software development technology specifically designed for engineering high-reliability applications";
+    homepage = "https://github.com/AdaCore/spark2014";
+    maintainers = [ maintainers.jiegec ];
+    license = licenses.gpl3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

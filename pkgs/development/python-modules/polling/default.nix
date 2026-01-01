@@ -32,10 +32,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful polling utility in Python";
     homepage = "https://github.com/justiniso/polling";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Powerful polling utility in Python";
+    homepage = "https://github.com/justiniso/polling";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

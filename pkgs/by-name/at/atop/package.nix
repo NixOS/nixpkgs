@@ -92,9 +92,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) atop; };
 
+<<<<<<< HEAD
   meta = {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ raskin ];
+=======
+  meta = with lib; {
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Console system performance monitor";
     longDescription = ''
       Atop is an ASCII full-screen performance monitor that is capable of reporting the activity of
@@ -104,7 +110,11 @@ stdenv.mkDerivation rec {
       swap, disks and network layers, and for every active process it shows the CPU utilization,
       memory growth, disk utilization, priority, username, state, and exit code.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
+=======
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "http://atoptool.nl/downloadatop.php";
   };
 }

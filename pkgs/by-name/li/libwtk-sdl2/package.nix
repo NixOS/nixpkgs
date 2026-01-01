@@ -40,19 +40,32 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simplistic SDL2 GUI framework in early developement";
     mainProgram = "libwtk-sdl2-test";
     homepage = "https://github.com/muesli4/libwtk-sdl2";
     # See: https://github.com/muesli4/mpd-touch-screen-gui/tree/master/LICENSES
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     /*
       Partial darwin build failure log (from ofborg):
       geometry.cpp:95:34: error: no member named 'abs' in namespace 'std'
          >     return { std::abs(v.w), std::abs(v.h) };
          >                             ~~~~~^
     */
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

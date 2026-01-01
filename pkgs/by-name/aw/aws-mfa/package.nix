@@ -41,11 +41,19 @@ python3Packages.buildPythonApplication rec {
     "awsmfa"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Manage AWS MFA Security Credentials";
     mainProgram = "aws-mfa";
     homepage = "https://github.com/broamski/aws-mfa";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Manage AWS MFA Security Credentials";
+    mainProgram = "aws-mfa";
+    homepage = "https://github.com/broamski/aws-mfa";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

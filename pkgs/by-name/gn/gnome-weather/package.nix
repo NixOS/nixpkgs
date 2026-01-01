@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://apps.gnome.org/Weather/";
     description = "Access current weather conditions and forecasts";
@@ -76,5 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://apps.gnome.org/Weather/";
+    description = "Access current weather conditions and forecasts";
+    mainProgram = "gnome-weather";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

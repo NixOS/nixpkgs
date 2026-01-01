@@ -15,11 +15,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pMkvyMGfvLdj406xH/1+ZHE33iZDcmUUBjeSiIro0xY=";
 
+<<<<<<< HEAD
   meta = {
     description = "Converts Specr lang code to Rust";
     mainProgram = "specr-transpile";
     homepage = "https://github.com/RalfJung/minirust-tooling";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Converts Specr lang code to Rust";
+    mainProgram = "specr-transpile";
+    homepage = "https://github.com/RalfJung/minirust-tooling";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       mit
     ];

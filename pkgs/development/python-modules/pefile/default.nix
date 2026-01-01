@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pefile" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-platform Python module to parse and work with Portable Executable (aka PE) files";
     homepage = "https://github.com/erocarrera/pefile";
     changelog = "https://github.com/erocarrera/pefile/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pamplemousse ];
+=======
+  meta = with lib; {
+    description = "Multi-platform Python module to parse and work with Portable Executable (aka PE) files";
+    homepage = "https://github.com/erocarrera/pefile";
+    changelog = "https://github.com/erocarrera/pefile/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pamplemousse ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

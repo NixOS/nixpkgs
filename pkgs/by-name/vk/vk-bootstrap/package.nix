@@ -41,11 +41,20 @@ stdenv.mkDerivation rec {
     "-DVK_BOOTSTRAP_VULKAN_HEADER_DIR=${vulkan-headers}/include"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Vulkan Bootstrapping Library";
     license = lib.licenses.mit;
     homepage = "https://github.com/charles-lunarg/vk-bootstrap";
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Vulkan Bootstrapping Library";
+    license = licenses.mit;
+    homepage = "https://github.com/charles-lunarg/vk-bootstrap";
+    maintainers = with maintainers; [ shamilton ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

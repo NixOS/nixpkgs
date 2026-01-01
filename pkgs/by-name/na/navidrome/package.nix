@@ -19,23 +19,38 @@
 
 buildGoModule (finalAttrs: {
   pname = "navidrome";
+<<<<<<< HEAD
   version = "0.59.0";
+=======
+  version = "0.58.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-YXyNnjaLgu4FXvgsbbzCOZRIuN96h+KDrXmJe1607JI=";
   };
 
   vendorHash = "sha256-FFtTQuXb5GYxZmUiNjZNO6K8QYF0TLH4JU2JmAzZhqQ=";
+=======
+    hash = "sha256-bb6Ak8coEhN4ny79WgZ4DqzjqLbCr1FW/a3w2gfls2M=";
+  };
+
+  vendorHash = "sha256-axtXNcduTCmi08kjmGCCgokvHR+uIdpZtnLCSFUIoM4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
+<<<<<<< HEAD
     hash = "sha256-RTye1ZbxLqfkZUvV0NLN7wcRnri3sC5Lfi8RXVG1bLM=";
+=======
+    hash = "sha256-X6H3laLaWsI0aqFKIE7IDdWqYuTScI7gcRbcB4wPsKA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

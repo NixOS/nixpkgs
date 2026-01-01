@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Your plan for improving personal life and workflow";
     homepage = "https://github.com/iman-salmani/iplan";
@@ -51,5 +52,14 @@ stdenv.mkDerivation rec {
     mainProgram = "iplan";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Your plan for improving personal life and workflow";
+    homepage = "https://github.com/iman-salmani/iplan";
+    license = licenses.gpl3Plus;
+    mainProgram = "iplan";
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -41,6 +41,7 @@ ocamlPackages.buildDunePackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/talex5/wayland-virtwl-proxy";
     description = "Proxy Wayland connections across a VM boundary";
@@ -51,5 +52,17 @@ ocamlPackages.buildDunePackage {
       lib.maintainers.sternenseemann
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/talex5/wayland-virtwl-proxy";
+    description = "Proxy Wayland connections across a VM boundary";
+    license = licenses.asl20;
+    mainProgram = "wayland-proxy-virtwl";
+    maintainers = [
+      maintainers.qyliss
+      maintainers.sternenseemann
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

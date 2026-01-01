@@ -148,6 +148,7 @@ mkPackage rec {
         ${mono}/bin/mono Helloworld.exe | grep "Hello, world!"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
     mainProgram = "msbuild";
@@ -159,5 +160,18 @@ mkPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jdanek ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
+    mainProgram = "msbuild";
+    homepage = "https://github.com/mono/msbuild";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode # dependencies
+    ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jdanek ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

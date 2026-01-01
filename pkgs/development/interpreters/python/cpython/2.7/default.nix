@@ -296,7 +296,11 @@ let
 
   # Python 2.7 needs this
   crossCompileEnv = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+<<<<<<< HEAD
     env._PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
+=======
+    _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Build the basic Python interpreter without modules that have
@@ -318,6 +322,7 @@ stdenv.mkDerivation (
       configureFlags
       ;
 
+<<<<<<< HEAD
     env = {
       LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
       inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
@@ -327,6 +332,16 @@ stdenv.mkDerivation (
         + " -std=gnu17";
       DETERMINISTIC_BUILD = 1;
     };
+=======
+    LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
+    inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
+
+    env.NIX_CFLAGS_COMPILE =
+      lib.optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
+      + lib.optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000"
+      + " -std=gnu17";
+    DETERMINISTIC_BUILD = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     setupHook = python-setup-hook sitePackages;
 
@@ -399,8 +414,11 @@ stdenv.mkDerivation (
 
     doCheck = false; # expensive, and fails
 
+<<<<<<< HEAD
     __structuredAttrs = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     meta = {
       homepage = "http://python.org";
       description = "High-level dynamically-typed programming language";

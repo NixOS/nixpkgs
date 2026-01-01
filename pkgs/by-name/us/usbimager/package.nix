@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withLibui "USE_LIBUI=yes"
   ++ lib.optional withUdisks "USE_UDISKS2=yes";
 
+<<<<<<< HEAD
   meta = {
     description = "Very minimal GUI app that can write compressed disk images to USB drives";
     homepage = "https://gitlab.com/bztsrc/usbimager";
@@ -66,6 +67,16 @@ stdenv.mkDerivation rec {
     # windows and darwin could work, but untested
     # feel free add them if you have a machine to test
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Very minimal GUI app that can write compressed disk images to USB drives";
+    homepage = "https://gitlab.com/bztsrc/usbimager";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vdot0x23 ];
+    # windows and darwin could work, but untested
+    # feel free add them if you have a machine to test
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "usbimager";

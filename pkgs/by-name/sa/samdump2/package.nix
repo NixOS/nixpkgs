@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=cc"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dump password hashes from a Windows NT/2k/XP installation";
     mainProgram = "samdump2";
@@ -70,5 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Dump password hashes from a Windows NT/2k/XP installation";
+    mainProgram = "samdump2";
+    homepage = "https://sourceforge.net/projects/ophcrack/files/samdump2";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -1,7 +1,11 @@
 {
   stdenv,
   lib,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchurl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meson,
   ninja,
   pkg-config,
@@ -10,12 +14,16 @@
   gettext,
   libarchive,
   desktop-file-utils,
+<<<<<<< HEAD
   appstream,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   appstream-glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-cb";
+<<<<<<< HEAD
   version = "0.1.12";
 
   src = fetchFromGitHub {
@@ -23,6 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "zathura-cb";
     tag = finalAttrs.version;
     hash = "sha256-Dj398aUQBxOrH5XOC5u/vNkEQ6pa05/EDB5m0EAGAxo=";
+=======
+  version = "0.1.11";
+
+  src = fetchurl {
+    url = "https://pwmt.org/projects/zathura-cb/download/zathura-cb-${finalAttrs.version}.tar.xz";
+    hash = "sha256-TiAepUzcIKkyWMQ1VvY4lEGvmXQN59ymyh/1JBcvvUc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -31,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     desktop-file-utils
+<<<<<<< HEAD
     appstream
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     appstream-glib
   ];
 

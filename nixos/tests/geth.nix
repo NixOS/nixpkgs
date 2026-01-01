@@ -1,8 +1,13 @@
 { pkgs, ... }:
 {
   name = "geth";
+<<<<<<< HEAD
   meta = {
     maintainers = with pkgs.lib.maintainers; [ bachp ];
+=======
+  meta = with pkgs.lib; {
+    maintainers = with maintainers; [ bachp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes.machine =

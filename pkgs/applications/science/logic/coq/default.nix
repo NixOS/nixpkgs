@@ -13,7 +13,10 @@
   writeText,
   pkg-config,
   gnumake42,
+<<<<<<< HEAD
   dune,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   customOCamlPackages ? null,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
@@ -131,7 +134,11 @@ let
     ocamlPackages.ocaml
     ocamlPackages.findlib
   ]
+<<<<<<< HEAD
   ++ lib.optional (coqAtLeast "8.14") dune;
+=======
+  ++ lib.optional (coqAtLeast "8.14") ocamlPackages.dune_3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ocamlPropagatedBuildInputs =
     [ ]
     ++ lib.optional (!coqAtLeast "8.10") ocamlPackages.camlp5
@@ -264,8 +271,12 @@ let
     ]
     ++ lib.optional buildIde "coqide"
     ++ lib.optional (!coqAtLeast "8.14") "bin/votour";
+<<<<<<< HEAD
     # workaround for irreproducible build error in https://github.com/NixOS/nixpkgs/pull/474970
     enableParallelBuilding = coqAtLeast "8.14";
+=======
+    enableParallelBuilding = true;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     createFindlibDestdir = true;
 
@@ -302,7 +313,11 @@ let
         ln -s "$out/share/coq/coq.png" "$out/share/pixmaps/"
       '';
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Coq proof assistant";
       longDescription = ''
         Coq is a formal proof management system.  It provides a formal language
@@ -311,15 +326,25 @@ let
         machine-checked proofs.
       '';
       homepage = "https://coq.inria.fr";
+<<<<<<< HEAD
       license = lib.licenses.lgpl21;
       branch = coq-version;
       maintainers = with lib.maintainers; [
+=======
+      license = licenses.lgpl21;
+      branch = coq-version;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         roconnor
         thoughtpolice
         vbgl
         Zimmi48
       ];
+<<<<<<< HEAD
       platforms = lib.platforms.unix;
+=======
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "coqide";
     };
   };

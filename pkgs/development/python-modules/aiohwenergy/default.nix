@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohwenergy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to interact with the HomeWizard Energy devices API";
     homepage = "https://github.com/DCSBL/aiohwenergy";
     changelog = "https://github.com/DCSBL/aiohwenergy/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library to interact with the HomeWizard Energy devices API";
+    homepage = "https://github.com/DCSBL/aiohwenergy";
+    changelog = "https://github.com/DCSBL/aiohwenergy/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

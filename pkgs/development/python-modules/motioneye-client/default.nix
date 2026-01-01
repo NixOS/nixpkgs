@@ -44,11 +44,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "motioneye_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for motionEye";
     homepage = "https://github.com/dermotduffy/motioneye-client";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for motionEye";
+    homepage = "https://github.com/dermotduffy/motioneye-client";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

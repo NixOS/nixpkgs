@@ -26,11 +26,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-fZNXkOmvCBwlxJX9E8LPzaR5KYNBjpY1jvbnMg7gY0Y=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix being unable to use Ipv6 link-local DNS servers. See: https://github.com/c-ares/c-ares/pull/997.
     ./fix-link-local-dns-servers.patch
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   outputs = [
     "out"
     "dev"
@@ -57,11 +60,20 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/pkgconfig/libcares.pc --replace-fail \''${prefix}/ ""
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C library for asynchronous DNS requests";
     homepage = "https://c-ares.haxx.se";
     changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C library for asynchronous DNS requests";
+    homepage = "https://c-ares.haxx.se";
+    changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] version}";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

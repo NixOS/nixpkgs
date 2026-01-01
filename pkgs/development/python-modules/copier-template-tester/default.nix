@@ -29,10 +29,18 @@ buildPythonPackage rec {
     corallium
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI and pre-commit tool for testing copier";
     homepage = "https://copier-template-tester.kyleking.me";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yajo ];
+=======
+  meta = with lib; {
+    description = "CLI and pre-commit tool for testing copier";
+    homepage = "https://copier-template-tester.kyleking.me";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yajo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   pythonAtLeast,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   setuptools,
@@ -33,7 +36,10 @@
   pytest-cov-stub,
   pytest-mock,
   pytest-rerunfailures,
+<<<<<<< HEAD
   pytest-timeout,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytest-xdist,
   pytestCheckHook,
   versionCheckHook,
@@ -41,13 +47,18 @@
 
 buildPythonPackage rec {
   pname = "dask";
+<<<<<<< HEAD
   version = "2025.12.0";
+=======
+  version = "2025.11.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-oGBOt2ULLn0Kx1rOVNWaC3l1ECotMC2yNeCHya9Tx+s=";
   };
 
@@ -57,6 +68,11 @@ buildPythonPackage rec {
       --replace-fail "except AttributeError:" "except (AttributeError, pickle.PicklingError):"
   '';
 
+=======
+    hash = "sha256-cU4w4dqJQ3ew+fRyD7Lc4URNfW738kKqls6k6j65pIo=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     setuptools
     setuptools-scm
@@ -102,13 +118,20 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mock
     pytest-rerunfailures
+<<<<<<< HEAD
     pytest-timeout
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pytest-xdist
     pytestCheckHook
     versionCheckHook
   ]
   ++ optional-dependencies.array
   ++ optional-dependencies.dataframe;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pytestFlags = [
     # Rerun failed tests up to three times
@@ -120,11 +143,14 @@ buildPythonPackage rec {
     "network"
   ];
 
+<<<<<<< HEAD
   # https://github.com/dask/dask/issues/12042
   disabledTests = lib.optionals (pythonAtLeast "3.14") [
     "test_multiple_repartition_partition_size"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [

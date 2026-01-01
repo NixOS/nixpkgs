@@ -10,7 +10,11 @@ let
     id
     warn
     ;
+<<<<<<< HEAD
   inherit (lib.attrsets) mapAttrs attrNames attrValues;
+=======
+  inherit (lib.attrsets) mapAttrs attrNames;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit (lib) max;
 in
 rec {
@@ -439,7 +443,11 @@ rec {
   flatten = x: if isList x then concatMap (y: flatten y) x else [ x ];
 
   /**
+<<<<<<< HEAD
     Remove elements equal to `e` from a list.  Useful for `buildInputs`.
+=======
+    Remove elements equal to 'e' from a list.  Useful for buildInputs.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -1926,7 +1934,11 @@ rec {
   allUnique = list: (length (unique list) == length list);
 
   /**
+<<<<<<< HEAD
     Intersects list `list1` and another list (`list2`).
+=======
+    Intersects list 'list1' and another list (`list2`).
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     O(nm) complexity.
 
@@ -1954,7 +1966,11 @@ rec {
   intersectLists = e: filter (x: elem x e);
 
   /**
+<<<<<<< HEAD
     Subtracts list `e` from another list (`list2`).
+=======
+    Subtracts list 'e' from another list (`list2`).
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     O(nm) complexity.
 
@@ -1983,7 +1999,11 @@ rec {
 
   /**
     Test if two lists have no common element.
+<<<<<<< HEAD
     It should be slightly more efficient than `intersectLists a b == []`.
+=======
+    It should be slightly more efficient than (intersectLists a b == [])
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -1997,6 +2017,7 @@ rec {
   */
   mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
+<<<<<<< HEAD
   /**
     Concatenate all attributes of an attribute set.
     This assumes that every attribute of the set is a list.
@@ -2019,4 +2040,6 @@ rec {
     :::
   */
   concatAttrValues = set: concatLists (attrValues set);
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

@@ -49,12 +49,21 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/CoolnsX/dra-cla";
     description = "Cli tool to browse and play korean drama, chinese drama";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ idlip ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/CoolnsX/dra-cla";
+    description = "Cli tool to browse and play korean drama, chinese drama";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ idlip ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dra-cla";
   };
 }

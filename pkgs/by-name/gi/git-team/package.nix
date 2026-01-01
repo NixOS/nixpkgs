@@ -37,11 +37,19 @@ buildGoModule rec {
       --zsh <($out/bin/git-team completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line interface for managing and enhancing git commit messages with co-authors";
     homepage = "https://github.com/hekmekk/git-team";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lockejan ];
+=======
+  meta = with lib; {
+    description = "Command line interface for managing and enhancing git commit messages with co-authors";
+    homepage = "https://github.com/hekmekk/git-team";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lockejan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-team";
   };
 }

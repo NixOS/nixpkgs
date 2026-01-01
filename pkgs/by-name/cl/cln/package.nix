@@ -16,11 +16,20 @@ gccStdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
+<<<<<<< HEAD
   meta = {
     description = "C/C++ library for numbers, a part of GiNaC";
     mainProgram = "pi";
     homepage = "https://www.ginac.de/CLN/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix; # Once had cygwin problems
+=======
+  meta = with lib; {
+    description = "C/C++ library for numbers, a part of GiNaC";
+    mainProgram = "pi";
+    homepage = "https://www.ginac.de/CLN/";
+    license = licenses.gpl2;
+    platforms = platforms.unix; # Once had cygwin problems
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

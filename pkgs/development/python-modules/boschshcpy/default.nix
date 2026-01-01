@@ -38,10 +38,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "boschshcpy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to work with the Bosch Smart Home Controller API";
     homepage = "https://github.com/tschamm/boschshcpy";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to work with the Bosch Smart Home Controller API";
+    homepage = "https://github.com/tschamm/boschshcpy";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

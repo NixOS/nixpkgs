@@ -3,9 +3,13 @@
   fetchFromGitHub,
   stdenv,
   nodejs,
+<<<<<<< HEAD
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+  pnpm,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildGoModule,
   mage,
   writeShellScriptBin,
@@ -30,7 +34,11 @@ let
     ];
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
+=======
+    pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (finalAttrs)
         pname
         version
@@ -38,15 +46,22 @@ let
         src
         sourceRoot
         ;
+<<<<<<< HEAD
       pnpm = pnpm_9;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 1;
       hash = "sha256-94ZlywOZYmW/NsvE0dtEA81MeBWGUrJsBXTUauuOmZM=";
     };
 
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_9
+=======
+      pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     doCheck = true;

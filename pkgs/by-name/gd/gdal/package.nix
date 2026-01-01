@@ -3,6 +3,10 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -83,15 +87,33 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
+<<<<<<< HEAD
   version = "3.12.1";
+=======
+  version = "3.11.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-vs9qun9Z8o4KPxWjKOV9Lp/GgAsYW7gseYv4G7+liso=";
   };
 
+=======
+    hash = "sha256-CFQF3vDhhXsAnIfUcn6oTQ4Xm+GH/36dqSGc0HvyEJ0=";
+  };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-poppler-25.10.0.patch";
+      url = "https://github.com/OSGeo/gdal/commit/a716a6cd5ffd779b30950f046fce91878fc97b9d.patch";
+      hash = "sha256-dSotpnTiMjt3Bz63hpNjF5juZ3JsjIpD59/67cR9rNU=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     bison
     cmake
@@ -264,8 +286,11 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests = [
     # tests that attempt to make network requests
     "test_jp2openjpeg_45"
+<<<<<<< HEAD
     "test_ogr_gmlas_datetime"
     "test_vrtrawlink_GDAL_VRT_RAWRASTERBAND_ALLOWED_SOURCE_ONLY_REMOTE_accepted"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # tests that require the full proj dataset which we don't package yet
     # https://github.com/OSGeo/gdal/issues/5523
     "test_transformer_dem_overrride_srs"
@@ -312,6 +337,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/OSGeo/gdal/blob/${finalAttrs.src.tag}/NEWS.md";
     description = "Translator library for raster geospatial data formats";
@@ -323,5 +349,18 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/OSGeo/gdal/blob/${finalAttrs.src.tag}/NEWS.md";
+    description = "Translator library for raster geospatial data formats";
+    homepage = "https://www.gdal.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      marcweber
+      dotlambda
+    ];
+    teams = [ teams.geospatial ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

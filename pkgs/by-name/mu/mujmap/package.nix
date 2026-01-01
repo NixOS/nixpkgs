@@ -22,11 +22,19 @@ rustPlatform.buildRustPackage rec {
     notmuch
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "JMAP integration for notmuch mail";
     homepage = "https://github.com/elizagamedev/mujmap/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ elizagamedev ];
+=======
+  meta = with lib; {
+    description = "JMAP integration for notmuch mail";
+    homepage = "https://github.com/elizagamedev/mujmap/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ elizagamedev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mujmap";
   };
 }

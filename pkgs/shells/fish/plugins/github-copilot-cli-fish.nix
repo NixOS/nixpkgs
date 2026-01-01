@@ -15,10 +15,18 @@ buildFishPlugin rec {
     hash = "sha256-CFXbeO0euC/UtvQV0KCz4WQfdJgsuXKPM6M9oaw7hvg=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GitHub Copilot CLI aliases for Fish Shell";
     homepage = "https://github.com/z11i/github-copilot-cli.fish";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.malo ];
+=======
+  meta = with lib; {
+    description = "GitHub Copilot CLI aliases for Fish Shell";
+    homepage = "https://github.com/z11i/github-copilot-cli.fish";
+    license = licenses.asl20;
+    maintainers = [ maintainers.malo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

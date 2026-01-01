@@ -33,7 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beancount_docverif" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Document verification plugin for Beancount";
     homepage = "https://github.com/siriobalmelli/beancount_docverif";
     longDescription = ''
@@ -46,7 +50,12 @@ buildPythonPackage rec {
       - Associate (and require) a document with any type of entry, including open entries themselves.
       - Guarantee integrity: verify that every document declared does in fact exist on disk.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ siriobalmelli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

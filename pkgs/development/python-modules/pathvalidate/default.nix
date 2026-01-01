@@ -22,11 +22,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathvalidate" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to sanitize/validate a string such as filenames/file-paths/etc";
     homepage = "https://github.com/thombashi/pathvalidate";
     changelog = "https://github.com/thombashi/pathvalidate/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oxalica ];
+=======
+  meta = with lib; {
+    description = "Library to sanitize/validate a string such as filenames/file-paths/etc";
+    homepage = "https://github.com/thombashi/pathvalidate";
+    changelog = "https://github.com/thombashi/pathvalidate/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ oxalica ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

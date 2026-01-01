@@ -26,7 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
+<<<<<<< HEAD
   version = "7.2.0";
+=======
+  version = "7.1.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -37,7 +41,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-m6ICWL2JZoWh3myHLOhrKZ4St8zJcyVWhfozg+kdOng=";
+=======
+    hash = "sha256-z6trjczB+ZLPvWO/R41PTSA1tSBIVD/kMF12TupwId4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -69,12 +77,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "File browser designed for elementary OS";
     homepage = "https://github.com/elementary/files";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "File browser designed for elementary OS";
+    homepage = "https://github.com/elementary/files";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "io.elementary.files";
   };
 }

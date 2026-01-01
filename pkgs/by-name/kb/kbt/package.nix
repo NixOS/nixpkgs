@@ -28,10 +28,17 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Keyboard tester in terminal";
     homepage = "https://github.com/bloznelis/kbt";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Keyboard tester in terminal";
+    homepage = "https://github.com/bloznelis/kbt";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "kbt";
   };

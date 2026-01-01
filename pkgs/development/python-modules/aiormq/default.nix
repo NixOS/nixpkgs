@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiormq" ];
 
+<<<<<<< HEAD
   meta = {
     description = "AMQP 0.9.1 asynchronous client library";
     homepage = "https://github.com/mosquito/aiormq";
     changelog = "https://github.com/mosquito/aiormq/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ emilytrau ];
+=======
+  meta = with lib; {
+    description = "AMQP 0.9.1 asynchronous client library";
+    homepage = "https://github.com/mosquito/aiormq";
+    changelog = "https://github.com/mosquito/aiormq/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

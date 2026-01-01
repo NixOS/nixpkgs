@@ -23,9 +23,12 @@
   release."0.2.4+8.20".sha256 = "sha256-mQxh2/Cb5hZ99TtqWYLpZ/BRPrm5GRDYPDfKlCTK9N4=";
   release."0.2.4+9.0".sha256 = "sha256-ICPdNxJODNqmUErdTkNk7s52MRuINWLbAPm0rmXFW18=";
   release."0.2.4+9.1".sha256 = "sha256-HNHA2vbX70oZkd4QtbP28UbTRXatqxJdxw1OWDVDE8U=";
+<<<<<<< HEAD
   release."0.2.5+8.20".sha256 = "sha256-OduwwJESXVEkeX+w8nLEhLUtPo4YGDPj21yWyc1uv3U=";
   release."0.2.5+9.0".sha256 = "sha256-nbMf7xziBYoBH0F8YBUEybCHSdsaOxlqXnyngeQNg3c=";
   release."0.2.5+9.1".sha256 = "sha256-PzIgo15zI3JjibT8GzyHdTwofd3IF6eRmUc47NveH70=";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   inherit version;
   defaultVersion =
@@ -49,6 +52,7 @@
       }
       {
         case = isEq "8.20";
+<<<<<<< HEAD
         out = "0.2.5+8.20";
       }
       {
@@ -58,6 +62,17 @@
       {
         case = isEq "9.1";
         out = "0.2.5+9.1";
+=======
+        out = "0.2.4+8.20";
+      }
+      {
+        case = isEq "9.0";
+        out = "0.2.4+9.0";
+      }
+      {
+        case = isEq "9.1";
+        out = "0.2.4+9.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
     ] null;
 
@@ -78,12 +93,21 @@
     yojson
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Language Server Protocol and VS Code Extension for Coq";
     homepage = "https://github.com/ejgallego/coq-lsp";
     changelog = "https://github.com/ejgallego/coq-lsp/blob/${defaultVersion}/CHANGES.md";
     maintainers = with lib.maintainers; [ alizter ];
     license = lib.licenses.lgpl21Only;
+=======
+  meta = with lib; {
+    description = "Language Server Protocol and VS Code Extension for Coq";
+    homepage = "https://github.com/ejgallego/coq-lsp";
+    changelog = "https://github.com/ejgallego/coq-lsp/blob/${defaultVersion}/CHANGES.md";
+    maintainers = with maintainers; [ alizter ];
+    license = licenses.lgpl21Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }).overrideAttrs
   (

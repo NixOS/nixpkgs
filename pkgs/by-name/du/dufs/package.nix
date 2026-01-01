@@ -35,16 +35,28 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/dufs --completions zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "File server that supports static serving, uploading, searching, accessing control, webdav";
     mainProgram = "dufs";
     homepage = "https://github.com/sigoden/dufs";
     changelog = "https://github.com/sigoden/dufs/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
     maintainers = with lib.maintainers; [
+=======
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       holymonson
     ];
   };

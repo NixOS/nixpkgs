@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylint_venv" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to make pylint respect virtual environments";
     homepage = "https://github.com/jgosmann/pylint-venv/";
     changelog = "https://github.com/jgosmann/pylint-venv/blob/v${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to make pylint respect virtual environments";
+    homepage = "https://github.com/jgosmann/pylint-venv/";
+    changelog = "https://github.com/jgosmann/pylint-venv/blob/v${version}/CHANGES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

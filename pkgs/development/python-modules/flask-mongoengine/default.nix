@@ -60,11 +60,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_mongoengine" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
     changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Flask extension that provides integration with MongoEngine and WTF model forms";
+    homepage = "https://github.com/mongoengine/flask-mongoengine";
+    changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -24,13 +24,23 @@ buildNpmPackage {
     mv temp.json tsconfig.json
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "json2ts";
     description = "Compile JSON Schema to TypeScript type declarations";
     homepage = "https://github.com/bcherny/json-schema-to-typescript";
     changelog = "https://github.com/bcherny/json-schema-to-typescript/blob/master/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hsjobeki ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ hsjobeki ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

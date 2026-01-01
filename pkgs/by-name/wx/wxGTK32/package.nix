@@ -135,7 +135,11 @@ stdenv.mkDerivation rec {
     inherit compat28 compat30 unicode;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.wxwidgets.org/";
     description = "Cross-Platform C++ GUI Library";
     longDescription = ''
@@ -148,6 +152,7 @@ stdenv.mkDerivation rec {
       multithreading, image loading and saving in a variety of popular formats,
       database support, HTML viewing and printing, and much more.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
       lgpl2Plus
       wxWindowsException31
@@ -156,5 +161,15 @@ stdenv.mkDerivation rec {
       fliegendewurst
     ];
     platforms = lib.platforms.unix;
+=======
+    license = with licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
+    maintainers = with maintainers; [
+      fliegendewurst
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

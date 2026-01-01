@@ -50,11 +50,20 @@ stdenv.mkDerivation (finalAttrs: {
     openal
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin";
     description = "Effects plugin for OpenRGB";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin";
+    description = "Effects plugin for OpenRGB";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

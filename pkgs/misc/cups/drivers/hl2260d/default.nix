@@ -107,16 +107,28 @@ stdenv.mkDerivation {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.brother.com/";
     description = "Brother HL-2260D printer driver";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    homepage = "http://www.brother.com/";
+    description = "Brother HL-2260D printer driver";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
     downloadPage = "https://support.brother.com/g/b/downloadtop.aspx?c=cn_ot&lang=en&prod=hl2260d_cn";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ u2x1 ];
+=======
+    maintainers = with maintainers; [ u2x1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

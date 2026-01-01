@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pkkxZ6YHRn/I1SJpT9A+EK4S5hWGmFdcDBJS0zh5mLA=";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Bayesian Inference of Phylogeny";
     mainProgram = "mb";
     longDescription = ''
@@ -28,8 +32,14 @@ stdenv.mkDerivation rec {
       MCMC) to approximate the posterior probabilities of trees.
     '';
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     homepage = "https://nbisweden.github.io/MrBayes/";
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    homepage = "https://nbisweden.github.io/MrBayes/";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

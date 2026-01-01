@@ -11,13 +11,21 @@
 
 buildGoModule rec {
   pname = "kubevela";
+<<<<<<< HEAD
   version = "1.10.6";
+=======
+  version = "1.10.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-lY+gz/rv+UcIDFOIa7jFoYsFRSBcHSzET+LZH/HC1PM=";
+=======
+    hash = "sha256-VdHPjN3su5LxqtNGUaWttXU/Tns5U6jfdP22uozDhv8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-MUfULgycZn8hFfWmtNeoFf21+g3gGpeKoBvL8qB/m80=";

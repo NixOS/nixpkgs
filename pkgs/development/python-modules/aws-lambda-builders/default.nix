@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
+<<<<<<< HEAD
   version = "1.59.0";
+=======
+  version = "1.58.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-US8NHNEvYlYJMurXjvlySIdKIgKjAwIws8PmnPF0J6Q=";
+=======
+    hash = "sha256-rscE6eiJ2lbI/U20YRmcUj21PdB9nXpjfyBvu+msC/A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -72,7 +80,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aws_lambda_builders" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool to compile, build and package AWS Lambda functions";
     mainProgram = "lambda-builders";
     homepage = "https://github.com/awslabs/aws-lambda-builders";
@@ -81,7 +93,12 @@ buildPythonPackage rec {
       Lambda Builders is a Python library to compile, build and package
       AWS Lambda functions for several runtimes & frameworks.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dhkl ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dhkl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

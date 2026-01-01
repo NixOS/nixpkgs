@@ -19,11 +19,19 @@ stdenv.mkDerivation {
     "PREFIX=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cli-accessible Greek Bible with the Septuagint, SBL and Apocrypha";
     homepage = "https://github.com/LukeSmithxyz/grb";
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.cafkafk ];
+=======
+  meta = with lib; {
+    description = "Cli-accessible Greek Bible with the Septuagint, SBL and Apocrypha";
+    homepage = "https://github.com/LukeSmithxyz/grb";
+    license = licenses.publicDomain;
+    maintainers = [ maintainers.cafkafk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "grb";
   };
 }

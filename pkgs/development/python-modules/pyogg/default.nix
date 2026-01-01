@@ -57,10 +57,18 @@ buildPythonPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Xiph.org's Ogg Vorbis, Opus and FLAC for Python";
     homepage = "https://github.com/Zuzu-Typ/PyOgg";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ pmiddend ];
+=======
+  meta = with lib; {
+    description = "Xiph.org's Ogg Vorbis, Opus and FLAC for Python";
+    homepage = "https://github.com/Zuzu-Typ/PyOgg";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ pmiddend ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

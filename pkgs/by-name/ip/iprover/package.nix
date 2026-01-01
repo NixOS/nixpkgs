@@ -55,6 +55,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automated first-order logic theorem prover";
     homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
@@ -63,5 +64,15 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Automated first-order logic theorem prover";
+    homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
+    maintainers = with maintainers; [
+      raskin
+    ];
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

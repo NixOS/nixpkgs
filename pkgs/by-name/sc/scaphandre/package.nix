@@ -65,12 +65,21 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Electrical power consumption metrology agent";
     homepage = "https://github.com/hubblo-org/scaphandre";
     license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ gaelreyrol ];
+=======
+  meta = with lib; {
+    description = "Electrical power consumption metrology agent";
+    homepage = "https://github.com/hubblo-org/scaphandre";
+    license = licenses.asl20;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ gaelreyrol ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "scaphandre";
     # Upstream needs to decide what to do about a broken dependency
     # https://github.com/hubblo-org/scaphandre/issues/403

@@ -51,11 +51,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiopurpleair" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interacting with the PurpleAir API";
     homepage = "https://github.com/bachya/aiopurpleair";
     changelog = "https://github.com/bachya/aiopurpleair/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for interacting with the PurpleAir API";
+    homepage = "https://github.com/bachya/aiopurpleair";
+    changelog = "https://github.com/bachya/aiopurpleair/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

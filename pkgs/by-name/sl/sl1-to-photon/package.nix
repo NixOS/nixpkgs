@@ -31,9 +31,15 @@ python312Packages.buildPythonApplication rec {
     install -D -m 0755 SL1_to_Photon.py $out/bin/${pname}
   '';
 
+<<<<<<< HEAD
   meta = {
     maintainers = [ lib.maintainers.cab404 ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    maintainers = [ maintainers.cab404 ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for converting Slic3r PE's SL1 files to Photon files for the Anycubic Photon 3D-Printer";
     homepage = "https://github.com/cab404/SL1toPhoton";
     mainProgram = "sl1-to-photon";

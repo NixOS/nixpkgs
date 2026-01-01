@@ -77,7 +77,11 @@ rec {
   isOption = lib.isType "option";
 
   /**
+<<<<<<< HEAD
     Creates an Option attribute set. `mkOption` accepts an attribute set with the following keys:
+=======
+    Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -152,7 +156,11 @@ rec {
     attrs // { _type = "option"; };
 
   /**
+<<<<<<< HEAD
     Creates an option declaration with a default value of `false`, and can be defined to `true`.
+=======
+    Creates an option declaration with a default value of ´false´, and can be defined to ´true´.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -433,7 +441,11 @@ rec {
     else if all isAttrs list then
       foldl' lib.mergeAttrs { } list
     else if all isBool list then
+<<<<<<< HEAD
       foldl' lib."or" false list
+=======
+      foldl' lib.or false list
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     else if all isString list then
       lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then
@@ -444,18 +456,26 @@ rec {
   /**
     Require a single definition.
 
+<<<<<<< HEAD
     ::: {.warning}
     Does not perform nested checks, as this does not run the merge function!
     :::
+=======
+    WARNING: Does not perform nested checks, as this does not run the merge function!
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
   /**
     Require a single definition.
 
+<<<<<<< HEAD
     ::: {.note}
     When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
     :::
+=======
+    NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -520,7 +540,11 @@ rec {
       ) (head defs) (tail defs)).value;
 
   /**
+<<<<<<< HEAD
     Extracts values of all `value` keys of the given list.
+=======
+    Extracts values of all "value" keys of the given list.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Type
 
@@ -542,7 +566,11 @@ rec {
   getValues = map (x: x.value);
 
   /**
+<<<<<<< HEAD
     Extracts values of all `file` keys of the given list
+=======
+    Extracts values of all "file" keys of the given list
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Type
 
@@ -619,7 +647,11 @@ rec {
     (on the order of megabytes) and is not actually used by the
     manual generator.
 
+<<<<<<< HEAD
     This function was made obsolete by `renderOptionValue` and is kept for
+=======
+    This function was made obsolete by renderOptionValue and is kept for
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     compatibility with out-of-tree code.
 
     # Inputs

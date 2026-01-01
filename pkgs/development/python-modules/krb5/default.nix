@@ -37,12 +37,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "krb5" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/jborean93/pykrb5/blob/v${version}/CHANGELOG.md";
     description = "Kerberos API bindings for Python";
     homepage = "https://github.com/jborean93/pykrb5";
     license = lib.licenses.mit;
     teams = [ lib.teams.deshaw ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/jborean93/pykrb5/blob/v${version}/CHANGELOG.md";
+    description = "Kerberos API bindings for Python";
+    homepage = "https://github.com/jborean93/pykrb5";
+    license = licenses.mit;
+    teams = [ teams.deshaw ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # TODO: figure out how to build on Darwin
   };
 }

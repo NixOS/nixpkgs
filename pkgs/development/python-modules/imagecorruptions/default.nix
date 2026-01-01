@@ -29,10 +29,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "imagecorruptions" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bethgelab/imagecorruptions";
     description = "This package provides a set of image corruptions";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rakesh4g ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bethgelab/imagecorruptions";
+    description = "This package provides a set of image corruptions";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rakesh4g ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

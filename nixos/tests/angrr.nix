@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { pkgs, ... }:
 let
   drvForTest =
@@ -7,12 +8,16 @@ let
       echo "${name}" >"$out/${name}"
     '';
 in
+=======
+{ ... }:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 {
   name = "angrr";
   nodes = {
     machine = {
       services.angrr = {
         enable = true;
+<<<<<<< HEAD
         settings = {
           temporary-root-policies = {
             result = {
@@ -47,6 +52,9 @@ in
             ];
           };
         };
+=======
+        period = "7d";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
       # `angrr.service` integrates to `nix-gc.service` by default
       nix.gc.automatic = true;
@@ -60,6 +68,7 @@ in
       # Test direnv integration
       programs.direnv.enable = true;
       # Verbose logging for angrr in direnv
+<<<<<<< HEAD
       environment.variables.ANGRR_DIRENV_LOG = "debug";
 
       # Add some store paths to machine for test
@@ -77,6 +86,9 @@ in
 
       # Unit start limit workaround
       systemd.services.angrr.unitConfig.StartLimitBurst = 10;
+=======
+      environment.variables.ANGRR_DIRENV_LOG = "angrr=debug";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -89,6 +101,7 @@ in
 
     # Creates some auto gc roots
     # Use /run/current-system so that we do not need to build anything new
+<<<<<<< HEAD
     machine.succeed("nix build /run/current-system --out-link /tmp/result-root-auto-gc-root-1")
     machine.succeed("nix build /run/current-system --out-link /tmp/result-root-auto-gc-root-2")
     machine.succeed("su normal --command 'nix build /run/current-system --out-link /tmp/result-user-auto-gc-root-1'")
@@ -100,11 +113,25 @@ in
     machine.succeed("readlink /tmp/result-root-auto-gc-root-2")
     machine.succeed("readlink /tmp/result-user-auto-gc-root-1")
     machine.succeed("readlink /tmp/result-user-auto-gc-root-2")
+=======
+    machine.succeed("nix build /run/current-system --out-link /tmp/root-auto-gc-root-1")
+    machine.succeed("nix build /run/current-system --out-link /tmp/root-auto-gc-root-2")
+    machine.succeed("su normal --command 'nix build /run/current-system --out-link /tmp/user-auto-gc-root-1'")
+    machine.succeed("su normal --command 'nix build /run/current-system --out-link /tmp/user-auto-gc-root-2'")
+
+    machine.systemctl("start nix-gc.service")
+    # Not auto gc root will be removed
+    machine.succeed("readlink /tmp/root-auto-gc-root-1")
+    machine.succeed("readlink /tmp/root-auto-gc-root-2")
+    machine.succeed("readlink /tmp/user-auto-gc-root-1")
+    machine.succeed("readlink /tmp/user-auto-gc-root-2")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Change time to 8 days after (greater than 7d)
     machine.succeed("date -s '8 days'")
 
     # Touch GC roots `-2`
+<<<<<<< HEAD
     machine.succeed("touch /tmp/result-root-auto-gc-root-2 --no-dereference")
     machine.succeed("touch /tmp/result-user-auto-gc-root-2 --no-dereference")
 
@@ -121,11 +148,30 @@ in
     # All auto GC roots are removed
     machine.succeed("test ! -e /tmp/result-root-auto-gc-root-2")
     machine.succeed("test ! -e /tmp/result-user-auto-gc-root-2")
+=======
+    machine.succeed("touch /tmp/root-auto-gc-root-2 --no-dereference")
+    machine.succeed("touch /tmp/user-auto-gc-root-2 --no-dereference")
+
+    machine.systemctl("start nix-gc.service")
+    # Only GC roots `-1` are removed
+    machine.succeed("test ! -f /tmp/root-auto-gc-root-1")
+    machine.succeed("readlink  /tmp/root-auto-gc-root-2")
+    machine.succeed("test ! -f /tmp/user-auto-gc-root-1")
+    machine.succeed("readlink  /tmp/user-auto-gc-root-2")
+
+    # Change time again
+    machine.succeed("date -s '8 days'")
+    machine.systemctl("start nix-gc.service")
+    # All auto GC roots are removed
+    machine.succeed("test ! -f /tmp/root-auto-gc-root-2")
+    machine.succeed("test ! -f /tmp/user-auto-gc-root-2")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Direnv integration test
     machine.succeed("mkdir /tmp/test-direnv")
     machine.succeed("echo >/tmp/test-direnv/.envrc") # Simply create an empty .envrc
     machine.succeed("nix build /run/current-system --out-link /tmp/test-direnv/.direnv/gc-root")
+<<<<<<< HEAD
     machine.succeed("nix build /run/current-system --out-link /tmp/test-direnv/result")
     machine.succeed("cd /tmp/test-direnv; direnv allow; direnv exec . true")
 
@@ -236,5 +282,22 @@ in
     machine.succeed("readlink  /nix/var/nix/profiles/per-user/root/profile-4-link") # Not monitored
     machine.succeed("readlink  /nix/var/nix/profiles/per-user/root/profile-5-link") # Not monitored
     machine.succeed("readlink  /nix/var/nix/profiles/per-user/root/profile-6-link") # Not monitored
+=======
+    machine.succeed("cd /tmp/test-direnv; direnv allow; direnv exec . true")
+
+    # The root will be removed if we does not use the direnv recently
+    machine.succeed("date -s '8 days'")
+    machine.systemctl("start nix-gc.service")
+    machine.succeed("test ! -f /tmp/test-direnv/.direnv/gc-root")
+
+    # Recreate the root
+    machine.succeed("nix build /run/current-system --out-link /tmp/test-direnv/.direnv/gc-root")
+
+    # The root will not be remove if we use the direnv recently
+    machine.succeed("date -s '8 days'")
+    machine.succeed("cd /tmp/test-direnv; direnv exec . true")
+    machine.systemctl("start nix-gc.service")
+    machine.succeed("readlink /tmp/test-direnv/.direnv/gc-root")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 }

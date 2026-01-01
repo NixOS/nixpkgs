@@ -45,12 +45,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "controku" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/benthetechguy/controku/releases/tag/${version}";
     description = "Control Roku devices from the comfort of your own desktop";
     mainProgram = "controku";
     homepage = "https://github.com/benthetechguy/controku";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mjm ];
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ mjm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -38,12 +38,20 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python interpreter written in Go";
     mainProgram = "gpython";
     homepage = "https://github.com/go-python/gpython";
     changelog = "https://github.com/go-python/gpython/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

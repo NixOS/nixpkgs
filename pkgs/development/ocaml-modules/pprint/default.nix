@@ -17,10 +17,18 @@ buildDunePackage rec {
     sha256 = "sha256-avf71vAgCL1MU8O7Q3FNN3wEdCDtbNZP0ipETnn8AqA=";
   };
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "OCaml library for pretty-printing textual documents";
     license = lib.licenses.lgpl2Only;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "OCaml library for pretty-printing textual documents";
+    license = licenses.lgpl2Only;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

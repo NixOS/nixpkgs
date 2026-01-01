@@ -16,7 +16,10 @@
             touch /tmp/qemu_hook_is_working
           ''}";
           libvirtd.nss.enable = true;
+<<<<<<< HEAD
           libvirtd.dbus.enable = true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
         boot.supportedFilesystems = [ "zfs" ];
         networking.hostId = "deadbeef"; # needed for zfs
@@ -73,6 +76,7 @@
       with subtest("test if hooks are linked and run"):
         virthost.succeed("ls /var/lib/libvirt/hooks/qemu.d/is_working")
         virthost.succeed("ls /tmp/qemu_hook_is_working")
+<<<<<<< HEAD
 
       with subtest("check libvirt over dbus"):
         # The service is activated on-demand and shouldn't be active yet
@@ -83,5 +87,7 @@
 
         # Now the service should be active
         virthost.succeed("systemctl is-active libvirt-dbus.service")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '';
 }

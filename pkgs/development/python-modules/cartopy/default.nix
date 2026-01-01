@@ -70,7 +70,11 @@ buildPythonPackage rec {
     pytest-mpl
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
@@ -92,11 +96,19 @@ buildPythonPackage rec {
     "test_gridliner_labels_bbox_style"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Process geospatial data to create maps and perform analyses";
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
     changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Process geospatial data to create maps and perform analyses";
+    homepage = "https://scitools.org.uk/cartopy/docs/latest/";
+    changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "feature_download";
   };

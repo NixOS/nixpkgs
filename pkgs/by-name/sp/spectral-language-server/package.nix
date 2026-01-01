@@ -55,10 +55,17 @@ let
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://github.com/stoplightio/vscode-spectral";
       description = "VS Code extension bringing the awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
       license = lib.licenses.asl20;
+=======
+    meta = with lib; {
+      homepage = "https://github.com/stoplightio/vscode-spectral";
+      description = "VS Code extension bringing the awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
+      license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   });
 in
@@ -99,11 +106,19 @@ buildNpmPackage {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/luizcorreia/spectral-language-server";
     description = "Awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
     maintainers = with lib.maintainers; [ momeemt ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/luizcorreia/spectral-language-server";
+    description = "Awesome Spectral JSON/YAML linter with OpenAPI/AsyncAPI support";
+    maintainers = with maintainers; [ momeemt ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "spectral-language-server";
   };
 }

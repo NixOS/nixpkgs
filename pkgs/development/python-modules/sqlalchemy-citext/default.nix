@@ -28,10 +28,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "citext" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sqlalchemy plugin that allows postgres use of CITEXT";
     homepage = "https://github.com/mahmoudimus/sqlalchemy-citext";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Sqlalchemy plugin that allows postgres use of CITEXT";
+    homepage = "https://github.com/mahmoudimus/sqlalchemy-citext";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

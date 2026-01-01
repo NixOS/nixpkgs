@@ -22,12 +22,21 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "View and change the default application for url schemes and UTIs";
     homepage = "https://github.com/Lord-Kamina/SwiftDefaultApps";
     license = lib.licenses.beerware;
     maintainers = [ lib.maintainers.malo ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "View and change the default application for url schemes and UTIs";
+    homepage = "https://github.com/Lord-Kamina/SwiftDefaultApps";
+    license = licenses.beerware;
+    maintainers = [ maintainers.malo ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "swda";
   };
 }

@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "palace" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pythonic Audio Library and Codecs Environment";
     homepage = "https://mcsinyx.gitlab.io/palace";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
+=======
+  meta = with lib; {
+    description = "Pythonic Audio Library and Codecs Environment";
+    homepage = "https://mcsinyx.gitlab.io/palace";
+    license = licenses.lgpl3Plus;
+    maintainers = [ maintainers.McSinyx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

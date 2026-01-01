@@ -46,11 +46,20 @@ stdenv.mkDerivation rec {
     kwidgetsaddons
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Graphviz dot graph viewer for KDE";
     mainProgram = "kgraphviewer";
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Graphviz dot graph viewer for KDE";
+    mainProgram = "kgraphviewer";
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
       --suffix PATH ":" "${lib.makeBinPath [ git ]}";
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Project generator for the IHP (Integrated Haskell Platform) web framework";
     mainProgram = "ihp-new";
@@ -35,5 +36,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mpscholten ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Project generator for the IHP (Integrated Haskell Platform) web framework";
+    mainProgram = "ihp-new";
+    homepage = "https://ihp.digitallyinduced.com";
+    license = licenses.mit;
+    maintainers = [ maintainers.mpscholten ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -57,10 +57,18 @@ buildPythonPackage rec {
 
   pytestFlags = [ "-v" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for Xvfb, Xephyr and Xvnc";
     homepage = "https://github.com/ponty/pyvirtualdisplay";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ layus ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for Xvfb, Xephyr and Xvnc";
+    homepage = "https://github.com/ponty/pyvirtualdisplay";
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ layus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -47,6 +47,7 @@ stdenv.mkDerivation {
   ]
   ++ additionalBuildInputs;
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = description;
@@ -54,5 +55,14 @@ stdenv.mkDerivation {
     license = lib.licenses.artistic2;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = description;
+    homepage = "https://open-music-kontrollers.ch/lv2/${pname}:";
+    license = licenses.artistic2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

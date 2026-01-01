@@ -48,11 +48,20 @@ buildPythonPackage rec {
     "test_async_poll"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Oral B BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/oralb-ble";
     changelog = "https://github.com/Bluetooth-Devices/oralb-ble/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Oral B BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/oralb-ble";
+    changelog = "https://github.com/Bluetooth-Devices/oralb-ble/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

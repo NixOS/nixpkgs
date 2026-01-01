@@ -41,10 +41,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiss_headers" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for HTTP/1.1 style headers";
     homepage = "https://github.com/Ousret/kiss-headers";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python package for HTTP/1.1 style headers";
+    homepage = "https://github.com/Ousret/kiss-headers";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

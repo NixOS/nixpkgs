@@ -48,7 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 ${./gnujump.xpm} $out/share/pixmaps/gnujump.xpm
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://jump.gnu.sinusoid.es/index.php?title=Main_Page";
     description = "Clone of the simple yet addictive game Xjump";
     mainProgram = "gnujump";
@@ -58,8 +62,14 @@ stdenv.mkDerivation (finalAttrs: {
       Try to survive longer get upper than anyone. It might seem too simple but
       once you've tried you'll realize how addictive this is.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

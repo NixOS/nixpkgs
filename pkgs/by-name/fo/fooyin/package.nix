@@ -79,12 +79,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   # Fix compatibility with Qt 6.10.1 - should be fixed in next release
   postPatch = ''
     substituteInPlace src/utils/starrating.cpp \
       --replace-fail '.arg(alignment);' '.arg(alignment.toInt());'
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Customisable music player";
     homepage = "https://www.fooyin.org/";

@@ -307,12 +307,21 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstallCheck
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cross-language development platform for in-memory data";
+    homepage = "https://arrow.apache.org/docs/cpp/";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tobim
       veprbl
       cpcloud

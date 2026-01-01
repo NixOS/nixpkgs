@@ -75,11 +75,20 @@ stdenv.mkDerivation {
     wrapPythonProgramsIn "$out/lib/neard" "$pythonPath"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Near Field Communication manager";
     homepage = "https://01.org/linux-nfc";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Near Field Communication manager";
+    homepage = "https://01.org/linux-nfc";
+    license = licenses.gpl2Only;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

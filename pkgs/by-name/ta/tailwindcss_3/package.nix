@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool for the CSS framework with composable CSS classes, standalone CLI";
     homepage = "https://tailwindcss.com/blog/standalone-cli";
@@ -63,5 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.adamcstephens ];
     mainProgram = "tailwindcss";
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Command-line tool for the CSS framework with composable CSS classes, standalone CLI";
+    homepage = "https://tailwindcss.com/blog/standalone-cli";
+    license = licenses.mit;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    maintainers = [ maintainers.adamcstephens ];
+    mainProgram = "tailwindcss";
+    platforms = platforms.darwin ++ platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

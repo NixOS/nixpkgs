@@ -30,11 +30,19 @@ stdenv.mkDerivation {
     "LIBFDT_DIR=${dtc}/lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight tool for hosting KVM guests";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/tree/README";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Lightweight tool for hosting KVM guests";
+    homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/tree/README";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       astro
       mfrw
       peigongdsd

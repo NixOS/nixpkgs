@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Universal Histogram Interface";
     homepage = "https://uhi.readthedocs.io/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Universal Histogram Interface";
+    homepage = "https://uhi.readthedocs.io/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

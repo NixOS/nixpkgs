@@ -36,7 +36,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "dparse" ];
 
@@ -45,11 +49,20 @@ buildPythonPackage rec {
     "test_update_pipfile"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parser for Python dependency files";
     homepage = "https://github.com/pyupio/dparse";
     changelog = "https://github.com/pyupio/dparse/blob/${version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thomasdesr ];
+=======
+  meta = with lib; {
+    description = "Parser for Python dependency files";
+    homepage = "https://github.com/pyupio/dparse";
+    changelog = "https://github.com/pyupio/dparse/blob/${version}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ thomasdesr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

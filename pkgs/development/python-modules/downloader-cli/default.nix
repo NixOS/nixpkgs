@@ -27,12 +27,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "downloader_cli" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Downloader with an awesome customizable progressbar";
     mainProgram = "dw";
     homepage = "https://github.com/deepjyoti30/downloader-cli";
     changelog = "https://github.com/deepjyoti30/downloader-cli/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ j0hax ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ j0hax ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

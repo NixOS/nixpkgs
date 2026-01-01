@@ -14,16 +14,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
+<<<<<<< HEAD
   version = "1.15.1";
+=======
+  version = "1.14.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-NGivq2V4wdJapzU5iLcuHrz2RDz2WhnikmCq+75a338=";
   };
 
   cargoHash = "sha256-uCy/Qo92yZ4pjjgW64nWYH21EbdMMwGXP5522tl8MAE=";
+=======
+    hash = "sha256-ee9P2XrUToW0WJJk8QnIkY6/9t+RCY98Ai05cz9ViIY=";
+  };
+
+  cargoHash = "sha256-nO8T+nSfR/EGW8IhjevmCH10P0ky+D0vyULSCVL5OYE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"
@@ -76,6 +87,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

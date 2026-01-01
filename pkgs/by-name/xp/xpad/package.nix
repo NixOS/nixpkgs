@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoreconfHook,
   pkg-config,
   wrapGAppsHook3,
@@ -21,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8mBSMIhQxAaxWtuNhqzTli7xCvIrQnuxpc/07slvguk=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch2 {
       url = "https://git.launchpad.net/~neil.mayhew/xpad/+git/xpad-1/patch/?id=637c7b51f1b09a28553a926f594f626d363c526a";
@@ -28,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

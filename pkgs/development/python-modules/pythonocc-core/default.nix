@@ -60,12 +60,21 @@ stdenv.mkDerivation rec {
     skipBulkUpdate = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
     changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
+    homepage = "https://github.com/tpaviot/pythonocc-core";
+    changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

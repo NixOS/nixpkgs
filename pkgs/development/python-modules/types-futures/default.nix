@@ -14,10 +14,18 @@ buildPythonPackage rec {
     sha256 = "6fe8ccc2c2af7ef2fdd9bf73eab6d617074f09f30ad7d373510b4043d39c42de";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Typing stubs for futures";
     homepage = "https://github.com/python/typeshed";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ andersk ];
+=======
+  meta = with lib; {
+    description = "Typing stubs for futures";
+    homepage = "https://github.com/python/typeshed";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ andersk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

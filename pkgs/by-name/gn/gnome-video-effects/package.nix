@@ -32,11 +32,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of GStreamer effects to be used in different GNOME Modules";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-video-effects";
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "Collection of GStreamer effects to be used in different GNOME Modules";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-video-effects";
+    platforms = platforms.unix;
+    teams = [ teams.gnome ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

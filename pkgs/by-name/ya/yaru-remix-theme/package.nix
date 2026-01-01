@@ -41,16 +41,28 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
+<<<<<<< HEAD
   meta = {
     description = "Fork of the Yaru GTK theme";
     homepage = "https://github.com/Muqtxdir/yaru-remix";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Fork of the Yaru GTK theme";
+    homepage = "https://github.com/Muqtxdir/yaru-remix";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cc-by-sa-40
       gpl3Plus
       lgpl21Only
       lgpl3Only
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ hoppla20 ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ hoppla20 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

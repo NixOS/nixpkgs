@@ -73,6 +73,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = propagatedBuildInputs ++ [ python3.pkgs.unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/kimocoder/wifite2";
     description = "Rewrite of the popular wireless network auditor, wifite";
@@ -80,6 +81,15 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/kimocoder/wifite2";
+    description = "Rewrite of the popular wireless network auditor, wifite";
+    mainProgram = "wifite";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lassulus
       danielfullmer
       d3vil0p3r

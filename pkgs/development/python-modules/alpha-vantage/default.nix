@@ -50,18 +50,31 @@ buildPythonPackage rec {
     requests-mock
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Starting with 3.0.0 most tests require an API key
   doCheck = false;
 
   pythonImportsCheck = [ "alpha_vantage" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for the Alpha Vantage API";
     homepage = "https://github.com/RomelTorres/alpha_vantage";
     changelog = "https://github.com/RomelTorres/alpha_vantage/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for the Alpha Vantage API";
+    homepage = "https://github.com/RomelTorres/alpha_vantage";
+    changelog = "https://github.com/RomelTorres/alpha_vantage/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

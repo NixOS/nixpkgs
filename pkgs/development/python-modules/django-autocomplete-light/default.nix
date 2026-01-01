@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dal" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fresh approach to autocomplete implementations, specially for Django";
     homepage = "https://django-autocomplete-light.readthedocs.io";
     changelog = "https://github.com/yourlabs/django-autocomplete-light/blob/${version}/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Fresh approach to autocomplete implementations, specially for Django";
+    homepage = "https://django-autocomplete-light.readthedocs.io";
+    changelog = "https://github.com/yourlabs/django-autocomplete-light/blob/${version}/CHANGELOG";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

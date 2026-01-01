@@ -11,11 +11,14 @@ symlinkJoin {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
+<<<<<<< HEAD
   outputs = [
     "out"
     "man"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [ R ] ++ recommendedPackages ++ packages;
   paths = [ R ];
 
@@ -29,8 +32,11 @@ symlinkJoin {
       makeWrapper "${R}/bin/$exe" "$out/bin/$exe" \
         --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE"
     done
+<<<<<<< HEAD
 
     ln -s ${R.man} $man
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   # Make the list of recommended R packages accessible to other packages such as rpy2

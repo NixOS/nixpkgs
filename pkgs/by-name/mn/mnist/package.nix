@@ -34,7 +34,11 @@ stdenvNoCC.mkDerivation {
     ln -s "${srcs.test-labels}" "$out/${srcs.test-labels.name}"
   '';
   dontUnpack = true;
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Large database of handwritten digits";
     longDescription = ''
       The MNIST database (Modified National Institute of Standards and
@@ -42,8 +46,14 @@ stdenvNoCC.mkDerivation {
       commonly used for training various image processing systems.
     '';
     homepage = "http://yann.lecun.com/exdb/mnist/index.html";
+<<<<<<< HEAD
     license = lib.licenses.cc-by-sa-30;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ cmcdragonkai ];
+=======
+    license = licenses.cc-by-sa-30;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ cmcdragonkai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

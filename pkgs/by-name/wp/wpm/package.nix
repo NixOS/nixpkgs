@@ -22,11 +22,20 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "wpm" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Console app for measuring typing speed in words per minute (WPM)";
     mainProgram = "wpm";
     homepage = "https://pypi.org/project/wpm";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ alejandrosame ];
+=======
+  meta = with lib; {
+    description = "Console app for measuring typing speed in words per minute (WPM)";
+    mainProgram = "wpm";
+    homepage = "https://pypi.org/project/wpm";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ alejandrosame ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

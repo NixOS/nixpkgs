@@ -51,16 +51,28 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   enabledTestPaths = [ "tests/unit" ];
 
   meta = {
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  enabledTestPaths = [ "tests/unit" ];
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Flash firmware to STM32 microcontrollers in Python";
     mainProgram = "stm32loader";
     homepage = "https://github.com/florisla/stm32loader";
     changelog = "https://github.com/florisla/stm32loader/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
+=======
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

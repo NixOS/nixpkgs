@@ -85,11 +85,19 @@ buildPythonPackage rec {
     "google.cloud.logging_v2"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
     changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Stackdriver Logging API client library";
+    homepage = "https://github.com/googleapis/python-logging";
+    changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

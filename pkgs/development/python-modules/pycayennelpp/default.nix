@@ -25,10 +25,17 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for Cayenne Low Power Payload";
     homepage = "https://github.com/smlng/pycayennelpp";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python library for Cayenne Low Power Payload";
+    homepage = "https://github.com/smlng/pycayennelpp";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.haylin ];
   };
 }

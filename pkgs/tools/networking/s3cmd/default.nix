@@ -23,11 +23,19 @@ buildPythonApplication rec {
     python-dateutil
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://s3tools.org/s3cmd";
     description = "Command line tool for managing Amazon S3 and CloudFront services";
     mainProgram = "s3cmd";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://s3tools.org/s3cmd";
+    description = "Command line tool for managing Amazon S3 and CloudFront services";
+    mainProgram = "s3cmd";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

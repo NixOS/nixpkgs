@@ -9,13 +9,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "podman-tui";
+<<<<<<< HEAD
   version = "1.10.0";
+=======
+  version = "1.9.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Nm0vf+/DfFMFRYrxI48EoIeQZz19LUSJC9260+Vtynk=";
+=======
+    hash = "sha256-vE2GG7lDGORTuziNSoKJWNKGhskcGuEh6U2KHrGu0JQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = null;
@@ -55,7 +63,11 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/containers/podman-tui";
     description = "Podman Terminal UI";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ aaronjheng ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "podman-tui";
   };
 })

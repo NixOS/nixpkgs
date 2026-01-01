@@ -92,15 +92,27 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Light-weight tight-binding framework";
     mainProgram = "tblite";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Light-weight tight-binding framework";
+    mainProgram = "tblite";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Plus
       lgpl3Plus
     ];
     homepage = "https://github.com/tblite/tblite";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

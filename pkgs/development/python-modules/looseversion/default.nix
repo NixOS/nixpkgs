@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "looseversion" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Version numbering for anarchists and software realists";
     homepage = "https://github.com/effigies/looseversion";
     changelog = "https://github.com/effigies/looseversion/blob/${version}/CHANGES.md";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ pelme ];
+=======
+  meta = with lib; {
+    description = "Version numbering for anarchists and software realists";
+    homepage = "https://github.com/effigies/looseversion";
+    changelog = "https://github.com/effigies/looseversion/blob/${version}/CHANGES.md";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ pelme ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

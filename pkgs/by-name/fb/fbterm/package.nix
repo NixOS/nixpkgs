@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Framebuffer terminal emulator";
     mainProgram = "fbterm";
@@ -105,5 +106,17 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Framebuffer terminal emulator";
+    mainProgram = "fbterm";
+    homepage = "https://salsa.debian.org/debian/fbterm";
+    maintainers = with maintainers; [
+      lovesegfault
+      raskin
+    ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

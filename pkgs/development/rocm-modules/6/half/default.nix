@@ -29,11 +29,20 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ library for half precision floating point arithmetics";
     homepage = "https://github.com/ROCm/half";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C++ library for half precision floating point arithmetics";
+    homepage = "https://github.com/ROCm/half";
+    license = with licenses; [ mit ];
+    teams = [ teams.rocm ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

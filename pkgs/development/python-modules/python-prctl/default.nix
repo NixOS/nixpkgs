@@ -51,5 +51,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/seveas/python-prctl";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

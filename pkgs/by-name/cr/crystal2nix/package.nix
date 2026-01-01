@@ -35,11 +35,19 @@ crystal.buildCrystalPackage rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Utility to convert Crystal's shard.lock files to a Nix file";
     mainProgram = "crystal2nix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Utility to convert Crystal's shard.lock files to a Nix file";
+    mainProgram = "crystal2nix";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       manveru
       peterhoeg
     ];

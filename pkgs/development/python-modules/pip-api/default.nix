@@ -45,11 +45,20 @@ buildPythonPackage rec {
     "test_isolation"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Importable pip API";
     homepage = "https://github.com/di/pip-api";
     changelog = "https://github.com/di/pip-api/blob/${version}/CHANGELOG";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Importable pip API";
+    homepage = "https://github.com/di/pip-api";
+    changelog = "https://github.com/di/pip-api/blob/${version}/CHANGELOG";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

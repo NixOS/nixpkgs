@@ -49,12 +49,21 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://zmap.io/";
     license = lib.licenses.asl20;
     description = "Fast single packet network scanner designed for Internet-wide network surveys";
     maintainers = with lib.maintainers; [ ma27 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://zmap.io/";
+    license = licenses.asl20;
+    description = "Fast single packet network scanner designed for Internet-wide network surveys";
+    maintainers = with maintainers; [ ma27 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

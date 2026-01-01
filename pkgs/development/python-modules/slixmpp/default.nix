@@ -54,7 +54,11 @@ buildPythonPackage rec {
     safer-xml-parserig = [ defusedxml ];
   };
 
+<<<<<<< HEAD
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+=======
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     # don't test against pure python version in the source tree
@@ -70,11 +74,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slixmpp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
     changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/slix-${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for XMPP";
+    homepage = "https://slixmpp.readthedocs.io/";
+    changelog = "https://codeberg.org/poezio/slixmpp/releases/tag/slix-${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,15 +30,26 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "css_html_js_minify" ];
 
+<<<<<<< HEAD
   meta = {
     description = "StandAlone Async cross-platform Minifier for the Web";
     homepage = "https://github.com/juancarlospaco/css-html-js-minify";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "StandAlone Async cross-platform Minifier for the Web";
+    homepage = "https://github.com/juancarlospaco/css-html-js-minify";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Plus
       lgpl3Plus
       mit
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ FlorianFranzen ];
+=======
+    maintainers = with maintainers; [ FlorianFranzen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "css-html-js-minify";
   };
 }

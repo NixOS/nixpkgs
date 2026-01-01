@@ -25,11 +25,20 @@ buildPythonPackage rec {
     matplotlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provides fixtures for quickly creating Matplotlib plots in your tests";
     homepage = "https://www.nengo.ai/pytest-plt/";
     changelog = "https://github.com/nengo/pytest-plt/blob/master/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.doronbehar ];
+=======
+  meta = with lib; {
+    description = "Provides fixtures for quickly creating Matplotlib plots in your tests";
+    homepage = "https://www.nengo.ai/pytest-plt/";
+    changelog = "https://github.com/nengo/pytest-plt/blob/master/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = [ maintainers.doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

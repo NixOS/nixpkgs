@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Higher Order Perturbative Parton Evolution Toolkit";
     mainProgram = "hoppet-config";
@@ -33,5 +34,14 @@ stdenv.mkDerivation rec {
     homepage = "https://hoppet.hepforge.org";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Higher Order Perturbative Parton Evolution Toolkit";
+    mainProgram = "hoppet-config";
+    license = licenses.gpl2;
+    homepage = "https://hoppet.hepforge.org";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

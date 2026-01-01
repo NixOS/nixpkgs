@@ -19,11 +19,20 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Like wc, but unicode-aware, and with per-line mode";
     mainProgram = "uwc";
     homepage = "https://github.com/dead10ck/uwc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ShamrockLee ];
+=======
+  meta = with lib; {
+    description = "Like wc, but unicode-aware, and with per-line mode";
+    mainProgram = "uwc";
+    homepage = "https://github.com/dead10ck/uwc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ShamrockLee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

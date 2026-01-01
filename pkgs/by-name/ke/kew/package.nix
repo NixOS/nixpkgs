@@ -9,7 +9,10 @@
   faad2,
   fetchFromGitHub,
   fftwFloat,
+<<<<<<< HEAD
   gdk-pixbuf,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   glib,
   libogg,
   libopus,
@@ -34,20 +37,32 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
+<<<<<<< HEAD
   version = "3.7.2";
+=======
+  version = "3.6.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-MCmOd8c2owIjtXkRUso3+4C0Hj/5HoOLa97E9+21FGA=";
+=======
+    hash = "sha256-PhNBAy+XS1wpU91GNoRc4jume9razD03xmmUER0p8I0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail '$(shell uname -s)' '${uppercaseFirst stdenv.hostPlatform.parsed.kernel.name}' \
+<<<<<<< HEAD
       --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}' \
       --replace-fail 'LANGDIRPREFIX = /usr' 'LANGDIRPREFIX = ${placeholder "out"}'
+=======
+      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   nativeBuildInputs = [
@@ -61,7 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat.dev
     chafa
     curl.dev
+<<<<<<< HEAD
     gdk-pixbuf
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     glib.dev
     libopus
     opusfile
@@ -91,6 +109,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {

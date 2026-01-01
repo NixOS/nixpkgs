@@ -162,7 +162,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Crossplatform chiptunes player";
     longDescription = ''
       Chiptune music player with truly extensive format support. Supported
@@ -172,11 +176,19 @@ stdenv.mkDerivation rec {
       sidplay, and many other libraries.
     '';
     homepage = "https://zxtune.bitbucket.io/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     # zxtune supports mac and windows, but more work will be needed to
     # integrate with the custom make system (see platformName above)
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ EBADBEEF ];
+=======
+    license = licenses.gpl3;
+    # zxtune supports mac and windows, but more work will be needed to
+    # integrate with the custom make system (see platformName above)
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ EBADBEEF ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = if withQt then "zxtune-qt" else "zxtune123";
   };
 }

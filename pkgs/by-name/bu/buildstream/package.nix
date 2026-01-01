@@ -46,6 +46,10 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ (with python3Packages; [
     click
+<<<<<<< HEAD
+=======
+    dulwich
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     grpcio
     jinja2
     markupsafe
@@ -54,8 +58,15 @@ python3Packages.buildPythonApplication rec {
     protobuf
     psutil
     pyroaring
+<<<<<<< HEAD
     ruamel-yaml
     ruamel-yaml-clib
+=======
+    requests
+    ruamel-yaml
+    ruamel-yaml-clib
+    tomlkit
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ujson
   ])
   ++ lib.optionals enableBuildstreamPlugins [
@@ -118,6 +129,10 @@ python3Packages.buildPythonApplication rec {
   '';
 
   versionCheckProgram = "${placeholder "out"}/bin/bst";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script { };
 

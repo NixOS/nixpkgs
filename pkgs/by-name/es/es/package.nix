@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-readline" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Extensible shell with higher order functions";
     mainProgram = "es";
     longDescription = ''
@@ -49,12 +53,21 @@ stdenv.mkDerivation rec {
       and the Tcl embeddable programming language.
     '';
     homepage = "http://wryun.github.io/es-shell/";
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [
       sjmackenzie
       ttuegel
     ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [
+      sjmackenzie
+      ttuegel
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {

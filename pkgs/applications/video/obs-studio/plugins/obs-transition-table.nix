@@ -30,11 +30,19 @@ stdenv.mkDerivation {
     rm -rf $out/obs-plugins $out/data
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin for OBS Studio to add a Transition Table to the tools menu";
     homepage = "https://github.com/exeldro/obs-transition-table";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Plugin for OBS Studio to add a Transition Table to the tools menu";
+    homepage = "https://github.com/exeldro/obs-transition-table";
+    maintainers = with maintainers; [ flexiondotorg ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

@@ -39,11 +39,20 @@ buildPythonPackage rec {
     "asciimatics.screen"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to create full-screen text UIs (from interactive forms to ASCII animations)";
     homepage = "https://github.com/peterbrittain/asciimatics";
     changelog = "https://github.com/peterbrittain/asciimatics/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cmcdragonkai ];
+=======
+  meta = with lib; {
+    description = "Module to create full-screen text UIs (from interactive forms to ASCII animations)";
+    homepage = "https://github.com/peterbrittain/asciimatics";
+    changelog = "https://github.com/peterbrittain/asciimatics/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cmcdragonkai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typecode_libmagic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
     homepage = "https://github.com/aboutcode-org/scancode-plugins/tree/main/builtins/typecode_libmagic-linux";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
+    homepage = "https://github.com/aboutcode-org/scancode-plugins/tree/main/builtins/typecode_libmagic-linux";
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

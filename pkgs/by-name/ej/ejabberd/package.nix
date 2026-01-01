@@ -221,6 +221,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.ejabberd.im";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      sander
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       chuangzhu
       toastal
     ];

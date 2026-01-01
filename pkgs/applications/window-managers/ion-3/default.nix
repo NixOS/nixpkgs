@@ -43,11 +43,19 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=\${out}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tiling tabbed window manager designed with keyboard users in mind";
     homepage = "https://tuomov.iki.fi/software/ion/";
     platforms = with lib.platforms; linux;
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    description = "Tiling tabbed window manager designed with keyboard users in mind";
+    homepage = "https://tuomov.iki.fi/software/ion/";
+    platforms = with platforms; linux;
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

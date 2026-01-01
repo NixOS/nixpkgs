@@ -8,13 +8,21 @@
 
 buildGoModule rec {
   pname = "arkade";
+<<<<<<< HEAD
   version = "0.11.60";
+=======
+  version = "0.11.59";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-2VabFPcvTgkjoGXQDUdDh1BdUB+tS3QsfGDSGerd95Q=";
+=======
+    hash = "sha256-tmn75g4hfayU7zDaP7QPIv46tHHxFgB0ebATS+fYHgI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   env.CGO_ENABLED = 0;
@@ -50,12 +58,21 @@ buildGoModule rec {
       --fish <($out/bin/arkade completion fish)
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/alexellis/arkade";
     description = "Open Source Kubernetes Marketplace";
     mainProgram = "arkade";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/alexellis/arkade";
+    description = "Open Source Kubernetes Marketplace";
+    mainProgram = "arkade";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       welteki
       techknowlogick
       qjoly

@@ -48,12 +48,21 @@ stdenv.mkDerivation rec {
     xorg.xorgproto
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/eworm-de/xcur2png/releases";
     description = "Convert X cursors to PNG images";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/eworm-de/xcur2png/releases";
+    description = "Convert X cursors to PNG images";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xcur2png";
   };
 }

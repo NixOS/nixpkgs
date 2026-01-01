@@ -57,11 +57,20 @@ buildPythonPackage rec {
     "test_sample_texts_are_in_script"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for Google Fonts language metadata";
     homepage = "https://github.com/googlefonts/lang";
     changelog = "https://github.com/googlefonts/lang/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python library for Google Fonts language metadata";
+    homepage = "https://github.com/googlefonts/lang";
+    changelog = "https://github.com/googlefonts/lang/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -16,12 +16,21 @@ stdenv.mkDerivation rec {
   # The prefix passed to configure is not used.
   makeFlags = [ "DESTDIR=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the pic little language for creating drawings";
     homepage = "https://ece.uwaterloo.ca/~aplevich/dpic/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ aespinosa ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Implementation of the pic little language for creating drawings";
+    homepage = "https://ece.uwaterloo.ca/~aplevich/dpic/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ aespinosa ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dpic";
   };
 }

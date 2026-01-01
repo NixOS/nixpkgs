@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "demjson3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
     mainProgram = "jsonlint";
     homepage = "https://github.com/nielstron/demjson3/";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
+    mainProgram = "jsonlint";
+    homepage = "https://github.com/nielstron/demjson3/";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

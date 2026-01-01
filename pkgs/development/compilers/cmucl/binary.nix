@@ -57,10 +57,17 @@ stdenv.mkDerivation (finalAttrs: {
       $out/bin/lisp
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CMU implementation of Common Lisp";
     homepage = "http://www.cons.org/cmucl/";
     license = lib.licenses.publicDomain;
+=======
+  meta = with lib; {
+    description = "CMU implementation of Common Lisp";
+    homepage = "http://www.cons.org/cmucl/";
+    license = licenses.publicDomain;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       CMUCL is a free implementation of the Common Lisp programming language
       which runs on most major Unix platforms.  It mainly conforms to the

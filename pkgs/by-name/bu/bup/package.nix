@@ -81,19 +81,32 @@ stdenv.mkDerivation {
       --prefix NIX_PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages pythonDeps}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bup/bup";
     description = "Efficient file backup system based on the git packfile format";
     mainProgram = "bup";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bup/bup";
+    description = "Efficient file backup system based on the git packfile format";
+    mainProgram = "bup";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       Highly efficient file backup system based on the git packfile format.
       Capable of doing *fast* incremental backups of virtual machine images.
     '';
 
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ rnhmjoj ];
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ rnhmjoj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # bespoke ./configure does not like cross
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };

@@ -18,14 +18,22 @@
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
+<<<<<<< HEAD
   version = "3.3.3";
+=======
+  version = "3.3.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_ydoc";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-crhJ1jEr5gyNMNPQgN41+cduO6WSii9OnWbKDcVNX3w=";
+=======
+    hash = "sha256-PGZu3CVF8X9LeFr8HRD7G6LcYoq/RPbqztopopFcAuA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

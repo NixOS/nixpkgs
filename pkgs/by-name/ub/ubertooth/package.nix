@@ -48,11 +48,20 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Open source wireless development platform suitable for Bluetooth experimentation";
     homepage = "https://github.com/greatscottgadgets/ubertooth";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ oxzi ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open source wireless development platform suitable for Bluetooth experimentation";
+    homepage = "https://github.com/greatscottgadgets/ubertooth";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ oxzi ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -12,16 +12,27 @@
 
 buildGo124Module (finalAttrs: {
   pname = "terraform-docs";
+<<<<<<< HEAD
   version = "0.21.0";
+=======
+  version = "0.20.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
     repo = "terraform-docs";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-vucMB0S8fYVTCqX+H29XdJTG9uQOMJii8aLAhiIGilg=";
   };
 
   vendorHash = "sha256-jk5NjGxFK8iSOK1RoqeIqFC52BLRDi2vhmYJwm94IUY=";
+=======
+    hash = "sha256-DiKoYAe7vcNy35ormKHYZcZrGK/MEb6VmcHWPgrbmUg=";
+  };
+
+  vendorHash = "sha256-ynyYpX41LJxGhf5kF2AULj+VKROjsvTjVPBnqG+JGSg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"
@@ -46,12 +57,21 @@ buildGo124Module (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Utility to generate documentation from Terraform modules in various output formats";
     mainProgram = "terraform-docs";
     homepage = "https://github.com/terraform-docs/terraform-docs/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Utility to generate documentation from Terraform modules in various output formats";
+    mainProgram = "terraform-docs";
+    homepage = "https://github.com/terraform-docs/terraform-docs/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zimbatm
       anthonyroussel
     ];

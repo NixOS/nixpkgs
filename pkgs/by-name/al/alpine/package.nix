@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Console mail reader";
     license = lib.licenses.asl20;
@@ -57,6 +58,16 @@ stdenv.mkDerivation rec {
       rhendric
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Console mail reader";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      raskin
+      rhendric
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://alpineapp.email/";
   };
 }

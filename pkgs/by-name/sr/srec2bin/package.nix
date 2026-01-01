@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/srec2bin/srec";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ KSJ2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "srec2bin";
   };
 })

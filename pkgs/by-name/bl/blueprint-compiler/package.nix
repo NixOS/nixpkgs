@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Markup language for GTK user interface files";
     mainProgram = "blueprint-compiler";
@@ -90,5 +91,17 @@ stdenv.mkDerivation (finalAttrs: {
       ranfdev
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Markup language for GTK user interface files";
+    mainProgram = "blueprint-compiler";
+    homepage = "https://gitlab.gnome.org/GNOME/blueprint-compiler";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [
+      benediktbroich
+      ranfdev
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

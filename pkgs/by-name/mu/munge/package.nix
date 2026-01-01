@@ -65,17 +65,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.nixos = nixosTests.munge;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       An authentication service for creating and validating credentials
     '';
     license = [
       # MUNGE
+<<<<<<< HEAD
       lib.licenses.gpl3Plus
       # libmunge
       lib.licenses.lgpl3Plus
     ];
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.rickynils ];
+=======
+      licenses.gpl3Plus
+      # libmunge
+      licenses.lgpl3Plus
+    ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.rickynils ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

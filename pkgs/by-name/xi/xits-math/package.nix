@@ -33,11 +33,19 @@ stdenv.mkDerivation rec {
     install -m444 -Dt $out/share/fonts/opentype *.otf
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/alif-type/xits";
     description = "OpenType implementation of STIX fonts with math support";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/alif-type/xits";
+    description = "OpenType implementation of STIX fonts with math support";
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

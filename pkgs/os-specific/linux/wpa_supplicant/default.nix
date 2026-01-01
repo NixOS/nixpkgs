@@ -14,7 +14,10 @@
   readline,
   withPcsclite ? !stdenv.hostPlatform.isStatic,
   pcsclite,
+<<<<<<< HEAD
   unprivileged ? true,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +37,11 @@ stdenv.mkDerivation rec {
       hash = "sha256-X6mBbj7BkW66aYeSCiI3JKBJv10etLQxaTRfRgwsFmM=";
       revert = true;
     })
+<<<<<<< HEAD
+=======
+    ./unsurprising-ext-password.patch
+    ./multiple-configs.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (fetchpatch {
       name = "suppress-ctrl-event-signal-change.patch";
       url = "https://w1.fi/cgit/hostap/patch/?id=c330b5820eefa8e703dbce7278c2a62d9c69166a";
@@ -44,10 +52,14 @@ stdenv.mkDerivation rec {
       url = "https://git.w1.fi/cgit/hostap/patch/?id=1ce37105da371c8b9cf3f349f78f5aac77d40836";
       hash = "sha256-leCk0oexNBZyVK5Q5gR4ZcgWxa0/xt/aU+DssTa0UwE=";
     })
+<<<<<<< HEAD
     ./unsurprising-ext-password.patch
     ./multiple-configs.patch
   ]
   ++ lib.optional unprivileged ./unprivileged-daemon.patch;
+=======
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
@@ -171,6 +183,7 @@ stdenv.mkDerivation rec {
     inherit wpa_supplicant_gui; # inherits the src+version updates
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://w1.fi/wpa_supplicant/";
     description = "Tool for connecting to WPA and WPA2-protected wireless networks";
@@ -180,5 +193,16 @@ stdenv.mkDerivation rec {
       ma27
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://w1.fi/wpa_supplicant/";
+    description = "Tool for connecting to WPA and WPA2-protected wireless networks";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+      marcweber
+      ma27
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

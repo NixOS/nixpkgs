@@ -3,7 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   setuptools,
@@ -22,13 +25,18 @@
 
 buildPythonPackage rec {
   pname = "blis";
+<<<<<<< HEAD
   version = "1.3.3";
+=======
+  version = "1.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cython-blis";
     tag = "release-v${version}";
+<<<<<<< HEAD
     hash = "sha256-CCy5vYjj4pCOfpKSEjdHsA6XTW7Wl3UVN8FHUsAhmVk=";
   };
 
@@ -40,6 +48,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-mSIfFjnLhPLqSNLHMS5gTeAmqmNfXpcbyH7ejv4YgQU=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     setuptools
     cython
@@ -54,6 +67,7 @@ buildPythonPackage rec {
         # error: [Errno 2] No such file or directory: '/build/source/blis/_src/make/linux-cortexa57.jsonl'
         (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
 
+<<<<<<< HEAD
         # cc1: error: bad value ‘knl’ for ‘-march=’ switch
         # https://gcc.gnu.org/gcc-15/changes.html#x86
         || (
@@ -62,6 +76,11 @@ buildPythonPackage rec {
           && stdenv.cc.isGNU
           && lib.versionAtLeast stdenv.cc.version "15"
         )
+=======
+        # clang: error: unknown argument '-mavx512pf'; did you mean '-mavx512f'?
+        # Patching blis/_src/config/knl/make_defs.mk to remove the said flag does not work
+        || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       )
       {
         BLIS_ARCH = "generic";

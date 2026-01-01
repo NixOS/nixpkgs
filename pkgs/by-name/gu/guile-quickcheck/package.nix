@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ngyro.com/software/guile-quickcheck.html";
     description = "Guile library providing tools for randomized, property-based testing";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://ngyro.com/software/guile-quickcheck.html";
+    description = "Guile library providing tools for randomized, property-based testing";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ foo-dogsquared ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 }

@@ -22,6 +22,7 @@ buildGoModule rec {
   vendorHash = "sha256-249LWguTHIF0HNIo8CsE/HWpAtBw4P46VPvlTARLTpw=";
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "User-friendly Lightweight TPM Remote Attestation over Bluetooth";
     mainProgram = "ultrablue-server";
@@ -29,5 +30,14 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ raitobezarius ];
+=======
+  meta = with lib; {
+    description = "User-friendly Lightweight TPM Remote Attestation over Bluetooth";
+    mainProgram = "ultrablue-server";
+    homepage = "https://github.com/ANSSI-FR/ultrablue";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ raitobezarius ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

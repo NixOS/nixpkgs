@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_smtpd" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest fixture that creates an SMTP server";
     homepage = "https://github.com/bebleo/pytest-smtpd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Pytest fixture that creates an SMTP server";
+    homepage = "https://github.com/bebleo/pytest-smtpd";
+    license = licenses.mit;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

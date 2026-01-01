@@ -30,6 +30,11 @@ rustPlatform.buildRustPackage rec {
 
   versionCheckProgram = [ "${placeholder "out"}/bin/arp-scan" ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater { };

@@ -48,11 +48,20 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for accessing the GeoNet NZ Volcanic GeoJSON feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-geonetnz-volcano";
     changelog = "https://github.com/exxamalte/python-aio-geojson-geonetnz-volcano/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for accessing the GeoNet NZ Volcanic GeoJSON feeds";
+    homepage = "https://github.com/exxamalte/python-aio-geojson-geonetnz-volcano";
+    changelog = "https://github.com/exxamalte/python-aio-geojson-geonetnz-volcano/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

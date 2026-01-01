@@ -38,10 +38,18 @@ buildDunePackage rec {
     mirage-clock-unix
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mirage-nat is a library for network address translation to be used with MirageOS";
     homepage = "https://github.com/mirage/${pname}";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Mirage-nat is a library for network address translation to be used with MirageOS";
+    homepage = "https://github.com/mirage/${pname}";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

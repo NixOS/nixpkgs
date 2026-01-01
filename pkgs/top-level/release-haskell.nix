@@ -68,8 +68,12 @@ let
     ghc984
     ghc9102
     ghc9103
+<<<<<<< HEAD
     ghc9122 # TODO(@sternenseemann): drop
     ghc9123
+=======
+    ghc9122
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -541,7 +545,10 @@ let
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
         compilerNames.ghc9122
+<<<<<<< HEAD
         compilerNames.ghc9123
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
@@ -549,13 +556,24 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+<<<<<<< HEAD
+=======
+      git-annex = [
+        # for 9.10, test that using filepath (instead of filepath-bytestring) works.
+        compilerNames.ghc9102
+        compilerNames.ghc9103
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
         compilerNames.ghc9102
         compilerNames.ghc9103
         compilerNames.ghc9122
+<<<<<<< HEAD
         compilerNames.ghc9123
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ] released;
       hpack = released;
       hsdns = released;
@@ -568,11 +586,17 @@ let
       ghc-lib-parser-ex = released;
       ghc-source-gen = lib.subtractLists [
         compilerNames.ghc9122
+<<<<<<< HEAD
         compilerNames.ghc9123
       ] released;
       ghc-tags = lib.subtractLists [
         compilerNames.ghc9122
         compilerNames.ghc9123
+=======
+      ] released;
+      ghc-tags = lib.subtractLists [
+        compilerNames.ghc9122
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ] released;
       hashable = released;
       primitive = released;
@@ -585,7 +609,10 @@ let
         compilerNames.ghc9102
         compilerNames.ghc9103
         compilerNames.ghc9122
+<<<<<<< HEAD
         compilerNames.ghc9123
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ] released;
     })
     {

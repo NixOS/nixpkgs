@@ -38,12 +38,21 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/portalmod/lv2bm";
     description = "Benchmark tool for LV2 plugins";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/portalmod/lv2bm";
+    description = "Benchmark tool for LV2 plugins";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lv2bm";
   };
 }

@@ -17,10 +17,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "groestlcoin_hash" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bindings for groestl key derivation function library used in Groestlcoin";
     homepage = "https://pypi.org/project/groestlcoin_hash/";
     maintainers = with lib.maintainers; [ gruve-p ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Bindings for groestl key derivation function library used in Groestlcoin";
+    homepage = "https://pypi.org/project/groestlcoin_hash/";
+    maintainers = with maintainers; [ gruve-p ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

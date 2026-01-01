@@ -86,6 +86,7 @@
   },
   {
     "pname": "FSharp.Analyzers.SDK",
+<<<<<<< HEAD
     "version": "0.34.1",
     "hash": "sha256-irU+Cx4ke47nSzOSozj7qPWa8a0RlMBb0mfIXzoxPiY="
   },
@@ -93,6 +94,15 @@
     "pname": "FSharp.Compiler.Service",
     "version": "43.10.100",
     "hash": "sha256-80hXILU4oYRtTOl3CeFt1MiquS2B/vbEI7YWcL4+8cQ="
+=======
+    "version": "0.33.1",
+    "hash": "sha256-bx4DTUakeLlwbAUxZZpNK8E0sGa7B6UvN1rX6nFOZf0="
+  },
+  {
+    "pname": "FSharp.Compiler.Service",
+    "version": "43.9.300",
+    "hash": "sha256-dBo6juX2cLAAEIlGwRdYrR13dMTtbvBPhyFpUj+Rogc="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   },
   {
     "pname": "FSharp.Control.AsyncSeq",
@@ -106,8 +116,13 @@
   },
   {
     "pname": "FSharp.Core",
+<<<<<<< HEAD
     "version": "10.0.100",
     "hash": "sha256-stXiDuNoO0xYs82vm6CNWbTsxUErbWc1iSirUyiUdXA="
+=======
+    "version": "9.0.300",
+    "hash": "sha256-eBGcd/OwlGuW2009Fb/ym813OWI9tHJXCY6oi4iGOyA="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   },
   {
     "pname": "FSharp.Data.Adaptive",
@@ -206,6 +221,7 @@
   },
   {
     "pname": "Ionide.Analyzers",
+<<<<<<< HEAD
     "version": "0.14.10",
     "hash": "sha256-aUo+WiX33PGJbyg+vbsMfjRYee3LQZNKEzie2OKrhcw="
   },
@@ -213,6 +229,15 @@
     "pname": "Ionide.KeepAChangelog.Tasks",
     "version": "0.3.1",
     "hash": "sha256-rjN09jA31CfXOMBJZquBykKOCu4l/KWdxnSM1IDBTi0="
+=======
+    "version": "0.14.9",
+    "hash": "sha256-41vXbwlwWbM/iwbrqA+lhsxpMochokM9xsOsgKlKqXg="
+  },
+  {
+    "pname": "Ionide.KeepAChangelog.Tasks",
+    "version": "0.1.8",
+    "hash": "sha256-yyg8Az7VG4rK/AsMC9cUZc67onl6wOGXoUqHm4Wi3xg="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   },
   {
     "pname": "Ionide.LanguageServerProtocol",
@@ -221,6 +246,7 @@
   },
   {
     "pname": "Ionide.ProjInfo",
+<<<<<<< HEAD
     "version": "0.74.1",
     "hash": "sha256-haxYYj6EboU7NLrlXSw/wTyMLnnXcw45FDyWkYx71f4="
   },
@@ -233,6 +259,20 @@
     "pname": "Ionide.ProjInfo.ProjectSystem",
     "version": "0.74.1",
     "hash": "sha256-rwxY8UCvH7qPurMafpTskWqVCoauZ5Pdmhq2pyI1nuE="
+=======
+    "version": "0.72.0",
+    "hash": "sha256-zu9ssScreEgwFQb0YOgVfAFxTEoGLjsLiMbWIdf2zkg="
+  },
+  {
+    "pname": "Ionide.ProjInfo.FCS",
+    "version": "0.72.0",
+    "hash": "sha256-udtCva1gKPo6rJpsCCVI+DCY2ilUwSFQ9P9XCysNcto="
+  },
+  {
+    "pname": "Ionide.ProjInfo.ProjectSystem",
+    "version": "0.72.0",
+    "hash": "sha256-ilUr29oAONpGm76Dc1ocSfu33p0Gyr9VhiNfMoxyKfI="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   },
   {
     "pname": "LinkDotNet.StringBuilder",
@@ -241,8 +281,13 @@
   },
   {
     "pname": "McMaster.NETCore.Plugins",
+<<<<<<< HEAD
     "version": "2.0.0",
     "hash": "sha256-baHzhBAK/4gdRP6uE+82UvLRwdTkXSa13uTradlEvdM="
+=======
+    "version": "1.4.0",
+    "hash": "sha256-PtpD8S74UXyoA80YRDlrp8qR/I7Ws7+4m2EJZzH4WMw="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   },
   {
     "pname": "MessagePack",
@@ -395,6 +440,14 @@
     "hash": "sha256-2tWVTPHsw1NG2zO0zsxvi1GybryqeE1V00ZRE66YZB4="
   },
   {
+<<<<<<< HEAD
+=======
+    "pname": "Microsoft.Extensions.DependencyModel",
+    "version": "9.0.1",
+    "hash": "sha256-x+1GlrYNoN+UsooEUV2cr8TPPyx5Ni/vB6pJpspM8kw="
+  },
+  {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "pname": "Microsoft.Extensions.Diagnostics.Abstractions",
     "version": "9.0.1",
     "hash": "sha256-/JkeyAQ//lfuHrWbq8ZFrHZiLvIXSnBj0MG0rU8eggQ="
@@ -551,8 +604,13 @@
   },
   {
     "pname": "Paket",
+<<<<<<< HEAD
     "version": "10.0.0-alpha011",
     "hash": "sha256-0IIN6RMReCb7azSmurOnGgCF0HtPT0lYnxFDZsqor/g="
+=======
+    "version": "9.0.2",
+    "hash": "sha256-/NFd2DQE1rmAMNTzNRgGj7aBMunl3Wkf2ju3JnvRiOw="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   },
   {
     "pname": "Perfolizer",
@@ -560,11 +618,14 @@
     "hash": "sha256-EfT9EabewLMOAKrxEwpj7QRzqnHODU0tZ08o1w7aV6Q="
   },
   {
+<<<<<<< HEAD
     "pname": "Ply",
     "version": "0.3.1",
     "hash": "sha256-RpLtDGUggvo7cSKOgzJ6WzU+KBueGPkRorvLMnRxFu0="
   },
   {
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "pname": "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl",
     "version": "4.3.3",
     "hash": "sha256-Zu908yAE2vKu/eCWu/EtxeY0bpSu2jg+UPGGvQISq+k="
@@ -726,8 +787,13 @@
   },
   {
     "pname": "System.CommandLine",
+<<<<<<< HEAD
     "version": "2.0.0",
     "hash": "sha256-cUJTPCLcnA6959PGdwWw8zsjFxhYGI+SZeIxnMC/Cwc="
+=======
+    "version": "2.0.0-beta4.22272.1",
+    "hash": "sha256-zSO+CYnMH8deBHDI9DHhCPj79Ce3GOzHCyH1/TiHxcc="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   },
   {
     "pname": "System.ComponentModel.Annotations",

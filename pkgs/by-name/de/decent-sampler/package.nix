@@ -15,7 +15,11 @@
 
 let
   pname = "decent-sampler";
+<<<<<<< HEAD
   version = "1.15.0";
+=======
+  version = "1.13.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rlkey = "orvjprslmwn0dkfs0ncx6nxnm";
 
   icon = fetchurl {
@@ -28,8 +32,13 @@ let
 
     src = fetchzip {
       # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
+<<<<<<< HEAD
       url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/ABn4zZmR24tyJx0xaRS_lXg/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz?rlkey=${rlkey}&dl=0";
       hash = "sha256-A+CBsGUtqXo7KAlx6BjbHGRZww73TlJCI68thicGKiE=";
+=======
+      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/AHLHYaQpGY3OwhYqQEd06Po/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz?rlkey=${rlkey}&dl=0";
+      hash = "sha256-sLaQd1AATr1mY3qhylQMkOfIIygKNwvf7K4mVqkbe8U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
@@ -82,7 +91,11 @@ buildFHSEnv {
     cp -r ${decent-sampler}/share $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Audio sample player";
     longDescription = ''
       Decent Sampler is an audio sample player.
@@ -93,10 +106,17 @@ buildFHSEnv {
     homepage = "https://www.decentsamples.com/product/decent-sampler-plugin/";
     # It claims to be free but we currently cannot find any license
     # that it is released under.
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       adam248
       chewblacka
       kaptcha0

@@ -15,14 +15,22 @@
 
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
+<<<<<<< HEAD
   version = "3.17";
+=======
+  version = "3.16";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = "helio-workstation";
     tag = version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-uEo4dxwc1HksYGU5ssYp3rLugszSir2kKo4XxgqvSno=";
+=======
+    hash = "sha256-JzJA9Y710upgzvsgPEV9QzpRUTYI0i2yi6thnUAcrL0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -62,12 +70,21 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/helio" "$out/bin/helio"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "One music sequencer for all major platforms, both desktop and mobile";
     mainProgram = "helio";
     homepage = "https://helio.fm/";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.suhr ];
+=======
+  meta = with lib; {
+    description = "One music sequencer for all major platforms, both desktop and mobile";
+    mainProgram = "helio";
+    homepage = "https://helio.fm/";
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.suhr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

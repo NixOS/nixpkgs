@@ -171,6 +171,7 @@ stdenv.mkDerivation rec {
     libSuffix = "${version}0";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Optimization solver for mathematical programming";
     homepage = "https://www.ibm.com/be-en/marketplace/ibm-ilog-cplex";
@@ -179,5 +180,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ bfortz ];
+=======
+  meta = with lib; {
+    description = "Optimization solver for mathematical programming";
+    homepage = "https://www.ibm.com/be-en/marketplace/ibm-ilog-cplex";
+    mainProgram = "cplex";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ bfortz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

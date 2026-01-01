@@ -23,11 +23,19 @@ appimageTools.wrapType2 rec {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
     homepage = "https://github.com/jeffvli/sonixd";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
+    homepage = "https://github.com/jeffvli/sonixd";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "sonixd";
   };

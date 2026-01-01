@@ -56,14 +56,24 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free touch typing tutor program";
     mainProgram = "klavaro";
     homepage = "http://klavaro.sourceforge.net/";
     changelog = "https://sourceforge.net/p/klavaro/code/HEAD/tree/trunk/ChangeLog";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mimame
       davidak
     ];

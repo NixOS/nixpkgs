@@ -27,11 +27,20 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Monitoring and Testing Tool for Linux kernel thermal subsystem";
     mainProgram = "tmon";
     homepage = "https://www.kernel.org/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Monitoring and Testing Tool for Linux kernel thermal subsystem";
+    mainProgram = "tmon";
+    homepage = "https://www.kernel.org/";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -34,15 +34,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
 
+<<<<<<< HEAD
   meta = {
     description = "General Stream I/O";
     homepage = "https://sourceforge.net/projects/ser2net/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "General Stream I/O";
+    homepage = "https://sourceforge.net/projects/ser2net/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       emantor
       sarcasticadmin
     ];
     mainProgram = "gensiot";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

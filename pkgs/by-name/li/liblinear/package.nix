@@ -53,11 +53,20 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $dev/include linear.h
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for large linear classification";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for large linear classification";
+    homepage = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/";
+    license = licenses.bsd3;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

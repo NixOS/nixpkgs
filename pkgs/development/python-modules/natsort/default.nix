@@ -43,12 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "natsort" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Natural sorting for Python";
     mainProgram = "natsort";
     homepage = "https://github.com/SethMMorton/natsort";
     changelog = "https://github.com/SethMMorton/natsort/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

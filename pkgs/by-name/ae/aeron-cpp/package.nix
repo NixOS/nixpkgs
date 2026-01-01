@@ -125,6 +125,7 @@ stdenv.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Aeron Messaging C++ Library";
     homepage = "https://aeron.io/";
@@ -134,6 +135,17 @@ stdenv.mkDerivation {
     sourceProvenance = [
       lib.sourceTypes.fromSource
       lib.sourceTypes.binaryBytecode
+=======
+  meta = with lib; {
+    description = "Aeron Messaging C++ Library";
+    homepage = "https://aeron.io/";
+    license = licenses.asl20;
+    mainProgram = "aeronmd";
+    maintainers = [ maintainers.vaci ];
+    sourceProvenance = [
+      sourceTypes.fromSource
+      sourceTypes.binaryBytecode
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

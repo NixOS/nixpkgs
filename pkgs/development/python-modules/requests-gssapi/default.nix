@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_gssapi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "GSSAPI authentication handler for python-requests";
     homepage = "https://github.com/pythongssapi/requests-gssapi";
     changelog = "https://github.com/pythongssapi/requests-gssapi/blob/v${version}/HISTORY.rst";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ javimerino ];
+=======
+  meta = with lib; {
+    description = "GSSAPI authentication handler for python-requests";
+    homepage = "https://github.com/pythongssapi/requests-gssapi";
+    changelog = "https://github.com/pythongssapi/requests-gssapi/blob/v${version}/HISTORY.rst";
+    license = licenses.isc;
+    maintainers = with maintainers; [ javimerino ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

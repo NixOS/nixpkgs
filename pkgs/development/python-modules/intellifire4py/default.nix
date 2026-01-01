@@ -46,12 +46,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "intellifire4py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to read Intellifire fireplace status data";
     homepage = "https://github.com/jeeftor/intellifire4py";
     changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/v${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to read Intellifire fireplace status data";
+    homepage = "https://github.com/jeeftor/intellifire4py";
+    changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/v${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "intellifire4py";
 
   };

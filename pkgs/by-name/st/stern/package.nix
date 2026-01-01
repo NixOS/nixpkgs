@@ -11,13 +11,21 @@
 
 buildGoModule rec {
   pname = "stern";
+<<<<<<< HEAD
   version = "1.33.1";
+=======
+  version = "1.33.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "stern";
     repo = "stern";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-2GCUPmeSbRg1TE5pD42BiHUwzxqS+9FV9ZYIaZKwNWo=";
+=======
+    hash = "sha256-JMtdjsXUOf75Djva0qdHUGM16OuWoTLjshDz4LAfllQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-xDkYW542V2M9CvjNBFojRw4KAhcxvlBPVJCndlF+MKw=";

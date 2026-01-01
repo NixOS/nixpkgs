@@ -22,10 +22,18 @@ buildPythonPackage rec {
   # doesnt work out of the box but might be possible
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible Python 2/3 Kconfig implementation and library";
     homepage = "https://github.com/ulfalizer/Kconfiglib";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ teto ];
+=======
+  meta = with lib; {
+    description = "Flexible Python 2/3 Kconfig implementation and library";
+    homepage = "https://github.com/ulfalizer/Kconfiglib";
+    license = licenses.isc;
+    maintainers = with maintainers; [ teto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -7,10 +7,17 @@
 
 let
   pname = "wootility";
+<<<<<<< HEAD
   version = "5.2.2";
   src = fetchurl {
     url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
     sha256 = "sha256-0ROk+Qv874zxoHFznWbdVYSwdui5XNqHGu5hcWzo4Wg=";
+=======
+  version = "5.1.2";
+  src = fetchurl {
+    url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
+    sha256 = "sha256-JcVyuilhy1qjXyIeniXZ0s4qxXr/4wLXrXgTTxjCkBk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 
@@ -27,9 +34,15 @@ appimageTools.wrapType2 {
       wrapProgram $out/bin/wootility \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
+<<<<<<< HEAD
       install -Dm444 ${contents}/Wootility.desktop -t $out/share/applications
       install -Dm444 ${contents}/Wootility.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/Wootility.desktop \
+=======
+      install -Dm444 ${contents}/wootility.desktop -t $out/share/applications
+      install -Dm444 ${contents}/wootility.png -t $out/share/pixmaps
+      substituteInPlace $out/share/applications/wootility.desktop \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=wootility'
     '';
 

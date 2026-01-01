@@ -24,11 +24,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Classical Arabic typeface in Naskh style";
     homepage = "https://www.amirifont.org/";
     license = lib.licenses.ofl;
     maintainers = [ lib.maintainers.vbgl ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Classical Arabic typeface in Naskh style";
+    homepage = "https://www.amirifont.org/";
+    license = licenses.ofl;
+    maintainers = [ maintainers.vbgl ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansimarkup" ];
 
+<<<<<<< HEAD
   meta = {
     description = "XML-like markup for producing colored terminal text";
     homepage = "https://github.com/gvalkov/python-ansimarkup";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "XML-like markup for producing colored terminal text";
+    homepage = "https://github.com/gvalkov/python-ansimarkup";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

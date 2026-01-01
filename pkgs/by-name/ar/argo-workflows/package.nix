@@ -41,12 +41,20 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+<<<<<<< HEAD
     for shell in bash zsh fish; do
+=======
+    for shell in bash zsh; do
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ${
         if (stdenv.buildPlatform == stdenv.hostPlatform) then
           "$out/bin/argo"
         else
+<<<<<<< HEAD
           "${pkgsBuildBuild.argo-workflows}/bin/argo"
+=======
+          "${pkgsBuildBuild.argo}/bin/argo"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       } completion $shell > argo.$shell
       installShellCompletion argo.$shell
     done

@@ -41,10 +41,18 @@ buildPythonPackage rec {
     "test_location_with_motion_entry"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for Canary Security Camera";
     homepage = "https://github.com/snjoetw/py-canary";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python package for Canary Security Camera";
+    homepage = "https://github.com/snjoetw/py-canary";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "aioonkyo";
+<<<<<<< HEAD
   version = "0.4.0";
+=======
+  version = "0.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "arturpragacz";
     repo = "aioonkyo";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-hLtyQWChWBddefDUT/+7e/w6i/DPEm/zw+EqOPgGsUI=";
+=======
+    hash = "sha256-xGSvwfCwWfWHZTl4+Uf+vgI5JkjeO5affbURqpLsCuk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];

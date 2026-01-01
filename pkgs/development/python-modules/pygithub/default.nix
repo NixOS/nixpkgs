@@ -47,11 +47,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "github" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to access the GitHub API v3";
     homepage = "https://github.com/PyGithub/PyGithub";
     changelog = "https://github.com/PyGithub/PyGithub/raw/${src.tag}/doc/changes.rst";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Python library to access the GitHub API v3";
+    homepage = "https://github.com/PyGithub/PyGithub";
+    changelog = "https://github.com/PyGithub/PyGithub/raw/${src.tag}/doc/changes.rst";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -109,7 +109,11 @@ let
     # times out after spending many hours
     #wezterm.pkg = p: p.wezterm;
 
+<<<<<<< HEAD
     xfce4-terminal.pkg = p: p.xfce4-terminal;
+=======
+    xfce4-terminal.pkg = p: p.xfce.xfce4-terminal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     xterm.pkg = p: p.xterm;
 

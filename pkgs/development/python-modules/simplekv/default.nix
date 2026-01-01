@@ -63,12 +63,21 @@ buildPythonPackage rec {
     */
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple key-value store for binary data";
     homepage = "https://github.com/mbr/simplekv";
     changelog = "https://github.com/mbr/simplekv/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Simple key-value store for binary data";
+    homepage = "https://github.com/mbr/simplekv";
+    changelog = "https://github.com/mbr/simplekv/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fab
       bbenne10
     ];

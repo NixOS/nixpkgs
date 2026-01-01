@@ -33,10 +33,18 @@ buildPythonPackage rec {
     echo "def main(): return 0" > tests/static_tests.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Parse gdb machine interface output with Python";
     homepage = "https://github.com/cs01/pygdbmi";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mic92 ];
+=======
+  meta = with lib; {
+    description = "Parse gdb machine interface output with Python";
+    homepage = "https://github.com/cs01/pygdbmi";
+    license = licenses.mit;
+    maintainers = [ maintainers.mic92 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

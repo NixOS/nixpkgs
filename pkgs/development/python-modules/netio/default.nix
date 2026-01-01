@@ -38,12 +38,21 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Module for interacting with NETIO devices";
     mainProgram = "Netio";
     homepage = "https://github.com/netioproducts/PyNetio";
     changelog = "https://github.com/netioproducts/PyNetio/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

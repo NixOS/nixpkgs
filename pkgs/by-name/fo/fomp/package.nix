@@ -41,11 +41,20 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://drobilla.net/software/fomp.html";
     description = "LV2 port of the MCP, VCO, FIL, and WAH plugins by Fons Adriaensen";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://drobilla.net/software/fomp.html";
+    description = "LV2 port of the MCP, VCO, FIL, and WAH plugins by Fons Adriaensen";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

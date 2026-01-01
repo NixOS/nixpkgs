@@ -24,11 +24,20 @@ stdenv.mkDerivation {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Optional addons to wmutils";
     homepage = "https://github.com/wmutils/opt";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vifino ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Optional addons to wmutils";
+    homepage = "https://github.com/wmutils/opt";
+    license = licenses.isc;
+    maintainers = with maintainers; [ vifino ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

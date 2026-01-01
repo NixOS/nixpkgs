@@ -41,9 +41,12 @@ buildPythonPackage rec {
   dependencies = [
     django
     pillow
+<<<<<<< HEAD
   ];
 
   optional-dependencies.svg = [
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     reportlab
     svglib
   ];
@@ -51,8 +54,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
+<<<<<<< HEAD
   ]
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   checkInputs = [ testfixtures ];
 

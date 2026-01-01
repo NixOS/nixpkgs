@@ -24,12 +24,21 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/ooni/probe-cli/releases/tag/${src.tag}";
     description = "Open Observatory of Network Interference command line network probe";
     homepage = "https://ooni.org/install/cli";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/ooni/probe-cli/releases/tag/${src.tag}";
+    description = "Open Observatory of Network Interference command line network probe";
+    homepage = "https://ooni.org/install/cli";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ooniprobe";
   };
 }

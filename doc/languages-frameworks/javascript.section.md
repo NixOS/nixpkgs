@@ -95,6 +95,96 @@ The node_modules abstraction can be also used to build some web framework fronte
 For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. `mkYarnModules` to make the derivation containing node_modules.
 Then when building the frontend you can just symlink the node_modules directory.
 
+<<<<<<< HEAD
+=======
+## Javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
+
+The [pkgs/development/node-packages](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages) folder contains a generated collection of [npm packages](https://npmjs.com/) that can be installed with the Nix package manager.
+
+As a rule of thumb, the package set should only provide _end-user_ software packages, such as command-line utilities.
+Libraries should only be added to the package set if there is a non-npm package that requires it.
+
+When it is desired to use npm libraries in a development project, use the `node2nix` generator directly on the `package.json` configuration file of the project.
+
+The package set provides support for the official stable Node.js versions.
+The latest stable LTS release in `nodePackages`, as well as the latest stable current release in `nodePackages_latest`.
+
+If your package uses native addons, you need to examine what kind of native build system it uses. Here are some examples:
+
+- `node-gyp`
+- `node-gyp-builder`
+- `node-pre-gyp`
+
+After you have identified the correct system, you need to override your package expression while adding in build system as a build input.
+For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
+
+```nix
+{
+  dat = prev.dat.override (oldAttrs: {
+    buildInputs = [
+      final.node-gyp-build
+      pkgs.libtool
+      pkgs.autoconf
+      pkgs.automake
+    ];
+    meta = oldAttrs.meta // {
+      broken = since "12";
+    };
+  });
+}
+```
+
+### Adding and updating JavaScript packages in Nixpkgs {#javascript-adding-or-updating-packages}
+
+To add a package from npm to Nixpkgs:
+
+1. Modify [pkgs/development/node-packages/node-packages.json](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/node-packages.json) to add, update or remove package entries to have it included in `nodePackages` and `nodePackages_latest`.
+2. Run the script:
+
+   ```sh
+   ./pkgs/development/node-packages/generate.sh
+   ```
+
+3. Build your new package to test your changes:
+
+   ```sh
+   nix-build -A nodePackages.<new-or-updated-package>
+   ```
+
+    To build against the latest stable Current Node.js version (e.g. 18.x):
+
+    ```sh
+    nix-build -A nodePackages_latest.<new-or-updated-package>
+    ```
+
+    If the package doesn't build, you may need to add an override as explained above.
+4. If the package's name doesn't match any of the executables it provides, add an entry in [pkgs/development/node-packages/main-programs.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/main-programs.nix). This will be the case for all scoped packages, e.g., `@angular/cli`.
+5. Add and commit all modified and generated files.
+
+For more information about the generation process, consult the [README.md](https://github.com/svanderburg/node2nix) file of the `node2nix` tool.
+
+To update npm packages in Nixpkgs, run the same `generate.sh` script:
+
+```sh
+./pkgs/development/node-packages/generate.sh
+```
+
+#### Git protocol error {#javascript-git-error}
+
+Some packages may have Git dependencies from GitHub specified with `git://`.
+GitHub has [disabled unencrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
+
+```
+The unauthenticated git protocol on port 9418 is no longer supported
+```
+
+Use the following Git configuration to resolve the issue:
+
+```sh
+git config --global url."https://github.com/".insteadOf git://github.com/
+```
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 ## Tool-specific instructions {#javascript-tool-specific}
 
 ### buildNpmPackage {#javascript-buildNpmPackage}
@@ -327,6 +417,7 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 
 ### pnpm {#javascript-pnpm}
 
+<<<<<<< HEAD
 pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8`, `pnpm_9` and `pnpm_10`, which support different sets of lock file versions.
 
 When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook `pnpmConfigHook` will prepare the build environment to install the pre-fetched dependencies store. Here is an example for a package that contains `package.json` and a `pnpm-lock.yaml` files using the fetcher and setup hook above:
@@ -338,6 +429,18 @@ When packaging an application that includes a `pnpm-lock.yaml`, you need to fetc
   pnpm,
   pnpmConfigHook,
   stdenv,
+=======
+Pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8` and `pnpm_9`, which support different sets of lock file versions.
+
+When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The functions `pnpm_8.fetchDeps` and `pnpm_9.fetchDeps` can create this pnpm store derivation. In conjunction, the setup hooks `pnpm_8.configHook` and `pnpm_9.configHook` will prepare the build environment to install the pre-fetched dependencies store. Here is an example for a package that contains `package.json` and a `pnpm-lock.yaml` files using the above `pnpm_` attributes:
+
+```nix
+{
+  stdenv,
+  nodejs,
+  # This is pinned as { pnpm = pnpm_9; }
+  pnpm,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -349,6 +452,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     nodejs # in case scripts are run outside of a pnpm call
     pnpmConfigHook
     pnpm # At least required by pnpmConfigHook, if not other (custom) phases
@@ -357,11 +461,21 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 3;
+=======
+    nodejs
+    pnpm.configHook
+  ];
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "...";
   };
 })
 ```
 
+<<<<<<< HEAD
 It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_9` or `pnpm_10`), to increase future reproducibility. It might also be required to use an older version if the package needs support for a certain lock file version. To do so, you can pass the `pnpm` argument to `fetchPnpmDeps` and override the `pnpm` arg in `pnpmConfigHook`. Here are the changes in the example above to use a pinned pnpm version:
 
 <!-- TODO: Does splicing still work when overriding in nativeBuildInputs here? -->
@@ -418,12 +532,40 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 
   pnpmInstallFlags = [ "--shamefully-hoist" ];
 }
+=======
+NOTE: It is highly recommended to use a pinned version of pnpm (i.e., `pnpm_8` or `pnpm_9`), to increase future reproducibility. It might also be required to use an older version if the package needs support for a certain lock file version.
+
+In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e., `inherit (finalAttrs) patches`.
+
+`pnpm.configHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array:
+
+```nix
+{ pnpm }:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = {
+    # ...
+  };
+
+  pnpmInstallFlags = [ "--shamefully-hoist" ];
+
+  pnpmDeps = pnpm.fetchDeps { inherit (finalAttrs) pnpmInstallFlags; };
+})
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 ```
 
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
+<<<<<<< HEAD
 If the pnpm project is in a subdirectory, you can just define `sourceRoot` or `setSourceRoot` for `fetchPnpmDeps`.
 If `sourceRoot` is different between the parent derivation and `fetchPnpmDeps`, you will have to set `pnpmRoot` to effectively be the same location as it is in `fetchPnpmDeps`.
+=======
+If the pnpm project is in a subdirectory, you can just define `sourceRoot` or `setSourceRoot` for `fetchDeps`.
+If `sourceRoot` is different between the parent derivation and `fetchDeps`, you will have to set `pnpmRoot` to effectively be the same location as it is in `fetchDeps`.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 Assuming the following directory structure, we can define `sourceRoot` and `pnpmRoot` as follows:
 
@@ -439,7 +581,11 @@ Assuming the following directory structure, we can define `sourceRoot` and `pnpm
 ```nix
 {
   # ...
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # ...
     sourceRoot = "${finalAttrs.src.name}/frontend";
   };
@@ -451,7 +597,11 @@ Assuming the following directory structure, we can define `sourceRoot` and `pnpm
 
 #### PNPM Workspaces {#javascript-pnpm-workspaces}
 
+<<<<<<< HEAD
 If you need to use a PNPM workspace for your project, then set `pnpmWorkspaces = [ "<workspace project name 1>" "<workspace project name 2>" ]`, etc, in your `fetchPnpmDeps` call,
+=======
+If you need to use a PNPM workspace for your project, then set `pnpmWorkspaces = [ "<workspace project name 1>" "<workspace project name 2>" ]`, etc, in your `pnpm.fetchDeps` call,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 which will make PNPM only install dependencies for those workspace packages.
 
 For example:
@@ -460,14 +610,24 @@ For example:
 {
   # ...
   pnpmWorkspaces = [ "@astrojs/language-server" ];
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     #...
     inherit (finalAttrs) pnpmWorkspaces;
+=======
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pnpmWorkspaces;
+    #...
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 ```
 
+<<<<<<< HEAD
 The above would make `fetchPnpmDeps` call only install dependencies for the `@astrojs/language-server` workspace package.
+=======
+The above would make `pnpm.fetchDeps` call only install dependencies for the `@astrojs/language-server` workspace package.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 Note that you do not need to set `sourceRoot` to make this work.
 
 Usually, in such cases, you'd want to use `pnpm --filter=<pnpm workspace name> build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
@@ -494,23 +654,39 @@ set `prePnpmInstall` to the right commands to run. For example:
   prePnpmInstall = ''
     pnpm config set dedupe-peer-dependents false
   '';
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs) prePnpmInstall;
     # ...
   };
 }
 ```
 
+<<<<<<< HEAD
 In this example, `prePnpmInstall` will be run by both `pnpmConfigHook` and by the `fetchPnpmDeps` builder.
 
 #### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
 This is the version of the output of `fetchPnpmDeps`, if you haven't set it already, you can use `1` with your current hash:
+=======
+In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by the `pnpm.fetchDeps` builder.
+
+#### PNPM `fetcherVersion` {#javascript-pnpm-fetcherVersion}
+
+This is the version of the output of `pnpm.fetchDeps`, if you haven't set it already, you can use `1` with your current hash:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 ```nix
 {
   # ...
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # ...
     fetcherVersion = 1;
     hash = "..."; # you can use your already set hash here
@@ -523,7 +699,11 @@ After upgrading to a newer `fetcherVersion`, you need to regenerate the hash:
 ```nix
 {
   # ...
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # ...
     fetcherVersion = 2;
     hash = "..."; # clear this hash and generate a new one
@@ -531,14 +711,21 @@ After upgrading to a newer `fetcherVersion`, you need to regenerate the hash:
 }
 ```
 
+<<<<<<< HEAD
 This variable ensures that we can make changes to the output of `fetchPnpmDeps` without breaking existing hashes.
+=======
+This variable ensures that we can make changes to the output of `pnpm.fetchDeps` without breaking existing hashes.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 Changes can include workarounds or bug fixes to existing PNPM issues.
 
 ##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
 
 - 1: Initial version, nothing special
 - 2: [Ensure consistent permissions](https://github.com/NixOS/nixpkgs/pull/422975)
+<<<<<<< HEAD
 - 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 ### Yarn {#javascript-yarn}
 
@@ -577,7 +764,11 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "...";
     repo = "...";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
+=======
+    rev = "v${finalAttrs.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 

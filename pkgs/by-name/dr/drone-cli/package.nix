@@ -26,10 +26,17 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "drone";
     maintainers = with lib.maintainers; [ techknowlogick ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    mainProgram = "drone";
+    maintainers = with maintainers; [ techknowlogick ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line client for the Drone continuous integration server";
   };
 }

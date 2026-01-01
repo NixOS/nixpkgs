@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Textbox edit widget for urwid that supports readline shortcuts";
     homepage = "https://github.com/rr-/urwid_readline";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Textbox edit widget for urwid that supports readline shortcuts";
+    homepage = "https://github.com/rr-/urwid_readline";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

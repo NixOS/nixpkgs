@@ -38,11 +38,20 @@ buildGoModule rec {
     installShellCompletion --cmd sift --bash sift-completion.bash
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast and powerful alternative to grep";
     mainProgram = "sift";
     homepage = "https://sift-tool.org";
     maintainers = with lib.maintainers; [ viraptor ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Fast and powerful alternative to grep";
+    mainProgram = "sift";
+    homepage = "https://sift-tool.org";
+    maintainers = with maintainers; [ viraptor ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

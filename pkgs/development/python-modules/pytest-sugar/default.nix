@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin that changes the default look and feel of pytest";
     homepage = "https://github.com/Frozenball/pytest-sugar";
     changelog = "https://github.com/Teemu/pytest-sugar/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Plugin that changes the default look and feel of pytest";
+    homepage = "https://github.com/Frozenball/pytest-sugar";
+    changelog = "https://github.com/Teemu/pytest-sugar/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

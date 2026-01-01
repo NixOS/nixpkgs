@@ -13,12 +13,21 @@ stdenv.mkDerivation rec {
     sha256 = "1iyfizbbxmr87wjgqiwqds51irgw6l3vm9wn89pc3zpj2zkyvf5h";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Parse Command Line Interface";
     mainProgram = "parse";
     homepage = "https://parse.com";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Parse Command Line Interface";
+    mainProgram = "parse";
+    homepage = "https://parse.com";
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dontUnpack = true;

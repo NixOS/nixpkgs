@@ -30,10 +30,18 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Tokenizer for Text to Speech (TTS) models";
     homepage = "https://pypi.org/project/ttstokenizer";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Tokenizer for Text to Speech (TTS) models";
+    homepage = "https://pypi.org/project/ttstokenizer";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

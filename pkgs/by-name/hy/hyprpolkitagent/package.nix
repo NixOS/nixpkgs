@@ -1,6 +1,10 @@
 {
   lib,
+<<<<<<< HEAD
   gcc15Stdenv,
+=======
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   pkg-config,
   fetchFromGitHub,
@@ -10,7 +14,11 @@
   polkit,
   qt6,
 }:
+<<<<<<< HEAD
 gcc15Stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation (finalAttrs: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "hyprpolkitagent";
   version = "0.1.3";
 

@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tuya_iot" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tuya IoT Python SDK for Tuya Open API";
     homepage = "https://github.com/tuya/tuya-iot-python-sdk";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tuya IoT Python SDK for Tuya Open API";
+    homepage = "https://github.com/tuya/tuya-iot-python-sdk";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

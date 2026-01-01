@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opentimestamps" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Create and verify OpenTimestamps proofs";
     homepage = "https://github.com/opentimestamps/python-opentimestamps";
     changelog = "https://github.com/opentimestamps/python-opentimestamps/releases/tag/python-opentimestamps-v${version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ erikarvstedt ];
+=======
+  meta = with lib; {
+    description = "Create and verify OpenTimestamps proofs";
+    homepage = "https://github.com/opentimestamps/python-opentimestamps";
+    changelog = "https://github.com/opentimestamps/python-opentimestamps/releases/tag/python-opentimestamps-v${version}";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ erikarvstedt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,10 +28,17 @@ gccStdenv.mkDerivation rec {
       --replace-fail "strip " "${gccStdenv.cc.targetPrefix}strip "
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "MIME alteration tool";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "MIME alteration tool";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license.fullName = "alterMIME LICENSE";
     downloadPage = "https://pldaniels.com/altermime/";
     mainProgram = "altermime";

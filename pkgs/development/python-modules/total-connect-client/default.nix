@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "total_connect_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interact with Total Connect 2 alarm systems";
     homepage = "https://github.com/craigjmidwinter/total-connect-client";
     changelog = "https://github.com/craigjmidwinter/total-connect-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Interact with Total Connect 2 alarm systems";
+    homepage = "https://github.com/craigjmidwinter/total-connect-client";
+    changelog = "https://github.com/craigjmidwinter/total-connect-client/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

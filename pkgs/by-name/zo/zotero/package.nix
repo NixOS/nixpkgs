@@ -6,7 +6,11 @@
 
 let
   pname = "zotero";
+<<<<<<< HEAD
   version = "7.0.30";
+=======
+  version = "7.0.27";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";

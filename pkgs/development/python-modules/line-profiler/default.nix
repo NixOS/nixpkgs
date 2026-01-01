@@ -54,11 +54,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "line_profiler" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Line-by-line profiler";
     mainProgram = "kernprof";
     homepage = "https://github.com/pyutils/line_profiler";
     changelog = "https://github.com/pyutils/line_profiler/blob/v${version}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

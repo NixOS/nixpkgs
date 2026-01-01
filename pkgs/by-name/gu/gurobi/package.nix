@@ -16,14 +16,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gurobi";
+<<<<<<< HEAD
   version = "13.0.0";
+=======
+  version = "12.0.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchurl {
     url = "https://packages.gurobi.com/${lib.versions.majorMinor version}/gurobi${version}_${platform}.tar.gz";
     hash =
       {
+<<<<<<< HEAD
         aarch64-linux = "sha256-0wFhMzLK1QViDc0ZLM/oVemtRW0g+FRJRFFOL/eiOFE=";
         x86_64-linux = "sha256-mEVUVXCeizSzQDLtkNS/EkaxT0MToxL3x3UGb/XB9lI=";
+=======
+        aarch64-linux = "sha256-NrHyudaioPE34qulwQNe3RFk4KnjFTGmLRj8B9jGRu4=";
+        x86_64-linux = "sha256-Ib2ruq+Dzi2kKk8T7N56H9F7buxNdMl7rYoFGIfRECE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -49,6 +58,13 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp bin/* $out/bin/
+<<<<<<< HEAD
+=======
+    rm $out/bin/gurobi.sh
+    rm $out/bin/python*
+
+    cp lib/gurobi.py $out/bin/gurobi.sh
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     mkdir -p $out/include
     cp include/gurobi*.h $out/include/

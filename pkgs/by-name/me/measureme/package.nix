@@ -23,10 +23,18 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Support crate for rustc's self-profiling feature";
     homepage = "https://github.com/rust-lang/measureme";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.t4ccer ];
+=======
+  meta = with lib; {
+    description = "Support crate for rustc's self-profiling feature";
+    homepage = "https://github.com/rust-lang/measureme";
+    license = licenses.asl20;
+    maintainers = [ maintainers.t4ccer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

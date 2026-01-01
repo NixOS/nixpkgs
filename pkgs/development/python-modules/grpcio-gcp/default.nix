@@ -17,10 +17,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ grpcio ];
 
+<<<<<<< HEAD
   meta = {
     description = "gRPC extensions for Google Cloud Platform";
     homepage = "https://grpc.io";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "gRPC extensions for Google Cloud Platform";
+    homepage = "https://grpc.io";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

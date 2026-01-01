@@ -24,11 +24,19 @@ rustPlatform.buildRustPackage rec {
   #   https://github.com/bytecodealliance/wit-bindgen/blob/main/.github/workflows/main.yml
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Language binding generator for WebAssembly interface types";
     homepage = "https://github.com/bytecodealliance/wit-bindgen";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ xrelkd ];
+=======
+  meta = with lib; {
+    description = "Language binding generator for WebAssembly interface types";
+    homepage = "https://github.com/bytecodealliance/wit-bindgen";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ xrelkd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wit-bindgen";
   };
 }

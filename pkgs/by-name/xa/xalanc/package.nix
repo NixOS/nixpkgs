@@ -44,5 +44,9 @@ stdenv.mkDerivation {
     mainProgram = "Xalan";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.jagajaga ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

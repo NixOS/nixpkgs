@@ -32,10 +32,17 @@ buildPythonPackage rec {
     sed -i 's#^_mystem_info = .*#_mystem_info = ["${mystem}/bin", "${mystem}/bin/mystem"]#' pymystem3/constants.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the Yandex MyStem 3.1 morpholocial analyzer of the Russian language";
     homepage = "https://github.com/nlpub/pymystem3";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python wrapper for the Yandex MyStem 3.1 morpholocial analyzer of the Russian language";
+    homepage = "https://github.com/nlpub/pymystem3";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

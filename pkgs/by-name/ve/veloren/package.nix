@@ -42,7 +42,11 @@ rustPlatform.buildRustPackage {
     ./fix-assets-path.patch
   ];
 
+<<<<<<< HEAD
   cargoHash = "sha256-hxDVFJxZQ2Seg4vapSE8PsT527GOs9DFWFnacKwWkiM=";
+=======
+  cargoHash = "sha256-Uj0gFcStWhIS+GbM/Hn/vD2PrA0ftzEnMnCwV0n0g7g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postPatch = ''
     # Force vek to build in unstable mode

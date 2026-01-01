@@ -11,6 +11,7 @@ let
     path = "${drv}/parser";
   };
 
+<<<<<<< HEAD
   grammarPackage = grammars: pkgs.linkFarm "emacs-treesit-grammars" (map grammarToAttrSet grammars);
 
   # Usage:
@@ -21,4 +22,16 @@ let
 in
 {
   inherit with-grammars with-all-grammars;
+=======
+  # Usage:
+  # treesit-grammars.with-grammars (p: [ p.tree-sitter-bash p.tree-sitter-c ... ])
+  with-grammars =
+    fn:
+    pkgs.linkFarm "emacs-treesit-grammars" (map grammarToAttrSet (fn pkgs.tree-sitter.builtGrammars));
+in
+{
+  inherit with-grammars;
+
+  with-all-grammars = with-grammars builtins.attrValues;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

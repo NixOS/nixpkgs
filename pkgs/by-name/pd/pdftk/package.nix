@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     cp ${src}/pdftk.1 $out/share/man/man1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool for working with PDFs";
     homepage = "https://gitlab.com/pdftk-java/pdftk";
@@ -69,6 +70,21 @@ stdenv.mkDerivation rec {
       averelld
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Command-line tool for working with PDFs";
+    homepage = "https://gitlab.com/pdftk-java/pdftk";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # deps
+    ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      raskin
+      averelld
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pdftk";
   };
 }

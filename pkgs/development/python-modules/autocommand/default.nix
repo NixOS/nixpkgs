@@ -35,10 +35,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autocommand" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Autocommand turns a python function into a CLI program";
     homepage = "https://github.com/Lucretiel/autocommand";
     license = lib.licenses.lgpl3Only;
+=======
+  meta = with lib; {
+    description = "Autocommand turns a python function into a CLI program";
+    homepage = "https://github.com/Lucretiel/autocommand";
+    license = licenses.lgpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

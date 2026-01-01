@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sdds" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to handle SDDS files";
     homepage = "https://pylhc.github.io/sdds/";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Module to handle SDDS files";
+    homepage = "https://pylhc.github.io/sdds/";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

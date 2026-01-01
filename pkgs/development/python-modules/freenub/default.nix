@@ -48,11 +48,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pubnub" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fork of pubnub";
     homepage = "https://github.com/bdraco/freenub";
     changelog = "https://github.com/bdraco/freenub/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Fork of pubnub";
+    homepage = "https://github.com/bdraco/freenub";
+    changelog = "https://github.com/bdraco/freenub/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

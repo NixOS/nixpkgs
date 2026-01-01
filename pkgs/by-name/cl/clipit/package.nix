@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     ]}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight GTK Clipboard Manager";
     inherit (src.meta) homepage;
@@ -74,5 +75,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "clipit";
     maintainers = with lib.maintainers; [ kamilchm ];
+=======
+  meta = with lib; {
+    description = "Lightweight GTK Clipboard Manager";
+    inherit (src.meta) homepage;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    mainProgram = "clipit";
+    maintainers = with maintainers; [ kamilchm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

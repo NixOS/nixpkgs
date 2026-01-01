@@ -28,12 +28,21 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://erratique.ch/software/react";
     description = "Applicative events and signals for OCaml";
     license = lib.licenses.bsd3;
     inherit (ocaml.meta) platforms;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://erratique.ch/software/react";
+    description = "Applicative events and signals for OCaml";
+    license = licenses.bsd3;
+    inherit (ocaml.meta) platforms;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       vbmithr
       gal_bolle
     ];

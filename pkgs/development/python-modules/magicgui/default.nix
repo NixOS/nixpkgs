@@ -49,11 +49,20 @@ buildPythonPackage rec {
     inherit napari;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Build GUIs from python functions, using magic.  (napari/magicgui)";
     homepage = "https://github.com/pyapp-kit/magicgui";
     changelog = "https://github.com/pyapp-kit/magicgui/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
+=======
+  meta = with lib; {
+    description = "Build GUIs from python functions, using magic.  (napari/magicgui)";
+    homepage = "https://github.com/pyapp-kit/magicgui";
+    changelog = "https://github.com/pyapp-kit/magicgui/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SomeoneSerge ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

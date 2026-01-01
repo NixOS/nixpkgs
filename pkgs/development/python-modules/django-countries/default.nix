@@ -45,7 +45,11 @@ buildPythonPackage rec {
     pytest-django
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Provides a country field for Django models";
     longDescription = ''
       A Django application that provides country choices for use with
@@ -53,7 +57,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/SmileyChris/django-countries";
     changelog = "https://github.com/SmileyChris/django-countries/blob/v${version}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

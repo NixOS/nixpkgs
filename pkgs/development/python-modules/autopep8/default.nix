@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/hhatto/autopep8/releases/tag/v${version}";
     description = "Tool that automatically formats Python code to conform to the PEP 8 style guide";
@@ -42,5 +43,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     mainProgram = "autopep8";
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/hhatto/autopep8/releases/tag/v${version}";
+    description = "Tool that automatically formats Python code to conform to the PEP 8 style guide";
+    homepage = "https://github.com/hhatto/autopep8";
+    license = licenses.mit;
+    mainProgram = "autopep8";
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

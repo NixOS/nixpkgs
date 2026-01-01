@@ -50,11 +50,19 @@ buildPythonPackage rec {
     cbor2 = cbor2WithoutCExtensions;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of untyped plutus language core";
     homepage = "https://github.com/OpShin/uplc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aciceri ];
+=======
+  meta = with lib; {
+    description = "Python implementation of untyped plutus language core";
+    homepage = "https://github.com/OpShin/uplc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aciceri ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "opshin";
   };
 }

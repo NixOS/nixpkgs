@@ -29,9 +29,15 @@ buildPythonPackage rec {
     transitions
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pypi.org/project/dissononce/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://pypi.org/project/dissononce/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python implementation for Noise Protocol Framework";
   };
 }

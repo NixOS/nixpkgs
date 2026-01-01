@@ -43,6 +43,7 @@ stdenv.mkDerivation {
     "--enable-pthreads" # build Hugs using POSIX threads C library
   ];
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "hugs";
     homepage = "https://www.haskell.org/hugs";
@@ -50,5 +51,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ joachifm ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    mainProgram = "hugs";
+    homepage = "https://www.haskell.org/hugs";
+    description = "Haskell interpreter";
+    maintainers = with maintainers; [ joachifm ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

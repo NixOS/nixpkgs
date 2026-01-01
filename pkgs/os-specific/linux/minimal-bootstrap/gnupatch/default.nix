@@ -38,7 +38,10 @@ let
     "-DSTDC_HEADERS"
     "-DHAVE_STRING_H"
     "-DHAVE_STDLIB_H"
+<<<<<<< HEAD
     "-DHAVE_VPRINTF"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # Maintenance note: List of sources from Makefile.in
@@ -75,6 +78,7 @@ kaem.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [ tinycc.compiler ];
 
+<<<<<<< HEAD
     meta = {
       description = "GNU Patch, a program to apply differences to files";
       homepage = "https://www.gnu.org/software/patch";
@@ -82,6 +86,15 @@ kaem.runCommand "${pname}-${version}"
       teams = [ lib.teams.minimal-bootstrap ];
       mainProgram = "patch";
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      description = "GNU Patch, a program to apply differences to files";
+      homepage = "https://www.gnu.org/software/patch";
+      license = licenses.gpl3Plus;
+      teams = [ teams.minimal-bootstrap ];
+      mainProgram = "patch";
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

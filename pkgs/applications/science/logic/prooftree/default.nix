@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
 
   prefixKey = "--prefix ";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Program for proof-tree visualization";
     mainProgram = "prooftree";
     longDescription = ''
@@ -51,8 +55,14 @@ stdenv.mkDerivation rec {
       shift-click).
     '';
     homepage = "http://askra.de/software/prooftree";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.jwiegley ];
     license = lib.licenses.gpl3;
+=======
+    platforms = platforms.unix;
+    maintainers = [ maintainers.jwiegley ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,10 +20,18 @@ buildPythonPackage rec {
     mock
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Time manipulation utilities for Python";
     homepage = "https://hiro.readthedocs.io/en/latest/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyarly ];
+=======
+  meta = with lib; {
+    description = "Time manipulation utilities for Python";
+    homepage = "https://hiro.readthedocs.io/en/latest/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nyarly ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

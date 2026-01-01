@@ -33,11 +33,20 @@ buildGoModule {
     gtk2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple tray icon for detecting new email on IMAP servers";
     mainProgram = "hasmail";
     homepage = "https://github.com/jonhoo/hasmail";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "Simple tray icon for detecting new email on IMAP servers";
+    mainProgram = "hasmail";
+    homepage = "https://github.com/jonhoo/hasmail";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

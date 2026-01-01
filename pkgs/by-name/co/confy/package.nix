@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     ))
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${finalAttrs.version}";
     description = "Conferences schedule viewer";
@@ -55,5 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "confy";
     maintainers = with lib.maintainers; [ michaelgrahamevans ];
+=======
+  meta = with lib; {
+    changelog = "https://git.sr.ht/~fabrixxm/confy/refs/${finalAttrs.version}";
+    description = "Conferences schedule viewer";
+    homepage = "https://confy.kirgroup.net/";
+    license = licenses.gpl3Plus;
+    mainProgram = "confy";
+    maintainers = with maintainers; [ michaelgrahamevans ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

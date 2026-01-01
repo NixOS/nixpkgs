@@ -45,15 +45,26 @@ buildGoModule rec {
       --replace 'ExecStart=yubikey-agent' "ExecStart=$out/bin/yubikey-agent"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Seamless ssh-agent for YubiKeys";
     mainProgram = "yubikey-agent";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Seamless ssh-agent for YubiKeys";
+    mainProgram = "yubikey-agent";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://filippo.io/yubikey-agent";
     maintainers = with lib.maintainers; [
       philandstuff
       rawkode
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+=======
+    platforms = platforms.darwin ++ platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

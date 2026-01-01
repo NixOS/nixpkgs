@@ -61,11 +61,20 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Python utility library with a stdlib like feel and extra batteries. Paths, Progress, Dicts, Downloads, Caching, Hashing: ubelt makes it easy";
     homepage = "https://github.com/Erotemic/ubelt";
     changelog = "https://github.com/Erotemic/ubelt/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Python utility library with a stdlib like feel and extra batteries. Paths, Progress, Dicts, Downloads, Caching, Hashing: ubelt makes it easy";
+    homepage = "https://github.com/Erotemic/ubelt";
+    changelog = "https://github.com/Erotemic/ubelt/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -4,20 +4,30 @@
     "adaptivecpp",
     "adios2",
     "adoptopenjdk-icedtea-web",
+<<<<<<< HEAD
     "aider-chat",
     "aider-chat-full",
     "aider-chat-with-bedrock",
     "aider-chat-with-browser",
     "aider-chat-with-help",
     "aider-chat-with-playwright",
+=======
+    "aider-chat-full",
+    "aider-chat-with-help",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "aitrack",
     "alpaca",
     "ants",
     "appcsxcad",
     "arpack-mpi",
+<<<<<<< HEAD
     "audiobookshelf",
     "babeldoc",
     "backgroundremover",
+=======
+    "backgroundremover",
+    "beets",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "btop",
     "btop-cuda",
     "c3d",
@@ -41,15 +51,22 @@
     "elmerfem",
     "elpa",
     "envision",
+<<<<<<< HEAD
     "escrotum",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "exhibit",
     "exo",
     "ezminc",
     "f3d",
+<<<<<<< HEAD
     "ffcast",
     "ffmpeg-full",
     "ffmpeg_8-full",
     "ffsubsync",
+=======
+    "ffmpeg_8-full",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "fftwMpi",
     "firefox",
     "firefox-beta",
@@ -64,11 +81,17 @@
     "galene-stt",
     "gdcm",
     "getdp",
+<<<<<<< HEAD
     "git-sim",
     "globalarrays",
     "gromacsDoubleMpi",
     "gromacsMpi",
     "gruut",
+=======
+    "globalarrays",
+    "gromacsDoubleMpi",
+    "gromacsMpi",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "hashcat",
     "haskellPackages.mpi-hs",
     "haskellPackages.mpi-hs-binary",
@@ -76,7 +99,10 @@
     "haskellPackages.mpi-hs-store",
     "hdf5-fortran-mpi",
     "hdf5-mpi",
+<<<<<<< HEAD
     "hieroglyphic",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "highfive-mpi",
     "home-assistant-component-tests.tami4",
     "hp2p",
@@ -85,7 +111,10 @@
     "hypre",
     "hyprpanel",
     "ieda",
+<<<<<<< HEAD
     "imagination",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "immich-machine-learning",
     "ior",
     "itk",
@@ -94,8 +123,11 @@
     "kagen",
     "kahip",
     "kaminpar",
+<<<<<<< HEAD
     "kdePackages.kdenlive",
     "kikoplay",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "lacus",
     "lammps-mpi",
     "libcircle",
@@ -112,11 +144,14 @@
     "maa-assistant-arknights",
     "maa-cli",
     "magika",
+<<<<<<< HEAD
     "magika-cli",
     "manim",
     "manim-slides",
     "meshtastic",
     "midivisualizer",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "migrate",
     "minari",
     "mirtk",
@@ -125,7 +160,10 @@
     "monado",
     "mpi",
     "mpifileutils",
+<<<<<<< HEAD
     "mpvScripts.autosubsync-mpv",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "mrtrix",
     "mumps-mpi",
     "nest-mpi",
@@ -146,7 +184,10 @@
     "opensplat",
     "opentrack",
     "otb",
+<<<<<<< HEAD
     "owncast",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "owocr",
     "p4est",
     "p4est-dbg",
@@ -156,12 +197,16 @@
     "parmmg",
     "pcl",
     "pdi",
+<<<<<<< HEAD
     "peek",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "petsc",
     "pfft",
     "pianotrans",
     "piper-phonemize",
     "piper-tts",
+<<<<<<< HEAD
     "pnetcdf",
     "pnfft",
     "precice",
@@ -169,6 +214,14 @@
     "python3Packages.accelerate",
     "python3Packages.adios2",
     "python3Packages.aigpy",
+=======
+    "pitivi",
+    "pnetcdf",
+    "pnfft",
+    "precice",
+    "python3Packages.accelerate",
+    "python3Packages.adios2",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.albumentations",
     "python3Packages.ale-py",
     "python3Packages.anndata",
@@ -179,10 +232,19 @@
     "python3Packages.array-api-compat",
     "python3Packages.asteroid-filterbanks",
     "python3Packages.attacut",
+<<<<<<< HEAD
     "python3Packages.auditok",
     "python3Packages.augmax",
     "python3Packages.ax-platform",
     "python3Packages.baselines",
+=======
+    "python3Packages.augmax",
+    "python3Packages.ax-platform",
+    "python3Packages.baselines",
+    "python3Packages.beetcamp",
+    "python3Packages.beets",
+    "python3Packages.beets-audible",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.bitsandbytes",
     "python3Packages.blackjax",
     "python3Packages.blosc2",
@@ -195,8 +257,11 @@
     "python3Packages.cleanvision",
     "python3Packages.clip",
     "python3Packages.clip-anytorch",
+<<<<<<< HEAD
     "python3Packages.cltk",
     "python3Packages.clu",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.cnvkit",
     "python3Packages.colbert-ai",
     "python3Packages.compressai",
@@ -228,7 +293,10 @@
     "python3Packages.encodec",
     "python3Packages.envisage",
     "python3Packages.evosax",
+<<<<<<< HEAD
     "python3Packages.executorch",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.experiment-utilities",
     "python3Packages.ezyrb",
     "python3Packages.f3d",
@@ -249,7 +317,10 @@
     "python3Packages.funsor",
     "python3Packages.fvcore",
     "python3Packages.gdcm",
+<<<<<<< HEAD
     "python3Packages.gdsfactory",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.geotorch",
     "python3Packages.gliner",
     "python3Packages.gluonts",
@@ -260,16 +331,23 @@
     "python3Packages.gradio",
     "python3Packages.gradio-client",
     "python3Packages.gradio-pdf",
+<<<<<<< HEAD
     "python3Packages.graphrag",
     "python3Packages.graphtage",
     "python3Packages.gruut",
+=======
+    "python3Packages.graphtage",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.gstools",
     "python3Packages.guidance",
     "python3Packages.gymnasium",
     "python3Packages.h5io",
     "python3Packages.h5py-mpi",
     "python3Packages.holistic-trace-analysis",
+<<<<<<< HEAD
     "python3Packages.hoomd-blue",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.hyper-connections",
     "python3Packages.ignite",
     "python3Packages.imagededup",
@@ -283,7 +361,10 @@
     "python3Packages.k-diffusion",
     "python3Packages.kahip",
     "python3Packages.keras",
+<<<<<<< HEAD
     "python3Packages.kokoro",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.kornia",
     "python3Packages.kornia-rs",
     "python3Packages.kserve",
@@ -294,6 +375,10 @@
     "python3Packages.layoutparser",
     "python3Packages.lerobot",
     "python3Packages.libretranslate",
+<<<<<<< HEAD
+=======
+    "python3Packages.librosa",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.libsupermesh",
     "python3Packages.lightning",
     "python3Packages.linear-operator",
@@ -338,7 +423,10 @@
     "python3Packages.magika",
     "python3Packages.manga-ocr",
     "python3Packages.manifest-ml",
+<<<<<<< HEAD
     "python3Packages.manimgl",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.markitdown",
     "python3Packages.mayavi",
     "python3Packages.mdtraj",
@@ -354,7 +442,10 @@
     "python3Packages.mmcv",
     "python3Packages.mmengine",
     "python3Packages.mne",
+<<<<<<< HEAD
     "python3Packages.moderngl-window",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.monai",
     "python3Packages.monotonic-alignment-search",
     "python3Packages.monty",
@@ -373,7 +464,10 @@
     "python3Packages.openai-whisper",
     "python3Packages.opencv4Full",
     "python3Packages.optimum",
+<<<<<<< HEAD
     "python3Packages.optimum-onnx",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.optuna",
     "python3Packages.optuna-dashboard",
     "python3Packages.orbax-checkpoint",
@@ -397,25 +491,37 @@
     "python3Packages.pyannote-audio",
     "python3Packages.pyannote-pipeline",
     "python3Packages.pydmd",
+<<<<<<< HEAD
     "python3Packages.pydub",
     "python3Packages.pyglet",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.pykrige",
     "python3Packages.pylance",
     "python3Packages.pymanopt",
     "python3Packages.pymatgen",
     "python3Packages.pymedio",
+<<<<<<< HEAD
     "python3Packages.pymoo",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.pyotb",
     "python3Packages.pypasser",
     "python3Packages.pyprecice",
     "python3Packages.pyradiomics",
+<<<<<<< HEAD
     "python3Packages.pyrender",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.pyro-ppl",
     "python3Packages.pyseries",
     "python3Packages.pysilero-vad",
     "python3Packages.python-csxcad",
     "python3Packages.python-openems",
+<<<<<<< HEAD
     "python3Packages.pytmx",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.pytorch-bench",
     "python3Packages.pytorch-lightning",
     "python3Packages.pytorch-memlab",
@@ -423,7 +529,10 @@
     "python3Packages.pytorch-msssim",
     "python3Packages.pytorch-pfn-extras",
     "python3Packages.pytorch-tabnet",
+<<<<<<< HEAD
     "python3Packages.pytorch-tokenizers",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.pytorch3d",
     "python3Packages.pytorchviz",
     "python3Packages.pyvista",
@@ -433,6 +542,10 @@
     "python3Packages.rapidocr-onnxruntime",
     "python3Packages.rembg",
     "python3Packages.rerun-sdk",
+<<<<<<< HEAD
+=======
+    "python3Packages.resampy",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.resize-right",
     "python3Packages.retinaface",
     "python3Packages.rlcard",
@@ -440,7 +553,10 @@
     "python3Packages.rotary-embedding-torch",
     "python3Packages.safetensors",
     "python3Packages.sagemaker-mlflow",
+<<<<<<< HEAD
     "python3Packages.sam2",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.scanpy",
     "python3Packages.scikit-bio",
     "python3Packages.scikit-survival",
@@ -494,7 +610,10 @@
     "python3Packages.torchbench",
     "python3Packages.torchcodec",
     "python3Packages.torchcrepe",
+<<<<<<< HEAD
     "python3Packages.torchdata",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.torchdiffeq",
     "python3Packages.torchinfo",
     "python3Packages.torchio",
@@ -506,7 +625,11 @@
     "python3Packages.torchsnapshot",
     "python3Packages.torchsummary",
     "python3Packages.torchtnt",
+<<<<<<< HEAD
     "python3Packages.torchtune",
+=======
+    "python3Packages.torchtnt-nightly",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.torchvision",
     "python3Packages.trainer",
     "python3Packages.transformers",
@@ -522,7 +645,10 @@
     "python3Packages.unsloth-zoo",
     "python3Packages.unstructured-inference",
     "python3Packages.vllm",
+<<<<<<< HEAD
     "python3Packages.vmas",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "python3Packages.vtk",
     "python3Packages.wandb",
     "python3Packages.waymax",
@@ -539,12 +665,18 @@
     "raxml-mpi",
     "rclip",
     "rembg",
+<<<<<<< HEAD
     "restream",
     "rlama",
     "rofi-screenshot",
     "rtabmap",
     "scalapack",
     "scalapack-ilp64",
+=======
+    "rlama",
+    "rtabmap",
+    "scalapack",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "scipopt-ug",
     "seagoat",
     "siesta",
@@ -555,8 +687,12 @@
     "slepc",
     "spfft",
     "spla",
+<<<<<<< HEAD
     "stable-diffusion-cpp",
     "stable-diffusion-cpp-vulkan",
+=======
+    "supergee",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "superlu_dist",
     "tabby",
     "tests.pkg-config.defaultPkgConfigPackages.ompi",
@@ -574,10 +710,15 @@
     "thunderbird-unwrapped",
     "thunderbirdPackages.thunderbird",
     "thunderbirdPackages.thunderbird-latest",
+<<<<<<< HEAD
     "tidal-dl",
     "tmpi",
     "tocpdf",
     "tone",
+=======
+    "tmpi",
+    "tocpdf",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "trilinos-mpi",
     "tt-metal",
     "tts",
@@ -586,7 +727,10 @@
     "unbook",
     "unstructured-api",
     "vectorcode",
+<<<<<<< HEAD
     "vimPlugins.aider-nvim",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "vimPlugins.vectorcode-nvim",
     "viskores",
     "vllm",
@@ -602,7 +746,10 @@
     "wifite2",
     "witnessme",
     "wivrn",
+<<<<<<< HEAD
     "wlr-layout-ui",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "wyoming-faster-whisper",
     "wyoming-piper",
     "xyce-parallel"

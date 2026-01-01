@@ -49,11 +49,20 @@ buildPythonPackage rec {
     "test_convert_json_to_weather_data4"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with the WeatherFlow REST API";
     homepage = "https://github.com/jeeftor/weatherflow4py";
     changelog = "https://github.com/jeeftor/weatherflow4py/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with the WeatherFlow REST API";
+    homepage = "https://github.com/jeeftor/weatherflow4py";
+    changelog = "https://github.com/jeeftor/weatherflow4py/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

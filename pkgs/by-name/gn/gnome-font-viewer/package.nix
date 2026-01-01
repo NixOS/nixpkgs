@@ -58,11 +58,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Program that can preview fonts and create thumbnails for fonts";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-font-viewer";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Program that can preview fonts and create thumbnails for fonts";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-font-viewer";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

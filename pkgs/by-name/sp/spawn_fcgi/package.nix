@@ -22,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-implicit-function-declaration";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://redmine.lighttpd.net/projects/spawn-fcgi";
     description = "Provides an interface to external programs that support the FastCGI interface";
@@ -29,5 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    homepage = "https://redmine.lighttpd.net/projects/spawn-fcgi";
+    description = "Provides an interface to external programs that support the FastCGI interface";
+    mainProgram = "spawn-fcgi";
+    license = licenses.bsd3;
+    maintainers = [ ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -19,10 +19,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pygtail ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parses log files, generates metrics for Graphite and Ganglia";
     mainProgram = "logster";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Parses log files, generates metrics for Graphite and Ganglia";
+    mainProgram = "logster";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/etsy/logster";
   };
 }

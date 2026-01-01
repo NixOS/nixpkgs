@@ -19,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
+<<<<<<< HEAD
   version = "0.10.1";
+=======
+  version = "1.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,19 +31,27 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mxmlnkn";
     repo = "ratarmount";
+<<<<<<< HEAD
     tag = "core-v${version}";
     hash = "sha256-7xknOpJIjXMr7Z7JD3Jn3oma63hbEZcj/1zQ6FAp5aA=";
+=======
+    tag = "v${version}";
+    hash = "sha256-8DjmYYTb0BR5KvtSeI2s7VtYdbRSI+QCjhZfDwqnk3M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
   sourceRoot = "${src.name}/core";
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace tests/test_AutoMountLayer.py \
       --replace-fail 'f"tests/{name}.tgz.tgz.gz"' 'os.path.join(os.path.dirname(__file__), f"../../tests/{name}.tgz.tgz.gz")' \
       --replace-fail 'copy_test_file("tests/double-compressed-nested-tar.tgz.tgz")' 'copy_test_file(os.path.join(os.path.dirname(__file__), "../../tests/double-compressed-nested-tar.tgz.tgz"))'
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   optional-dependencies = {
@@ -65,7 +77,11 @@ buildPythonPackage rec {
     fsspec
     writableTmpDirAsHomeHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "ratarmountcore" ];
 
@@ -88,11 +104,19 @@ buildPythonPackage rec {
     "test_URL"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for accessing archives by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
     changelog = "https://github.com/mxmlnkn/ratarmount/blob/${src.rev}/core/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library for accessing archives by way of indexing";
+    homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
+    changelog = "https://github.com/mxmlnkn/ratarmount/blob/core-${src.tag}/core/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

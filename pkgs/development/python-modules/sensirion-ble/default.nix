@@ -42,10 +42,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sensirion_ble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parser for Sensirion BLE devices";
     homepage = "https://github.com/akx/sensirion-ble";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Parser for Sensirion BLE devices";
+    homepage = "https://github.com/akx/sensirion-ble";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

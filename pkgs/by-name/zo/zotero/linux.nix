@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
+<<<<<<< HEAD
     hash = "sha256-uV0R0L8EoZt59hMKXFlJ+EhONArPpRbb/tIV+wZKLgY=";
+=======
+    hash = "sha256-ce0Lvz0k3DH6rGzdGoqYIW1OBiaJwaxn8pDnMQbqtv4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dontPatchELF = true;

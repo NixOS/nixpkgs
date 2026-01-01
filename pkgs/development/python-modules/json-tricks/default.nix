@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "json_tricks" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extra features for Python JSON handling";
     homepage = "https://github.com/mverleg/pyjson_tricks";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Extra features for Python JSON handling";
+    homepage = "https://github.com/mverleg/pyjson_tricks";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

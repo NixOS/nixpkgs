@@ -34,9 +34,16 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pluggable transport proxy";
     homepage = "https://www.torproject.org/projects/obfsproxy";
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "Pluggable transport proxy";
+    homepage = "https://www.torproject.org/projects/obfsproxy";
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

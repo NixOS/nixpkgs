@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Application for viewing, editing and converting GPS coordinate data";
     homepage = "https://activityworkshop.net/software/gpsprune/";
@@ -66,6 +67,16 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ rycee ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Application for viewing, editing and converting GPS coordinate data";
+    homepage = "https://activityworkshop.net/software/gpsprune/";
+    changelog = "https://activityworkshop.net/software/gpsprune/whats_new.html";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ rycee ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gpsprune";
   };
 }

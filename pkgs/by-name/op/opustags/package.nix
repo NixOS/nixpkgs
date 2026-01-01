@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     make check
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/fmang/opustags";
     description = "Ogg Opus tags editor";
@@ -56,6 +57,15 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ kmein ];
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/fmang/opustags";
+    description = "Ogg Opus tags editor";
+    platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [ kmein ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "opustags";
   };
 }

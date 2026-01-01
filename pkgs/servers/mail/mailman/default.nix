@@ -1,7 +1,11 @@
 {
   newScope,
   lib,
+<<<<<<< HEAD
   python312,
+=======
+  python3,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -13,7 +17,11 @@ let
     {
       callPackage = newScope self;
 
+<<<<<<< HEAD
       python3 = callPackage ./python.nix { python3 = python312; };
+=======
+      python3 = callPackage ./python.nix { inherit python3; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       hyperkitty = callPackage ./hyperkitty.nix { };
 

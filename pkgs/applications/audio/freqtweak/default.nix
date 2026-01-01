@@ -42,12 +42,21 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://essej.net/freqtweak/";
     description = "Realtime audio frequency spectral manipulation";
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "http://essej.net/freqtweak/";
+    description = "Realtime audio frequency spectral manipulation";
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "freqtweak";
   };
 }

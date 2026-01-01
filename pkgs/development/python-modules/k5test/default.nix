@@ -37,11 +37,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "k5test" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
     changelog = "https://github.com/pythongssapi/k5test/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library for setting up self-contained Kerberos 5 environment";
+    homepage = "https://github.com/pythongssapi/k5test";
+    changelog = "https://github.com/pythongssapi/k5test/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

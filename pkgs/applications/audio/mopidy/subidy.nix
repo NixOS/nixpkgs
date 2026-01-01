@@ -32,10 +32,18 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_subidy" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for playing music from a Subsonic-compatible Music Server";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ wenngle ];
+=======
+  meta = with lib; {
+    homepage = "https://www.mopidy.com/";
+    description = "Mopidy extension for playing music from a Subsonic-compatible Music Server";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ wenngle ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,11 +27,20 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Set of QtQuick components providing basic image editing capabilities";
     homepage = "https://invent.kde.org/libraries/kquickimageeditor";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Set of QtQuick components providing basic image editing capabilities";
+    homepage = "https://invent.kde.org/libraries/kquickimageeditor";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -8,7 +8,11 @@
   qt6,
   libusb1,
   protobuf,
+<<<<<<< HEAD
   asio_1_32_0,
+=======
+  asio,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace {hidviz,libhidx{,/libhidx{,_server{,_daemon}}}}/CMakeLists.txt \
       --replace-fail 'cmake_minimum_required(VERSION 3.2)' 'cmake_minimum_required(VERSION 3.10)'
+<<<<<<< HEAD
     substituteInPlace libhidx/cmake_modules/Findasio.cmake --replace-fail '/usr/include/asio' '${lib.getDev asio_1_32_0}/include/asio'
+=======
+    substituteInPlace libhidx/cmake_modules/Findasio.cmake --replace-fail '/usr/include/asio' '${lib.getDev asio}/include/asio'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     substituteInPlace libhidx/libhidx/src/Connector.cc --replace-fail '/usr/local/libexec' "$out/libexec"
   '';
 
@@ -39,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwebengine
     libusb1
     protobuf
+<<<<<<< HEAD
     # depends on io_service
     asio_1_32_0
   ];
@@ -48,6 +57,16 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GUI application for in-depth analysis of USB HID class devices";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+    asio
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/hidviz/hidviz";
+    description = "GUI application for in-depth analysis of USB HID class devices";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

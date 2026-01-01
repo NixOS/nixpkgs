@@ -10,12 +10,20 @@
   hidapi,
   libpng,
   libsamplerate,
+<<<<<<< HEAD
   libusb1,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   minizip,
   nasm,
   pkg-config,
   qt6Packages,
+<<<<<<< HEAD
   sdl3,
+=======
+  SDL2,
+  SDL2_net,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   speexdsp,
   vulkan-headers,
   vulkan-loader,
@@ -30,13 +38,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rmg";
+<<<<<<< HEAD
   version = "0.8.8";
+=======
+  version = "0.8.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-d2kUUJTZhm5m7MIZ8Ym0wyBvX2+h/FsrRQoyLTi0/N8=";
+=======
+    hash = "sha256-XMYHzPE5h9gD1fpN8b5YwOpY5zYCsYYQnof2MHDHa3E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -53,9 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
     hidapi
     libpng
     libsamplerate
+<<<<<<< HEAD
     libusb1
     minizip
     sdl3
+=======
+    minizip
+    SDL2
+    SDL2_net
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     speexdsp
     vulkan-headers
     vulkan-loader
@@ -101,5 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = if withAngrylionRdpPlus then lib.licenses.unfree else lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "RMG";
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ slam-bert ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -9,13 +9,21 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "2.6.0";
+=======
+  version = "2.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "keyd";
     rev = "v" + version;
+<<<<<<< HEAD
     hash = "sha256-l7yjGpicX1ly4UwF7gcOTaaHPRnxVUMwZkH70NDLL5M=";
+=======
+    hash = "sha256-pylfQjTnXiSzKPRJh9Jli1hhin/MIGIkZxLKxqlReVo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pypkgs = python3.pkgs;
@@ -70,10 +78,18 @@ stdenv.mkDerivation {
 
   passthru.tests.keyd = nixosTests.keyd;
 
+<<<<<<< HEAD
   meta = {
     description = "Key remapping daemon for Linux";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alfarel ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Key remapping daemon for Linux";
+    license = licenses.mit;
+    maintainers = with maintainers; [ alfarel ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

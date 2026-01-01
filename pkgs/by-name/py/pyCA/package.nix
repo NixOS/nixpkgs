@@ -81,12 +81,21 @@ python3.pkgs.buildPythonApplication rec {
     inherit frontend;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "Fully functional Opencast capture agent written in Python";
     mainProgram = "pyca";
     homepage = "https://github.com/opencast/pyCA";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ pmiddend ];
+=======
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ pmiddend ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

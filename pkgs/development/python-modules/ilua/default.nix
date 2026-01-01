@@ -35,11 +35,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ilua" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Portable Lua kernel for Jupyter";
     mainProgram = "ilua";
     homepage = "https://github.com/guysv/ilua";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Portable Lua kernel for Jupyter";
+    mainProgram = "ilua";
+    homepage = "https://github.com/guysv/ilua";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

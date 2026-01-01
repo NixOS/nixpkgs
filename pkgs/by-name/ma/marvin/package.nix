@@ -9,6 +9,7 @@
   gnugrep,
   gnused,
   openjdk17,
+<<<<<<< HEAD
   freetype,
   fontconfig,
   libXi,
@@ -26,6 +27,18 @@ stdenv.mkDerivation (finalAttrs: {
     name = "marvin-${finalAttrs.version}.deb";
     url = "http://dl.chemaxon.com/marvin/${finalAttrs.version}/marvin_linux_${finalAttrs.version}.deb";
     hash = "sha256-OiTHMGKAuHadoKQMTTPRcYl/zKL+bc0ts/UNsJlHn0Q=";
+=======
+}:
+
+stdenv.mkDerivation rec {
+  pname = "marvin";
+  version = "23.17.0";
+
+  src = fetchurl {
+    name = "marvin-${version}.deb";
+    url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${lib.versions.majorMinor version}.deb";
+    hash = "sha256-zE/9EaOsNJwzE4Doasm9N8QG4t7wDOxqpV/Nhc4p7Ws=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -33,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
+<<<<<<< HEAD
   buildInputs = [
     freetype
     fontconfig
@@ -43,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXrender
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   unpackPhase = ''
     dpkg-deb -x $src opt
   '';
@@ -51,7 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapBin() {
       makeWrapper $1 $out/bin/$(basename $1) \
         --set INSTALL4J_JAVA_HOME "${openjdk17}" \
+<<<<<<< HEAD
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         --prefix PATH : ${
           lib.makeBinPath [
             coreutils
@@ -83,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     )}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Chemical modelling, analysis and structure drawing program";
     homepage = "https://chemaxon.com/products/marvin";
@@ -91,3 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
   };
 })
+=======
+  meta = with lib; {
+    description = "Chemical modelling, analysis and structure drawing program";
+    homepage = "https://chemaxon.com/products/marvin";
+    maintainers = with maintainers; [ fusion809 ];
+    license = licenses.unfree;
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

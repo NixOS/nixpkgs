@@ -36,12 +36,21 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Reverse HTTP proxy to filter requests by different rules";
     homepage = "https://github.com/asciimoo/filtron";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.dasj19 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Reverse HTTP proxy to filter requests by different rules";
+    homepage = "https://github.com/asciimoo/filtron";
+    license = licenses.agpl3Only;
+    maintainers = [ maintainers.dasj19 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "filtron";
   };
 }

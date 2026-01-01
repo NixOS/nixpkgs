@@ -200,10 +200,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sunpy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Python for Solar Physics";
+    homepage = "https://sunpy.org";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

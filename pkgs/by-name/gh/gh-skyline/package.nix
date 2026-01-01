@@ -29,7 +29,11 @@ buildGoModule rec {
     description = "Generate a 3D model of your GitHub contribution history";
     homepage = "https://github.com/github/gh-skyline";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ PerchunPak ];
+=======
+    maintainers = with lib.maintainers; [ perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gh-skyline";
   };
 }

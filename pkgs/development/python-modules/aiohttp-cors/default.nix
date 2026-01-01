@@ -42,11 +42,19 @@ buildPythonPackage rec {
   # interactive browser tests using selenium
   disabledTestPaths = [ "tests/integration" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/aio-libs/aiohttp-cors/blob/${src.tag}/CHANGES.rst";
     description = "CORS support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp-cors";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/aio-libs/aiohttp-cors/blob/${src.tag}/CHANGES.rst";
+    description = "CORS support for aiohttp";
+    homepage = "https://github.com/aio-libs/aiohttp-cors";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

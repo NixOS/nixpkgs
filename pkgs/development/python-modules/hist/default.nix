@@ -40,12 +40,21 @@ buildPythonPackage rec {
     pytest-mpl
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Histogramming for analysis powered by boost-histogram";
     mainProgram = "hist";
     homepage = "https://hist.readthedocs.io/";
     changelog = "https://github.com/scikit-hep/hist/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

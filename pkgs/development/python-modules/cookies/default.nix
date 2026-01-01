@@ -31,9 +31,16 @@ buildPythonPackage rec {
     "test_encoding_assumptions"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Friendlier RFC 6265-compliant cookie parser/renderer";
     homepage = "https://github.com/sashahart/cookies";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Friendlier RFC 6265-compliant cookie parser/renderer";
+    homepage = "https://github.com/sashahart/cookies";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

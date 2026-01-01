@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/man/man8}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Recover files based on their contents";
     longDescription = ''
       Foremost is a console program to recover files based on their headers,
@@ -42,9 +46,15 @@ stdenv.mkDerivation rec {
       reliable and faster recovery.
     '';
     homepage = "https://foremost.sourceforge.net/";
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.jiegec ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    license = licenses.publicDomain;
+    maintainers = [ maintainers.jiegec ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "foremost";
   };
 }

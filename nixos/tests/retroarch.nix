@@ -2,8 +2,13 @@
 
 {
   name = "retroarch";
+<<<<<<< HEAD
   meta = {
     maintainers = pkgs.lib.teams.libretro.members ++ [ pkgs.lib.maintainers.j0hax ];
+=======
+  meta = with pkgs.lib; {
+    maintainers = teams.libretro.members ++ [ maintainers.j0hax ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes.machine =

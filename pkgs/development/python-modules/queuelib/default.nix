@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "queuelib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of persistent (disk-based) queues for Python";
     homepage = "https://github.com/scrapy/queuelib";
     changelog = "https://github.com/scrapy/queuelib/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Collection of persistent (disk-based) queues for Python";
+    homepage = "https://github.com/scrapy/queuelib";
+    changelog = "https://github.com/scrapy/queuelib/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

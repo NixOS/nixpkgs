@@ -20,14 +20,22 @@
 
 stdenv.mkDerivation rec {
   pname = "tev";
+<<<<<<< HEAD
   version = "2.6.3";
+=======
+  version = "2.6.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = "tev";
     tag = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-2jUUipT6xE/8qxWaMsUmrEf2qmDcE93vp2nME01B34A=";
+=======
+    hash = "sha256-pK4XFrwNxaFgLFNTK8uPVSF4GBAkH8KkSFi3yWgMjF0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux (

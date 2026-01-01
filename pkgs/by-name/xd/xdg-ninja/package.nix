@@ -41,12 +41,21 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
+<<<<<<< HEAD
   meta = {
     description = "Shell script which checks your $HOME for unwanted files and directories";
     homepage = "https://github.com/b3nj5m1n/xdg-ninja";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ arcuru ];
+=======
+  meta = with lib; {
+    description = "Shell script which checks your $HOME for unwanted files and directories";
+    homepage = "https://github.com/b3nj5m1n/xdg-ninja";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ arcuru ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xdg-ninja";
   };
 }

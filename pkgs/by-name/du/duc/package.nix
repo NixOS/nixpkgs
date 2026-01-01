@@ -42,12 +42,21 @@ stdenv.mkDerivation rec {
     "--disable-cairo"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://duc.zevv.nl/";
     description = "Collection of tools for inspecting and visualizing disk usage";
     license = lib.licenses.gpl2Only;
 
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://duc.zevv.nl/";
+    description = "Collection of tools for inspecting and visualizing disk usage";
+    license = licenses.gpl2Only;
+
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "duc";
   };

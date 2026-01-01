@@ -50,12 +50,21 @@ stdenv.mkDerivation {
 
   dontUseCmakeConfigure = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://tmate.io/";
     description = "Instant Terminal Sharing";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ck3d ];
+=======
+  meta = with lib; {
+    homepage = "https://tmate.io/";
+    description = "Instant Terminal Sharing";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ck3d ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tmate";
   };
 }

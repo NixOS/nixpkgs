@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash contrib/bash_completion.d/redo
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo";
     homepage = "https://github.com/apenwarr/redo";
@@ -86,6 +87,15 @@ stdenv.mkDerivation rec {
       ck3d
     ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo";
+    homepage = "https://github.com/apenwarr/redo";
+    maintainers = with maintainers; [
+      ck3d
+    ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = python3.meta.platforms;
   };
 }

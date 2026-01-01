@@ -78,7 +78,11 @@ buildPythonPackage rec {
     pocketsphinx
     respx
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "speech_recognition" ];
 
@@ -87,6 +91,7 @@ buildPythonPackage rec {
     "test_sphinx_keywords"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
@@ -96,5 +101,16 @@ buildPythonPackage rec {
       bsd3
     ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
+    homepage = "https://github.com/Uberi/speech_recognition";
+    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${src.tag}";
+    license = with licenses; [
+      gpl2Only
+      bsd3
+    ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -48,11 +48,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Solver for package problems in CUDF format using ASP";
     homepage = "https://potassco.org/aspcud/";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.hakuch ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Solver for package problems in CUDF format using ASP";
+    homepage = "https://potassco.org/aspcud/";
+    platforms = platforms.all;
+    maintainers = [ maintainers.hakuch ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

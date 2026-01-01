@@ -48,12 +48,21 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/test.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible MQTT to InfluxDB Bridge";
     homepage = "https://github.com/hardwario/bch-mqtt2influxdb";
     changelog = "https://github.com/hardwario/bch-mqtt2influxdb/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
+=======
+  meta = with lib; {
+    description = "Flexible MQTT to InfluxDB Bridge";
+    homepage = "https://github.com/hardwario/bch-mqtt2influxdb";
+    changelog = "https://github.com/hardwario/bch-mqtt2influxdb/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cynerd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mqtt2influxdb";
   };
 }

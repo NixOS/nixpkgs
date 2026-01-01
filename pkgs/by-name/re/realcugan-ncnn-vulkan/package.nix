@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Real-cugan converter ncnn version, runs fast on intel / amd / nvidia / apple-silicon GPU with vulkan";
     homepage = "https://github.com/nihui/realcugan-ncnn-vulkan";
@@ -67,5 +68,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "realcugan-ncnn-vulkan";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Real-cugan converter ncnn version, runs fast on intel / amd / nvidia / apple-silicon GPU with vulkan";
+    homepage = "https://github.com/nihui/realcugan-ncnn-vulkan";
+    license = licenses.mit;
+    maintainers = with maintainers; [ iynaix ];
+    mainProgram = "realcugan-ncnn-vulkan";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

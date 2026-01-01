@@ -42,6 +42,7 @@ let
   # The revisions are extracted from https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/fetch_sources.py#L290
   # with the vk-cts-sources.py script.
   sources = import ./sources.nix { inherit fetchurl fetchFromGitHub; };
+<<<<<<< HEAD
 
   # Use pinned version from vulkan-video-samples
   shaderc-src = fetchFromGitHub {
@@ -54,12 +55,22 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
   version = "1.4.5.0";
+=======
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "vulkan-cts";
+  version = "1.4.3.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "vulkan-cts-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-cbXSelRPCCH52xczWaxqftbimHe4PyIKZqySQSFTHos=";
+=======
+    hash = "sha256-bhbk2ayY4syyUXJcYesRlVFArAVhivTjELvM8uuNzEQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   prePatch = ''
@@ -69,6 +80,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${sources.prePatch}
 
+<<<<<<< HEAD
+=======
+    substituteInPlace external/vulkan-validationlayers/CMakeLists.txt \
+      --replace-fail 'UPDATE_DEPS ON' 'UPDATE_DEPS OFF'
+
+    substituteInPlace external/vulkan-video-samples/src/cmake/FindVulkanSDK.cmake \
+      --replace-fail 'GIT_TAG main' 'GIT_TAG main FIND_PACKAGE_ARGS NAMES VulkanHeaders'
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     chmod u+w -R external
   '';
 
@@ -113,7 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
     "-DSELECTED_BUILD_TARGETS=deqp-vk"
+<<<<<<< HEAD
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SHADERC" "${shaderc-src}")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postInstall = ''
@@ -146,11 +169,20 @@ stdenv.mkDerivation (finalAttrs: {
         touch $out
       '';
 
+<<<<<<< HEAD
   meta = {
     description = "Khronos Vulkan Conformance Tests";
     homepage = "https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/vulkancts/README.md";
     changelog = "https://github.com/KhronosGroup/VK-GL-CTS/releases/tag/vulkan-cts-${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Flakebi ];
+=======
+  meta = with lib; {
+    description = "Khronos Vulkan Conformance Tests";
+    homepage = "https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/vulkancts/README.md";
+    changelog = "https://github.com/KhronosGroup/VK-GL-CTS/releases/tag/vulkan-cts-${finalAttrs.version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ Flakebi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

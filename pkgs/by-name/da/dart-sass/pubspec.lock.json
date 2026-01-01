@@ -24,11 +24,19 @@
       "dependency": "direct dev",
       "description": {
         "name": "archive",
+<<<<<<< HEAD
         "sha256": "2fde1607386ab523f7a36bb3e7edb43bd58e6edaf2ffb29d8a6d578b297fdbbd",
         "url": "https://pub.dev"
       },
       "source": "hosted",
       "version": "4.0.7"
+=======
+        "sha256": "cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.6.1"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "args": {
       "dependency": "direct main",
@@ -94,11 +102,19 @@
       "dependency": "direct main",
       "description": {
         "name": "cli_pkg",
+<<<<<<< HEAD
         "sha256": "8343ec3b11f163ab105687d6bad5432ef49b95d15137ec44a28c8cef918b5150",
         "url": "https://pub.dev"
       },
       "source": "hosted",
       "version": "2.15.1"
+=======
+        "sha256": "bbffba7114f20c1deceeec8935f9f2de8abcd1befb479663e9a538ef79a17190",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.15.0"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "cli_repl": {
       "dependency": "direct main",
@@ -364,11 +380,19 @@
       "dependency": "transitive",
       "description": {
         "name": "matcher",
+<<<<<<< HEAD
         "sha256": "12956d0ad8390bbcc63ca2e1469c0619946ccb52809807067a7020d57e647aa6",
         "url": "https://pub.dev"
       },
       "source": "hosted",
       "version": "0.12.18"
+=======
+        "sha256": "dc58c723c3c24bf8d3e2d3ad3f2f9d7bd9cf43ec6feaa64181775e60190153f2",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.12.17"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "meta": {
       "dependency": "direct main",
@@ -394,11 +418,19 @@
       "dependency": "transitive",
       "description": {
         "name": "native_stack_traces",
+<<<<<<< HEAD
         "sha256": "d34cf916db87b14d39465b3e3b4b4a8ee1f304bde6ed7605571e34802e3d6a11",
         "url": "https://pub.dev"
       },
       "source": "hosted",
       "version": "0.6.1"
+=======
+        "sha256": "64d2f4bcf3b69326fb9bc91b4dd3a06f94bb5bbc3a65e25ae6467ace0b34bfd3",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.5.7"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "native_synchronization": {
       "dependency": "direct main",
@@ -480,6 +512,7 @@
       "source": "hosted",
       "version": "1.5.2"
     },
+<<<<<<< HEAD
     "posix": {
       "dependency": "transitive",
       "description": {
@@ -490,6 +523,8 @@
       "source": "hosted",
       "version": "6.0.3"
     },
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "protobuf": {
       "dependency": "direct main",
       "description": {
@@ -674,11 +709,19 @@
       "dependency": "direct dev",
       "description": {
         "name": "test",
+<<<<<<< HEAD
         "sha256": "77cc98ea27006c84e71a7356cf3daf9ddbde2d91d84f77dbfe64cf0e4d9611ae",
         "url": "https://pub.dev"
       },
       "source": "hosted",
       "version": "1.28.0"
+=======
+        "sha256": "8f0eb7fa76b7d05a4f3707e0dbd581babef5b0915ca508b757cf15d0cabb56cb",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.27.0"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "test_api": {
       "dependency": "transitive",
@@ -694,11 +737,19 @@
       "dependency": "transitive",
       "description": {
         "name": "test_core",
+<<<<<<< HEAD
         "sha256": "f1072617a6657e5fc09662e721307f7fb009b4ed89b19f47175d11d5254a62d4",
         "url": "https://pub.dev"
       },
       "source": "hosted",
       "version": "0.6.14"
+=======
+        "sha256": "bad9916601a4f2ef6e4dbc466fb712e4b42cf4917c3fd428b018f51984fce13b",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.6.13"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "test_descriptor": {
       "dependency": "direct dev",
@@ -754,11 +805,19 @@
       "dependency": "direct main",
       "description": {
         "name": "watcher",
+<<<<<<< HEAD
         "sha256": "f52385d4f73589977c80797e60fe51014f7f2b957b5e9a62c3f6ada439889249",
         "url": "https://pub.dev"
       },
       "source": "hosted",
       "version": "1.2.0"
+=======
+        "sha256": "592ab6e2892f67760543fb712ff0177f4ec76c031f02f5b4ff8d3fc5eb9fb61a",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.4"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "web": {
       "dependency": "transitive",

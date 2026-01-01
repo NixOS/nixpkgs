@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fpyutils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of useful non-standard Python functions";
     homepage = "https://github.com/frnmst/fpyutils";
     changelog = "https://blog.franco.net.eu.org/software/fpyutils-${version}/release.html";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Collection of useful non-standard Python functions";
+    homepage = "https://github.com/frnmst/fpyutils";
+    changelog = "https://blog.franco.net.eu.org/software/fpyutils-${version}/release.html";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

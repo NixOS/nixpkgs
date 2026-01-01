@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pBg5R7k3xEE1EoSdLO4jmibTnGE+ndZnkWeMO+UXN6Q=";
 
+<<<<<<< HEAD
   meta = {
     description = "Automatically run a script when a monitor connects (or disconnects) in Hyprland";
     homepage = "https://github.com/coffebar/hyprland-monitor-attached";
@@ -24,5 +25,14 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ bddvlpr ];
     mainProgram = "hyprland-monitor-attached";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Automatically run a script when a monitor connects (or disconnects) in Hyprland";
+    homepage = "https://github.com/coffebar/hyprland-monitor-attached";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bddvlpr ];
+    mainProgram = "hyprland-monitor-attached";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -9,15 +9,27 @@
   versionCheckHook,
   callPackage,
 }:
+<<<<<<< HEAD
 buildGoModule (finalAttrs: {
   pname = "alist";
   version = "3.55.0";
+=======
+buildGoModule rec {
+  pname = "alist";
+  version = "3.45.0";
+  webVersion = "3.45.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-/psFL/dCG82y1uWEcg45JG6S7+MD0avqU/HjrR+vklA=";
+=======
+    tag = "v${version}";
+    hash = "sha256-h8oWeTX3z3xye5O4+s7LA7Wm36JOrsU+UdKGZXaDKXk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,9 +41,19 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+<<<<<<< HEAD
 
   proxyVendor = true;
   vendorHash = "sha256-aRnS3LLG25FK1ELKd7K1e5aGLmKnQ7w/3QVe4P9RRLI=";
+=======
+  web = fetchzip {
+    url = "https://github.com/AlistGo/alist-web/releases/download/${webVersion}/dist.tar.gz";
+    hash = "sha256-rNVa+dr/SX2aYHBzeV8QdD5XYCFyelhbqkTpvhF+S2g=";
+  };
+
+  proxyVendor = true;
+  vendorHash = "sha256-IMoLVAgOaVM1xIFDe8BGOpzyBnDMfD9Q6VogFfOWFzU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = [ fuse ];
 
@@ -41,13 +63,22 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X \"github.com/alist-org/alist/v3/internal/conf.GitAuthor=Xhofe <i@nn.ci>\""
+<<<<<<< HEAD
     "-X github.com/alist-org/alist/v3/internal/conf.Version=${finalAttrs.version}"
     "-X github.com/alist-org/alist/v3/internal/conf.WebVersion=${finalAttrs.passthru.webVersion}"
+=======
+    "-X github.com/alist-org/alist/v3/internal/conf.Version=${version}"
+    "-X github.com/alist-org/alist/v3/internal/conf.WebVersion=${webVersion}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   preConfigure = ''
     rm -rf public/dist
+<<<<<<< HEAD
     cp -r ${finalAttrs.passthru.web} public/dist
+=======
+    cp -r ${web} public/dist
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   preBuild = ''
@@ -87,17 +118,24 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = lib.getExe (callPackage ./update.nix { });
+<<<<<<< HEAD
     webVersion = "3.55.0";
     web = fetchzip {
       url = "https://github.com/AlistGo/alist-web/releases/download/${finalAttrs.passthru.webVersion}/dist.tar.gz";
       hash = "sha256-v0o4G2mzd63sShJZRjijIFAUB+ocvF4jspxf841lZ8U=";
     };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   meta = {
     description = "File list/WebDAV program that supports multiple storages";
     homepage = "https://github.com/alist-org/alist";
+<<<<<<< HEAD
     changelog = "https://github.com/alist-org/alist/releases/tag/v${finalAttrs.version}";
+=======
+    changelog = "https://github.com/alist-org/alist/releases/tag/v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = with lib.licenses; [
       agpl3Only
       # alist-web
@@ -115,4 +153,8 @@ buildGoModule (finalAttrs: {
     ];
     mainProgram = "alist";
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

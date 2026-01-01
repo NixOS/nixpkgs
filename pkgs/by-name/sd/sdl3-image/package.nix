@@ -10,7 +10,10 @@
   validatePkgConfig,
   libpng,
   libjpeg,
+<<<<<<< HEAD
   libjxl,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
   # Boolean flags
   enableTests ? true,
@@ -20,7 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3-image";
+<<<<<<< HEAD
   version = "3.2.6";
+=======
+  version = "3.2.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "lib"
@@ -32,7 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL_image";
     tag = "release-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-CnUCqFq9ZaM/WQcmaCpQdjtjR9l5ymzgeqEJx7ZW/s4=";
+=======
+    hash = "sha256-/orQ+YfH0CV8DOqXFMF9fOT4YaVpC1t55xM3j520Png=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;
@@ -47,9 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
     sdl3
     libtiff
     libwebp
+<<<<<<< HEAD
     libjxl
   ]
   ++ (lib.optional (!stdenv.hostPlatform.isDarwin) libavif)
+=======
+    libavif
+  ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ (lib.optionals (!enableSTB) [
     libpng
     libjpeg
@@ -66,10 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDLIMAGE_BACKEND_IMAGEIO" enableImageIO)
     # enable tests
     (lib.cmakeBool "SDLIMAGE_TESTS" enableTests)
+<<<<<<< HEAD
     # enable jxl
     (lib.cmakeBool "SDLIMAGE_JXL" true)
     # disable avif on darwin (see https://github.com/NixOS/nixpkgs/issues/400910)
     (lib.cmakeBool "SDLIMAGE_AVIF" (!stdenv.hostPlatform.isDarwin))
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   passthru.updateScript = nix-update-script {

@@ -46,11 +46,20 @@ stdenvNoCC.mkDerivation rec {
 
   checkTarget = "test_in_various_shells";
 
+<<<<<<< HEAD
   meta = {
     description = "Elegant option/argument parser for shell scripts (full support for bash and all POSIX shells)";
     homepage = "https://github.com/ko1nksm/getoptions";
     license = lib.licenses.cc0;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ matrss ];
+=======
+  meta = with lib; {
+    description = "Elegant option/argument parser for shell scripts (full support for bash and all POSIX shells)";
+    homepage = "https://github.com/ko1nksm/getoptions";
+    license = licenses.cc0;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ matrss ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

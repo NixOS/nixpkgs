@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bizkaibus" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to get information about Bizkaibus buses";
     homepage = "https://github.com/UgaitzEtxebarria/BizkaibusRTPI";
     changelog = "https://github.com/UgaitzEtxebarria/BizkaibusRTPI/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to get information about Bizkaibus buses";
+    homepage = "https://github.com/UgaitzEtxebarria/BizkaibusRTPI";
+    changelog = "https://github.com/UgaitzEtxebarria/BizkaibusRTPI/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

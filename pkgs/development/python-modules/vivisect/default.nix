@@ -63,11 +63,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vivisect" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python disassembler, debugger, emulator, and static analysis framework";
     homepage = "https://github.com/vivisect/vivisect";
     changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python disassembler, debugger, emulator, and static analysis framework";
+    homepage = "https://github.com/vivisect/vivisect";
+    changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

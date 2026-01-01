@@ -23,10 +23,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
+<<<<<<< HEAD
   meta = {
     description = "SubBand Codec Library";
     homepage = "https://www.bluez.org/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "SubBand Codec Library";
+    homepage = "https://www.bluez.org/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

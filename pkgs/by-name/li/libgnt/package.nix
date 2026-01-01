@@ -58,11 +58,19 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "python2" false)
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Ncurses toolkit for creating text-mode graphical user interfaces";
     homepage = "https://keep.imfreedom.org/libgnt/libgnt/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Ncurses toolkit for creating text-mode graphical user interfaces";
+    homepage = "https://keep.imfreedom.org/libgnt/libgnt/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ ony ];
   };
 }

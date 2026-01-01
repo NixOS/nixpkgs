@@ -50,11 +50,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Module to read SAS, SPSS and Stata files into pandas data frames";
     homepage = "https://github.com/Roche/pyreadstat";
     changelog = "https://github.com/Roche/pyreadstat/blob/${src.tag}/change_log.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ swflint ];
+=======
+  meta = with lib; {
+    description = "Module to read SAS, SPSS and Stata files into pandas data frames";
+    homepage = "https://github.com/Roche/pyreadstat";
+    changelog = "https://github.com/Roche/pyreadstat/blob/${src.tag}/change_log.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ swflint ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

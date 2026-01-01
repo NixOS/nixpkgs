@@ -11,11 +11,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sipp";
+<<<<<<< HEAD
   version = "3.7.5";
+=======
+  version = "3.7.3-unstable-2025-01-22";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "SIPp";
     repo = "sipp";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-W5KOvBBaUmyYJshYEg39QpkS8rrpGSEj4g3NZD29YrY=";
   };
@@ -25,6 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     echo '#define VERSION "v${finalAttrs.version}"' >> include/version.h
   '';
 
+=======
+    rev = "464cf74c7321069b51c10f0c37f19ba16c2e7138";
+    hash = "sha256-mloeBKgDXmsa/WAUhlDsgNdhK8dpisGf3ti5UQQchJ8=";
+    leaveDotGit = true;
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmakeFlags = [
     "-DUSE_PCAP=1"
     "-DUSE_SSL=1"

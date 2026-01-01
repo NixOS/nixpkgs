@@ -37,10 +37,17 @@ buildGoModule {
     cp -r static $out/share/dcs
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Debian Code Search";
     homepage = "https://github.com/Debian/dcs";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Debian Code Search";
+    homepage = "https://github.com/Debian/dcs";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     broken = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dcs.x86_64-darwin
   };

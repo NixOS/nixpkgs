@@ -37,10 +37,17 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "arcmenu";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Application menu for GNOME Shell, designed to provide a more traditional user experience and workflow";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dkabot ];
+=======
+  meta = with lib; {
+    description = "Application menu for GNOME Shell, designed to provide a more traditional user experience and workflow";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dkabot ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.com/arcmenu/ArcMenu";
   };
 }

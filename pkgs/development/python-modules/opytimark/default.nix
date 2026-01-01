@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opytimark" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library consisting of optimization benchmarking functions";
     homepage = "https://github.com/gugarosa/opytimark";
     changelog = "https://github.com/gugarosa/opytimark/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ firefly-cpp ];
+=======
+  meta = with lib; {
+    description = "Library consisting of optimization benchmarking functions";
+    homepage = "https://github.com/gugarosa/opytimark";
+    changelog = "https://github.com/gugarosa/opytimark/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ firefly-cpp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

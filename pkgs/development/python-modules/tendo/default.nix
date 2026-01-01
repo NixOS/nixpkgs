@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tendo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Adds basic functionality that is not provided by Python";
     homepage = "https://github.com/pycontribs/tendo";
     changelog = "https://github.com/pycontribs/tendo/releases/tag/v${version}";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Adds basic functionality that is not provided by Python";
+    homepage = "https://github.com/pycontribs/tendo";
+    changelog = "https://github.com/pycontribs/tendo/releases/tag/v${version}";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

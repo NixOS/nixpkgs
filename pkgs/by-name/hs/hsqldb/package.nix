@@ -39,11 +39,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://hsqldb.org";
     description = "Relational, embedable database management system written in Java and a set of related tools";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "http://hsqldb.org";
+    description = "Relational, embedable database management system written in Java and a set of related tools";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = platforms.unix;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

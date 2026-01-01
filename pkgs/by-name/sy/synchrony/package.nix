@@ -4,12 +4,19 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
   fetchurl,
   runCommand,
 }:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenv.mkDerivation (finalAttrs: {
   pname = "synchrony";
   version = "2.4.5";
@@ -23,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
   ];
@@ -30,6 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
+=======
+    pnpm_9.configHook
+  ];
+
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-+hS4UK7sncCxv6o5Yl72AeY+LSGLnUTnKosAYB6QsP0=";
   };

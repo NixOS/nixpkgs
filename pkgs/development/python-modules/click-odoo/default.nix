@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Odoo scripting helper library";
     mainProgram = "click-odoo";
     homepage = "https://github.com/acsone/click-odoo";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ yajo ];
+=======
+  meta = with lib; {
+    description = "Odoo scripting helper library";
+    mainProgram = "click-odoo";
+    homepage = "https://github.com/acsone/click-odoo";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ yajo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

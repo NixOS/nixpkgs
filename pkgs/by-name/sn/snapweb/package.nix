@@ -31,10 +31,18 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Web client for Snapcast";
     homepage = "https://github.com/badaix/snapweb";
     maintainers = with lib.maintainers; [ ettom ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Web client for Snapcast";
+    homepage = "https://github.com/badaix/snapweb";
+    maintainers = with maintainers; [ ettom ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

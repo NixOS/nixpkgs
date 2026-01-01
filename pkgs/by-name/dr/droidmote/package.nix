@@ -57,12 +57,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Control your computer from your couch";
     homepage = "https://www.videomap.it/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ atila ];
+=======
+  meta = with lib; {
+    description = "Control your computer from your couch";
+    homepage = "https://www.videomap.it/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ atila ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.attrNames srcs;
   };
 }

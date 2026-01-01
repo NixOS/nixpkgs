@@ -54,12 +54,21 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Project manager and build tool for GNU guile";
     mainProgram = "hall";
     homepage = "https://gitlab.com/a-sassmannshausen/guile-hall";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Project manager and build tool for GNU guile";
+    mainProgram = "hall";
+    homepage = "https://gitlab.com/a-sassmannshausen/guile-hall";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 }

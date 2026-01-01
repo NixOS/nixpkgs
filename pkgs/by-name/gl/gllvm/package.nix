@@ -27,10 +27,17 @@ buildGoModule {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/SRI-CSL/gllvm";
     description = "Whole Program LLVM: wllvm ported to go";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/SRI-CSL/gllvm";
+    description = "Whole Program LLVM: wllvm ported to go";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

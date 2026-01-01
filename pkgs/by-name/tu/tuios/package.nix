@@ -10,16 +10,27 @@
 
 buildGoModule (finalAttrs: {
   pname = "tuios";
+<<<<<<< HEAD
   version = "0.5.1";
+=======
+  version = "0.3.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Gaurav-Gosain";
     repo = "tuios";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-OBdVnKt3XkuzztgNcwla/EGqmAhNuRGkT6boJw5UITQ=";
   };
 
   vendorHash = "sha256-kDZRT/Ua+SaxyZ6RI9ZY2tqBgQBWo755fvQVRupBsUc=";
+=======
+    hash = "sha256-pIzHf4JT+BEa4On92uWscbZoEd3eRjf/B+aUART2V4M=";
+  };
+
+  vendorHash = "sha256-tu8GXE/wMq2i61gTlgdbfL38ehVppa/fz1WVXrsX+vk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"

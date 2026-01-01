@@ -14,10 +14,18 @@ buildFishPlugin {
     sha256 = "sha256-cXOYvdn74H4rkMWSC7G6bT4wa9d3/3vRnKed2ixRnuA=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Powerline-style, Git-aware fish theme optimized for awesome";
     homepage = "https://github.com/oh-my-fish/theme-bobthefish";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scrumplex ];
+=======
+  meta = with lib; {
+    description = "Powerline-style, Git-aware fish theme optimized for awesome";
+    homepage = "https://github.com/oh-my-fish/theme-bobthefish";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Scrumplex ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -5,7 +5,11 @@
   cmake,
   extra-cmake-modules,
   fftw,
+<<<<<<< HEAD
   krita-unwrapped,
+=======
+  krita,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libsForQt5,
 }:
 
@@ -36,7 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fftw
+<<<<<<< HEAD
     krita-unwrapped
+=======
+    krita.unwrapped
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libsForQt5.kcoreaddons
   ];
 
@@ -48,10 +56,18 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_SYSTEM_GMIC" false)
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/amyspark/gmic";
     description = "GMic plugin for Krita";
     license = lib.licenses.cecill21;
     maintainers = with lib.maintainers; [ lelgenio ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/amyspark/gmic";
+    description = "GMic plugin for Krita";
+    license = lib.licenses.cecill21;
+    maintainers = with maintainers; [ lelgenio ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

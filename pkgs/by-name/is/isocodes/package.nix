@@ -31,11 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://salsa.debian.org/iso-codes-team/iso-codes";
     description = "Various ISO codes packaged as XML files";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://salsa.debian.org/iso-codes-team/iso-codes";
+    description = "Various ISO codes packaged as XML files";
+    license = licenses.lgpl21;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "iso-codes" ];
   };
 })

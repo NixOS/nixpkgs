@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
   # The tests require contacting external servers.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to send files and directories, based on iroh";
     homepage = "https://iroh.computer/sendme";
@@ -28,6 +29,16 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ cameronfyfe ];
+=======
+  meta = with lib; {
+    description = "Tool to send files and directories, based on iroh";
+    homepage = "https://iroh.computer/sendme";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ cameronfyfe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sendme";
   };
 }

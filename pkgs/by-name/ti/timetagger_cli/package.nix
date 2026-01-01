@@ -29,11 +29,19 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "timetagger_cli" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Track your time from the command-line";
     homepage = "https://github.com/almarklein/timetagger_cli";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Track your time from the command-line";
+    homepage = "https://github.com/almarklein/timetagger_cli";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "timetagger";
   };
 }

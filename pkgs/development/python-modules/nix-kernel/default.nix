@@ -44,10 +44,17 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nix-kernel" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple jupyter kernel for nix-repl";
     homepage = "https://github.com/GTrunSec/nix-kernel";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple jupyter kernel for nix-repl";
+    homepage = "https://github.com/GTrunSec/nix-kernel";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

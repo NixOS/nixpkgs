@@ -19,12 +19,21 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/anned20/kicli";
     description = "CLI interface to the Kimai time tracking project";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ poelzi ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/anned20/kicli";
+    description = "CLI interface to the Kimai time tracking project";
+    license = licenses.mit;
+    maintainers = with maintainers; [ poelzi ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kicli";
   };
 }

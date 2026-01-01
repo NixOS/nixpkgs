@@ -62,10 +62,18 @@ stdenv.mkDerivation rec {
     espeak-ng = espeak-ng';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ library for converting text to phonemes for Piper";
     homepage = "https://github.com/rhasspy/piper-phonemize";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "C++ library for converting text to phonemes for Piper";
+    homepage = "https://github.com/rhasspy/piper-phonemize";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

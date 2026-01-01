@@ -35,11 +35,19 @@ stdenv.mkDerivation rec {
     cp cpdfmanual.pdf $out/share/doc/cpdf/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "PDF Command Line Tools";
     homepage = "https://www.coherentpdf.com/";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "PDF Command Line Tools";
+    homepage = "https://www.coherentpdf.com/";
+    license = licenses.agpl3Only;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cpdf";
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.10";

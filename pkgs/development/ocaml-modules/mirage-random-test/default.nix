@@ -24,10 +24,18 @@ buildDunePackage rec {
     mirage-random
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stub random device implementation for testing";
     homepage = "https://github.com/mirage/mirage-random";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Stub random device implementation for testing";
+    homepage = "https://github.com/mirage/mirage-random";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

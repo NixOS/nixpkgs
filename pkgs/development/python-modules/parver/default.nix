@@ -36,10 +36,17 @@ buildPythonPackage rec {
     pretend
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Allows parsing and manipulation of PEP 440 version numbers";
     homepage = "https://github.com/RazerM/parver";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Allows parsing and manipulation of PEP 440 version numbers";
+    homepage = "https://github.com/RazerM/parver";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

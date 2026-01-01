@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ubjson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Universal Binary JSON draft-12 serializer for Python";
     homepage = "https://github.com/Iotic-Labs/py-ubjson";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Universal Binary JSON draft-12 serializer for Python";
+    homepage = "https://github.com/Iotic-Labs/py-ubjson";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioemonitor" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for SiteSage Emonitor";
     mainProgram = "my_example";
     homepage = "https://github.com/bdraco/aioemonitor";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client for SiteSage Emonitor";
+    mainProgram = "my_example";
+    homepage = "https://github.com/bdraco/aioemonitor";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

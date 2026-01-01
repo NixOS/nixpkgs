@@ -42,14 +42,22 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
+<<<<<<< HEAD
   version = "1.14.0";
+=======
+  version = "1.13.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-server";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Yq5dYaX+/hLvmPpHI8rhCcSlabQBPAyUrIQRgnoi17c=";
+=======
+    hash = "sha256-uW4q/uwEkKASZBPQ994s5+t5Urg7/nZIaIv4hqyIffM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [
@@ -114,6 +122,10 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ]
   ++ optional-dependencies.all;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # avoid dependencies on many Qt things just to run one singular test

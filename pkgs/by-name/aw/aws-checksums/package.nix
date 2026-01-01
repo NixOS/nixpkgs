@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "HW accelerated CRC32c and CRC32";
     homepage = "https://github.com/awslabs/aws-checksums";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "HW accelerated CRC32c and CRC32";
+    homepage = "https://github.com/awslabs/aws-checksums";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

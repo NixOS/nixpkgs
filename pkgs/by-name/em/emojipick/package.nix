@@ -63,11 +63,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Get a selection of emojis with dmenu or rofi";
     homepage = "https://github.com/thingsiplay/emojipick";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alexnortung ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Get a selection of emojis with dmenu or rofi";
+    homepage = "https://github.com/thingsiplay/emojipick";
+    license = licenses.mit;
+    maintainers = with maintainers; [ alexnortung ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

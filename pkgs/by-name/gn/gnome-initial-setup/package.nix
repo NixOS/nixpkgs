@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "gnome-initial-setup"; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, easy, and safe way to prepare a new system";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-initial-setup";
@@ -101,5 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "Simple, easy, and safe way to prepare a new system";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-initial-setup";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-initial-setup/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -20,10 +20,18 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sdispater/pastel";
     description = "Bring colors to your terminal";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sdispater/pastel";
+    description = "Bring colors to your terminal";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jakewaksbaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

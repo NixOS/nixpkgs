@@ -29,11 +29,19 @@ stdenv.mkDerivation rec {
     installShellCompletion --zsh auto-completion/zsh/_ddgr
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jarun/ddgr";
     description = "Search DuckDuckGo from the terminal";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jarun/ddgr";
+    description = "Search DuckDuckGo from the terminal";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ceedubs
       markus1189
     ];

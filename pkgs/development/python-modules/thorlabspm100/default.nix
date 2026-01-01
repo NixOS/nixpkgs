@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ThorlabsPM100" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interface to the PM100A/D power meter from Thorlabs";
     homepage = "https://github.com/clade/ThorlabsPM100/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fsagbuya ];
+=======
+  meta = with lib; {
+    description = "Interface to the PM100A/D power meter from Thorlabs";
+    homepage = "https://github.com/clade/ThorlabsPM100/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fsagbuya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

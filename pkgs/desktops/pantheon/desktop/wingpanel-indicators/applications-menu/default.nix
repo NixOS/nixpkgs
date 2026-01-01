@@ -22,13 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
+<<<<<<< HEAD
   version = "8.0.2";
+=======
+  version = "8.0.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "applications-menu";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-uc+enFOeYL91fFWaDY+43EJ4VomGqZQ7uZ3+dYm66SI=";
+=======
+    sha256 = "sha256-bwQI41Znm75GFoXxSbWkY9daAJTMvUo+UHyyPmvzOUA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -73,11 +81,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight and stylish app launcher for Pantheon";
     homepage = "https://github.com/elementary/applications-menu";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Lightweight and stylish app launcher for Pantheon";
+    homepage = "https://github.com/elementary/applications-menu";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

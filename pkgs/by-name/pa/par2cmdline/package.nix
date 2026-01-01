@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/Parchive/par2cmdline";
     description = "PAR 2.0 compatible file verification and repair tool";
     longDescription = ''
@@ -26,8 +30,14 @@ stdenv.mkDerivation rec {
       damage in data files and repair them if necessary. It can be used with
       any kind of file.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

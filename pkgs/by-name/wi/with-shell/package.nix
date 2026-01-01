@@ -25,7 +25,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/mchav/With";
     description = "Command prefixing for continuous workflow using a single tool";
     longDescription = ''
@@ -70,9 +74,15 @@ stdenv.mkDerivation {
 
       To exit use either :q or :exit.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "with";
   };
 }

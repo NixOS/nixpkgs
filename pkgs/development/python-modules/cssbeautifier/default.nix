@@ -34,12 +34,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cssbeautifier" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "CSS unobfuscator and beautifier";
     mainProgram = "css-beautify";
     homepage = "https://github.com/beautifier/js-beautify";
     changelog = "https://github.com/beautifier/js-beautify/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ traxys ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ traxys ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,18 @@ buildKodiAddon rec {
     pythonPath = "lib";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/zach-morris/script.module.archive_tool";
     description = "Set of common python functions to work with the Kodi archive virtual file system (vfs) binary addons";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/zach-morris/script.module.archive_tool";
+    description = "Set of common python functions to work with the Kodi archive virtual file system (vfs) binary addons";
+    license = licenses.gpl3Plus;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,10 +22,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pymsgbox" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, cross-platform, pure Python module for JavaScript-like message boxes";
     homepage = "https://github.com/asweigart/PyMsgBox";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Simple, cross-platform, pure Python module for JavaScript-like message boxes";
+    homepage = "https://github.com/asweigart/PyMsgBox";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

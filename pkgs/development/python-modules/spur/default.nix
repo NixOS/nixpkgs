@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spur" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to run commands and manipulate files locally or over SSH";
     homepage = "https://github.com/mwilliamson/spur.py";
     changelog = "https://github.com/mwilliamson/spur.py/blob/0.3.23/CHANGES";
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to run commands and manipulate files locally or over SSH";
+    homepage = "https://github.com/mwilliamson/spur.py";
+    changelog = "https://github.com/mwilliamson/spur.py/blob/0.3.23/CHANGES";
+    license = with licenses; [ bsd2 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

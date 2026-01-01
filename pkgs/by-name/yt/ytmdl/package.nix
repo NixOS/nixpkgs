@@ -57,11 +57,19 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ytmdl" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/deepjyoti30/ytmdl";
     description = "YouTube Music Downloader";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ j0hax ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/deepjyoti30/ytmdl";
+    description = "YouTube Music Downloader";
+    license = licenses.mit;
+    maintainers = with maintainers; [ j0hax ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ytmdl";
   };
 }

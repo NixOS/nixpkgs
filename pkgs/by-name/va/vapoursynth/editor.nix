@@ -63,12 +63,21 @@ let
       inherit withPlugins;
     };
 
+<<<<<<< HEAD
     meta = {
       description = "Cross-platform editor for VapourSynth scripts";
       homepage = "https://github.com/YomikoR/VapourSynth-Editor";
       license = lib.licenses.mit;
       maintainers = [ ];
       platforms = lib.platforms.all;
+=======
+    meta = with lib; {
+      description = "Cross-platform editor for VapourSynth scripts";
+      homepage = "https://github.com/YomikoR/VapourSynth-Editor";
+      license = licenses.mit;
+      maintainers = [ ];
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

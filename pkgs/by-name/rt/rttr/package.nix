@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required (VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "C++ Reflection Library";
     homepage = "https://www.rttr.org";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "C++ Reflection Library";
+    homepage = "https://www.rttr.org";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

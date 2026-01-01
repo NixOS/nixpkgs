@@ -43,11 +43,20 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert a .rpm file to a .tar.gz archive";
     homepage = "http://slackware.com/config/packages.php";
     license = lib.licenses.bsd1;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Convert a .rpm file to a .tar.gz archive";
+    homepage = "http://slackware.com/config/packages.php";
+    license = licenses.bsd1;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

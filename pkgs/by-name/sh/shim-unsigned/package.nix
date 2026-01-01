@@ -54,15 +54,26 @@ stdenv.mkDerivation rec {
     fallbackTarget = "fb${archSuffix}.efi";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "UEFI shim loader";
     homepage = "https://github.com/rhboot/shim";
     license = lib.licenses.bsd1;
+=======
+  meta = with lib; {
+    description = "UEFI shim loader";
+    homepage = "https://github.com/rhboot/shim";
+    license = licenses.bsd1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       baloo
       raitobezarius
     ];

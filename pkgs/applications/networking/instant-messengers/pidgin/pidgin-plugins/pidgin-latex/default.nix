@@ -43,11 +43,19 @@ stdenv.mkDerivation {
     }";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/projects/pidgin-latex/";
     description = "LaTeX rendering plugin for Pidgin IM";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/pidgin-latex/";
+    description = "LaTeX rendering plugin for Pidgin IM";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

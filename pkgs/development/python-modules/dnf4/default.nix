@@ -92,6 +92,7 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Package manager based on libdnf and libsolv. Replaces YUM";
     homepage = "https://github.com/rpm-software-management/dnf";
@@ -100,5 +101,15 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "dnf";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Package manager based on libdnf and libsolv. Replaces YUM";
+    homepage = "https://github.com/rpm-software-management/dnf";
+    changelog = "https://github.com/rpm-software-management/dnf/releases/tag/${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ katexochen ];
+    mainProgram = "dnf";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

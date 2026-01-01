@@ -29,6 +29,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "setuptools_scm_git_archive" ];
 
+<<<<<<< HEAD
   meta = {
     description = "setuptools_scm plugin for git archives";
     homepage = "https://github.com/Changaco/setuptools_scm_git_archive";
@@ -36,5 +37,14 @@ buildPythonPackage rec {
     maintainers = [ ];
     # https://github.com/Changaco/setuptools_scm_git_archive/pull/22
     broken = lib.versionAtLeast setuptools-scm.version "8";
+=======
+  meta = with lib; {
+    description = "setuptools_scm plugin for git archives";
+    homepage = "https://github.com/Changaco/setuptools_scm_git_archive";
+    license = licenses.mit;
+    maintainers = [ ];
+    # https://github.com/Changaco/setuptools_scm_git_archive/pull/22
+    broken = versionAtLeast setuptools-scm.version "8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

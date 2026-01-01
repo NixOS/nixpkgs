@@ -52,11 +52,19 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://jimmac.musichall.cz";
     description = "Style neutral scalable cursor theme";
     platforms = lib.platforms.all;
     license = lib.licenses.cc-by-sa-30;
+=======
+  meta = with lib; {
+    homepage = "http://jimmac.musichall.cz";
+    description = "Style neutral scalable cursor theme";
+    platforms = platforms.all;
+    license = licenses.cc-by-sa-30;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -54,11 +54,20 @@ stdenvNoCC.mkDerivation {
     ${toWrapScriptLines "extract-vmlinux"}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Standalone scripts from <linux>/scripts";
     homepage = "https://www.kernel.org/";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.phip1611 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Standalone scripts from <linux>/scripts";
+    homepage = "https://www.kernel.org/";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.phip1611 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,10 +22,18 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ alsa-lib ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savonet/ocaml-alsa";
     description = "OCaml interface for libasound2";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savonet/ocaml-alsa";
+    description = "OCaml interface for libasound2";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

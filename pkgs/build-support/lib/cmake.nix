@@ -12,9 +12,13 @@ let
     [
       "-DCMAKE_SYSTEM_NAME=${
         findFirst isString "Generic" (
+<<<<<<< HEAD
           # uname -s is CYGWIN_NT[...] on cygwin, but cmake expects CYGWIN
           optional (stdenv.hostPlatform.isCygwin) "CYGWIN"
           ++ optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system
+=======
+          optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         )
       }"
     ]

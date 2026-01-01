@@ -27,7 +27,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "mkdocs_gitlab_plugin" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "MkDocs plugin to transform strings into links to a Gitlab repository";
     longDescription = ''
       Transform handles such as #1234, %56, !789, &12 or $34 into links to a gitlab repository,
@@ -35,7 +39,12 @@ buildPythonPackage {
       Before the #/%/!/&/$ is needed either a space, a '(', or a '['.
     '';
     homepage = "https://gitlab.inria.fr/vidjil/mkdocs-gitlab-plugin";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ snpschaaf ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ snpschaaf ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,9 +22,16 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extension for adding a simple Blog, News or Announcements section to a Sphinx website";
     homepage = "https://github.com/prometheusresearch/sphinxcontrib-newsfeed";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Extension for adding a simple Blog, News or Announcements section to a Sphinx website";
+    homepage = "https://github.com/prometheusresearch/sphinxcontrib-newsfeed";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

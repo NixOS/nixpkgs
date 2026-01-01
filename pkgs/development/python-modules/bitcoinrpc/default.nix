@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bitcoinrpc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bitcoin JSON-RPC client";
     homepage = "https://github.com/bibajz/bitcoin-python-async-rpc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Bitcoin JSON-RPC client";
+    homepage = "https://github.com/bibajz/bitcoin-python-async-rpc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

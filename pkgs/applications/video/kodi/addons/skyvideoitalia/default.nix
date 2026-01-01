@@ -31,10 +31,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.github.com/nixxo/plugin.video.skyvideoitalia";
     description = "Show video content from the website of Sky Italia (video.sky.it). News, sport, entertainment and much more";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://www.github.com/nixxo/plugin.video.skyvideoitalia";
+    description = "Show video content from the website of Sky Italia (video.sky.it). News, sport, entertainment and much more";
+    license = licenses.gpl3Plus;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

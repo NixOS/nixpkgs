@@ -92,7 +92,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Finest emoji you can use legally (formerly EmojiOne)";
     longDescription = ''
       Updated for 2024! JoyPixels 9.0 includes 3,820 originally crafted icon
@@ -116,12 +120,20 @@ stdenv.mkDerivation rec {
         free = false;
         redistributable = true;
       };
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       toonn
       jtojnar
     ];
     # Not quite accurate since it's a font, not a program, but clearly
     # indicates we're not actually building it from source.
+<<<<<<< HEAD
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+=======
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -99,12 +99,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lexicon" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Manipulate DNS records on various DNS providers in a standardized way";
     mainProgram = "lexicon";
     homepage = "https://github.com/AnalogJ/lexicon";
     changelog = "https://github.com/AnalogJ/lexicon/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ aviallon ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ aviallon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

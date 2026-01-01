@@ -24,11 +24,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pgfplots.sourceforge.net";
     description = "TeX package to draw plots directly in TeX in two and three dimensions";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://pgfplots.sourceforge.net";
+    description = "TeX package to draw plots directly in TeX in two and three dimensions";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

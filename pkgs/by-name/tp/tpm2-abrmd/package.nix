@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ tpm2-tss ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "TPM2 resource manager, accessible via D-Bus";
     mainProgram = "tpm2-abrmd";
@@ -66,6 +67,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "TPM2 resource manager, accessible via D-Bus";
+    mainProgram = "tpm2-abrmd";
+    homepage = "https://github.com/tpm2-software/tpm2-tools";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
       scottstephens
     ];

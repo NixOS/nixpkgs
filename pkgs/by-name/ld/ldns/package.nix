@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/ldns-config" "$dev"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library with the aim of simplifying DNS programming in C";
     homepage = "https://www.nlnetlabs.nl/projects/ldns/";
@@ -66,5 +67,14 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "drill";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library with the aim of simplifying DNS programming in C";
+    homepage = "https://www.nlnetlabs.nl/projects/ldns/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "drill";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1,10 +1,16 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
   fetchFromGitHub,
   rustPlatform,
   libcosmicAppHook,
   just,
+=======
+  fetchFromGitHub,
+  rustPlatform,
+  libcosmicAppHook,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pulseaudio,
   pipewire,
   libinput,
@@ -15,13 +21,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-osd";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "1.0.0-beta.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-osd";
     tag = "epoch-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-InQdJ3ddyDg8SfkIaK2T4r+gS5Cr0h93afwBGmI40fk=";
   };
 
@@ -29,6 +40,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     just
+=======
+    hash = "sha256-gAmsLScFKgs2bUf0c4NuP2Zuuz+vz8Y7w4uQtKzXSRo=";
+  };
+
+  cargoHash = "sha256-cpNp/by8TU2lbb2d3smxUr48mTSLnoPXseiRZScwSXI=";
+
+  nativeBuildInputs = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libcosmicAppHook
     rustPlatform.bindgenHook
   ];
@@ -40,6 +59,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pipewire
   ];
 
+<<<<<<< HEAD
   dontUseJustBuild = true;
   dontUseJustCheck = true;
 
@@ -52,6 +72,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 
   passthru = {
@@ -63,9 +85,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+<<<<<<< HEAD
 
     updateScript = nix-update-script {
       extraArgs = [
+=======
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "--version-regex"
         "epoch-(.*)"
       ];

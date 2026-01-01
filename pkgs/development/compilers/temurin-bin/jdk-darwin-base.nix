@@ -73,19 +73,33 @@ let
       bundle = "${finalAttrs.finalPackage}/Library/Java/JavaVirtualMachines/${name-prefix}-${lib.versions.major finalAttrs.version}.jdk";
     };
 
+<<<<<<< HEAD
     meta = {
       license = with lib.licenses; [
         gpl2
         classpathException20
       ];
       sourceProvenance = with lib.sourceTypes; [
+=======
+    meta = with lib; {
+      license = with licenses; [
+        gpl2
+        classpathException20
+      ];
+      sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         binaryNativeCode
         binaryBytecode
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
       platforms = map (arch: arch + "-darwin") providedCpuTypes; # some inherit jre.meta.platforms
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [ taku0 ];
       teams = [ lib.teams.java ];
+=======
+      maintainers = with maintainers; [ taku0 ];
+      teams = [ teams.java ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit knownVulnerabilities;
       mainProgram = "java";
     };

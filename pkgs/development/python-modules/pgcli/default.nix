@@ -62,7 +62,11 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_application_name_db_uri" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command-line interface for PostgreSQL";
     mainProgram = "pgcli";
     longDescription = ''
@@ -71,8 +75,13 @@ buildPythonPackage rec {
     '';
     homepage = "https://pgcli.com";
     changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       SuperSandro2000
     ];
   };

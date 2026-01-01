@@ -1,6 +1,10 @@
 {
   lib,
+<<<<<<< HEAD
   gcc15Stdenv,
+=======
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   pkg-config,
   cmake,
@@ -16,7 +20,11 @@
   nix-update-script,
 }:
 
+<<<<<<< HEAD
 gcc15Stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation (finalAttrs: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "hypridle";
   version = "0.1.7";
 

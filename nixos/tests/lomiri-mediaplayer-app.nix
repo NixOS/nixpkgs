@@ -25,7 +25,11 @@ in
               ];
             }
             ''
+<<<<<<< HEAD
               magick -size 600x600 canvas:black -pointsize 32 -fill white -annotate +100+100 '${ocrContent}' output.png
+=======
+              magick -size 600x600 canvas:white -pointsize 20 -fill black -annotate +100+100 '${ocrContent}' output.png
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               ffmpeg -re -loop 1 -i output.png -c:v libvpx -b:v 200K -t 120 $out -loglevel fatal
             '';
         systemPackages = with pkgs.lomiri; [

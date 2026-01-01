@@ -45,10 +45,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest7CheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generator of ANSI C tracers which output CTF data streams";
     mainProgram = "barectf";
     homepage = "https://github.com/efficios/barectf";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Generator of ANSI C tracers which output CTF data streams";
+    mainProgram = "barectf";
+    homepage = "https://github.com/efficios/barectf";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
     install -D -t $out/lib libzxcvbn.so*
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tsyrogit/zxcvbn-c";
     description = "C/C++ implementation of the zxcvbn password strength estimation";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ xurei ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tsyrogit/zxcvbn-c";
+    description = "C/C++ implementation of the zxcvbn password strength estimation";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ xurei ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

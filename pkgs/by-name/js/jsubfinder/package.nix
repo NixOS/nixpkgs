@@ -17,11 +17,20 @@ buildGoModule {
 
   vendorHash = "sha256-pr4KkszyzEl+yLJousx29tr7UZDJf0arEfXBb7eumww=";
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to search for in Javascript hidden subdomains and secrets";
     mainProgram = "jsubfinder";
     homepage = "https://github.com/ThreatUnkown/jsubfinder";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to search for in Javascript hidden subdomains and secrets";
+    mainProgram = "jsubfinder";
+    homepage = "https://github.com/ThreatUnkown/jsubfinder";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

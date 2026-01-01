@@ -43,12 +43,21 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
+<<<<<<< HEAD
     meta = {
       description = "Commands for showing the differences between files (diff, cmp, etc.)";
       homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
       license = lib.licenses.gpl3Only;
       teams = [ lib.teams.minimal-bootstrap ];
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      description = "Commands for showing the differences between files (diff, cmp, etc.)";
+      homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
+      license = licenses.gpl3Only;
+      teams = [ teams.minimal-bootstrap ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

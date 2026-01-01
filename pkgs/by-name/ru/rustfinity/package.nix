@@ -20,7 +20,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Requires network and fs access
   checkFlags = [

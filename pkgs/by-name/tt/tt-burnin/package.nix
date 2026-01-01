@@ -36,6 +36,11 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     mainProgram = "tt-burnin";
     description = "Command line utility to run a high power consumption workload on TT devices";

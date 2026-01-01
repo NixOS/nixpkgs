@@ -65,16 +65,29 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = lib.singleton (perl.withPackages (p: [ p.TestCommand ]));
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
     # released under a variant of the MIT license
     # https://spdx.org/licenses/MIT-feh.html
+<<<<<<< HEAD
     license = lib.licenses.mit-feh;
     maintainers = with lib.maintainers; [
       gepbird
     ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit-feh;
+    maintainers = with maintainers; [
+      gepbird
+      globin
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "feh";
   };
 })

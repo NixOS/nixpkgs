@@ -18,18 +18,30 @@
   nix-update-script,
 }:
 let
+<<<<<<< HEAD
   version = "1.3.21";
+=======
+  version = "1.3.20";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "michaelb";
     repo = "sniprun";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-L/OTi6vHyfcvlVgpgjiU3MBCd6v00GKlAkUwBm4X500=";
+=======
+    hash = "sha256-z8viNr1TBGfWqgjfZKYJTEa1/KytKBmLbqcQrAiTZyc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   sniprun-bin = rustPlatform.buildRustPackage {
     pname = "sniprun-bin";
     inherit version src;
 
+<<<<<<< HEAD
     cargoHash = "sha256-6xh4YyXGIqrU9ixQ6QDCGDtaROoPe8iSMlytclbqqtY=";
+=======
+    cargoHash = "sha256-Ki1IFQzG4rOakGX5HsYWL8GeQ53dN7WAIZ113+bwcvI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     nativeBuildInputs = [ makeWrapper ];
 

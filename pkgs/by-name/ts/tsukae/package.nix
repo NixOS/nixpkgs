@@ -17,11 +17,20 @@ buildGoModule {
 
   vendorHash = "sha256-Q0WOzyJGnTXTmj7ZPKyVSnWuWb4bbDjDpgftQ1Opf/I=";
 
+<<<<<<< HEAD
   meta = {
     description = "Show off your most used shell commands";
     homepage = "https://github.com/irevenko/tsukae";
     license = lib.licenses.mit;
     mainProgram = "tsukae";
     maintainers = with lib.maintainers; [ l3af ];
+=======
+  meta = with lib; {
+    description = "Show off your most used shell commands";
+    homepage = "https://github.com/irevenko/tsukae";
+    license = licenses.mit;
+    mainProgram = "tsukae";
+    maintainers = with maintainers; [ l3af ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

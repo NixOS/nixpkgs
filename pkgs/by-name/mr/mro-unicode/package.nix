@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/phjamr/MroUnicode";
     description = "Unicode-compliant Mro font";
     maintainers = with lib.maintainers; [ mathnerd314 ];
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/phjamr/MroUnicode";
+    description = "Unicode-compliant Mro font";
+    maintainers = with maintainers; [ mathnerd314 ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

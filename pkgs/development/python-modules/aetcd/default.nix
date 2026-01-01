@@ -58,11 +58,20 @@ buildPythonPackage rec {
     "tests/integration/"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python asyncio-based client for etcd";
     homepage = "https://github.com/martyanov/aetcd";
     changelog = "https://github.com/martyanov/aetcd/blob/v${version}/docs/changelog.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python asyncio-based client for etcd";
+    homepage = "https://github.com/martyanov/aetcd";
+    changelog = "https://github.com/martyanov/aetcd/blob/v${version}/docs/changelog.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

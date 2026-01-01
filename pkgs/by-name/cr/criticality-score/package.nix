@@ -41,6 +41,10 @@ buildGo124Module rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Gives criticality score for an open source project";

@@ -33,11 +33,20 @@ buildGoModule rec {
       }"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Kernel {module, exploit} development tool";
     mainProgram = "out-of-tree";
     homepage = "https://out-of-tree.io";
     maintainers = [ lib.maintainers.dump_stack ];
     license = lib.licenses.agpl3Plus;
+=======
+  meta = with lib; {
+    description = "Kernel {module, exploit} development tool";
+    mainProgram = "out-of-tree";
+    homepage = "https://out-of-tree.io";
+    maintainers = [ maintainers.dump_stack ];
+    license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

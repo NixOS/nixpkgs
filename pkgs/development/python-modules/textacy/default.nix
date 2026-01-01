@@ -63,9 +63,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textacy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Higher-level text processing, built on spaCy";
     homepage = "https://textacy.readthedocs.io/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Higher-level text processing, built on spaCy";
+    homepage = "https://textacy.readthedocs.io/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

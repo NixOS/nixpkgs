@@ -29,10 +29,18 @@ buildDunePackage rec {
   ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
+<<<<<<< HEAD
   meta = {
     description = "OCaml API to manipulate real files (POSIX like) and filenames";
     homepage = "https://github.com/gildor478/ocaml-fileutils";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    description = "OCaml API to manipulate real files (POSIX like) and filenames";
+    homepage = "https://github.com/gildor478/ocaml-fileutils";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

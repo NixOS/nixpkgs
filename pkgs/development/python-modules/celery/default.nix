@@ -10,7 +10,10 @@
   click-repl,
   click,
   cryptography,
+<<<<<<< HEAD
   exceptiongroup,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   gevent,
   google-cloud-firestore,
@@ -30,7 +33,10 @@
   python-dateutil,
   pyyaml,
   setuptools,
+<<<<<<< HEAD
   tzlocal,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   vine,
   # The AMQP REPL depends on click-repl, which is incompatible with our version
   # of click.
@@ -39,14 +45,22 @@
 
 buildPythonPackage rec {
   pname = "celery";
+<<<<<<< HEAD
   version = "5.6.0";
+=======
+  version = "5.5.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "celery";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-BKF+p35Z5r/WRjuOaSFtESkbo+N+tbd0R40EWl0iU9I=";
+=======
+    hash = "sha256-+sickqRfSkBxhcO0W9na6Uov4kZ7S5oqpXXKX0iRQ0w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = lib.optionals (!withAmqpRepl) [
@@ -60,10 +74,15 @@ buildPythonPackage rec {
     click
     click-didyoumean
     click-plugins
+<<<<<<< HEAD
     exceptiongroup
     kombu
     python-dateutil
     tzlocal
+=======
+    kombu
+    python-dateutil
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     vine
   ]
   ++ lib.optionals withAmqpRepl [
@@ -97,7 +116,11 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTestPaths = [
     # test_eventlet touches network
@@ -112,7 +135,10 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+<<<<<<< HEAD
     "test_uses_utc_timezone"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # seems to only fail on higher core counts
     # AssertionError: assert 3 == 0
     "test_setup_security_disabled_serializers"
@@ -138,7 +164,11 @@ buildPythonPackage rec {
   meta = {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
+<<<<<<< HEAD
     changelog = "https://github.com/celery/celery/blob/${src.tag}/Changelog.rst";
+=======
+    changelog = "https://github.com/celery/celery/releases/tag/v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "celery";

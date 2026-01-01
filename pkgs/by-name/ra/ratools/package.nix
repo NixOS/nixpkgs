@@ -25,11 +25,20 @@ stdenv.mkDerivation rec {
     install -vD man/* -t $out/share/man/man8
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast, dynamic, multi-threading framework for IPv6 Router Advertisements";
     homepage = "https://github.com/danrl/ratools";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.fpletz ];
+=======
+  meta = with lib; {
+    description = "Fast, dynamic, multi-threading framework for IPv6 Router Advertisements";
+    homepage = "https://github.com/danrl/ratools";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.fpletz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

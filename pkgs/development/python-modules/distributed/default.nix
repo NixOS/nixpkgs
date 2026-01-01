@@ -27,14 +27,22 @@
 
 buildPythonPackage rec {
   pname = "distributed";
+<<<<<<< HEAD
   version = "2025.12.0";
+=======
+  version = "2025.11.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-srFYbAdlnxpxhSVFqd1geOBoD7bbpLNSlAUWNtefokM=";
+=======
+    hash = "sha256-b6kVrRPGbPyss0Wl56qQFjZOznLH9Y3HQlEHo9d6X9I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

@@ -49,6 +49,9 @@ lib.makeScope newScope (
 
     fosphor = callPackage ../development/gnuradio-modules/fosphor/default.nix { };
 
+<<<<<<< HEAD
     gr-difi = callPackage ../development/gnuradio-modules/gr-difi/default.nix { };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   }
 )

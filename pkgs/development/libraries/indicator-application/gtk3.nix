@@ -59,10 +59,15 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
+<<<<<<< HEAD
   env = {
     PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "$(out)/lib/systemd/user";
     PKG_CONFIG_INDICATOR3_0_4_INDICATORDIR = "$(out)/lib/indicators3/7/";
   };
+=======
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "$(out)/lib/systemd/user";
+  PKG_CONFIG_INDICATOR3_0_4_INDICATORDIR = "$(out)/lib/indicators3/7/";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Upstart is not used in NixOS
   postFixup = ''
@@ -70,11 +75,20 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/upstart
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Indicator to take menus from applications and place them in the panel";
     homepage = "https://launchpad.net/indicator-application";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.msteen ];
+=======
+  meta = with lib; {
+    description = "Indicator to take menus from applications and place them in the panel";
+    homepage = "https://launchpad.net/indicator-application";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.msteen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

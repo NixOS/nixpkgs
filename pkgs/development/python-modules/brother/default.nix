@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "brother" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for getting data from Brother laser and inkjet printers via SNMP";
     homepage = "https://github.com/bieniu/brother";
     changelog = "https://github.com/bieniu/brother/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for getting data from Brother laser and inkjet printers via SNMP";
+    homepage = "https://github.com/bieniu/brother";
+    changelog = "https://github.com/bieniu/brother/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

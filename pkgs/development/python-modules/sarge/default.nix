@@ -27,10 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sarge" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for subprocess which provides command pipeline functionality";
     homepage = "https://sarge.readthedocs.org/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python wrapper for subprocess which provides command pipeline functionality";
+    homepage = "https://sarge.readthedocs.org/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

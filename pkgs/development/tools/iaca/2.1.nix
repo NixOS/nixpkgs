@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
           $out/bin/iaca
     '';
   postFixup = "wrapProgram $out/bin/iaca --set LD_LIBRARY_PATH $out/lib";
+<<<<<<< HEAD
   meta = {
     description = "Intel Architecture Code Analyzer";
     homepage = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer/";
@@ -44,5 +45,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ kazcw ];
+=======
+  meta = with lib; {
+    description = "Intel Architecture Code Analyzer";
+    homepage = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ kazcw ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

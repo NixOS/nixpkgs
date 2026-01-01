@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     changelog = "https://github.com/kpcyrd/repro-env/releases/tag/v${finalAttrs.version}";

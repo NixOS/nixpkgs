@@ -73,14 +73,22 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
+<<<<<<< HEAD
   version = "2.32.15"; # N.B: if you change this, check if overrides are still up-to-date
+=======
+  version = "2.31.39"; # N.B: if you change this, check if overrides are still up-to-date
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-TOXoArw33exbMfKBnNSECymYS8hVzPoVOA7PWzbnroc=";
+=======
+    hash = "sha256-IuOamzLmnU3wIhgQIsWbU6GSRM2XLv0eH0gezp9IHNA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -208,6 +216,10 @@ py.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      bhipple
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       davegallant
       devusb
       anthonyroussel

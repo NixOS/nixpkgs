@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://brandy.matrixnetwork.co.uk/";
     description = "Matrix Brandy BASIC VI for Linux, Windows, MacOSX";
@@ -44,5 +45,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fiq ];
+=======
+  meta = with lib; {
+    homepage = "https://brandy.matrixnetwork.co.uk/";
+    description = "Matrix Brandy BASIC VI for Linux, Windows, MacOSX";
+    mainProgram = "brandy";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fiq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

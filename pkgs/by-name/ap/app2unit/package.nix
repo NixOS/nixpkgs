@@ -9,13 +9,21 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "app2unit";
+<<<<<<< HEAD
   version = "1.2.1";
+=======
+  version = "1.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "app2unit";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     sha256 = "sha256-DZ0W7SygOUmjIO0+K8hS9K1U+gSp1gA6Q15eXr6rOmo=";
+=======
+    sha256 = "sha256-M2sitlrQNSLthSaDH+R8gUcZ8i+o1ktf2SB/vvjyJEI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru.updateScript = nix-update-script { };

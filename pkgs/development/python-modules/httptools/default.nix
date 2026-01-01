@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httptools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of framework independent HTTP protocol utils";
     homepage = "https://github.com/MagicStack/httptools";
     changelog = "https://github.com/MagicStack/httptools/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Collection of framework independent HTTP protocol utils";
+    homepage = "https://github.com/MagicStack/httptools";
+    changelog = "https://github.com/MagicStack/httptools/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

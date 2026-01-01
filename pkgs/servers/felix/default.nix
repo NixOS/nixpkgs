@@ -17,11 +17,20 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -av * $out
   '';
+<<<<<<< HEAD
   meta = {
     description = "OSGi gateway";
     homepage = "https://felix.apache.org";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "OSGi gateway";
+    homepage = "https://felix.apache.org";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = [ maintainers.sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "felix.jar";
   };
 }

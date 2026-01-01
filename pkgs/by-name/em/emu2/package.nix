@@ -17,12 +17,21 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dmsc/emu2/";
     description = "Simple text-mode x86 + DOS emulator";
     platforms = lib.platforms.linux;
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dmsc/emu2/";
+    description = "Simple text-mode x86 + DOS emulator";
+    platforms = platforms.linux;
+    maintainers = [ ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "emu2";
   };
 }

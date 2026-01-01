@@ -14,9 +14,17 @@
   SDL2,
   gtk3,
   vulkan-loader,
+<<<<<<< HEAD
   makeDesktopItem,
   n64recomp,
   directx-shader-compiler,
+=======
+  graphicsmagick,
+  makeDesktopItem,
+  n64recomp,
+  directx-shader-compiler,
+  sdl_gamecontrollerdb,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   forceX11 ? false,
 }:
 
@@ -42,6 +50,7 @@ in
 
 llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   pname = "mariokart64recomp";
+<<<<<<< HEAD
   version = "0.9.1-unstable-2025-10-15";
 
   src = fetchFromGitHub {
@@ -56,6 +65,23 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
     '';
     fetchSubmodules = true;
   };
+=======
+  version = "0.9.1-unstable-2025-10-02";
+
+  src =
+    (fetchFromGitHub {
+      owner = "sonicdcer";
+      repo = "MarioKart64Recomp";
+      rev = "6f5791b3f4eae60bd341502b7af71372a9d531a9";
+      hash = "sha256-qVAXFUJYR4Q7WfbuY0h7ZhvIsgkfpD5W0eo5mUv4TEg=";
+      fetchSubmodules = true;
+    }).overrideAttrs
+      (_: {
+        GIT_CONFIG_COUNT = 1;
+        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
+        GIT_CONFIG_VALUE_0 = "git@github.com:";
+      });
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   strictDeps = true;
 

@@ -5,7 +5,11 @@ import subprocess
 import json
 import os.path
 
+<<<<<<< HEAD
 BRANCHES = ["5.10-lts", "5.15-lts", "6.1-lts", "6.6-lts"]
+=======
+BRANCHES = ["5.10-lts", "5.15-lts", "6.1-lts"]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 versions = dict()

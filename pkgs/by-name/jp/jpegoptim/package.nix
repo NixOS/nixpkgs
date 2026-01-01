@@ -21,12 +21,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg ];
 
+<<<<<<< HEAD
   meta = {
     description = "Optimize JPEG files";
     homepage = "https://www.kokkonen.net/tjko/projects.html";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Optimize JPEG files";
+    homepage = "https://www.kokkonen.net/tjko/projects.html";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jpegoptim";
   };
 }

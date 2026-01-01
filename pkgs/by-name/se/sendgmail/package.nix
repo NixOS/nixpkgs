@@ -4,7 +4,11 @@
   fetchFromGitHub,
   nix-update-script,
 }:
+<<<<<<< HEAD
 buildGoModule (finalAttrs: {
+=======
+buildGoModule {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "sendgmail";
   version = "0-unstable-2025-03-06";
 
@@ -15,7 +19,11 @@ buildGoModule (finalAttrs: {
     hash = "sha256-bzbTU9SA4dJKtQVkqESvV5o3l3MY4Uy7HDqo7jI3dhM=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/go/sendgmail";
+=======
+  sourceRoot = "source/go/sendgmail";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   vendorHash = "sha256-0pjcO2Ati+mUSw614uEL3CatHSgbgDUfOBE8bWpjmcw=";
 
@@ -29,4 +37,8 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "sendgmail";
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -46,12 +46,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unearth" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Utility to fetch and download Python packages";
     mainProgram = "unearth";
     homepage = "https://github.com/frostming/unearth";
     changelog = "https://github.com/frostming/unearth/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ betaboon ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ betaboon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

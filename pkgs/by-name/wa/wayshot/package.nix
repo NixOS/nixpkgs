@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
   # tests are off as they are broken and pr for integration testing is still WIP
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Native, blazing-fast screenshot tool for wlroots based compositors such as sway and river";
     homepage = "https://github.com/waycrate/wayshot";
@@ -28,6 +29,17 @@ rustPlatform.buildRustPackage rec {
       id3v1669
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Native, blazing-fast screenshot tool for wlroots based compositors such as sway and river";
+    homepage = "https://github.com/waycrate/wayshot";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+      dit7ya
+      id3v1669
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wayshot";
   };
 }

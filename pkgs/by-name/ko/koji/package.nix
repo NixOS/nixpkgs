@@ -15,18 +15,31 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koji";
+<<<<<<< HEAD
   version = "3.3.1";
+=======
+  version = "3.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cococonscious";
     repo = "koji";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-8z7lx0aVmA2gbydeJOBDVM2s6rwZpDLRaw1yqErwhJ4=";
   };
 
   cargoHash = "sha256-dnidKrH/HSUpm8sU51G4e74NgyyO3v2sTK4eDKSJujA=";
 
   env.OPENSSL_NO_VENDOR = 1;
+=======
+    hash = "sha256-+xtq4btFbOfiyFMDHXo6riSBMhAwTLQFuE91MUHtg5Q=";
+  };
+
+  cargoHash = "sha256-WiFXDXLJc2ictv29UoRFRpIpAqeJlEBEOvThXhLXLJA=";
+
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config

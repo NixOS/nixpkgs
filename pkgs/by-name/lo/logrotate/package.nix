@@ -47,12 +47,21 @@ stdenv.mkDerivation rec {
     nixos-logrotate = nixosTests.logrotate;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/logrotate/logrotate";
     description = "Rotates and compresses system logs";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.tobim ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/logrotate/logrotate";
+    description = "Rotates and compresses system logs";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.tobim ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "logrotate";
   };
 }

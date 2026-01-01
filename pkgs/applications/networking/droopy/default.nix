@@ -36,11 +36,19 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mini Web server that let others upload files to your computer";
     homepage = "http://stackp.online.fr/droopy";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.Profpatsch ];
+=======
+  meta = with lib; {
+    description = "Mini Web server that let others upload files to your computer";
+    homepage = "http://stackp.online.fr/droopy";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.Profpatsch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "droopy";
   };
 

@@ -45,12 +45,21 @@ stdenv.mkDerivation rec {
     cp doc/axelrc.example $out/share/doc/axelrc.example
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Console downloading program with some features for parallel connections for faster downloading";
     homepage = "https://github.com/axel-download-accelerator/axel";
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Console downloading program with some features for parallel connections for faster downloading";
+    homepage = "https://github.com/axel-download-accelerator/axel";
+    maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "axel";
   };
 }

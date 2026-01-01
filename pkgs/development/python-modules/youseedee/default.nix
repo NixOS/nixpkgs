@@ -47,10 +47,18 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for querying the Unicode Character Database";
     homepage = "https://github.com/simoncozens/youseedee";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python library for querying the Unicode Character Database";
+    homepage = "https://github.com/simoncozens/youseedee";
+    license = licenses.mit;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

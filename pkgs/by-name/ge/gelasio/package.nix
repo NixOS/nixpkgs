@@ -26,7 +26,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Font which is metric-compatible with Microsoft's Georgia";
     longDescription = ''
       Gelasio is an original typeface which is metrics compatible with Microsoft's
@@ -34,8 +38,14 @@ stdenvNoCC.mkDerivation {
       Medium, medium Italic, SemiBold and SemiBold Italic have now been added as well.
     '';
     homepage = "https://github.com/SorkinType/Gelasio";
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ colemickens ];
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ colemickens ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -25,11 +25,19 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generate typed CustomResources from a Kubernetes CustomResourceDefinition";
     mainProgram = "crd2pulumi";
     homepage = "https://github.com/pulumi/crd2pulumi";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Generate typed CustomResources from a Kubernetes CustomResourceDefinition";
+    mainProgram = "crd2pulumi";
+    homepage = "https://github.com/pulumi/crd2pulumi";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

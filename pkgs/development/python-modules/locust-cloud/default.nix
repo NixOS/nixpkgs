@@ -19,14 +19,22 @@
 
 buildPythonPackage rec {
   pname = "locust-cloud";
+<<<<<<< HEAD
   version = "1.30.0";
+=======
+  version = "1.29.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustcloud";
     repo = "locust-cloud";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-GJS0+CUYMz3G98I7Edj2qEsIFTp5wzsuSMmN7DlZPjA=";
+=======
+    hash = "sha256-cWcP1haQQcdOgjxDLZcbsQX18x68l3LSD9NZ/jZJiqE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

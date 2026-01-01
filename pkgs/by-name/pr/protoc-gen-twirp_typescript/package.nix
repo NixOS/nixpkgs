@@ -20,12 +20,21 @@ buildGoModule {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Protobuf Plugin for Generating a Twirp Typescript Client";
     mainProgram = "protoc-gen-twirp_typescript";
     homepage = "https://github.com/larrymyers/protoc-gen-twirp_typescript";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Protobuf Plugin for Generating a Twirp Typescript Client";
+    mainProgram = "protoc-gen-twirp_typescript";
+    homepage = "https://github.com/larrymyers/protoc-gen-twirp_typescript";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jojosch
       dgollings
     ];

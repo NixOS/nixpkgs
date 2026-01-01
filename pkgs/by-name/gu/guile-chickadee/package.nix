@@ -69,11 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Game development toolkit for Guile Scheme with SDL2 and OpenGL";
     homepage = "https://dthompson.us/projects/chickadee.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ chito ];
+=======
+  meta = with lib; {
+    description = "Game development toolkit for Guile Scheme with SDL2 and OpenGL";
+    homepage = "https://dthompson.us/projects/chickadee.html";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ chito ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "chickadee";
     platforms = guile.meta.platforms;
     broken = stdenv.hostPlatform.isDarwin;

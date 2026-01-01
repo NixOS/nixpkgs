@@ -1,20 +1,31 @@
 {
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   lib,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+<<<<<<< HEAD
   installShellFiles,
 }:
 buildGoModule (finalAttrs: {
   pname = "waybar-lyric";
   version = "0.14.3";
+=======
+}:
+buildGoModule (finalAttrs: {
+  pname = "waybar-lyric";
+  version = "0.12.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Nadim147c";
     repo = "waybar-lyric";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-bpc0AF/PcdmkVr791uT2PxgV59wTAAtFMFtKHKwtkQI=";
   };
 
@@ -36,6 +47,16 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+=======
+    hash = "sha256-2iuMlcKDnhRc3PZNMjhkHElEyVdx8+p+ONHn8lC4dQ0=";
+  };
+
+  vendorHash = "sha256-JpAlpTHPxPWHBCeegnUVYsM9LjUCuvfFd0JjQpCccaM=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versionCheckKeepEnvironment = [ "XDG_CACHE_HOME" ];
   preInstallCheck = ''
     # ERROR Failed to find cache directory
@@ -49,10 +70,14 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Nadim147c/waybar-lyric";
     license = lib.licenses.agpl3Only;
     mainProgram = "waybar-lyric";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       Nadim147c
       vanadium5000
     ];
+=======
+    maintainers = with lib.maintainers; [ vanadium5000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 })

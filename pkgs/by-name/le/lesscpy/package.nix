@@ -25,11 +25,20 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "lesscpy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python LESS Compiler";
     mainProgram = "lesscpy";
     homepage = "https://github.com/lesscpy/lesscpy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ s1341 ];
+=======
+  meta = with lib; {
+    description = "Python LESS Compiler";
+    mainProgram = "lesscpy";
+    homepage = "https://github.com/lesscpy/lesscpy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ s1341 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

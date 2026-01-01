@@ -13,7 +13,11 @@ let
 in
 symlinkJoin {
   pname = "nh";
+<<<<<<< HEAD
   inherit (unwrapped) version;
+=======
+  inherit (unwrapped) version meta;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   paths = [
     unwrapped
@@ -27,6 +31,7 @@ symlinkJoin {
     wrapProgram $out/bin/nh \
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
+<<<<<<< HEAD
 
   meta = {
     inherit (unwrapped.meta)
@@ -43,4 +48,6 @@ symlinkJoin {
     # prefer wrapper over the package
     priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

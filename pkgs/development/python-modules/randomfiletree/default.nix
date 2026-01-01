@@ -18,10 +18,18 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "randomfiletree" ];
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Create a random file/directory tree/structure in python fortesting purposes";
     homepage = "https://pypi.org/project/RandomFileTree/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twitchy0 ];
+=======
+  meta = with lib; {
+    description = "Create a random file/directory tree/structure in python fortesting purposes";
+    homepage = "https://pypi.org/project/RandomFileTree/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ twitchy0 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

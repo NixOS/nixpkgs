@@ -44,12 +44,21 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/rspeer/python-ftfy/blob/${src.rev}/CHANGELOG.md";
     description = "Given Unicode text, make its representation consistent and possibly less broken";
     mainProgram = "ftfy";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aborsu ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aborsu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

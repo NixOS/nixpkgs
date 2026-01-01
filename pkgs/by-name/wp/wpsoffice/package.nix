@@ -126,6 +126,7 @@ stdenv.mkDerivation rec {
     ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Office suite, formerly Kingsoft Office";
     homepage = "https://www.wps.com";
@@ -134,6 +135,16 @@ stdenv.mkDerivation rec {
     hydraPlatforms = [ ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Office suite, formerly Kingsoft Office";
+    homepage = "https://www.wps.com";
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    hydraPlatforms = [ ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mlatus
       th0rgal
       wineee

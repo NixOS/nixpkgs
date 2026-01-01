@@ -24,6 +24,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to generate ATOM feeds, RSS feeds and Podcasts";
     downloadPage = "https://github.com/lkiesow/python-feedgen/releases";
@@ -33,5 +34,16 @@ buildPythonPackage rec {
       lgpl3
     ];
     maintainers = with lib.maintainers; [ casey ];
+=======
+  meta = with lib; {
+    description = "Python module to generate ATOM feeds, RSS feeds and Podcasts";
+    downloadPage = "https://github.com/lkiesow/python-feedgen/releases";
+    homepage = "https://github.com/lkiesow/python-feedgen";
+    license = with licenses; [
+      bsd2
+      lgpl3
+    ];
+    maintainers = with maintainers; [ casey ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

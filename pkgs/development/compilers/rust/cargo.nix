@@ -96,6 +96,7 @@ rustPlatform.buildRustPackage.override
       runHook postInstallCheck
     '';
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://crates.io";
       description = "Downloads your Rust project's dependencies and builds your project";
@@ -106,6 +107,18 @@ rustPlatform.buildRustPackage.override
         lib.licenses.asl20
       ];
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      homepage = "https://crates.io";
+      description = "Downloads your Rust project's dependencies and builds your project";
+      mainProgram = "cargo";
+      teams = [ teams.rust ];
+      license = [
+        licenses.mit
+        licenses.asl20
+      ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # https://github.com/alexcrichton/nghttp2-rs/issues/2
       broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
     };

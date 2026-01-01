@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tagexpressions" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Package to parse logical tag expressions";
     homepage = "https://github.com/timofurrer/tag-expressions";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ kalbasit ];
+=======
+  meta = with lib; {
+    description = "Package to parse logical tag expressions";
+    homepage = "https://github.com/timofurrer/tag-expressions";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ kalbasit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

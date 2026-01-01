@@ -50,6 +50,7 @@ buildGoModule rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+<<<<<<< HEAD
   versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
@@ -59,5 +60,17 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "ddev";
     maintainers = with lib.maintainers; [ remyvv ];
+=======
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  meta = with lib; {
+    description = "Docker-based local PHP+Node.js web development environments";
+    homepage = "https://ddev.com/";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    mainProgram = "ddev";
+    maintainers = with maintainers; [ remyvv ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

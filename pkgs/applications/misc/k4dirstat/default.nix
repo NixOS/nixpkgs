@@ -35,6 +35,7 @@ mkDerivation rec {
     command = "k4dirstat -platform offscreen --version &>/dev/stdout";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jeromerobert/k4dirstat";
     description = "Small utility program that sums up disk usage for directory trees";
@@ -42,5 +43,14 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.raboof ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jeromerobert/k4dirstat";
+    description = "Small utility program that sums up disk usage for directory trees";
+    mainProgram = "k4dirstat";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.raboof ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

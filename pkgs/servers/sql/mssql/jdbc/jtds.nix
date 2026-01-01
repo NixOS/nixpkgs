@@ -23,10 +23,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Java (type 4) JDBC 3.0 driver for Microsoft SQL Server";
     homepage = "https://jtds.sourceforge.net/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Pure Java (type 4) JDBC 3.0 driver for Microsoft SQL Server";
+    homepage = "https://jtds.sourceforge.net/";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

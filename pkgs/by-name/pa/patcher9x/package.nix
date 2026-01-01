@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttr: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Patch for Windows 95/98/98 SE/Me to fix CPU issues";
     mainProgram = "patcher9x";
@@ -49,5 +50,14 @@ stdenv.mkDerivation (finalAttr: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hughobrien ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Patch for Windows 95/98/98 SE/Me to fix CPU issues";
+    mainProgram = "patcher9x";
+    homepage = "https://github.com/JHRobotics/patcher9x";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hughobrien ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -40,16 +40,26 @@ stdenvNoCC.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://kimmo.suominen.com/sw/colorless";
     description = "Enable colorised command output and pipe it to less";
     longDescription = ''
       colorless is a wrapper that enables colorised output of commands and
       pipes the output to less(1).
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ suominen ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ suominen ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "colorless";
   };
 }

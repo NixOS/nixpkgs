@@ -56,11 +56,19 @@ rustPlatform.buildRustPackage {
     in
     "${python-with-toml}/bin/python3 ${script}";
 
+<<<<<<< HEAD
   meta = {
     description = "Faster alternative to cd + ls";
     homepage = "https://github.com/mgunyho/tere";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ ProducerMatt ];
+=======
+  meta = with lib; {
+    description = "Faster alternative to cd + ls";
+    homepage = "https://github.com/mgunyho/tere";
+    license = licenses.eupl12;
+    maintainers = with maintainers; [ ProducerMatt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tere";
   };
 }

@@ -8,24 +8,38 @@
   clang_20,
   libsecret,
   ripgrep,
+<<<<<<< HEAD
   nodejs_22,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
+<<<<<<< HEAD
   version = "0.22.5";
+=======
+  version = "0.18.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-3d9Lq3IulIgp4QGNtSvkwz10kfygX6vsmVdlU3lE6Gw=";
   };
 
   nodejs = nodejs_22;
 
   npmDepsHash = "sha256-6NqpkUgez7CqQAMDQW3Zdi86sF5qXseKXMw1Vw/5zWU=";
+=======
+    hash = "sha256-TSHL3X+p74yFGTNFk9r4r+nnul2etgVdXxy8x9BjsRg=";
+  };
+
+  npmDepsHash = "sha256-2Z6YrmUHlYKRU3pR0ZGwQbBgzNFqakBB6LYZqf66nSs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     jq
@@ -62,18 +76,26 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "settings.merged.general?.disableUpdateNag" "(settings.merged.general?.disableUpdateNag ?? true)"
   '';
 
+<<<<<<< HEAD
   # Prevent npmDeps and python from getting into the closure
   disallowedReferences = [
     finalAttrs.npmDeps
     nodejs_22.python
   ];
+=======
+  # Prevent npmDeps from getting into the closure
+  disallowedReferences = [ finalAttrs.npmDeps ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/{bin,share/gemini-cli}
 
     npm prune --omit=dev
+<<<<<<< HEAD
     rm node_modules/shell-quote/print.py # remove python demo to prevent python from getting into the closure
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cp -r node_modules $out/share/gemini-cli/
 
     rm -f $out/share/gemini-cli/node_modules/@google/gemini-cli
@@ -99,7 +121,10 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
       brantes
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       xiaoxiangmoe
       FlameFlag
       taranarmo

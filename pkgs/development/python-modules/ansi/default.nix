@@ -27,9 +27,16 @@ buildPythonPackage rec {
     "ansi.color"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "ANSI cursor movement and graphics";
     homepage = "https://github.com/tehmaze/ansi/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "ANSI cursor movement and graphics";
+    homepage = "https://github.com/tehmaze/ansi/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

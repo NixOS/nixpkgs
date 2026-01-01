@@ -8,16 +8,24 @@
   withIntel ? true,
 }:
 mkDerivation rec {
+<<<<<<< HEAD
   path = "...";
   pname =
     "drm-kmod-firmware" + lib.optionalString withAmd "-amd" + lib.optionalString withIntel "-intel";
 
   version = "20230625_4"; # there is a _8 but freebsd-ports is pinned to _4
+=======
+  pname =
+    "drm-kmod-firmware" + lib.optionalString withAmd "-amd" + lib.optionalString withIntel "-intel";
+
+  version = "20230625_8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "drm-kmod-firmware";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-RS8uXZMYoHfjDSC0OUJUU81eR8rLlEgFhuh+Y7+kXtA=";
   };
 
@@ -26,6 +34,11 @@ mkDerivation rec {
     "debug"
   ];
 
+=======
+    hash = "sha256-Ly9B0zf+YODel/X1sZYVVUVWh38faNLhkcXcjEnQwII=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   extraNativeBuildInputs = [ buildFreebsd.xargs-j ];
 
   hardeningDisable = [
@@ -45,6 +58,7 @@ mkDerivation rec {
 
   env = sys.passthru.env;
   SYSDIR = "${sys.src}/sys";
+<<<<<<< HEAD
   KERN_DEBUGDIR = "${builtins.placeholder "debug"}/lib/debug";
   KERN_DEBUGDIR_KODIR = "${KERN_DEBUGDIR}/kernel";
   KERN_DEBUGDIR_KMODDIR = "${KERN_DEBUGDIR}/kernel";
@@ -55,6 +69,11 @@ mkDerivation rec {
     "DEBUG_FLAGS=-g"
   ];
 
+=======
+
+  KMODDIR = "${placeholder "out"}/kernel";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "GPU firmware for FreeBSD drm-kmod";
     platforms = lib.platforms.freebsd;

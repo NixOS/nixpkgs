@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
     "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Soapy SDR module for SDRplay";
     homepage = "https://github.com/pothosware/SoapySDRPlay3";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pmenke ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Soapy SDR module for SDRplay";
+    homepage = "https://github.com/pothosware/SoapySDRPlay3";
+    license = licenses.mit;
+    maintainers = [ maintainers.pmenke ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,12 +27,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "karton.asciimagic" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Decoders for ascii-encoded executables for the Karton framework";
     mainProgram = "karton-asciimagic";
     homepage = "https://github.com/CERT-Polska/karton-asciimagic";
     changelog = "https://github.com/CERT-Polska/karton-asciimagic/releases/tag/v${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

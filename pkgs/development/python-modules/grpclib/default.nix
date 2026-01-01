@@ -54,11 +54,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpclib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure-Python gRPC implementation for asyncio";
     homepage = "https://github.com/vmagamedov/grpclib";
     changelog = "https://github.com/vmagamedov/grpclib/blob/v${version}/docs/changelog/index.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nikstur ];
+=======
+  meta = with lib; {
+    description = "Pure-Python gRPC implementation for asyncio";
+    homepage = "https://github.com/vmagamedov/grpclib";
+    changelog = "https://github.com/vmagamedov/grpclib/blob/v${version}/docs/changelog/index.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nikstur ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

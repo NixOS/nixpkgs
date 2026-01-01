@@ -20,12 +20,21 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-gR3FL1GeD9Dx5TKeThmPScMCRJQ2THlO4pBViXlI9XM=";
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast text uwuifier";
     homepage = "https://github.com/Daniel-Liu-c0deb0t/uwu";
     license = lib.licenses.mit;
     platforms = lib.platforms.x86; # uses SSE instructions
     maintainers = with lib.maintainers; [ siraben ];
+=======
+  meta = with lib; {
+    description = "Fast text uwuifier";
+    homepage = "https://github.com/Daniel-Liu-c0deb0t/uwu";
+    license = licenses.mit;
+    platforms = lib.platforms.x86; # uses SSE instructions
+    maintainers = with maintainers; [ siraben ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "uwuify";
   };
 }

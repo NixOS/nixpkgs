@@ -7,7 +7,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "18.6.2";
+=======
+  version = "18.6.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -21,7 +25,11 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-GdHU/FEBYsRackYLsXVZQC6c49k3r/nF5PUvWS4AyuQ=";
+=======
+      hash = "sha256-aG2JG918tq/aXu9UzcSaLSE5M/pXQtJXesKXp4Q0iQk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     vendorHash = "sha256-+5CTncYwtGlScFvVc3QaEScfuqMqvsjnGhggM1HMhNU=";
@@ -95,12 +103,21 @@ buildGoModule (
       inherit git;
     };
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://gitlab.com/gitlab-org/gitaly";
       description = "Git RPC service for handling all the git calls made by GitLab";
       platforms = lib.platforms.linux ++ [ "x86_64-darwin" ];
       teams = [ lib.teams.gitlab ];
       license = lib.licenses.mit;
+=======
+    meta = with lib; {
+      homepage = "https://gitlab.com/gitlab-org/gitaly";
+      description = "Git RPC service for handling all the git calls made by GitLab";
+      platforms = platforms.linux ++ [ "x86_64-darwin" ];
+      teams = [ teams.gitlab ];
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   // commonOpts

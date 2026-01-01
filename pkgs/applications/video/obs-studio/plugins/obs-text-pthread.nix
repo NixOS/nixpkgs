@@ -37,11 +37,19 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Rich text source plugin for OBS Studio";
     homepage = "https://github.com/norihiro/obs-text-pthread";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Rich text source plugin for OBS Studio";
+    homepage = "https://github.com/norihiro/obs-text-pthread";
+    maintainers = with maintainers; [ flexiondotorg ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

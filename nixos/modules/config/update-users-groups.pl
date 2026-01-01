@@ -334,6 +334,7 @@ $subUidsPrevUsed{$_} = 1 foreach values %{$subUidMap};
 sub allocSubUid {
     my ($name, @rest) = @_;
 
+<<<<<<< HEAD
     # The upper bound of 29000 users is derived from limits in
     # nixos/modules/programs/shadow.nix which allocates the UID ranges
     # 1000-29999 for regular users. System users are not allocated
@@ -341,6 +342,10 @@ sub allocSubUid {
     # system users, we end up with 29000 users that are non-system users
     # that need subUIDs and subGIDs.
     my ($min, $max, $delta) = (100000, 100000 + 29000 * 65536 - 1, 65536);
+=======
+    # TODO: No upper bounds?
+    my ($min, $max, $delta) = (100000, 100000 + 100 * 65536, 65536);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     my $prevId = $subUidMap->{$name};
     if (defined $prevId && !defined $subUidsUsed{$prevId}) {
         $subUidsUsed{$prevId} = 1;

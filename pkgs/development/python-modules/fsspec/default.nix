@@ -38,14 +38,22 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
+<<<<<<< HEAD
   version = "2025.10.0";
+=======
+  version = "2025.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "filesystem_spec";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-rIn2m3lRhlJwkB54X4sRT9JH+e4pIIEt7dPjnknczjs=";
+=======
+    hash = "sha256-FsgDILnnr+WApoTv/y1zVFSeBNysvkizdKtMeRegbfI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

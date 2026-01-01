@@ -5,10 +5,16 @@
   djangorestframework,
   fetchFromGitHub,
   pytest-django,
+<<<<<<< HEAD
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   pyjwt,
+=======
+  pytestCheckHook,
+  pythonOlder,
+  jwt,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
 }:
 
@@ -36,15 +42,26 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
+<<<<<<< HEAD
     pytest-xdist
     pyjwt
+=======
+    jwt
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pythonImportsCheck = [ "rest_registration" ];
 
   disabledTests = [
+<<<<<<< HEAD
     # Failed: DID NOT RAISE <class 'rest_registration.utils.html.MLStripperParseFailed'>
     "test_convert_html_to_text_fails"
+=======
+    # This test fails on Python 3.10
+    "test_convert_html_to_text_fails"
+    # This test is broken and was removed after 0.7.3. Remove this line once version > 0.7.3
+    "test_coreapi_autoschema_success"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {

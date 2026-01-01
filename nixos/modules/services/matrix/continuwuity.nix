@@ -220,9 +220,12 @@ in
         User = cfg.user;
         Group = cfg.group;
 
+<<<<<<< HEAD
         # To avoid timing out during database migrations
         TimeoutStartSec = "10m";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

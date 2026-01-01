@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cursor theme designed to look decent";
     homepage = "https://gitlab.com/Burning_Cube/quintom-cursor-theme";
@@ -31,5 +32,16 @@ stdenvNoCC.mkDerivation {
       gpl3Only
     ];
     maintainers = with lib.maintainers; [ frogamic ];
+=======
+  meta = with lib; {
+    description = "Cursor theme designed to look decent";
+    homepage = "https://gitlab.com/Burning_Cube/quintom-cursor-theme";
+    platforms = platforms.unix;
+    license = with licenses; [
+      cc-by-sa-40
+      gpl3Only
+    ];
+    maintainers = with maintainers; [ frogamic ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

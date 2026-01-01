@@ -17,6 +17,7 @@
     sha256 = "sha256-7DszvbCNTjpzGRmpIVAWXk20P0/XTrWZ79KSOGLrUWY=";
   };
 
+<<<<<<< HEAD
   collect-rev = testers.invalidateFetcherByDrvHash fetchgit {
     name = "collect-rev-nix-source";
     url = "https://github.com/NixOS/nix";
@@ -44,6 +45,8 @@
     '';
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   sparseCheckout = testers.invalidateFetcherByDrvHash fetchgit {
     name = "sparse-checkout-nix-source";
     url = "https://github.com/NixOS/nix";
@@ -104,6 +107,7 @@
     postFetch = "rm -r $out/.git";
   };
 
+<<<<<<< HEAD
   submodule-revision-count = testers.invalidateFetcherByDrvHash fetchgit {
     name = "submodule-revision-count-source";
     url = "https://github.com/pineapplehunter/nix-test-repo-with-submodule";
@@ -118,6 +122,8 @@
     '';
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   submodule-leave-git-deep = testers.invalidateFetcherByDrvHash fetchgit {
     name = "submodule-leave-git-deep-source";
     url = "https://github.com/pineapplehunter/nix-test-repo-with-submodule";

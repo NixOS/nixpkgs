@@ -18,10 +18,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "mulpyplexer" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multiplex interactions with lists of Python objects";
     homepage = "https://github.com/zardus/mulpyplexer";
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Multiplex interactions with lists of Python objects";
+    homepage = "https://github.com/zardus/mulpyplexer";
+    license = with licenses; [ bsd2 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

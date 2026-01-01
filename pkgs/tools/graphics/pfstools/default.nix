@@ -80,11 +80,20 @@ mkDerivation rec {
     ./pfsalign.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pfstools.sourceforge.net/";
     description = "Toolkit for manipulation of HDR images";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2;
     maintainers = [ lib.maintainers.juliendehos ];
+=======
+  meta = with lib; {
+    homepage = "https://pfstools.sourceforge.net/";
+    description = "Toolkit for manipulation of HDR images";
+    platforms = platforms.linux;
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.juliendehos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

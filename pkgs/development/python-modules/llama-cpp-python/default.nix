@@ -9,7 +9,10 @@
   # nativeBuildInputs
   cmake,
   ninja,
+<<<<<<< HEAD
   autoAddDriverRunpath,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   pathspec,
@@ -74,6 +77,7 @@ buildPythonPackage rec {
     # -mcpu, breaking linux build as follows:
     #
     # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
+<<<<<<< HEAD
     (lib.cmakeBool "GGML_NATIVE" false)
     (lib.cmakeFeature "GGML_BUILD_NUMBER" "1")
   ]
@@ -81,6 +85,15 @@ buildPythonPackage rec {
     (lib.cmakeBool "GGML_CUDA" true)
     (lib.cmakeFeature "CUDAToolkit_ROOT" "${lib.getDev cudaPackages.cuda_nvcc}")
     (lib.cmakeFeature "CMAKE_CUDA_COMPILER" "${lib.getExe cudaPackages.cuda_nvcc}")
+=======
+    "-DGGML_NATIVE=off"
+    "-DGGML_BUILD_NUMBER=1"
+  ]
+  ++ lib.optionals cudaSupport [
+    "-DGGML_CUDA=on"
+    "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
+    "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   enableParallelBuilding = true;
@@ -88,9 +101,12 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     ninja
+<<<<<<< HEAD
   ]
   ++ lib.optionals cudaSupport [
     autoAddDriverRunpath
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   build-system = [
@@ -129,6 +145,7 @@ buildPythonPackage rec {
     "test_real_llama"
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = lib.optionals (!cudaSupport) [
     # `libllama.so` is loaded at import time, and failing when cudaSupport is enabled as the cuda
     # driver is missing in the sandbox:
@@ -136,6 +153,9 @@ buildPythonPackage rec {
     # libcuda.so.1: cannot open shared object file: No such file or directory
     "llama_cpp"
   ];
+=======
+  pythonImportsCheck = [ "llama_cpp" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = gitUpdater {

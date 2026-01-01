@@ -79,7 +79,11 @@ let
   pythonEnv = unwrapped.python.withPackages (ps: pythonPkgs);
 
   pname = unwrapped.pname + "-wrapped";
+<<<<<<< HEAD
   inherit (unwrapped) outputs version;
+=======
+  inherit (unwrapped) version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeWrapperArgs = builtins.concatStringsSep " " (
     [
     ]
@@ -214,6 +218,7 @@ let
   self =
     if doWrap then
       stdenv.mkDerivation {
+<<<<<<< HEAD
         inherit
           pname
           outputs
@@ -222,13 +227,22 @@ let
           ;
         nativeBuildInputs = [
           makeWrapper
+=======
+        inherit pname version passthru;
+        nativeBuildInputs = [ makeWrapper ];
+        buildInputs = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           xorg.lndir
         ];
         buildCommand = ''
           mkdir $out
           cd $out
+<<<<<<< HEAD
           lndir -silent ${unwrapped.out}
           lndir -silent ${unwrapped.man}
+=======
+          lndir -silent ${unwrapped}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ${lib.optionalString (extraPackages != [ ]) (
             builtins.concatStringsSep "\n" (
               map (pkg: ''

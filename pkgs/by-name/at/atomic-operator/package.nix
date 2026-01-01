@@ -55,11 +55,20 @@ python3.pkgs.buildPythonApplication rec {
     "test_config_parser"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to execute Atomic Red Team tests (Atomics)";
     mainProgram = "atomic-operator";
     homepage = "https://www.atomic-operator.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to execute Atomic Red Team tests (Atomics)";
+    mainProgram = "atomic-operator";
+    homepage = "https://www.atomic-operator.com/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

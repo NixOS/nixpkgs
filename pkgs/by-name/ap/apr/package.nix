@@ -74,12 +74,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://apr.apache.org/";
     description = "Apache Portable Runtime library";
     mainProgram = "apr-1-config";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://apr.apache.org/";
+    description = "Apache Portable Runtime library";
+    mainProgram = "apr-1-config";
+    platforms = platforms.all;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

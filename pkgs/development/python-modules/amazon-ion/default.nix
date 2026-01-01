@@ -4,14 +4,20 @@
   cbor2,
   docopt,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   jsonconversion,
   pytestCheckHook,
   pytest_7,
   setuptools,
   six,
   tabulate,
+<<<<<<< HEAD
   cmake,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
@@ -25,6 +31,7 @@ buildPythonPackage rec {
     tag = "v${version}";
     # Test vectors require git submodule
     fetchSubmodules = true;
+<<<<<<< HEAD
     leaveDotGit = true; # During ion-c submodule build git history/hash used to infer version
     postFetch = ''
       # Generated file should match output of command in ion-c/cmake/VersionHeader.cmake
@@ -79,6 +86,17 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
   ];
+=======
+    hash = "sha256-ZnslVmXE2YvTAkpfw2lbpB+uF85n/CvA22htO/Y7yWk=";
+  };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," ""
+  '';
+
+  build-system = [ setuptools ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dependencies = [
     jsonconversion
@@ -102,6 +120,7 @@ buildPythonPackage rec {
     "tests/test_benchmark_cli.py"
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "amazon.ion"
     "amazon.ion.ionc" # C extension module for speedup
@@ -117,5 +136,19 @@ buildPythonPackage rec {
     ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ terlar ];
+=======
+  pythonImportsCheck = [ "amazon.ion" ];
+
+  meta = with lib; {
+    description = "Python implementation of Amazon Ion";
+    homepage = "https://github.com/amazon-ion/ion-python";
+    changelog = "https://github.com/amazon-ion/ion-python/releases/tag/${src.tag}";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ terlar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

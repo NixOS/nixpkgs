@@ -12,18 +12,29 @@
 
 stdenv.mkDerivation rec {
   pname = "moosefs";
+<<<<<<< HEAD
   version = "4.58.3";
+=======
+  version = "4.58.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "moosefs";
     repo = "moosefs";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-lEnCP+ORWdW52SVO7K3WxcjlFMrQFR9VT8fjquI/fZg=";
+=======
+    sha256 = "sha256-eywJ7MmCrwxqlbTDYEEPs6ego9Ivn+ziXCBNhcDfcmY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
     pkg-config
+<<<<<<< HEAD
     python3
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -51,6 +62,13 @@ stdenv.mkDerivation rec {
       "#undef HAVE_STRUCT_STAT_ST_BIRTHTIME"
   '';
 
+<<<<<<< HEAD
+=======
+  postInstall = ''
+    substituteInPlace $out/sbin/mfscgiserv --replace "datapath=\"$out" "datapath=\""
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doCheck = true;
 
   passthru.tests = {

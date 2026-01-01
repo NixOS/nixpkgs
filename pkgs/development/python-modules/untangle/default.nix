@@ -28,10 +28,18 @@ buildPythonPackage rec {
     "tests"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert XML documents into Python objects";
     homepage = "https://github.com/stchris/untangle";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.arnoldfarkas ];
+=======
+  meta = with lib; {
+    description = "Convert XML documents into Python objects";
+    homepage = "https://github.com/stchris/untangle";
+    license = licenses.mit;
+    maintainers = [ maintainers.arnoldfarkas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,18 @@ buildPythonPackage rec {
   # There are no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Kivy garden installation script, split into its own package for convenient use in buildozer";
     homepage = "https://github.com/kivy-garden/garden";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ risson ];
+=======
+  meta = with lib; {
+    description = "Kivy garden installation script, split into its own package for convenient use in buildozer";
+    homepage = "https://github.com/kivy-garden/garden";
+    license = licenses.mit;
+    maintainers = with maintainers; [ risson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

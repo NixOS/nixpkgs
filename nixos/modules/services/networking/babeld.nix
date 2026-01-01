@@ -41,6 +41,11 @@ in
 
 {
 
+<<<<<<< HEAD
+=======
+  meta.maintainers = with lib.maintainers; [ hexa ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ###### interface
 
   options = {

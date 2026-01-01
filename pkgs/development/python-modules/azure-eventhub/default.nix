@@ -41,11 +41,20 @@ buildPythonPackage rec {
     updateScript = gitUpdater { rev-prefix = "azure.eventhub."; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Event Hubs Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/eventhub/azure-eventhub";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/${src.tag}/sdk/eventhub/azure-eventhub/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Event Hubs Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/eventhub/azure-eventhub";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/${src.tag}/sdk/eventhub/azure-eventhub/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

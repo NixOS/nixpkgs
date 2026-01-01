@@ -58,10 +58,18 @@ stdenv.mkDerivation rec {
     sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://cgit.freedesktop.org/vaapi/vdpau-driver";
     license = lib.licenses.gpl2Plus;
     description = "VDPAU driver for the VAAPI library";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://cgit.freedesktop.org/vaapi/vdpau-driver";
+    license = licenses.gpl2Plus;
+    description = "VDPAU driver for the VAAPI library";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,10 +30,18 @@ buildPythonPackage rec {
     ${python.interpreter} -W ignore::ResourceWarning tests/api_tests.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python language bindings for ev3dev";
     homepage = "https://github.com/ev3dev/ev3dev-lang-python";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ emilytrau ];
+=======
+  meta = with lib; {
+    description = "Python language bindings for ev3dev";
+    homepage = "https://github.com/ev3dev/ev3dev-lang-python";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -68,11 +68,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dzaima/APL";
     description =
       "APL implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dzaima/APL";
+    description =
+      "APL implementation in Java" + lib.optionalString buildNativeImage ", compiled as a native image";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     inherit (jdk.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dapl-native.x86_64-darwin

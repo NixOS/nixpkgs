@@ -41,6 +41,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/PurpleBooth/git-mit";
     changelog = "https://github.com/PurpleBooth/git-mit/releases/tag/v${version}";
     license = lib.licenses.cc0;
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

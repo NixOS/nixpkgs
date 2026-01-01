@@ -35,7 +35,11 @@ stdenv.mkDerivation {
     "manprefix=/share"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool to inject machine checks into x86 kernel for testing";
     mainProgram = "mce-inject";
     longDescription = ''
@@ -44,8 +48,14 @@ stdenv.mkDerivation {
       kernel machine check handler.
     '';
     homepage = "https://github.com/andikleen/mce-inject/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ arkivm ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ arkivm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

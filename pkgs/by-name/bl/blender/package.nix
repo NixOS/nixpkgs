@@ -67,7 +67,11 @@
   pkg-config,
   potrace,
   pugixml,
+<<<<<<< HEAD
   python311Packages, # must use python3Packages instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
+=======
+  python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rocmPackages, # comes with a significantly larger closure size
   rubberband,
   runCommand,
@@ -95,8 +99,13 @@ let
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   python3 = python311Packages.python;
   pyPkgsOpenusd = python311Packages.openusd.override (old: {
+=======
+  python3 = python3Packages.python;
+  pyPkgsOpenusd = python3Packages.openusd.override (old: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };
     withOsl = false;
   });
@@ -117,21 +126,39 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
+<<<<<<< HEAD
   version = "5.0.1";
+=======
+  version = "5.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-fNnQRfGfNc7rbk8npkcYtoAqRjJc6MaV4mqtSJxd0EM=";
   };
 
+=======
+    hash = "sha256-UUHsylDmMWRcr1gGiXuYnno7D6uMjLqTYd9ak4FnZis=";
+  };
+
+  patches = [
+    ./fix-hip-path.patch # https://projects.blender.org/blender/blender/pulls/150321
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace-fail '${"$"}{LIBDIR}/python' \
                   '${python3}' \
+<<<<<<< HEAD
         --replace-fail '${"$"}{LIBDIR}/materialx/' '${python311Packages.materialx}/'
+=======
+        --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
                   '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
@@ -149,12 +176,21 @@ stdenv'.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-C../build_files/cmake/config/blender_release.cmake"
 
+<<<<<<< HEAD
     (lib.cmakeFeature "MaterialX_DIR" "${python311Packages.materialx}/lib/cmake/MaterialX")
     (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
     (lib.cmakeFeature "PYTHON_LIBPATH" "${python3}/lib")
     (lib.cmakeFeature "PYTHON_LIBRARY" "${python3.libPrefix}")
     (lib.cmakeFeature "PYTHON_NUMPY_INCLUDE_DIRS" "${python311Packages.numpy_1}/${python3.sitePackages}/numpy/core/include")
     (lib.cmakeFeature "PYTHON_NUMPY_PATH" "${python311Packages.numpy_1}/${python3.sitePackages}")
+=======
+    (lib.cmakeFeature "MaterialX_DIR" "${python3Packages.materialx}/lib/cmake/MaterialX")
+    (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
+    (lib.cmakeFeature "PYTHON_LIBPATH" "${python3}/lib")
+    (lib.cmakeFeature "PYTHON_LIBRARY" "${python3.libPrefix}")
+    (lib.cmakeFeature "PYTHON_NUMPY_INCLUDE_DIRS" "${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include")
+    (lib.cmakeFeature "PYTHON_NUMPY_PATH" "${python3Packages.numpy_1}/${python3.sitePackages}")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (lib.cmakeFeature "PYTHON_VERSION" "${python3.pythonVersion}")
 
     (lib.cmakeBool "WITH_BUILDINFO" false)
@@ -221,7 +257,11 @@ stdenv'.mkDerivation (finalAttrs: {
     cmake
     llvmPackages.llvm.dev
     makeWrapper
+<<<<<<< HEAD
     python311Packages.wrapPython
+=======
+    python3Packages.wrapPython
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals cudaSupport [
     addDriverRunpath
@@ -263,7 +303,11 @@ stdenv'.mkDerivation (finalAttrs: {
     potrace
     pugixml
     python3
+<<<<<<< HEAD
     python311Packages.materialx
+=======
+    python3Packages.materialx
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rubberband
     zlib
     zstd
@@ -316,7 +360,11 @@ stdenv'.mkDerivation (finalAttrs: {
 
   pythonPath =
     let
+<<<<<<< HEAD
       ps = python311Packages;
+=======
+      ps = python3Packages;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     in
     [
       ps.materialx
@@ -362,13 +410,21 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru = {
     python = python3;
+<<<<<<< HEAD
     pythonPackages = python311Packages;
+=======
+    pythonPackages = python3Packages;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     withPackages =
       f:
       (callPackage ./wrapper.nix { }).override {
         blender = finalAttrs.finalPackage;
+<<<<<<< HEAD
         extraModules = (f python311Packages);
+=======
+        extraModules = (f python3Packages);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
     tests = {

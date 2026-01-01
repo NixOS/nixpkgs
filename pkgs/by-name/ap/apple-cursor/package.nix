@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     cp -r macOS/macOS* $out/share/icons/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Opensource macOS Cursors";
     homepage = "https://github.com/ful1e5/apple_cursor";
@@ -44,6 +45,18 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Opensource macOS Cursors";
+    homepage = "https://github.com/ful1e5/apple_cursor";
+    license = [
+      licenses.gpl3Only
+      # Potentially a derivative work of copyrighted Apple designs
+      licenses.unfree
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       colemickens
       dxwil
     ];

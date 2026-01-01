@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoreconfHook,
   gettext,
   makeWrapper,
@@ -26,12 +29,15 @@ stdenv.mkDerivation rec {
   patches = [
     # expose error function used by dependents
     ./expose-error.patch
+<<<<<<< HEAD
 
     # Fix build with GCC 15
     (fetchpatch {
       url = "https://github.com/pure-data/pure-data/commit/95e4105bc1044cbbcbbbcc369480a77c298d7475.patch";
       hash = "sha256-zFB9m8Nw80X9+a64Uft4tNRA4BHsVr8zxLqAof0jJEI=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [
@@ -73,12 +79,21 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/pd-gui --prefix PATH : ${lib.makeBinPath [ tk ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = ''Real-time graphical programming environment for audio, video, and graphical processing'';
     homepage = "http://puredata.info";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ carlthome ];
+=======
+  meta = with lib; {
+    description = ''Real-time graphical programming environment for audio, video, and graphical processing'';
+    homepage = "http://puredata.info";
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ carlthome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pd";
     changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
   };

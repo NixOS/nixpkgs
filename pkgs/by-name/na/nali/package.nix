@@ -38,11 +38,19 @@ buildGoModule rec {
     installShellCompletion --cmd nali nali.{bash,fish,zsh}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Offline tool for querying IP geographic information and CDN provider";
     homepage = "https://github.com/zu1k/nali";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Offline tool for querying IP geographic information and CDN provider";
+    homepage = "https://github.com/zu1k/nali";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       diffumist
       xyenon
     ];

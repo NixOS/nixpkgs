@@ -60,11 +60,20 @@ rustPlatform.buildRustPackage rec {
     version = testers.testVersion { package = comma; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/nix-community/comma";
     description = "Runs programs without installing them";
     license = lib.licenses.mit;
     mainProgram = "comma";
     maintainers = with lib.maintainers; [ artturin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/nix-community/comma";
+    description = "Runs programs without installing them";
+    license = licenses.mit;
+    mainProgram = "comma";
+    maintainers = with maintainers; [ artturin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

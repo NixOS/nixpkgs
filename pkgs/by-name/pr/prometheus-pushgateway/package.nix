@@ -38,12 +38,21 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
     mainProgram = "pushgateway";
     homepage = "https://github.com/prometheus/pushgateway";
     changelog = "https://github.com/prometheus/pushgateway/releases/tag/v${finalAttrs.version}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ benley ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ benley ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

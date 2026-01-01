@@ -23,20 +23,34 @@ stdenv.mkDerivation {
     sdcc
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Firmware for FX2 logic analyzers";
     homepage = "https://sigrok.org/";
 
     # licensing details explained in:
     # https://sigrok.org/gitweb/?p=sigrok-firmware-fx2lafw.git;a=blob;f=README;hb=HEAD#l122
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus # overall
       lgpl21Plus # fx2lib, Hantek 6022BE, Sainsmart DDS120 firmwares
     ];
 
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       panicgh
       vifino
     ];

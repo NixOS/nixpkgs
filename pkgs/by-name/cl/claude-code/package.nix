@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 # NOTE: Use the following command to update the package
 # ```sh
 # nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["vscode-extensions" "anthropic" "claude-code"]])'
 # ```
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 {
   lib,
   buildNpmPackage,
@@ -11,6 +14,7 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "claude-code";
+<<<<<<< HEAD
   version = "2.0.76";
 
   src = fetchzip {
@@ -19,6 +23,20 @@ buildNpmPackage (finalAttrs: {
   };
 
   npmDepsHash = "sha256-mDErPWWqOe+3fKriTBLNCzXP48pmmlOMoB+kCP4FoT8=";
+=======
+  # NOTE: Use the following command to update the package
+  # ```sh
+  # nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package vscode-extensions.anthropic.claude-code && nix-shell maintainers/scripts/update.nix --argstr commit true --argstr package claude-code
+  # ```
+  version = "2.0.55";
+
+  src = fetchzip {
+    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
+    hash = "sha256-wsjOkNxuBLMYprjaZQyUZHiqWl8UG7cZ1njkyKZpRYg=";
+  };
+
+  npmDepsHash = "sha256-k7sCE3dyHz69qlxxrX+lnPuJUf8w/FAAUQtFuEdlTqA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -43,6 +61,10 @@ buildNpmPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = ./update.sh;
 

@@ -7,8 +7,11 @@
     browser =
       { config, pkgs, ... }:
       {
+<<<<<<< HEAD
         virtualisation.memorySize = 1024 * 2;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         environment.systemPackages =
           let
             prometheusSeleniumScript =
@@ -20,11 +23,15 @@
                   from selenium import webdriver
                   from selenium.webdriver.common.by import By
                   from selenium.webdriver.firefox.options import Options
+<<<<<<< HEAD
                   from selenium.webdriver.support.relative_locator import locate_with
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                   from selenium.webdriver.support.ui import WebDriverWait
 
                   options = Options()
                   options.add_argument("--headless")
+<<<<<<< HEAD
                   service = webdriver.FirefoxService(
                     executable_path="${lib.getExe pkgs.geckodriver}")  # noqa: E501
 
@@ -101,6 +108,18 @@
                   version_td_element = driver.find_element(
                     locate_with(By.TAG_NAME, "td").near(version_th_element))
                   assert version_td_element.text == "${pkgs.prometheus.version}"
+=======
+                  service = webdriver.FirefoxService(executable_path="${lib.getExe pkgs.geckodriver}")  # noqa: E501
+
+                  driver = webdriver.Firefox(options=options, service=service)
+                  driver.implicitly_wait(10)
+                  driver.get("http://prometheus:9090/")
+
+                  wait = WebDriverWait(driver, 60)
+
+                  assert len(driver.find_elements(By.CLASS_NAME, "mantine-AppShell-header")) > 0  # noqa: E501
+                  assert len(driver.find_elements(By.CLASS_NAME, "mantine-AppShell-main")) > 0  # noqa: E501
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
                   driver.close()
                 '';
@@ -128,7 +147,12 @@
               static_configs = [
                 {
                   targets = [
+<<<<<<< HEAD
                     "prometheus:${toString config.services.prometheus.port}"
+=======
+                    "prometheus1:${toString config.services.prometheus.port}"
+                    "prometheus2:${toString config.services.prometheus.port}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                   ];
                 }
               ];

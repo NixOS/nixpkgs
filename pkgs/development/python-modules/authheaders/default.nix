@@ -44,11 +44,19 @@ buildPythonPackage rec {
     "test_authenticate_dmarc_psdsub"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for the generation of email authentication headers";
     homepage = "https://github.com/ValiMail/authentication-headers";
     changelog = "https://github.com/ValiMail/authentication-headers/blob${version}/CHANGES";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python library for the generation of email authentication headers";
+    homepage = "https://github.com/ValiMail/authentication-headers";
+    changelog = "https://github.com/ValiMail/authentication-headers/blob${version}/CHANGES";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "dmarc-policy-find";
   };

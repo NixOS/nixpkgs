@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Identify any songs in seconds";
     mainProgram = "mousai";
@@ -76,5 +77,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dotlambda ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Identify any songs in seconds";
+    mainProgram = "mousai";
+    homepage = "https://github.com/SeaDve/Mousai";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+    teams = [ teams.gnome-circle ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

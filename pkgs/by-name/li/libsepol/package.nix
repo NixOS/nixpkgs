@@ -45,11 +45,19 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit se_url; };
 
+<<<<<<< HEAD
   meta = {
     description = "SELinux binary policy manipulation library";
     homepage = "http://userspace.selinuxproject.org";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "SELinux binary policy manipulation library";
+    homepage = "http://userspace.selinuxproject.org";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       RossComputerGuy
       numinit
     ];

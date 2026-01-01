@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -9,16 +12,25 @@
   setuptools,
 
   # dependencies
+<<<<<<< HEAD
   alive-progress,
   autograd,
   cma,
   deprecated,
   matplotlib,
   moocore,
+=======
+  autograd,
+  cma,
+  deprecated,
+  dill,
+  matplotlib,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   numpy,
   scipy,
 
   # tests
+<<<<<<< HEAD
   jupytext,
   nbformat,
   notebook,
@@ -27,6 +39,13 @@
   pytestCheckHook,
   pythonAtLeast,
   scikit-learn,
+=======
+  pytestCheckHook,
+  nbformat,
+  notebook,
+  numba,
+  pythonAtLeast,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   writeText,
 }:
 
@@ -34,20 +53,33 @@ let
   pymoo_data = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo-data";
+<<<<<<< HEAD
     rev = "8dae7d02078def161ee109184399adc3db25265b";
     hash = "sha256-dpuRIMqDQ+oKrvK1VAQxPG6vijZMxT6MB8xOswPwv5o=";
+=======
+    tag = "33f61a78182ceb211b95381dd6d3edee0d2fc0f3";
+    hash = "sha256-iGWPepZw3kJzw5HKV09CvemVvkvFQ38GVP+BAryBSs0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 buildPythonPackage rec {
   pname = "pymoo";
+<<<<<<< HEAD
   version = "0.6.1.6";
+=======
+  version = "0.6.1.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-tLkXH0Ig/yWZbaFwzsdIdmbnlNd9UAruVSziaL3iW4U=";
+=======
+    hash = "sha256-IRNYluK6fO1cQq0u9dIJYnI5HWqtTPLXARXNoHa4F0I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -63,6 +95,10 @@ buildPythonPackage rec {
         "file://${pymoo_data}/"
   '';
 
+<<<<<<< HEAD
+=======
+  pythonRelaxDeps = [ "cma" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonRemoveDeps = [ "alive-progress" ];
 
   build-system = [
@@ -71,16 +107,25 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+<<<<<<< HEAD
     alive-progress
     autograd
     cma
     deprecated
     matplotlib
     moocore
+=======
+    autograd
+    cma
+    deprecated
+    dill
+    matplotlib
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     numpy
     scipy
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     jupytext
     nbformat
@@ -89,6 +134,18 @@ buildPythonPackage rec {
     optuna
     pytestCheckHook
     scikit-learn
+=======
+  # Some tests require a grad backend to be configured, this is a hacky way to do so.
+  # The choice must be either "jax.numpy" or "autograd.numpy"
+  preCheck = ''
+    echo 'from pymoo.gradient import activate; activate("autograd.numpy")' >> tests/conftest.py
+  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    nbformat
+    notebook
+    numba
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
   # Select some lightweight tests
   disabledTestMarks = [ "long" ];
@@ -114,6 +171,7 @@ buildPythonPackage rec {
     # AttributeError: 'ZDT3' object has no attribute 'elementwise'
     "test_kktpm_correctness"
   ];
+<<<<<<< HEAD
 
   disabledTestPaths = [
     # sensitive to float precision
@@ -126,6 +184,14 @@ buildPythonPackage rec {
 
   # Avoid crashing sandboxed build on macOS
   env.MATPLOTLIBRC = writeText "" ''
+=======
+  disabledTestPaths = [
+    # sensitive to float precision
+    "tests/algorithms/test_no_modfication.py"
+  ];
+  # Avoid crashing sandboxed build on macOS
+  MATPLOTLIBRC = writeText "" ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     backend: Agg
   '';
 
@@ -134,8 +200,11 @@ buildPythonPackage rec {
   meta = {
     description = "Multi-objective Optimization in Python";
     homepage = "https://pymoo.org/";
+<<<<<<< HEAD
     downloadPage = "https://github.com/anyoptimization/pymoo";
     changelog = "https://github.com/anyoptimization/pymoo/releases/tag/${src.tag}";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };

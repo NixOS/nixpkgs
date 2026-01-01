@@ -35,10 +35,18 @@ buildDunePackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Simple Core-inspired wrapper for standard library Stream module";
     maintainers = [ lib.maintainers.bcdarwin ];
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Simple Core-inspired wrapper for standard library Stream module";
+    maintainers = [ maintainers.bcdarwin ];
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

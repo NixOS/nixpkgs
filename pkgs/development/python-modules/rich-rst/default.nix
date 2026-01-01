@@ -31,10 +31,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rich_rst" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Beautiful reStructuredText renderer for rich";
     homepage = "https://github.com/wasi-master/rich-rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Beautiful reStructuredText renderer for rich";
+    homepage = "https://github.com/wasi-master/rich-rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

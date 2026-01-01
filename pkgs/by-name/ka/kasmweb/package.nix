@@ -27,10 +27,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.kasmweb.com/";
     description = "Streaming containerized apps and desktops to end-users";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ s1341 ];
+=======
+  meta = with lib; {
+    homepage = "https://www.kasmweb.com/";
+    description = "Streaming containerized apps and desktops to end-users";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ s1341 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

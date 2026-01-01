@@ -27,11 +27,19 @@ buildPythonPackage rec {
 
   dependencies = [ pyvirtualdisplay ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to run Xvfb for tests";
     homepage = "https://github.com/The-Compiler/pytest-xvfb";
     changelog = "https://github.com/The-Compiler/pytest-xvfb/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pytest plugin to run Xvfb for tests";
+    homepage = "https://github.com/The-Compiler/pytest-xvfb";
+    changelog = "https://github.com/The-Compiler/pytest-xvfb/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

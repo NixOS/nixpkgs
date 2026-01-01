@@ -72,6 +72,7 @@ stdenv.mkDerivation {
     "-Dui=enabled"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "UI components for parental controls library";
     mainProgram = "malcontent-control";
@@ -79,5 +80,14 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "UI components for parental controls library";
+    mainProgram = "malcontent-control";
+    homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

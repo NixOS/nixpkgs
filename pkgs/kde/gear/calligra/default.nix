@@ -1,6 +1,10 @@
 {
   mkKdeDerivation,
   lib,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   boost,
   eigen,
   gsl,
@@ -26,6 +30,17 @@
 mkKdeDerivation {
   pname = "calligra";
 
+<<<<<<< HEAD
+=======
+  patches = [
+    # Fix build with Poppler 25.10
+    (fetchpatch {
+      url = "https://invent.kde.org/office/calligra/-/commit/45e8b302bce1d318f310ea13599d7ce84acc477e.patch";
+      hash = "sha256-TECB3eo24+gI8TXL8gw9BIdFWqw0JBKCWpoNVqBSan8=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   extraBuildInputs = [
     boost
     eigen
@@ -62,6 +77,10 @@ mkKdeDerivation {
 
   meta = {
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      ebzzry
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zraexy
       sigmasquadron
     ];

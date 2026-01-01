@@ -22,10 +22,18 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and tiny yield-based trampoline implementation for python";
     homepage = "https://gitlab.com/ferreum/trampoline";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    description = "Simple and tiny yield-based trampoline implementation for python";
+    homepage = "https://gitlab.com/ferreum/trampoline";
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

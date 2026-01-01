@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross;
   configureFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GNU ddrescue, a data recovery tool";
 
     longDescription = ''
@@ -47,10 +51,17 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/ddrescue/ddrescue.html";
 
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
 
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Plus;
+
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fpletz
     ];
   };

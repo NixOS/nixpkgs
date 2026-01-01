@@ -28,7 +28,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Roboto family of fonts";
     longDescription = ''
       Google’s signature family of fonts, the default font on Android and
@@ -36,8 +40,14 @@ stdenvNoCC.mkDerivation rec {
       Material Design.
     '';
     homepage = "https://github.com/googlefonts/roboto-serif";
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

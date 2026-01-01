@@ -60,12 +60,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "versioningit" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Setuptools plugin for determining package version from VCS";
     mainProgram = "versioningit";
     homepage = "https://github.com/jwodder/versioningit";
     changelog = "https://versioningit.readthedocs.io/en/latest/changelog.html";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DeeUnderscore ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ DeeUnderscore ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

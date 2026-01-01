@@ -20,12 +20,20 @@ let
     hash = "sha256-rhCum59GCIAwdi5QgSaPfrALelAIMncNetu81i53Q8c=";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Modern performant fuzzy picker for Vim and NeoVim";
     mainProgram = "maple";
     homepage = "https://github.com/liuchengxu/vim-clap";
     changelog = "https://github.com/liuchengxu/vim-clap/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 

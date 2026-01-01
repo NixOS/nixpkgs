@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_sqlalchemy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "SQLAlchemy extension for Flask";
     homepage = "http://flask-sqlalchemy.pocoo.org/";
     changelog = "https://github.com/pallets-eco/flask-sqlalchemy/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ gerschtli ];
+=======
+  meta = with lib; {
+    description = "SQLAlchemy extension for Flask";
+    homepage = "http://flask-sqlalchemy.pocoo.org/";
+    changelog = "https://github.com/pallets-eco/flask-sqlalchemy/blob/${version}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ gerschtli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

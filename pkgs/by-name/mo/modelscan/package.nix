@@ -41,19 +41,32 @@ python3.pkgs.buildPythonApplication rec {
       dill
       pytestCheckHook
     ]
+<<<<<<< HEAD
     ++ lib.concatAttrValues optional-dependencies;
+=======
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # tensorflow doesn0t support Python 3.12
   doCheck = false;
 
   pythonImportsCheck = [ "modelscan" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Protection against Model Serialization Attacks";
     homepage = "https://github.com/protectai/modelscan";
     changelog = "https://github.com/protectai/modelscan/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Protection against Model Serialization Attacks";
+    homepage = "https://github.com/protectai/modelscan";
+    changelog = "https://github.com/protectai/modelscan/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "modelscan";
   };
 }

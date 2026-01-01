@@ -39,7 +39,11 @@ index dfccc661..85233f3b 100644
 +set -eu -o pipefail +o posix
 +shopt -s nullglob
 +export PROG=\"{}\"
+<<<<<<< HEAD
 +\"{}\" \"$@\"",
+=======
++\"{}\" $@",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 +        unwrapped_lld.to_string_lossy().to_string(),
 +        ld_wrapper_path.to_string_lossy().to_string(),
 +    );

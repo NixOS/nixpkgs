@@ -51,11 +51,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fugashi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cython MeCab wrapper for fast, pythonic Japanese tokenization and morphological analysis";
     homepage = "https://github.com/polm/fugashi";
     changelog = "https://github.com/polm/fugashi/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ laurent-f1z1 ];
+=======
+  meta = with lib; {
+    description = "Cython MeCab wrapper for fast, pythonic Japanese tokenization and morphological analysis";
+    homepage = "https://github.com/polm/fugashi";
+    changelog = "https://github.com/polm/fugashi/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ laurent-f1z1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

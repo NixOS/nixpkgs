@@ -25,14 +25,22 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
+<<<<<<< HEAD
   version = "0.88.0";
+=======
+  version = "0.86.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-jYhanzekQIIBSqoB/8sToKOhAS/Cicx5OJ83XxWTp7E=";
+=======
+    hash = "sha256-PROJKC8ZxAZ8zZR4if33553qtp7i9y58LPr1d1gCXVQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -88,6 +96,7 @@ buildPythonPackage rec {
     "zigpy.zcl"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
@@ -95,5 +104,14 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library implementing a ZigBee stack";
+    homepage = "https://github.com/zigpy/zigpy";
+    changelog = "https://github.com/zigpy/zigpy/releases/tag/${version}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ mvnetbiz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

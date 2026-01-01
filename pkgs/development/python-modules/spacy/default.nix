@@ -47,14 +47,22 @@
 
 buildPythonPackage rec {
   pname = "spacy";
+<<<<<<< HEAD
   version = "3.8.11";
+=======
+  version = "3.8.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
     tag = "release-v${version}";
+<<<<<<< HEAD
     hash = "sha256-pLn3fq6SDstkRIv+1fj1yEGTlAd1IAiVgRu25CnEV8E=";
+=======
+    hash = "sha256-mRra5/4W3DFVI/KbReTg2Ey9mOC6eQQ31/QDt7Pw0fU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -147,7 +155,11 @@ buildPythonPackage rec {
   meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
+<<<<<<< HEAD
     changelog = "https://github.com/explosion/spaCy/releases/tag/${src.tag}";
+=======
+    changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
     mainProgram = "spacy";

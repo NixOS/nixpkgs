@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grapheme" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for grapheme aware string handling";
     homepage = "https://github.com/alvinlindstam/grapheme";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ creator54 ];
+=======
+  meta = with lib; {
+    description = "Python package for grapheme aware string handling";
+    homepage = "https://github.com/alvinlindstam/grapheme";
+    license = licenses.mit;
+    maintainers = with maintainers; [ creator54 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

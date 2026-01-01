@@ -1,8 +1,11 @@
 {
   rustPlatform,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cargo-tauri,
   nodejs,
   pkg-config,
@@ -19,15 +22,26 @@
   jq,
   gst_all_1,
 }:
+<<<<<<< HEAD
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
   version = "0.9.96";
+=======
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "readest";
+  version = "0.9.93";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-3PCdcSF9ocDqHzK9P/FJQwch5u5zVLQ3eDNSGJQGSKw=";
+=======
+    hash = "sha256-Yfj7QVjCCIX41xVzYMoaJPQd2zY/zymo2V2nbNUZpO4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -38,16 +52,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/apps/readest-app";
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-Ea/J3W3L8vVDlIRY/szaCfcqunjiFU6yL+e8h4c5UHg=";
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-z7eOiaNXUb2wb014MOGAejZc2fgoMTavhJsNQaygFzc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pnpmRoot = "../..";
 
+<<<<<<< HEAD
   cargoHash = "sha256-AwrA0KXLTSUhLxIJHKU1crVxUxImFOKDRStB48mZfcg=";
+=======
+  cargoHash = "sha256-nNMD2LnMDz91kI2QniD+zD/Ug9BSVjTIiuxWdz8UxL0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cargoRoot = "../..";
 
@@ -66,8 +91,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cargo-tauri.hook
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
@@ -88,8 +117,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   preBuild = ''
+<<<<<<< HEAD
     # set up pdfjs and simplecc
     pnpm setup-vendors
+=======
+    pnpm setup-pdfjs
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   preFixup = ''

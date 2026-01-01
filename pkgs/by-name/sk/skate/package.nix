@@ -24,11 +24,19 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Personal multi-machine syncable key value store";
     homepage = "https://github.com/charmbracelet/skate";
     changelog = "https://github.com/charmbracelet/skate/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Personal multi-machine syncable key value store";
+    homepage = "https://github.com/charmbracelet/skate";
+    changelog = "https://github.com/charmbracelet/skate/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "skate";
   };

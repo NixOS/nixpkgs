@@ -59,7 +59,11 @@ buildPythonPackage rec {
     pytestCheckHook
     time-machine
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "avwx" ];
 
@@ -70,11 +74,20 @@ buildPythonPackage rec {
     "test_station_nearest_ip"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Aviation Weather parsing engine";
     homepage = "https://github.com/avwx-rest/avwx-engine";
     changelog = "https://github.com/avwx-rest/avwx-engine/blob/${src.tag}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Aviation Weather parsing engine";
+    homepage = "https://github.com/avwx-rest/avwx-engine";
+    changelog = "https://github.com/avwx-rest/avwx-engine/blob/${src.tag}/changelog.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

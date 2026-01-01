@@ -147,7 +147,11 @@ rustPlatform.buildRustPackage rec {
       gpl3Plus
       cc0
     ];
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

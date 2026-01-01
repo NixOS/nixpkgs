@@ -41,12 +41,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Free cross-platform programming exerciser";
     mainProgram = "plm";
     homepage = "https://people.irisa.fr/Martin.Quinson/Teaching/PLM/";
     license = lib.licenses.gpl3;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+=======
+  meta = with lib; {
+    description = "Free cross-platform programming exerciser";
+    mainProgram = "plm";
+    homepage = "https://people.irisa.fr/Martin.Quinson/Teaching/PLM/";
+    license = licenses.gpl3;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

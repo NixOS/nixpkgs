@@ -40,10 +40,18 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/alsa-lib"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Real-time adjustable equalizer plugin for ALSA";
     homepage = "https://github.com/bassdr/alsaequal";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ymeister ];
+=======
+  meta = with lib; {
+    description = "Real-time adjustable equalizer plugin for ALSA";
+    homepage = "https://github.com/bassdr/alsaequal";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ymeister ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

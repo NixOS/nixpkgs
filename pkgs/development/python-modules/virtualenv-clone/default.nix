@@ -39,11 +39,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/edwardgeorge/virtualenv-clone";
     description = "Script to clone virtualenvs";
     mainProgram = "virtualenv-clone";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/edwardgeorge/virtualenv-clone";
+    description = "Script to clone virtualenvs";
+    mainProgram = "virtualenv-clone";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

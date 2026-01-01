@@ -20,7 +20,10 @@ stdenv.mkDerivation rec {
   rebol = fetchurl {
     url = "http://www.rebol.com/downloads/v278/rebol-core-278-4-2.tar.gz";
     sha256 = "1c1v0pyhf3d8z98qc93a5zmx0bbl0qq5lr8mbkdgygqsq2bv2xbz";
+<<<<<<< HEAD
     meta.license = lib.licenses.unfree; # https://www.rebol.com/license.html
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -88,7 +91,11 @@ stdenv.mkDerivation rec {
 
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       New programming language strongly inspired by Rebol, but with a
       broader field of usage thanks to its native-code compiler, from system
@@ -96,12 +103,20 @@ stdenv.mkDerivation rec {
       concurrency and multi-core CPUs
     '';
     mainProgram = "red";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ uralbash ];
+=======
+    maintainers = with maintainers; [ uralbash ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.red-lang.org/";
   };
 }

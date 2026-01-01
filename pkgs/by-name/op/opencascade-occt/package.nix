@@ -60,7 +60,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withVtk vtk;
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = "-fpermissive";
+=======
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmakeFlags = [
     (lib.cmakeBool "USE_RAPIDJSON" true)
     # Enable exception handling for release builds.
@@ -80,6 +84,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
     homepage = "https://www.opencascade.org/";
@@ -88,5 +93,15 @@ stdenv.mkDerivation rec {
     # are basically about making the license a little less share-alike.
     maintainers = with lib.maintainers; [ amiloradovsky ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
+    homepage = "https://www.opencascade.org/";
+    license = licenses.lgpl21; # essentially...
+    # The special exception defined in the file OCCT_LGPL_EXCEPTION.txt
+    # are basically about making the license a little less share-alike.
+    maintainers = with maintainers; [ amiloradovsky ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

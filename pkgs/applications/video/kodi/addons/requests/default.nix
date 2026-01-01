@@ -33,10 +33,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://python-requests.org";
     description = "Python HTTP for Humans";
     license = lib.licenses.asl20;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "http://python-requests.org";
+    description = "Python HTTP for Humans";
+    license = licenses.asl20;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,7 +33,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
+<<<<<<< HEAD
   version = "0.10.1";
+=======
+  version = "0.10.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -45,7 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "wayfire";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-yiqtnsXxvC7vk22ZQ5OFt5uX40FCRGWpfZrax9GItAg=";
+=======
+    hash = "sha256-rnrcuikfRPnIfIkmKUIRh8Sm+POwFLzaZZMAlmeBdjY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

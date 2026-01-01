@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_simple_breaks" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mdformat plugin to render thematic breaks using three dashes";
     homepage = "https://github.com/csala/mdformat-simple-breaks";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aldoborrero ];
+=======
+  meta = with lib; {
+    description = "Mdformat plugin to render thematic breaks using three dashes";
+    homepage = "https://github.com/csala/mdformat-simple-breaks";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aldoborrero ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

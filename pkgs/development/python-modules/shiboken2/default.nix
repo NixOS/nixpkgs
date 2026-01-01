@@ -66,10 +66,17 @@ stdenv.mkDerivation {
     rm $out/bin/shiboken_tool.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generator for the PySide2 Qt bindings";
     mainProgram = "shiboken2";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Generator for the PySide2 Qt bindings";
+    mainProgram = "shiboken2";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2
       lgpl21
     ];

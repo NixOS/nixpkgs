@@ -10,16 +10,27 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cook-cli";
+<<<<<<< HEAD
   version = "0.19.1";
+=======
+  version = "0.19.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-CJDWhcnY/HjaJbBJCevH9ytp7oJ734M30DxJ/vCCO/I=";
   };
 
   cargoHash = "sha256-rI/6niK/9QgRc4cWmDLPOc70PN1mRZLXdPym1R3d/Iw=";
+=======
+    hash = "sha256-yNUiwMzCAj5aXuQIzfzpy2GylhB37CuSmyHsyxcmKXM=";
+  };
+
+  cargoHash = "sha256-Kq70YgTis5e8PcIAOgAqk/fi3HmE+lbpYjaV47axGX4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Build without the self-updating feature
   buildNoDefaultFeatures = true;
@@ -35,7 +46,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   npmDeps = fetchNpmDeps {
     inherit src;

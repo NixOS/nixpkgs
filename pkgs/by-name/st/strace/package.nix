@@ -11,11 +11,19 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
+<<<<<<< HEAD
   version = "6.18";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
     hash = "sha256-CtXcupc6aed5ZQ7xyzNbEu5gcW/HMmYJiVvTPm0qcyU=";
+=======
+  version = "6.17";
+
+  src = fetchurl {
+    url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
+    hash = "sha256-Cnx77cfvwHbzJCoDEK8q5jwpKjbdQjbweeiKk+mMucA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   separateDebugInfo = true;
@@ -50,6 +58,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://strace.io/";
     description = "System call tracer for Linux";
@@ -59,6 +68,17 @@ stdenv.mkDerivation rec {
     ]; # gpl2Plus is for the test suite
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://strace.io/";
+    description = "System call tracer for Linux";
+    license = with licenses; [
+      lgpl21Plus
+      gpl2Plus
+    ]; # gpl2Plus is for the test suite
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       globin
       ma27
       qyliss

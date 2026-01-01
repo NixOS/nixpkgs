@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Device specific feedback themes for Feedbackd";
     homepage = "https://gitlab.freedesktop.org/agx/feedbackd-device-themes";
@@ -52,5 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
       Luflosi
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Device specific feedback themes for Feedbackd";
+    homepage = "https://gitlab.freedesktop.org/agx/feedbackd-device-themes";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      pacman99
+      Luflosi
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

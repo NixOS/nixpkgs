@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uritemplate" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of RFC 6570 URI templates";
     homepage = "https://github.com/python-hyper/uritemplate";
@@ -34,5 +35,16 @@ buildPythonPackage rec {
       bsd3
     ];
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Implementation of RFC 6570 URI templates";
+    homepage = "https://github.com/python-hyper/uritemplate";
+    changelog = "https://github.com/python-hyper/uritemplate/blob/${version}/HISTORY.rst";
+    license = with licenses; [
+      asl20
+      bsd3
+    ];
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -85,13 +85,21 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
+<<<<<<< HEAD
   version = "7.1.2-11";
+=======
+  version = "7.1.2-8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-RFiE23VW8AbVb7iglxjQMT6njDw+P7vLW6+nSKqN0p8=";
+=======
+    hash = "sha256-2jSQ59Wi6/1dbS/AgM1DfW6WlwoYuJlnTLoM8Mc6Ji8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -194,7 +202,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.imagemagick.org/";
     changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
     description = "Software suite to create, edit, compose, or convert bitmap images";
@@ -202,13 +214,22 @@ stdenv.mkDerivation (finalAttrs: {
       "ImageMagick"
       "MagickWand"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dotlambda
       rhendric
       faukah
     ];
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "magick";
   };
 })

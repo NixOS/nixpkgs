@@ -40,11 +40,20 @@ stdenv.mkDerivation rec {
   ];
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "WMF library from wvWare";
     homepage = "https://wvware.sourceforge.net/libwmf.html";
     downloadPage = "https://github.com/caolanm/libwmf/releases";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "WMF library from wvWare";
+    homepage = "https://wvware.sourceforge.net/libwmf.html";
+    downloadPage = "https://github.com/caolanm/libwmf/releases";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

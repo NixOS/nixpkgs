@@ -38,9 +38,16 @@ mkCoqDerivation {
   };
   releaseRev = v: "v${v}";
 
+<<<<<<< HEAD
   meta = {
     description = "Geometry in Coq for French high school";
     maintainers = with lib.maintainers; [ definfo ];
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "Geometry in Coq for French high school";
+    maintainers = with maintainers; [ definfo ];
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

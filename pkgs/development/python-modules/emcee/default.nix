@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "emcee" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Kick ass affine-invariant ensemble MCMC sampling";
     homepage = "https://emcee.readthedocs.io/";
     changelog = "https://github.com/dfm/emcee/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Kick ass affine-invariant ensemble MCMC sampling";
+    homepage = "https://emcee.readthedocs.io/";
+    changelog = "https://github.com/dfm/emcee/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

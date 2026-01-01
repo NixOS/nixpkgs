@@ -21,14 +21,22 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
+<<<<<<< HEAD
   version = "3.11.4";
+=======
+  version = "3.11.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Le/TJfDSvro9eMLOfY/il/0LSJ8orHSSjI7jaYdXaLs=";
+=======
+    hash = "sha256-2wOeghoi8FSk1II/0rid+ddRq7ceerH7ZeLcb+SSXKY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   __darwinAllowLocalNetworking = true;
@@ -50,7 +58,11 @@ buildPythonPackage rec {
     sqlalchemy
     twisted
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     pushd test
@@ -77,7 +89,11 @@ buildPythonPackage rec {
     "examples/"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python implementation of the Modbus protocol";
     longDescription = ''
       Pymodbus is a full Modbus protocol implementation using twisted,
@@ -87,8 +103,13 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pymodbus-dev/pymodbus";
     changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pymodbus.simulator";
   };
 }

@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "container_inspector" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Suite of analysis utilities and command line tools for container images";
     homepage = "https://github.com/nexB/container-inspector";
     changelog = "https://github.com/nexB/container-inspector/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Suite of analysis utilities and command line tools for container images";
+    homepage = "https://github.com/nexB/container-inspector";
+    changelog = "https://github.com/nexB/container-inspector/releases/tag/v${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

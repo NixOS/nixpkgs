@@ -7,7 +7,11 @@
   rainfrog,
 }:
 let
+<<<<<<< HEAD
   version = "0.3.12";
+=======
+  version = "0.3.10";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -17,10 +21,17 @@ rustPlatform.buildRustPackage {
     owner = "achristmascarl";
     repo = "rainfrog";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-4Zc8r6Sf4iE/fYiYwa8gXoCzEnCuarYzF1AzaXhdpHg=";
   };
 
   cargoHash = "sha256-Ziqs6F3XaWY0ugdpE096/SYmNEeKK4KdrhOkJcKUxZs=";
+=======
+    hash = "sha256-Up/ZjIppQ3EYceSzY8DBV3lK8fd+sylm2Jl7lvO4VdY=";
+  };
+
+  cargoHash = "sha256-PzBvshoVxa4FaSygDPTR0+EuzfmQBkdb64jOWOpAgYY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     tests.version = testers.testVersion {

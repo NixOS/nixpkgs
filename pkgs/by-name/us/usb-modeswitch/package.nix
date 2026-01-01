@@ -11,6 +11,7 @@
   bash,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "usb-modeswitch";
   version = "2.6.2";
@@ -21,6 +22,21 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [ ./pkg-config.patch ];
+=======
+stdenv.mkDerivation rec {
+  pname = "usb-modeswitch";
+  version = "2.6.0";
+
+  src = fetchurl {
+    url = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
+    sha256 = "18wbbxc5cfsmikba0msdvd5qlaga27b32nhrzicyd9mdddp265f2";
+  };
+
+  patches = [
+    ./configurable-usb-modeswitch.patch
+    ./pkg-config.patch
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Remove attempts to write to /etc and /var/lib.
   postPatch = ''
@@ -54,12 +70,16 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     tcl
   ];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mode switching tool for controlling 'multi-mode' USB devices";
     license = lib.licenses.gpl2;
@@ -71,3 +91,16 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "usb_modeswitch";
   };
 })
+=======
+  meta = with lib; {
+    description = "Mode switching tool for controlling 'multi-mode' USB devices";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      marcweber
+      peterhoeg
+    ];
+    platforms = platforms.linux;
+    mainProgram = "usb_modeswitch";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -88,12 +88,24 @@ let
         };
     };
 
+<<<<<<< HEAD
     meta = {
       description = "Free and Open Source Reverse Engineering Platform powered by rizin";
       homepage = src.meta.homepage;
       license = lib.licenses.gpl3;
       mainProgram = "cutter";
       maintainers = with lib.maintainers; [ mic92 ];
+=======
+    meta = with lib; {
+      description = "Free and Open Source Reverse Engineering Platform powered by rizin";
+      homepage = src.meta.homepage;
+      license = licenses.gpl3;
+      mainProgram = "cutter";
+      maintainers = with maintainers; [
+        mic92
+        dtzWill
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (rizin.meta) platforms;
     };
   };

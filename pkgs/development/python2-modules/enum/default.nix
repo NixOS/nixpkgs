@@ -19,10 +19,17 @@ buildPythonPackage rec {
 
   doCheck = !isPyPy;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pypi.python.org/pypi/enum/";
     description = "Robust enumerated type support in Python";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://pypi.python.org/pypi/enum/";
+    description = "Robust enumerated type support in Python";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

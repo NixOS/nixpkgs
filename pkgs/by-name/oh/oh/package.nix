@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-Qma5Vk0JO/tTrZanvTCE40LmjeCfBup3U3N7gyhfp44=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/michaelmacinnis/oh";
     description = "New Unix shell";
     mainProgram = "oh";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/michaelmacinnis/oh";
+    description = "New Unix shell";
+    mainProgram = "oh";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {

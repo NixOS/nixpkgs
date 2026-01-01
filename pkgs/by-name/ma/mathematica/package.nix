@@ -70,12 +70,21 @@ callPackage ./generic.nix {
     + "-${found-version.version}"
     + lib.optionalString (lang != "en") "-${lang}"
   );
+<<<<<<< HEAD
   meta = {
     description = "Wolfram Mathematica computational software system";
     homepage = "https://www.wolfram.com/mathematica/";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Wolfram Mathematica computational software system";
+    homepage = "https://www.wolfram.com/mathematica/";
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rafaelrc
     ];
     platforms = [ "x86_64-linux" ];

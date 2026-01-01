@@ -20,11 +20,20 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Rust adapter for Buildkite Test Analytics";
     mainProgram = "buildkite-test-collector";
     homepage = "https://buildkite.com/test-analytics";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ jfroche ];
+=======
+  meta = with lib; {
+    description = "Rust adapter for Buildkite Test Analytics";
+    mainProgram = "buildkite-test-collector";
+    homepage = "https://buildkite.com/test-analytics";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ jfroche ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

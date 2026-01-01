@@ -20,11 +20,19 @@ buildDunePackage rec {
     inherit liquidsoap;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal support for Canonical S-expressions";
     homepage = "https://github.com/ocaml-dune/csexp";
     changelog = "https://github.com/ocaml-dune/csexp/raw/${version}/CHANGES.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Minimal support for Canonical S-expressions";
+    homepage = "https://github.com/ocaml-dune/csexp";
+    changelog = "https://github.com/ocaml-dune/csexp/raw/${version}/CHANGES.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

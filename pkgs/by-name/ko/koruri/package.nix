@@ -21,11 +21,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Japanese TrueType font obtained by mixing M+ FONTS and Open Sans";
     homepage = "https://github.com/Koruri/Koruri";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ haruki7049 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Japanese TrueType font obtained by mixing M+ FONTS and Open Sans";
+    homepage = "https://github.com/Koruri/Koruri";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ haruki7049 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

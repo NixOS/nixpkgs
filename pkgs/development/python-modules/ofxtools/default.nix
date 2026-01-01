@@ -28,10 +28,18 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/csingley/ofxtools";
     description = "Library for working with Open Financial Exchange (OFX) formatted data used by financial institutions";
     mainProgram = "ofxget";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/csingley/ofxtools";
+    description = "Library for working with Open Financial Exchange (OFX) formatted data used by financial institutions";
+    mainProgram = "ofxget";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

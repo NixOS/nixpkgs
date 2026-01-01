@@ -33,11 +33,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "result" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rust-like result type for Python";
     homepage = "https://github.com/rustedpy/result";
     changelog = "https://github.com/rustedpy/result/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Rust-like result type for Python";
+    homepage = "https://github.com/rustedpy/result";
+    changelog = "https://github.com/rustedpy/result/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ emattiza ];
   };
 }

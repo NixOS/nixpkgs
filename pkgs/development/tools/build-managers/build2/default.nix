@@ -98,10 +98,17 @@ stdenv.mkDerivation rec {
     inherit configSharedStatic;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.build2.org/";
     description = "Build2 build system";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://www.build2.org/";
+    description = "Build2 build system";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       build2 is an open source (MIT), cross-platform build toolchain
       that aims to approximate Rust Cargo's convenience for developing
@@ -115,8 +122,13 @@ stdenv.mkDerivation rec {
       one of these languages (see bash and rust modules, for example).
     '';
     changelog = "https://git.build2.org/cgit/build2/tree/NEWS";
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hiro98
       r-burns
     ];

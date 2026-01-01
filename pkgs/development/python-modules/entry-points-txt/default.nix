@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "entry_points_txt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read & write entry_points.txt files";
     homepage = "https://github.com/jwodder/entry-points-txt";
     changelog = "https://github.com/wheelodex/entry-points-txt/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ayazhafiz ];
+=======
+  meta = with lib; {
+    description = "Read & write entry_points.txt files";
+    homepage = "https://github.com/jwodder/entry-points-txt";
+    changelog = "https://github.com/wheelodex/entry-points-txt/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ayazhafiz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,11 +17,20 @@ buildTileSet {
 
   modRoot = "MSX++UnDeadPeopleEdition";
 
+<<<<<<< HEAD
   meta = {
     description = "Cataclysm DDA tileset based on MSX++ tileset";
     homepage = "https://github.com/jmz-b/UndeadPeopleTileset";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ mnacamura ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Cataclysm DDA tileset based on MSX++ tileset";
+    homepage = "https://github.com/jmz-b/UndeadPeopleTileset";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ mnacamura ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

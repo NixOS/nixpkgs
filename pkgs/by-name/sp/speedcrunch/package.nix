@@ -31,9 +31,15 @@ stdenv.mkDerivation {
     libsForQt5.wrapQtAppsHook
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://speedcrunch.org";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://speedcrunch.org";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast power user calculator";
     mainProgram = "speedcrunch";
     longDescription = ''
@@ -42,7 +48,11 @@ stdenv.mkDerivation {
       precisions, unlimited variable storage, intelligent automatic completion
       full keyboard-friendly and more than 15 built-in math function.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       j0hax
     ];
     inherit (libsForQt5.qtbase.meta) platforms;

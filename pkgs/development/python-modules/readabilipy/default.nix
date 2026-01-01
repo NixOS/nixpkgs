@@ -101,12 +101,21 @@ buildPythonPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "HTML content extractor";
     homepage = "https://github.com/alan-turing-institute/ReadabiliPy";
     changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "HTML content extractor";
+    homepage = "https://github.com/alan-turing-institute/ReadabiliPy";
+    changelog = "https://github.com/alan-turing-institute/ReadabiliPy/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "readabilipy";
   };
 }

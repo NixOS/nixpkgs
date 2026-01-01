@@ -73,11 +73,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atomman" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/usnistgov/atomman/blob/${src.rev}/UPDATES.rst";
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/usnistgov/atomman/blob/${src.rev}/UPDATES.rst";
+    description = "Atomistic Manipulation Toolkit";
+    homepage = "https://github.com/usnistgov/atomman/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

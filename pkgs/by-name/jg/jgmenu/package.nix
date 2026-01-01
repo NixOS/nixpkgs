@@ -6,13 +6,20 @@
   python3Packages,
   pango,
   librsvg,
+<<<<<<< HEAD
   libxfce4util,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libxml2,
   menu-cache,
   xorg,
   makeWrapper,
   enableXfcePanelApplet ? false,
+<<<<<<< HEAD
   xfce4-panel,
+=======
+  xfce,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gtk3,
   gitUpdater,
 }:
@@ -45,8 +52,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableXfcePanelApplet [
     gtk3
+<<<<<<< HEAD
     libxfce4util
     xfce4-panel
+=======
+    xfce.libxfce4util
+    xfce.xfce4-panel
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   configureFlags = [
@@ -64,11 +76,20 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/johanmalm/jgmenu";
     description = "Small X11 menu intended to be used with openbox and tint2";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/johanmalm/jgmenu";
+    description = "Small X11 menu intended to be used with openbox and tint2";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,12 +29,21 @@ let
         rev = "a2bf59878dd76685803ec260e15d875746ad6e25";
         hash = "sha256-3CvjgNjsrm4obATK6LmtYob8i2ngTbwP6FB4HlJMPCE=";
       };
+<<<<<<< HEAD
       meta = {
         description = "Hyphen dictionary for ${shortDescription} from LibreOffice";
         homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
         license = with lib.licenses; [ mpl20 ];
         maintainers = with lib.maintainers; [ theCapypara ];
         platforms = lib.platforms.all;
+=======
+      meta = with lib; {
+        description = "Hyphen dictionary for ${shortDescription} from LibreOffice";
+        homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
+        license = with licenses; [ mpl20 ];
+        maintainers = with maintainers; [ theCapypara ];
+        platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
       dontBuild = true;
       installPhase = ''

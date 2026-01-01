@@ -61,7 +61,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Scientific signal analysis application";
     longDescription = ''
       Baudline is a time-frequency browser designed for scientific
@@ -77,13 +81,22 @@ stdenv.mkDerivation rec {
     homepage = "http://www.baudline.com/";
     # See http://www.baudline.com/faq.html#licensing_terms.
     # (Do NOT (re)distribute on hydra.)
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

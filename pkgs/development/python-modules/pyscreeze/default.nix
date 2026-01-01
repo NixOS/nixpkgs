@@ -34,10 +34,18 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ pillow ];
 
+<<<<<<< HEAD
   meta = {
     description = "PyScreeze is a simple, cross-platform screenshot module for Python 2 and 3";
     homepage = "https://github.com/asweigart/pyscreeze";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lucasew ];
+=======
+  meta = with lib; {
+    description = "PyScreeze is a simple, cross-platform screenshot module for Python 2 and 3";
+    homepage = "https://github.com/asweigart/pyscreeze";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lucasew ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

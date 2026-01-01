@@ -44,11 +44,19 @@ stdenvNoCC.mkDerivation rec {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sdushantha/tmpmail";
     description = "Temporary email right from your terminal written in POSIX sh";
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sdushantha/tmpmail";
+    description = "Temporary email right from your terminal written in POSIX sh";
+    license = licenses.mit;
+    maintainers = [ maintainers.lom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tmpmail";
   };
 }

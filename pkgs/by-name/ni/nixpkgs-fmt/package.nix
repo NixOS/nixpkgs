@@ -16,11 +16,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-aookq6n8/dMz+REDwtSghhzcUf66D3O9SKJKx3q7lsI=";
 
+<<<<<<< HEAD
   meta = {
     description = "Nix code formatter for nixpkgs";
     homepage = "https://nix-community.github.io/nixpkgs-fmt";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ zimbatm ];
+=======
+  meta = with lib; {
+    description = "Nix code formatter for nixpkgs";
+    homepage = "https://nix-community.github.io/nixpkgs-fmt";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ zimbatm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nixpkgs-fmt";
   };
 }

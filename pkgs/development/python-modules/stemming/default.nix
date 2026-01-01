@@ -24,10 +24,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "stemming" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementations of various stemming algorithms";
     homepage = "https://github.com/nmstoker/stemming";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Python implementations of various stemming algorithms";
+    homepage = "https://github.com/nmstoker/stemming";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

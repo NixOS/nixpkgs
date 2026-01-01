@@ -61,11 +61,20 @@ stdenv.mkDerivation {
     "bdf"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html";
     description = "Unicode bitmap fonts";
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html";
+    description = "Unicode bitmap fonts";
+    license = licenses.publicDomain;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

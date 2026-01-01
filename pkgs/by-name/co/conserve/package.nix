@@ -24,11 +24,19 @@ rustPlatform.buildRustPackage rec {
     "--skip=chgrp_reported_as_changed"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Robust portable backup tool in Rust";
     homepage = "https://github.com/sourcefrog/conserve";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Robust portable backup tool in Rust";
+    homepage = "https://github.com/sourcefrog/conserve";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "conserve";
   };
 }

@@ -33,11 +33,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-72DuM64wj8WW6soagodOFIeHvVn1CPpb1T3Y7GQYsbs=";
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and fast dashboard for Kubernetes";
     mainProgram = "kdash";
     homepage = "https://github.com/kdash-rs/kdash";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Simple and fast dashboard for Kubernetes";
+    mainProgram = "kdash";
+    homepage = "https://github.com/kdash-rs/kdash";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

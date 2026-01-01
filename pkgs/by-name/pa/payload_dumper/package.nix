@@ -38,11 +38,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = finalAttrs.src.meta.homepage;
     description = "Android OTA payload dumper";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ DamienCassou ];
+=======
+  meta = with lib; {
+    homepage = finalAttrs.src.meta.homepage;
+    description = "Android OTA payload dumper";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ DamienCassou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "payload_dumper";
   };
 })

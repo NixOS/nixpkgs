@@ -34,13 +34,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qtawesome" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Iconic fonts in PyQt and PySide applications";
     mainProgram = "qta-browser";
     homepage = "https://github.com/spyder-ide/qtawesome";
     changelog = "https://github.com/spyder-ide/qtawesome/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux; # fails on Darwin
+=======
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux; # fails on Darwin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

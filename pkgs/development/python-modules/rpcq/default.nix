@@ -55,10 +55,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rpcq" ];
 
+<<<<<<< HEAD
   meta = {
     description = "RPC framework and message specification for rigetti Quantum Cloud services";
     homepage = "https://github.com/rigetti/rpcq";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "RPC framework and message specification for rigetti Quantum Cloud services";
+    homepage = "https://github.com/rigetti/rpcq";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

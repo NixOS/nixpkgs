@@ -25,16 +25,27 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
+<<<<<<< HEAD
   version = "1.5.6";
+=======
+  version = "1.5.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-N27cKlJxQtE+/fMnaTlWyM3QeOIkt5M79t9PzB69eqw=";
   };
 
   cargoHash = "sha256-JnlqKESW2VBv902/qZqEr5rEDSLhnpQ/nZdYHU6tBMI=";
+=======
+    hash = "sha256-5sGVVJ8Y90yJoikQnPeGbZhNlSR/d3EkMct9isSWies=";
+  };
+
+  cargoHash = "sha256-+Yc7u6q4U4MwT5eHnxHC2DCG66SmEyRfNMeMqSO+GeQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -114,6 +125,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {

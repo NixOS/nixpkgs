@@ -19,12 +19,21 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Plot device";
     homepage = "https://github.com/silentbicycle/guff";
     license = lib.licenses.isc;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Plot device";
+    homepage = "https://github.com/silentbicycle/guff";
+    license = licenses.isc;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "guff";
   };
 }

@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin bpf_dbg
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/libbpf/bpftool";
     description = "Debugging/program analysis tools for the eBPF subsystem";
@@ -87,5 +88,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/libbpf/bpftool";
+    description = "Debugging/program analysis tools for the eBPF subsystem";
+    license = [
+      licenses.gpl2Only
+      licenses.bsd2
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

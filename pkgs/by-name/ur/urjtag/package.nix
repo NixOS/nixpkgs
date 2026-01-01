@@ -45,14 +45,25 @@ stdenv.mkDerivation rec {
     (lib.enableFeature svfSupport "svf")
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://urjtag.org/";
     description = "Universal JTAG library, server and tools";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "http://urjtag.org/";
+    description = "Universal JTAG library, server and tools";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       lgpl21Plus
     ];
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

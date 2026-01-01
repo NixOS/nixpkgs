@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "riden" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for Riden RD power supplies";
     homepage = "https://github.com/geeksville/riden";
     changelog = "https://github.com/geeksville/Riden/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for Riden RD power supplies";
+    homepage = "https://github.com/geeksville/riden";
+    changelog = "https://github.com/geeksville/Riden/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

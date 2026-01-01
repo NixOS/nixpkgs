@@ -47,13 +47,23 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage recoverdm.1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Recover damaged CD DVD and disks with bad sectors";
     mainProgram = "recoverdm";
     homepage = "https://salsa.debian.org/pkg-security-team/recoverdm";
     changelog = "https://salsa.debian.org/pkg-security-team/recoverdm/-/blob/debian/master/debian/changelog";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl1Only;
+=======
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl1Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

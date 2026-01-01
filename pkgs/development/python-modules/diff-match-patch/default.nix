@@ -21,10 +21,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/diff-match-patch-python/diff-match-patch";
     description = "Diff, Match and Patch libraries for Plain Text";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/diff-match-patch-python/diff-match-patch";
+    description = "Diff, Match and Patch libraries for Plain Text";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

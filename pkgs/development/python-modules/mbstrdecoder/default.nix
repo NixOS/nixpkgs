@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   checkInputs = [ faker ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/thombashi/mbstrdecoder";
     description = "Library for decoding multi-byte character strings";
     maintainers = with lib.maintainers; [ genericnerdyusername ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/thombashi/mbstrdecoder";
+    description = "Library for decoding multi-byte character strings";
+    maintainers = with maintainers; [ genericnerdyusername ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -2,6 +2,7 @@ plugins {
     id('application')
 }
 
+<<<<<<< HEAD
 String getPropOrDie(String prop, String message) {
     def ret = System.getProperty(prop)
     if (!ret) {
@@ -12,4 +13,8 @@ String getPropOrDie(String prop, String message) {
 
 application {
     mainClass = getPropOrDie('nix.test.mainClass', 'No main class defined, perhaps GRADLE_OPTS broke?')
+=======
+application {
+    mainClass = 'Main'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

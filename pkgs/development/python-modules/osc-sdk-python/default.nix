@@ -40,10 +40,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "osc_sdk_python" ];
 
+<<<<<<< HEAD
   meta = {
     description = "SDK to perform actions on Outscale API";
     homepage = "https://github.com/outscale/osc-sdk-python";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "SDK to perform actions on Outscale API";
+    homepage = "https://github.com/outscale/osc-sdk-python";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

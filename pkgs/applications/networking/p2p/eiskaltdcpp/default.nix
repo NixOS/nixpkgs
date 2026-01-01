@@ -88,10 +88,18 @@ mkDerivation rec {
       --replace "/usr/local" "$out"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform program that uses the Direct Connect and ADC protocols";
     homepage = "https://github.com/eiskaltdcpp/eiskaltdcpp";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Cross-platform program that uses the Direct Connect and ADC protocols";
+    homepage = "https://github.com/eiskaltdcpp/eiskaltdcpp";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

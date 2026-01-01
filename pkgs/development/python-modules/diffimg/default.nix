@@ -36,10 +36,17 @@ buildPythonPackage {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Differentiate images in python - get a ratio or percentage difference, and generate a diff image";
     homepage = "https://github.com/nicolashahn/diffimg";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Differentiate images in python - get a ratio or percentage difference, and generate a diff image";
+    homepage = "https://github.com/nicolashahn/diffimg";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

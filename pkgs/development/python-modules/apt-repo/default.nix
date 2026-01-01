@@ -27,10 +27,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "apt_repo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to query APT repositories";
     homepage = "https://github.com/brennerm/python-apt-repo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicoo ];
+=======
+  meta = with lib; {
+    description = "Python library to query APT repositories";
+    homepage = "https://github.com/brennerm/python-apt-repo";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nicoo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

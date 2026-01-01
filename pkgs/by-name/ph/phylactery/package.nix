@@ -23,6 +23,7 @@ buildGoModule rec {
 
   passthru.tests.phylactery = nixosTests.phylactery;
 
+<<<<<<< HEAD
   meta = {
     description = "Old school comic web server";
     mainProgram = "phylactery";
@@ -30,5 +31,14 @@ buildGoModule rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ McSinyx ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Old school comic web server";
+    mainProgram = "phylactery";
+    homepage = "https://trong.loang.net/phylactery/about";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ McSinyx ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

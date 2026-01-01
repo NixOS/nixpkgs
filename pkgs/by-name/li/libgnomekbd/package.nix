@@ -55,11 +55,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Keyboard management library";
     mainProgram = "gkbd-keyboard-display";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Keyboard management library";
+    mainProgram = "gkbd-keyboard-display";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

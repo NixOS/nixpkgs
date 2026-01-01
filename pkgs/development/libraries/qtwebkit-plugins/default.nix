@@ -32,11 +32,19 @@ stdenv.mkDerivation {
     sed -i "s,\$\$\[QT_INSTALL_PLUGINS\],$out/$qtPluginPrefix," src/src.pro
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Spell checking plugin using Hunspell and HTML5 Notifications plugin for QtWebKit";
     homepage = "https://github.com/QupZilla/qtwebkit-plugins";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Spell checking plugin using Hunspell and HTML5 Notifications plugin for QtWebKit";
+    homepage = "https://github.com/QupZilla/qtwebkit-plugins";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

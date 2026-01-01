@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     "CC:=$(CC)"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/openresty/sregex";
     description = "Non-backtracking NFA/DFA-based Perl-compatible regex engine matching on large data streams";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/openresty/sregex";
+    description = "Non-backtracking NFA/DFA-based Perl-compatible regex engine matching on large data streams";
+    mainProgram = "sregex-cli";
+    license = licenses.bsd3;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

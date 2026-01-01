@@ -38,20 +38,35 @@ buildFHSEnv {
     cp -P $out/bin/cockroachdb $out/bin/cockroach
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.cockroachlabs.com";
     description = "Scalable, survivable, strongly-consistent SQL database";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://www.cockroachlabs.com";
+    description = "Scalable, survivable, strongly-consistent SQL database";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsl11
       mit
       cockroachdb-community-license
     ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rushmorem
       thoughtpolice
     ];

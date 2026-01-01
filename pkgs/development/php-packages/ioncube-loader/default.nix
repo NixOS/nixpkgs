@@ -42,6 +42,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Use ionCube-encoded files on a web server";
     changelog = "https://www.ioncube.com/loaders.php";
@@ -49,6 +50,15 @@ stdenv.mkDerivation {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ neverbehave ];
+=======
+  meta = with lib; {
+    description = "Use ionCube-encoded files on a web server";
+    changelog = "https://www.ioncube.com/loaders.php";
+    homepage = "https://www.ioncube.com";
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ neverbehave ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

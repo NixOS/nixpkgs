@@ -61,6 +61,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pomerium.io";
     description = "Client-side helper for Pomerium authenticating reverse proxy";
@@ -68,5 +69,14 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lukegb ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://pomerium.io";
+    description = "Client-side helper for Pomerium authenticating reverse proxy";
+    mainProgram = "pomerium-cli";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ lukegb ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

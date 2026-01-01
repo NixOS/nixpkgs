@@ -34,7 +34,11 @@
   versionCheckHook,
   vulkan-loader,
   wayland,
+<<<<<<< HEAD
   xfconf,
+=======
+  xfce,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   xorg,
   yyjson,
   zlib,
@@ -59,13 +63,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
+<<<<<<< HEAD
   version = "2.56.1";
+=======
+  version = "2.55.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-loTEadHPhE0b7VYCq2Lh+FKKnqzc4kzWFkHLnTjFsBg=";
+=======
+    hash = "sha256-pHDKVVGKOl9vdPephuClIrsIU0ooJID3M6Hbcm5GSig=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -175,7 +187,11 @@ stdenv.mkDerivation (finalAttrs: {
         ]
         ++ lib.optionals xfceSupport [
           #  Needed for XFWM theme and XFCE Terminal font.
+<<<<<<< HEAD
           xfconf
+=======
+          xfce.xfconf
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ]
         ++ lib.optionals zfsSupport [
           # Needed for zpool module
@@ -257,6 +273,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

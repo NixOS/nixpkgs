@@ -23,9 +23,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_markdown_tables" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension for rendering tables written in markdown";
     homepage = "https://github.com/ryanfox/sphinx-markdown-tables";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Sphinx extension for rendering tables written in markdown";
+    homepage = "https://github.com/ryanfox/sphinx-markdown-tables";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

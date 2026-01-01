@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     cp ${pname}.desktop $out/etc/xdg/autostart/${pname}.desktop
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/centic9/headset-charge-indicator";
     description = "App-indicator for GNOME desktops for controlling some features of various wireless headsets";
@@ -68,6 +69,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zebreus ];
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/centic9/headset-charge-indicator";
+    description = "App-indicator for GNOME desktops for controlling some features of various wireless headsets";
+    longDescription = "A simple app-indicator for GNOME desktops to display the battery charge of some wireless headsets which also allows to control some functions like LEDs, sidetone and others.";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ zebreus ];
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "headset-charge-indicator.py";
   };
 }

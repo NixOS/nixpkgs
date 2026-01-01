@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C++ library for Finite Fields and Elliptic Curves";
     changelog = "https://github.com/scipr-lab/libff/blob/develop/CHANGELOG.md";
@@ -52,5 +53,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ arturcygan ];
+=======
+  meta = with lib; {
+    description = "C++ library for Finite Fields and Elliptic Curves";
+    changelog = "https://github.com/scipr-lab/libff/blob/develop/CHANGELOG.md";
+    homepage = "https://github.com/scipr-lab/libff";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ arturcygan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

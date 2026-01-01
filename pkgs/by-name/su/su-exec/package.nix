@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     cp -a su-exec $out/bin/su-exec
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Switch user and group id and exec";
     mainProgram = "su-exec";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zimbatm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Switch user and group id and exec";
+    mainProgram = "su-exec";
+    homepage = "https://github.com/ncopa/su-exec";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zimbatm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

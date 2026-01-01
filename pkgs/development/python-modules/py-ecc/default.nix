@@ -53,11 +53,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py_ecc" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/ethereum/py_ecc/blob/${src.rev}/CHANGELOG.rst";
     description = "ECC pairing and bn_128 and bls12_381 curve operations";
     homepage = "https://github.com/ethereum/py_ecc";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/ethereum/py_ecc/blob/${src.rev}/CHANGELOG.rst";
+    description = "ECC pairing and bn_128 and bls12_381 curve operations";
+    homepage = "https://github.com/ethereum/py_ecc";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

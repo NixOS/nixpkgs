@@ -20,15 +20,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ zlib ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line tools for transforming Open Street Map files";
     homepage = [
       "https://wiki.openstreetmap.org/wiki/osmconvert"
       "https://wiki.openstreetmap.org/wiki/osmfilter"
       "https://wiki.openstreetmap.org/wiki/osmupdate"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
     license = lib.licenses.agpl3Only;
+=======
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
+    license = licenses.agpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

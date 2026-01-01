@@ -90,8 +90,11 @@ in
   #
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
   monad-dijkstra = dontCheck super.monad-dijkstra; # needs hlint 3.10
+<<<<<<< HEAD
 
   # Workaround https://github.com/haskell/haskell-language-server/issues/4674
   haskell-language-server = haskellLib.disableCabalFlag "hlint" super.haskell-language-server;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

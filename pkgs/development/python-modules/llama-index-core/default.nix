@@ -160,11 +160,20 @@ buildPythonPackage rec {
     "test_str"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Data framework for your LLM applications";
     homepage = "https://github.com/run-llama/llama_index/";
     changelog = "https://github.com/run-llama/llama_index/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Data framework for your LLM applications";
+    homepage = "https://github.com/run-llama/llama_index/";
+    changelog = "https://github.com/run-llama/llama_index/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

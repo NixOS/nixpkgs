@@ -64,12 +64,21 @@ stdenv.mkDerivation {
         }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Software tool that allows everybody to quickly assess the performance of their computer and compare it to a number of standard 'baseline' computer systems";
     homepage = "https://www.passmark.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ neverbehave ];
+=======
+  meta = with lib; {
+    description = "Software tool that allows everybody to quickly assess the performance of their computer and compare it to a number of standard 'baseline' computer systems";
+    homepage = "https://www.passmark.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ neverbehave ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = builtins.attrNames sources;
     mainProgram = "performancetest";
   };

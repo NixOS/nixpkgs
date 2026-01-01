@@ -64,11 +64,14 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+<<<<<<< HEAD
     adobeDisplayPostScript = {
       spdxId = "Adobe-Display-PostScript";
       fullName = "Adobe Display PostScript License";
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     adobeUtopia = {
       fullName = "Adobe Utopia Font License";
       spdxId = "Adobe-Utopia";
@@ -506,11 +509,14 @@ lib.mapAttrs mkLicense (
       fullName = "curl License";
     };
 
+<<<<<<< HEAD
     dec3Clause = {
       spdxId = "DEC-3-Clause";
       fullName = "DEC 3-Clause License";
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     doc = {
       spdxId = "DOC";
       fullName = "DOC License";
@@ -737,11 +743,14 @@ lib.mapAttrs mkLicense (
       spdxId = "HPND-sell-variant";
     };
 
+<<<<<<< HEAD
     hpndSellVariantMitDisclaimerXserver = {
       spdxId = "HPND-sell-MIT-disclaimer-xserver";
       fullName = "Historical Permission Notice and Disclaimer - sell xserver variant with MIT disclaimer";
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hpndDec = {
       fullName = "Historical Permission Notice and Disclaimer - DEC variant";
       spdxId = "HPND-DEC";
@@ -1128,6 +1137,7 @@ lib.mapAttrs mkLicense (
       fullName = "Non-Profit Open Software License 3.0";
     };
 
+<<<<<<< HEAD
     # NTP is basically HPND, but spdx and the OSI recognize it
     # hpnd says "and without fee", ntp "with or without fee"
     ntp = {
@@ -1135,6 +1145,8 @@ lib.mapAttrs mkLicense (
       fullName = "NTP License";
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nvidiaCuda = {
       shortName = "CUDA EULA";
       fullName = "CUDA Toolkit End User License Agreement (EULA)";

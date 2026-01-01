@@ -103,12 +103,21 @@ stdenv.mkDerivation rec {
       ;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://graphviz.org";
     description = "Graph visualization tools";
     license = lib.licenses.epl10;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://graphviz.org";
+    description = "Graph visualization tools";
+    license = licenses.epl10;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       raskin
     ];

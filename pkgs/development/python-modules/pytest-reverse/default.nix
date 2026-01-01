@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_reverse" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to reverse test order";
     homepage = "https://github.com/adamchainz/pytest-reverse";
     changelog = "https://github.com/adamchainz/pytest-reverse/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin to reverse test order";
+    homepage = "https://github.com/adamchainz/pytest-reverse";
+    changelog = "https://github.com/adamchainz/pytest-reverse/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

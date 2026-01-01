@@ -54,10 +54,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.dsproject" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PyScaffold extension for Data Science projects";
     homepage = "https://pypi.org/project/pyscaffoldext-dsproject/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
+=======
+  meta = with lib; {
+    description = "PyScaffold extension for Data Science projects";
+    homepage = "https://pypi.org/project/pyscaffoldext-dsproject/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

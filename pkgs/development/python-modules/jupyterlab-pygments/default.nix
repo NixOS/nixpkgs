@@ -41,10 +41,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyterlab_pygments" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jupyterlab syntax coloring theme for pygments";
     homepage = "https://github.com/jupyterlab/jupyterlab_pygments";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Jupyterlab syntax coloring theme for pygments";
+    homepage = "https://github.com/jupyterlab/jupyterlab_pygments";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -60,11 +60,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "\''${_IMPORT_PREFIX}/include" '${placeholder "dev"}/include'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Flux implementation for QML";
     homepage = "https://github.com/benlau/quickflux";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Flux implementation for QML";
+    homepage = "https://github.com/benlau/quickflux";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

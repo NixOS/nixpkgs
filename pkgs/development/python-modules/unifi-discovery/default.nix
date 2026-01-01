@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unifi_discovery" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to discover Unifi devices";
     homepage = "https://github.com/bdraco/unifi-discovery";
@@ -51,5 +52,14 @@ buildPythonPackage rec {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Module to discover Unifi devices";
+    homepage = "https://github.com/bdraco/unifi-discovery";
+    changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/v${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

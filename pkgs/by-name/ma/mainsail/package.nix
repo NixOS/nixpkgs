@@ -6,16 +6,27 @@
 
 buildNpmPackage rec {
   pname = "mainsail";
+<<<<<<< HEAD
   version = "2.15.0";
+=======
+  version = "2.14.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "mainsail-crew";
     repo = "mainsail";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-JmN5VPj4h83gLx/UsT69mXFxyvCHir0tl7zN2Q7eMOc=";
   };
 
   npmDepsHash = "sha256-8rUhDo1l0oLENWwy56UzwlSGIBJtTPsH6w5OX8tnp6U=";
+=======
+    hash = "sha256-hZgENY1Vb0wr6fqQfodjXQ+a/JAca0AQFKHlTc4EG68=";
+  };
+
+  npmDepsHash = "sha256-9pkcQS281OC9q9WadctQ/GAgbaeejrj7HLwKK/SDkAU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Prevent Cypress binary download.
   CYPRESS_INSTALL_BINARY = 0;

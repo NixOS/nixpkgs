@@ -28,6 +28,10 @@ rustPlatform.buildRustPackage rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;

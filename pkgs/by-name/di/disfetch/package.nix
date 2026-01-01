@@ -23,12 +23,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Yet another *nix distro fetching program, but less complex";
     homepage = "https://github.com/q60/disfetch";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ vel ];
+=======
+  meta = with lib; {
+    description = "Yet another *nix distro fetching program, but less complex";
+    homepage = "https://github.com/q60/disfetch";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ vel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "disfetch";
   };
 }

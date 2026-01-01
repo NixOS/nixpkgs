@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyperion" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for Hyperion Ambient Lighting";
     homepage = "https://github.com/dermotduffy/hyperion-py";
     changelog = "https://github.com/dermotduffy/hyperion-py/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python package for Hyperion Ambient Lighting";
+    homepage = "https://github.com/dermotduffy/hyperion-py";
+    changelog = "https://github.com/dermotduffy/hyperion-py/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -89,11 +89,20 @@ stdenv.mkDerivation rec {
     rm "$out"/lib/*.a
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight, Portable, Flexible Distributed/Mobile Deep Learning with Dynamic, Mutation-aware Dataflow Dep Scheduler";
     homepage = "https://mxnet.incubator.apache.org/";
     maintainers = [ ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Lightweight, Portable, Flexible Distributed/Mobile Deep Learning with Dynamic, Mutation-aware Dataflow Dep Scheduler";
+    homepage = "https://mxnet.incubator.apache.org/";
+    maintainers = [ ];
+    license = licenses.asl20;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

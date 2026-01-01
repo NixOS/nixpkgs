@@ -32,10 +32,18 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dedicated Chrome instance to log into captive portals without messing with DNS settings";
     homepage = "https://blog.filippo.io/captive-browser";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ma27 ];
+=======
+  meta = with lib; {
+    description = "Dedicated Chrome instance to log into captive portals without messing with DNS settings";
+    homepage = "https://blog.filippo.io/captive-browser";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ma27 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

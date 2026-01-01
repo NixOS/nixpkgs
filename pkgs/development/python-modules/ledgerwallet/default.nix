@@ -60,12 +60,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ledgerwallet" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/LedgerHQ/ledgerctl";
     description = "Library to control Ledger devices";
     mainProgram = "ledgerctl";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/LedgerHQ/ledgerctl";
+    description = "Library to control Ledger devices";
+    mainProgram = "ledgerctl";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       erdnaxe
     ];
   };

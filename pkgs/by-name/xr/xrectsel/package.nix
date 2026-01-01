@@ -20,12 +20,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libX11 ];
 
+<<<<<<< HEAD
   meta = {
     description = "Print the geometry of a rectangular screen region";
     homepage = "https://github.com/ropery/xrectsel";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Print the geometry of a rectangular screen region";
+    homepage = "https://github.com/ropery/xrectsel";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xrectsel";
   };
 }

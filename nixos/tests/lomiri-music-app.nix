@@ -57,9 +57,15 @@ in
             lomiri-thumbnailer
             # To check if playback actually works, or is broken due to missing codecs, we need to make the app's icons more OCR-able
             (lib.meta.hiPrio (
+<<<<<<< HEAD
               suru-icon-theme.overrideAttrs (old: {
                 # Colour the background in special colours, which we can OCR for
                 postPatch = (old.postPatch or "") + ''
+=======
+              suru-icon-theme.overrideAttrs (oa: {
+                # Colour the background in special colours, which we can OCR for
+                postPatch = (oa.postPatch or "") + ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                   substituteInPlace suru/actions/scalable/media-playback-pause.svg \
                     --replace-fail 'fill:none' 'fill:${ocrPauseColor}'
 
@@ -145,12 +151,20 @@ in
     with subtest("lomiri music plays music"):
         machine.succeed("xdotool mousemove 30 720 click 1") # Skip intro
         machine.sleep(2)
+<<<<<<< HEAD
         machine.wait_for_window("Albums")
+=======
+        machine.wait_for_text("Albums")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         machine.succeed("xdotool mousemove 25 45 click 1") # Open categories
         machine.sleep(2)
         machine.succeed("xdotool mousemove 25 240 click 1") # Switch to Tracks category
         machine.sleep(2)
+<<<<<<< HEAD
         machine.wait_for_window("Tracks")
+=======
+        machine.wait_for_text("Tracks") # Written in larger text now, easier for OCR
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         machine.screenshot("lomiri-music_listing")
 
         # Ensure pause colours isn't present already
@@ -192,7 +206,11 @@ in
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(2)
+<<<<<<< HEAD
         machine.wait_for_window("Titel")
+=======
+        machine.wait_for_text("Titel")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         machine.screenshot("lomiri-music_localised")
   '';
 }

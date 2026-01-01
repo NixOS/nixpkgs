@@ -46,12 +46,21 @@ python3Packages.buildPythonApplication {
     x256
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Render gifs as ASCII art in your cli";
     longDescription = "Takes in a GIF, short video, or a query to the Tenor GIF API and converts it to animated ASCII art.";
     homepage = "https://github.com/google/gif-for-cli";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
+=======
+  meta = with lib; {
+    description = "Render gifs as ASCII art in your cli";
+    longDescription = "Takes in a GIF, short video, or a query to the Tenor GIF API and converts it to animated ASCII art.";
+    homepage = "https://github.com/google/gif-for-cli";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ Scriptkiddi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gif-for-cli";
   };
 }

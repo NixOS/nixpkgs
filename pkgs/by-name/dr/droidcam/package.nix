@@ -60,11 +60,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux client for DroidCam app";
     homepage = "https://github.com/aramg/droidcam";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.suhr ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Linux client for DroidCam app";
+    homepage = "https://github.com/aramg/droidcam";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.suhr ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

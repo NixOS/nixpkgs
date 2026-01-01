@@ -59,14 +59,24 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm0444 src/gtk-gnutella.man $out/share/man/man1/gtk-gnutella.1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GTK Gnutella client, optimized for speed and scalability";
     mainProgram = "gtk-gnutella";
     homepage = "https://gtk-gnutella.sourceforge.net/"; # Code: https://github.com/gtk-gnutella/gtk-gnutella
     changelog = "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${finalAttrs.version}/ChangeLog";
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.doronbehar ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    maintainers = [ maintainers.doronbehar ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;
   };

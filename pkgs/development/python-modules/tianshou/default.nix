@@ -92,7 +92,11 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+<<<<<<< HEAD
     all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
+=======
+    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     argparse = [
       docstring-parser

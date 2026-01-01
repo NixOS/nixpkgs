@@ -44,12 +44,21 @@ stdenvNoCC.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/RaitaroH/adl";
     description = "Popcorn anime scraper/downloader + trackma wrapper";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ weathercold ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/RaitaroH/adl";
+    description = "Popcorn anime scraper/downloader + trackma wrapper";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ weathercold ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "adl";
   };
 }

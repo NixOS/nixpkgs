@@ -28,11 +28,19 @@ buildGoModule rec {
       "-X=${pkgSrc}.buildVersion=${version}"
     ];
 
+<<<<<<< HEAD
   meta = {
     description = "Alternative Yggdrasil network client";
     homepage = "https://github.com/popura-network/popura";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ urandom ];
+=======
+  meta = with lib; {
+    description = "Alternative Yggdrasil network client";
+    homepage = "https://github.com/popura-network/popura";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ urandom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yggdrasil";
   };
 }

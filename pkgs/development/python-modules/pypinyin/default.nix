@@ -28,12 +28,21 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Chinese Characters to Pinyin - 汉字转拼音";
     mainProgram = "pypinyin";
     homepage = "https://github.com/mozillazg/python-pinyin";
     changelog = "https://github.com/mozillazg/python-pinyin/blob/${src.tag}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

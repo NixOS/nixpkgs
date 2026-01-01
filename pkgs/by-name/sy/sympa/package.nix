@@ -118,6 +118,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) sympa;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source mailing list manager";
     homepage = "https://www.sympa.org";
@@ -126,5 +127,15 @@ stdenv.mkDerivation rec {
       sorki
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Open source mailing list manager";
+    homepage = "https://www.sympa.org";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      sorki
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

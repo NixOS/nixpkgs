@@ -17,10 +17,18 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ numpy ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/erdewit/eventkit";
     description = "Event-driven data pipelines";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ cab404 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/erdewit/eventkit";
+    description = "Event-driven data pipelines";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ cab404 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://github.com/jpcima/quadrafuzz";
@@ -50,5 +51,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    homepage = "https://github.com/jpcima/quadrafuzz";
+    description = "Multi-band fuzz distortion plugin";
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,10 +43,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "foobot_async" ];
 
+<<<<<<< HEAD
   meta = {
     description = "API Client for Foobot Air Quality Monitoring devices";
     homepage = "https://github.com/reefab/foobot_async";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "API Client for Foobot Air Quality Monitoring devices";
+    homepage = "https://github.com/reefab/foobot_async";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

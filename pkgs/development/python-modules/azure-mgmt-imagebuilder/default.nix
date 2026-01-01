@@ -38,11 +38,19 @@ buildPythonPackage rec {
     "azure.mgmt.imagebuilder"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Image Builder Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/compute/azure-mgmt-imagebuilder";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-imagebuilder_${version}/sdk/compute/azure-mgmt-imagebuilder/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Image Builder Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/compute/azure-mgmt-imagebuilder";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-imagebuilder_${version}/sdk/compute/azure-mgmt-imagebuilder/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

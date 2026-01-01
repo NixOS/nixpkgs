@@ -34,6 +34,7 @@ buildPythonPackage rec {
     zlib_ng = [ zlib-ng ];
   };
 
+<<<<<<< HEAD
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiohttp_fast_zlib" ];
@@ -43,6 +44,17 @@ buildPythonPackage rec {
     homepage = "https://github.com/bdraco/aiohttp-fast-zlib";
     changelog = "https://github.com/bdraco/aiohttp-fast-zlib/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "aiohttp_fast_zlib" ];
+
+  meta = with lib; {
+    description = "Use the fastest installed zlib compatible library with aiohttp";
+    homepage = "https://github.com/bdraco/aiohttp-fast-zlib";
+    changelog = "https://github.com/bdraco/aiohttp-fast-zlib/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -28,12 +28,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.twisted;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/Mic92/python-mpd2/blob/v${version}/doc/changes.rst";
     description = "Python client module for the Music Player Daemon";
     homepage = "https://github.com/Mic92/python-mpd2";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    changelog = "https://github.com/Mic92/python-mpd2/blob/v${version}/doc/changes.rst";
+    description = "Python client module for the Music Player Daemon";
+    homepage = "https://github.com/Mic92/python-mpd2";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mic92
       hexa
     ];

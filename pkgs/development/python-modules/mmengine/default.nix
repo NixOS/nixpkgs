@@ -128,6 +128,7 @@ buildPythonPackage rec {
     # ValueError: User specified autocast device_type must be cuda or cpu, but got mps
     "tests/test_runner/test_runner.py::TestRunner::test_test"
     "tests/test_runner/test_runner.py::TestRunner::test_val"
+<<<<<<< HEAD
 
     # Fails in pytestCheckHook due to multiple copies accessing the same resources (nixpkgs-review
     "tests/test_hooks/test_ema_hook.py::TestEMAHook::test_after_test_epoch"
@@ -155,6 +156,8 @@ buildPythonPackage rec {
 
     # TypeError: 'BaseDataset' object is not callable
     "tests/test_dataset/test_base_dataset.py::TestBaseDataset::test_get_subset[False-True]"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   disabledTests = [
@@ -176,11 +179,19 @@ buildPythonPackage rec {
     # Fails when max-jobs is set to use fewer processes than cores
     # for example `AssertionError: assert 14 == 4`
     "test_setup_multi_processes"
+<<<<<<< HEAD
 
     # Crashes in pytestCheckHook due to MPS incompatibility in torch
     "test_with_runner"
   ];
 
+=======
+  ];
+
+  # torch.distributed.DistNetworkError: The server socket has failed to bind.
+  __darwinAllowLocalNetworking = true;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";

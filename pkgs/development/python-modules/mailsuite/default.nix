@@ -9,16 +9,31 @@
   imapclient,
   mail-parser,
   publicsuffix2,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "mailsuite";
+<<<<<<< HEAD
   version = "1.10.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-+QPGSQQZaUjDmTGhZZoyTGegKV9DBqrgnxdQpEgszrI=";
+=======
+  version = "1.10.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-xYM4/Ou91WtYwiobE9ihlYGu8ViNTVbSLFGi8Y9yPc4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [ "mail-parser" ];

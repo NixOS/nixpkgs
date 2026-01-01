@@ -3,6 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   ninja,
   duckdb,
@@ -15,7 +19,10 @@
   psutil,
   pyarrow,
   pybind11,
+<<<<<<< HEAD
   pytz,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   scikit-build-core,
   setuptools-scm,
   pytest-reraise,
@@ -25,7 +32,11 @@
 buildPythonPackage rec {
   inherit (duckdb)
     pname
+<<<<<<< HEAD
     version # nixpkgs-update: no auto update
+=======
+    version
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ;
   pyproject = true;
 
@@ -33,6 +44,7 @@ buildPythonPackage rec {
     owner = "duckdb";
     repo = "duckdb-python";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = duckdb.passthru.pythonHash;
   };
 
@@ -40,6 +52,16 @@ buildPythonPackage rec {
     # The build depends on a duckdb git submodule
     rm -r external/duckdb
     ln -s ${duckdb.src} external/duckdb
+=======
+    hash = "sha256-cZyiTqu5iW/cqEo42b/XnOG7hJqtQs1h2RXXL392ujA=";
+  };
+
+  postPatch = ''
+    # patch cmake to ignore absence of git submodule copy of duckdb
+    substituteInPlace cmake/duckdb_loader.cmake \
+      --replace-fail '"''${CMAKE_CURRENT_SOURCE_DIR}/external/duckdb"' \
+                     '"${duckdb.src}"'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # replace pybind11[global] with pybind11
     substituteInPlace pyproject.toml \
@@ -72,11 +94,24 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+<<<<<<< HEAD
     all = [
       # FIXME package adbc_driver_manager
       ipython
       fsspec
       numpy
+=======
+    # Note: ipython and adbc_driver_manager currently excluded despite inclusion in upstream
+    # https://github.com/duckdb/duckdb-python/blob/v1.4.0/pyproject.toml#L44-L52
+    all = [
+      ipython
+      fsspec
+      numpy
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [
+      # https://github.com/duckdb/duckdb-python/blob/0ee500cfa35fc07bf81ed02e8ab6984ea1f665fd/pyproject.toml#L49-L51
+      # adbc_driver_manager noted for migration to duckdb C source
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pandas
       pyarrow
     ];
@@ -99,12 +134,22 @@ buildPythonPackage rec {
     psutil
     pytest-reraise
     pytestCheckHook
+<<<<<<< HEAD
     pytz
   ]
   ++ optional-dependencies.all;
 
   # test flags from .github/workflows/Python.yml
   pytestFlags = [ "--verbose" ];
+=======
+  ]
+  ++ optional-dependencies.all;
+
+  pytestFlags = [ "--verbose" ];
+
+  # test flags from .github/workflows/Python.yml
+  pytestFlagsArray = [ "--verbose" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   enabledTestPaths = if stdenv.hostPlatform.isDarwin then [ "tests/fast" ] else [ "tests" ];
 
   disabledTestPaths = [
@@ -141,10 +186,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duckdb" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "Python binding for DuckDB";
+    homepage = "https://duckdb.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

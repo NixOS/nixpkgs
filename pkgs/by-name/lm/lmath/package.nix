@@ -39,7 +39,11 @@ appimageTools.wrapType2 {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
+<<<<<<< HEAD
       "^r([0-9.]*)"
+=======
+      "^r([0-9\.]*)"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 

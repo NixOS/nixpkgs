@@ -27,11 +27,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plexwebsocket" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to react to events issued over Plex websockets";
     homepage = "https://github.com/jjlawren/python-plexwebsocket/";
     changelog = "https://github.com/jjlawren/python-plexwebsocket/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library to react to events issued over Plex websockets";
+    homepage = "https://github.com/jjlawren/python-plexwebsocket/";
+    changelog = "https://github.com/jjlawren/python-plexwebsocket/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

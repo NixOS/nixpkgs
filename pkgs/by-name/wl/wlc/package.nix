@@ -31,11 +31,19 @@ python3.pkgs.buildPythonPackage rec {
 
   pythonImportsCheck = [ "wlc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Weblate commandline client using Weblate's REST API";
     homepage = "https://github.com/WeblateOrg/wlc";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
+=======
+  meta = with lib; {
+    description = "Weblate commandline client using Weblate's REST API";
+    homepage = "https://github.com/WeblateOrg/wlc";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ paperdigits ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wlc";
   };
 }

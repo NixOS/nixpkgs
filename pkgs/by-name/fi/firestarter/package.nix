@@ -122,6 +122,7 @@ stdenv.mkDerivation rec {
     addDriverRunpath $out/bin/FIRESTARTER_CUDA
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
@@ -132,6 +133,18 @@ stdenv.mkDerivation rec {
       marenz
     ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
+    description = "Processor Stress Test Utility";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      astro
+      marenz
+    ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "FIRESTARTER";
   };
 }

@@ -40,10 +40,18 @@ rustPlatform.buildRustPackage rec {
     installManPage docs/ea.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Makes file paths from CLI output actionable";
     homepage = "https://github.com/dduan/ea";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ deejayem ];
+=======
+  meta = with lib; {
+    description = "Makes file paths from CLI output actionable";
+    homepage = "https://github.com/dduan/ea";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ deejayem ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

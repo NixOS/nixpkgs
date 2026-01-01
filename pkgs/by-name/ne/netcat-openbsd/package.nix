@@ -47,12 +47,21 @@ stdenv.mkDerivation rec {
     $out/bin/nc -h 2> /dev/null
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "TCP/IP swiss army knife. OpenBSD variant";
     homepage = "https://salsa.debian.org/debian/netcat-openbsd";
     maintainers = with lib.maintainers; [ artturin ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "TCP/IP swiss army knife. OpenBSD variant";
+    homepage = "https://salsa.debian.org/debian/netcat-openbsd";
+    maintainers = with maintainers; [ artturin ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nc";
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;

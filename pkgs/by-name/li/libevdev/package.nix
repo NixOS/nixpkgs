@@ -20,10 +20,18 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper library for evdev devices";
     homepage = "https://www.freedesktop.org/software/libevdev/doc/latest/index.html";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Wrapper library for evdev devices";
+    homepage = "https://www.freedesktop.org/software/libevdev/doc/latest/index.html";
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1969,7 +1969,11 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart =
+<<<<<<< HEAD
           "${lib.getExe cfg.package}"
+=======
+          "${cfg.package}/bin/prometheus"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           + optionalString (length cmdlineArgs != 0) (" \\\n  " + concatStringsSep " \\\n  " cmdlineArgs);
         ExecReload = mkIf cfg.enableReload "+${reload}/bin/reload-prometheus";
         User = "prometheus";
@@ -1980,7 +1984,10 @@ in
         StateDirectory = cfg.stateDir;
         StateDirectoryMode = "0700";
         # Hardening
+<<<<<<< HEAD
         CapabilityBoundingSet = [ "" ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         DeviceAllow = [ "/dev/null rw" ];
         DevicePolicy = "strict";
         LockPersonality = true;

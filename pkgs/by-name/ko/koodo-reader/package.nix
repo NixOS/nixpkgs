@@ -15,8 +15,11 @@
   xcbuild,
 
   electron_37,
+<<<<<<< HEAD
 
   nix-update-script,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -24,13 +27,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
+<<<<<<< HEAD
   version = "2.2.3";
+=======
+  version = "2.0.9";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-VQC1xvFw6TDw6P3UcQ4Y++UpjSgEGiRh0M+i1Z8O+N4=";
+=======
+    hash = "sha256-t93yRd9TrtGZogjpSy0Bse0cM5BFyMaSxFYQFZZyvPM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -136,8 +147,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/${finalAttrs.src.tag}";
     description = "Cross-platform ebook reader";

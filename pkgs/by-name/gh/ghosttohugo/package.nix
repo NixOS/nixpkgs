@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-/7MsVLVek2nQwf8rVJQywBKiIOCGe72L45CkAElXrMo=";
 
+<<<<<<< HEAD
   meta = {
     description = "Convert Ghost export to Hugo posts";
     homepage = "https://github.com/jbarone/ghostToHugo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ clerie ];
+=======
+  meta = with lib; {
+    description = "Convert Ghost export to Hugo posts";
+    homepage = "https://github.com/jbarone/ghostToHugo";
+    license = licenses.mit;
+    maintainers = with maintainers; [ clerie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ghostToHugo";
   };
 }

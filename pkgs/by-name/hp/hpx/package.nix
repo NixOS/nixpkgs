@@ -22,12 +22,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-AhByaw1KnEDuRfKiN+/vQMbkG0BJ6Z3+h+QT8scFzAY=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/STEllAR-GROUP/hpx/pull/6731
     # Fix build with asio >= 1.34.0
     ./remove_deprecated_asio_features.patch
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   propagatedBuildInputs = [ hwloc ];
   buildInputs = [
     asio

@@ -33,10 +33,17 @@ buildPythonPackage rec {
     mako
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Pylons/pyramid_mako";
     description = "Mako template bindings for the Pyramid web framework";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Pylons/pyramid_mako";
+    description = "Mako template bindings for the Pyramid web framework";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

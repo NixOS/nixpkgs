@@ -5,7 +5,10 @@
   fetchpatch,
   installShellFiles,
   python3Packages,
+<<<<<<< HEAD
   python3,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   asciidoc,
   wrapGAppsNoGuiHook,
   iw,
@@ -47,6 +50,7 @@ stdenv.mkDerivation rec {
     asciidoc # for a2x
     installShellFiles
     wrapGAppsNoGuiHook
+<<<<<<< HEAD
   ];
 
   buildInputs = [
@@ -65,6 +69,29 @@ stdenv.mkDerivation rec {
     runHook preInstall
     install -D -m755 -t $out/bin networkd-dispatcher
     patchShebangs --host $out/bin/networkd-dispatcher
+=======
+    python3Packages.wrapPython
+  ];
+
+  dontWrapGApps = true;
+
+  checkInputs = with python3Packages; [
+    dbus-python
+    iw
+    mock
+    pygobject3
+    pytestCheckHook
+  ];
+
+  pythonPath = with python3Packages; [
+    dbus-python
+    pygobject3
+  ];
+
+  installPhase = ''
+    runHook preInstall
+    install -D -m755 -t $out/bin networkd-dispatcher
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     install -Dm644 networkd-dispatcher.service $out/lib/systemd/system/networkd-dispatcher.service
     install -Dm644 networkd-dispatcher.conf $out/etc/conf.d/networkd-dispatcher.conf
     installManPage networkd-dispatcher.8
@@ -74,6 +101,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   preFixup = ''
+<<<<<<< HEAD
     gappsWrapperArgs+=("--prefix" "PATH" ":" "${lib.makeBinPath [ iw ]}")
   '';
 
@@ -84,5 +112,23 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ onny ];
+=======
+    makeWrapperArgs+=( \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix PATH : "${lib.makeBinPath [ iw ]}" \
+    )
+  '';
+  postFixup = ''
+    wrapPythonPrograms
+  '';
+
+  meta = with lib; {
+    description = "Dispatcher service for systemd-networkd connection status changes";
+    mainProgram = "networkd-dispatcher";
+    homepage = "https://gitlab.com/craftyguy/networkd-dispatcher";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

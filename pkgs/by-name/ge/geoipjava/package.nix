@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GeoIP Java API";
     license = lib.licenses.lgpl21Plus;
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 }

@@ -38,11 +38,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Firmware uploader for the Teensy microcontroller boards";
     mainProgram = "teensy-loader-cli";
     homepage = "https://www.pjrc.com/teensy/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Firmware uploader for the Teensy microcontroller boards";
+    mainProgram = "teensy-loader-cli";
+    homepage = "https://www.pjrc.com/teensy/";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

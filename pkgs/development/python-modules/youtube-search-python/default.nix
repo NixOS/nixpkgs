@@ -27,10 +27,17 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Search for YouTube videos, channels & playlists & get video information using link without YouTube Data API";
     homepage = "https://github.com/alexmercerind/youtube-search-python";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Search for YouTube videos, channels & playlists & get video information using link without YouTube Data API";
+    homepage = "https://github.com/alexmercerind/youtube-search-python";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

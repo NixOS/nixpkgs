@@ -2,6 +2,10 @@
   stdenv,
   lib,
   fetchFromGitLab,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gitUpdater,
   testers,
   cmake,
@@ -27,13 +31,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libusermetrics";
+<<<<<<< HEAD
   version = "1.4.0";
+=======
+  version = "1.3.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libusermetrics";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-Zh6a+laSsdZMyoaGoZAKTo5ShJ1NyPZrqR/zBjlOdbk=";
+=======
+    hash = "sha256-V4vxNyHMs2YYBILkpco79FN9xnooULgB+z2Kf3V0790=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -42,6 +54,18 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+<<<<<<< HEAD
+=======
+  patches = [
+    # Remove when https://gitlab.com/ubports/development/core/libusermetrics/-/merge_requests/17 merged & in release
+    (fetchpatch {
+      name = "0001-libusermetrics-BUILD_TESTING.patch";
+      url = "https://gitlab.com/ubports/development/core/libusermetrics/-/commit/c1e4847601cc4522034a766755ce491d48132d77.patch";
+      hash = "sha256-UWc9/ngpuiSm0Rd6eBK/R3N/NwDRtMxie78seN3+y/8=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     # Tries to query QMake for QT_INSTALL_QML variable, would return broken paths into /build/qtbase-<commit> even if qmake was available
     substituteInPlace src/modules/UserMetrics/CMakeLists.txt \
@@ -49,10 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace doc/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_FULL_DATAROOTDIR}/doc/libusermetrics-doc" "\''${CMAKE_INSTALL_DOCDIR}"
+<<<<<<< HEAD
 
     # https://gitlab.com/ubports/development/core/libusermetrics/-/merge_requests/22
     substituteInPlace src/libusermetricsoutput/GSettingsColorThemeProvider.h \
       --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   strictDeps = true;

@@ -65,6 +65,7 @@ mkDerivation {
     "sys/sys/bitstring.h"
     "sys/sys/nv_namespace.h"
   ]
+<<<<<<< HEAD
   ++ lib.optionals (versionData.major >= 15) [
     "crypto/krb5/src/include/gssapi.h"
     "crypto/krb5/src/include/kdb.h"
@@ -116,6 +117,8 @@ mkDerivation {
 
     "contrib/libedit/readline/readline.h"
   ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ [
 
     # Listed in Makefile as SYSINCS

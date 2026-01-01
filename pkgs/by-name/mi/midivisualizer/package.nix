@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "midivisualizer";
+<<<<<<< HEAD
   version = "7.3";
+=======
+  version = "7.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "kosua20";
     repo = "MIDIVisualizer";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     sha256 = "sha256-ljDdbpvXJXv7YPgxwXELee06NNOwqIBP8C/IbL7qBuk=";
+=======
+    sha256 = "sha256-Ilsqc14PBTqreLhrEpvMOZAp37xOY/OwuhHTjeOjqm8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -61,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
           --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
       '';
 
+<<<<<<< HEAD
   meta = {
     description = "Small MIDI visualizer tool, using OpenGL";
     mainProgram = "MIDIVisualizer";
@@ -69,5 +78,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = [ lib.maintainers.ericdallo ];
+=======
+  meta = with lib; {
+    description = "Small MIDI visualizer tool, using OpenGL";
+    mainProgram = "MIDIVisualizer";
+    homepage = "https://github.com/kosua20/MIDIVisualizer";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = [ maintainers.ericdallo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -53,5 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     pkgConfigModules = [ "libidn" ];
     platforms = lib.platforms.all;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ lsix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

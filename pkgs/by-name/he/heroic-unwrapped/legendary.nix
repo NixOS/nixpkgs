@@ -30,13 +30,21 @@ python3Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "legendary" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free and open-source Epic Games Launcher alternative";
     longDescription = ''
       This is the Heroic Games Launcher's fork of legendary.
     '';
     homepage = "https://github.com/Heroic-Games-Launcher/legendary";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
+=======
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "legendary";
   };

@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "System information fetcher written in GNU Guile Scheme";
     homepage = "https://github.com/KikyTokamuro/fetch.scm";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ vel ];
+=======
+  meta = with lib; {
+    description = "System information fetcher written in GNU Guile Scheme";
+    homepage = "https://github.com/KikyTokamuro/fetch.scm";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ vel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fetch-scm";
   };
 }

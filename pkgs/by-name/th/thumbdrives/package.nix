@@ -53,6 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     pyxdg
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "USB mass storage emulator for Linux handhelds";
     homepage = "https://sr.ht/~martijnbraam/thumbdrives/";
@@ -62,5 +63,16 @@ python3.pkgs.buildPythonApplication rec {
       Luflosi
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "USB mass storage emulator for Linux handhelds";
+    homepage = "https://sr.ht/~martijnbraam/thumbdrives/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      chuangzhu
+      Luflosi
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

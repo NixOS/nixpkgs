@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Hard disk recovery tool that reads undamaged regions first";
     mainProgram = "myrescue";
@@ -36,5 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Hard disk recovery tool that reads undamaged regions first";
+    mainProgram = "myrescue";
+    homepage = "https://myrescue.sourceforge.net";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

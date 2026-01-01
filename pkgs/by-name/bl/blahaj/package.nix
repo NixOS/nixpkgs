@@ -24,11 +24,19 @@ crystal.buildCrystalPackage rec {
 
   buildTargets = [ "${if static then "static" else "build"}${if multithreading then "_mt" else ""}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Gay sharks at your local terminal - lolcat-like CLI tool";
     homepage = "https://blahaj.geopjr.dev";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Gay sharks at your local terminal - lolcat-like CLI tool";
+    homepage = "https://blahaj.geopjr.dev";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aleksana
       cafkafk
     ];

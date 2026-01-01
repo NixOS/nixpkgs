@@ -166,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Visual management of your SurrealDB database";
     homepage = "https://surrealdb.com/surrealist";
@@ -176,5 +177,17 @@ stdenv.mkDerivation (finalAttrs: {
       dmitriiStepanidenko
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Visual management of your SurrealDB database";
+    homepage = "https://surrealdb.com/surrealist";
+    license = licenses.mit;
+    mainProgram = "surrealist";
+    maintainers = with maintainers; [
+      frankp
+      dmitriiStepanidenko
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

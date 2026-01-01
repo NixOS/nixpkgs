@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   intltool,
   pkg-config,
   gtk3,
@@ -20,6 +23,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Jqj6W/cFQct0Hwxxt8/ikbHqVuq2jusHqpYs71zfM8w=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "remove-trust_item-stuff-to-make-it-build-with-gpgme-2.x.patch";
@@ -28,6 +32,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     intltool
     pkg-config

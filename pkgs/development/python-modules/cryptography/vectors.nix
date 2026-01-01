@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cryptography_vectors" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Test vectors for the cryptography package";
     homepage = "https://cryptography.io/en/latest/development/test-vectors/";
@@ -41,5 +42,16 @@ buildPythonPackage rec {
       bsd3
     ];
     maintainers = with lib.maintainers; [ mdaniels5757 ];
+=======
+  meta = with lib; {
+    description = "Test vectors for the cryptography package";
+    homepage = "https://cryptography.io/en/latest/development/test-vectors/";
+    downloadPage = "https://github.com/pyca/cryptography/tree/master/vectors";
+    license = with licenses; [
+      asl20
+      bsd3
+    ];
+    maintainers = with maintainers; [ mdaniels5757 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

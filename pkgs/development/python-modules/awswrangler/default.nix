@@ -80,11 +80,20 @@ buildPythonPackage rec {
     "tests/unit/test_moto.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pandas on AWS";
     homepage = "https://github.com/aws/aws-sdk-pandas";
     changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mcwitt ];
+=======
+  meta = with lib; {
+    description = "Pandas on AWS";
+    homepage = "https://github.com/aws/aws-sdk-pandas";
+    changelog = "https://github.com/aws/aws-sdk-pandas/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mcwitt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -125,11 +125,19 @@ mkDerivation rec {
     ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/pixmaps/eagle.png
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Schematic editor and PCB layout tool from Autodesk (formerly CadSoft)";
     homepage = "https://www.autodesk.com/products/eagle/overview";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    description = "Schematic editor and PCB layout tool from Autodesk (formerly CadSoft)";
+    homepage = "https://www.autodesk.com/products/eagle/overview";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };

@@ -25,11 +25,19 @@ buildPythonPackage rec {
 
   doCheck = false; # uses nose
 
+<<<<<<< HEAD
   meta = {
     description = "Patch python built-in objects";
     homepage = "https://github.com/clarete/forbiddenfruit";
     changelog = "https://github.com/clarete/forbiddenfruit/releases/tag/${version}";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Patch python built-in objects";
+    homepage = "https://github.com/clarete/forbiddenfruit";
+    changelog = "https://github.com/clarete/forbiddenfruit/releases/tag/${version}";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       gpl3Plus
     ];

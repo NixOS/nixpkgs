@@ -27,10 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "txzmq" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Twisted bindings for ZeroMQ";
     homepage = "https://github.com/smira/txZMQ";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "Twisted bindings for ZeroMQ";
+    homepage = "https://github.com/smira/txZMQ";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

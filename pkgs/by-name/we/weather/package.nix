@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     installManPage weather.1 weatherrc.5
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://fungi.yuggoth.org/weather";
     description = "Quick access to current weather conditions and forecasts";
@@ -51,5 +52,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://fungi.yuggoth.org/weather";
+    description = "Quick access to current weather conditions and forecasts";
+    mainProgram = "weather";
+    license = licenses.isc;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

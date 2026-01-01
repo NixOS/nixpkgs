@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyarrow_hotfix" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hotfix for the PyArrow security vulnerability CVE-2023-47248";
     homepage = "https://github.com/pitrou/pyarrow-hotfix";
     changelog = "https://github.com/pitrou/pyarrow-hotfix/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Hotfix for the PyArrow security vulnerability CVE-2023-47248";
+    homepage = "https://github.com/pitrou/pyarrow-hotfix";
+    changelog = "https://github.com/pitrou/pyarrow-hotfix/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

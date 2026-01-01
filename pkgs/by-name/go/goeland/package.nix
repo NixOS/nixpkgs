@@ -6,16 +6,27 @@
 
 buildGoModule rec {
   pname = "goeland";
+<<<<<<< HEAD
   version = "0.21.0";
+=======
+  version = "0.20.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "slurdge";
     repo = "goeland";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Yw9FRI4TdfqCLdZCTA+y1y8TaD0flp1sP1aKYvd8PGM=";
   };
 
   vendorHash = "sha256-FfdHOYrpVilter80arOtwn+qJV56gIh6Ml64ekPs+DE=";
+=======
+    sha256 = "sha256-5MKkjUOAXz6R7PdChuJA4ybc07gHdO9BF68CpI7OExA=";
+  };
+
+  vendorHash = "sha256-Jnui1toAV4VvPs6T7UqgAUarFjuik/OnLUrF5VqI+EU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"

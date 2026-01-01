@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   kernel,
   kernelModuleMakeFlags,
   nixosTests,
@@ -17,6 +20,7 @@ stdenv.mkDerivation {
 
   src = sourceAttrs.src;
 
+<<<<<<< HEAD
   patches = lib.optionals (lib.versionAtLeast kernel.version "6.18.0") [
     (fetchpatch {
       url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/3.23-stable/community/jool-modules-lts/kernel-6.18.patch";
@@ -24,6 +28,8 @@ stdenv.mkDerivation {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = kernel.moduleBuildDependencies;
   hardeningDisable = [ "pic" ];
 

@@ -47,12 +47,21 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive wrapper for jq";
     mainProgram = "ijq";
     homepage = "https://codeberg.org/gpanders/ijq";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Interactive wrapper for jq";
+    mainProgram = "ijq";
+    homepage = "https://codeberg.org/gpanders/ijq";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       justinas
       mattpolzin
       SuperSandro2000

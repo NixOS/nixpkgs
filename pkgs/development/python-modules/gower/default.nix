@@ -38,10 +38,18 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Gower's distance calculation in Python";
     homepage = "https://github.com/wwwjk366/gower";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ b-rodrigues ];
+=======
+  meta = with lib; {
+    description = "Gower's distance calculation in Python";
+    homepage = "https://github.com/wwwjk366/gower";
+    license = licenses.mit;
+    maintainers = with maintainers; [ b-rodrigues ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

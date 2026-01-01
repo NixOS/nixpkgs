@@ -21,11 +21,20 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "yaswfp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python SWF Parser";
     mainProgram = "swfparser";
     homepage = "https://github.com/facundobatista/yaswfp";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python SWF Parser";
+    mainProgram = "swfparser";
+    homepage = "https://github.com/facundobatista/yaswfp";
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

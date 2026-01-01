@@ -37,6 +37,7 @@ buildPythonPackage rec {
     "test_gpgsign"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Efficiently update, split, and rearrange git commits";
     homepage = "https://github.com/mystor/git-revise";
@@ -44,5 +45,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     mainProgram = "git-revise";
     maintainers = with lib.maintainers; [ _9999years ];
+=======
+  meta = with lib; {
+    description = "Efficiently update, split, and rearrange git commits";
+    homepage = "https://github.com/mystor/git-revise";
+    changelog = "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    mainProgram = "git-revise";
+    maintainers = with maintainers; [ _9999years ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

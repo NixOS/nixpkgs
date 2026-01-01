@@ -27,10 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonlines" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to simplify working with jsonlines and ndjson data";
     homepage = "https://github.com/wbolster/jsonlines";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python library to simplify working with jsonlines and ndjson data";
+    homepage = "https://github.com/wbolster/jsonlines";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -55,6 +55,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Gnome icon pack based upon Faenza";
     homepage = "https://github.com/madmaxms/iconpack-obsidian";
@@ -62,5 +63,14 @@ stdenvNoCC.mkDerivation rec {
     # darwin cannot deal with file names differing only in case
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Gnome icon pack based upon Faenza";
+    homepage = "https://github.com/madmaxms/iconpack-obsidian";
+    license = licenses.gpl3Only;
+    # darwin cannot deal with file names differing only in case
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

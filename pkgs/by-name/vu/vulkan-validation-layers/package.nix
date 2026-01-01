@@ -5,7 +5,10 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+<<<<<<< HEAD
   python3,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   jq,
   glslang,
   libffi,
@@ -26,13 +29,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
+<<<<<<< HEAD
   version = "1.4.335.0";
+=======
+  version = "1.4.328.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "vulkan-sdk-${version}";
+<<<<<<< HEAD
     hash = "sha256-FRxr33epHe+HIH/7Y7ms+6E9L0yzaNnFzN3YnswZfRo=";
+=======
+    hash = "sha256-iz6kWvnfVnznn78XNHJqSvIW4TYkp2KgEFT302VAiaY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;
@@ -40,7 +51,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+<<<<<<< HEAD
     python3
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     jq
   ];
 
@@ -83,11 +97,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Official Khronos Vulkan validation layers";
     homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ralith ];
+=======
+  meta = with lib; {
+    description = "Official Khronos Vulkan validation layers";
+    homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
+    platforms = platforms.all;
+    license = licenses.asl20;
+    maintainers = [ maintainers.ralith ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

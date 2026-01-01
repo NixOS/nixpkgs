@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Patched version of dd that includes a number of features useful for computer forensics";
     mainProgram = "dc3dd";
@@ -39,5 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus; # Refer to https://sourceforge.net/p/dc3dd/code/HEAD/tree/COPYING
+=======
+  meta = with lib; {
+    description = "Patched version of dd that includes a number of features useful for computer forensics";
+    mainProgram = "dc3dd";
+    homepage = "https://sourceforge.net/projects/dc3dd/";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus; # Refer to https://sourceforge.net/p/dc3dd/code/HEAD/tree/COPYING
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

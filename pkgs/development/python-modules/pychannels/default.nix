@@ -23,10 +23,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pychannels" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interacting with the Channels app";
     homepage = "https://github.com/fancybits/pychannels";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for interacting with the Channels app";
+    homepage = "https://github.com/fancybits/pychannels";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

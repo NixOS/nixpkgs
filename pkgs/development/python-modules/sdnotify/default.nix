@@ -14,10 +14,18 @@ buildPythonPackage rec {
     inherit pname version;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python implementation of systemd's service notification protocol";
     homepage = "https://github.com/bb4242/sdnotify";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pmiddend ];
+=======
+  meta = with lib; {
+    description = "Pure Python implementation of systemd's service notification protocol";
+    homepage = "https://github.com/bb4242/sdnotify";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pmiddend ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

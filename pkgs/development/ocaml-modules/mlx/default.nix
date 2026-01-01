@@ -24,10 +24,18 @@ buildDunePackage rec {
     menhir
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "OCaml syntax dialect which adds JSX syntax expressions";
     homepage = "https://github.com/ocaml-mlx/mlx";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ Denommus ];
+=======
+  meta = with lib; {
+    description = "OCaml syntax dialect which adds JSX syntax expressions";
+    homepage = "https://github.com/ocaml-mlx/mlx";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ Denommus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

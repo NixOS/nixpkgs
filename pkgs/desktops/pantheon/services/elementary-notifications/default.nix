@@ -55,12 +55,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GTK notification server for Pantheon";
     homepage = "https://github.com/elementary/notifications";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GTK notification server for Pantheon";
+    homepage = "https://github.com/elementary/notifications";
+    license = licenses.gpl3Plus;
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "io.elementary.notifications";
   };
 }

@@ -80,11 +80,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_concurrency" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Oslo Concurrency library";
     mainProgram = "lockutils-wrapper";
     homepage = "https://github.com/openstack/oslo.concurrency";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Oslo Concurrency library";
+    mainProgram = "lockutils-wrapper";
+    homepage = "https://github.com/openstack/oslo.concurrency";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

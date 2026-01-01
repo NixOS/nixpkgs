@@ -38,15 +38,25 @@ stdenv.mkDerivation {
       --prefix PATH : ${lib.makeBinPath [ imagemagick ]} \
       --set-default FONTCONFIG_FILE ${makeFontsConf { fontDirectories = [ ]; }}
   '';
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://homepages.cwi.nl/~aeb/go/sgfutils/html/sgfutils.html";
     description = "Command line utilities that help working with SGF files";
     longDescription = ''
       The package sgfutils is a collection of command line utilities that help working with SGF files,
       especially when they describe go (igo, weiqi, baduk) games.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ggpeti ];
     platforms = lib.platforms.all; # tested on x86_64-linux and aarch64-darwin
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ggpeti ];
+    platforms = platforms.all; # tested on x86_64-linux and aarch64-darwin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

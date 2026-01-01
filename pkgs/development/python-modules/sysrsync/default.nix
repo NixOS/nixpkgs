@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sysrsync" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and safe system's rsync wrapper for Python";
     homepage = "https://github.com/gchamon/sysrsync";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Simple and safe system's rsync wrapper for Python";
+    homepage = "https://github.com/gchamon/sysrsync";
+    license = licenses.mit;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

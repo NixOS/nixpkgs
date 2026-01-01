@@ -17,10 +17,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Semantic versioning library for Python";
     homepage = "https://github.com/python-poetry/semver";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "Semantic versioning library for Python";
+    homepage = "https://github.com/python-poetry/semver";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,10 +22,17 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/oem/lnch";
     description = "Launches a process and moves it out of the process group";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/oem/lnch";
+    description = "Launches a process and moves it out of the process group";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lnch";
   };
 }

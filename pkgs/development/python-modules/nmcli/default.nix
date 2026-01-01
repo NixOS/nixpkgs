@@ -10,14 +10,22 @@
 
 buildPythonPackage rec {
   pname = "nmcli";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ushiboy";
     repo = "nmcli";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-F8cZvsW51dhE+KBKF0OKCTN0mDKOJBm1CEtn1MAa+gA=";
+=======
+    hash = "sha256-1gVj4WfTx1NcoyWA9OK5EyGze9hmrXV0Mq50C1S3bfM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

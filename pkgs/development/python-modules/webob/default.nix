@@ -46,10 +46,17 @@ buildPythonPackage rec {
     inherit pyramid routes tokenlib;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "WSGI request and response object";
     homepage = "https://webob.org/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "WSGI request and response object";
+    homepage = "https://webob.org/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

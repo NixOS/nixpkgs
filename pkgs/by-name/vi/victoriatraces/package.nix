@@ -47,7 +47,13 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
+<<<<<<< HEAD
     tests = lib.recurseIntoAttrs nixosTests.victoriatraces;
+=======
+    tests = {
+      inherit (nixosTests) victoriatraces;
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     updateScript = nix-update-script { };
   };
 

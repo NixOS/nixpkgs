@@ -30,9 +30,15 @@ buildPythonPackage rec {
 
   dependencies = [
     django
+<<<<<<< HEAD
     icalendar
     python-dateutil
     pytz
+=======
+    python-dateutil
+    pytz
+    icalendar
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [
@@ -44,6 +50,7 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.settings
   '';
 
+<<<<<<< HEAD
   patches = [
     # Remove in Django 5.1
     # https://github.com/llazzaro/django-scheduler/pull/567
@@ -70,5 +77,15 @@ buildPythonPackage rec {
     changelog = "https://github.com/llazzaro/django-scheduler/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ derdennisop ];
+=======
+  pythonImportsCheck = [ "schedule" ];
+
+  meta = with lib; {
+    description = "Calendar app for Django";
+    homepage = "https://github.com/llazzaro/django-scheduler";
+    changelog = "https://github.com/llazzaro/django-scheduler/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ derdennisop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

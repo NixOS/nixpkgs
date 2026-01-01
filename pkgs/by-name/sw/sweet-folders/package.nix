@@ -24,11 +24,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Folders icons for Sweet GTK theme";
     homepage = "https://github.com/EliverLara/Sweet-folders";
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Folders icons for Sweet GTK theme";
+    homepage = "https://github.com/EliverLara/Sweet-folders";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

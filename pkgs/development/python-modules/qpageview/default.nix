@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qpageview" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Page-based viewer widget for Qt5/PyQt5";
     homepage = "https://github.com/frescobaldi/qpageview";
     changelog = "https://github.com/frescobaldi/qpageview/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ camillemndn ];
+=======
+  meta = with lib; {
+    description = "Page-based viewer widget for Qt5/PyQt5";
+    homepage = "https://github.com/frescobaldi/qpageview";
+    changelog = "https://github.com/frescobaldi/qpageview/blob/${src.tag}/ChangeLog";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ camillemndn ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

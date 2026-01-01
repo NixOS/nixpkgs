@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     patchelf --add-rpath "${lib.getLib alsa-lib}/lib" $out/bin/minivmac
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Miniature early Macintosh emulator (fork from erichelgeson)";
     homepage = "https://github.com/erichelgeson/minivmac";
@@ -53,5 +54,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.flokli ];
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
+=======
+  meta = with lib; {
+    description = "Miniature early Macintosh emulator (fork from erichelgeson)";
+    homepage = "https://github.com/erichelgeson/minivmac";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.flokli ];
+    platforms = platforms.linux;
+    sourceProvenance = [ sourceTypes.fromSource ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

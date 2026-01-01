@@ -35,15 +35,25 @@ stdenv.mkDerivation rec {
   # by the build system), which patchelf will remove.
   dontPatchELF = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Light-weight implementation of Standard ML";
     longDescription = ''
       Moscow ML is a light-weight implementation of Standard ML (SML), a strict
       functional language used in teaching and research.
     '';
     homepage = "https://mosml.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ vaibhavsagar ];
+=======
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ vaibhavsagar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

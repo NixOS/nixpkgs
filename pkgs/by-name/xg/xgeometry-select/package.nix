@@ -27,11 +27,19 @@ stdenv.mkDerivation rec {
     mv -v xgeometry-select $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Select a region with mouse and prints geometry information (x/y/w/h)";
     homepage = "https://bbs.archlinux.org/viewtopic.php?pid=660837";
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Select a region with mouse and prints geometry information (x/y/w/h)";
+    homepage = "https://bbs.archlinux.org/viewtopic.php?pid=660837";
+    maintainers = with maintainers; [ obadz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xgeometry-select";
   };
 }

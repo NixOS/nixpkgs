@@ -17,6 +17,7 @@ buildGoModule {
 
   vendorHash = "sha256-zGWRzw1KUmifIsTudlgoKCR3+K0FLehHRSB3lNX+OWY=";
 
+<<<<<<< HEAD
   meta = {
     description = "Nintendo Wii iso.dec decoder";
     mainProgram = "dec-decode";
@@ -24,5 +25,14 @@ buildGoModule {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ hughobrien ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "Nintendo Wii iso.dec decoder";
+    mainProgram = "dec-decode";
+    homepage = "https://github.com/sammiq/dec-decode";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ hughobrien ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

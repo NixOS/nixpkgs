@@ -39,7 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     command = "vpcs -v";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple virtual PC simulator";
     longDescription = ''
       The VPCS (Virtual PC Simulator) can simulate up to 9 PCs. You can
@@ -47,9 +51,16 @@ stdenv.mkDerivation (finalAttrs: {
       VPCS when you study the Cisco routers in the dynamips.
     '';
     inherit (finalAttrs.src.meta) homepage;
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "vpcs";
     maintainers = with lib.maintainers; [ anthonyroussel ];
+=======
+    license = licenses.bsd2;
+    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "vpcs";
+    maintainers = with maintainers; [ anthonyroussel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

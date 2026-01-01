@@ -57,10 +57,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.markdown" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PyScaffold extension which uses Markdown instead of reStructuredText";
     homepage = "https://pypi.org/project/pyscaffoldext-markdown/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
+=======
+  meta = with lib; {
+    description = "PyScaffold extension which uses Markdown instead of reStructuredText";
+    homepage = "https://pypi.org/project/pyscaffoldext-markdown/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

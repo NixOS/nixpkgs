@@ -40,6 +40,7 @@ stdenv.mkDerivation {
     qttools
   ]);
 
+<<<<<<< HEAD
   meta = {
     description = "Realtime modular synthesizer for ALSA";
     mainProgram = "ams";
@@ -47,5 +48,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sjfloat ];
+=======
+  meta = with lib; {
+    description = "Realtime modular synthesizer for ALSA";
+    mainProgram = "ams";
+    homepage = "https://alsamodular.sourceforge.net";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sjfloat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

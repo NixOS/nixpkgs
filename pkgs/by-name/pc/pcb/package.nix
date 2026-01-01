@@ -60,11 +60,20 @@ stdenv.mkDerivation rec {
     "--disable-update-desktop-database"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Printed Circuit Board editor";
     homepage = "https://sourceforge.net/projects/pcb/";
     maintainers = with lib.maintainers; [ mog ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "Printed Circuit Board editor";
+    homepage = "https://sourceforge.net/projects/pcb/";
+    maintainers = with maintainers; [ mog ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

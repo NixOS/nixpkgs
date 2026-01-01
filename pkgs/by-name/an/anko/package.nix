@@ -24,10 +24,17 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Scriptable interpreter written in golang";
     homepage = "https://github.com/mattn/anko";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Scriptable interpreter written in golang";
+    homepage = "https://github.com/mattn/anko";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

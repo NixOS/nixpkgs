@@ -22,11 +22,19 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
   ];
+<<<<<<< HEAD
   meta = {
     description = "Minimalistic X11 menu creator";
     license = lib.licenses.free; # 9menu derivative with 9menu license
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Minimalistic X11 menu creator";
+    license = licenses.free; # 9menu derivative with 9menu license
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.update.uu.se/~zrajm/programs/";
     downloadPage = "http://www.update.uu.se/~zrajm/programs/ratmen/";
     mainProgram = "ratmen";

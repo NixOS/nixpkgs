@@ -22,11 +22,19 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Most effective way for operating in Zabbix Server";
     homepage = "https://github.com/kovetskiy/zabbixctl";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmahut ];
+=======
+  meta = with lib; {
+    description = "Most effective way for operating in Zabbix Server";
+    homepage = "https://github.com/kovetskiy/zabbixctl";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zabbixctl";
   };
 }

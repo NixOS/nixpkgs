@@ -6,16 +6,26 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bikeshed";
+<<<<<<< HEAD
   version = "7.0.6";
+=======
+  version = "5.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-0lO5TlAnUMtJp81XQEXpxt3yBz3zx6ff+vO/LYJfFZA=";
   };
 
   patches = [ ./remove-install-check.patch ];
 
+=======
+    hash = "sha256-vgjS8jAtLA2OvJG/pJAJnvaaMPMLkbKHgzIMsdzXTBM=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ python3Packages.setuptools ];
 
   pythonRelaxDeps = true;
@@ -61,7 +71,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "bikeshed" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Preprocessor for anyone writing specifications that converts source files into actual specs";
     mainProgram = "bikeshed";
     longDescription = ''
@@ -72,7 +86,11 @@ python3Packages.buildPythonApplication rec {
       and many other W3C working groups, WHATWG, the C++ standards committee, and elsewhere!
     '';
     homepage = "https://tabatkins.github.io/bikeshed/";
+<<<<<<< HEAD
     license = lib.licenses.cc0;
+=======
+    license = licenses.cc0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [
       matthiasbeyer
       hemera

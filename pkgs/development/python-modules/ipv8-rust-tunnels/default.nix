@@ -26,10 +26,18 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "A set of performance enhancements to the TunnelCommunity, the anonymization layer used in IPv8 and Tribler";
     homepage = "https://github.com/Tribler/ipv8-rust-tunnels";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ mlaradji ];
+=======
+  meta = with lib; {
+    description = "A set of performance enhancements to the TunnelCommunity, the anonymization layer used in IPv8 and Tribler";
+    homepage = "https://github.com/Tribler/ipv8-rust-tunnels";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ mlaradji ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

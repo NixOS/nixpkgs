@@ -20,10 +20,18 @@ buildHomeAssistantComponent rec {
 
   dependencies = [ libgpiod ];
 
+<<<<<<< HEAD
   meta = {
     description = "Home Assistant GPIO custom integration";
     homepage = "https://codeberg.org/raboof/ha-gpio";
     maintainers = with lib.maintainers; [ raboof ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Home Assistant GPIO custom integration";
+    homepage = "https://codeberg.org/raboof/ha-gpio";
+    maintainers = with maintainers; [ raboof ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

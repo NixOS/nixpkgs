@@ -24,14 +24,22 @@
 
 buildPythonPackage rec {
   pname = "cf-xarray";
+<<<<<<< HEAD
   version = "0.10.10";
+=======
+  version = "0.10.9";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-t6b4Tog0BLk5y+wi3QH6IKLbJSKw5NkLa3kJRtSBKRs=";
+=======
+    hash = "sha256-tYs+aZp/QbM166KNj4MjIjqS6LcuDCyXwghSoF5rj4M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -58,7 +66,11 @@ buildPythonPackage rec {
     pytestCheckHook
     scipy
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "cf_xarray" ];
 

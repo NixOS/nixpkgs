@@ -26,7 +26,11 @@ buildPythonPackage rec {
     six
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python components for parsing HTML, XML and other textual content";
     longDescription = ''
       Python library that provides an integrated set of components for
@@ -34,6 +38,10 @@ buildPythonPackage rec {
       content for output generation on the web.
     '';
     homepage = "https://genshi.edgewall.org/";
+<<<<<<< HEAD
     license = lib.licenses.bsd0;
+=======
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

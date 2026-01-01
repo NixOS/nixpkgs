@@ -39,8 +39,11 @@
 assert (securityLevel == null) || (securityLevel >= 0 && securityLevel <= 5);
 
 let
+<<<<<<< HEAD
   useBinaryWrapper = !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin);
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   common =
     {
       version,
@@ -100,10 +103,14 @@ let
           (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
           ''
             rm test/recipes/02-test_errstr.t
+<<<<<<< HEAD
           ''
       + lib.optionalString stdenv.hostPlatform.isCygwin ''
         rm test/recipes/01-test_symbol_presence.t
       '';
+=======
+          '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       outputs = [
         "bin"
@@ -126,7 +133,11 @@ let
         && stdenv.cc.isGNU;
 
       nativeBuildInputs =
+<<<<<<< HEAD
         lib.optional useBinaryWrapper makeBinaryWrapper
+=======
+        lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ++ [ perl ]
         ++ lib.optionals static [ removeReferencesTo ];
       buildInputs = lib.optional withCryptodev cryptodev ++ lib.optional withZlib zlib;
@@ -180,8 +191,11 @@ let
               "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
           else if stdenv.hostPlatform.isiOS then
             "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+<<<<<<< HEAD
           else if stdenv.hostPlatform.isCygwin then
             "./Configure Cygwin-${stdenv.hostPlatform.linuxArch}"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           else
             throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
         );
@@ -297,7 +311,11 @@ let
 
         ''
         +
+<<<<<<< HEAD
           lib.optionalString useBinaryWrapper
+=======
+          lib.optionalString (!stdenv.hostPlatform.isWindows)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
             ''
               # c_rehash is a legacy perl script with the same functionality
@@ -446,11 +464,15 @@ in
       (
         if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
       )
+<<<<<<< HEAD
     ]
     ++
       # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
       # and also https://github.com/openssl/openssl/pull/29321
       lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
+=======
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     withDocs = true;
 
@@ -482,11 +504,15 @@ in
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./3.5/fix-mingw-linking.patch
+<<<<<<< HEAD
     ]
     ++
       # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
       # and also https://github.com/openssl/openssl/pull/29321
       lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
+=======
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     withDocs = true;
 

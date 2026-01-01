@@ -105,6 +105,7 @@ stdenv.mkDerivation {
     version: pkgs.spirv-llvm-translator.override { llvm = pkgs."llvm_${version}"; }
   );
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "Tool and a library for bi-directional translation between SPIR-V and LLVM IR";
@@ -112,6 +113,15 @@ stdenv.mkDerivation {
     license = lib.licenses.ncsa;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ gloaming ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
+    description = "Tool and a library for bi-directional translation between SPIR-V and LLVM IR";
+    mainProgram = "llvm-spirv";
+    license = licenses.ncsa;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ gloaming ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = !(versions ? ${llvmMajor});
   };
 }

@@ -35,11 +35,19 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # system clock issues
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.nongnu.org/lzip/tarlz.html";
     description = "Massively parallel combined implementation of the tar archiver and the lzip compressor";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.nongnu.org/lzip/tarlz.html";
+    description = "Massively parallel combined implementation of the tar archiver and the lzip compressor";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tarlz";
   };
 })

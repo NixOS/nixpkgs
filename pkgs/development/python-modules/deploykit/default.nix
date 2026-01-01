@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deploykit" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Execute commands remote via ssh and locally in parallel with python";
     homepage = "https://github.com/numtide/deploykit";
@@ -49,5 +50,17 @@ buildPythonPackage rec {
       zowoq
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Execute commands remote via ssh and locally in parallel with python";
+    homepage = "https://github.com/numtide/deploykit";
+    changelog = "https://github.com/numtide/deploykit/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      mic92
+      zowoq
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

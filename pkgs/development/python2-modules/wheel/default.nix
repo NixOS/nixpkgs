@@ -37,7 +37,11 @@ buildPythonPackage rec {
   # We add this flag to ignore the copy installed by bootstrapped-pip
   pipInstallFlags = [ "--ignore-installed" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/pypa/wheel";
     description = "Built-package format for Python";
     longDescription = ''
@@ -52,7 +56,12 @@ buildPythonPackage rec {
       It should be noted that wheel is not intended to be used as a library,
       and as such there is no stable, public API.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ siriobalmelli ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ siriobalmelli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -14,13 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixbit";
+<<<<<<< HEAD
   version = "0.6.2";
+=======
+  version = "0.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "pbek";
     repo = "nixbit";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Vbv6+d0jUNxI7TP06vIey3a7fCzX/jgnNJZ18ntBN2k=";
+=======
+    hash = "sha256-EaL+ekvvnKZM7fdfuzNz9Ddq7k0HN3ZGW8JpyVyNV9c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -51,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       --fish <(xvfb-run $out/bin/nixbit --completion-fish)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "KDE Plasma application to update your NixOS system from a git repository";
     homepage = "https://github.com/pbek/nixbit";
@@ -58,6 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pbek ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "KDE Plasma application to update your NixOS system from a git repository";
+    homepage = "https://github.com/pbek/nixbit";
+    changelog = "https://github.com/pbek/nixbit/releases/tag/v${finalAttrs.version}";
+    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pbek ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nixbit";
   };
 })

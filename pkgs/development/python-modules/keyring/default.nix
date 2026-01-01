@@ -19,13 +19,20 @@
 
 buildPythonPackage rec {
   pname = "keyring";
+<<<<<<< HEAD
   version = "25.7.0";
   pyproject = true;
+=======
+  version = "25.6.0";
+  pyproject = true;
+  disabled = pythonOlder "3.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "keyring";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-v9s28vwx/5DJRa3dQyS/mdZppfvFcfBtafjBRi2c1oQ=";
   };
 
@@ -34,6 +41,11 @@ buildPythonPackage rec {
       --replace-fail '"coherent.licensed",' ""
   '';
 
+=======
+    hash = "sha256-qu9HAlZMLlIVs8c9ClzWUljezhrt88gu1kouklMNxMY=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools-scm ];
 
   nativeBuildInputs = [
@@ -74,6 +86,7 @@ buildPythonPackage rec {
   # These tests fail when sandboxing is enabled because they are unable to get a password from keychain.
   ++ lib.optional stdenv.hostPlatform.isDarwin "tests/test_multiprocess.py";
 
+<<<<<<< HEAD
   meta = {
     description = "Store and access your passwords safely";
     homepage = "https://github.com/jaraco/keyring";
@@ -85,5 +98,18 @@ buildPythonPackage rec {
       dotlambda
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Store and access your passwords safely";
+    homepage = "https://github.com/jaraco/keyring";
+    changelog = "https://github.com/jaraco/keyring/blob/${src.tag}/NEWS.rst";
+    license = licenses.mit;
+    mainProgram = "keyring";
+    maintainers = with maintainers; [
+      lovek323
+      dotlambda
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

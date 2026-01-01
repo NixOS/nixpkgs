@@ -15,12 +15,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://mdocml.bsd.lv/";
     description = "Converter from Texinfo into mdoc";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ramkromberg ];
+=======
+  meta = with lib; {
+    homepage = "http://mdocml.bsd.lv/";
+    description = "Converter from Texinfo into mdoc";
+    license = licenses.isc;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ramkromberg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "texi2mdoc";
   };
 }

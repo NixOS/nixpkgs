@@ -4,8 +4,13 @@
   fetchFromGitea,
   fetchYarnDeps,
   writableTmpDirAsHomeHook,
+<<<<<<< HEAD
   yarnConfigHook,
   yarnBuildHook,
+=======
+  fixup-yarn-lock,
+  yarn,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   jpegoptim,
   oxipng,
@@ -15,13 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "akkoma-fe";
+<<<<<<< HEAD
   version = "3.12.0";
+=======
+  version = "3.15.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-DK+KLAcT/10qhwmB+GoHN/7nOKJEJ32zSao8/fjgW7E=";
 
     # upstream repository archive fetching is broken
@@ -29,14 +39,25 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   yarnOfflineCache = fetchYarnDeps {
+=======
+    hash = "sha256-VKYeJwAc4pMpF1dWBnx5D39ffNk7eGpJI2es+GAxdow=";
+  };
+
+  offlineCache = fetchYarnDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-QB523QZX8oBMHWBSFF7MpaWWXc+MgEUaw/2gsCPZ9a4=";
   };
 
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
+<<<<<<< HEAD
     yarnConfigHook
     yarnBuildHook
+=======
+    fixup-yarn-lock
+    yarn
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
     jpegoptim
     oxipng
@@ -51,6 +72,30 @@ stdenv.mkDerivation (finalAttrs: {
       build/webpack.prod.conf.js
   '';
 
+<<<<<<< HEAD
+=======
+  configurePhase = ''
+    runHook preConfigure
+
+    yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg finalAttrs.offlineCache}
+    fixup-yarn-lock yarn.lock
+
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    export NODE_ENV="production"
+    export NODE_OPTIONS="--openssl-legacy-provider"
+    yarn run build --offline
+
+    runHook postBuild
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   installPhase = ''
     runHook preInstall
 

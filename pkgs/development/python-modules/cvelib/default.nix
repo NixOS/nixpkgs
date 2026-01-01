@@ -40,12 +40,21 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = cve; };
 
+<<<<<<< HEAD
   meta = {
     description = "Library and a command line interface for the CVE Services API";
     homepage = "https://github.com/RedHatProductSecurity/cvelib";
     changelog = "https://github.com/RedHatProductSecurity/cvelib/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raboof ];
+=======
+  meta = with lib; {
+    description = "Library and a command line interface for the CVE Services API";
+    homepage = "https://github.com/RedHatProductSecurity/cvelib";
+    changelog = "https://github.com/RedHatProductSecurity/cvelib/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ raboof ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cve";
   };
 }

@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     cp -v Fonts/WebFonts/*.woff2 $out/share/fonts/WOFF2
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://comicneue.com/";
     description = "Casual type face: Make your lemonade stand look like a fortune 500 company";
     longDescription = ''
@@ -35,8 +39,13 @@ stdenv.mkDerivation rec {
       the latter angular terminals. Both variants come in Light,
       Regular, and Bold weights with Oblique variants.
     '';
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

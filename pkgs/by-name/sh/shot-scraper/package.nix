@@ -34,12 +34,21 @@ python3.pkgs.buildPythonApplication rec {
     "shot_scraper"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line utility for taking automated screenshots of websites";
     homepage = "https://github.com/simonw/shot-scraper";
     changelog = "https://github.com/simonw/shot-scraper/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ techknowlogick ];
+=======
+  meta = with lib; {
+    description = "Command-line utility for taking automated screenshots of websites";
+    homepage = "https://github.com/simonw/shot-scraper";
+    changelog = "https://github.com/simonw/shot-scraper/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ techknowlogick ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "shot-scraper";
   };
 }

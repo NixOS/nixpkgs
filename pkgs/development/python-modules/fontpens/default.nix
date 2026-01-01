@@ -42,10 +42,18 @@ buildPythonPackage rec {
     "transformPointPen"
   ]);
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of classes implementing the pen protocol for manipulating glyphs";
     homepage = "https://github.com/robotools/fontPens";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Collection of classes implementing the pen protocol for manipulating glyphs";
+    homepage = "https://github.com/robotools/fontPens";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -2990,10 +2990,17 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
+<<<<<<< HEAD
       sha256 = "1ix0dwbg9f9x0hzxd2h339099vinqp145dqr4l62kgiy40vx5mx7";
       type = "gem";
     };
     version = "0.0.39";
+=======
+      sha256 = "1ihbyibcfsf9wcww2xw94808j20xixrc1ni0c47s8mfnhf9dsmwf";
+      type = "gem";
+    };
+    version = "0.0.38";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   gitlab-grape-openapi = {
     dependencies = [
@@ -3343,10 +3350,17 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
+<<<<<<< HEAD
       sha256 = "1x2nxiii42f74mhd8bmmf58nfqyrxxqvkhd6h5hv0vjm9vrb030c";
       type = "gem";
     };
     version = "3.1.0";
+=======
+      sha256 = "0n9m042lmpxpyr9nldz6d9rksczra7agjkrvrwkqjj9a5w1grigy";
+      type = "gem";
+    };
+    version = "2.26.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   globalid = {
     dependencies = [ "activesupport" ];

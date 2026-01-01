@@ -30,10 +30,18 @@ stdenv.mkDerivation {
     cudaPackages.markForCudatoolkitRootHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Nvidia optical flow headers for computing the relative motion of pixels between images";
     homepage = "https://developer.nvidia.com/opticalflow-sdk";
     license = lib.licenses.bsd3; # applies to the header files only
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Nvidia optical flow headers for computing the relative motion of pixels between images";
+    homepage = "https://developer.nvidia.com/opticalflow-sdk";
+    license = licenses.bsd3; # applies to the header files only
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

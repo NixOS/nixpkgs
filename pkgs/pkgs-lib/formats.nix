@@ -487,10 +487,14 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
+<<<<<<< HEAD
       type = mkStructuredType {
         typeName = "TOML";
         nullable = false;
       };
+=======
+      type = mkStructuredType { typeName = "TOML"; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       generate =
         name: value:

@@ -26,11 +26,19 @@ buildNpmPackage rec {
     version = src.rev;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Makes eslint the fastest linter on the planet";
     homepage = "https://github.com/mantoni/eslint_d.js";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ehllie ];
+=======
+  meta = with lib; {
+    description = "Makes eslint the fastest linter on the planet";
+    homepage = "https://github.com/mantoni/eslint_d.js";
+    license = licenses.mit;
+    maintainers = [ maintainers.ehllie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "eslint_d";
   };
 }

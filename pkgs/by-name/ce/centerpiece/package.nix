@@ -56,6 +56,7 @@ rustPlatform.buildRustPackage rec {
     }" $out/bin/centerpiece
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/friedow/centerpiece";
     description = "Your trusty omnibox search";
@@ -65,6 +66,17 @@ rustPlatform.buildRustPackage rec {
       friedow
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/friedow/centerpiece";
+    description = "Your trusty omnibox search";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      a-kenji
+      friedow
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "centerpiece";
   };
 }

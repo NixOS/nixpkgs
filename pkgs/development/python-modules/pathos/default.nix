@@ -35,11 +35,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathos" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parallel graph management and execution in heterogeneous computing";
     homepage = "https://pathos.readthedocs.io/";
     changelog = "https://github.com/uqfoundation/pathos/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Parallel graph management and execution in heterogeneous computing";
+    homepage = "https://pathos.readthedocs.io/";
+    changelog = "https://github.com/uqfoundation/pathos/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

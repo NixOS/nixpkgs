@@ -37,11 +37,20 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "onlykey.client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "OnlyKey client and command-line tool";
     mainProgram = "onlykey-cli";
     homepage = "https://github.com/trustcrypto/python-onlykey";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ranfdev ];
+=======
+  meta = with lib; {
+    description = "OnlyKey client and command-line tool";
+    mainProgram = "onlykey-cli";
+    homepage = "https://github.com/trustcrypto/python-onlykey";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ranfdev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

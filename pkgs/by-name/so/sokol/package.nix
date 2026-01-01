@@ -28,11 +28,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal cross-platform standalone C headers";
     homepage = "https://github.com/floooh/sokol";
     license = lib.licenses.zlib;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ jonnybolton ];
+=======
+  meta = with lib; {
+    description = "Minimal cross-platform standalone C headers";
+    homepage = "https://github.com/floooh/sokol";
+    license = licenses.zlib;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jonnybolton ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

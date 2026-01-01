@@ -15,18 +15,30 @@
   hicolor-icon-theme,
   mate,
   wrapGAppsHook3,
+<<<<<<< HEAD
   gitUpdater,
+=======
+  mateUpdateScript,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
   inherit (apacheHttpdPackages) apacheHttpd mod_dnssd;
 in
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "mate-user-share";
   version = "1.28.0";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-user-share-${finalAttrs.version}.tar.xz";
+=======
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "iYVgmZkXllE0jkl+8I81C4YIG5expKcwQHfurlc5rjg=";
   };
 
@@ -65,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/mate-user-share";
     odd-unstable = true;
@@ -80,3 +93,16 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "User level public file sharing for the MATE desktop";
+    mainProgram = "mate-file-share-properties";
+    homepage = "https://github.com/mate-desktop/mate-user-share";
+    license = with licenses; [ gpl2Plus ];
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

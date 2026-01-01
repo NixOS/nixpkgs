@@ -28,10 +28,17 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fault-tolerant Python3 package for searching, navigating, and modifying LaTeX documents";
     homepage = "https://github.com/alvinwan/TexSoup";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Fault-tolerant Python3 package for searching, navigating, and modifying LaTeX documents";
+    homepage = "https://github.com/alvinwan/TexSoup";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

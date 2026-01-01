@@ -22,10 +22,18 @@ stdenv.mkDerivation {
     install -D $src $out/share/buffer_autoset.py
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (weechat.meta) platforms;
     description = "WeeChat script which auto-set buffer properties when a buffer is opened";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ govanify ];
+=======
+  meta = with lib; {
+    inherit (weechat.meta) platforms;
+    description = "WeeChat script which auto-set buffer properties when a buffer is opened";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ govanify ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

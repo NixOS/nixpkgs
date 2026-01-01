@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Dock/panel library for GTK 4";
     mainProgram = "libpanel-example";
@@ -74,5 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Dock/panel library for GTK 4";
+    mainProgram = "libpanel-example";
+    homepage = "https://gitlab.gnome.org/GNOME/libpanel";
+    license = licenses.lgpl3Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

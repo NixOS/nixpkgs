@@ -173,10 +173,17 @@ buildDotnetModule rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
     homepage = "https://spacestation14.io";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
+    homepage = "https://spacestation14.io";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SS14.Launcher";

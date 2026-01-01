@@ -52,11 +52,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygraphviz" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to Graphviz graph drawing package";
     homepage = "https://github.com/pygraphviz/pygraphviz";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python interface to Graphviz graph drawing package";
+    homepage = "https://github.com/pygraphviz/pygraphviz";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
       dotlambda
     ];

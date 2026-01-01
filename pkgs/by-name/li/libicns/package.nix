@@ -30,14 +30,25 @@ stdenv.mkDerivation {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for manipulation of the Mac OS icns resource format";
     homepage = "https://icns.sourceforge.io";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Library for manipulation of the Mac OS icns resource format";
+    homepage = "https://icns.sourceforge.io";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2
       lgpl2
       lgpl21
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

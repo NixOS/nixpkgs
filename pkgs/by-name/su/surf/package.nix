@@ -75,7 +75,11 @@ stdenv.mkDerivation rec {
       )
     '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # webkitgtk_4_0 was removed. master is supposed to support 4.1
     # but it crashes with BadWindow X Error
     broken = true;
@@ -88,8 +92,14 @@ stdenv.mkDerivation rec {
       surf to another URI by setting its XProperties.
     '';
     homepage = "https://surf.suckless.org";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = webkitgtk_4_1.meta.platforms;
     maintainers = with lib.maintainers; [ joachifm ];
+=======
+    license = licenses.mit;
+    platforms = webkitgtk_4_1.meta.platforms;
+    maintainers = with maintainers; [ joachifm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

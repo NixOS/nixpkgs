@@ -19,6 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-WlIholi/nzq6Ikc0LS6FhG0Q5Kz0kvvAlA2YJ7EksZ4=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     # Backport fix for test_long_password from upstream PR: https://github.com/maxcountryman/flask-bcrypt/pull/96
     substituteInPlace test_bcrypt.py \
@@ -26,6 +27,8 @@ buildPythonPackage rec {
                      "self.assertTrue(self.bcrypt.check_password_hash(pw_hash, 'A' * 72))"
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   propagatedBuildInputs = [
     flask
     bcrypt
@@ -35,10 +38,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_bcrypt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Brcrypt hashing for Flask";
     homepage = "https://github.com/maxcountryman/flask-bcrypt";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Brcrypt hashing for Flask";
+    homepage = "https://github.com/maxcountryman/flask-bcrypt";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -71,10 +71,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpbin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP Request and Response Service";
     homepage = "https://github.com/psf/httpbin";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "HTTP Request and Response Service";
+    homepage = "https://github.com/psf/httpbin";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -196,5 +196,9 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ jagajaga ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

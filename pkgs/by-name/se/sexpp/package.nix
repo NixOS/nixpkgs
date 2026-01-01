@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     echo "v${finalAttrs.version}" > version.txt
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rnpgp/sexp";
     description = "S-expressions parser and generator C++ library, fully compliant to [https://people.csail.mit.edu/rivest/Sexp.txt]";
@@ -57,5 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ribose-jeffreylau ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rnpgp/sexp";
+    description = "S-expressions parser and generator C++ library, fully compliant to [https://people.csail.mit.edu/rivest/Sexp.txt]";
+    mainProgram = "sexpp";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ribose-jeffreylau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

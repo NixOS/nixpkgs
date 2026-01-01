@@ -65,6 +65,7 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Provides production-ready containers and deployment tools for operating OpenStack clouds";
     mainProgram = "kolla-build";
@@ -72,5 +73,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.astro ];
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Provides production-ready containers and deployment tools for operating OpenStack clouds";
+    mainProgram = "kolla-build";
+    homepage = "https://opendev.org/openstack/kolla";
+    license = licenses.asl20;
+    maintainers = [ maintainers.astro ];
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

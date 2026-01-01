@@ -134,11 +134,20 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux sources and UVC firmwares for The Imaging Source cameras";
     homepage = "https://github.com/TheImagingSource/tiscamera";
     license = with lib.licenses; [ asl20 ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jraygauthier ];
+=======
+  meta = with lib; {
+    description = "Linux sources and UVC firmwares for The Imaging Source cameras";
+    homepage = "https://github.com/TheImagingSource/tiscamera";
+    license = with licenses; [ asl20 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jraygauthier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

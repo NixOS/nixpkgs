@@ -18,9 +18,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
+<<<<<<< HEAD
   meta = {
     description = "Get live-data from mvg-live.de";
     homepage = "https://github.com/pc-coholic/PyMVGLive";
     license = lib.licenses.free;
+=======
+  meta = with lib; {
+    description = "Get live-data from mvg-live.de";
+    homepage = "https://github.com/pc-coholic/PyMVGLive";
+    license = licenses.free;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

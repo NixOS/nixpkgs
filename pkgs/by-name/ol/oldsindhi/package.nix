@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/MihailJP/oldsindhi";
     description = "Free Sindhi Khudabadi font";
@@ -31,5 +32,16 @@ stdenvNoCC.mkDerivation rec {
       ofl
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/MihailJP/oldsindhi";
+    description = "Free Sindhi Khudabadi font";
+    maintainers = with maintainers; [ mathnerd314 ];
+    license = with licenses; [
+      mit
+      ofl
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

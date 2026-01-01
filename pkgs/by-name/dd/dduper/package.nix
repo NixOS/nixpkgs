@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     install -m755 ./dduper $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast block-level out-of-band BTRFS deduplication tool";
     mainProgram = "dduper";
@@ -62,5 +63,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ thesola10 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Fast block-level out-of-band BTRFS deduplication tool";
+    mainProgram = "dduper";
+    homepage = "https://github.com/Lakshmipathi/dduper";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ thesola10 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

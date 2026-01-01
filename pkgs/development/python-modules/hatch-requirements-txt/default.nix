@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/repo-helper/hatch-requirements-txt/releases/tag/${version}";
     description = "Hatchling plugin to read project dependencies from requirements.txt";
     homepage = "https://github.com/repo-helper/hatch-requirements-txt";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/repo-helper/hatch-requirements-txt/releases/tag/${version}";
+    description = "Hatchling plugin to read project dependencies from requirements.txt";
+    homepage = "https://github.com/repo-helper/hatch-requirements-txt";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

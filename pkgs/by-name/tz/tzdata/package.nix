@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   # minor releases.
   passthru.tests = postgresql;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
@@ -104,6 +105,18 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "http://www.iana.org/time-zones";
+    description = "Database of current and historical time zones";
+    changelog = "https://github.com/eggert/tz/blob/${finalAttrs.version}/NEWS";
+    license = with licenses; [
+      bsd3 # tzcode
+      publicDomain # tzdata
+    ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ajs124
       fpletz
     ];

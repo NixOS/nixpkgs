@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "setuptools_generate" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generate shell completions and man page when building a python package";
     homepage = "https://github.com/Freed-Wu/setuptools-generate";
     changelog = "https://github.com/Freed-Wu/setuptools-generate/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Generate shell completions and man page when building a python package";
+    homepage = "https://github.com/Freed-Wu/setuptools-generate";
+    changelog = "https://github.com/Freed-Wu/setuptools-generate/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

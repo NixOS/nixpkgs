@@ -38,12 +38,20 @@ buildPythonPackage rec {
     "test_hatch_build"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/jupyterlab/hatch-jupyter-builder/releases/tag/v${version}";
     description = "Hatch plugin to help build Jupyter packages";
     mainProgram = "hatch-jupyter-builder";
     homepage = "https://github.com/jupyterlab/hatch-jupyter-builder";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

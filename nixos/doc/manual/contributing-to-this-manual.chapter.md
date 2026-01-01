@@ -1,7 +1,11 @@
 # Contributing to this manual {#chap-contributing}
 
 The sources of the NixOS manual are in the [nixos/doc/manual](https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual) subdirectory of the [Nixpkgs](https://github.com/NixOS/nixpkgs) repository.
+<<<<<<< HEAD
 This manual uses the [Nixpkgs manual syntax](https://github.com/NixOS/nixpkgs/blob/master/doc/README.md#syntax) and [stylistic conventions](https://github.com/NixOS/nixpkgs/blob/master/doc/README.md#documentation-conventions).
+=======
+This manual uses the [Nixpkgs manual syntax](https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-markup).
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 You can quickly check your edits with the following:
 
@@ -13,6 +17,11 @@ $ nix-build nixos/release.nix -A manual.x86_64-linux
 
 If the build succeeds, the manual will be in `./result/share/doc/nixos/index.html`.
 
+<<<<<<< HEAD
+=======
+There's also [a convenient development daemon](https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-devmode).
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 The above instructions don't deal with the appendix of available `configuration.nix` options, and the manual pages related to NixOS. These are built, and written in a different location and in a different format, as explained in the next sections.
 
 ## Development environment {#sec-contributing-development-env}

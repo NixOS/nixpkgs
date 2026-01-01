@@ -38,11 +38,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_remotedata" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin for controlling remote data access";
     homepage = "https://github.com/astropy/pytest-remotedata";
     changelog = "https://github.com/astropy/pytest-remotedata/blob/v${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Pytest plugin for controlling remote data access";
+    homepage = "https://github.com/astropy/pytest-remotedata";
+    changelog = "https://github.com/astropy/pytest-remotedata/blob/v${version}/CHANGES.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

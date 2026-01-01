@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line encoder frontend for libfdk-aac encoder";
     mainProgram = "fdkaac";
     longDescription = ''
@@ -35,8 +39,14 @@ stdenv.mkDerivation rec {
       and encodes it into either M4A / AAC file.
     '';
     homepage = "https://github.com/nu774/fdkaac";
+<<<<<<< HEAD
     license = lib.licenses.zlib;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.lunik1 ];
+=======
+    license = licenses.zlib;
+    platforms = platforms.all;
+    maintainers = [ maintainers.lunik1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

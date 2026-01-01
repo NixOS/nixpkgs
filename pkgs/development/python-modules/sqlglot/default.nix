@@ -19,14 +19,22 @@
 
 buildPythonPackage rec {
   pname = "sqlglot";
+<<<<<<< HEAD
   version = "27.29.0";
+=======
+  version = "27.28.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "sqlglot";
     owner = "tobymao";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-kqtsZRtIIgQ0cTbhG5K4N+c3cq7I+Uvd+3s+b0CYLtg=";
+=======
+    hash = "sha256-DGpxKIlSRwKKXhZGDTTQb8a3iAzy8a7h9/PKHPCuq+g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

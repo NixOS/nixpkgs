@@ -66,11 +66,20 @@ maven.buildMavenPackage {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
     mainProgram = "java-language-server";
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hqurve ];
+=======
+  meta = with lib; {
+    description = "Java language server based on v3.0 of the protocol and implemented using the Java compiler API";
+    mainProgram = "java-language-server";
+    homepage = "https://github.com/georgewfraser/java-language-server";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hqurve ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

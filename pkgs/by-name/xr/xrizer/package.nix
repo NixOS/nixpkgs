@@ -54,7 +54,11 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/lib/xrizer/$platformPath
+<<<<<<< HEAD
     mv "$out/lib/libxrizer.so" "$out/lib/xrizer/$platformPath/vrclient.so"
+=======
+    ln -s "$out/lib/libxrizer.so" "$out/lib/xrizer/$platformPath/vrclient.so"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   platformPath =

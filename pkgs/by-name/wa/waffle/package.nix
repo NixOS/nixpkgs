@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
+<<<<<<< HEAD
     owner = "Mesa";
+=======
+    owner = "libgbm";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     repo = "waffle";
     rev = "v${version}";
     sha256 = "sha256-Y7GRYLqSO572qA1eZ3jS8QlZ1X9xKpDtScaySTuPK/U=";
@@ -71,7 +75,11 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
+<<<<<<< HEAD
   env.PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
+=======
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \
@@ -83,6 +91,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform C library that allows one to defer selection of an OpenGL API and window system until runtime";
     mainProgram = "wflinfo";
@@ -90,5 +99,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     inherit (libgbm.meta) platforms;
     maintainers = with lib.maintainers; [ Flakebi ];
+=======
+  meta = with lib; {
+    description = "Cross-platform C library that allows one to defer selection of an OpenGL API and window system until runtime";
+    mainProgram = "wflinfo";
+    homepage = "https://www.waffle-gl.org/";
+    license = licenses.bsd2;
+    inherit (libgbm.meta) platforms;
+    maintainers = with maintainers; [ Flakebi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

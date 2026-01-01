@@ -46,10 +46,18 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Converter and deserializer for FontLab Studio 5 VFB files";
     homepage = "https://github.com/LucasFonts/vfbLib";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jopejoe1 ];
+=======
+  meta = with lib; {
+    description = "Converter and deserializer for FontLab Studio 5 VFB files";
+    homepage = "https://github.com/LucasFonts/vfbLib";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ jopejoe1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -35,11 +35,19 @@ stdenv.mkDerivation rec {
       }"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Prevents you from committing secrets and credentials into git repositories";
     homepage = "https://github.com/awslabs/git-secrets";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Prevents you from committing secrets and credentials into git repositories";
+    homepage = "https://github.com/awslabs/git-secrets";
+    license = licenses.asl20;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-secrets";
   };
 }

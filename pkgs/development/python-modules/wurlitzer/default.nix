@@ -24,11 +24,19 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Capture C-level output in context managers";
     homepage = "https://github.com/minrk/wurlitzer";
     changelog = "https://github.com/minrk/wurlitzer/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Capture C-level output in context managers";
+    homepage = "https://github.com/minrk/wurlitzer";
+    changelog = "https://github.com/minrk/wurlitzer/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

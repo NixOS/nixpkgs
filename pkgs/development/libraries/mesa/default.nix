@@ -20,6 +20,10 @@
   libpng,
   libunwind,
   libva-minimal,
+<<<<<<< HEAD
+=======
+  libvdpau,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   llvmPackages,
   lm_sensors,
   meson,
@@ -271,6 +275,10 @@ stdenv.mkDerivation {
       libpng
       libunwind
       libva-minimal
+<<<<<<< HEAD
+=======
+      libvdpau
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       libX11
       libxcb
       libXext

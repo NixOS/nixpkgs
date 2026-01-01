@@ -43,11 +43,20 @@ stdenv.mkDerivation {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Contractor extension for File Roller";
     homepage = "https://github.com/elementary/file-roller-contract";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Contractor extension for File Roller";
+    homepage = "https://github.com/elementary/file-roller-contract";
+    license = licenses.gpl3Plus;
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

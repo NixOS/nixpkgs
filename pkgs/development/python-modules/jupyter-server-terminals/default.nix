@@ -47,11 +47,19 @@ let
       });
     };
 
+<<<<<<< HEAD
     meta = {
       changelog = "https://github.com/jupyter-server/jupyter_server_terminals/releases/tag/v${version}";
       description = "Jupyter Server Extension Providing Support for Terminals";
       homepage = "https://github.com/jupyter-server/jupyter_server_terminals";
       license = lib.licenses.bsd3;
+=======
+    meta = with lib; {
+      changelog = "https://github.com/jupyter-server/jupyter_server_terminals/releases/tag/v${version}";
+      description = "Jupyter Server Extension Providing Support for Terminals";
+      homepage = "https://github.com/jupyter-server/jupyter_server_terminals";
+      license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maintainers = [ ];
     };
   };

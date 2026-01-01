@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import datetime as dt
 import fcntl
 import io
@@ -5,11 +6,18 @@ import os
 import select
 import subprocess
 import typing
+=======
+import io
+import os
+import pty
+import subprocess
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 from pathlib import Path
 
 from test_driver.logger import AbstractLogger
 
 
+<<<<<<< HEAD
 def readline_with_timeout(
     readable: typing.IO[str], timeout: dt.timedelta
 ) -> typing.Generator[str]:
@@ -38,6 +46,8 @@ def readline_with_timeout(
         fcntl.fcntl(fd, fcntl.F_SETFL, og_flags)
 
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 class VLan:
     """This class handles a VLAN that the run-vm scripts identify via its
     number handles. The network's lifetime equals the object's lifetime.
@@ -64,6 +74,7 @@ class VLan:
         os.environ[f"QEMU_VDE_SOCKET_{self.nr}"] = str(self.socket_dir)
 
         self.logger.info("start vlan")
+<<<<<<< HEAD
 
         self.process = subprocess.Popen(
             [
@@ -115,11 +126,40 @@ class VLan:
                 break
 
         assert (self.socket_dir / "ctl").exists(), "cannot start vde_switch"
+=======
+        pty_master, pty_slave = pty.openpty()
+
+        # The --hub is required for the scenario determined by
+        # nixos/tests/networking.nix vlan-ping.
+        # VLAN Tagged traffic (802.1Q) seams to be blocked if a vde_switch is
+        # used without the hub mode (flood packets to all ports).
+        self.process = subprocess.Popen(
+            ["vde_switch", "-s", self.socket_dir, "--dirmode", "0700", "--hub"],
+            stdin=pty_slave,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            shell=False,
+        )
+        self.pid = self.process.pid
+        self.fd = os.fdopen(pty_master, "w")
+        self.fd.write("version\n")
+
+        # TODO: perl version checks if this can be read from
+        # an if not, dies. we could hang here forever. Fix it.
+        assert self.process.stdout is not None
+        self.process.stdout.readline()
+        if not (self.socket_dir / "ctl").exists():
+            self.logger.error("cannot start vde_switch")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         self.logger.info(f"running vlan (pid {self.pid}; ctl {self.socket_dir})")
 
     def stop(self) -> None:
         self.logger.info(f"kill vlan (pid {self.pid})")
+<<<<<<< HEAD
         assert self.process.stdin is not None
         self.process.stdin.close()
+=======
+        self.fd.close()
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         self.process.terminate()

@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
     mv $out/share/man/man1/ifstat.1 $out/share/man/man1/ifstat-legacy.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Report network interfaces bandwith just like vmstat/iostat do for other system counters - legacy version";
     homepage = "http://gael.roualland.free.fr/ifstat/";
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Report network interfaces bandwith just like vmstat/iostat do for other system counters - legacy version";
+    homepage = "http://gael.roualland.free.fr/ifstat/";
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ifstat-legacy";
   };
 }

@@ -22,6 +22,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Command line utility for interacting with BagIt bags (RFC 8493)";

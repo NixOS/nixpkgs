@@ -21,12 +21,21 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) nar-serve; };
 
+<<<<<<< HEAD
   meta = {
     description = "Serve NAR file contents via HTTP";
     mainProgram = "nar-serve";
     homepage = "https://github.com/numtide/nar-serve";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Serve NAR file contents via HTTP";
+    mainProgram = "nar-serve";
+    homepage = "https://github.com/numtide/nar-serve";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rizary
       zimbatm
     ];

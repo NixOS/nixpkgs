@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gpsoauth" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Google Play Services OAuth";
     homepage = "https://github.com/simon-weber/gpsoauth";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jgillich ];
+=======
+  meta = with lib; {
+    description = "Library for Google Play Services OAuth";
+    homepage = "https://github.com/simon-weber/gpsoauth";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jgillich ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

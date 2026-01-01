@@ -46,11 +46,19 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests = nixosTests.stratis;
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for the Stratis project";
     homepage = "https://stratis-storage.github.io";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "CLI for the Stratis project";
+    homepage = "https://stratis-storage.github.io";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "stratis";
   };
 }

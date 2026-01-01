@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to integrate C/Cpp code with Lua";
     homepage = "http://www.codenix.com/~tolua/";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ colinsane ];
     mainProgram = "tolua++";
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Tool to integrate C/Cpp code with Lua";
+    homepage = "http://www.codenix.com/~tolua/";
+    license = licenses.mit;
+    maintainers = with lib.maintainers; [ colinsane ];
+    mainProgram = "tolua++";
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

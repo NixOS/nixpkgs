@@ -64,11 +64,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Source code editing widget for GTK";
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gtksourceview";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ bobby285271 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Source code editing widget for GTK";
+    homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gtksourceview";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ bobby285271 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

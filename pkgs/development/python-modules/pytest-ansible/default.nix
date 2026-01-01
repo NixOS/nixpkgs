@@ -19,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
+<<<<<<< HEAD
   version = "25.12.0";
+=======
+  version = "25.11.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +32,11 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "pytest-ansible";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-2mrz+DADelydnwNf3ytGa3igSTlybQdZ7kdlWfoG8Io=";
+=======
+    hash = "sha256-8pTw67Nn7BTLaygL/HZyQidzOdrqmbBToOK6TxpRPVo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -92,12 +100,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_ansible" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin for pytest to simplify calling ansible modules from tests or fixtures";
     homepage = "https://github.com/jlaska/pytest-ansible";
     changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Plugin for pytest to simplify calling ansible modules from tests or fixtures";
+    homepage = "https://github.com/jlaska/pytest-ansible";
+    changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      tjni
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       robsliwi
     ];
   };

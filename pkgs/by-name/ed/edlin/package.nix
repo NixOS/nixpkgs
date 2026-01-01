@@ -22,12 +22,21 @@ stdenv.mkDerivation (finalAttrs: {
     cp AUTHORS ChangeLog README TODO edlin.htm $out/share/doc/edlin-${finalAttrs.version}/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/projects/freedos-edlin/";
     description = "FreeDOS line editor";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/freedos-edlin/";
+    description = "FreeDOS line editor";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "edlin";
   };
 })

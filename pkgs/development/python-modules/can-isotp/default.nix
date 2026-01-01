@@ -39,12 +39,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "isotp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package that provides support for ISO-TP (ISO-15765) protocol";
     homepage = "https://github.com/pylessard/python-can-isotp";
     changelog = "https://github.com/pylessard/python-can-isotp/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python package that provides support for ISO-TP (ISO-15765) protocol";
+    homepage = "https://github.com/pylessard/python-can-isotp";
+    changelog = "https://github.com/pylessard/python-can-isotp/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jacobkoziej
     ];
   };

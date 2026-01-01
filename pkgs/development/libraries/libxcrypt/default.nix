@@ -90,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/besser82/libxcrypt/blob/v${finalAttrs.version}/NEWS";
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
@@ -100,5 +101,17 @@ stdenv.mkDerivation (finalAttrs: {
       hexa
     ];
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/besser82/libxcrypt/blob/v${finalAttrs.version}/NEWS";
+    description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
+    homepage = "https://github.com/besser82/libxcrypt/";
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      dottedmag
+      hexa
+    ];
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

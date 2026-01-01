@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXfixes
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive whiteboard application";
     homepage = "https://openboard.ch/";
@@ -102,6 +103,17 @@ stdenv.mkDerivation (finalAttrs: {
       fufexan
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Interactive whiteboard application";
+    homepage = "https://openboard.ch/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      atinba
+      fufexan
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "openboard";
   };
 })

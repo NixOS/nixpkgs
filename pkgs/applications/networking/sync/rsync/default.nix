@@ -84,15 +84,26 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Fast incremental file transfer utility";
+    homepage = "https://rsync.samba.org/";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rsync";
     maintainers = with lib.maintainers; [
       ivan
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     identifiers.cpeParts = {
       vendor = "samba";
       inherit version;

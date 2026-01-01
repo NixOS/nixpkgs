@@ -53,11 +53,19 @@ buildPythonPackage rec {
     "test_timeout_generator"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module with some convenient utilities";
     homepage = "https://github.com/WoLpH/python-utils";
     changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Module with some convenient utilities";
+    homepage = "https://github.com/WoLpH/python-utils";
+    changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

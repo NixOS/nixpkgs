@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/etc/udev/rules.d Linux_udevrules/70-stm32vcp.rules
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Read, write and execute programs on PADAUK microcontroller";
     mainProgram = "easypdkprog";
@@ -36,5 +37,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ david-sawatzke ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Read, write and execute programs on PADAUK microcontroller";
+    mainProgram = "easypdkprog";
+    homepage = "https://github.com/free-pdk/easy-pdk-programmer-software";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ david-sawatzke ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

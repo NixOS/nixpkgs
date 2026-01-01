@@ -15,14 +15,22 @@
 
 buildPythonPackage rec {
   pname = "cma";
+<<<<<<< HEAD
   version = "4.4.1";
+=======
+  version = "4.4.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CMA-ES";
     repo = "pycma";
     tag = "r${version}";
+<<<<<<< HEAD
     hash = "sha256-06QPs2hbrIbrPRWidlZYf0jcMGdcDYfg89Ad+4IX/Co=";
+=======
+    hash = "sha256-2uCn5CZma9RLK8zaaPhiQCqnK+2dWgLNr5+Ck2cV6vI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # setuptools.errors.PackageDiscoveryError:

@@ -22,11 +22,20 @@ ocamlPackages.buildDunePackage rec {
   nativeBuildInputs = [ ocamlPackages.menhir ];
   buildInputs = [ ocamlPackages.zarith ];
 
+<<<<<<< HEAD
   meta = {
     description = "Modal Homotopy Type System";
     mainProgram = "anders";
     homepage = "https://homotopy.dev/";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.suhr ];
+=======
+  meta = with lib; {
+    description = "Modal Homotopy Type System";
+    mainProgram = "anders";
+    homepage = "https://homotopy.dev/";
+    license = licenses.isc;
+    maintainers = [ maintainers.suhr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

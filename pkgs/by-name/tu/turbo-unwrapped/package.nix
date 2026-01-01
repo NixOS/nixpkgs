@@ -81,6 +81,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/vercel/turborepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      dlip
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       getchoo
     ];
     mainProgram = "turbo";

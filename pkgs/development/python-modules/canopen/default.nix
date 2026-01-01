@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "canopen" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CANopen stack implementation";
     homepage = "https://github.com/christiansandberg/canopen/";
     changelog = "https://github.com/christiansandberg/canopen/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sorki ];
+=======
+  meta = with lib; {
+    description = "CANopen stack implementation";
+    homepage = "https://github.com/christiansandberg/canopen/";
+    changelog = "https://github.com/christiansandberg/canopen/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sorki ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

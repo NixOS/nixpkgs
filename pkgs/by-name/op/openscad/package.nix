@@ -168,7 +168,11 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
+<<<<<<< HEAD
     ln -s "$out/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" "$out/bin/openscad"
+=======
+    rmdir $out/bin || true
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     mv --target-directory=$out/Applications/OpenSCAD.app/Contents/Resources \
       $out/share/openscad/{examples,color-schemes,locale,libraries,fonts,templates}

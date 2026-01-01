@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Linux tool to dump x86 CPUID information about the CPU";
     longDescription = ''
       cpuid dumps detailed information about the CPU(s) gathered from the CPUID
@@ -45,8 +49,13 @@ stdenv.mkDerivation rec {
       Cyrix, UMC, NexGen, Rise, and SiS CPUs.
     '';
     homepage = "http://etallen.com/cpuid.html";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ blitz ];
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ blitz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

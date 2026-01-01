@@ -79,11 +79,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast, disk based, rotating network backup system";
     homepage = "http://dirvish.org/";
     license = lib.licenses.osl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.winpat ];
+=======
+  meta = with lib; {
+    description = "Fast, disk based, rotating network backup system";
+    homepage = "http://dirvish.org/";
+    license = lib.licenses.osl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.winpat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

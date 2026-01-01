@@ -28,10 +28,18 @@ buildDunePackage rec {
   # requires a mounted xenfs and xen server
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Low-level libraries for connecting to a xenstore service on a xen host";
     license = lib.licenses.lgpl21Only;
     homepage = "https://github.com/xapi-project/ocaml-xenstore-clients";
     teams = [ lib.teams.xen ];
+=======
+  meta = with lib; {
+    description = "Low-level libraries for connecting to a xenstore service on a xen host";
+    license = licenses.lgpl21Only;
+    homepage = "https://github.com/xapi-project/ocaml-xenstore-clients";
+    teams = [ teams.xen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

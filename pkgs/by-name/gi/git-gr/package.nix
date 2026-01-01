@@ -30,7 +30,11 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-5YHE1NVUcZ5NeOl3Z87l3PVsmlkswhnT83Oi9loJjdM=";
 
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = true;
+=======
+  OPENSSL_NO_VENDOR = true;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 

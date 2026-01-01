@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
+<<<<<<< HEAD
   meta = {
     description = "Themes for GTK, gnome-shell and Xfce";
     homepage = "https://github.com/lassekongo83/zuki-themes";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Themes for GTK, gnome-shell and Xfce";
+    homepage = "https://github.com/lassekongo83/zuki-themes";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,7 +23,11 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Find outdated or deprecated Helm charts running in your cluster";
     mainProgram = "nova";
     longDescription = ''
@@ -33,7 +37,12 @@ buildGoModule rec {
       your current version is deprecated, it will let you know.
     '';
     homepage = "https://nova.docs.fairwinds.com/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ qjoly ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

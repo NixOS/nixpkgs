@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyasuswrt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for communication with ASUSWRT routers via HTTP";
     homepage = "https://github.com/ollo69/pyasuswrt";
     changelog = "https://github.com/ollo69/pyasuswrt/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library for communication with ASUSWRT routers via HTTP";
+    homepage = "https://github.com/ollo69/pyasuswrt";
+    changelog = "https://github.com/ollo69/pyasuswrt/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -5,6 +5,7 @@
 }:
 
 let
+<<<<<<< HEAD
   tests =
     tests-stdenv
     // test-extendMkDerivation
@@ -12,6 +13,9 @@ let
     // tests-fetchurl
     // tests-go
     // tests-python;
+=======
+  tests = tests-stdenv // test-extendMkDerivation // tests-fetchhg // tests-go // tests-python;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   tests-stdenv =
     let
@@ -137,6 +141,7 @@ let
       };
     };
 
+<<<<<<< HEAD
   tests-fetchgit =
     let
       src-with-sha256 = pkgs.fetchgit {
@@ -229,6 +234,8 @@ let
       };
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   tests-fetchhg =
     let
       ruamel_0_18_14-hash = "sha256-HDkPPp1xI3uoGYlS9mwPp1ZjG2gKvx6vog0Blj6tBuI=";
@@ -390,6 +397,7 @@ let
 
   tests-python =
     let
+<<<<<<< HEAD
       package-stub = pkgs.python3Packages.callPackage (
         {
           buildPythonPackage,
@@ -499,6 +507,17 @@ let
         ];
         expected = lib.genAttrs [ "a" "b" "c" "d" ] lib.id;
       };
+=======
+      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: {
+        dontWrapPythonPrograms = true;
+      });
+    in
+    {
+      overridePythonAttrs = {
+        expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
+        expected = true;
+      };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
 in

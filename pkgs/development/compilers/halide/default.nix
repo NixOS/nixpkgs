@@ -155,12 +155,21 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.imageio
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C++ based language for image processing and computational photography";
     homepage = "https://halide-lang.org";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "C++ based language for image processing and computational photography";
+    homepage = "https://halide-lang.org";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ck3d
       atila
       twesterhout

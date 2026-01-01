@@ -92,7 +92,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # https://github.com/rhasspy/gruut/issues/25
@@ -105,11 +109,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gruut" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tokenizer, text cleaner, and phonemizer for many human languages";
     mainProgram = "gruut";
     homepage = "https://github.com/rhasspy/gruut";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    description = "Tokenizer, text cleaner, and phonemizer for many human languages";
+    mainProgram = "gruut";
+    homepage = "https://github.com/rhasspy/gruut";
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -37,10 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
     aspell
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Guile bindings for the aspell library";
     homepage = "https://github.com/spk121/guile-aspell";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Guile bindings for the aspell library";
+    homepage = "https://github.com/spk121/guile-aspell";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };

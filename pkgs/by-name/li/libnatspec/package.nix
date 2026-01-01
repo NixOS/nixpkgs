@@ -26,11 +26,20 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libiconv ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://natspec.sourceforge.net/";
     description = "Library intended to smooth national specificities in using of programs";
     mainProgram = "natspec";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    homepage = "https://natspec.sourceforge.net/";
+    description = "Library intended to smooth national specificities in using of programs";
+    mainProgram = "natspec";
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

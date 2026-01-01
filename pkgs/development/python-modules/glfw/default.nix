@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glfw" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for GLFW";
     homepage = "https://github.com/FlorianRhiem/pyGLFW";
     changelog = "https://github.com/FlorianRhiem/pyGLFW/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.McSinyx ];
+=======
+  meta = with lib; {
+    description = "Python bindings for GLFW";
+    homepage = "https://github.com/FlorianRhiem/pyGLFW";
+    changelog = "https://github.com/FlorianRhiem/pyGLFW/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = [ maintainers.McSinyx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

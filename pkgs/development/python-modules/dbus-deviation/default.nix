@@ -27,10 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbusdeviation" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://tecnocode.co.uk/dbus-deviation/";
     description = "Project for parsing D-Bus introspection XML and processing it in various ways";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    homepage = "https://tecnocode.co.uk/dbus-deviation/";
+    description = "Project for parsing D-Bus introspection XML and processing it in various ways";
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

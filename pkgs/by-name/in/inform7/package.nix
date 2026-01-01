@@ -35,6 +35,7 @@ stdenv.mkDerivation {
       --replace "/usr/bin/perl" "${perl}/bin/perl"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Design system for interactive fiction";
     mainProgram = "i7";
@@ -42,6 +43,15 @@ stdenv.mkDerivation {
     license = lib.licenses.artistic2;
     maintainers = with lib.maintainers; [ mbbx6spp ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Design system for interactive fiction";
+    mainProgram = "i7";
+    homepage = "http://inform7.com/";
+    license = licenses.artistic2;
+    maintainers = with maintainers; [ mbbx6spp ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken =
       (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)

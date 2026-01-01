@@ -24,10 +24,18 @@ stdenv.mkDerivation rec {
   preInstall = "export INSTALLDIR=$out";
   postInstall = ''for i in "$out/casc"/*; do ln -s "$i" "$out/bin/ekrh-casc-$(basename $i)"; done '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automated first-order theorem prover";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Automated first-order theorem prover";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

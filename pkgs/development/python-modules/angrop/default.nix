@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "angrop" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ROP gadget finder and chain builder";
     homepage = "https://github.com/angr/angrop";
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "ROP gadget finder and chain builder";
+    homepage = "https://github.com/angr/angrop";
+    license = with licenses; [ bsd2 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

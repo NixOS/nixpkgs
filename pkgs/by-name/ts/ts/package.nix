@@ -20,12 +20,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+oMzEVQ9xTW2DLerg8ZKte4xEo26qqE93jQZhOVCtCg=";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://vicerveza.homeunix.net/~viric/soft/ts";
     description = "Task spooler - batch queue";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://vicerveza.homeunix.net/~viric/soft/ts";
+    description = "Task spooler - batch queue";
+    license = licenses.gpl2Only;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ts";
   };
 }

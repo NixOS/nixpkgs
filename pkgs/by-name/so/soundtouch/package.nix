@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Program and library for changing the tempo, pitch and playback rate of audio";
     homepage = "https://www.surina.net/soundtouch/";
@@ -36,5 +37,14 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "soundstretch";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Program and library for changing the tempo, pitch and playback rate of audio";
+    homepage = "https://www.surina.net/soundtouch/";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ orivej ];
+    mainProgram = "soundstretch";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

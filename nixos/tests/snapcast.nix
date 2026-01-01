@@ -23,6 +23,10 @@ in
         enable = true;
         settings = {
           stream = {
+<<<<<<< HEAD
+=======
+            port = port;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             source = [
               "pipe:///run/snapserver/mpd?name=mpd&mode=create"
               "pipe:///run/snapserver/bluetooth?name=bluetooth"
@@ -31,11 +35,15 @@ in
             ];
             buffer = bufferSize;
           };
+<<<<<<< HEAD
           tcp-streaming = {
             enabled = true;
             port = port;
           };
           tcp-control = {
+=======
+          tcp = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             enabled = true;
             port = tcpPort;
           };
@@ -79,8 +87,11 @@ in
         )
 
     with subtest("test a ipv6 connection"):
+<<<<<<< HEAD
         # URI scheme does not support IPv6 literals
         # https://github.com/snapcast/snapcast/issues/1472
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         server.execute("systemd-run --unit=snapcast-local-client snapclient -h ::1 -p ${toString port}")
         server.wait_until_succeeds(
             "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
@@ -88,7 +99,11 @@ in
         server.wait_until_succeeds("journalctl -o cat -u snapcast-local-client | grep -q 'buffer: ${toString bufferSize}'")
 
     with subtest("test a connection"):
+<<<<<<< HEAD
         client.execute("systemd-run --unit=snapcast-client snapclient 'tcp://server:${toString port}'")
+=======
+        client.execute("systemd-run --unit=snapcast-client snapclient -h server -p ${toString port}")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         server.wait_until_succeeds(
             "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
         )

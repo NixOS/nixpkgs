@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     cp bklk $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Ncurses Binary Clock";
     longDescription = "bklk is a simple binary clock for your terminal.";
@@ -32,6 +33,15 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ j0hax ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Ncurses Binary Clock";
+    longDescription = "bklk is a simple binary clock for your terminal.";
+    homepage = "https://github.com/Ruunyox/bklk";
+    license = licenses.mit;
+    maintainers = with maintainers; [ j0hax ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bklk";
   };
 }

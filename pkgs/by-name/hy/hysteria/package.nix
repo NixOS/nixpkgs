@@ -38,12 +38,21 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Feature-packed proxy & relay utility optimized for lossy, unstable connections";
     homepage = "https://github.com/apernet/hysteria";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ oluceps ];
+=======
+  meta = with lib; {
+    description = "Feature-packed proxy & relay utility optimized for lossy, unstable connections";
+    homepage = "https://github.com/apernet/hysteria";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ oluceps ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hysteria";
   };
 }

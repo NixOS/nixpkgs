@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension that allows including wavedrom diagrams by using its text-based representation";
     homepage = "https://github.com/bavovanachte/sphinx-wavedrom";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fsagbuya ];
+=======
+  meta = with lib; {
+    description = "Sphinx extension that allows including wavedrom diagrams by using its text-based representation";
+    homepage = "https://github.com/bavovanachte/sphinx-wavedrom";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fsagbuya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -15,11 +15,19 @@ stdenv.mkDerivation {
     sed -i 's,/usr,,g' Makefile
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to enumerate and control the Intel Speed Select Technology features";
     mainProgram = "intel-speed-select";
     homepage = "https://www.kernel.org/";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Tool to enumerate and control the Intel Speed Select Technology features";
+    mainProgram = "intel-speed-select";
+    homepage = "https://www.kernel.org/";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

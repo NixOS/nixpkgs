@@ -27,6 +27,7 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Full-featured download manager";
     homepage = "https://motrix.app";
@@ -34,6 +35,15 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Full-featured download manager";
+    homepage = "https://motrix.app";
+    license = licenses.mit;
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "motrix";
   };
 }

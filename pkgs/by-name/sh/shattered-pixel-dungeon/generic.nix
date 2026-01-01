@@ -127,6 +127,7 @@ stdenv.mkDerivation (
     '';
 
     meta =
+<<<<<<< HEAD
 
       {
         sourceProvenance = with lib.sourceTypes; [
@@ -136,6 +137,17 @@ stdenv.mkDerivation (
         license = lib.licenses.gpl3Plus;
         maintainers = with lib.maintainers; [ fgaz ];
         platforms = lib.platforms.all;
+=======
+      with lib;
+      {
+        sourceProvenance = with sourceTypes; [
+          fromSource
+          binaryBytecode # deps
+        ];
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [ fgaz ];
+        platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         mainProgram = pname;
       }
       // meta;

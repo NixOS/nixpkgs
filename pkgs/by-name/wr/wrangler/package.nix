@@ -5,8 +5,11 @@
   makeWrapper,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoPatchelfHook,
   cacert,
   llvmPackages,
@@ -19,25 +22,41 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
+<<<<<<< HEAD
   version = "4.54.0";
+=======
+  version = "4.50.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-aDBKdpAoeVmKRvgNfQ9UrwpoeRG+WWHJ9pu1jrnxA0M=";
   };
 
   pnpmDeps = fetchPnpmDeps {
+=======
+    hash = "sha256-/hAqcaZCzF6n1yS2dsqXDk9J6Zu6+MDTc+BzKJ81XYk=";
+  };
+
+  pnpmDeps = pnpm_9.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       postPatch
       ;
+<<<<<<< HEAD
     pnpm = pnpm_9;
     fetcherVersion = 2;
     hash = "sha256-TiaMBbx3diKkyYWD0tbqnLwvvjF4LfL/GhlONJ0iUH4=";
+=======
+    fetcherVersion = 2;
+    hash = "sha256-z38rGh9Wnj9iDR196hcVmS2AY1l07UJfcAhmD0Qx1Co=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   # pnpm packageManager version in workers-sdk root package.json may not match nixpkgs
   postPatch = ''
@@ -62,8 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     jq
     moreutils
   ]

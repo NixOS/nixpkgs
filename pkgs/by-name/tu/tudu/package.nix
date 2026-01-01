@@ -21,11 +21,19 @@ stdenv.mkDerivation rec {
       --replace 'echo "main()' 'echo "int main()'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "ncurses-based hierarchical todo list manager with vim-like keybindings";
     homepage = "https://code.meskio.net/tudu/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "ncurses-based hierarchical todo list manager with vim-like keybindings";
+    homepage = "https://code.meskio.net/tudu/";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tudu";
   };
 }

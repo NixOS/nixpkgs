@@ -52,12 +52,21 @@ stdenv.mkDerivation rec {
       --prefix PATH : $out/bin:${binPath}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Formal verification tool for distributed software systems";
     homepage = "https://spinroot.com/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Formal verification tool for distributed software systems";
+    homepage = "https://spinroot.com/";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pSub
       siraben
     ];

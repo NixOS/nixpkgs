@@ -44,10 +44,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fitbit" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fitbit API Python Client Implementation";
     homepage = "https://github.com/orcasgit/python-fitbit";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Fitbit API Python Client Implementation";
+    homepage = "https://github.com/orcasgit/python-fitbit";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

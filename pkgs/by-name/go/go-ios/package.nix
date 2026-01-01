@@ -12,13 +12,21 @@
 
 buildGoModule rec {
   pname = "go-ios";
+<<<<<<< HEAD
   version = "1.0.192";
+=======
+  version = "1.0.182";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-2M53jcAZXzUjV53YdENjLpK9o26Xr/gFniuS0T2NZ0E=";
+=======
+    sha256 = "sha256-GUCZiuW6IDVxVsFZN7QMRt5EFovxjUopC4jQD+/lZv8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   proxyVendor = true;
@@ -62,11 +70,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Operating system independent implementation of iOS device features";
     homepage = "https://github.com/danielpaulus/go-ios";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
+=======
+  meta = with lib; {
+    description = "Operating system independent implementation of iOS device features";
+    homepage = "https://github.com/danielpaulus/go-ios";
+    license = licenses.mit;
+    maintainers = with maintainers; [ eyjhb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ios";
   };
 }

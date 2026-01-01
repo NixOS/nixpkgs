@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.clfs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dissect module implementing a parser for the CLFS (Common Log File System) file system";
     homepage = "https://github.com/fox-it/dissect.clfs";
     changelog = "https://github.com/fox-it/dissect.clfs/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Dissect module implementing a parser for the CLFS (Common Log File System) file system";
+    homepage = "https://github.com/fox-it/dissect.clfs";
+    changelog = "https://github.com/fox-it/dissect.clfs/releases/tag/${src.tag}";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

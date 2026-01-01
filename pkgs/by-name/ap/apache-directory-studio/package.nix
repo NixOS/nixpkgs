@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     install -D -t "$out/share/applications" ${desktopItem}/share/applications/*
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Eclipse-based LDAP browser and directory client";
     homepage = "https://directory.apache.org/studio/";
@@ -85,6 +86,19 @@ stdenv.mkDerivation rec {
     # Upstream supports macOS and Windows too.
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Eclipse-based LDAP browser and directory client";
+    homepage = "https://directory.apache.org/studio/";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    license = licenses.asl20;
+    # Upstream supports macOS and Windows too.
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ApacheDirectoryStudio";
   };
 }

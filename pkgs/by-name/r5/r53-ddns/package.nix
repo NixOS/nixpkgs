@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-ImV/jxCYIWObN+jCSbXhuzR4TuRc/EgQ8SIV6x+wEpA=";
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.mit;
     homepage = "https://github.com/fleaz/r53-ddns";
     description = "DIY DynDNS tool based on Route53";
     maintainers = with lib.maintainers; [ fleaz ];
+=======
+  meta = with lib; {
+    license = licenses.mit;
+    homepage = "https://github.com/fleaz/r53-ddns";
+    description = "DIY DynDNS tool based on Route53";
+    maintainers = with maintainers; [ fleaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "r53-ddns";
   };
 }

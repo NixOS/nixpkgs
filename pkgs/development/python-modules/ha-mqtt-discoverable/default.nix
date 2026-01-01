@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ha_mqtt_discoverable" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to create MQTT entities that are automatically discovered by Home Assistant";
     homepage = "https://github.com/unixorn/ha-mqtt-discoverable";
     changelog = "https://github.com/unixorn/ha-mqtt-discoverable/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to create MQTT entities that are automatically discovered by Home Assistant";
+    homepage = "https://github.com/unixorn/ha-mqtt-discoverable";
+    changelog = "https://github.com/unixorn/ha-mqtt-discoverable/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

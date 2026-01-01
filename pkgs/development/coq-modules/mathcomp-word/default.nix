@@ -81,9 +81,16 @@ mkCoqDerivation {
     stdlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Yet Another Coq Library on Machine Words";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Yet Another Coq Library on Machine Words";
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

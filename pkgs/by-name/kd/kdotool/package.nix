@@ -22,10 +22,18 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
 
+<<<<<<< HEAD
   meta = {
     description = "xdotool clone for KDE Wayland";
     homepage = "https://github.com/jinliu/kdotool";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kotatsuyaki ];
+=======
+  meta = with lib; {
+    description = "xdotool clone for KDE Wayland";
+    homepage = "https://github.com/jinliu/kdotool";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kotatsuyaki ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

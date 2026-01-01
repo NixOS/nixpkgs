@@ -1,7 +1,10 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchurl,
   yasm,
   autoconf,
@@ -9,11 +12,16 @@
   libtool,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "xvidcore";
   version = "1.3.7";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://downloads.xvid.com/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     hash = "sha256-ruqulS1Ns5UkmDmjvQOEHWhEhD9aT4TCcf+I96oaz/c=";
   };
@@ -26,6 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+    url = "https://downloads.xvid.com/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "1xyg3amgg27zf7188kss7y248s0xhh1vv8rrk0j9bcsd5nasxsmf";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preConfigure = ''
     # Configure script is not in the root of the source directory
     cd build/generic
@@ -69,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/*.dll $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "MPEG-4 video codec for PC";
     homepage = "https://www.xvid.com/";
@@ -80,3 +95,16 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
   };
 })
+=======
+  meta = with lib; {
+    description = "MPEG-4 video codec for PC";
+    homepage = "https://www.xvid.com/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      codyopel
+      lovek323
+    ];
+    platforms = platforms.all;
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

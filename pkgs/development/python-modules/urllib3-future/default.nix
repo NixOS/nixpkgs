@@ -24,14 +24,22 @@
 
 buildPythonPackage rec {
   pname = "urllib3-future";
+<<<<<<< HEAD
   version = "2.15.901";
+=======
+  version = "2.14.907";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "urllib3.future";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-RffHaGJmbfI56QKgIIgSdGSaKZ/WGSNTZce8kck8neY=";
+=======
+    hash = "sha256-LdJplIA/hUIHmDNJKUwcr5ganKaxEQMGhjQsc5FcEjI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -73,7 +81,11 @@ buildPythonPackage rec {
     tornado
     trustme
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTestPaths = [
     # test connects to the internet

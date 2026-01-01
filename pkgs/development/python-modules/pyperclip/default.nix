@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyperclip" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/asweigart/pyperclip";
     license = lib.licenses.bsd3;
     description = "Cross-platform clipboard module";
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/asweigart/pyperclip";
+    license = licenses.bsd3;
+    description = "Cross-platform clipboard module";
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

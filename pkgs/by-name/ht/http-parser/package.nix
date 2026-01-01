@@ -64,11 +64,20 @@ stdenv.mkDerivation rec {
     ln -sf libhttp_parser.${version}.dll.a $out/lib/libhttp_parser.dll.a
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP message parser written in C";
     homepage = "https://github.com/nodejs/http-parser";
     maintainers = [ ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "HTTP message parser written in C";
+    homepage = "https://github.com/nodejs/http-parser";
+    maintainers = [ ];
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

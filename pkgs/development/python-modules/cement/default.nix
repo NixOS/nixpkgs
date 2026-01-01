@@ -57,7 +57,11 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "cement" ];
 
@@ -76,12 +80,21 @@ buildPythonPackage rec {
     "tests/ext/test_ext_smtp.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI Application Framework for Python";
     homepage = "https://builtoncement.com/";
     changelog = "https://github.com/datafolklabs/cement/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ eqyiel ];
+=======
+  meta = with lib; {
+    description = "CLI Application Framework for Python";
+    homepage = "https://builtoncement.com/";
+    changelog = "https://github.com/datafolklabs/cement/blob/${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ eqyiel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cement";
   };
 }

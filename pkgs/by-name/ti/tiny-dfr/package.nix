@@ -55,6 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/AsahiLinux/tiny-dfr";
     description = "Most basic dynamic function row daemon possible";
@@ -65,5 +66,17 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "tiny-dfr";
     maintainers = [ lib.maintainers.qyliss ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/AsahiLinux/tiny-dfr";
+    description = "Most basic dynamic function row daemon possible";
+    license = [
+      licenses.asl20
+      licenses.mit
+    ];
+    mainProgram = "tiny-dfr";
+    maintainers = [ maintainers.qyliss ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

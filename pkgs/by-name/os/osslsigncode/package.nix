@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mtrojnar/osslsigncode";
     description = "OpenSSL based Authenticode signing for PE/MSI/Java CAB files";
@@ -41,5 +42,17 @@ stdenv.mkDerivation rec {
       prusnak
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mtrojnar/osslsigncode";
+    description = "OpenSSL based Authenticode signing for PE/MSI/Java CAB files";
+    mainProgram = "osslsigncode";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      mmahut
+      prusnak
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

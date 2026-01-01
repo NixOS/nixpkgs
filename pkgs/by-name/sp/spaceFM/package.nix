@@ -86,7 +86,11 @@ stdenv.mkDerivation rec {
   # Introduced because ifuse doesn't build due to CVEs in libplist
   # Revert when libplist builds again…
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Multi-panel tabbed file manager";
     longDescription = ''
       Multi-panel tabbed file and desktop manager for Linux
@@ -94,9 +98,16 @@ stdenv.mkDerivation rec {
       customizable menu system, and bash integration
     '';
     homepage = "http://ignorantguru.github.io/spacefm/";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      jagajaga
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       obadz
     ];
   };

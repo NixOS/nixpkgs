@@ -76,10 +76,18 @@ buildPythonPackage rec {
     "nipy.algorithms"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://nipy.org/nipy";
     description = "Software for structural and functional neuroimaging analysis";
     downloadPage = "https://github.com/nipy/nipy";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://nipy.org/nipy";
+    description = "Software for structural and functional neuroimaging analysis";
+    downloadPage = "https://github.com/nipy/nipy";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

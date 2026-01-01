@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Abstraction over x86 NASM Assembly";
     longDescription = "Construct adds features such as while loops, if statements, scoped macros and function-call syntax to NASM Assembly.";
@@ -35,6 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ rucadi ];
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Abstraction over x86 NASM Assembly";
+    longDescription = "Construct adds features such as while loops, if statements, scoped macros and function-call syntax to NASM Assembly.";
+    homepage = "https://github.com/Thomas-de-Bock/construct";
+    maintainers = with maintainers; [ rucadi ];
+    platforms = platforms.all;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "construct";
   };
 })

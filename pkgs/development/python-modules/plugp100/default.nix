@@ -51,10 +51,18 @@ buildPythonPackage rec {
     "tests/unit/test_klap_protocol.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to control Tapo Plug P100 devices";
     homepage = "https://github.com/petretiandrea/plugp100";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ pyle ];
+=======
+  meta = with lib; {
+    description = "Python library to control Tapo Plug P100 devices";
+    homepage = "https://github.com/petretiandrea/plugp100";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ pyle ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "General purpose multiple sequence alignment program for protein and DNA/RNA";
     homepage = "http://www.clustal.org/omega/";
@@ -34,5 +35,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bzizou ];
     mainProgram = "clustalo";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "General purpose multiple sequence alignment program for protein and DNA/RNA";
+    homepage = "http://www.clustal.org/omega/";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.bzizou ];
+    mainProgram = "clustalo";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -55,12 +55,21 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Account manager and channel dispatcher for the Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Account manager and channel dispatcher for the Telepathy framework";
+    homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
+    license = licenses.lgpl21Only;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };

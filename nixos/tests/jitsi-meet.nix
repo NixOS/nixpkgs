@@ -1,8 +1,13 @@
 { pkgs, ... }:
 {
   name = "jitsi-meet";
+<<<<<<< HEAD
   meta = {
     maintainers = pkgs.lib.teams.jitsi.members;
+=======
+  meta = with pkgs.lib; {
+    maintainers = teams.jitsi.members;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes = {

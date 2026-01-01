@@ -46,12 +46,21 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix=$out
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Dynamic tracing in Linux";
     mainProgram = "ply";
     homepage = "https://wkz.github.io/ply/";
     license = [ lib.licenses.gpl2Only ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Dynamic tracing in Linux";
+    mainProgram = "ply";
+    homepage = "https://wkz.github.io/ply/";
+    license = [ licenses.gpl2Only ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mic92
       mbbx6spp
     ];

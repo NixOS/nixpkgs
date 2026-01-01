@@ -14,10 +14,18 @@ buildFishPlugin rec {
     sha256 = "sha256-+FUBM7CodtZrYKqU542fQD+ZDGrd2438trKM0tIESs0=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Pure-fish z directory jumping";
     homepage = "https://github.com/jethrokuan/z";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scrumplex ];
+=======
+  meta = with lib; {
+    description = "Pure-fish z directory jumping";
+    homepage = "https://github.com/jethrokuan/z";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Scrumplex ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

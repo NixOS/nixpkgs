@@ -44,11 +44,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/DarkElvenAngel/argononed";
     description = "Replacement daemon for the Argon One Raspberry Pi case";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.misterio77 ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/DarkElvenAngel/argononed";
+    description = "Replacement daemon for the Argon One Raspberry Pi case";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.misterio77 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

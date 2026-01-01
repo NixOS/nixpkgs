@@ -50,11 +50,19 @@ buildPythonPackage rec {
   # tests require timezone to set America/Los_Angeles
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output";
     homepage = "https://github.com/kellyjonbrazil/jc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ atemu ];
+=======
+  meta = with lib; {
+    description = "This tool serializes the output of popular command line tools and filetypes to structured JSON output";
+    homepage = "https://github.com/kellyjonbrazil/jc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ atemu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/kellyjonbrazil/jc/blob/${src.tag}/CHANGELOG";
     mainProgram = "jc";
   };

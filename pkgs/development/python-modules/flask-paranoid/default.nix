@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_paranoid" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/miguelgrinberg/flask-paranoid/";
     description = "Simple user session protection";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/miguelgrinberg/flask-paranoid/";
+    description = "Simple user session protection";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

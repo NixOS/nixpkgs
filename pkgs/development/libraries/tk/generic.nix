@@ -89,21 +89,32 @@ tcl.mkTclDerivation {
 
   inherit tcl;
 
+<<<<<<< HEAD
   env = lib.optionalAttrs (lib.versionOlder tcl.version "8.6") {
     NIX_CFLAGS_COMPILE = "-std=gnu17";
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru = rec {
     inherit (tcl) release version;
     libPrefix = "tk${tcl.release}";
     libdir = "lib/${libPrefix}";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
     homepage = "https://www.tcl.tk/";
     license = lib.licenses.tcltk;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
+    homepage = "https://www.tcl.tk/";
+    license = licenses.tcltk;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin && lib.elem (lib.versions.majorMinor tcl.version) [ "8.5" ];
   };

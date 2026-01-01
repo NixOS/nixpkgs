@@ -64,10 +64,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Brokken's Own Base Classes And Templates";
     homepage = "https://fbb-git.gitlab.io/bobcat/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Brokken's Own Base Classes And Templates";
+    homepage = "https://fbb-git.gitlab.io/bobcat/";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -62,11 +62,20 @@ stdenv.mkDerivation rec {
   # Until https://github.com/NikitaIvanovV/ctpv/pull/90 is merged
   patches = [ ./use-polite-flag.patch ];
 
+<<<<<<< HEAD
   meta = {
     description = "File previewer for a terminal";
     homepage = "https://github.com/NikitaIvanovV/ctpv";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.wesleyjrz ];
+=======
+  meta = with lib; {
+    description = "File previewer for a terminal";
+    homepage = "https://github.com/NikitaIvanovV/ctpv";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.wesleyjrz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

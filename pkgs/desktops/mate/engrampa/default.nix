@@ -12,18 +12,30 @@
   json-glib,
   mate-desktop,
   wrapGAppsHook3,
+<<<<<<< HEAD
   gitUpdater,
+=======
+  mateUpdateScript,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # can be defaulted to true once switch to meson
   withMagic ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   file,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "engrampa";
   version = "1.28.2";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/engrampa-${finalAttrs.version}.tar.xz";
+=======
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-Hpl3wjdFv4hDo38xUXHZr5eBSglxrqw9d08BdlCsCe8=";
   };
 
@@ -55,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/engrampa";
     odd-unstable = true;
@@ -66,11 +79,27 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "engrampa";
     homepage = "https://mate-desktop.org";
     license = with lib.licenses; [
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "Archive Manager for MATE";
+    mainProgram = "engrampa";
+    homepage = "https://mate-desktop.org";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       lgpl2Plus
       fdl11Plus
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
 })
+=======
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

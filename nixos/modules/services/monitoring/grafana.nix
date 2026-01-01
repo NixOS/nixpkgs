@@ -1300,6 +1300,7 @@ in
               type = types.bool;
             };
           };
+<<<<<<< HEAD
 
           plugins = {
             preinstall_disabled = mkOption {
@@ -1312,6 +1313,8 @@ in
               type = types.bool;
             };
           };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       };
     };

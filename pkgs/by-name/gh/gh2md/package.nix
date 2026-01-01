@@ -29,11 +29,20 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "gh2md" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Export Github repository issues to markdown files";
     mainProgram = "gh2md";
     homepage = "https://github.com/mattduck/gh2md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artturin ];
+=======
+  meta = with lib; {
+    description = "Export Github repository issues to markdown files";
+    mainProgram = "gh2md";
+    homepage = "https://github.com/mattduck/gh2md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ artturin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

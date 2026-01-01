@@ -82,11 +82,20 @@ buildPythonPackage rec {
     inherit (src) owner repo;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GEMMs and tensor contractions";
     homepage = "https://github.com/ROCm/Tensile";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GEMMs and tensor contractions";
+    homepage = "https://github.com/ROCm/Tensile";
+    license = with licenses; [ mit ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -54,11 +54,20 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.8.7)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Daemon for communicating with WebOS devices";
     mainProgram = "novacomd";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Daemon for communicating with WebOS devices";
+    mainProgram = "novacomd";
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

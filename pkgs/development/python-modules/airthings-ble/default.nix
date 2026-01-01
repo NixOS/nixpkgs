@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "airthings_ble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Airthings BLE devices";
     homepage = "https://github.com/vincegio/airthings-ble";
     changelog = "https://github.com/vincegio/airthings-ble/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Airthings BLE devices";
+    homepage = "https://github.com/vincegio/airthings-ble";
+    changelog = "https://github.com/vincegio/airthings-ble/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

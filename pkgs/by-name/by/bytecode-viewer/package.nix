@@ -67,6 +67,7 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://bytecodeviewer.com";
     description = "Lightweight user-friendly Java/Android Bytecode Viewer, Decompiler & More";
@@ -81,5 +82,21 @@ maven.buildMavenPackage rec {
       binaryBytecode # deps
     ];
     license = with lib.licenses; [ gpl3Only ];
+=======
+  meta = with lib; {
+    homepage = "https://bytecodeviewer.com";
+    description = "Lightweight user-friendly Java/Android Bytecode Viewer, Decompiler & More";
+    mainProgram = "bytecode-viewer";
+    maintainers = with maintainers; [
+      shard7
+      d3vil0p3r
+    ];
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # deps
+    ];
+    license = with licenses; [ gpl3Only ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

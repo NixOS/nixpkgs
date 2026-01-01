@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.storage.queue" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for Microsoft Azure Storage services containing the queue service APIs";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-queue_${version}/sdk/storage/azure-storage-queue/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cmcdragonkai ];
+=======
+  meta = with lib; {
+    description = "Client library for Microsoft Azure Storage services containing the queue service APIs";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-queue_${version}/sdk/storage/azure-storage-queue/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cmcdragonkai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

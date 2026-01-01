@@ -50,11 +50,20 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple interface for devices supported by the linux UVC driver";
     homepage = "https://guvcview.sourceforge.net";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.puffnfresh ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Simple interface for devices supported by the linux UVC driver";
+    homepage = "https://guvcview.sourceforge.net";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.puffnfresh ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

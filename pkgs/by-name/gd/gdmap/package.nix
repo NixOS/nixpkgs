@@ -34,12 +34,21 @@ stdenv.mkDerivation {
     gettext
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/sjohannes/gdmap";
     description = "Tool to visualize disk space (GTK 3 port of Original)";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/sjohannes/gdmap";
+    description = "Tool to visualize disk space (GTK 3 port of Original)";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gdmap";
   };
 }

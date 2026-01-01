@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Kernel driver and development library to control serial CBM devices";
     longDescription = ''
       Win 7/8/10, and Linux/i386/AMD64 kernel driver and development library to
@@ -49,7 +53,13 @@ stdenv.mkDerivation rec {
       and the XUM1541 devices (a.k.a. "ZoomFloppy").
     '';
     homepage = "https://spiro.trikaliotis.net/opencbm";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

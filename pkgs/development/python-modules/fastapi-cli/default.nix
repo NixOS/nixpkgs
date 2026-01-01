@@ -56,12 +56,20 @@ let
 
     pythonImportsCheck = [ "fastapi_cli" ];
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Run and manage FastAPI apps from the command line with FastAPI CLI";
       homepage = "https://github.com/tiangolo/fastapi-cli";
       changelog = "https://github.com/tiangolo/fastapi-cli/releases/tag/${src.tag}";
       mainProgram = "fastapi";
+<<<<<<< HEAD
       license = lib.licenses.mit;
+=======
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maintainers = [ ];
       # This package provides a `fastapi`-executable that is in conflict with the one from
       # python3Packages.fastapi. Because this package is primarily used for the purpose of

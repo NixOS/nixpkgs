@@ -183,6 +183,7 @@ python311Packages.buildPythonApplication {
   # Expose isl to nix repl as sapling.isl.
   passthru.isl = isl;
 
+<<<<<<< HEAD
   meta = {
     description = "Scalable, User-Friendly Source Control System";
     homepage = "https://sapling-scm.com";
@@ -193,6 +194,17 @@ python311Packages.buildPythonApplication {
       shikanime
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Scalable, User-Friendly Source Control System";
+    homepage = "https://sapling-scm.com";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      pbar
+      thoughtpolice
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sl";
   };
 }

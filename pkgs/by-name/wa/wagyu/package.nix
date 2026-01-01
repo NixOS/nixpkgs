@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-vtNxRW/b8kvy21YQezCUiZNtLnlMSkdTRr/OkGy6UAw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Rust library for generating cryptocurrency wallets";
     homepage = "https://github.com/AleoHQ/wagyu";
@@ -27,6 +28,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = [ lib.maintainers.offline ];
+=======
+  meta = with lib; {
+    description = "Rust library for generating cryptocurrency wallets";
+    homepage = "https://github.com/AleoHQ/wagyu";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = [ maintainers.offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wagyu";
   };
 }

@@ -168,7 +168,11 @@ buildPythonPackage rec {
     "test_save_load_int8woqtensors_0_cpu"
     "test_save_load_int8woqtensors_1_cpu"
   ]
+<<<<<<< HEAD
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+=======
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # AssertionError: Scalars are not equal!
     "test_comm"
     "test_fsdp2"
@@ -176,7 +180,12 @@ buildPythonPackage rec {
     "test_precompute_bitnet_scale"
     "test_qlora_fsdp2"
     "test_uneven_shard"
+<<<<<<< HEAD
 
+=======
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # RuntimeError: No packed_weights_format was selected
     "TestIntxOpaqueTensor"
     "test_accuracy_kleidiai"
@@ -184,6 +193,7 @@ buildPythonPackage rec {
     # RuntimeError: quantized engine NoQEngine is not supported
     "test_smooth_linear_cpu"
     "test_smooth_linear_edge_cases"
+<<<<<<< HEAD
 
     # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
     "test_subclass_slice_subclass2_shape0_device_mps"
@@ -197,18 +207,26 @@ buildPythonPackage rec {
     "test_optim_smoke_optim_name_AdamFp8_bfloat16_device_mps"
     "test_optim_smoke_optim_name_AdamFp8_float32_device_mps"
     "test_subclass_slice_subclass0_shape1_device_mps"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Flaky: [gw0] node down: keyboard-interrupt
     "test_int8_weight_only_quant_with_freeze_0_cpu"
     "test_int8_weight_only_quant_with_freeze_1_cpu"
     "test_int8_weight_only_quant_with_freeze_2_cpu"
+<<<<<<< HEAD
 
     # Illegal instruction in subclass_4bit.py::dequantize
     "test_subclass_slice"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+=======
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Require unpackaged 'coremltools'
     "test/prototype/test_groupwise_lowbit_weight_lut_quantizer.py"
 
@@ -223,9 +241,13 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytorch/ao";
     changelog = "https://github.com/pytorch/ao/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       GaetanLepage
       sarahec
     ];
+=======
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

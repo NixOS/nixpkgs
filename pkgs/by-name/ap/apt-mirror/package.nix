@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool that provides the ability to mirror any parts of apt sources";
     homepage = "https://github.com/apt-mirror/apt-mirror";
@@ -48,5 +49,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ arthsmn ];
     mainProgram = "apt-mirror";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Tool that provides the ability to mirror any parts of apt sources";
+    homepage = "https://github.com/apt-mirror/apt-mirror";
+    changelog = "https://github.com/apt-mirror/apt-mirror/blob/${finalAttrs.src.rev}/CHANGELOG";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ arthsmn ];
+    mainProgram = "apt-mirror";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

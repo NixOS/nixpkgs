@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     curl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Music related metadata searchengine";
     homepage = "https://github.com/sahib/glyr";
@@ -52,5 +53,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.sternenseemann ];
     mainProgram = "glyrc";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Music related metadata searchengine";
+    homepage = "https://github.com/sahib/glyr";
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.sternenseemann ];
+    mainProgram = "glyrc";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

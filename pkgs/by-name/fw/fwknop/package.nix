@@ -64,15 +64,24 @@ stdenv.mkDerivation rec {
       "wknopddir = $out/etc/fwknop"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Single Packet Authorization (and Port Knocking) server/client";
     longDescription = ''
       fwknop stands for the "FireWall KNock OPerator", and implements an
       authorization scheme called Single Packet Authorization (SPA).
     '';
     homepage = "https://www.cipherdyne.org/fwknop/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

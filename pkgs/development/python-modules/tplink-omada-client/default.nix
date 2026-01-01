@@ -33,12 +33,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tplink_omada_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for the TP-Link Omada SDN Controller API";
     homepage = "https://github.com/MarkGodwin/tplink-omada-api";
     changelog = "https://github.com/MarkGodwin/tplink-omada-api/releases/tag/release%2Fv${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for the TP-Link Omada SDN Controller API";
+    homepage = "https://github.com/MarkGodwin/tplink-omada-api";
+    changelog = "https://github.com/MarkGodwin/tplink-omada-api/releases/tag/release%2Fv${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "omada";
   };
 }

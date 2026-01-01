@@ -51,11 +51,19 @@ stdenv.mkDerivation rec {
     cp {font.*,LICENSE} $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Synth and a stepsequencer (a clone of the famous nanoloop)";
     homepage = "https://github.com/yoyz/picoloop";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Synth and a stepsequencer (a clone of the famous nanoloop)";
+    homepage = "https://github.com/yoyz/picoloop";
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "picoloop";
   };
 }

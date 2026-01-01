@@ -57,11 +57,20 @@ buildGoModule rec {
     tests.version = testers.testVersion { package = dsq; };
   };
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "dsq";
     description = "Commandline tool for running SQL queries against JSON, CSV, Excel, Parquet, and more";
     homepage = "https://github.com/multiprocessio/dsq";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ liff ];
+=======
+  meta = with lib; {
+    mainProgram = "dsq";
+    description = "Commandline tool for running SQL queries against JSON, CSV, Excel, Parquet, and more";
+    homepage = "https://github.com/multiprocessio/dsq";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ liff ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

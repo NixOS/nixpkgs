@@ -24,11 +24,20 @@ stdenvNoCC.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Joypad autoconfig files";
     homepage = "https://www.libretro.com/";
     license = lib.licenses.mit;
     teams = [ lib.teams.libretro ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Joypad autoconfig files";
+    homepage = "https://www.libretro.com/";
+    license = licenses.mit;
+    teams = [ teams.libretro ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

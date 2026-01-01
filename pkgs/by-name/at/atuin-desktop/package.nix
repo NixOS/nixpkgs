@@ -9,11 +9,16 @@
   cargo-tauri,
   nodejs,
   pkg-config,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
 
   alsa-lib,
+=======
+  pnpm,
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   glib-networking,
   libappindicator-gtk3,
   openssl,
@@ -21,13 +26,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin-desktop";
+<<<<<<< HEAD
   # TODO When updating the version, check if the version-mismatch workaround in preBuild is still needed
   version = "0.2.11";
+=======
+  version = "0.2.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "desktop";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-tVIT3GUJ1qcv6HSvO+nqAz+VMfd8g9AjgaqE6+GSa+I=";
   };
 
@@ -38,13 +48,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-XqKGAx2Q9cWO1oG4mP1cKM2Y9Pib5haFYEaq0PAfAdQ=";
+=======
+    hash = "sha256-jBCf6Wq7xTgI2VjhQ+RZ3uN7LVh+ZlQ3TDJ0epsGj0M=";
+  };
+
+  cargoRoot = "./.";
+  cargoHash = "sha256-329uNcc8LSNreD8CgPCpEhGCR2PebpmFoaRwZn+oscE=";
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
+    hash = "sha256-2i1mL4HwwiXrmM1qaWvHhm27U2/oElbOpnXh09ziamo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
     cargo-tauri.hook
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
     rustPlatform.bindgenHook
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     nodejs
     pkg-config
@@ -52,7 +78,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+<<<<<<< HEAD
     alsa-lib
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     glib-networking
     libappindicator-gtk3
     openssl
@@ -72,9 +101,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tauriBuildFlags+=(
       "--config"
       "$tauriConfPath"
+<<<<<<< HEAD
       # Skips the version mismatch check (and accepts the consequences)
       # ref: https://github.com/atuinsh/desktop/issues/313
       "--ignore-version-mismatches"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     )
   '';
 

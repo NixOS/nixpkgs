@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv Brogue.app "$out/Applications/Brogue CE.app"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Community-lead fork of the minimalist roguelike game Brogue";
     mainProgram = "brogue-ce";
@@ -91,5 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
       fgaz
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Community-lead fork of the minimalist roguelike game Brogue";
+    mainProgram = "brogue-ce";
+    homepage = "https://github.com/tmewett/BrogueCE";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [
+      fgaz
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

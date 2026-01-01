@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     libserdes
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generic non-JVM producer and consumer for Apache Kafka";
     mainProgram = "kcat";
@@ -43,5 +44,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ nyarly ];
+=======
+  meta = with lib; {
+    description = "Generic non-JVM producer and consumer for Apache Kafka";
+    mainProgram = "kcat";
+    homepage = "https://github.com/edenhill/kcat";
+    license = licenses.bsd2;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ nyarly ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

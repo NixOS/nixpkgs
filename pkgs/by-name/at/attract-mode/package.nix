@@ -61,6 +61,10 @@ stdenv.mkDerivation {
     description = "Frontend for arcade cabinets and media PCs";
     homepage = "http://attractmode.org";
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.hrdinka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
     mainProgram = "attract";
   };

@@ -28,15 +28,22 @@ let
     generators
     id
     mapAttrs
+<<<<<<< HEAD
+=======
+    trace
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ;
 in
 
 rec {
+<<<<<<< HEAD
   inherit (builtins)
     trace
     addErrorContext
     unsafeGetAttrPos
     ;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # -- TRACING --
 

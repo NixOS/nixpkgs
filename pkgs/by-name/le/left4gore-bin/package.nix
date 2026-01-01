@@ -46,10 +46,18 @@ stdenvNoCC.mkDerivation {
     ln -s ${env}/bin/* $out/bin/left4gore
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.left4gore.com";
     description = "Memory patcher which adds the gore back into Left 4 Dead 2";
     license = lib.licenses.unfree; # Probably the best choice
     maintainers = with lib.maintainers; [ das_j ];
+=======
+  meta = with lib; {
+    homepage = "http://www.left4gore.com";
+    description = "Memory patcher which adds the gore back into Left 4 Dead 2";
+    license = licenses.unfree; # Probably the best choice
+    maintainers = with maintainers; [ das_j ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://lv2plug.in";
     description = "Plugin standard for audio systems";
@@ -66,5 +67,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://lv2plug.in";
+    description = "Plugin standard for audio systems";
+    mainProgram = "lv2_validate";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -53,10 +53,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nasdaqdatalink" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Nasdaq Data Link's RESTful API";
     homepage = "https://github.com/Nasdaq/data-link-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Nasdaq Data Link's RESTful API";
+    homepage = "https://github.com/Nasdaq/data-link-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

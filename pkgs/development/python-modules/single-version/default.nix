@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "single_version" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utility to let you have a single source of version in your code base";
     homepage = "https://github.com/hongquan/single-version";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Utility to let you have a single source of version in your code base";
+    homepage = "https://github.com/hongquan/single-version";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

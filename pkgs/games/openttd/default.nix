@@ -50,7 +50,11 @@ let
 
   openmsx = fetchzip {
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
+<<<<<<< HEAD
     hash = "sha256-ysNFIvo7iaLN8XoaeZuZQFLpBZlYUDLDg7rH6TabaHY=";
+=======
+    hash = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # OpenTTD builds and uses some of its own tools during the build and we need those to be available for cross-compilation.
@@ -82,12 +86,15 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OpenTTD/OpenTTD/commit/14fac2ad37bfb9cec56b4f9169d864f6f1c7b96e.patch";
       hash = "sha256-L35ybnTKPO+HVP/7ZYzWM2mA+s1RAywhofSuzpy/6sc=";
     })
+<<<<<<< HEAD
 
     (fetchpatch {
       name = "fix-GCC-15-due-to-missing-CRTP-usage.patch";
       url = "https://github.com/OpenTTD/OpenTTD/commit/db36e61807955c896267d6585de0577efd30465d.patch";
       hash = "sha256-wJqboBuB+gcn1UPoTlym9IaL7tXtdKEp/E474vG5rYk=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [

@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
   # Test can randomly fail: https://hydra.nixos.org/build/7243912
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Unit testing framework for C";
 
     longDescription = ''
@@ -35,8 +39,14 @@ stdenv.mkDerivation rec {
 
     homepage = "https://libcheck.github.io/check/";
 
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
     mainProgram = "checkmk";
     platforms = lib.platforms.all;
+=======
+    license = licenses.lgpl2Plus;
+    mainProgram = "checkmk";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

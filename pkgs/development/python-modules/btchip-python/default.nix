@@ -35,9 +35,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "btchip.btchip" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python communication library for Ledger Hardware Wallet products";
     homepage = "https://github.com/LedgerHQ/btchip-python";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python communication library for Ledger Hardware Wallet products";
+    homepage = "https://github.com/LedgerHQ/btchip-python";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

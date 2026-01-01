@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "nbxmpp";
+<<<<<<< HEAD
   version = "6.4.0";
+=======
+  version = "6.3.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -27,7 +31,11 @@ buildPythonPackage rec {
     owner = "gajim";
     repo = "python-nbxmpp";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-q910WbBp0TBqXw8WfYniliVGnr4Hi6dDhVDqZszSL0c=";
+=======
+    hash = "sha256-osT6arHZ+ac9NAfyVU/ArT78QCTfq3rPPmwdhvTMg14=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -56,10 +64,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbxmpp" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
     description = "Non-blocking Jabber/XMPP module";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
+    description = "Non-blocking Jabber/XMPP module";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

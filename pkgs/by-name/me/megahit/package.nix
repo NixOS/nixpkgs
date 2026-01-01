@@ -40,11 +40,19 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Ultra-fast single-node solution for large and complex metagenomics assembly via succinct de Bruijn graph";
     license = lib.licenses.gpl3;
     homepage = "https://github.com/voutcn/megahit";
     maintainers = with lib.maintainers; [ luispedro ];
+=======
+  meta = with lib; {
+    description = "Ultra-fast single-node solution for large and complex metagenomics assembly via succinct de Bruijn graph";
+    license = licenses.gpl3;
+    homepage = "https://github.com/voutcn/megahit";
+    maintainers = with maintainers; [ luispedro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

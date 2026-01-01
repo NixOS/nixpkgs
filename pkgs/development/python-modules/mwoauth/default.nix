@@ -36,9 +36,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mwoauth" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to perform OAuth handshakes with a MediaWiki installation";
     homepage = "https://github.com/mediawiki-utilities/python-mwoauth";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python library to perform OAuth handshakes with a MediaWiki installation";
+    homepage = "https://github.com/mediawiki-utilities/python-mwoauth";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -92,10 +92,17 @@ lib.fix (
       runHook postCheck
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "Python DBus bindings";
       homepage = "https://gitlab.freedesktop.org/dbus/dbus-python";
       license = lib.licenses.mit;
+=======
+    meta = with lib; {
+      description = "Python DBus bindings";
+      homepage = "https://gitlab.freedesktop.org/dbus/dbus-python";
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = dbus.meta.platforms;
       maintainers = [ ];
     };

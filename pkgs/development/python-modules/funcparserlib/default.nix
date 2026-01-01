@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "funcparserlib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Recursive descent parsing library based on functional combinators";
     homepage = "https://github.com/vlasovskikh/funcparserlib";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Recursive descent parsing library based on functional combinators";
+    homepage = "https://github.com/vlasovskikh/funcparserlib";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

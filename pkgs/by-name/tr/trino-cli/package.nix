@@ -32,12 +32,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Trino CLI provides a terminal-based, interactive shell for running queries";
     mainProgram = "trino";
     homepage = "https://github.com/trinodb/trino";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Trino CLI provides a terminal-based, interactive shell for running queries";
+    mainProgram = "trino";
+    homepage = "https://github.com/trinodb/trino";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       regadas
       cpcloud
     ];

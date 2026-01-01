@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     cp -r ITSx_db $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Improved software detection and extraction of ITS1 and ITS2 from ribosomal ITS sequences of fungi and other eukaryotes for use in environmental sequencing";
     mainProgram = "ITSx";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Improved software detection and extraction of ITS1 and ITS2 from ribosomal ITS sequences of fungi and other eukaryotes for use in environmental sequencing";
+    mainProgram = "ITSx";
+    homepage = "https://microbiology.se/software/itsx/";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

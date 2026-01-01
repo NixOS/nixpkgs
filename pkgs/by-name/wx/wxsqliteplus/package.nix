@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
       install -Dm755 wxSQLitePlus $out/bin/wxSQLitePlus
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple SQLite database browser built with wxWidgets";
     mainProgram = "wxSQLitePlus";
@@ -54,5 +55,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple SQLite database browser built with wxWidgets";
+    mainProgram = "wxSQLitePlus";
+    homepage = "https://github.com/guanlisheng/wxsqliteplus";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

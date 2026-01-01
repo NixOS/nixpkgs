@@ -53,12 +53,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Single Bash script to create blogs";
     mainProgram = "bashblog";
     homepage = "https://github.com/cfenollosa/bashblog";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Single Bash script to create blogs";
+    mainProgram = "bashblog";
+    homepage = "https://github.com/cfenollosa/bashblog";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -48,11 +48,20 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast, configurable, extensible, flexible, and beautiful linter for Go";
     mainProgram = "revive";
     homepage = "https://revive.run";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maaslalani ];
+=======
+  meta = with lib; {
+    description = "Fast, configurable, extensible, flexible, and beautiful linter for Go";
+    mainProgram = "revive";
+    homepage = "https://revive.run";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maaslalani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -58,11 +58,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spyse" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for spyse.com API";
     homepage = "https://github.com/spyse-com/spyse-python";
     changelog = "https://github.com/spyse-com/spyse-python/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for spyse.com API";
+    homepage = "https://github.com/spyse-com/spyse-python";
+    changelog = "https://github.com/spyse-com/spyse-python/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,11 +32,19 @@ buildGoModule rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tool for browsing Hacker News in your terminal";
     homepage = "https://github.com/bensadeh/circumflex";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mktip ];
+=======
+  meta = with lib; {
+    description = "Command line tool for browsing Hacker News in your terminal";
+    homepage = "https://github.com/bensadeh/circumflex";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ mktip ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "clx";
   };
 }

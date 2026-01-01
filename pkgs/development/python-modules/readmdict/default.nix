@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "readmdict" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read mdx/mdd files (repacking of readmdict from mdict-analysis)";
     mainProgram = "readmdict";
     homepage = "https://github.com/ffreemt/readmdict";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Read mdx/mdd files (repacking of readmdict from mdict-analysis)";
+    mainProgram = "readmdict";
+    homepage = "https://github.com/ffreemt/readmdict";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

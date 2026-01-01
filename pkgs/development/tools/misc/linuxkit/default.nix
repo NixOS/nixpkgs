@@ -59,11 +59,20 @@ buildGoModule rec {
     command = "linuxkit version";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Toolkit for building secure, portable and lean operating systems for containers";
     mainProgram = "linuxkit";
     license = lib.licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
     maintainers = with lib.maintainers; [ nicknovitski ];
+=======
+  meta = with lib; {
+    description = "Toolkit for building secure, portable and lean operating systems for containers";
+    mainProgram = "linuxkit";
+    license = licenses.asl20;
+    homepage = "https://github.com/linuxkit/linuxkit";
+    maintainers = with maintainers; [ nicknovitski ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

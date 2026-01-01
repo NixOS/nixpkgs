@@ -46,6 +46,10 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "Official VSCode plugin for ReScript";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
     maintainers = [
+<<<<<<< HEAD
+=======
+      lib.maintainers.dlip
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lib.maintainers.jayesh-bhoot
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

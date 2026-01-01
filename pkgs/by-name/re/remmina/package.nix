@@ -141,19 +141,32 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.com/Remmina/Remmina";
     changelog = "https://gitlab.com/Remmina/Remmina/-/blob/master/CHANGELOG.md#${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.src.rev
     }";
     description = "Remote desktop client written in GTK";
     mainProgram = "remmina";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bbigras
       melsigl
       ryantm
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

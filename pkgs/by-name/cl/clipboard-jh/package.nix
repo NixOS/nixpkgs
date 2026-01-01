@@ -59,12 +59,21 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";
     homepage = "https://github.com/Slackadays/clipboard";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dit7ya ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Cut, copy, and paste anything, anywhere, all from the terminal";
+    homepage = "https://github.com/Slackadays/clipboard";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dit7ya ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cb";
   };
 }

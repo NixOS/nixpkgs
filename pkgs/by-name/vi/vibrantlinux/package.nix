@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to automate managing your screen's saturation depending on what programs are running";
     homepage = "https://github.com/libvibrant/vibrantLinux";
@@ -44,6 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
       unclamped
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool to automate managing your screen's saturation depending on what programs are running";
+    homepage = "https://github.com/libvibrant/vibrantLinux";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      Scrumplex
+      unclamped
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vibrantLinux";
   };
 })

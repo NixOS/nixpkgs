@@ -93,11 +93,20 @@ stdenv.mkDerivation (finalAttrs: {
       ;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Data model, library, and file format for storing and managing data";
     homepage = "https://support.hdfgroup.org/products/hdf4/";
     maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsdOriginal;
+=======
+  meta = with lib; {
+    description = "Data model, library, and file format for storing and managing data";
+    homepage = "https://support.hdfgroup.org/products/hdf4/";
+    maintainers = [ ];
+    platforms = platforms.unix;
+    license = licenses.bsdOriginal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

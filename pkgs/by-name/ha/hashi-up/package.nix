@@ -17,11 +17,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-dircE3WlDPsPnF+0wT5RG/c4hC8qPs8NaSGM5wpvVlM=";
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight utility to install HashiCorp Consul, Nomad, or Vault on any remote Linux host";
     mainProgram = "hashi-up";
     homepage = "https://github.com/jsiebens/hashi-up";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lucperkins ];
+=======
+  meta = with lib; {
+    description = "Lightweight utility to install HashiCorp Consul, Nomad, or Vault on any remote Linux host";
+    mainProgram = "hashi-up";
+    homepage = "https://github.com/jsiebens/hashi-up";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lucperkins ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

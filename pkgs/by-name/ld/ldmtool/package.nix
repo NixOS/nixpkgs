@@ -62,12 +62,21 @@ stdenv.mkDerivation rec {
     libuuid
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool and library for managing Microsoft Windows Dynamic Disks";
     homepage = "https://github.com/mdbooth/libldm";
     maintainers = with lib.maintainers; [ jensbin ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool and library for managing Microsoft Windows Dynamic Disks";
+    homepage = "https://github.com/mdbooth/libldm";
+    maintainers = with maintainers; [ jensbin ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ldmtool";
   };
 }

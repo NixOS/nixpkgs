@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { pkgs, lib, ... }:
+=======
+{ pkgs, ... }:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 let
   homeserverUrl = "http://homeserver:8008";
 in
@@ -60,8 +64,14 @@ in
                 displayname = "Discord bridge bot";
                 avatar = "mxc://maunium.net/nIdEykemnwdisvHbpxflpDlC";
               };
+<<<<<<< HEAD
               # Don't override as_token/hs_token - let them use the default placeholder
               # which will trigger automatic generation
+=======
+              # These will be generated automatically
+              as_token = "generate";
+              hs_token = "generate";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
               database = {
                 type = "sqlite3";
@@ -85,7 +95,10 @@ in
 
         environment.systemPackages = [
           pkgs.nettools
+<<<<<<< HEAD
           pkgs.yq
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ];
       };
 
@@ -156,6 +169,7 @@ in
 
     with subtest("verify registration file was created"):
         homeserver.wait_until_succeeds("test -f /var/lib/mautrix-discord/discord-registration.yaml")
+<<<<<<< HEAD
 
         # Verify tokens were generated and are not default values
         config_as_token = homeserver.succeed("yq -r '.appservice.as_token' /var/lib/mautrix-discord/config.yaml").strip()
@@ -195,6 +209,9 @@ in
             f"hs_token changed after restart: {config_hs_token[:20]}... -> {config_hs_token_2[:20]}..."
 
         print("Tokens persisted correctly after restart")
+=======
+        homeserver.succeed("ls -la /var/lib/mautrix-discord/")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     with subtest("verify bridge connects to homeserver"):
         # Give the bridge a moment to connect

@@ -22,6 +22,10 @@ in
 {
   meta.maintainers = with lib.maintainers; [
     jbedo
+<<<<<<< HEAD
+=======
+    cfhammill
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   options.services.rstudio-server = {

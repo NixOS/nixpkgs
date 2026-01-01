@@ -49,12 +49,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "riscv_isac" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "ISA coverage extraction tool";
     mainProgram = "riscv_isac";
     homepage = "https://github.com/riscv/riscv-isac";
     changelog = "https://github.com/riscv-software-src/riscv-isac/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ genericnerdyusername ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ genericnerdyusername ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

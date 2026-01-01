@@ -17,13 +17,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-5GFYp1ZEkmag2GfzHRz3QDYaURzbDKY9yTSznkxddnE=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Create dependency graphs for cargo projects using `cargo metadata` and graphviz";
     mainProgram = "cargo-depgraph";
     homepage = "https://sr.ht/~jplatte/cargo-depgraph";
     changelog = "https://git.sr.ht/~jplatte/cargo-depgraph/tree/${src.rev}/item/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
   };

@@ -32,9 +32,15 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for interfacing with Broadlink RM2/3 (Pro) remote controls, A1 sensor platforms and SP2/3 smartplugs";
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Tools for interfacing with Broadlink RM2/3 (Pro) remote controls, A1 sensor platforms and SP2/3 smartplugs";
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (python3Packages.broadlink.meta) homepage license;
   };
 }

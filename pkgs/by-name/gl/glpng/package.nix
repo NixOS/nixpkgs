@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://repo.or.cz/glpng.git/blob_plain/HEAD:/glpng.htm";
     description = "PNG loader library for OpenGL";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://repo.or.cz/glpng.git/blob_plain/HEAD:/glpng.htm";
+    description = "PNG loader library for OpenGL";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

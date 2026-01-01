@@ -4,9 +4,12 @@
   buildPythonPackage,
   fetchFromGitHub,
 
+<<<<<<< HEAD
   # nativeBuildInputs
   writableTmpDirAsHomeHook,
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # build-system
   packaging,
   setuptools,
@@ -36,18 +39,27 @@
   #, pystan (not packaged)
   pytestCheckHook,
   torchvision,
+<<<<<<< HEAD
+=======
+  writableTmpDirAsHomeHook,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   zarr,
 }:
 
 buildPythonPackage rec {
   pname = "arviz";
+<<<<<<< HEAD
   version = "0.23.0";
+=======
+  version = "0.22.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-/Xz4hTKB1lh9cxHkVXAZY8NsZoqdadukI/V1/LRZu24=";
   };
 
@@ -58,6 +70,11 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+=======
+    hash = "sha256-ZzZZKEtpVy44119H+upU36VLriZjjwPz3gqgKrL+gRI=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     packaging
     setuptools
@@ -89,6 +106,10 @@ buildPythonPackage rec {
     # pystan (not packaged)
     pytestCheckHook
     torchvision
+<<<<<<< HEAD
+=======
+    writableTmpDirAsHomeHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     zarr
   ];
 

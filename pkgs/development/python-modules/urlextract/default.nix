@@ -49,12 +49,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "urlextract" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Collects and extracts URLs from given text";
     mainProgram = "urlextract";
     homepage = "https://github.com/lipoja/URLExtract";
     changelog = "https://github.com/lipoja/URLExtract/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ilkecan ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ ilkecan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

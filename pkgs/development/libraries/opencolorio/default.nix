@@ -82,11 +82,20 @@ stdenv.mkDerivation rec {
   # Tends to fail otherwise.
   enableParallelChecking = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://opencolorio.org";
     description = "Color management framework for visual effects and animation";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.rytone ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://opencolorio.org";
+    description = "Color management framework for visual effects and animation";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.rytone ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -139,9 +139,13 @@ in
   config = lib.mkMerge [
     {
       console.keyMap =
+<<<<<<< HEAD
         let
           inherit (config.services.xserver) xkb;
         in
+=======
+        with config.services.xserver;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         lib.mkIf cfg.useXkbConfig (
           pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
             '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \

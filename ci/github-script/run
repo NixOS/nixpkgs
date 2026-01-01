@@ -94,6 +94,7 @@ program
     await run(getTeams, owner, repo, undefined, { ...options, outFile })
   })
 
+<<<<<<< HEAD
 program
   .command('lint-commits')
   .description('Lint for common errors in commit messages')
@@ -105,4 +106,6 @@ program
     await run(checkCommitMessages, owner, repo, pr, options)
   })
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 await program.parse()

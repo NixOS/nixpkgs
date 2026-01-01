@@ -43,11 +43,20 @@ buildPythonPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python client bindings for D-Bus AT-SPI";
     homepage = "https://gitlab.gnome.org/GNOME/pyatspi2";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Python client bindings for D-Bus AT-SPI";
+    homepage = "https://gitlab.gnome.org/GNOME/pyatspi2";
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

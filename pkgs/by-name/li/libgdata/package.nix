@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GData API library";
     homepage = "https://gitlab.gnome.org/GNOME/libgdata";
@@ -89,5 +90,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "GData API library";
+    homepage = "https://gitlab.gnome.org/GNOME/libgdata";
+    maintainers = with maintainers; [ raskin ];
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

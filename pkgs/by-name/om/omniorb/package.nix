@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
     ${lib.getExe python3} -c "import omniidl_be.cxx"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Robust high performance CORBA ORB for C++ and Python";
     longDescription = ''
       omniORB is a robust high performance CORBA ORB for C++ and Python.
@@ -46,11 +50,20 @@ stdenv.mkDerivation rec {
       omniORB is largely CORBA 2.6 compliant.
     '';
     homepage = "http://omniorb.sourceforge.net/";
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
     maintainers = with lib.maintainers; [ smironov ];
     platforms = lib.platforms.unix;
+=======
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
+    maintainers = with maintainers; [ smironov ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,10 +27,18 @@ buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for Microsoft Azure Storage services containing the file service APIs";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cmcdragonkai ];
+=======
+  meta = with lib; {
+    description = "Client library for Microsoft Azure Storage services containing the file service APIs";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cmcdragonkai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

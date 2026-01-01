@@ -108,17 +108,29 @@ stdenv.mkDerivation rec {
     cp -rv include/terra $dev/include
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Low-level counterpart to Lua";
     homepage = "https://terralang.org/";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Low-level counterpart to Lua";
+    homepage = "https://terralang.org/";
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jb55
       seylerius
       thoughtpolice
       elliottslaughter
     ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # never built on aarch64-darwin since first introduction in nixpkgs
     # Linux Aarch64 broken above LLVM11
     # https://github.com/terralang/terra/issues/597

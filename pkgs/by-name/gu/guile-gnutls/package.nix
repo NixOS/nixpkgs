@@ -44,11 +44,19 @@ stdenv.mkDerivation rec {
     "--with-guile-extension-dir=${placeholder "out"}/lib/guile/${guile.effectiveVersion}/extensions"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/gnutls/guile/";
     description = "Guile bindings for GnuTLS library";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/gnutls/guile/";
+    description = "Guile bindings for GnuTLS library";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ foo-dogsquared ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 }

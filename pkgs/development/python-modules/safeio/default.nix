@@ -17,10 +17,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "safeIO" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Safely make I/O operations to files in Python even from multiple threads";
     homepage = "https://github.com/Animenosekai/safeIO";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Safely make I/O operations to files in Python even from multiple threads";
+    homepage = "https://github.com/Animenosekai/safeIO";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

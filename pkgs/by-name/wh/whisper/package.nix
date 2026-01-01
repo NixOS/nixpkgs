@@ -47,10 +47,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Short read sequence mapper";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Short read sequence mapper";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # vendored libraries acof, aelf, deflate, bzip2, zlib
     # https://github.com/refresh-bio/Whisper/issues/18
     knownVulnerabilities = [
@@ -61,8 +68,14 @@ stdenv.mkDerivation rec {
       "CVE-2019-12900"
     ];
     homepage = "https://github.com/refresh-bio/whisper";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.x86_64;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+=======
+    maintainers = with maintainers; [ jbedo ];
+    platforms = platforms.x86_64;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

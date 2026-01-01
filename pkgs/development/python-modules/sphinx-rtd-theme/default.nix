@@ -48,10 +48,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_rtd_theme" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx theme for readthedocs.org";
     homepage = "https://github.com/readthedocs/sphinx_rtd_theme";
     changelog = "https://github.com/readthedocs/sphinx_rtd_theme/blob/${version}/docs/changelog.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Sphinx theme for readthedocs.org";
+    homepage = "https://github.com/readthedocs/sphinx_rtd_theme";
+    changelog = "https://github.com/readthedocs/sphinx_rtd_theme/blob/${version}/docs/changelog.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

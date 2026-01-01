@@ -50,11 +50,20 @@ stdenv.mkDerivation rec {
     "-DFLATCC_INSTALL=on"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "FlatBuffers Compiler and Library in C for C";
     mainProgram = "flatcc";
     homepage = "https://github.com/dvidelabs/flatcc";
     license = [ lib.licenses.asl20 ];
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "FlatBuffers Compiler and Library in C for C";
+    mainProgram = "flatcc";
+    homepage = "https://github.com/dvidelabs/flatcc";
+    license = [ licenses.asl20 ];
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

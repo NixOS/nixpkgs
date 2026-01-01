@@ -41,12 +41,21 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) merecat;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Small and made-easy HTTP/HTTPS server based on Jef Poskanzer's thttpd";
     homepage = "https://troglobit.com/projects/merecat/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Small and made-easy HTTP/HTTPS server based on Jef Poskanzer's thttpd";
+    homepage = "https://troglobit.com/projects/merecat/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Strange header and/or linker errors
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "model_utils" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jazzband/django-model-utils";
     description = "Django model mixins and utilities";
     changelog = "https://github.com/jazzband/django-model-utils/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jazzband/django-model-utils";
+    description = "Django model mixins and utilities";
+    changelog = "https://github.com/jazzband/django-model-utils/blob/${version}/CHANGES.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

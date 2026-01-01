@@ -46,6 +46,7 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
+<<<<<<< HEAD
     meta = {
       description = "GNU implementation of the `tar' archiver";
       homepage = "https://www.gnu.org/software/tar";
@@ -53,6 +54,15 @@ bash.runCommand "${pname}-${version}"
       teams = [ lib.teams.minimal-bootstrap ];
       mainProgram = "tar";
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      description = "GNU implementation of the `tar' archiver";
+      homepage = "https://www.gnu.org/software/tar";
+      license = licenses.gpl3Plus;
+      teams = [ teams.minimal-bootstrap ];
+      mainProgram = "tar";
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

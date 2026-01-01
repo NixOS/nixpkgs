@@ -29,11 +29,19 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Using Ledger as hardware-based SSH/PGP agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Using Ledger as hardware-based SSH/PGP agent";
+    homepage = "https://github.com/romanz/trezor-agent";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hkjn
       np
       mmahut

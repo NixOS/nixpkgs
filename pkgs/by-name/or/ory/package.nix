@@ -41,12 +41,21 @@ buildGoModule rec {
       --zsh <($out/bin/ory completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for Ory";
     mainProgram = "ory";
     homepage = "https://www.ory.sh/cli";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "CLI for Ory";
+    mainProgram = "ory";
+    homepage = "https://www.ory.sh/cli";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       luleyleo
       nicolas-goudry
     ];

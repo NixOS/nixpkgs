@@ -38,11 +38,20 @@ buildPythonPackage rec {
     "tests/unit/test_data_loading.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to work with the AWS IP address ranges";
     homepage = "https://github.com/aws-samples/awsipranges";
     changelog = "https://github.com/aws-samples/awsipranges/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to work with the AWS IP address ranges";
+    homepage = "https://github.com/aws-samples/awsipranges";
+    changelog = "https://github.com/aws-samples/awsipranges/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,18 @@ buildGoModule {
   vendorHash = "sha256-58zK6t3rb+19ilaQaNgsMVFQBYKPIV40ww8klrGbpnw=";
   proxyVendor = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple tool to give you Desktop Notifications about your battery";
     mainProgram = "upower-notify";
     homepage = "https://github.com/omeid/upower-notify";
     maintainers = with lib.maintainers; [ kamilchm ];
+=======
+  meta = with lib; {
+    description = "Simple tool to give you Desktop Notifications about your battery";
+    mainProgram = "upower-notify";
+    homepage = "https://github.com/omeid/upower-notify";
+    maintainers = with maintainers; [ kamilchm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

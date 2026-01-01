@@ -3,19 +3,38 @@
   betamax,
   blinker,
   buildPythonPackage,
+<<<<<<< HEAD
+=======
+  coverage,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   flask,
   flask-caching,
   flask-login,
   flask-sqlalchemy,
+<<<<<<< HEAD
   flit-core,
   freezegun,
   oauthlib,
+=======
+  flit,
+  freezegun,
+  oauthlib,
+  pallets-sphinx-themes,
+  pillow,
+  pytest,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytest-mock,
   pytestCheckHook,
   requests,
   requests-oauthlib,
   responses,
+<<<<<<< HEAD
+=======
+  sphinx,
+  sphinxcontrib-seqdiag,
+  sphinxcontrib-spelling,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   sqlalchemy,
   urlobject,
   werkzeug,
@@ -33,7 +52,11 @@ buildPythonPackage rec {
     hash = "sha256-rKHC0G5S7l52QSrbbweMii68AZuBAgf6tYsJdPKIeUk=";
   };
 
+<<<<<<< HEAD
   build-system = [ flit-core ];
+=======
+  build-system = [ flit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dependencies = [
     flask
@@ -45,6 +68,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+<<<<<<< HEAD
     signals = [ blinker ];
     sqla = [ sqlalchemy ];
   };
@@ -60,6 +84,38 @@ buildPythonPackage rec {
     responses
   ]
   ++ lib.concatAttrValues optional-dependencies;
+=======
+    docs = [
+      betamax
+      pallets-sphinx-themes
+      pillow
+      sphinx
+      sphinxcontrib-seqdiag
+      sphinxcontrib-spelling
+      sqlalchemy
+    ];
+
+    signals = [ blinker ];
+
+    sqla = [ sqlalchemy ];
+
+    test = [
+      betamax
+      coverage
+      flask-caching
+      flask-login
+      flask-sqlalchemy
+      freezegun
+      oauthlib
+      pytest
+      pytest-mock
+      responses
+      sqlalchemy
+    ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "flask_dance" ];
 

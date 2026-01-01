@@ -44,11 +44,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastjsonschema" ];
 
+<<<<<<< HEAD
   meta = {
     description = "JSON schema validator for Python";
     downloadPage = "https://github.com/horejsek/python-fastjsonschema";
     homepage = "https://horejsek.github.io/python-fastjsonschema/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "JSON schema validator for Python";
+    downloadPage = "https://github.com/horejsek/python-fastjsonschema";
+    homepage = "https://horejsek.github.io/python-fastjsonschema/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

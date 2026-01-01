@@ -31,7 +31,11 @@ stdenv.mkDerivation {
     libusb1
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Calculate local oscillator frequency offset in RTL-SDR devices";
     longDescription = ''
       Kalibrate, or kal, can scan for GSM base stations in a given frequency
@@ -41,12 +45,21 @@ stdenv.mkDerivation {
       This package is for RTL-SDR devices.
     '';
     homepage = "https://github.com/steve-m/kalibrate-rtl";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       viraptor
     ];
     mainProgram = "kal";
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

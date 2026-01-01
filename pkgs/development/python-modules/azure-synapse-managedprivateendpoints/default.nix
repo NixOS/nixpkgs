@@ -34,11 +34,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.synapse.managedprivateendpoints" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Synapse Managed Private Endpoints Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-synapse-managedprivateendpoints";
     changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-synapse-managedprivateendpoints_${version}/sdk/synapse/azure-synapse-managedprivateendpoints";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Synapse Managed Private Endpoints Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-synapse-managedprivateendpoints";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/tree/azure-synapse-managedprivateendpoints_${version}/sdk/synapse/azure-synapse-managedprivateendpoints";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

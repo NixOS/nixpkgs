@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     libintl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for reading and writing the IPTC metadata in images and other files";
     mainProgram = "iptc";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    description = "Library for reading and writing the IPTC metadata in images and other files";
+    mainProgram = "iptc";
+    homepage = "https://github.com/ianw/libiptcdata";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,11 +20,20 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible LV2 delay plugin";
     homepage = "https://github.com/MrBollie/bolliedelayxt.lv2";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Flexible LV2 delay plugin";
+    homepage = "https://github.com/MrBollie/bolliedelayxt.lv2";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

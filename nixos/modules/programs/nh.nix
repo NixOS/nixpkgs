@@ -10,7 +10,10 @@ in
 {
   meta.maintainers = with lib.maintainers; [
     NotAShelf
+<<<<<<< HEAD
     mdaniels5757
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     viperML
   ];
 

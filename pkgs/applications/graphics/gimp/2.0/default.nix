@@ -283,12 +283,21 @@ stdenv.mkDerivation (finalAttrs: {
     python2Support = withPython;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
     maintainers = [ ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "GNU Image Manipulation Program";
+    homepage = "https://www.gimp.org/";
+    maintainers = [ ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gimp";
   };
 })

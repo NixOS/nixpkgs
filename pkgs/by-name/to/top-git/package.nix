@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     install -Dm755 contrib/tg-completion.bash -t "$out/share/bash-completion/completions/"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "TopGit manages large amount of interdependent topic branches";
     mainProgram = "tg";
@@ -36,5 +37,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ marcweber ];
+=======
+  meta = with lib; {
+    description = "TopGit manages large amount of interdependent topic branches";
+    mainProgram = "tg";
+    homepage = "https://github.com/mackyle/topgit";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ marcweber ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bugaevc/wl-clipboard";
     description = "Command-line copy/paste utilities for Wayland";
@@ -55,5 +56,16 @@ stdenv.mkDerivation rec {
       kashw2
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bugaevc/wl-clipboard";
+    description = "Command-line copy/paste utilities for Wayland";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      dywedir
+      kashw2
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

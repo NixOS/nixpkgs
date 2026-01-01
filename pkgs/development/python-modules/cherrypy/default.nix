@@ -120,12 +120,20 @@ buildPythonPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Object-oriented HTTP framework";
     mainProgram = "cherryd";
     homepage = "https://cherrypy.dev/";
     changelog = "https://github.com/cherrypy/cherrypy/blob/v${version}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

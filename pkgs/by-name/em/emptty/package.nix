@@ -25,11 +25,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-PLyemAUcCz9H7+nAxftki3G7rQoEeyPzY3YUEj2RFn4=";
 
+<<<<<<< HEAD
   meta = {
     description = "Dead simple CLI Display Manager on TTY";
     homepage = "https://github.com/tvrzna/emptty";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urandom ];
+=======
+  meta = with lib; {
+    description = "Dead simple CLI Display Manager on TTY";
+    homepage = "https://github.com/tvrzna/emptty";
+    license = licenses.mit;
+    maintainers = with maintainers; [ urandom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # many undefined functions
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "emptty";

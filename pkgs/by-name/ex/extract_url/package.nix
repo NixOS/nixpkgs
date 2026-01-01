@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
       --set PERL5LIB "${perlPackages.makeFullPerlPath perlDeps}"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.memoryhole.net/~kyle/extract_url/";
     description = "Extracts URLs from MIME messages or plain text";
@@ -46,5 +47,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.qyliss ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.memoryhole.net/~kyle/extract_url/";
+    description = "Extracts URLs from MIME messages or plain text";
+    mainProgram = "extract_url";
+    license = licenses.bsd2;
+    maintainers = [ maintainers.qyliss ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

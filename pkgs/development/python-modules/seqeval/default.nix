@@ -38,10 +38,17 @@ buildPythonPackage rec {
     "test_by_ground_truth"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python framework for sequence labeling evaluation";
     homepage = "https://github.com/chakki-works/seqeval";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python framework for sequence labeling evaluation";
+    homepage = "https://github.com/chakki-works/seqeval";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -26,11 +26,19 @@ appimageTools.wrapType2 {
       $out/share/icons/hicolor/512x512/apps/bstudio.png
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Drag-and-drop designer for bootstrap";
     homepage = "https://bootstrapstudio.io/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ khushraj ];
+=======
+  meta = with lib; {
+    description = "Drag-and-drop designer for bootstrap";
+    homepage = "https://bootstrapstudio.io/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ khushraj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

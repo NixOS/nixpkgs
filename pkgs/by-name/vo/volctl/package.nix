@@ -63,12 +63,21 @@ python3Packages.buildPythonApplication rec {
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${libpulseaudio}/lib")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "PulseAudio enabled volume control featuring per-app sliders";
     homepage = "https://buzz.github.io/volctl/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "PulseAudio enabled volume control featuring per-app sliders";
+    homepage = "https://buzz.github.io/volctl/";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "volctl";
   };
 }

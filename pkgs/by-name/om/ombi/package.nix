@@ -80,12 +80,21 @@ stdenv.mkDerivation rec {
     tests.smoke-test = nixosTests.ombi;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Self-hosted web application that automatically gives your shared Plex or Emby users the ability to request content by themselves";
     homepage = "https://ombi.io/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ woky ];
+=======
+  meta = with lib; {
+    description = "Self-hosted web application that automatically gives your shared Plex or Emby users the ability to request content by themselves";
+    homepage = "https://ombi.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ woky ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

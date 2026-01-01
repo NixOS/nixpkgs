@@ -32,10 +32,17 @@ buildGoModule {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/raymond-w-ko/tewisay";
     description = "Cowsay replacement with unicode and partial ansi escape support";
     license = with lib.licenses; [ cc0 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/raymond-w-ko/tewisay";
+    description = "Cowsay replacement with unicode and partial ansi escape support";
+    license = with licenses; [ cc0 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tewisay";
   };
 }

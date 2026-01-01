@@ -25,14 +25,21 @@
   SDL2_mixer,
   SDL2_ttf,
   numpy,
+<<<<<<< HEAD
   astroid,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pygame-gui,
 }:
 
 buildPythonPackage rec {
   pname = "pygame-ce";
+<<<<<<< HEAD
   version = "2.5.6";
+=======
+  version = "2.5.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +48,11 @@ buildPythonPackage rec {
     owner = "pygame-community";
     repo = "pygame-ce";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-0DNvAs1E6OhN6wTvbMCDt9YAEFoBZp1r7hI4GSnJUl8=";
+=======
+    hash = "sha256-OWC063N7G8t2ai/Qyz8DwP76BrFve5ZCbLD/mQwVbi4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Unicode files cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
   };
@@ -63,8 +74,16 @@ buildPythonPackage rec {
       );
     })
 
+<<<<<<< HEAD
     # Can be removed after the SDL 3.4.0 bump.
     ./skip-rle-tests.patch
+=======
+    # Can be removed with the next SDL3 bump.
+    ./skip-rle-tests.patch
+
+    # https://github.com/pygame-community/pygame-ce/pull/3639
+    ./0001-Use-SDL_AllocFormat-instead-of-creating-it-manually.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''
@@ -72,6 +91,7 @@ buildPythonPackage rec {
     # cython was pinned to fix windows build hangs (pygame-community/pygame-ce/pull/3015)
     substituteInPlace pyproject.toml \
       --replace-fail '"pyproject-metadata!=0.9.1",' '"pyproject-metadata",' \
+<<<<<<< HEAD
       --replace-fail '"meson<=1.9.1",' '"meson",' \
       --replace-fail '"meson-python<=0.18.0",' '"meson-python",' \
       --replace-fail '"ninja<=1.13.0",' "" \
@@ -79,6 +99,14 @@ buildPythonPackage rec {
       --replace-fail '"cython<=3.1.4",' '"cython",' \
       --replace-fail '"sphinx<=8.2.3",' "" \
       --replace-fail '"sphinx-autoapi<=3.6.0",' ""
+=======
+      --replace-fail '"meson<=1.7.0",' '"meson",' \
+      --replace-fail '"meson-python<=0.17.1",' '"meson-python",' \
+      --replace-fail '"ninja<=1.12.1",' "" \
+      --replace-fail '"cython<=3.0.11",' '"cython",' \
+      --replace-fail '"sphinx<=8.1.3",' "" \
+      --replace-fail '"sphinx-autoapi<=3.3.2",' ""
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     substituteInPlace buildconfig/config_{unix,darwin}.py \
       --replace-fail 'from distutils' 'from setuptools._distutils'
     substituteInPlace src_py/sysfont.py \
@@ -111,7 +139,10 @@ buildPythonPackage rec {
     (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
+<<<<<<< HEAD
     astroid
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [

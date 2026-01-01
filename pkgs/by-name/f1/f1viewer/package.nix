@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-UNeH3zxgssXxFpJws6nAL8EgXt0DRyAQfmlJWz/qyDg=";
 
+<<<<<<< HEAD
   meta = {
     description = "TUI to view Formula 1 footage using VLC or another media player";
     homepage = "https://github.com/SoMuchForSubtlety/f1viewer";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ michzappa ];
+=======
+  meta = with lib; {
+    description = "TUI to view Formula 1 footage using VLC or another media player";
+    homepage = "https://github.com/SoMuchForSubtlety/f1viewer";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ michzappa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "f1viewer";
   };
 }

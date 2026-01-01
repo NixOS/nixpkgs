@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_wsgi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "WSGI adapter for aiohttp";
     mainProgram = "aiohttp-wsgi-serve";
     homepage = "https://github.com/etianen/aiohttp-wsgi";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "WSGI adapter for aiohttp";
+    mainProgram = "aiohttp-wsgi-serve";
+    homepage = "https://github.com/etianen/aiohttp-wsgi";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

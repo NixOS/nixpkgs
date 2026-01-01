@@ -60,11 +60,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "celery_singleton" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Seamlessly prevent duplicate executions of celery tasks";
     homepage = "https://github.com/steinitzu/celery-singleton";
     changelog = "https://github.com/steinitzu/celery-singleton/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Seamlessly prevent duplicate executions of celery tasks";
+    homepage = "https://github.com/steinitzu/celery-singleton";
+    changelog = "https://github.com/steinitzu/celery-singleton/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

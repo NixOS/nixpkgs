@@ -32,11 +32,19 @@ buildPythonPackage rec {
     sed -i /addopts/d pyproject.toml
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the XDG Base Directory Specification in Python";
     homepage = "https://github.com/srstevenson/xdg-base-dirs";
     changelog = "https://github.com/srstevenson/xdg-base-dirs/releases/tag/${version}";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Implementation of the XDG Base Directory Specification in Python";
+    homepage = "https://github.com/srstevenson/xdg-base-dirs";
+    changelog = "https://github.com/srstevenson/xdg-base-dirs/releases/tag/${version}";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rustPlatform,
   fetchFromGitHub,
   autoAddDriverRunpath,
@@ -12,16 +15,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bottom";
+<<<<<<< HEAD
   version = "0.12.2";
+=======
+  version = "0.11.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = "bottom";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-+VfXxLKIdrg+ytmx29TPm46t3yhAgqBSJ+ykiIjuNmA=";
   };
 
   cargoHash = "sha256-dvU/iAgLC0+l8FH1bnOdIvZrXHqltE1hMkf+IaLQZxE=";
+=======
+    hash = "sha256-hyEYSkoV86BWVMjolU9IjU0rTABxE4ag26el0UydsFQ=";
+  };
+
+  cargoHash = "sha256-VnpSgaBxSHJj+brMtNwmbrXUN9H3y0oinF8ya+vsl88=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     autoAddDriverRunpath
@@ -39,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh target/tmp/bottom/completion/_btm
 
     install -Dm444 desktop/bottom.desktop -t $out/share/applications
+<<<<<<< HEAD
     install -Dm644 assets/icons/bottom-system-monitor.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
@@ -47,12 +62,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=collection::tests::test_data_collection"
   ];
 
+=======
+    install -Dm644 assets/icons/bottom.svg -t $out/share/icons/hicolor/scalable/apps
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/btm";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = nix-update-script { };

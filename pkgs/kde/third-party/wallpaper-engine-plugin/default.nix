@@ -67,11 +67,19 @@ mkKdeDerivation {
     cd -
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "KDE wallpaper plugin integrating Wallpaper Engine";
     homepage = "https://github.com/catsout/wallpaper-engine-kde-plugin";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ macronova ];
+=======
+  meta = with lib; {
+    description = "KDE wallpaper plugin integrating Wallpaper Engine";
+    homepage = "https://github.com/catsout/wallpaper-engine-kde-plugin";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ macronova ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     teams = [ ];
   };
 }

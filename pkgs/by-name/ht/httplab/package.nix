@@ -22,10 +22,17 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/qustavo/httplab";
     description = "Interactive WebServer";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/qustavo/httplab";
+    description = "Interactive WebServer";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "httplab";
   };
 }

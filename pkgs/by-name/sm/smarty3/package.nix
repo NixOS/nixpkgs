@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
     cp -r libs/* $out
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Smarty 3 template engine";
     longDescription = ''
       Smarty is a template engine for PHP, facilitating the
@@ -29,7 +33,12 @@ stdenv.mkDerivation rec {
       logic, and is separated from the presentation.
     '';
     homepage = "https://www.smarty.net";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ das_j ];
+=======
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ das_j ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,14 +24,25 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mplhep_data" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sub-package to hold data (fonts) for mplhep";
     homepage = "https://github.com/scikit-hep/mplhep_data";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Sub-package to hold data (fonts) for mplhep";
+    homepage = "https://github.com/scikit-hep/mplhep_data";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       gfl
       ofl
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

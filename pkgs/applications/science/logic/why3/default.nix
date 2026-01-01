@@ -104,12 +104,21 @@ stdenv.mkDerivation rec {
 
   passthru.withProvers = callPackage ./with-provers.nix { };
 
+<<<<<<< HEAD
   meta = {
     description = "Platform for deductive program verification";
     homepage = "https://why3.lri.fr/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Platform for deductive program verification";
+    homepage = "https://why3.lri.fr/";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       vbgl
     ];

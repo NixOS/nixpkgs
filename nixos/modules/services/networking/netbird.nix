@@ -711,7 +711,10 @@ in
             "org.freedesktop.resolve1.set-default-route",
             "org.freedesktop.resolve1.set-dns-servers",
             "org.freedesktop.resolve1.set-domains",
+<<<<<<< HEAD
             "org.freedesktop.resolve1.set-dnssec",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ];
           var users = ${builtins.toJSON (toHardenedClientList (client: client.user.name))};
 

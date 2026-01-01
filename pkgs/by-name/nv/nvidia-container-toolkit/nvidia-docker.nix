@@ -26,11 +26,20 @@ stdenv.mkDerivation rec {
     cp bin/nvidia-docker $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/NVIDIA/nvidia-docker";
     description = "NVIDIA container runtime for Docker";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/NVIDIA/nvidia-docker";
+    description = "NVIDIA container runtime for Docker";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

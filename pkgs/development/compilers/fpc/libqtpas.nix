@@ -33,12 +33,20 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free Pascal Qt${qtVersion} binding library";
     homepage =
       "https://wiki.freepascal.org/Qt${qtVersion}_Interface"
       + lib.optionalString (qtVersion == "5") "#libqt5pas";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (lazarus.meta) license platforms;
   };
 }

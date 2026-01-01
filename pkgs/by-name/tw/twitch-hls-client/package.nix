@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-MYuDQMxUqKbgGVC/vFRcYJhjL5e8v+5zA0SYRaBlJaw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal CLI client for watching/recording Twitch streams";
     homepage = "https://github.com/2bc4/twitch-hls-client.git";
@@ -25,5 +26,15 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "twitch-hls-client";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Minimal CLI client for watching/recording Twitch streams";
+    homepage = "https://github.com/2bc4/twitch-hls-client.git";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ lenivaya ];
+    mainProgram = "twitch-hls-client";
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

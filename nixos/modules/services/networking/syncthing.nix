@@ -72,7 +72,10 @@ let
   ) (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
 
   jq = "${pkgs.jq}/bin/jq";
+<<<<<<< HEAD
   grep = lib.getExe pkgs.gnugrep;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   updateConfig = pkgs.writers.writeBash "merge-syncthing-config" (
     ''
       set -efu
@@ -93,6 +96,7 @@ let
               --retry 1000 --retry-delay 1 --retry-all-errors \
               "$@"
       }
+<<<<<<< HEAD
 
       # Before version 2.0.0, Syncthing used LevelDB. In version 2.0.0,
       # Syncthing started using SQLite. If you upgrade from an older version of
@@ -148,6 +152,8 @@ let
           exit 76
         fi
       done
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ''
     +
 

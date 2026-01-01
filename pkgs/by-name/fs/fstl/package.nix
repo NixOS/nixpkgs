@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-puDYXANiyTluSlmnT+gnNPA5eCcw0Ny6md6Ock6pqLc=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Fastest STL file viewer";
     mainProgram = "fstl";
@@ -38,5 +39,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ tweber ];
+=======
+  meta = with lib; {
+    description = "Fastest STL file viewer";
+    mainProgram = "fstl";
+    homepage = "https://github.com/fstl-app/fstl";
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ tweber ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

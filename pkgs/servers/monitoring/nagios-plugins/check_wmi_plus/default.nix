@@ -96,11 +96,20 @@ stdenv.mkDerivation rec {
     gzip $out/share/man/man1/check_wmi_plus.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Sensu/nagios plugin using WMI to query Windows hosts";
     homepage = "https://edcint.co.nz/checkwmiplus/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "check_wmi_plus";
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Sensu/nagios plugin using WMI to query Windows hosts";
+    homepage = "https://edcint.co.nz/checkwmiplus/";
+    license = licenses.gpl2Plus;
+    mainProgram = "check_wmi_plus";
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

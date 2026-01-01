@@ -66,11 +66,20 @@ buildPythonPackage rec {
 
   passthru.tests = callPackage ./tests.nix { };
 
+<<<<<<< HEAD
   meta = {
     description = "Python build and release management tool";
     mainProgram = "bork";
     homepage = "https://github.com/duckinator/bork";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicoo ];
+=======
+  meta = with lib; {
+    description = "Python build and release management tool";
+    mainProgram = "bork";
+    homepage = "https://github.com/duckinator/bork";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nicoo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

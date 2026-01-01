@@ -6,18 +6,28 @@
   openssl,
   stdenv,
   curl,
+<<<<<<< HEAD
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+=======
+}:
+
+rustPlatform.buildRustPackage rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "cargo-tarpaulin";
   version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "xd009642";
     repo = "tarpaulin";
+<<<<<<< HEAD
     tag = finalAttrs.version;
+=======
+    tag = version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-HJgcFQrHINm4BPfZ4c5ZHQYBTSBVYdSl/n0qBlSsNOI=";
   };
 
@@ -35,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doCheck = false;
 
+<<<<<<< HEAD
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -56,3 +67,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
   };
 })
+=======
+  meta = with lib; {
+    description = "Code coverage tool for Rust projects";
+    mainProgram = "cargo-tarpaulin";
+    homepage = "https://github.com/xd009642/tarpaulin";
+    changelog = "https://github.com/xd009642/tarpaulin/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with maintainers; [
+      hugoreeves
+    ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     ln -s  "$out"/lib/common-lisp/{asdf/uiop,uiop}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Standard software-system definition library for Common Lisp";
     homepage = "https://asdf.common-lisp.dev/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Standard software-system definition library for Common Lisp";
+    homepage = "https://asdf.common-lisp.dev/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

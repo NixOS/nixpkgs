@@ -65,11 +65,20 @@ buildPythonPackage rec {
     inherit sage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
     changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
+=======
+  meta = with lib; {
+    description = "Base package on which Jupyter projects rely";
+    homepage = "https://jupyter.org/";
+    changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.bsd3;
+    teams = [ teams.jupyter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

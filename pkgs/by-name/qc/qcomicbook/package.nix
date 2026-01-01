@@ -46,11 +46,19 @@ stdenv.mkDerivation rec {
       --replace "Exec=qcomicbook" "Exec=$out/bin/qcomicbook"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/stolowski/QComicBook";
     description = "Comic book reader in Qt5";
     mainProgram = "qcomicbook";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/stolowski/QComicBook";
+    description = "Comic book reader in Qt5";
+    mainProgram = "qcomicbook";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       QComicBook is a viewer for PDF files and comic book archives containing
@@ -60,7 +68,12 @@ stdenv.mkDerivation rec {
       mouse or keyboard navigation etc.
     '';
 
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ greydot ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ greydot ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,11 +22,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tidyexc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Raise rich, helpful exceptions";
     homepage = "https://github.com/kalekundert/tidyexc";
     changelog = "https://github.com/kalekundert/tidyexc/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "Raise rich, helpful exceptions";
+    homepage = "https://github.com/kalekundert/tidyexc";
+    changelog = "https://github.com/kalekundert/tidyexc/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

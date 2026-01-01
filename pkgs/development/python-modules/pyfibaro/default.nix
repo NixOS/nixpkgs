@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfibaro" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to access FIBARO Home center";
     homepage = "https://github.com/rappenze/pyfibaro";
     changelog = "https://github.com/rappenze/pyfibaro/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to access FIBARO Home center";
+    homepage = "https://github.com/rappenze/pyfibaro";
+    changelog = "https://github.com/rappenze/pyfibaro/releases/tag/${src.tag}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

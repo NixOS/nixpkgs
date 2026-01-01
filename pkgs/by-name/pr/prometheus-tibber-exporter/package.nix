@@ -47,6 +47,10 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/tibber-exporter";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     changelog = "https://github.com/terjesannum/tibber-exporter/releases/tag/tibber-exporter-${finalAttrs.version}";

@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "astroid";
+<<<<<<< HEAD
   version = "4.0.1"; # Check whether the version is compatible with pylint
+=======
+  version = "3.3.11"; # Check whether the version is compatible with pylint
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "astroid";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Ulifj+ym0j0LqhmKPfM8vVCjz71Gwd483ke3PkMnHb8=";
+=======
+    hash = "sha256-lv+BQDYP7N4UGMf7XhB6HVDORPU0kZQPYveQWOcAqfQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -47,11 +55,20 @@ buildPythonPackage rec {
     inherit pylint;
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/PyCQA/astroid/blob/v${version}/ChangeLog";
     description = "Abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/PyCQA/astroid/blob/v${version}/ChangeLog";
+    description = "Abstract syntax tree for Python with inference support";
+    homepage = "https://github.com/PyCQA/astroid";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

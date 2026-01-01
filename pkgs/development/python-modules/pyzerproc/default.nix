@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyzerproc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to control Zerproc Bluetooth LED smart string lights";
     mainProgram = "pyzerproc";
@@ -39,5 +40,14 @@ buildPythonPackage rec {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Python library to control Zerproc Bluetooth LED smart string lights";
+    mainProgram = "pyzerproc";
+    homepage = "https://github.com/emlove/pyzerproc";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

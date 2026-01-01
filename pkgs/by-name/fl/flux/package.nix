@@ -22,10 +22,18 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interface description language used by DirectFB";
     mainProgram = "fluxcomp";
     homepage = "https://github.com/deniskropp/flux";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Interface description language used by DirectFB";
+    mainProgram = "fluxcomp";
+    homepage = "https://github.com/deniskropp/flux";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

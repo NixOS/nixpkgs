@@ -34,12 +34,21 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/icholy/ttygif";
     description = "Convert terminal recordings to animated gifs";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moaxcp ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/icholy/ttygif";
+    description = "Convert terminal recordings to animated gifs";
+    platforms = platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [ moaxcp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ttygif";
   };
 }

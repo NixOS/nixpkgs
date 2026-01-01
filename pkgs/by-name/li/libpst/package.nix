@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoreconfHook,
   bzip2,
   doxygen,
@@ -22,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-PSkb7rvbSNK5NGCLwGGVtkHaY9Ko9eDThvLp1tBaC0I=";
   };
 
+<<<<<<< HEAD
   patches = [
     # readpst: Fix a build with gcc/C23 standard
     (fetchpatch {
@@ -30,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     autoreconfHook
     doxygen
@@ -52,11 +58,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.five-ten-sg.com/libpst/";
     description = "Library to read PST (MS Outlook Personal Folders) files";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.five-ten-sg.com/libpst/";
+    description = "Library to read PST (MS Outlook Personal Folders) files";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

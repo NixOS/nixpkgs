@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   mkDerivation,
   lib,
@@ -5,6 +6,9 @@
   libcapsicum,
   libnv,
 }:
+=======
+{ mkDerivation, lib }:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 mkDerivation {
   path = "usr.sbin/syslogd";
 
@@ -13,12 +17,15 @@ mkDerivation {
     "sys/sys"
   ];
 
+<<<<<<< HEAD
   buildInputs = [
     libcasper
     libcapsicum
     libnv
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # These want to install some config files which we don't want
   MK_FTP = "no";
   MK_LPR = "no";

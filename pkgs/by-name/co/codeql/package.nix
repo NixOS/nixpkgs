@@ -54,11 +54,20 @@ stdenv.mkDerivation rec {
     ln -s $out/codeql/codeql $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Semantic code analysis engine";
     homepage = "https://codeql.github.com";
     maintainers = [ lib.maintainers.dump_stack ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    description = "Semantic code analysis engine";
+    homepage = "https://codeql.github.com";
+    maintainers = [ maintainers.dump_stack ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1,5 +1,9 @@
 { copyparty }:
+<<<<<<< HEAD
 (copyparty.override {
+=======
+copyparty.override {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   withHashedPasswords = false;
   withCertgen = false;
   withThumbnails = false;
@@ -14,6 +18,7 @@
   withMagic = false;
   nameSuffix = "-min";
   longDescription = "Minimal variant, minimal dependencies and fewest features";
+<<<<<<< HEAD
 }).overrideAttrs
   (old: {
     # don't try to update this package, just update `copyparty`
@@ -27,3 +32,6 @@
       description = old.meta.description + " - minimal variant";
     };
   })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

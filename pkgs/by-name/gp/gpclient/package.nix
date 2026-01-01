@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   lib,
   rustPlatform,
   glib-networking,
@@ -8,6 +9,13 @@
   autoconf,
   automake,
   libtool,
+=======
+  rustPlatform,
+  glib-networking,
+  gpauth,
+  makeWrapper,
+  openconnect,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   openssl,
   perl,
   pkg-config,
@@ -17,10 +25,13 @@
   cairo,
   atk,
   gtk3,
+<<<<<<< HEAD
   libxml2,
   p11-kit,
   lz4,
   gnutls,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 rustPlatform.buildRustPackage {
@@ -39,6 +50,7 @@ rustPlatform.buildRustPackage {
     perl
     makeWrapper
     pkg-config
+<<<<<<< HEAD
 
     # used to build vendored openconnect
     autoconf
@@ -47,6 +59,12 @@ rustPlatform.buildRustPackage {
   ];
   buildInputs = [
     gpauth
+=======
+  ];
+  buildInputs = [
+    gpauth
+    openconnect
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     openssl
     glib-networking
     glib
@@ -54,6 +72,7 @@ rustPlatform.buildRustPackage {
     cairo
     atk
     gtk3
+<<<<<<< HEAD
 
     # used for vendored openconnect
     libxml2
@@ -72,6 +91,18 @@ rustPlatform.buildRustPackage {
   '';
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+=======
+  ];
+
+  preConfigure = ''
+    substituteInPlace crates/gpapi/src/lib.rs \
+      --replace-fail /usr/bin/gpauth ${gpauth}/bin/gpauth
+    substituteInPlace crates/common/src/vpn_utils.rs \
+      --replace-fail /usr/sbin/vpnc-script ${vpnc-scripts}/bin/vpnc-script
+  '';
+
+  postInstall = ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mkdir -p $out/share/applications
     cp packaging/files/usr/share/applications/gpgui.desktop $out/share/applications/gpgui.desktop
   '';
@@ -80,4 +111,12 @@ rustPlatform.buildRustPackage {
     wrapProgram "$out/bin/gpclient" \
       --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules
   '';
+<<<<<<< HEAD
+=======
+
+  postFixup = ''
+    substituteInPlace $out/share/applications/gpgui.desktop \
+      --replace-fail /usr/bin/gpclient gpclient
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

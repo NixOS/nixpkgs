@@ -80,11 +80,19 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "../tests/" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
     changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
+    homepage = "https://github.com/KimiNewt/pyshark/";
+    changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

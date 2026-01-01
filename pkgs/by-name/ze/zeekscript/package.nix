@@ -2,12 +2,20 @@
   lib,
   python3,
   fetchFromGitHub,
+<<<<<<< HEAD
   writeScript,
+=======
+  unstableGitUpdater,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zeekscript";
+<<<<<<< HEAD
   version = "1.3.2-61";
+=======
+  version = "1.3.2-unstable-2025-11-10";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -36,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     "zeekscript"
   ];
 
+<<<<<<< HEAD
   passthru.updateScript = writeScript "update-${pname}" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p git common-updater-scripts
@@ -48,6 +57,9 @@ python3.pkgs.buildPythonApplication rec {
     rm -rf "$tmpdir"
     update-source-version "${pname}" "$newVersion" --rev="$newRevision"
   '';
+=======
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Zeek script formatter and analyzer";

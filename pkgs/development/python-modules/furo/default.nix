@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   stdenv,
   lib,
   nodejs,
@@ -7,18 +8,28 @@
   runCommand,
   fetchFromGitHub,
   fetchPypi,
+=======
+  lib,
+  buildNpmPackage,
+  buildPythonPackage,
+  fetchFromGitHub,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   flit-core,
   accessible-pygments,
   beautifulsoup4,
   pygments,
   sphinx,
   sphinx-basic-ng,
+<<<<<<< HEAD
   unzip,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
   pname = "furo";
   version = "2025.07.19";
+<<<<<<< HEAD
   # version on pypi doesn't have month & day padded with 0
   pypiVersion =
     let
@@ -33,6 +44,8 @@ let
     + "."
     # day
     + (dropLeadingZero (lib.lists.elemAt versionComponents 2));
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
@@ -41,6 +54,7 @@ let
     hash = "sha256-pIF5zrh5YbkuSkrateEB/tDULSNbeVn2Qx+Fm3nOYGE=";
   };
 
+<<<<<<< HEAD
   web-bin =
     let
       web-bin-src = fetchPypi {
@@ -63,6 +77,9 @@ let
       '';
 
   web-native = buildNpmPackage {
+=======
+  web = buildNpmPackage {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pname = "${pname}-web";
     inherit version src;
 
@@ -75,8 +92,11 @@ let
       popd
     '';
   };
+<<<<<<< HEAD
 
   web = if (lib.meta.availableOn stdenv.buildPlatform nodejs) then web-native else web-bin;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 
 buildPythonPackage rec {
@@ -112,11 +132,20 @@ buildPythonPackage rec {
     inherit web;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Clean customizable documentation theme for Sphinx";
     homepage = "https://github.com/pradyunsg/furo";
     changelog = "https://github.com/pradyunsg/furo/blob/${version}/docs/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    description = "Clean customizable documentation theme for Sphinx";
+    homepage = "https://github.com/pradyunsg/furo";
+    changelog = "https://github.com/pradyunsg/furo/blob/${version}/docs/changelog.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Test ssh login key acceptance without having the private key";
     homepage = "https://github.com/benjojo/ssh-key-confirmer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+  meta = with lib; {
+    description = "Test ssh login key acceptance without having the private key";
+    homepage = "https://github.com/benjojo/ssh-key-confirmer";
+    license = licenses.mit;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ssh-key-confirmer";
   };
 }

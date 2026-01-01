@@ -98,12 +98,21 @@ stdenv.mkDerivation rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/projects/gtkpod/";
     description = "Library used by gtkpod to access the contents of an ipod";
     mainProgram = "ipod-read-sysinfo-extended";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/gtkpod/";
+    description = "Library used by gtkpod to access the contents of an ipod";
+    mainProgram = "ipod-read-sysinfo-extended";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

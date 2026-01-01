@@ -76,6 +76,7 @@ buildGoModule rec {
     smoke-test = nixosTests.blockbook-frontend;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
@@ -84,6 +85,16 @@ buildGoModule rec {
       mmahut
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Trezor address/account balance backend";
+    homepage = "https://github.com/trezor/blockbook";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+      mmahut
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "blockbook";
   };
 }

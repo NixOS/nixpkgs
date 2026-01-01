@@ -64,10 +64,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "echo" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/glue-viz/echo";
     description = "Callback Properties in Python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ifurther ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/glue-viz/echo";
+    description = "Callback Properties in Python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ifurther ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -90,6 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/noraj/haiti";
     license = lib.licenses.mit;
     mainProgram = "haiti";
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ KSJ2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 })

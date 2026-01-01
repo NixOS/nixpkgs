@@ -21,12 +21,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Multiplexer for various nmea 0183 interfaces";
     homepage = "https://www.stripydog.com/kplex/";
     changelog = "https://www.stripydog.com/kplex/changes.html";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mabster314 ];
+=======
+  meta = with lib; {
+    description = "Multiplexer for various nmea 0183 interfaces";
+    homepage = "https://www.stripydog.com/kplex/";
+    changelog = "https://www.stripydog.com/kplex/changes.html";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ mabster314 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kplex";
   };
 })

@@ -30,11 +30,19 @@ stdenv.mkDerivation rec {
     vdr
   ];
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "This PlugIn is a VDR implementation of the VTP (Video Transfer Protocol) Version 0.0.3 (see file PROTOCOL) and a basic HTTP Streaming Protocol";
     maintainers = [ lib.maintainers.ck3d ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "This PlugIn is a VDR implementation of the VTP (Video Transfer Protocol) Version 0.0.3 (see file PROTOCOL) and a basic HTTP Streaming Protocol";
+    maintainers = [ maintainers.ck3d ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (vdr.meta) platforms;
   };
 }

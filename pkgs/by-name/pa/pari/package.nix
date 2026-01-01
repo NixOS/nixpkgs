@@ -50,7 +50,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "all" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://pari.math.u-bordeaux.fr";
     description = "Computer algebra system for high-performance number theory computations";
     longDescription = ''
@@ -77,9 +81,15 @@ stdenv.mkDerivation rec {
         GP language.
     '';
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    license = licenses.gpl2Plus;
+    teams = [ teams.sage ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gp";
   };
 }

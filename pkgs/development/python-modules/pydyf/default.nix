@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydyf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Low-level PDF generator written in Python and based on PDF specification 1.7";
     homepage = "https://doc.courtbouillon.org/pydyf/stable/";
     changelog = "https://github.com/CourtBouillon/pydyf/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rprecenth ];
+=======
+  meta = with lib; {
+    description = "Low-level PDF generator written in Python and based on PDF specification 1.7";
+    homepage = "https://doc.courtbouillon.org/pydyf/stable/";
+    changelog = "https://github.com/CourtBouillon/pydyf/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ rprecenth ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

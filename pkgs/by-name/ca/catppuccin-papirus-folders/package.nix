@@ -85,11 +85,20 @@ lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ] lib.checkL
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "Soothing pastel theme for Papirus Icon Theme folders";
       homepage = "https://github.com/catppuccin/papirus-folders";
       license = lib.licenses.mit;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ rubyowo ];
+=======
+    meta = with lib; {
+      description = "Soothing pastel theme for Papirus Icon Theme folders";
+      homepage = "https://github.com/catppuccin/papirus-folders";
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ rubyowo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }

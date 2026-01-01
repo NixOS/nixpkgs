@@ -89,6 +89,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     user = lib.mkOption {
       type = lib.types.str;
       default = "photoprism";
@@ -101,6 +102,8 @@ in
       description = "Group under which photoprism runs.";
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     package = lib.mkPackageOption pkgs "photoprism" { };
 
     settings = lib.mkOption {
@@ -122,11 +125,19 @@ in
 
       serviceConfig = {
         Restart = "on-failure";
+<<<<<<< HEAD
         User = cfg.user;
         Group = cfg.group;
         DynamicUser = true;
         StateDirectory = "photoprism";
         WorkingDirectory = cfg.storagePath;
+=======
+        User = "photoprism";
+        Group = "photoprism";
+        DynamicUser = true;
+        StateDirectory = "photoprism";
+        WorkingDirectory = "/var/lib/photoprism";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         RuntimeDirectory = "photoprism";
         ReadWritePaths = [
           cfg.originalsPath
@@ -135,10 +146,17 @@ in
         ];
 
         LoadCredential = [
+<<<<<<< HEAD
           (lib.optionalString (cfg.passwordFile != null) "PHOTOPRISM_ADMIN_PASSWORD_FILE:${cfg.passwordFile}")
           (lib.optionalString (
             cfg.databasePasswordFile != null
           ) "PHOTOPRISM_DATABASE_PASSWORD:${cfg.databasePasswordFile}")
+=======
+          (lib.optionalString (cfg.passwordFile != null) "PHOTOPRISM_ADMIN_PASSWORD_FILE=${cfg.passwordFile}")
+          (lib.optionalString (
+            cfg.databasePasswordFile != null
+          ) "PHOTOPRISM_DATABASE_PASSWORD=${cfg.databasePasswordFile}")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ];
 
         LockPersonality = true;

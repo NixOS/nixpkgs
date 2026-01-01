@@ -1,9 +1,14 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   fetchFromGitHub,
   fetchFromGitLab,
   fetchFromSourcehut,
+=======
+  fetchgit,
+  fetchFromGitHub,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
   runCommand,
   which,
@@ -19,12 +24,17 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   webUISupport ? false,
+<<<<<<< HEAD
+=======
+  extraGrammars ? { },
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # tests
   lunarvim,
 }:
 
 let
+<<<<<<< HEAD
   /**
     Build a parser grammar and put the resulting shared object in `$out/parser`.
 
@@ -68,12 +78,127 @@ let
     Use pkgs.tree-sitter-grammars.<name> to access.
   */
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
+=======
+  # to update:
+  # 1) change all these hashes
+  # 2) nix-build -A tree-sitter.updater.update-all-grammars
+  # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
+  # 4) run the ./result script that is output by that (it updates ./grammars)
+  version = "0.25.10";
+  hash = "sha256-aHszbvLCLqCwAS4F4UmM3wbSb81QuG9FM7BDHTu1ZvM=";
+
+  src = fetchFromGitHub {
+    owner = "tree-sitter";
+    repo = "tree-sitter";
+    tag = "v${version}";
+    inherit hash;
+    fetchSubmodules = true;
+  };
+
+  update-all-grammars = callPackage ./update.nix { };
+
+  fetchGrammar =
+    v:
+    fetchgit {
+      inherit (v)
+        url
+        rev
+        sha256
+        fetchSubmodules
+        ;
+    };
+
+  grammars = runCommand "grammars" { } (
+    ''
+      mkdir $out
+    ''
+    + (lib.concatStrings (
+      lib.mapAttrsToList (
+        name: grammar: "ln -s ${grammar.src or (fetchGrammar grammar)} $out/${name}\n"
+      ) (import ./grammars { inherit lib; })
+    ))
+  );
+
+  buildGrammar = callPackage ./grammar.nix { };
+
+  builtGrammars =
+    let
+      build =
+        name: grammar:
+        buildGrammar {
+          language = grammar.language or name;
+          inherit version;
+          src = grammar.src or (fetchGrammar grammar);
+          location = grammar.location or null;
+          generate = grammar.generate or false;
+        };
+      grammars' = import ./grammars { inherit lib; } // extraGrammars;
+      grammars =
+        grammars'
+        // {
+          tree-sitter-latex = grammars'.tree-sitter-latex // {
+            generate = true;
+          };
+        }
+        // {
+          tree-sitter-ocaml = grammars'.tree-sitter-ocaml // {
+            location = "grammars/ocaml";
+          };
+        }
+        // {
+          tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // {
+            location = "grammars/interface";
+          };
+        }
+        // {
+          tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // {
+            language = "tree-sitter-org";
+          };
+        }
+        // {
+          tree-sitter-typescript = grammars'.tree-sitter-typescript // {
+            location = "typescript";
+          };
+        }
+        // {
+          tree-sitter-tsx = grammars'.tree-sitter-typescript // {
+            location = "tsx";
+          };
+        }
+        // {
+          tree-sitter-markdown = grammars'.tree-sitter-markdown // {
+            location = "tree-sitter-markdown";
+          };
+        }
+        // {
+          tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // {
+            language = "tree-sitter-markdown_inline";
+            location = "tree-sitter-markdown-inline";
+          };
+        }
+        // {
+          tree-sitter-php = grammars'.tree-sitter-php // {
+            location = "php";
+          };
+        }
+        // {
+          tree-sitter-sql = grammars'.tree-sitter-sql // {
+            generate = true;
+          };
+        };
+    in
+    lib.mapAttrs build grammars;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
   #
   # or for all grammars:
+<<<<<<< HEAD
   # pkgs.tree-sitter.withPlugins (_: pkgs.tree-sitter.allGrammars)
+=======
+  # pkgs.tree-sitter.withPlugins (_: allGrammars)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # which is equivalent to
   # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
   withPlugins =
@@ -98,6 +223,7 @@ let
       ) grammars
     );
 
+<<<<<<< HEAD
   allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
 
 in
@@ -112,6 +238,14 @@ rustPlatform.buildRustPackage (final: {
     hash = "sha256-aHszbvLCLqCwAS4F4UmM3wbSb81QuG9FM7BDHTu1ZvM=";
     fetchSubmodules = true;
   };
+=======
+  allGrammars = builtins.attrValues builtGrammars;
+
+in
+rustPlatform.buildRustPackage {
+  pname = "tree-sitter";
+  inherit src version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cargoHash = "sha256-4R5Y9yancbg/w3PhACtsWq0+gieUd2j8YnmEj/5eqkg=";
 
@@ -135,6 +269,7 @@ rustPlatform.buildRustPackage (final: {
     })
   ];
 
+<<<<<<< HEAD
   postPatch =
     lib.optionalString webUISupport ''
       substituteInPlace cli/loader/src/lib.rs \
@@ -148,6 +283,12 @@ rustPlatform.buildRustPackage (final: {
           --replace-fail 'all: libtree-sitter.a libtree-sitter.$(SOEXT) tree-sitter.pc' 'all: libtree-sitter.a tree-sitter.pc'
       sed -i '/^install:/,/^[^[:space:]]/ { /$(SOEXT/d; }' ./Makefile
     '';
+=======
+  postPatch = lib.optionalString webUISupport ''
+    substituteInPlace cli/loader/src/lib.rs \
+        --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
   # minifying the JavaScript; passing it allows us to side-step more Node
@@ -160,8 +301,13 @@ rustPlatform.buildRustPackage (final: {
 
   postInstall = ''
     PREFIX=$out make install
+<<<<<<< HEAD
     ${lib.optionalString (!enableShared) "rm -f $out/lib/*.so{,.*}"}
     ${lib.optionalString (!enableStatic) "rm -f $out/lib/*.a"}
+=======
+    ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
+    ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tree-sitter \
@@ -180,6 +326,12 @@ rustPlatform.buildRustPackage (final: {
   doCheck = false;
 
   passthru = {
+<<<<<<< HEAD
+=======
+    updater = {
+      inherit update-all-grammars;
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit
       grammars
       buildGrammar
@@ -202,7 +354,11 @@ rustPlatform.buildRustPackage (final: {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
+<<<<<<< HEAD
     changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${final.version}";
+=======
+    changelog = "https://github.com/tree-sitter/tree-sitter/releases/tag/v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.
@@ -221,4 +377,8 @@ rustPlatform.buildRustPackage (final: {
       amaanq
     ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

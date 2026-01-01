@@ -21,11 +21,19 @@ buildGoModule rec {
     mv $out/bin/tasktimer $out/bin/tt
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Task Timer (tt) is a dead simple TUI task timer";
     homepage = "https://github.com/caarlos0/tasktimer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Task Timer (tt) is a dead simple TUI task timer";
+    homepage = "https://github.com/caarlos0/tasktimer";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       abbe
       caarlos0
     ];

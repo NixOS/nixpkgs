@@ -41,9 +41,15 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easily rename multiple files using your text editor";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Easily rename multiple files using your text editor";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/laurent22/massren";
     maintainers = [ ];
     mainProgram = "massren";

@@ -68,11 +68,20 @@ stdenv.mkDerivation {
     mv $out/lib $lib/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "OpenEXR files able to isolate any object of a CG image with a perfect antialiazing";
     homepage = "https://github.com/MercenariesEngineering/openexrid";
     maintainers = [ lib.maintainers.guibou ];
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "OpenEXR files able to isolate any object of a CG image with a perfect antialiazing";
+    homepage = "https://github.com/MercenariesEngineering/openexrid";
+    maintainers = [ maintainers.guibou ];
+    platforms = platforms.all;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

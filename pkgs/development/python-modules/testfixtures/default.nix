@@ -51,11 +51,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "testfixtures" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of helpers and mock objects for unit tests and doc tests";
     homepage = "https://github.com/Simplistix/testfixtures";
     changelog = "https://github.com/simplistix/testfixtures/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+=======
+  meta = with lib; {
+    description = "Collection of helpers and mock objects for unit tests and doc tests";
+    homepage = "https://github.com/Simplistix/testfixtures";
+    changelog = "https://github.com/simplistix/testfixtures/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siriobalmelli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

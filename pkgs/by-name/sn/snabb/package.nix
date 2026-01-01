@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
     cp src/snabb $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/SnabbCo/snabbswitch";
     description = "Simple and fast packet networking toolkit";
     longDescription = ''
@@ -32,8 +36,13 @@ stdenv.mkDerivation rec {
       It is especially intended for ISPs and other network operators.
     '';
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.lukego ];
+=======
+    license = licenses.asl20;
+    maintainers = [ maintainers.lukego ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "snabb";
   };
 }

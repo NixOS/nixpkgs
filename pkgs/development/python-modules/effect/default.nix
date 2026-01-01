@@ -37,11 +37,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "effect" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure effects for Python";
     homepage = "https://effect.readthedocs.io/";
     changelog = "https://github.com/python-effect/effect/releases/tag/${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pure effects for Python";
+    homepage = "https://effect.readthedocs.io/";
+    changelog = "https://github.com/python-effect/effect/releases/tag/${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

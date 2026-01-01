@@ -53,11 +53,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bindep" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bindep is a tool for checking the presence of binary packages needed to use an application / library";
     homepage = "https://opendev.org/opendev/bindep";
     license = lib.licenses.asl20;
     mainProgram = "bindep";
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Bindep is a tool for checking the presence of binary packages needed to use an application / library";
+    homepage = "https://opendev.org/opendev/bindep";
+    license = licenses.asl20;
+    mainProgram = "bindep";
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

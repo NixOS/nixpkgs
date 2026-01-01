@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication rec {
     $out/bin/imgp --help
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "High-performance CLI batch image resizer & rotator";
     mainProgram = "imgp";
@@ -43,5 +44,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "High-performance CLI batch image resizer & rotator";
+    mainProgram = "imgp";
+    homepage = "https://github.com/jarun/imgp";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

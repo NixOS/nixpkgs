@@ -65,10 +65,18 @@ stdenv.mkDerivation (finalAttrs: {
       };
   passthru.updateScript = gitUpdater;
 
+<<<<<<< HEAD
   meta = {
     description = "Header-only library for using Keras (TensorFlow) models in C++";
     homepage = "https://github.com/Dobiasd/frugally-deep";
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Header-only library for using Keras (TensorFlow) models in C++";
+    homepage = "https://github.com/Dobiasd/frugally-deep";
+    license = with licenses; [ mit ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

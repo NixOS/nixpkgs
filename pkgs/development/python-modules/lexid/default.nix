@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Micro library to increment lexically ordered numerical ids";
     mainProgram = "lexid_incr";
     homepage = "https://pypi.org/project/lexid/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kfollesdal ];
+=======
+  meta = with lib; {
+    description = "Micro library to increment lexically ordered numerical ids";
+    mainProgram = "lexid_incr";
+    homepage = "https://pypi.org/project/lexid/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kfollesdal ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

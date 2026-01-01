@@ -87,11 +87,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_restx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fully featured framework for fast, easy and documented API development with Flask";
     homepage = "https://github.com/python-restx/flask-restx";
     changelog = "https://github.com/python-restx/flask-restx/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Fully featured framework for fast, easy and documented API development with Flask";
+    homepage = "https://github.com/python-restx/flask-restx";
+    changelog = "https://github.com/python-restx/flask-restx/blob/${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

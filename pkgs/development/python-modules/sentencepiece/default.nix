@@ -15,8 +15,11 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/python";
 
+<<<<<<< HEAD
   pythonImportsCheck = [ "sentencepiece" ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # sentencepiece installs 'bin' output.
   meta = removeAttrs sentencepiece.meta [ "outputsToInstall" ];
 }

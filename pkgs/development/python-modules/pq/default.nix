@@ -20,10 +20,17 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pq" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PQ is a transactional queue for PostgreSQL";
     homepage = "https://github.com/malthe/pq/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "PQ is a transactional queue for PostgreSQL";
+    homepage = "https://github.com/malthe/pq/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

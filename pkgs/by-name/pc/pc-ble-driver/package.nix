@@ -5,7 +5,11 @@
   fetchFromGitHub,
   cmake,
   git,
+<<<<<<< HEAD
   asio_1_32_0,
+=======
+  asio,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   catch2,
   spdlog,
   udev,
@@ -47,8 +51,12 @@ stdenv.mkDerivation rec {
     git
   ];
   buildInputs = [
+<<<<<<< HEAD
     # Depends on io_service
     asio_1_32_0
+=======
+    asio
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     catch2
     spdlog
   ];
@@ -60,10 +68,18 @@ stdenv.mkDerivation rec {
     udev
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Desktop library for Bluetooth low energy development";
     homepage = "https://github.com/NordicSemiconductor/pc-ble-driver";
     license = lib.licenses.unfreeRedistributable;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Desktop library for Bluetooth low energy development";
+    homepage = "https://github.com/NordicSemiconductor/pc-ble-driver";
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

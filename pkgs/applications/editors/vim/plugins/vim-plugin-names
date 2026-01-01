@@ -57,7 +57,10 @@ https://github.com/derekelkins/agda-vim/,,
 https://github.com/emmanueltouzery/agitator.nvim/,HEAD,
 https://github.com/aduros/ai.vim/,HEAD,
 https://github.com/joshuavial/aider.nvim/,HEAD,
+<<<<<<< HEAD
 https://github.com/p00f/alabaster.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/slashmili/alchemist.vim/,,
 https://github.com/dense-analysis/ale/,,
 https://github.com/vim-scripts/align/,,
@@ -72,7 +75,10 @@ https://github.com/solarnz/arcanist.vim/,,
 https://github.com/vim-scripts/argtextobj.vim/,,
 https://github.com/otavioschwanck/arrow.nvim/,,
 https://github.com/arsham/arshlib.nvim/,HEAD,
+<<<<<<< HEAD
 https://github.com/comfysage/artio.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/AstroNvim/astrocore/,HEAD,
 https://github.com/AstroNvim/astrolsp/,HEAD,
 https://github.com/AstroNvim/astrotheme/,,
@@ -245,7 +251,10 @@ https://github.com/ravitemer/codecompanion-history.nvim/,HEAD,
 https://github.com/franco-ruggeri/codecompanion-lualine.nvim/,HEAD,
 https://github.com/franco-ruggeri/codecompanion-spinner.nvim/,HEAD,
 https://github.com/olimorris/codecompanion.nvim/,HEAD,
+<<<<<<< HEAD
 https://github.com/mrjones2014/codesettings.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/gorbit99/codewindow.nvim/,HEAD,
 https://github.com/metakirby5/codi.vim/,,
 https://github.com/archseer/colibri.vim/,HEAD,
@@ -266,11 +275,18 @@ https://github.com/Zeioth/compiler.nvim/,HEAD,
 https://github.com/steelsojka/completion-buffers/,,
 https://github.com/nvim-lua/completion-nvim/,,
 https://github.com/aca/completion-tabnine/,,
+<<<<<<< HEAD
+=======
+https://github.com/nvim-treesitter/completion-treesitter/,,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/chikatoike/concealedyank.vim/,,
 https://github.com/rhysd/conflict-marker.vim/,,
 https://github.com/stevearc/conform.nvim/,HEAD,
 https://github.com/Olical/conjure/,,
+<<<<<<< HEAD
 https://github.com/niklasdewally/conjure.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/wellle/context.vim/,,
 https://github.com/Shougo/context_filetype.vim/,,
 https://github.com/banjo/contextfiles.nvim/,HEAD,
@@ -306,7 +322,11 @@ https://github.com/Koalhack/darcubox-nvim/,HEAD,
 https://github.com/ptdewey/darkearth-nvim/,HEAD,
 https://github.com/dart-lang/dart-vim-plugin/,,
 https://github.com/iofq/dart.nvim/,HEAD,
+<<<<<<< HEAD
 https://github.com/joseotaviorf/dash.vim/,HEAD,
+=======
+https://github.com/rizzatti/dash.vim/,HEAD,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/nvimdev/dashboard-nvim/,,
 https://github.com/Shougo/ddc-filter-matcher_head/,HEAD,
 https://github.com/Shougo/ddc-filter-sorter_rank/,HEAD,
@@ -465,7 +485,10 @@ https://github.com/liuchengxu/graphviz.vim/,,
 https://github.com/cbochs/grapple.nvim/,HEAD,
 https://github.com/blazkowolf/gruber-darker.nvim/,,
 https://github.com/morhetz/gruvbox/,,
+<<<<<<< HEAD
 https://github.com/Xoconoch/gruvbox-alabaster.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/luisiacc/gruvbox-baby/,HEAD,
 https://github.com/gruvbox-community/gruvbox/,,gruvbox-community
 https://github.com/eddyekofo94/gruvbox-flat.nvim/,,
@@ -536,14 +559,20 @@ https://github.com/neutaaaaan/iosvkem/,,
 https://github.com/twerth/ir_black/,,
 https://github.com/Vigemus/iron.nvim/,HEAD,
 https://github.com/haya14busa/is.vim/,,
+<<<<<<< HEAD
 https://github.com/mizlan/iswap.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/vim-scripts/jdaddy.vim/,,
 https://github.com/mahyarmirrashed/jdd.nvim/,HEAD,
 https://github.com/davidhalter/jedi-vim/,,
 https://github.com/metalelf0/jellybeans-nvim/,,
 https://github.com/nanotech/jellybeans.vim/,,
 https://github.com/HiPhish/jinja.vim/,HEAD,
+<<<<<<< HEAD
 https://github.com/NicolasGB/jj.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/vito-c/jq.vim/,,
 https://github.com/neoclide/jsonc.vim/,,
 https://github.com/julelang/jule.nvim/,HEAD,
@@ -610,7 +639,10 @@ https://github.com/azratul/live-share.nvim/,HEAD,
 https://github.com/ggml-org/llama.vim/,HEAD,
 https://github.com/huggingface/llm.nvim/,HEAD,
 https://github.com/folke/lsp-colors.nvim/,,
+<<<<<<< HEAD
 https://github.com/joechrisellis/lsp-format-modifications.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/lukas-reineke/lsp-format.nvim/,HEAD,
 https://github.com/lvimuser/lsp-inlayhints.nvim/,HEAD,
 https://github.com/Issafalcon/lsp-overloads.nvim/,main,
@@ -665,7 +697,10 @@ https://github.com/nvim-mini/mini.basics/,HEAD,
 https://github.com/nvim-mini/mini.bracketed/,HEAD,
 https://github.com/nvim-mini/mini.bufremove/,HEAD,
 https://github.com/nvim-mini/mini.clue/,HEAD,
+<<<<<<< HEAD
 https://github.com/nvim-mini/mini.cmdline/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/nvim-mini/mini.colors/,HEAD,
 https://github.com/nvim-mini/mini.comment/,HEAD,
 https://github.com/nvim-mini/mini.completion/,HEAD,
@@ -705,7 +740,10 @@ https://github.com/milanglacier/minuet-ai.nvim/,HEAD,
 https://github.com/jghauser/mkdir.nvim/,main,
 https://github.com/jakewvincent/mkdnflow.nvim/,HEAD,
 https://github.com/SidOfc/mkdx/,,
+<<<<<<< HEAD
 https://github.com/gsuuon/model.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/mawkler/modicator.nvim/,HEAD,
 https://github.com/miikanissi/modus-themes.nvim/,HEAD,
 https://github.com/tomasr/molokai/,,
@@ -861,6 +899,10 @@ https://github.com/vijaymarupudi/nvim-fzf-commands/,,
 https://github.com/sakhnik/nvim-gdb/,,
 https://github.com/chrisgrieser/nvim-genghis/,HEAD,
 https://github.com/booperlv/nvim-gomove/,HEAD,
+<<<<<<< HEAD
+=======
+https://github.com/smiteshp/nvim-gps/,,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/brenoprata10/nvim-highlight-colors/,HEAD,
 https://github.com/Iron-E/nvim-highlite/,,
 https://github.com/kevinhwang91/nvim-hlslens/,,
@@ -949,13 +991,19 @@ https://github.com/nvzone/minty/,HEAD,nvzone-minty
 https://github.com/nvzone/typr/,HEAD,nvzone-typr
 https://github.com/nvzone/volt/,HEAD,nvzone-volt
 https://github.com/obsidian-nvim/obsidian.nvim/,HEAD,
+<<<<<<< HEAD
 https://github.com/tarides/ocaml.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/nvimdev/oceanic-material/,,
 https://github.com/mhartington/oceanic-next/,,
 https://github.com/pwntester/octo.nvim/,,
 https://github.com/refractalize/oil-git-status.nvim/,HEAD,
 https://github.com/benomahony/oil-git.nvim/,HEAD,
+<<<<<<< HEAD
 https://github.com/JezerM/oil-lsp-diagnostics.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/eero-lehtinen/oklch-color-picker.nvim/,HEAD,
 https://github.com/nomnivore/ollama.nvim/,HEAD,
 https://github.com/yonlu/omni.vim/,,
@@ -1004,6 +1052,10 @@ https://github.com/motus/pig.vim/,,
 https://github.com/weirongxu/plantuml-previewer.vim/,HEAD,
 https://github.com/aklt/plantuml-syntax/,,
 https://github.com/goropikari/plantuml.nvim/,HEAD,
+<<<<<<< HEAD
+=======
+https://github.com/nvim-treesitter/playground/,,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/olivercederborg/poimandres.nvim/,HEAD,
 https://github.com/epwalsh/pomo.nvim/,HEAD,
 https://github.com/dleonard0/pony-vim-syntax/,,
@@ -1138,6 +1190,10 @@ https://github.com/AndrewRadev/switch.vim/,,
 https://github.com/Wansmer/symbol-usage.nvim/,HEAD,
 https://github.com/simrat39/symbols-outline.nvim/,,
 https://github.com/vim-syntastic/syntastic/,,
+<<<<<<< HEAD
+=======
+https://github.com/ziontee113/syntax-tree-surfer/,HEAD,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/nanozuki/tabby.nvim/,HEAD,
 https://github.com/kdheepak/tabline.nvim/,,
 https://github.com/vim-scripts/tabmerge/,,
@@ -1221,7 +1277,10 @@ https://github.com/markonm/traces.vim/,,
 https://github.com/LeonHeidelbach/trailblazer.nvim/,HEAD,
 https://github.com/tjdevries/train.nvim/,,
 https://github.com/xiyaowong/transparent.nvim/,HEAD,
+<<<<<<< HEAD
 https://github.com/MeanderingProgrammer/treesitter-modules.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/Wansmer/treesj/,main,
 https://github.com/aaronik/treewalker.nvim/,HEAD,
 https://github.com/tremor-rs/tremor-vim/,,
@@ -1236,7 +1295,10 @@ https://github.com/dmmulroy/tsc.nvim/,HEAD,
 https://github.com/jgdavey/tslime.vim/,,
 https://github.com/mtrajano/tssorter.nvim/,HEAD,
 https://github.com/Quramy/tsuquyomi/,,
+<<<<<<< HEAD
 https://github.com/alexpasmantier/tv.nvim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/folke/twilight.nvim/,,
 https://github.com/pmizio/typescript-tools.nvim/,,
 https://github.com/leafgarland/typescript-vim/,,
@@ -1300,7 +1362,10 @@ https://github.com/enricobacis/vim-airline-clock/,,
 https://github.com/vim-airline/vim-airline-themes/,,
 https://github.com/Konfekt/vim-alias/,,
 https://github.com/hsanson/vim-android/,,
+<<<<<<< HEAD
 https://github.com/b4winckler/vim-angry/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/osyo-manga/vim-anzu/,,
 https://github.com/tpope/vim-apathy/,HEAD,
 https://github.com/ThePrimeagen/vim-apm/,,
@@ -1326,7 +1391,10 @@ https://github.com/ConradIrwin/vim-bracketed-paste/,,
 https://github.com/mtikekar/vim-bsv/,,
 https://github.com/jeetsukumaran/vim-buffergator/,,
 https://github.com/bling/vim-bufferline/,,
+<<<<<<< HEAD
 https://github.com/bagrat/vim-buffet/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/qpkorr/vim-bufkill/,,
 https://github.com/ap/vim-buftabline/,HEAD,
 https://github.com/isobit/vim-caddyfile/,HEAD,
@@ -1355,7 +1423,10 @@ https://github.com/romainl/vim-cool/,,
 https://github.com/octol/vim-cpp-enhanced-highlight/,,
 https://github.com/mhinz/vim-crates/,,
 https://github.com/vim-crystal/vim-crystal/,HEAD,
+<<<<<<< HEAD
 https://github.com/rbong/vim-crystalline/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/OrangeT/vim-csharp/,,
 https://github.com/ap/vim-css-color/,,
 https://github.com/cue-lang/vim-cue/,,
@@ -1425,7 +1496,10 @@ https://github.com/itchyny/vim-gitbranch/,,
 https://github.com/airblade/vim-gitgutter/,,
 https://github.com/junegunn/vim-github-dashboard/,,
 https://github.com/tikhomirov/vim-glsl/,,
+<<<<<<< HEAD
 https://github.com/JafarDakhan/vim-gml/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/jamessan/vim-gnupg/,,
 https://github.com/fatih/vim-go/,,
 https://github.com/habamax/vim-godot/,HEAD,
@@ -1585,7 +1659,10 @@ https://github.com/PProvost/vim-ps1/,,
 https://github.com/digitaltoad/vim-pug/,,
 https://github.com/rodjek/vim-puppet/,,
 https://github.com/Vimjas/vim-python-pep8-indent/,,
+<<<<<<< HEAD
 https://github.com/jeetsukumaran/vim-pythonsense/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/romainl/vim-qf/,,
 https://github.com/romainl/vim-qlist/,,
 https://github.com/peterhoeg/vim-qml/,,
@@ -1661,7 +1738,10 @@ https://github.com/kana/vim-textobj-function/,,
 https://github.com/gibiansky/vim-textobj-haskell/,,
 https://github.com/kana/vim-textobj-line/,HEAD,
 https://github.com/osyo-manga/vim-textobj-multiblock/,,
+<<<<<<< HEAD
 https://github.com/preservim/vim-textobj-quote/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/kana/vim-textobj-user/,,
 https://github.com/Julian/vim-textobj-variable-segment/,,
 https://github.com/thinca/vim-themis/,,
@@ -1735,7 +1815,10 @@ https://github.com/dylanaraps/wal.vim/,,
 https://github.com/mattn/webapi-vim/,,
 https://github.com/willothy/wezterm.nvim/,HEAD,
 https://github.com/DingDean/wgsl.vim/,HEAD,
+<<<<<<< HEAD
 https://github.com/AndrewRadev/whatif.vim/,HEAD,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/folke/which-key.nvim/,,
 https://github.com/neolooong/whichpy.nvim/,HEAD,
 https://github.com/johnfrankmorgan/whitespace.nvim/,HEAD,
@@ -1774,6 +1857,10 @@ https://github.com/folke/zen-mode.nvim/,,
 https://github.com/zenbones-theme/zenbones.nvim/,HEAD,
 https://github.com/jnurmine/zenburn/,,
 https://github.com/nvimdev/zephyr-nvim/,,
+<<<<<<< HEAD
+=======
+https://github.com/ziglang/zig.vim/,,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 https://github.com/zk-org/zk-nvim/,HEAD,
 https://github.com/troydm/zoomwintab.vim/,,
 https://github.com/jalvesaq/zotcite/,HEAD,

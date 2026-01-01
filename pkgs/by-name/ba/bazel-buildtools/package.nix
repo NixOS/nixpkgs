@@ -41,6 +41,10 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       elasticdog
+<<<<<<< HEAD
+=======
+      uri-canva
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     teams = [ lib.teams.bazel ];
   };

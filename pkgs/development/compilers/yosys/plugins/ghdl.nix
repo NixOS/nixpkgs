@@ -37,11 +37,20 @@ stdenv.mkDerivation {
     cp ghdl.so $out/share/yosys/plugins/ghdl.so
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GHDL plugin for Yosys";
     homepage = "https://github.com/ghdl/ghdl-yosys-plugin";
     license = lib.licenses.isc;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "GHDL plugin for Yosys";
+    homepage = "https://github.com/ghdl/ghdl-yosys-plugin";
+    license = licenses.isc;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

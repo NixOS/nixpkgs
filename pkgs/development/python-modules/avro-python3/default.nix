@@ -24,6 +24,7 @@ buildPythonPackage rec {
   ];
   doCheck = false; # No such file or directory: './run_tests.py
 
+<<<<<<< HEAD
   meta = {
     description = "Serialization and RPC framework";
     mainProgram = "avro";
@@ -33,6 +34,17 @@ buildPythonPackage rec {
     maintainers = [
       lib.maintainers.shlevy
       lib.maintainers.timma
+=======
+  meta = with lib; {
+    description = "Serialization and RPC framework";
+    mainProgram = "avro";
+    homepage = "https://pypi.python.org/pypi/avro-python3/";
+    license = licenses.asl20;
+
+    maintainers = [
+      maintainers.shlevy
+      maintainers.timma
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

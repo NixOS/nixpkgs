@@ -19,12 +19,21 @@ rustPlatform.buildRustPackage rec {
 
   useNextest = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Fixpoint reasoning system that unifies Datalog and equality saturation";
     mainProgram = "egglog";
     homepage = "https://github.com/egraphs-good/egglog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fixpoint reasoning system that unifies Datalog and equality saturation";
+    mainProgram = "egglog";
+    homepage = "https://github.com/egraphs-good/egglog";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       XBagon
     ];
   };

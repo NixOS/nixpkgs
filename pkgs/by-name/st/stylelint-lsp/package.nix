@@ -3,11 +3,18 @@
   lib,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenvNoCC,
   nix-update-script,
 }:
+=======
+  stdenvNoCC,
+  nix-update-script,
+}:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stylelint-lsp";
   version = "2.0.1";
@@ -24,6 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
   ];
@@ -31,6 +39,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
+=======
+    pnpm_9.configHook
+  ];
+
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-PVA6sXbiuxqvi9u3sPoeVIJSSpSbFQHQQnTFO3w31WE=";
   };

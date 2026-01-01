@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mpldatacursor" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/joferkington/mpldatacursor";
     description = "Interactive data cursors for matplotlib";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bzizou ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/joferkington/mpldatacursor";
+    description = "Interactive data cursors for matplotlib";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bzizou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

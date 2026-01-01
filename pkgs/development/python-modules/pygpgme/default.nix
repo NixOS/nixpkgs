@@ -26,10 +26,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ gpgme ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://launchpad.net/pygpgme";
     description = "Python wrapper for the GPGME library";
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    homepage = "https://launchpad.net/pygpgme";
+    description = "Python wrapper for the GPGME library";
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

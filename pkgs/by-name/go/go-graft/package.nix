@@ -35,16 +35,29 @@ buildGoModule rec {
     --zsh completion/zsh/_gg
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool for one-click proxy in your research and development without installing v2ray or anything else";
     changelog = "https://github.com/mzz2017/gg/releases/tag/${src.rev}";
     homepage = "https://github.com/mzz2017/gg";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Command-line tool for one-click proxy in your research and development without installing v2ray or anything else";
+    changelog = "https://github.com/mzz2017/gg/releases/tag/${src.rev}";
+    homepage = "https://github.com/mzz2017/gg";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       xyenon
       oluceps
     ];
     mainProgram = "gg";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

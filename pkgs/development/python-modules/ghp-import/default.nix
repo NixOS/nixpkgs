@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ghp_import" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Copy your docs directly to the gh-pages branch";
     mainProgram = "ghp-import";
     homepage = "https://github.com/c-w/ghp-import";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veehaitch ];
+=======
+  meta = with lib; {
+    description = "Copy your docs directly to the gh-pages branch";
+    mainProgram = "ghp-import";
+    homepage = "https://github.com/c-w/ghp-import";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ veehaitch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

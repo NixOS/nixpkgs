@@ -56,12 +56,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdbfixer" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PDBFixer fixes problems in PDB files";
     homepage = "https://github.com/openmm/pdbfixer";
     changelog = "https://github.com/openmm/pdbfixer/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "PDBFixer fixes problems in PDB files";
+    homepage = "https://github.com/openmm/pdbfixer";
+    changelog = "https://github.com/openmm/pdbfixer/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pdbfixer";
   };
 }

@@ -24,10 +24,18 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sewer" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/komuw/sewer";
     description = "ACME client";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kevincox ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/komuw/sewer";
+    description = "ACME client";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kevincox ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

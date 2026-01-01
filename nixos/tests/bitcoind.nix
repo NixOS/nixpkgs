@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 { lib, ... }:
 {
   name = "bitcoind";
   meta = {
     maintainers = with lib.maintainers; [ _1000101 ];
+=======
+{ pkgs, ... }:
+{
+  name = "bitcoind";
+  meta = with pkgs.lib; {
+    maintainers = with maintainers; [ _1000101 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes.machine =

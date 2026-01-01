@@ -53,11 +53,19 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "CLI utility to find duplicate files";
     homepage = "http://www.virkki.com/dupd";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "CLI utility to find duplicate files";
+    homepage = "http://www.virkki.com/dupd";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dupd";
   };
 }

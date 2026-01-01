@@ -7,7 +7,11 @@
   ffmpeg,
   which,
   rustc,
+<<<<<<< HEAD
   wasm-bindgen-cli_0_2_105,
+=======
+  wasm-bindgen-cli_0_2_104,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   trunk,
   binaryen,
   dart-sass,
@@ -30,7 +34,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     ffmpeg
     which
+<<<<<<< HEAD
     wasm-bindgen-cli_0_2_105
+=======
+    wasm-bindgen-cli_0_2_104
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     trunk
     rustc.llvmPackages.lld
     binaryen
@@ -56,9 +64,12 @@ rustPlatform.buildRustPackage rec {
     popd
   '';
 
+<<<<<<< HEAD
   # Tests don't compile in 3.2.0
   doCheck = lib.versionAtLeast version "3.2.1";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   checkFlags = [
     "--skip=processing::parser::xmltv::tests::normalize"
     "--skip=processing::parser::xtream::tests::test_read_json_file_into_struct"

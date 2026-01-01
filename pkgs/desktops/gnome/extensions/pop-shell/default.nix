@@ -49,11 +49,19 @@ stdenv.mkDerivation {
     chmod +x $out/share/gnome-shell/extensions/pop-shell@system76.com/*/main.js
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Keyboard-driven layer for GNOME Shell";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.genofire ];
+=======
+  meta = with lib; {
+    description = "Keyboard-driven layer for GNOME Shell";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.genofire ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/pop-os/shell";
   };
 }

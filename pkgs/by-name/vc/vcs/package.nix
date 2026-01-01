@@ -49,12 +49,21 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/vcs --argv0 vcs --set PATH "${lib.makeBinPath runtimeDeps}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generates contact sheets from video files";
     homepage = "http://p.outlyer.net/vcs";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ elitak ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Generates contact sheets from video files";
+    homepage = "http://p.outlyer.net/vcs";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ elitak ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vcs";
   };
 }

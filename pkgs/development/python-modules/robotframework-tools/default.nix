@@ -42,10 +42,17 @@ buildPythonPackage rec {
   enabledTestPaths = [ "test" ];
   pythonImportsCheck = [ "robottools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Tools for Robot Framework and Test Libraries";
     homepage = "https://github.com/userzimmermann/robotframework-tools";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Python Tools for Robot Framework and Test Libraries";
+    homepage = "https://github.com/userzimmermann/robotframework-tools";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

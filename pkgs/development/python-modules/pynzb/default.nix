@@ -22,10 +22,17 @@ buildPythonPackage rec {
   # Can't get them working
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ericflo/pynzb";
     description = "Unified API for parsing NZB files";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ericflo/pynzb";
+    description = "Unified API for parsing NZB files";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

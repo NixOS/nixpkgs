@@ -58,11 +58,20 @@ stdenv.mkDerivation (finalAttrs: {
     inherit tuxclocker-without-unfree;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Qt overclocking tool for GNU/Linux";
     homepage = "https://github.com/Lurkki14/tuxclocker";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ lurkki ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Qt overclocking tool for GNU/Linux";
+    homepage = "https://github.com/Lurkki14/tuxclocker";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ lurkki ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

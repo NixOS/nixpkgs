@@ -46,10 +46,18 @@ stdenv.mkDerivation rec {
     wrapProgram $out/sbin/nslcd --prefix LD_LIBRARY_PATH ":" $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "LDAP identity and authentication for NSS/PAM";
     homepage = "https://arthurdejong.org/nss-pam-ldapd/";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "LDAP identity and authentication for NSS/PAM";
+    homepage = "https://arthurdejong.org/nss-pam-ldapd/";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -41,7 +41,11 @@
   upower,
   vala,
   validatePkgConfig,
+<<<<<<< HEAD
   libxfce4windowing,
+=======
+  xfce,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   wrapGAppsHook3,
   zenity,
 }:
@@ -110,7 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     udev
     upower
+<<<<<<< HEAD
     libxfce4windowing
+=======
+    xfce.libxfce4windowing
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   propagatedBuildInputs = [

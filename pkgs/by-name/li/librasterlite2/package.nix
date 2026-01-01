@@ -81,16 +81,29 @@ stdenv.mkDerivation rec {
   # - check_sql_stmt
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced library supporting raster handling methods";
     homepage = "https://www.gaia-gis.it/fossil/librasterlite2";
     # They allow any of these
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Advanced library supporting raster handling methods";
+    homepage = "https://www.gaia-gis.it/fossil/librasterlite2";
+    # They allow any of these
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       lgpl21Plus
       mpl11
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     teams = [ lib.teams.geospatial ];
+=======
+    platforms = platforms.unix;
+    teams = [ teams.geospatial ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     cp tie $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.ctan.org/tex-archive/web/tie";
     description = "Allow multiple web change files";
@@ -29,5 +30,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
     license = lib.licenses.abstyles;
+=======
+  meta = with lib; {
+    homepage = "https://www.ctan.org/tex-archive/web/tie";
+    description = "Allow multiple web change files";
+    mainProgram = "tie";
+    platforms = platforms.all;
+    maintainers = [ ];
+    license = licenses.abstyles;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

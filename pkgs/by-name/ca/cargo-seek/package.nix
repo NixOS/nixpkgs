@@ -31,6 +31,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };

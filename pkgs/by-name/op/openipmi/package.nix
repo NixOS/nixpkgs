@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://openipmi.sourceforge.io/";
     description = "User-level library that provides a higher-level abstraction of IPMI and generic services";
@@ -58,5 +59,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ arezvov ];
+=======
+  meta = with lib; {
+    homepage = "https://openipmi.sourceforge.io/";
+    description = "User-level library that provides a higher-level abstraction of IPMI and generic services";
+    license = with licenses; [
+      gpl2Only
+      lgpl2Only
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ arezvov ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

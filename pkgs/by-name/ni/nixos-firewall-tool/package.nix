@@ -31,15 +31,26 @@ stdenvNoCC.mkDerivation {
     shellcheck nixos-firewall-tool
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to temporarily manipulate the NixOS firewall";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool to temporarily manipulate the NixOS firewall";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       clerie
       rvfg
       garyguo
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nixos-firewall-tool";
   };
 }

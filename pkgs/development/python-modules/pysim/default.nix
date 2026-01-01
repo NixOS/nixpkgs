@@ -59,10 +59,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pySim" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python tool to program SIMs / USIMs / ISIMs";
     homepage = "https://github.com/osmocom/pysim";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ flokli ];
+=======
+  meta = with lib; {
+    description = "Python tool to program SIMs / USIMs / ISIMs";
+    homepage = "https://github.com/osmocom/pysim";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

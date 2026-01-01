@@ -11,10 +11,16 @@ buildPythonPackage {
   inherit (approvaltests) version src;
   pyproject = true;
 
+<<<<<<< HEAD
   postPatch = ''
     mv setup/setup.approval_utilities.py setup.py
   ''
   + approvaltests.postPatch or "";
+=======
+  postPatch = approvaltests.postPatch or "" + ''
+    mv setup.approval_utilities.py setup.py
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   build-system = [ setuptools ];
 

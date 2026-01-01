@@ -50,16 +50,29 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Next Generation Spice (Electronic Circuit Simulator)";
     mainProgram = "ngspice";
     homepage = "http://ngspice.sourceforge.net";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Next Generation Spice (Electronic Circuit Simulator)";
+    mainProgram = "ngspice";
+    homepage = "http://ngspice.sourceforge.net";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd3
       gpl2Plus
       lgpl2Plus
     ]; # See https://sourceforge.net/p/ngspice/ngspice/ci/master/tree/COPYING
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ bgamari ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ bgamari ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

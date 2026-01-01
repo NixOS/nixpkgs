@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-//d6izGm1odE25H/PI5pn51FfUL4/6GbLwKUKAqZ3Kw=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Continuous delivery server specializing in advanced workflow modeling and visualization";
     homepage = "http://www.go.cd";
@@ -26,6 +27,18 @@ stdenv.mkDerivation rec {
       binaryNativeCode
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Continuous delivery server specializing in advanced workflow modeling and visualization";
+    homepage = "http://www.go.cd";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       grahamc
       swarren83
     ];

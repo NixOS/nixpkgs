@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Smooths scrolling and set mouse scroll directions independently on macOS";
     homepage = "https://mos.caldis.me/";
@@ -36,5 +37,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Smooths scrolling and set mouse scroll directions independently on macOS";
+    homepage = "https://mos.caldis.me/";
+    changelog = "https://github.com/Caldis/Mos/releases/tag/${finalAttrs.version}";
+    license = licenses.cc-by-nc-40;
+    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

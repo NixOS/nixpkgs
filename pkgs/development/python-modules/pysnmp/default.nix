@@ -81,11 +81,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnmp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python SNMP library";
     homepage = "https://github.com/lextudio/pysnmp";
     changelog = "https://github.com/lextudio/pysnmp/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Python SNMP library";
+    homepage = "https://github.com/lextudio/pysnmp";
+    changelog = "https://github.com/lextudio/pysnmp/blob/${src.rev}/CHANGES.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

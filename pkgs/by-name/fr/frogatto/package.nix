@@ -47,6 +47,7 @@ buildEnv {
       --chdir "$out/share/frogatto"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://frogatto.com";
     description = description;
@@ -56,5 +57,16 @@ buildEnv {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ astro ];
+=======
+  meta = with lib; {
+    homepage = "https://frogatto.com";
+    description = description;
+    license = with licenses; [
+      cc-by-30
+      unfree
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

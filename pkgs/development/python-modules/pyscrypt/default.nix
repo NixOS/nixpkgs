@@ -19,10 +19,18 @@ buildPythonPackage rec {
     ${python.interpreter} tests/run-tests-hash.py
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ricmoo/pyscrypt/";
     description = "Pure-Python implementation of Scrypt PBKDF and scrypt file format library";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ valodim ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ricmoo/pyscrypt/";
+    description = "Pure-Python implementation of Scrypt PBKDF and scrypt file format library";
+    license = licenses.mit;
+    maintainers = with maintainers; [ valodim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

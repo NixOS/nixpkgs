@@ -44,11 +44,20 @@ python3Packages.buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modern, user-friendly, programmable command-line HTTP client for the API";
     homepage = "https://github.com/knid/httpy";
     license = lib.licenses.mit;
     mainProgram = "httpy";
     maintainers = with lib.maintainers; [ eymeric ];
+=======
+  meta = with lib; {
+    description = "Modern, user-friendly, programmable command-line HTTP client for the API";
+    homepage = "https://github.com/knid/httpy";
+    license = licenses.mit;
+    mainProgram = "httpy";
+    maintainers = with maintainers; [ eymeric ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

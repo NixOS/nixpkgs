@@ -22,9 +22,16 @@ buildPythonPackage rec {
   # Wants to connect to CUPS
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for libcups";
     homepage = "http://cyberelk.net/tim/software/pycups/";
     license = with lib.licenses; [ gpl2Plus ];
+=======
+  meta = with lib; {
+    description = "Python bindings for libcups";
+    homepage = "http://cyberelk.net/tim/software/pycups/";
+    license = with licenses; [ gpl2Plus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

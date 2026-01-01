@@ -111,9 +111,13 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+<<<<<<< HEAD
       HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) (
         whenAtLeast "6.15" yes
       );
+=======
+      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) yes;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       # Track memory leaks and performance issues related to allocations.
       MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
@@ -563,6 +567,7 @@ let
         # Enable CEC over DisplayPort
         DRM_DP_CEC = whenOlder "6.10" yes;
         DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
+<<<<<<< HEAD
 
         # Required for Nova
         # FIXME: remove after https://gitlab.freedesktop.org/drm/rust/kernel/-/commit/3d3352e73a55a4ccf110f8b3419bbe2fbfd8a030 lands
@@ -579,10 +584,25 @@ let
             # And disable the legacy framebuffer driver when we have the new one
             FB_HYPERV = whenAtLeast "5.14" no;
           }
+=======
+      }
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
         # Intel GVT-g graphics virtualization supports 64-bit only
         DRM_I915_GVT = yes;
         DRM_I915_GVT_KVMGT = module;
+<<<<<<< HEAD
+=======
+        # Enable Hyper-V guest stuff
+        HYPERV = lib.mkMerge [
+          (whenOlder "6.18" module)
+          (whenAtLeast "6.18" yes)
+        ];
+        # Enable Hyper-V Synthetic DRM Driver
+        DRM_HYPERV = whenAtLeast "5.14" module;
+        # And disable the legacy framebuffer driver when we have the new one
+        FB_HYPERV = whenAtLeast "5.14" no;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
         # enable HDMI-CEC on RPi boards
@@ -934,7 +954,10 @@ let
       BPF_EVENTS = yes;
       FUNCTION_PROFILER = yes;
       RING_BUFFER_BENCHMARK = no;
+<<<<<<< HEAD
       FUNCTION_GRAPH_RETVAL = whenAtLeast "6.5" yes;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     perf = {
@@ -956,7 +979,11 @@ let
       KSM = yes;
       VIRT_DRIVERS = yes;
       # We need 64 GB (PAE) support for Xen guest support
+<<<<<<< HEAD
       HIGHMEM64G = whenOlder "6.15" {
+=======
+      HIGHMEM64G = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         optional = true;
         tristate = lib.mkIf (!stdenv.hostPlatform.is64bit) "y";
       };
@@ -1228,7 +1255,10 @@ let
 
         KEXEC_FILE = option yes;
         KEXEC_JUMP = option yes;
+<<<<<<< HEAD
         KEXEC_HANDOVER = whenAtLeast "6.16" (option yes);
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         PARTITION_ADVANCED = yes; # Needed for LDM_PARTITION
         # Windows Logical Disk Manager (Dynamic Disk) support
@@ -1411,10 +1441,13 @@ let
         # Enable generic kernel watch queues
         # See https://docs.kernel.org/core-api/watch_queue.html
         WATCH_QUEUE = yes;
+<<<<<<< HEAD
 
         # Enable coreboot firmware drivers.
         # While these are called CONFIG_GOOGLE_*, they apply to coreboot systems in general.
         GOOGLE_FIRMWARE = yes;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
       //
         lib.optionalAttrs

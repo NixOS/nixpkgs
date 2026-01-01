@@ -25,12 +25,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ping3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ICMP ping implementation using raw socket";
     homepage = "https://github.com/kyan001/ping3";
     changelog = "https://github.com/kyan001/ping3/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
+=======
+  meta = with lib; {
+    description = "ICMP ping implementation using raw socket";
+    homepage = "https://github.com/kyan001/ping3";
+    changelog = "https://github.com/kyan001/ping3/blob/master/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ping3";
   };
 }

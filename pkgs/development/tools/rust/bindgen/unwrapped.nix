@@ -43,16 +43,27 @@ rustPlatform.buildRustPackage rec {
 
   passthru = { inherit clang; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Automatically generates Rust FFI bindings to C (and some C++) libraries";
     longDescription = ''
       Bindgen takes a c or c++ header file and turns them into
       rust ffi declarations.
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
+<<<<<<< HEAD
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ johntitor ];
     mainProgram = "bindgen";
     platforms = lib.platforms.unix;
+=======
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ johntitor ];
+    mainProgram = "bindgen";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

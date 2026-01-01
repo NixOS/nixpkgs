@@ -34,12 +34,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/zolrath/wemux";
     description = "Multi-user tmux made easy";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bsima ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/zolrath/wemux";
+    description = "Multi-user tmux made easy";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ bsima ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wemux";
   };
 }

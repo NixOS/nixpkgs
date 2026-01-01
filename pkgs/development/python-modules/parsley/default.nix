@@ -16,10 +16,18 @@ buildPythonPackage rec {
   # Tests fail although the package works just fine.  Unfortunately
   # the tests as run by the upstream CI server travis.org are broken.
   doCheck = false;
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.mit;
     homepage = "https://launchpad.net/parsley";
     description = "Parser generator library based on OMeta, and other useful parsing tools";
     maintainers = with lib.maintainers; [ seppeljordan ];
+=======
+  meta = with lib; {
+    license = licenses.mit;
+    homepage = "https://launchpad.net/parsley";
+    description = "Parser generator library based on OMeta, and other useful parsing tools";
+    maintainers = with maintainers; [ seppeljordan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

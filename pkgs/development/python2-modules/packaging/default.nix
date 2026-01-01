@@ -34,6 +34,7 @@ buildPythonPackage rec {
   # Prevent circular dependency
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Core utilities for Python packages";
     homepage = "https://github.com/pypa/packaging";
@@ -42,5 +43,15 @@ buildPythonPackage rec {
       lib.licenses.asl20
     ];
     maintainers = with lib.maintainers; [ bennofs ];
+=======
+  meta = with lib; {
+    description = "Core utilities for Python packages";
+    homepage = "https://github.com/pypa/packaging";
+    license = [
+      licenses.bsd2
+      licenses.asl20
+    ];
+    maintainers = with maintainers; [ bennofs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

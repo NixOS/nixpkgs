@@ -45,11 +45,20 @@ stdenv.mkDerivation {
     cp doc/netevent.rst $doc/share/doc/netevent/netevent.rst
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Share linux event devices with other machines";
     homepage = "https://github.com/Blub/netevent";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rgrunbla ];
+=======
+  meta = with lib; {
+    description = "Share linux event devices with other machines";
+    homepage = "https://github.com/Blub/netevent";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rgrunbla ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

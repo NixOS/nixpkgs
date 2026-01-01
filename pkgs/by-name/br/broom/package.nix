@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive CLI tool for managing local git branches";
     homepage = "https://github.com/a-camarillo/broom";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ a-camarillo ];
+=======
+  meta = with lib; {
+    description = "Interactive CLI tool for managing local git branches";
+    homepage = "https://github.com/a-camarillo/broom";
+    license = licenses.mit;
+    maintainers = with maintainers; [ a-camarillo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "broom";
   };
 }

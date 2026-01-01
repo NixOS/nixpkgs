@@ -26,6 +26,7 @@ symlinkJoin {
       --prefix XINE_PLUGIN_PATH ":" ${lib.escapeShellArg (makeXinePluginPath requiredXinePlugins)}
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (vdr.meta) license homepage;
     description =
@@ -33,5 +34,11 @@ symlinkJoin {
       + " (with plugins: "
       + lib.concatStringsSep ", " (map (x: "" + x.name) plugins)
       + ")";
+=======
+  meta = with vdr.meta; {
+    inherit license homepage;
+    description =
+      description + " (with plugins: " + lib.concatStringsSep ", " (map (x: "" + x.name) plugins) + ")";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1,12 +1,19 @@
 {
   lib,
   fetchurl,
+<<<<<<< HEAD
   bash,
   tinycc,
+=======
+  callPackage,
+  bash,
+  tinycc-bootstrappable,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   musl,
   gnupatch,
   gnutar,
   gzip,
+<<<<<<< HEAD
   buildPlatform,
 }:
 let
@@ -39,6 +46,32 @@ let
       "i686-linux"
       "x86_64-linux"
     ];
+=======
+}:
+let
+  pname = "tinycc-musl";
+  # next commit introduces use of realpath (unsupported in mes-libc)
+  version = "unstable-2023-07-10";
+  rev = "fd6d2180c5c801bb0b4c5dde27d61503059fc97d";
+
+  src = fetchurl {
+    url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
+    hash = "sha256-R81SNbEmh4s9FNQxCWZwUiMCYRkkwOHAdRf0aMnnRiA=";
+  };
+
+  patches = [
+    ./ignore-duplicate-symbols.patch
+    ./ignore-static-inside-array.patch
+    ./static-link.patch
+  ];
+
+  meta = with lib; {
+    description = "Small, fast, and embeddable C compiler and interpreter";
+    homepage = "https://repo.or.cz/w/tinycc.git";
+    license = licenses.lgpl21Only;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = [ "i686-linux" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   tinycc-musl =
@@ -47,7 +80,11 @@ let
         inherit pname version meta;
 
         nativeBuildInputs = [
+<<<<<<< HEAD
           tinycc.compiler
+=======
+          tinycc-bootstrappable.compiler
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           gnupatch
           gnutar
           gzip
@@ -60,10 +97,13 @@ let
 
         # Patch
         ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
+<<<<<<< HEAD
         replace --file i386-asm.c --output i386-asm.c --match-on "switch(size)" --replace-with "if (reg >= 8) { cstr_printf(add_str, \"%%r%d%c\", reg, (size == 1) ? 'b' : ((size == 2) ? 'w' : ((size == 4) ? 'd' : ' '))); return; } switch(size)"
 
         # If performing ptr + (-1) for example, the offset should be ptrdiff_t and not size_t
         replace --file tccgen.c --output tccgen.c --match-on "vpush_type_size(pointed_type(&vtop[-1].type), &align);" --replace-with "vpush_type_size(pointed_type(&vtop[-1].type), &align); if (!(vtop[-1].type.t & VT_UNSIGNED)) gen_cast_s(VT_PTRDIFF_T);"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         # Configure
         touch config.h
@@ -74,7 +114,11 @@ let
         ln -s ${musl}/lib/libtcc1.a ./libtcc1.a
 
         tcc \
+<<<<<<< HEAD
           -B ${tinycc.libs}/lib \
+=======
+          -B ${tinycc-bootstrappable.libs}/lib \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           -DC2STR \
           -o c2str \
           conftest.c
@@ -83,7 +127,11 @@ let
         tcc -v \
           -static \
           -o tcc-musl \
+<<<<<<< HEAD
           -D TCC_TARGET_${tccTarget}=1 \
+=======
+          -D TCC_TARGET_I386=1 \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           -D CONFIG_TCCDIR=\"\" \
           -D CONFIG_TCC_CRTPREFIX=\"{B}\" \
           -D CONFIG_TCC_ELFINTERP=\"/musl/loader\" \
@@ -98,9 +146,14 @@ let
           -D TCC_MUSL=1 \
           -D CONFIG_TCC_PREDEFS=1 \
           -D CONFIG_TCC_SEMLOCK=0 \
+<<<<<<< HEAD
           -D CONFIG_TCC_BACKTRACE=0 \
           -B . \
           -B ${tinycc.libs}/lib \
+=======
+          -B . \
+          -B ${tinycc-bootstrappable.libs}/lib \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           tcc.c
         # libtcc1.a
         rm -f libtcc1.a
@@ -112,7 +165,11 @@ let
           -v \
           -static \
           -o tcc-musl \
+<<<<<<< HEAD
           -D TCC_TARGET_${tccTarget}=1 \
+=======
+          -D TCC_TARGET_I386=1 \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           -D CONFIG_TCCDIR=\"\" \
           -D CONFIG_TCC_CRTPREFIX=\"{B}\" \
           -D CONFIG_TCC_ELFINTERP=\"/musl/loader\" \
@@ -127,7 +184,10 @@ let
           -D TCC_MUSL=1 \
           -D CONFIG_TCC_PREDEFS=1 \
           -D CONFIG_TCC_SEMLOCK=0 \
+<<<<<<< HEAD
           -D CONFIG_TCC_BACKTRACE=0 \
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           -B . \
           -B ${musl}/lib \
           tcc.c

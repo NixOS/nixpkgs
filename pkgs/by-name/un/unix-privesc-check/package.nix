@@ -77,6 +77,7 @@ resholve.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Find misconfigurations that could allow local unprivilged users to escalate privileges to other users or to access local apps";
     mainProgram = "unix-privesc-check";
@@ -84,5 +85,14 @@ resholve.mkDerivation rec {
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Find misconfigurations that could allow local unprivilged users to escalate privileges to other users or to access local apps";
+    mainProgram = "unix-privesc-check";
+    homepage = "https://pentestmonkey.net/tools/audit/unix-privesc-check";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

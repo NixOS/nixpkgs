@@ -13,10 +13,17 @@
 }:
 
 let
+<<<<<<< HEAD
+=======
+  pname = "nezha";
+  version = "1.14.9";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   frontendName = lib.removePrefix "nezha-theme-";
 
   frontend-templates =
     let
+<<<<<<< HEAD
       mkTemplate =
         theme: extra:
         {
@@ -49,16 +56,57 @@ in
 buildGoModule (finalAttrs: {
   pname = "nezha";
   version = "1.14.10";
+=======
+      mkTemplate = theme: {
+        path = "${frontendName theme.pname}-dist";
+        name = frontendName theme.pname;
+        repository = theme.meta.homepage;
+        author = theme.src.owner;
+        version = theme.version;
+        isofficial = false;
+        isadmin = false;
+      };
+    in
+    (formats.yaml { }).generate "frontend-templates.yaml" (
+      [
+        (
+          mkTemplate nezha-theme-admin
+          // {
+            name = "OfficialAdmin";
+            isadmin = true;
+            isofficial = true;
+          }
+        )
+        (
+          mkTemplate nezha-theme-user
+          // {
+            name = "Official";
+            isofficial = true;
+          }
+        )
+      ]
+      ++ map mkTemplate withThemes
+    );
+in
+buildGoModule {
+  inherit pname version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-tgjLkNSNEQCJP1/Pcgfldl5DGQnzca6KMrqEjl45ex4=";
+=======
+    tag = "v${version}";
+    hash = "sha256-q4LxqoelZ0Haz8rArINOPvopQQKGnkqIMZ2INo/2C3c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   proxyVendor = true;
 
+<<<<<<< HEAD
   prePatch =
     let
       allThemes = [
@@ -75,6 +123,22 @@ buildGoModule (finalAttrs: {
       cp ${frontend-templates} service/singleton/frontend-templates.yaml
       ${lib.concatMapStringsSep "\n" installThemeCmd allThemes}
     '';
+=======
+  prePatch = ''
+    rm -rf cmd/dashboard/*-dist
+
+    cp ${frontend-templates} service/singleton/frontend-templates.yaml
+  ''
+  + lib.concatStringsSep "\n" (
+    map (theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist") (
+      [
+        nezha-theme-admin
+        nezha-theme-user
+      ]
+      ++ withThemes
+    )
+  );
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   patches = [
     # Nezha originally used ipinfo.mmdb to provide geoip query feature.
@@ -98,7 +162,11 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
+<<<<<<< HEAD
     "-X github.com/nezhahq/nezha/service/singleton.Version=${finalAttrs.version}"
+=======
+    "-X github.com/nezhahq/nezha/service/singleton.Version=${version}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   checkFlags = "-skip=^TestSplitDomainSOA$";
@@ -118,9 +186,17 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Self-hosted, lightweight server and website monitoring and O&M tool";
     homepage = "https://github.com/nezhahq/nezha";
+<<<<<<< HEAD
     changelog = "https://github.com/nezhahq/nezha/releases/tag/v${finalAttrs.version}";
+=======
+    changelog = "https://github.com/nezhahq/nezha/releases/tag/v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nezha";
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

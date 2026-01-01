@@ -94,7 +94,10 @@ in
           ConditionFileNotEmpty = ""; # override upstream
         };
         serviceConfig = {
+<<<<<<< HEAD
           Type = "notify";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           User = "step-ca";
           Group = "step-ca";
           UMask = "0077";

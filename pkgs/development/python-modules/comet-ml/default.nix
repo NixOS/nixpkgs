@@ -23,12 +23,20 @@
 
 buildPythonPackage rec {
   pname = "comet-ml";
+<<<<<<< HEAD
   version = "3.55.0";
+=======
+  version = "3.54.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchPypi {
     pname = "comet_ml";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-bNfh6tVpsU2LrSLcAKy5lXLgd4lbo3/6dzzMB4+Eh08=";
+=======
+    hash = "sha256-loe7Yz/I1hvxZlvjEP610kdHgvGVAYzx90RxhwopoQE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pyproject = true;

@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
+<<<<<<< HEAD
   meta = {
     description = "Control interface for some MiniDSP products";
     homepage = "https://github.com/mrene/minidsp-rs";
@@ -33,6 +34,16 @@ rustPlatform.buildRustPackage rec {
     maintainers = [
       lib.maintainers.adamcstephens
       lib.maintainers.mrene
+=======
+  meta = with lib; {
+    description = "Control interface for some MiniDSP products";
+    homepage = "https://github.com/mrene/minidsp-rs";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [
+      maintainers.adamcstephens
+      maintainers.mrene
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

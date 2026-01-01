@@ -32,7 +32,11 @@ python3Packages.buildPythonApplication rec {
   # Tests do not run with python3: https://github.com/lilydjwg/pssh/issues/126
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Parallel SSH Tools";
     longDescription = ''
       PSSH provides parallel versions of OpenSSH and related tools,
@@ -40,8 +44,14 @@ python3Packages.buildPythonApplication rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://github.com/lilydjwg/pssh/blob/${src.tag}/ChangeLog";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ chris-martin ];
+=======
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ chris-martin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

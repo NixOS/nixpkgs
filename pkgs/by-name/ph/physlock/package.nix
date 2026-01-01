@@ -31,10 +31,18 @@ stdenv.mkDerivation rec {
     "SESSION=systemd"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Secure suspend/hibernate-friendly alternative to `vlock -an`";
     mainProgram = "physlock";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Secure suspend/hibernate-friendly alternative to `vlock -an`";
+    mainProgram = "physlock";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

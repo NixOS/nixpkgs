@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnmp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of v1/v2c/v3 SNMP engine";
     homepage = "https://github.com/pysnmp/pysnmp";
     changelog = "https://github.com/pysnmp/pysnmp/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Implementation of v1/v2c/v3 SNMP engine";
+    homepage = "https://github.com/pysnmp/pysnmp";
+    changelog = "https://github.com/pysnmp/pysnmp/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

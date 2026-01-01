@@ -18,10 +18,18 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Dash component starter pack";
     homepage = "https://dash.plot.ly/dash-core-components";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antoinerg ];
+=======
+  meta = with lib; {
+    description = "Dash component starter pack";
+    homepage = "https://dash.plot.ly/dash-core-components";
+    license = licenses.mit;
+    maintainers = [ maintainers.antoinerg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

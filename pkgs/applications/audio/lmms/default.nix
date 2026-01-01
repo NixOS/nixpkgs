@@ -86,12 +86,21 @@ mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "DAW similar to FL Studio (music production software)";
     mainProgram = "lmms";
     homepage = "https://lmms.io";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "DAW similar to FL Studio (music production software)";
+    mainProgram = "lmms";
+    homepage = "https://lmms.io";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

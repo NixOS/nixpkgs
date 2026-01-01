@@ -36,9 +36,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argon2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Secure Password Hashes for Python";
     homepage = "https://argon2-cffi.readthedocs.io/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Secure Password Hashes for Python";
+    homepage = "https://argon2-cffi.readthedocs.io/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

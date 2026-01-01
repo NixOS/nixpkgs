@@ -37,11 +37,20 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/home-assistant-libs/pyserial-asyncio-fast/releases/tag/${version}";
     description = "Fast asyncio extension package for pyserial that implements eager writes";
     homepage = "https://github.com/bdraco/pyserial-asyncio-fast";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/home-assistant-libs/pyserial-asyncio-fast/releases/tag/${version}";
+    description = "Fast asyncio extension package for pyserial that implements eager writes";
+    homepage = "https://github.com/bdraco/pyserial-asyncio-fast";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,10 +43,18 @@ stdenv.mkDerivation rec {
     sed -i -e "s|^PATH=.*|PATH=$out/bin:${gnugrep}/bin|" $out/sbin/ipvsadm-{restore,save}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux Virtual Server support programs";
     homepage = "http://www.linuxvirtualserver.org/software/ipvs.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Linux Virtual Server support programs";
+    homepage = "http://www.linuxvirtualserver.org/software/ipvs.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

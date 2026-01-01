@@ -57,16 +57,26 @@ let
 
             npmDepsHash = "sha256-xwGR21+CpZRFdZYz8SQrSf1tkp3fjGudoMmP5TGgEe8=";
 
+<<<<<<< HEAD
             meta = {
+=======
+            meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               inherit (src.meta) homepage;
               description = ''
                 Customised build of the Iosevka typeface, with a consistent
                 rounded style and overrides for almost all individual glyphs
                 in both roman (upright) and italic (slanted) variants.
               '';
+<<<<<<< HEAD
               license = lib.licenses.ofl;
               platforms = iosevka.meta.platforms;
               maintainers = [ lib.maintainers.DamienCassou ];
+=======
+              license = licenses.ofl;
+              platforms = iosevka.meta.platforms;
+              maintainers = [ maintainers.DamienCassou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             };
           }
         );

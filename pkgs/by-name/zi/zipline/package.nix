@@ -3,11 +3,17 @@
   stdenv,
   fetchFromGitHub,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs_24,
   makeWrapper,
   prisma-engines_6,
+=======
+  nodejs_24,
+  makeWrapper,
+  prisma-engines,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ffmpeg,
   openssl,
   vips,
@@ -24,6 +30,7 @@ let
     NEXT_TELEMETRY_DISABLED = "1";
     FFMPEG_PATH = lib.getExe ffmpeg;
     FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
+<<<<<<< HEAD
     PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_6 "schema-engine";
     PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_6 "query-engine";
     PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_6}/lib/libquery_engine.node";
@@ -32,17 +39,33 @@ let
   };
 
   pnpm' = pnpm_10.override { nodejs = nodejs_24; };
+=======
+    PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
+    PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
+    PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
+    PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
+    PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
+<<<<<<< HEAD
   version = "4.4.0";
+=======
+  version = "4.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-H3WzCe1AgnYYI5oskWPi4k1NdpyXCFMmeulPJtwvuIo=";
+=======
+    hash = "sha256-t83LYLjAdXQkQKZlzaBCIs1wKk3v3GVQi8QHUPRHC18=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -50,11 +73,18 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
     fetcherVersion = 2;
     hash = "sha256-JphaLunhwPdeKxlHdpMNGAl8um7wsOkNCCWYxQhLuBM=";
+=======
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
+    hash = "sha256-i5unHz7Hs9zvnjgLwHJaoFdM2z/5ucXZG8eouko1Res=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -63,8 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm'
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs_24
     makeWrapper
     # for sharp build:
@@ -123,11 +157,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/ziplinectl";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versionCheckKeepEnvironment = [ "DATABASE_URL" ];
   doInstallCheck = true;
 
   passthru = {
+<<<<<<< HEAD
     prisma-engines = prisma-engines_6;
+=======
+    inherit prisma-engines;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     tests = { inherit (nixosTests) zipline; };
     updateScript = nix-update-script { };
   };

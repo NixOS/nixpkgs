@@ -51,7 +51,11 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/phiresky/ripgrep-all/blob/${src.rev}/CHANGELOG.md";
     description = "Ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, and more";
     longDescription = ''
@@ -62,8 +66,13 @@ rustPlatform.buildRustPackage rec {
       to search in pdf, docx, sqlite, jpg, movie subtitles (mkv, mp4), etc.
     '';
     homepage = "https://github.com/phiresky/ripgrep-all";
+<<<<<<< HEAD
     license = with lib.licenses; [ agpl3Plus ];
     maintainers = with lib.maintainers; [
+=======
+    license = with licenses; [ agpl3Plus ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zaninime
       ma27
     ];

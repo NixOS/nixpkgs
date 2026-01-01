@@ -28,11 +28,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ochre" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Down-to-earth approach to colors";
     homepage = "https://github.com/getcuia/ochre";
     changelog = "https://github.com/getcuia/ochre/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Down-to-earth approach to colors";
+    homepage = "https://github.com/getcuia/ochre";
+    changelog = "https://github.com/getcuia/ochre/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

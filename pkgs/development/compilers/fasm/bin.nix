@@ -26,7 +26,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://flatassembler.net/download.php";
     license = lib.licenses.bsd2;
     mainProgram = "fasm";
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.iamanaws ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

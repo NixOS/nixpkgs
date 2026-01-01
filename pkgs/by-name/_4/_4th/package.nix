@@ -6,11 +6,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "4th";
+<<<<<<< HEAD
   version = "3.64.2";
 
   src = fetchurl {
     url = "https://sourceforge.net/projects/forth-4th/files/4th-${finalAttrs.version}/4th-${finalAttrs.version}-unix.tar.gz";
     hash = "sha256-ufQiuRDPmcYzFSQf16cuZSrOEbH3itq7yZYo87zPs1g=";
+=======
+  version = "3.64.1";
+
+  src = fetchurl {
+    url = "https://sourceforge.net/projects/forth-4th/files/4th-${finalAttrs.version}/4th-${finalAttrs.version}-unix.tar.gz";
+    hash = "sha256-+W6nTNsqrf3Dvr+NbSz3uJdrXVbBI3OHR5v/rs7en+M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -18,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+<<<<<<< HEAD
+=======
+  patches = [
+    # Fix install manual; report this patch to upstream
+    ./001-install-manual-fixup.diff
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dontConfigure = true;
 
   makeFlags = [
@@ -45,7 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Portable Forth compiler";
     license = lib.licenses.lgpl3Plus;
     mainProgram = "4th";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ chillcicada ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 })

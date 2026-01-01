@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiolifx_connection" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper for aiolifx to connect to a single LIFX device";
     homepage = "https://github.com/bdraco/aiolifx_connection";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lukegb ];
+=======
+  meta = with lib; {
+    description = "Wrapper for aiolifx to connect to a single LIFX device";
+    homepage = "https://github.com/bdraco/aiolifx_connection";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lukegb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

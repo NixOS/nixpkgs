@@ -71,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   # VLC currently doesn't support Darwin on NixOS
+<<<<<<< HEAD
   meta = {
     mainProgram = "castero";
     description = "TUI podcast client for the terminal";
@@ -78,5 +79,14 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ keto ];
+=======
+  meta = with lib; {
+    mainProgram = "castero";
+    description = "TUI podcast client for the terminal";
+    homepage = "https://github.com/xgi/castero";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ keto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

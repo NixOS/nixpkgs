@@ -157,7 +157,11 @@ import ../../make-test-python.nix (
         '';
       in
       builtins.replaceStrings
+<<<<<<< HEAD
         [ "\${changePassword}" "\${testUser}" "\${testPassword}" "\${testGroup}" ]
+=======
+        [ "$\{changePassword}" "$\{testUser}" "$\{testPassword}" "$\{testGroup}" ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         [ "${changePassword}" "${testUser}" "${testPassword}" "${testGroup}" ]
         (lib.readFile "${./testScript.py}");
   }

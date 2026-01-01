@@ -31,11 +31,20 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "BGRT theme with a spinning NixOS logo";
     homepage = "https://github.com/helsinki-systems/plymouth-theme-nixos-bgrt";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "BGRT theme with a spinning NixOS logo";
+    homepage = "https://github.com/helsinki-systems/plymouth-theme-nixos-bgrt";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

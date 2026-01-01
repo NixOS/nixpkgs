@@ -17,10 +17,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
+<<<<<<< HEAD
   meta = {
     description = "API towards Ubiquity Networks UniFi controller";
     homepage = "https://github.com/finish06/unifi-api";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "API towards Ubiquity Networks UniFi controller";
+    homepage = "https://github.com/finish06/unifi-api";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

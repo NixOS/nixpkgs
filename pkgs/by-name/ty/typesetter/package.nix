@@ -30,19 +30,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typesetter";
+<<<<<<< HEAD
   version = "0.8.3";
+=======
+  version = "0.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "haydn";
     repo = "typesetter";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-IJK5ZqrQ7I85d5ULJ9TW61gQ5G0E4XRwPn93i6Sk+OU=";
+=======
+    hash = "sha256-ZbMg7yKJ9nYVqDfPO614PhEoL8fmVbdHONfWgCbZZ0k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
+<<<<<<< HEAD
     hash = "sha256-rqcJuDyuw/kpXp4MIboKLWmHvV7AtdH/Qrv9Phcvhjs=";
+=======
+    hash = "sha256-ZCWMyxzku5FXWF7EkeQ6O9qbZs1MBzuSIw2g198DNt0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;

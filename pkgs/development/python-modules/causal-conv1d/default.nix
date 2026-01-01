@@ -58,10 +58,18 @@ buildPythonPackage rec {
   }
   // lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Causal depthwise conv1d in CUDA with a PyTorch interface";
     homepage = "https://github.com/Dao-AILab/causal-conv1d";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Causal depthwise conv1d in CUDA with a PyTorch interface";
+    homepage = "https://github.com/Dao-AILab/causal-conv1d";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ cfhammill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # The package requires CUDA or ROCm, the ROCm build hasn't
     # been completed or tested, so broken if not using cuda.
     broken = !cudaSupport;

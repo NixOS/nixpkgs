@@ -31,10 +31,17 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for deferring decorator actions";
     homepage = "https://pylonsproject.org/";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    description = "Library for deferring decorator actions";
+    homepage = "https://pylonsproject.org/";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

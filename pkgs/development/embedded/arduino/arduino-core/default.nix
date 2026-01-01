@@ -275,6 +275,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source electronics prototyping platform";
     mainProgram = "arduino";
@@ -286,6 +287,19 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Open-source electronics prototyping platform";
+    mainProgram = "arduino";
+    homepage = "https://www.arduino.cc/";
+    license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       antono
       auntie
       robberer

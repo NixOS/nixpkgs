@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "web_cache" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple Python key-value storage backed up by sqlite3 database";
     homepage = "https://github.com/desbma/web_cache";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ moni ];
+=======
+  meta = with lib; {
+    description = "Simple Python key-value storage backed up by sqlite3 database";
+    homepage = "https://github.com/desbma/web_cache";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

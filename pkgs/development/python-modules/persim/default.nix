@@ -63,11 +63,19 @@ buildPythonPackage rec {
     "test_exact_critical_pairs"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
     changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Distances and representations of persistence diagrams";
+    homepage = "https://persim.scikit-tda.org";
+    changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

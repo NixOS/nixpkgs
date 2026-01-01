@@ -48,11 +48,20 @@ buildDunePackage {
     ppx_sexp_conv
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/hannesm/jackline";
     description = "Minimalistic secure XMPP client in OCaml";
     mainProgram = "jackline";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/hannesm/jackline";
+    description = "Minimalistic secure XMPP client in OCaml";
+    mainProgram = "jackline";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

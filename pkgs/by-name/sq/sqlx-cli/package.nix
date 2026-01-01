@@ -64,11 +64,19 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for managing databases, migrations, and enabling offline mode with `sqlx::query!()` and friends";
     homepage = "https://github.com/launchbadge/sqlx";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "CLI for managing databases, migrations, and enabling offline mode with `sqlx::query!()` and friends";
+    homepage = "https://github.com/launchbadge/sqlx";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       greizgh
       xrelkd
       fd

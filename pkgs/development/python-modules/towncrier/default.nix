@@ -50,11 +50,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "towncrier" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utility to produce useful, summarised news files";
     homepage = "https://github.com/twisted/towncrier/";
     changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Utility to produce useful, summarised news files";
+    homepage = "https://github.com/twisted/towncrier/";
+    changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "towncrier";
   };

@@ -27,10 +27,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "C library for creating MusicBrainz DiscIDs from audio CDs";
     homepage = "https://musicbrainz.org/doc/libdiscid";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C library for creating MusicBrainz DiscIDs from audio CDs";
+    homepage = "https://musicbrainz.org/doc/libdiscid";
+    license = licenses.lgpl21;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

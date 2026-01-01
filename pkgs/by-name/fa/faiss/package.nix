@@ -3,13 +3,19 @@
   config,
   fetchFromGitHub,
   stdenv,
+<<<<<<< HEAD
   capiSupport ? true,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   cudaPackages ? { },
   cudaSupport ? config.cudaSupport,
   pythonSupport ? true,
   python3Packages,
+<<<<<<< HEAD
   sharedLibrarySupport ? false,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   llvmPackages,
   blas,
   swig,
@@ -42,7 +48,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "faiss";
+<<<<<<< HEAD
   version = "1.13.2";
+=======
+  version = "1.13.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "dist" ];
 
@@ -50,7 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-EiqkOkMI65T2kNNMQvjl51GIN4XGzTKpkpQ3ImFa3rs=";
+=======
+    hash = "sha256-8o66YbAH2pqPjW7yG2pfuEdEyEzoopE2DJNV70XymUY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -75,8 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals cudaSupport cudaComponents;
 
   cmakeFlags = [
+<<<<<<< HEAD
     (lib.cmakeBool "BUILD_SHARED_LIBS" sharedLibrarySupport)
     (lib.cmakeBool "FAISS_ENABLE_C_API" capiSupport)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (lib.cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
     (lib.cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
     (lib.cmakeFeature "FAISS_OPT_LEVEL" optLevel)

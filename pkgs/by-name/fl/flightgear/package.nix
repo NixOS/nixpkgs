@@ -33,7 +33,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "2024.1.3";
+=======
+  version = "2024.1.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
@@ -41,8 +45,13 @@ let
     src = fetchFromGitLab {
       owner = "flightgear";
       repo = "fgdata";
+<<<<<<< HEAD
       tag = "${version}";
       hash = "sha256-LNHO/W8p4b8fYcehdfVecldKQ9uJp1zlg60xdgDC45c=";
+=======
+      tag = "v${version}";
+      hash = "sha256-PdqsIZw9mSrvnqqB/fVFjWPW9njhXLWR/2LQCMoBLQI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     dontUnpack = true;
@@ -62,8 +71,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "flightgear";
+<<<<<<< HEAD
     tag = "${version}";
     hash = "sha256-m4bbWwMXwKJrMkb6svGrIZhcsPghrTMgFs8JCx3Wn/A=";
+=======
+    tag = "v${version}";
+    hash = "sha256-h4N18VAbJGQSBKA+eEQxej5e5MEwAcZpvH+dpTypM+k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -104,11 +118,14 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [ "--set FG_ROOT ${data}/share/FlightGear" ];
 
+<<<<<<< HEAD
   postInstall = ''
     # Remove redundant AppImage artifacts
     rm -rf "$out/appdir"
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Flight simulator";
     maintainers = with lib.maintainers; [ raskin ];

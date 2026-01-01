@@ -37,6 +37,7 @@ mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/martynets/dialogbox/";
@@ -44,6 +45,15 @@ mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    homepage = "https://github.com/martynets/dialogbox/";
+    description = "Qt-based scriptable engine providing GUI dialog boxes";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dialogbox";
   };
 }

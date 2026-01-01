@@ -63,11 +63,20 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Indicator to take menus from applications and place them in the panel (GTK 2 library for Xfce/LXDE)";
     homepage = "https://launchpad.net/indicators-gtk2";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.msteen ];
+=======
+  meta = with lib; {
+    description = "Indicator to take menus from applications and place them in the panel (GTK 2 library for Xfce/LXDE)";
+    homepage = "https://launchpad.net/indicators-gtk2";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.msteen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

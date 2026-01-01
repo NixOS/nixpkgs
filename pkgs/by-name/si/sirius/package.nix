@@ -53,13 +53,21 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
+<<<<<<< HEAD
   version = "7.10.0";
+=======
+  version = "7.9.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = "SIRIUS";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-cq4ajtAJXfIH1B866FYhgROMSwd7nsbXf/6kbSwJAso=";
+=======
+    hash = "sha256-/bhY+LCxOikS1at0ONFAhmvfnWhAVHsRQ4GfXJOZbBA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -175,11 +183,20 @@ stdenv.mkDerivation (finalAttrs: {
     ctestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Domain specific library for electronic structure calculations";
     homepage = "https://github.com/electronic-structure/SIRIUS";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Domain specific library for electronic structure calculations";
+    homepage = "https://github.com/electronic-structure/SIRIUS";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

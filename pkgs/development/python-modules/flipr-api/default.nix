@@ -46,12 +46,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flipr_api" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python client for Flipr API";
     mainProgram = "flipr-api";
     homepage = "https://github.com/cnico/flipr-api";
     changelog = "https://github.com/cnico/flipr-api/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

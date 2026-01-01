@@ -41,10 +41,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ircrobots" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asynchronous bare-bones IRC bot framework for python3";
     license = lib.licenses.mit;
     homepage = "https://github.com/jesopo/ircrobots";
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Asynchronous bare-bones IRC bot framework for python3";
+    license = licenses.mit;
+    homepage = "https://github.com/jesopo/ircrobots";
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

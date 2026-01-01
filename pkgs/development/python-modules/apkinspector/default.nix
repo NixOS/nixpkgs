@@ -27,12 +27,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apkInspector" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module designed to provide detailed insights into the zip structure of APK files";
     homepage = "https://github.com/erev0s/apkInspector";
     changelog = "https://github.com/erev0s/apkInspector/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module designed to provide detailed insights into the zip structure of APK files";
+    homepage = "https://github.com/erev0s/apkInspector";
+    changelog = "https://github.com/erev0s/apkInspector/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "apkInspector";
   };
 }

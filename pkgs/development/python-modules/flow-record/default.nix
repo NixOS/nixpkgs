@@ -63,7 +63,11 @@ buildPythonPackage rec {
     elastic-transport
     pytest7CheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "flow.record" ];
 
@@ -76,11 +80,20 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_rdump_fieldtype_path_json" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for defining and creating structured data";
     homepage = "https://github.com/fox-it/flow.record";
     changelog = "https://github.com/fox-it/flow.record/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for defining and creating structured data";
+    homepage = "https://github.com/fox-it/flow.record";
+    changelog = "https://github.com/fox-it/flow.record/releases/tag/${src.tag}";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

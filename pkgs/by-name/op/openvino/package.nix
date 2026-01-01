@@ -41,6 +41,15 @@ let
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
 
+<<<<<<< HEAD
+=======
+  tbbbind_version = "2_5";
+  tbbbind = fetchurl {
+    url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v4.tgz";
+    hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python = python3Packages.python.withPackages (
     ps: with ps; [
       cython
@@ -95,6 +104,17 @@ stdenv.mkDerivation rec {
     cudaPackages.cuda_nvcc
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    mkdir -p temp/tbbbind_${tbbbind_version}
+    pushd temp/tbbbind_${tbbbind_version}
+    bsdtar -xf ${tbbbind}
+    echo "${tbbbind.url}" > ie_dependency.info
+    popd
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dontUseSconsCheck = true;
   dontUseSconsBuild = true;
   dontUseSconsInstall = true;
@@ -172,7 +192,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
     description = "Open-source toolkit for optimizing and deploying AI inference";
     longDescription = ''
@@ -183,8 +207,13 @@ stdenv.mkDerivation rec {
       It supports pre-trained models from the Open Model Zoo, along with 100+ open source and public models in popular formats such as Caffe*, TensorFlow*, MXNet* and ONNX*.
     '';
     homepage = "https://docs.openvinotoolkit.org/";
+<<<<<<< HEAD
     license = with lib.licenses; [ asl20 ];
     platforms = lib.platforms.all;
+=======
+    license = with licenses; [ asl20 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
   };
 }

@@ -80,6 +80,7 @@ stdenv.mkDerivation {
         --zsh <(scala-cli completions zsh)
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://scala-cli.virtuslab.org";
     downloadPage = "https://github.com/VirtusLab/scala-cli/releases/v${version}";
@@ -88,6 +89,16 @@ stdenv.mkDerivation {
     description = "Command-line tool to interact with the Scala language";
     mainProgram = "scala-cli";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://scala-cli.virtuslab.org";
+    downloadPage = "https://github.com/VirtusLab/scala-cli/releases/v${version}";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.asl20;
+    description = "Command-line tool to interact with the Scala language";
+    mainProgram = "scala-cli";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kubukoz
       agilesteel
     ];

@@ -450,6 +450,7 @@
       "source": "hosted",
       "version": "2.1.1"
     },
+<<<<<<< HEAD
     "dir_utils": {
       "dependency": "direct main",
       "description": {
@@ -469,6 +470,8 @@
       "source": "hosted",
       "version": "3.1.0"
     },
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "dotted_border": {
       "dependency": "direct main",
       "description": {
@@ -1199,11 +1202,19 @@
       "dependency": "direct main",
       "description": {
         "name": "hugeicons",
+<<<<<<< HEAD
         "sha256": "036d917bd12e2dee331de7910a11417ebf6c80be1962c0d63ee945e3184f0937",
         "url": "https://pub.dev"
       },
       "source": "hosted",
       "version": "1.1.1"
+=======
+        "sha256": "b4a695c2100217a0b4d2378f0102d948925c97e37417baa6e2d9cb62ba8fb2f7",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.0"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "image": {
       "dependency": "direct main",
@@ -1757,6 +1768,7 @@
       "source": "hosted",
       "version": "4.1.0"
     },
+<<<<<<< HEAD
     "saf_stream": {
       "dependency": "direct main",
       "description": {
@@ -1777,6 +1789,8 @@
       "source": "hosted",
       "version": "0.11.0"
     },
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "screen_retriever": {
       "dependency": "transitive",
       "description": {

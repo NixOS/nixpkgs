@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hid_parser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Typed pure Python library to parse HID report descriptors";
     homepage = "https://github.com/usb-tools/python-hid-parser";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
+=======
+  meta = with lib; {
+    description = "Typed pure Python library to parse HID report descriptors";
+    homepage = "https://github.com/usb-tools/python-hid-parser";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kranzes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

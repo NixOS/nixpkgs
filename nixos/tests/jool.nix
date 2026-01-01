@@ -24,7 +24,11 @@ let
           printf 'HTTP/1.0 200 OK\n'
           printf 'Content-Length: ${toString (1 + builtins.stringLength msg)}\n'
           printf '\n${msg}\n\n'
+<<<<<<< HEAD
         } | ${pkgs.netcat}/bin/nc -${toString ip}nvl 80
+=======
+        } | ${pkgs.libressl.nc}/bin/nc -${toString ip}nvl 80
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         done
       '';
     };

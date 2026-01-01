@@ -1,7 +1,10 @@
 {
   lib,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenv,
   autoreconfHook,
   pkg-config,
@@ -12,18 +15,27 @@
   lm_sensors,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
+<<<<<<< HEAD
   withVimKeys ? false,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 assert systemdSupport -> stdenv.hostPlatform.isLinux;
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "htop" + lib.optionalString withVimKeys "-vim";
+=======
+stdenv.mkDerivation rec {
+  pname = "htop";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "htop-dev";
     repo = "htop";
+<<<<<<< HEAD
     tag = finalAttrs.version;
     hash = "sha256-fVqQwXbJus2IVE1Bzf3yJJpKK4qcZN/SCTX1XYkiHhU=";
   };
@@ -34,6 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fZDTA2dCOmXxUYD6Wm41q7TxL7fgQOj8a/8yJC7Zags=";
   });
 
+=======
+    tag = version;
+    hash = "sha256-fVqQwXbJus2IVE1Bzf3yJJpKK4qcZN/SCTX1XYkiHhU=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # upstream removed pkg-config support and uses dlopen now
   postPatch =
     let
@@ -80,19 +98,32 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = {
+<<<<<<< HEAD
     description =
       "Interactive process viewer" + lib.optionalString withVimKeys ", with vim-style keybindings";
     homepage =
       if withVimKeys then "https://aur.archlinux.org/packages/htop-vim" else "https://htop.dev";
+=======
+    description = "Interactive process viewer";
+    homepage = "https://htop.dev";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       rob
       relrod
       SuperSandro2000
+<<<<<<< HEAD
       thiagokokada
     ];
     changelog = "https://github.com/htop-dev/htop/blob/${finalAttrs.version}/ChangeLog";
     mainProgram = "htop";
   };
 })
+=======
+    ];
+    changelog = "https://github.com/htop-dev/htop/blob/${version}/ChangeLog";
+    mainProgram = "htop";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

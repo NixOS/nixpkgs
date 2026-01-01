@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "daiquiri" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to configure Python logging easily";
     homepage = "https://github.com/Mergifyio/daiquiri";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Library to configure Python logging easily";
+    homepage = "https://github.com/Mergifyio/daiquiri";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

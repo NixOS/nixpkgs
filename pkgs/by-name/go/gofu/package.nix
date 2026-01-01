@@ -24,10 +24,18 @@ buildGoModule {
     ln -s $out/bin/gofu $out/bin/prettyprompt
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Multibinary containing several utilities";
     homepage = "https://github.com/majewsky/gofu";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Multibinary containing several utilities";
+    homepage = "https://github.com/majewsky/gofu";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

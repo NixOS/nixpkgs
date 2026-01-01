@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httmock" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mocking library for requests";
     homepage = "https://github.com/patrys/httmock";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    description = "Mocking library for requests";
+    homepage = "https://github.com/patrys/httmock";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

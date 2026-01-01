@@ -95,6 +95,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.cc-by-sa-40;
     maintainers = with lib.maintainers; [
@@ -102,6 +103,15 @@ stdenvNoCC.mkDerivation rec {
       fgaz
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    license = licenses.cc-by-sa-40;
+    maintainers = with maintainers; [
+      _999eagle
+      fgaz
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://openmoji.org/";
     downloadPage = "https://github.com/hfg-gmuend/openmoji/releases";
     description = "Open-source emojis for designers, developers and everyone else";

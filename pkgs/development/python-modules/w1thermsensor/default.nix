@@ -45,11 +45,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ]
   ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "w1thermsensor" ];
 
   meta = {
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "w1thermsensor" ];
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python interface to 1-Wire temperature sensors";
     mainProgram = "w1thermsensor";
     longDescription = ''
@@ -59,8 +67,14 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/timofurrer/w1thermsensor";
     changelog = "https://github.com/timofurrer/w1thermsensor/blob/v${version}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ quentin ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ quentin ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

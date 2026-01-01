@@ -23,14 +23,22 @@ let
 in
 buildPythonApplication rec {
   pname = "sonata";
+<<<<<<< HEAD
   version = "1.7.3";
+=======
+  version = "1.7.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "multani";
     repo = "sonata";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-eyB+DHcAg1nYjE415VjpPnqZC9embYRhnwXhN2ZVN0o=";
+=======
+    hash = "sha256-80F2dVaRawnI0E+GzaxRUudaLWWHGUjICCEbXHVGy+E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

@@ -46,12 +46,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "subarulink" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for interacting with STARLINK-enabled vehicle";
     homepage = "https://github.com/G-Two/subarulink";
     changelog = "https://github.com/G-Two/subarulink/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for interacting with STARLINK-enabled vehicle";
+    homepage = "https://github.com/G-Two/subarulink";
+    changelog = "https://github.com/G-Two/subarulink/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "subarulink";
   };
 }

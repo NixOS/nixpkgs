@@ -24,11 +24,20 @@ buildPecl rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/open-telemetry/opentelemetry-php-instrumentation/releases/tag/${version}";
     description = "OpenTelemetry PHP auto-instrumentation extension";
     homepage = "https://opentelemetry.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ gaelreyrol ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/open-telemetry/opentelemetry-php-instrumentation/releases/tag/${version}";
+    description = "OpenTelemetry PHP auto-instrumentation extension";
+    homepage = "https://opentelemetry.io/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ gaelreyrol ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

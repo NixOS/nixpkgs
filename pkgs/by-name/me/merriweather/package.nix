@@ -26,11 +26,20 @@ stdenvNoCC.mkDerivation rec {
     # TODO: install variable version?
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/SorkinType/Merriweather";
     description = "Text face designed to be pleasant to read on screens";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ emily ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/SorkinType/Merriweather";
+    description = "Text face designed to be pleasant to read on screens";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ emily ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

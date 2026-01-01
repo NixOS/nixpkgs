@@ -72,11 +72,20 @@ buildPythonPackage rec {
     "TestCLIExample"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for building Elasticsearch client objects";
     homepage = "https://github.com/untergeek/es_client";
     changelog = "https://github.com/untergeek/es_client/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for building Elasticsearch client objects";
+    homepage = "https://github.com/untergeek/es_client";
+    changelog = "https://github.com/untergeek/es_client/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

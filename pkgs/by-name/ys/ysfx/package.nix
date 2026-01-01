@@ -68,11 +68,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Hosting library for JSFX";
     homepage = "https://github.com/jpcima/ysfx";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Hosting library for JSFX";
+    homepage = "https://github.com/jpcima/ysfx";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

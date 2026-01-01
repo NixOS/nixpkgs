@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cardano_tools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for interfacing with the Cardano blockchain";
     homepage = "https://gitlab.com/viperscience/cardano-tools";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aciceri ];
+=======
+  meta = with lib; {
+    description = "Python module for interfacing with the Cardano blockchain";
+    homepage = "https://gitlab.com/viperscience/cardano-tools";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aciceri ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

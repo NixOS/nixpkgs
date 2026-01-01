@@ -40,10 +40,18 @@ stdenv.mkDerivation rec {
     libplasma
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plasma 6 applet in order to show window buttons in your panels";
     homepage = "https://github.com/moodyhunter/applet-window-buttons6";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ A1ca7raz ];
+=======
+  meta = with lib; {
+    description = "Plasma 6 applet in order to show window buttons in your panels";
+    homepage = "https://github.com/moodyhunter/applet-window-buttons6";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ A1ca7raz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

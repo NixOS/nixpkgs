@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "9pfs";
+<<<<<<< HEAD
   version = "0.5";
+=======
+  version = "0.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ftrvxmtrx";
     repo = "9pfs";
     tag = version;
+<<<<<<< HEAD
     sha256 = "sha256-NT8oIQK8Os3HRZLOH2OvauiCvh5bXZFbeEtTFbzNvrs=";
+=======
+    sha256 = "sha256-nlJ4Zh13T78r0Dn3Ky/XLhipeMbMFbn0qGCJnUCBd3Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

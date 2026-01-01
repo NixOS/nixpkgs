@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyflic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to interact with Flic buttons";
     homepage = "https://github.com/soldag/pyflic";
     license = with lib.licenses; [ cc0 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to interact with Flic buttons";
+    homepage = "https://github.com/soldag/pyflic";
+    license = with licenses; [ cc0 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

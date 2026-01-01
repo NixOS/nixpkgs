@@ -107,10 +107,18 @@ stdenv.mkDerivation rec {
 
   #doCheck = true; # some tests fail (and they take VERY long)
 
+<<<<<<< HEAD
   meta = {
     description = "Free distributed version control system";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Free distributed version control system";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

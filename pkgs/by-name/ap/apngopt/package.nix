@@ -44,11 +44,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/projects/apng/";
     description = "Optimizes APNG animations";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/apng/";
+    description = "Optimizes APNG animations";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

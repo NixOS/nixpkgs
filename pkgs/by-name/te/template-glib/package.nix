@@ -65,11 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library for template expansion which supports calling into GObject Introspection from templates";
     homepage = "https://gitlab.gnome.org/GNOME/template-glib";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for template expansion which supports calling into GObject Introspection from templates";
+    homepage = "https://gitlab.gnome.org/GNOME/template-glib";
+    license = licenses.lgpl21Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

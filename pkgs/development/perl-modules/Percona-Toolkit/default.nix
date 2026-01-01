@@ -2,6 +2,10 @@
   lib,
   fetchFromGitHub,
   buildPerlPackage,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   DBDmysql,
   DBI,
   IOSocketSSL,
@@ -18,7 +22,11 @@ let
     owner = "percona";
     repo = "percona-toolkit";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-NpLUHIdGnuNJmSYBYErU7yzFkxKRFQVWJHJqJ2q4U5E=";
+=======
+    sha256 = "sha256-fJGeL9XZHTFmpns5CE7It35HRnF3JiC6muOpOS1zboI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # needed for build script
     leaveDotGit = true;
@@ -41,6 +49,10 @@ buildPerlPackage {
 
   nativeBuildInputs = [
     git
+<<<<<<< HEAD
+=======
+    shortenPerlShebang
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -62,6 +74,13 @@ buildPerlPackage {
     export HOME=$TMPDIR
   '';
 
+<<<<<<< HEAD
+=======
+  postInstall = ''
+    shortenPerlShebang $(grep -l "/bin/env perl" $out/bin/*)
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Collection of advanced command-line tools to perform a variety of MySQL and system tasks";
     homepage = "https://www.percona.com/software/database-tools/percona-toolkit";

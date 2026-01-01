@@ -32,12 +32,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diceware" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Generates passphrases by concatenating words randomly picked from wordlists";
     mainProgram = "diceware";
     homepage = "https://github.com/ulif/diceware";
     changelog = "https://github.com/ulif/diceware/blob/v${version}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ asymmetric ];
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ asymmetric ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

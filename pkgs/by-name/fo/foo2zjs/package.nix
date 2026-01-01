@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
     cp -v getweb arm2hpdl "$out/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "ZjStream printer drivers";
     maintainers = with lib.maintainers; [
@@ -93,5 +94,14 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "ZjStream printer drivers";
+    maintainers = with maintainers; [
+      raskin
+    ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

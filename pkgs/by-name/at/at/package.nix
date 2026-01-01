@@ -77,12 +77,21 @@ stdenv.mkDerivation rec {
     sed -i "6i test -x ${atWrapperPath} && exec ${atWrapperPath} -qb now  # exec doesn't return" "$out/bin/batch"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Classical Unix `at' job scheduling command";
     license = lib.licenses.gpl2Plus;
     homepage = "https://tracker.debian.org/pkg/at";
     changelog = "https://salsa.debian.org/debian/at/-/raw/master/ChangeLog";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Classical Unix `at' job scheduling command";
+    license = licenses.gpl2Plus;
+    homepage = "https://tracker.debian.org/pkg/at";
+    changelog = "https://salsa.debian.org/debian/at/-/raw/master/ChangeLog";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "at";
   };
 }

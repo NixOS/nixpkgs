@@ -4,13 +4,20 @@
   fetchFromGitHub,
   pkgconfig,
   psutil,
+<<<<<<< HEAD
   pytest-cov-stub,
   pytestCheckHook,
   python,
+=======
+  pytestCheckHook,
+  python,
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
   setuptools-scm,
 }:
 
+<<<<<<< HEAD
 buildPythonPackage {
   pname = "lz4";
   version = "4.4.4-unstable-2025-10-21";
@@ -24,6 +31,26 @@ buildPythonPackage {
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = "4.4.4";
+=======
+buildPythonPackage rec {
+  pname = "lz4";
+  version = "4.4.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.5";
+
+  # get full repository in order to run tests
+  src = fetchFromGitHub {
+    owner = "python-lz4";
+    repo = "python-lz4";
+    tag = "v${version}";
+    hash = "sha256-RoM2U47T5WLepJlbJhJAeqKRP8Zf3twndqmMSViI5Z8=";
+  };
+
+  postPatch = ''
+    sed -i '/pytest-cov/d' setup.py
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   build-system = [
     pkgconfig
@@ -40,7 +67,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     psutil
+<<<<<<< HEAD
     pytest-cov-stub
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pytestCheckHook
   ];
 
@@ -53,10 +83,18 @@ buildPythonPackage {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "LZ4 Bindings for Python";
     homepage = "https://github.com/python-lz4/python-lz4";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "LZ4 Bindings for Python";
+    homepage = "https://github.com/python-lz4/python-lz4";
+    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

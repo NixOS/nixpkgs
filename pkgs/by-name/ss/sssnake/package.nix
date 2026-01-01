@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
   ];
+<<<<<<< HEAD
   meta = {
     description = "Cli snake game that plays itself";
     mainProgram = "sssnake";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ quantenzitrone ];
+=======
+  meta = with lib; {
+    description = "Cli snake game that plays itself";
+    mainProgram = "sssnake";
+    homepage = "https://github.com/angeljumbo/sssnake";
+    license = with licenses; [ mit ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ quantenzitrone ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

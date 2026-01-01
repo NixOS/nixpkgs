@@ -40,6 +40,7 @@ stdenv.mkDerivation {
     qtwebsockets
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cmdline tool to control the r3 hackerspace lights";
     mainProgram = "r3ctl";
@@ -47,5 +48,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ mkg20001 ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Cmdline tool to control the r3 hackerspace lights";
+    mainProgram = "r3ctl";
+    homepage = "https://github.com/0xfeedc0de64/r3ctl";
+    maintainers = with maintainers; [ mkg20001 ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

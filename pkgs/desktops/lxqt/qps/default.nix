@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lxqt/qps";
     description = "Qt based process manager";
@@ -51,5 +52,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux; # does not build on darwin
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lxqt/qps";
+    description = "Qt based process manager";
+    mainProgram = "qps";
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux; # does not build on darwin
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

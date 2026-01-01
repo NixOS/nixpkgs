@@ -32,6 +32,7 @@ let
   binaryninja = fetchFromGitHub {
     owner = "Vector35";
     repo = "binaryninja-api";
+<<<<<<< HEAD
     rev = "5accfca2dc53fe5685dbe9e74f519a7f2f657d48"; # https://github.com/radareorg/radare2/blob/master/subprojects/binaryninja.wrap
     hash = "sha256-ysTLRmD372mZNAxL+ua7tsPsYyFVPaiDctLUNKKIE4o=";
   };
@@ -41,24 +42,48 @@ let
     repo = "sdb";
     tag = "2.3.0"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
     hash = "sha256-u8sD278Gd5XZkxJZikojh44WketQImx+FtHBQEj8EO0=";
+=======
+    rev = "c40a5f04deec68d388b2072dc42b29141089f9ce"; # https://github.com/radareorg/radare2/blob/master/subprojects/binaryninja.wrap
+    hash = "sha256-IfuGgwVI51urQxhaYkYsE45NkScgxKmmEBV6Pllhwmo=";
+  };
+
+  sdb = fetchFromGitHub {
+    owner = "radare";
+    repo = "sdb";
+    tag = "2.2.0"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
+    hash = "sha256-S/aL3F6+Z/rqelfIJaZaBF1IxSmhA1qE9ahFvKARoaE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   qjs = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
+<<<<<<< HEAD
     rev = "d405777f7eefa22c17c12970317ef3d6e7658f5a"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
     hash = "sha256-6/9DmEU+CrZiykiKdLaQy7ds1TvNuyEbat7M6RNuTgs=";
+=======
+    rev = "7238ee64dbc2fbdea044555cda8cda78785a93ed"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
+    hash = "sha256-1ZeLCTmbrlRrZB9El3L497gt3QUA5GIScrFVIBkxA88=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
+<<<<<<< HEAD
   version = "6.0.7";
+=======
+  version = "6.0.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-/WVzqHaDwztvLskE9mSewPlfnVfFPRHQYKvuOitSeNo=";
+=======
+    hash = "sha256-B0xCQPD27NcCDvRJK1/yyjtrlEJoSTD7e2cu5JIo95w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   mesonFlags = [

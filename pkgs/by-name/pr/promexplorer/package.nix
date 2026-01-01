@@ -15,12 +15,21 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple tool to explore prometheus exporter metrics";
     homepage = "https://github.com/marcusramberg/promexplorer";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ marcusramberg ];
+=======
+  meta = with lib; {
+    description = "Simple tool to explore prometheus exporter metrics";
+    homepage = "https://github.com/marcusramberg/promexplorer";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ marcusramberg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "promexplorer";
   };
 })

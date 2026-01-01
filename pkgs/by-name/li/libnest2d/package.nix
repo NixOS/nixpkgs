@@ -40,10 +40,18 @@ stdenv.mkDerivation {
   CLIPPER_PATH = "${clipper.out}";
   cmakeFlags = [ "-DLIBNEST2D_HEADER_ONLY=OFF" ];
 
+<<<<<<< HEAD
   meta = {
     description = "2D irregular bin packaging and nesting library written in modern C++";
     homepage = "https://github.com/Ultimaker/libnest2d";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "2D irregular bin packaging and nesting library written in modern C++";
+    homepage = "https://github.com/Ultimaker/libnest2d";
+    license = licenses.lgpl3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 scalpel.conf -t $out/share/scalpel/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sleuthkit/scalpel";
     description = "Recover files based on their headers, footers and internal data structures, based on Foremost";
@@ -57,5 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ shard7 ];
     platforms = lib.platforms.unix;
     license = with lib.licenses; [ asl20 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sleuthkit/scalpel";
+    description = "Recover files based on their headers, footers and internal data structures, based on Foremost";
+    mainProgram = "scalpel";
+    maintainers = with maintainers; [ shard7 ];
+    platforms = platforms.unix;
+    license = with licenses; [ asl20 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

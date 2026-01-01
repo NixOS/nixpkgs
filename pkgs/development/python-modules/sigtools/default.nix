@@ -33,10 +33,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigtools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for working with inspect.Signature objects";
     homepage = "https://sigtools.readthedocs.io/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Utilities for working with inspect.Signature objects";
+    homepage = "https://sigtools.readthedocs.io/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

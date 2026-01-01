@@ -40,11 +40,19 @@ stdenv.mkDerivation rec {
       'cmake_minimum_required(VERSION 4.0)'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Hot patching executables on Linux using .so file injection";
     mainProgram = "hotpatcher";
     homepage = src.meta.homepage;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Hot patching executables on Linux using .so file injection";
+    mainProgram = "hotpatcher";
+    homepage = src.meta.homepage;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [
       "i686-linux"

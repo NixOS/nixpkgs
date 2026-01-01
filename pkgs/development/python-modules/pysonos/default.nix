@@ -44,10 +44,18 @@ buildPythonPackage rec {
     "test_desc_from_uri" # test requires network access
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SoCo fork with fixes for Home Assistant";
     homepage = "https://github.com/amelchio/pysonos";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ juaningan ];
+=======
+  meta = with lib; {
+    description = "SoCo fork with fixes for Home Assistant";
+    homepage = "https://github.com/amelchio/pysonos";
+    license = licenses.mit;
+    maintainers = with maintainers; [ juaningan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     installManPage pastebinit.1
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://stgraber.org/category/pastebinit/";
     description = "Software that lets you send anything you want directly to a pastebin from the command line";
@@ -55,5 +56,16 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "https://stgraber.org/category/pastebinit/";
+    description = "Software that lets you send anything you want directly to a pastebin from the command line";
+    maintainers = with maintainers; [
+      raboof
+      samuel-martineau
+    ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux ++ lib.platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

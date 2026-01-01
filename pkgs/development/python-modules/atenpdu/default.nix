@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atenpdu" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to control ATEN PE PDUs";
     homepage = "https://github.com/mtdcr/pductl";
@@ -40,5 +41,15 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pductl";
     broken = lib.versionAtLeast pysnmp.version "7";
+=======
+  meta = with lib; {
+    description = "Python interface to control ATEN PE PDUs";
+    homepage = "https://github.com/mtdcr/pductl";
+    changelog = "https://github.com/mtdcr/pductl/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+    mainProgram = "pductl";
+    broken = versionAtLeast pysnmp.version "7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

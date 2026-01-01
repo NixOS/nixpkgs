@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://cm-unicode.sourceforge.io/";
     description = "Computer Modern Unicode fonts";
@@ -31,5 +32,16 @@ stdenvNoCC.mkDerivation rec {
     ];
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://cm-unicode.sourceforge.io/";
+    description = "Computer Modern Unicode fonts";
+    maintainers = with maintainers; [
+      raskin
+      rycee
+    ];
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

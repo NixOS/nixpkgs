@@ -54,12 +54,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "View the color value of a specific pixel on your screen";
     homepage = "https://github.com/sdushantha/farge";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "View the color value of a specific pixel on your screen";
+    homepage = "https://github.com/sdushantha/farge";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jtbx
       justinlime
     ];

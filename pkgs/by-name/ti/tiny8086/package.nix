@@ -49,7 +49,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/adriancable/8086tiny";
     description = "Open-source small 8086 emulator";
     longDescription = ''
@@ -61,9 +65,15 @@ stdenv.mkDerivation {
       8086tiny is based on an IOCCC 2013 winning entry. In fact that is the
       "unobfuscated" version :)
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "8086tiny";
   };
 }

@@ -45,10 +45,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "audible" ];
 
+<<<<<<< HEAD
   meta = {
     description = "A(Sync) Interface for internal Audible API written in pure Python";
     license = lib.licenses.agpl3Only;
     homepage = "https://github.com/mkb79/Audible";
     maintainers = with lib.maintainers; [ jvanbruegge ];
+=======
+  meta = with lib; {
+    description = "A(Sync) Interface for internal Audible API written in pure Python";
+    license = licenses.agpl3Only;
+    homepage = "https://github.com/mkb79/Audible";
+    maintainers = with maintainers; [ jvanbruegge ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

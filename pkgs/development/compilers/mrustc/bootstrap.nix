@@ -136,7 +136,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (src.meta) homepage;
     description = "Minimal build of Rust";
     longDescription = ''
@@ -144,11 +148,19 @@ stdenv.mkDerivation rec {
       This is useful for bootstrapping the main Rust compiler without
       an initial binary toolchain download.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       progval
       r-burns
     ];
     license = with lib.licenses; [
+=======
+    maintainers = with maintainers; [
+      progval
+      r-burns
+    ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       asl20
     ];

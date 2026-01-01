@@ -51,11 +51,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notifications_python_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for the GOV.UK Notify API";
     homepage = "https://github.com/alphagov/notifications-python-client";
     changelog = "https://github.com/alphagov/notifications-python-client/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client for the GOV.UK Notify API";
+    homepage = "https://github.com/alphagov/notifications-python-client";
+    changelog = "https://github.com/alphagov/notifications-python-client/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

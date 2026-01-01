@@ -21,12 +21,21 @@ runCommand name
       };
     };
 
+<<<<<<< HEAD
     meta = {
       description = "Convenient wrapper for the systemctl commands, borrow from Ubuntu";
       mainProgram = "service";
       license = lib.licenses.gpl2Plus;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ DerTim1 ];
+=======
+    meta = with lib; {
+      description = "Convenient wrapper for the systemctl commands, borrow from Ubuntu";
+      mainProgram = "service";
+      license = licenses.gpl2Plus;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ DerTim1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # Shellscript has been modified but upstream source is: https://git.launchpad.net/ubuntu/+source/init-system-helpers
     };
   }

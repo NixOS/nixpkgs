@@ -56,11 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "coconut" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, elegant, Pythonic functional programming";
     homepage = "http://coconut-lang.org/";
     changelog = "https://github.com/evhub/coconut/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fabianhjr ];
+=======
+  meta = with lib; {
+    description = "Simple, elegant, Pythonic functional programming";
+    homepage = "http://coconut-lang.org/";
+    changelog = "https://github.com/evhub/coconut/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fabianhjr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

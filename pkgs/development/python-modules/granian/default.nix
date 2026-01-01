@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   fetchurl,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   rustPlatform,
   cacert,
@@ -20,14 +23,22 @@
 
 buildPythonPackage rec {
   pname = "granian";
+<<<<<<< HEAD
   version = "2.6.0";
+=======
+  version = "2.5.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Jj75ycr9Y0aCTP5YGzd6um/7emWKqqegUDB7HpTfTcM=";
+=======
+    hash = "sha256-XSDBSl7QWqIN5u48z4H5yPHR+ltRmmmrP0JSmvcCcsA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Granian forces a custom allocator for all the things it runs,
@@ -35,17 +46,24 @@ buildPythonPackage rec {
   # and allow the final application to make the allocator decision
   # via LD_PRELOAD or similar.
   patches = [
+<<<<<<< HEAD
     (fetchurl {
       # Refresh expired TLS certificates for tests
       url = "https://github.com/emmett-framework/granian/commit/189f1bed2effb4a8a9cba07b2c5004e599a6a890.patch";
       hash = "sha256-7FgVR7/lAh2P5ptGx6jlFzWuk24RY7wieN+aLaAEY+c=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ./no-alloc.patch
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
+<<<<<<< HEAD
     hash = "sha256-Q7BWwvkK5rRuhVobxW4qXLo6tnusOaQYN8mBoNVoulw=";
+=======
+    hash = "sha256-zQAHJcBWNx5IT/t2wtm7UeOfVNnvfowcp137TePnwiM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -85,6 +103,7 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/" ];
 
+<<<<<<< HEAD
   disabledTests = [
     # SSLCertVerificationError: certificate verify failed: certificate has expired
     "test_asgi_ws_scope"
@@ -101,6 +120,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "granian" ];
 
+=======
+  pythonImportsCheck = [ "granian" ];
+
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru.updateScript = nix-update-script { };
 
   meta = {

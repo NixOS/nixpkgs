@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cyclonedds ];
 
+<<<<<<< HEAD
   meta = {
     description = "C++ binding for Eclipse Cyclone DDS";
     homepage = "https://cyclonedds.io/";
@@ -34,5 +35,15 @@ stdenv.mkDerivation rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ linbreux ];
+=======
+  meta = with lib; {
+    description = "C++ binding for Eclipse Cyclone DDS";
+    homepage = "https://cyclonedds.io/";
+    license = with licenses; [
+      epl20
+      asl20
+    ];
+    maintainers = with maintainers; [ linbreux ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

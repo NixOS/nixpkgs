@@ -61,6 +61,7 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple application for converting currencies, with support for various APIs";
     homepage = "https://github.com/ideveCore/Valuta";
@@ -69,5 +70,15 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "currencyconverter";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Simple application for converting currencies, with support for various APIs";
+    homepage = "https://github.com/ideveCore/Valuta";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ arthsmn ];
+    teams = [ teams.gnome-circle ];
+    mainProgram = "currencyconverter";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

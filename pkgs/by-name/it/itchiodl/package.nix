@@ -27,10 +27,18 @@ python3Packages.buildPythonApplication rec {
     requests
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Emersont1/itchio";
     description = "itch.io download tool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Emersont1/itchio";
+    description = "itch.io download tool";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

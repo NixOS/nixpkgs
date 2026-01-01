@@ -18,10 +18,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flatdict" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for interacting with nested dicts as a single level dict with delimited keys";
     homepage = "https://github.com/gmr/flatdict";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lovesegfault ];
+=======
+  meta = with lib; {
+    description = "Python module for interacting with nested dicts as a single level dict with delimited keys";
+    homepage = "https://github.com/gmr/flatdict";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lovesegfault ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

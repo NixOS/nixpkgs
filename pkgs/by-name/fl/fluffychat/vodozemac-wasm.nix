@@ -15,13 +15,17 @@
   binaryen,
   writableTmpDirAsHomeHook,
   runCommand,
+<<<<<<< HEAD
   removeReferencesTo,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
   pubSources = fluffychat-web.pubspecLock.dependencySources;
 
   # wasm-pack doesn't take 'RUST_SRC_PATH' into consideration
+<<<<<<< HEAD
   sysroot = symlinkJoin {
     name = "rustc_unwrapped_with_libsrc";
     paths = [
@@ -33,6 +37,20 @@ let
     '';
   };
   rustcWithLibSrc = buildPackages.rustc.override { inherit sysroot; };
+=======
+  rustcWithLibSrc = buildPackages.rustc.override {
+    sysroot = symlinkJoin {
+      name = "rustc_unwrapped_with_libsrc";
+      paths = [
+        buildPackages.rustc.unwrapped
+      ];
+      postBuild = ''
+        mkdir -p $out/lib/rustlib/src/rust
+        ln -s ${rustPlatform.rustLibSrc} $out/lib/rustlib/src/rust/library
+      '';
+    };
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 
 # https://github.com/krille-chan/fluffychat/blob/main/scripts/prepare-web.sh
@@ -80,7 +98,10 @@ stdenv.mkDerivation {
     wasm-bindgen-cli_0_2_100
     binaryen
     writableTmpDirAsHomeHook
+<<<<<<< HEAD
     removeReferencesTo
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildPhase = ''
@@ -104,12 +125,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   # fix rustc leaking into closure
   # fluffychat-web should not reference build-time dependencies
   preFixup = ''
     find $out -name "*.wasm" -exec remove-references-to -t ${sysroot} {} +
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   env = {
     # Build a pub cache from fluffychat, as dart-vodozemac should be a subset
     # This is required because dart-vodozemac, as a pub, doesn't have a pubspec.lock

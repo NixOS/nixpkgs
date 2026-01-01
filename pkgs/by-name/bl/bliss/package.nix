@@ -37,11 +37,19 @@ stdenv.mkDerivation rec {
     mv *.h *.hh $out/include/bliss
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open source tool for computing automorphism groups and canonical forms of graphs. It has both a command line user interface as well as C++ and C programming language APIs";
     mainProgram = "bliss";
     homepage = "http://www.tcs.hut.fi/Software/bliss/";
     license = lib.licenses.lgpl3;
+=======
+  meta = with lib; {
+    description = "Open source tool for computing automorphism groups and canonical forms of graphs. It has both a command line user interface as well as C++ and C programming language APIs";
+    mainProgram = "bliss";
+    homepage = "http://www.tcs.hut.fi/Software/bliss/";
+    license = licenses.lgpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

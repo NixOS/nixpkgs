@@ -48,6 +48,7 @@ let
 
     mlPlugin = true;
 
+<<<<<<< HEAD
     meta = {
       description = "High level commands to declare a hierarchy based on packed classes";
       maintainers = with lib.maintainers; [
@@ -55,6 +56,15 @@ let
         siraben
       ];
       license = lib.licenses.mit;
+=======
+    meta = with lib; {
+      description = "High level commands to declare a hierarchy based on packed classes";
+      maintainers = with maintainers; [
+        cohencyril
+        siraben
+      ];
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
   hb2 = hb.overrideAttrs (

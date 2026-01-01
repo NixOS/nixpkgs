@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "avidtools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Developer tools for AVID";
     homepage = "https://github.com/avidml/avidtools";
     changelog = "https://github.com/avidml/avidtools/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Developer tools for AVID";
+    homepage = "https://github.com/avidml/avidtools";
+    changelog = "https://github.com/avidml/avidtools/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

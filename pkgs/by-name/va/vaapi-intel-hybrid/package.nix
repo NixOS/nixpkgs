@@ -65,11 +65,20 @@ stdenv.mkDerivation rec {
     sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://01.org/linuxmedia";
     description = "Intel driver for the VAAPI library with partial HW acceleration";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tadfisher ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://01.org/linuxmedia";
+    description = "Intel driver for the VAAPI library with partial HW acceleration";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tadfisher ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

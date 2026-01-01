@@ -55,11 +55,20 @@ buildPythonPackage rec {
     "tests/test_ssl_pool.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client API of Nebula Graph in Python";
     homepage = "https://github.com/vesoft-inc/nebula-python";
     changelog = "https://github.com/vesoft-inc/nebula-python/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Client API of Nebula Graph in Python";
+    homepage = "https://github.com/vesoft-inc/nebula-python";
+    changelog = "https://github.com/vesoft-inc/nebula-python/blob/${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

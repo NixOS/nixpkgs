@@ -52,11 +52,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Pantheon Geoclue2 Agent";
     homepage = "https://github.com/elementary/pantheon-agent-geoclue2";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Pantheon Geoclue2 Agent";
+    homepage = "https://github.com/elementary/pantheon-agent-geoclue2";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

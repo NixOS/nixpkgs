@@ -9,14 +9,22 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-icons";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "1.0.0-beta.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-icons";
     tag = "epoch-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-lbj64wH180UGO3jYW9HhuHIwy/tU2Ka86wXz+Wjde8g=";
+=======
+    hash = "sha256-jxt0x0Ctk0PaaFQjf8p9y1yEgWkuEi7bR2VtybwlQAs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ just ];
@@ -36,6 +44,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
+<<<<<<< HEAD
+=======
+      "--version"
+      "unstable"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "--version-regex"
       "epoch-(.*)"
     ];

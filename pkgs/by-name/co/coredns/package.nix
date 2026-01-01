@@ -6,7 +6,11 @@
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
+<<<<<<< HEAD
   vendorHash ? "sha256-bnNpJgy54wvTST1Jtfbd1ldLJrIzTW62TL7wyHeqz28=",
+=======
+  vendorHash ? "sha256-pU8INVCKjYfAFOeobM7N1XCMHod7Kz0N5NKwpMpA2lU=",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -14,13 +18,21 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "coredns";
+<<<<<<< HEAD
   version = "1.13.2";
+=======
+  version = "1.13.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-9ggyFixdNy0t4UA8ZxU5oMUzA/8EB/k1jors4f8Q6YE=";
+=======
+    hash = "sha256-rWa4xjHRREoMtvPqW6ZP6Ym9qNTa0l8Opd15FsmxraI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   inherit vendorHash;
@@ -76,7 +88,11 @@ buildGoModule (finalAttrs: {
     }
     diff -u plugin.cfg.orig plugin.cfg || true
     for src in ${toString (attrsToSources externalPlugins)}; do go get $src; done
+<<<<<<< HEAD
     CC= GOOS= GOARCH= go generate
+=======
+    GOOS= GOARCH= go generate
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     go mod tidy
     go mod vendor
   '';
@@ -90,7 +106,11 @@ buildGoModule (finalAttrs: {
     chmod -R u+w vendor
     mv -t . vendor/go.{mod,sum} vendor/plugin.cfg
 
+<<<<<<< HEAD
     CC= GOOS= GOARCH= go generate
+=======
+    GOOS= GOARCH= go generate
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   postPatch = ''
@@ -135,7 +155,10 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       deltaevo
       djds
+<<<<<<< HEAD
       johanot
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rtreffer
       rushmorem
     ];

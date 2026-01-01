@@ -39,12 +39,21 @@ buildPythonPackage {
     "test_set_config_defaults_with_ignore_patterns"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Docstring coverage analysis and rating for Python";
     mainProgram = "docstr-coverage";
     homepage = "https://github.com/HunterMcGushion/docstr_coverage";
     changelog = "https://github.com/HunterMcGushion/docstr_coverage/blob/master/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ augustebaum ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ augustebaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

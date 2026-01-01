@@ -39,7 +39,11 @@ buildGoModule rec {
        --zsh <($out/bin/jump shell zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Navigate directories faster by learning your habits";
     longDescription = ''
       Jump integrates with the shell and learns about your
@@ -47,7 +51,11 @@ buildGoModule rec {
       strives to give you the best directory for the shortest search term.
     '';
     homepage = "https://github.com/gsamokovarov/jump";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "jump";
   };

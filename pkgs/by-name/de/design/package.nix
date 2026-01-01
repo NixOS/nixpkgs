@@ -16,14 +16,22 @@
 
 stdenv.mkDerivation rec {
   pname = "design";
+<<<<<<< HEAD
   version = "48-alpha1";
+=======
+  version = "46-alpha1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "dubstar-04";
     repo = "Design";
     tag = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-xLARmvqJUxVjHHeak/BrpfIe18KCy9++8HRjOFjwE7I=";
+=======
+    hash = "sha256-Q4R/Ztu4w8IRvq15xNXN/iP/6hIHe/W+me1jROGpYc8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

@@ -26,10 +26,17 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_tunein.tunein" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mopidy extension for playing music from tunein";
     homepage = "https://github.com/kingosticks/mopidy-tunein";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Mopidy extension for playing music from tunein";
+    homepage = "https://github.com/kingosticks/mopidy-tunein";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -21,6 +21,7 @@ stdenv.mkDerivation {
     install -Dm555 git-cache $out/bin/git-cache
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Seb35/git-cache";
     license = lib.licenses.wtfpl;
@@ -28,5 +29,14 @@ stdenv.mkDerivation {
     mainProgram = "git-cache";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ maxhearnden ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Seb35/git-cache";
+    license = licenses.wtfpl;
+    description = "Program to add and manage a system-wide or user-wide cache for remote git repositories";
+    mainProgram = "git-cache";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ maxhearnden ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

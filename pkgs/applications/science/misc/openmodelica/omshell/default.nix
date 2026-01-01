@@ -45,6 +45,7 @@ mkOpenModelicaDerivation {
   dontUseQmakeConfigure = true;
   QMAKESPEC = "linux-clang";
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive OpenModelica session shell";
     homepage = "https://openmodelica.org";
@@ -54,5 +55,16 @@ mkOpenModelicaDerivation {
       smironov
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Interactive OpenModelica session shell";
+    homepage = "https://openmodelica.org";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+      balodja
+      smironov
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

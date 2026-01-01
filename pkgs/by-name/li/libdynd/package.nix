@@ -41,10 +41,18 @@ stdenv.mkDerivation rec {
   ];
   outputDoc = "dev";
 
+<<<<<<< HEAD
   meta = {
     description = "C++ dynamic ndarray library, with Python exposure";
     homepage = "http://libdynd.org";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "C++ dynamic ndarray library, with Python exposure";
+    homepage = "http://libdynd.org";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -25,11 +25,19 @@ rustPlatform.buildRustPackage rec {
   # requires nightly features
   RUSTC_BOOTSTRAP = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Functional programming language and proof assistant";
     mainProgram = "kind2";
     homepage = "https://github.com/higherorderco/kind";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Functional programming language and proof assistant";
+    mainProgram = "kind2";
+    homepage = "https://github.com/higherorderco/kind";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -80,16 +80,28 @@ buildPythonPackage rec {
     mock
     zipp
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [ "TestHardware" ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ap--/python-seabreeze";
     description = "Python library to access Ocean Optics spectrometers";
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ap--/python-seabreeze";
+    description = "Python library to access Ocean Optics spectrometers";
+    maintainers = [ ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -117,11 +117,19 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/libexec/clonehero/UnityPlayer.so"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Clone of Guitar Hero and Rockband-style games";
     homepage = "https://clonehero.net";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Clone of Guitar Hero and Rockband-style games";
+    homepage = "https://clonehero.net";
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kira-bruneau
       syboxez
     ];

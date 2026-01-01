@@ -14,11 +14,19 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "chef-cli";
 
+<<<<<<< HEAD
   meta = {
     description = "Chef Infra Client is a powerful agent that applies your configurations on remote Linux, macOS, Windows and cloud-based systems";
     homepage = "https://chef.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dylanmtaylor ];
+=======
+  meta = with lib; {
+    description = "Chef Infra Client is a powerful agent that applies your configurations on remote Linux, macOS, Windows and cloud-based systems";
+    homepage = "https://chef.io/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dylanmtaylor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "chef-cli";
   };
 }

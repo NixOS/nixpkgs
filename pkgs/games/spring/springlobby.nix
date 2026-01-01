@@ -68,11 +68,19 @@ stdenv.mkDerivation rec {
       --set SPRING_BUNDLE_DIR "${spring}/lib"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://springlobby.springrts.com";
     description = "Cross-platform lobby client for the Spring RTS project";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://springlobby.springrts.com";
+    description = "Cross-platform lobby client for the Spring RTS project";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       qknight
     ];
     platforms = [

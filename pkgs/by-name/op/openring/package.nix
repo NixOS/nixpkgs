@@ -20,11 +20,19 @@ buildGoModule rec {
   # The package has no tests.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Webring for static site generators";
     homepage = "https://sr.ht/~sircmpwn/openring";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sumnerevans ];
+=======
+  meta = with lib; {
+    description = "Webring for static site generators";
+    homepage = "https://sr.ht/~sircmpwn/openring";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ sumnerevans ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "openring";
   };
 }

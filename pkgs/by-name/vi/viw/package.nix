@@ -30,10 +30,17 @@ stdenv.mkDerivation {
     install -Dm 644 -t $out/share/doc/viw README.md
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "VI Worsened, a fun and light clone of VI";
     homepage = "https://github.com/lpan/viw";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "VI Worsened, a fun and light clone of VI";
+    homepage = "https://github.com/lpan/viw";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "viw";
   };

@@ -80,12 +80,21 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Create Nassi-Shneiderman diagrams (NSD)";
     homepage = "https://structorizer.fisch.lu";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ annaaurora ];
+=======
+  meta = with lib; {
+    description = "Create Nassi-Shneiderman diagrams (NSD)";
+    homepage = "https://structorizer.fisch.lu";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ annaaurora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "structorizer";
   };
 }

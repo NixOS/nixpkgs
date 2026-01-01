@@ -44,11 +44,20 @@ buildPythonPackage rec {
     "test_utilities_get_gitrootpath_function"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python utility for manipulating font version headers";
     mainProgram = "font-v";
     homepage = "https://github.com/source-foundry/font-v";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python utility for manipulating font version headers";
+    mainProgram = "font-v";
+    homepage = "https://github.com/source-foundry/font-v";
+    license = licenses.mit;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -26,10 +26,18 @@ buildPythonPackage rec {
   ];
   nativeCheckInputs = [ pytest8_3CheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Assertion library for Python";
     homepage = "http://heynemann.github.io/preggy/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Assertion library for Python";
+    homepage = "http://heynemann.github.io/preggy/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

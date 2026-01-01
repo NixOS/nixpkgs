@@ -38,15 +38,27 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "NFS client library";
     homepage = "https://github.com/sahlberg/libnfs";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "NFS client library";
+    homepage = "https://github.com/sahlberg/libnfs";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl2
       bsd2
       gpl3
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

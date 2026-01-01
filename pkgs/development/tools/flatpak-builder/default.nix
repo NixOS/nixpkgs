@@ -149,6 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to build flatpaks from source";
     mainProgram = "flatpak-builder";
@@ -156,5 +157,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ arthsmn ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool to build flatpaks from source";
+    mainProgram = "flatpak-builder";
+    homepage = "https://github.com/flatpak/flatpak-builder";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ arthsmn ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

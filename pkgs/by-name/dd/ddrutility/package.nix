@@ -24,11 +24,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of utilities for hard drive data rescue";
     homepage = "https://sourceforge.net/projects/ddrutility/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Set of utilities for hard drive data rescue";
+    homepage = "https://sourceforge.net/projects/ddrutility/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -62,11 +62,20 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r LV2/LibreArp.lv2 $out/lib/lv2
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pattern-based arpeggio generator plugin";
     homepage = "https://librearp.gitlab.io/";
     license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ magnetophon ];
+=======
+  meta = with lib; {
+    description = "Pattern-based arpeggio generator plugin";
+    homepage = "https://librearp.gitlab.io/";
+    license = licenses.gpl3Plus;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ magnetophon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

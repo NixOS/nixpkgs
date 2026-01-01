@@ -24,10 +24,18 @@ buildDunePackage rec {
   ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mirage/ocaml-ipaddr";
     description = "Library for manipulation of MAC address representations";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.alexfmpe ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mirage/ocaml-ipaddr";
+    description = "Library for manipulation of MAC address representations";
+    license = licenses.isc;
+    maintainers = [ maintainers.alexfmpe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

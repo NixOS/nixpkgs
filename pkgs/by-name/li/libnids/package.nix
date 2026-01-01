@@ -38,6 +38,7 @@ stdenv.mkDerivation {
   */
   env.NIX_CFLAGS_COMPILE = "-Dg_thread_init= ";
 
+<<<<<<< HEAD
   meta = {
     description = "E-component of Network Intrusion Detection System which emulates the IP stack of Linux 2.0.x";
     homepage = "https://libnids.sourceforge.net/";
@@ -45,5 +46,14 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.symphorien ];
     # probably also bsd and solaris
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "E-component of Network Intrusion Detection System which emulates the IP stack of Linux 2.0.x";
+    homepage = "https://libnids.sourceforge.net/";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.symphorien ];
+    # probably also bsd and solaris
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

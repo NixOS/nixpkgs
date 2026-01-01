@@ -17,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-SRk5kEUVmY3IJSB/XwchqWGnaXLQUoisx6KlVzMHdjg=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Cloud enumeration tool";
     mainProgram = "cloudbrute";
     longDescription = ''
@@ -26,7 +30,12 @@ buildGoModule rec {
       Alibaba, Vultr, Linode).
     '';
     homepage = "https://github.com/0xsha/CloudBrute";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -35,6 +35,7 @@ mkOpenModelicaDerivation {
     "-Wno-error=implicit-function-declaration"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "OpenModelica FMI & SSP-based co-simulation environment";
     homepage = "https://openmodelica.org";
@@ -44,5 +45,16 @@ mkOpenModelicaDerivation {
       smironov
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "OpenModelica FMI & SSP-based co-simulation environment";
+    homepage = "https://openmodelica.org";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+      balodja
+      smironov
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

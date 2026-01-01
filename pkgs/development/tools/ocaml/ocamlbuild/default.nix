@@ -43,11 +43,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Build system with builtin rules to easily build most OCaml projects";
     homepage = "https://github.com/ocaml/ocamlbuild/";
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    description = "Build system with builtin rules to easily build most OCaml projects";
+    homepage = "https://github.com/ocaml/ocamlbuild/";
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ocamlbuild";
     inherit (ocaml.meta) platforms;
   };

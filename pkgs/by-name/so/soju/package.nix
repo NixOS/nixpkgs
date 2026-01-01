@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   buildGoModule,
   fetchFromGitea,
   installShellFiles,
@@ -11,6 +12,17 @@
   withSqlite ? true,
 }:
 buildGoModule (finalAttrs: {
+=======
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  installShellFiles,
+  scdoc,
+  nixosTests,
+}:
+
+buildGoModule rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "soju";
   version = "0.10.1";
 
@@ -18,7 +30,11 @@ buildGoModule (finalAttrs: {
     domain = "codeberg.org";
     owner = "emersion";
     repo = "soju";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
+=======
+    rev = "v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-kOV7EFRr+Ca9bQ1bdDMNf1FiiniIHDebsf5SpbJshsI=";
   };
 
@@ -29,8 +45,11 @@ buildGoModule (finalAttrs: {
     scdoc
   ];
 
+<<<<<<< HEAD
   buildInputs = lib.optional withPam pam;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ldflags = [
     "-s"
     "-w"
@@ -38,18 +57,25 @@ buildGoModule (finalAttrs: {
     "-X codeberg.org/emersion/soju/config.DefaultUnixAdminPath=/run/soju/admin"
   ];
 
+<<<<<<< HEAD
   tags =
     lib.optional (!withSqlite) "nosqlite"
     ++ lib.optional withModernCSqlite "moderncsqlite"
     ++ lib.optional withPam "pam";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postBuild = ''
     make doc/soju.1 doc/sojuctl.1
   '';
 
+<<<<<<< HEAD
   checkFlags = [
     "-skip TestPostgresMigrations"
   ];
+=======
+  checkFlags = [ "-skip TestPostgresMigrations" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     installManPage doc/soju.1 doc/sojuctl.1
@@ -57,7 +83,11 @@ buildGoModule (finalAttrs: {
 
   passthru.tests.soju = nixosTests.soju;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "User-friendly IRC bouncer";
     longDescription = ''
       soju is a user-friendly IRC bouncer. soju connects to upstream IRC servers
@@ -67,12 +97,22 @@ buildGoModule (finalAttrs: {
       deployments.
     '';
     homepage = "https://soju.im";
+<<<<<<< HEAD
     changelog = "https://codeberg.org/emersion/soju/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    changelog = "https://codeberg.org/emersion/soju/releases/tag/${src.rev}";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       azahi
       malte-v
     ];
     mainProgram = "sojuctl";
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

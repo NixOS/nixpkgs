@@ -50,12 +50,21 @@ buildPythonPackage rec {
     "src/tests/test_integration.py" # runs pip install
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python docstring style checker";
     mainProgram = "pydocstyle";
     homepage = "https://github.com/PyCQA/pydocstyle";
     changelog = "https://github.com/PyCQA/pydocstyle/blob/${version}/docs/release_notes.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dzabraev ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ dzabraev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

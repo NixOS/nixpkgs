@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathable" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for object-oriented paths";
     homepage = "https://github.com/p1c2u/pathable";
     changelog = "https://github.com/p1c2u/pathable/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for object-oriented paths";
+    homepage = "https://github.com/p1c2u/pathable";
+    changelog = "https://github.com/p1c2u/pathable/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

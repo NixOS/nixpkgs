@@ -32,6 +32,10 @@ let
         nativeBuildInputs = [ unzip ];
         meta = a.meta // {
           platforms = graylogPackage.meta.platforms;
+<<<<<<< HEAD
+=======
+          maintainers = (a.meta.maintainers or [ ]) ++ [ maintainers.fadenb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           sourceProvenance = with sourceTypes; [ binaryBytecode ];
         };
       }

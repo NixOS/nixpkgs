@@ -49,10 +49,18 @@ buildPythonPackage rec {
     cd build/lib*
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "BSD-licensed HEALPix for Astropy";
     homepage = "https://github.com/astropy/astropy-healpix";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.smaret ];
+=======
+  meta = with lib; {
+    description = "BSD-licensed HEALPix for Astropy";
+    homepage = "https://github.com/astropy/astropy-healpix";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.smaret ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

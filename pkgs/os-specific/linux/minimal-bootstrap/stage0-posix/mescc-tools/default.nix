@@ -33,14 +33,21 @@ let
           ''${M2} --architecture ${m2libcArch} \
             -f ''${m2libc}/sys/types.h \
             -f ''${m2libc}/stddef.h \
+<<<<<<< HEAD
             -f ''${m2libc}/sys/utsname.h \
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             -f ''${m2libc}/${m2libcArch}/linux/fcntl.c \
             -f ''${m2libc}/fcntl.c \
             -f ''${m2libc}/${m2libcArch}/linux/unistd.c \
             -f ''${m2libc}/${m2libcArch}/linux/sys/stat.c \
+<<<<<<< HEAD
             -f ''${m2libc}/ctype.c \
             -f ''${m2libc}/stdlib.c \
             -f ''${m2libc}/stdarg.h \
+=======
+            -f ''${m2libc}/stdlib.c \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             -f ''${m2libc}/stdio.h \
             -f ''${m2libc}/stdio.c \
             -f ''${m2libc}/string.c \
@@ -109,11 +116,19 @@ derivationWithMeta {
     endianFlag
     ;
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://github.com/oriansj/mescc-tools";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.minimal-bootstrap ];
+=======
+  meta = with lib; {
+    description = "Collection of tools written for use in bootstrapping";
+    homepage = "https://github.com/oriansj/mescc-tools";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit platforms;
   };
 }

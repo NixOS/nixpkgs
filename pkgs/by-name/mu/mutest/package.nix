@@ -34,11 +34,20 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ebassi/mutest";
     description = "BDD testing framework for C, inspired by Mocha";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ebassi/mutest";
+    description = "BDD testing framework for C, inspired by Mocha";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

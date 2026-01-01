@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "py-madvr2";
+<<<<<<< HEAD
   version = "1.9.1";
+=======
+  version = "1.8.14";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iloveicedgreentea";
     repo = "py-madvr";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-yW2w0XwTRRT0h2spblziAkayklYZZi1uU1FJdiTSr6Y=";
+=======
+    hash = "sha256-7zYvbEoPlY49YZ9Akq+SfzMmqClrr3xTszVW2FUx62Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

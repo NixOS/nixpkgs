@@ -72,11 +72,20 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform GUI toolkit";
     homepage = "http://libagar.org/index.html";
     license = with lib.licenses; bsd3;
     maintainers = with lib.maintainers; [ ramkromberg ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Cross-platform GUI toolkit";
+    homepage = "http://libagar.org/index.html";
+    license = with licenses; bsd3;
+    maintainers = with maintainers; [ ramkromberg ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

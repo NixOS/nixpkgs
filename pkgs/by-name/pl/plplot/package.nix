@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform scientific graphics plotting library";
     mainProgram = "pltek";
@@ -56,5 +57,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
+=======
+  meta = with lib; {
+    description = "Cross-platform scientific graphics plotting library";
+    mainProgram = "pltek";
+    homepage = "https://plplot.org";
+    maintainers = with maintainers; [ bcdarwin ];
+    platforms = platforms.unix;
+    license = licenses.lgpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

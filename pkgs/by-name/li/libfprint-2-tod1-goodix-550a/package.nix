@@ -40,6 +40,7 @@ stdenv.mkDerivation {
 
   passthru.driverPath = "/lib/libfprint-2/tod-1";
 
+<<<<<<< HEAD
   meta = {
     description = "Goodix 550a driver module for libfprint-2-tod Touch OEM Driver (from Lenovo)";
     homepage = "https://support.lenovo.com/us/en/downloads/ds560884-goodix-fingerprint-driver-for-linux-thinkpad-e14-gen-4-e15-gen-4";
@@ -47,5 +48,14 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ utkarshgupta137 ];
+=======
+  meta = with lib; {
+    description = "Goodix 550a driver module for libfprint-2-tod Touch OEM Driver (from Lenovo)";
+    homepage = "https://support.lenovo.com/us/en/downloads/ds560884-goodix-fingerprint-driver-for-linux-thinkpad-e14-gen-4-e15-gen-4";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ utkarshgupta137 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

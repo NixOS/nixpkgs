@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Routines for clique searching";
     longDescription = ''
       Cliquer is a set of C routines for finding cliques in an arbitrary weighted graph.
@@ -35,9 +39,16 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://users.aalto.fi/~pat/cliquer.html";
     downloadPage = src.meta.homepage; # autocliquer
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.sage ];
     mainProgram = "cl";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    teams = [ teams.sage ];
+    mainProgram = "cl";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

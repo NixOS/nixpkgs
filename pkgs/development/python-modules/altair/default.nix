@@ -79,13 +79,22 @@ buildPythonPackage rec {
     "tests/utils/test_compiler.py"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Declarative statistical visualization library for Python";
     homepage = "https://altair-viz.github.io";
     downloadPage = "https://github.com/altair-viz/altair";
     changelog = "https://altair-viz.github.io/releases/changes.html";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       teh
       vinetos
     ];

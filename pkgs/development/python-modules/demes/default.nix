@@ -41,11 +41,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "demes" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for describing and manipulating demographic models";
     mainProgram = "demes";
     homepage = "https://github.com/popsim-consortium/demes-python";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Tools for describing and manipulating demographic models";
+    mainProgram = "demes";
+    homepage = "https://github.com/popsim-consortium/demes-python";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

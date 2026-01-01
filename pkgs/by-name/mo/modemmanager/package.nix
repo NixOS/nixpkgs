@@ -121,11 +121,20 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "WWAN modem manager, part of NetworkManager";
     homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "WWAN modem manager, part of NetworkManager";
+    homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
+    license = licenses.gpl2Plus;
+    teams = [ teams.freedesktop ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

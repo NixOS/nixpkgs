@@ -11,14 +11,22 @@
   unzip,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "rtg-tools";
   version = "3.13";
 
   src = fetchFromGitHub {
     owner = "RealTimeGenomics";
     repo = "rtg-tools";
+<<<<<<< HEAD
     rev = finalAttrs.version;
+=======
+    rev = version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-vPzKrgnX6BCQmn9aOVWWpFLC6SbPBHZhZ+oL1LCbvmo=";
   };
 
@@ -59,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     ant runalltests
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/RealTimeGenomics/rtg-tools";
     description = "Useful utilities for dealing with VCF files and sequence data, especially vcfeval";
@@ -68,3 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "rtg";
   };
 })
+=======
+  meta = with lib; {
+    homepage = "https://github.com/RealTimeGenomics/rtg-tools";
+    description = "Useful utilities for dealing with VCF files and sequence data, especially vcfeval";
+    license = licenses.bsd2;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ apraga ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

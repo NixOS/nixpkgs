@@ -48,11 +48,20 @@ stdenv.mkDerivation {
       --set PERL5LIB "$out/share/$pname:${with perlPackages; makePerlPath [ Tk ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux configuration checker for systems to be used for real-time audio";
     homepage = "https://github.com/raboof/realtimeconfigquickscan";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Linux configuration checker for systems to be used for real-time audio";
+    homepage = "https://github.com/raboof/realtimeconfigquickscan";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

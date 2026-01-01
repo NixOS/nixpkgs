@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   stdenv,
   lib,
   fetchFromGitHub,
@@ -16,10 +17,26 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
   version = "5.12.3";
+=======
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  python3,
+  electron_37,
+  makeDesktopItem,
+  makeShellWrapper,
+  copyDesktopItems,
+}:
+
+buildNpmPackage rec {
+  pname = "zulip";
+  version = "5.12.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-jRco2eyQrWf5jGvdWYn4mt8FD/xu1+FftQoB3wuF2Lw=";
   };
@@ -47,6 +64,32 @@ stdenv.mkDerivation (finalAttrs: {
       node --run pack -- \
       -c.electronDist=${electron_39}/libexec/electron \
       -c.electronVersion=${electron_39.version}
+=======
+    tag = "v${version}";
+    hash = "sha256-+OS3Fw4Z1ZOzXou1sK39AUFLI78nUl4UBVYA3SNH7I0=";
+  };
+
+  npmDepsHash = "sha256-5qjBZfl9kse97y5Mru4RF4RLTbojoXeUp84I/bOHEcw=";
+  makeCacheWritable = true;
+
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  };
+
+  nativeBuildInputs = [
+    makeShellWrapper
+    copyDesktopItems
+    (python3.withPackages (ps: with ps; [ distutils ]))
+  ];
+
+  dontNpmBuild = true;
+  buildPhase = ''
+    runHook preBuild
+
+    npm run pack -- \
+      -c.electronDist=${electron_37}/libexec/electron \
+      -c.electronVersion=${electron_37.version}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     runHook postBuild
   '';
@@ -59,8 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
+<<<<<<< HEAD
     makeBinaryWrapper '${lib.getExe electron_39}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
+=======
+    makeShellWrapper '${lib.getExe electron_37}' "$out/bin/zulip" \
+      --add-flags "$out/share/lib/zulip/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}" \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       --inherit-argv0
 
     runHook postInstall
@@ -83,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Desktop client for Zulip Chat";
     homepage = "https://zulip.com";
@@ -92,3 +142,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "zulip";
   };
 })
+=======
+  meta = with lib; {
+    description = "Desktop client for Zulip Chat";
+    homepage = "https://zulip.com";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ andersk ];
+    platforms = lib.platforms.linux;
+    mainProgram = "zulip";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

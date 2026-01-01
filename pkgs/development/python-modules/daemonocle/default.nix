@@ -43,7 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "daemonocle" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library for creating super fancy Unix daemons";
     longDescription = ''
       daemonocle is a library for creating your own Unix-style daemons
@@ -52,8 +56,14 @@ buildPythonPackage rec {
       often see in other daemons.
     '';
     homepage = "https://github.com/jnrbsn/daemonocle";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -90,6 +90,7 @@ buildPythonPackage rec {
     pytest-dependency
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # flaky, timing sensitive
     "test_timing"
@@ -98,15 +99,29 @@ buildPythonPackage rec {
     "test_argument_device_expansion"
     "test_argument_file_expansion"
     "test_local_managedfile"
+=======
+  disabledtests = [
+    # flaky, timing sensitive
+    "test_timing"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pytestFlags = [ "--benchmark-disable" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Embedded control & testing library";
     homepage = "https://github.com/labgrid-project/labgrid";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ emantor ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Embedded control & testing library";
+    homepage = "https://github.com/labgrid-project/labgrid";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ emantor ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

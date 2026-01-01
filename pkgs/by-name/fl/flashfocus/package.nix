@@ -58,11 +58,20 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/fennerm/flashfocus";
     description = "Simple focus animations for tiling window managers";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ artturin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/fennerm/flashfocus";
+    description = "Simple focus animations for tiling window managers";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ artturin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

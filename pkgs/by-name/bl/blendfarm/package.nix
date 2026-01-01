@@ -131,6 +131,7 @@ buildDotnetModule rec {
       ln -s ${libgdiplus}/lib/libgdiplus.dylib $out/lib/blendfarm/
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source, cross-platform, stand-alone, Network Renderer for Blender";
     homepage = "https://github.com/LogicReinc/LogicReinc.BlendFarm";
@@ -138,5 +139,14 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ gador ];
     mainProgram = "blendfarm-nix";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Open-source, cross-platform, stand-alone, Network Renderer for Blender";
+    homepage = "https://github.com/LogicReinc/LogicReinc.BlendFarm";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ gador ];
+    mainProgram = "blendfarm-nix";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

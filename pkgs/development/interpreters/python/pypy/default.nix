@@ -171,11 +171,14 @@ stdenv.mkDerivation rec {
       inherit (sqlite) out dev;
       libsqlite = "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+<<<<<<< HEAD
 
     # PyPy sets an explicit minimum SDK version for darwin that is much older
     # than what we default to on nixpkgs.
     # Simply removing the explicit flag makes it use our default instead.
     ./darwin_version_min.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''
@@ -395,12 +398,20 @@ stdenv.mkDerivation rec {
   inherit passthru;
   enableParallelBuilding = true; # almost no parallelization without STM
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.pypy.org/";
     changelog = "https://doc.pypy.org/en/stable/release-v${version}.html";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     mainProgram = "pypy";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
@@ -408,7 +419,11 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
     ];
     broken = optimizationLevel == "0"; # generates invalid code
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       andersk
       fliegendewurst
     ];

@@ -32,11 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.citi.umich.edu/projects/nfsv4/linux/";
     description = "Exports a gssapi interface which calls other random gssapi libraries";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ corngood ];
+=======
+  meta = with lib; {
+    homepage = "http://www.citi.umich.edu/projects/nfsv4/linux/";
+    description = "Exports a gssapi interface which calls other random gssapi libraries";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ corngood ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

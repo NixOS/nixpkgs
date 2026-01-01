@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pvo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to interact with the PVOutput API";
     homepage = "https://github.com/frenck/python-pvoutput";
     changelog = "https://github.com/frenck/python-pvoutput/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to interact with the PVOutput API";
+    homepage = "https://github.com/frenck/python-pvoutput";
+    changelog = "https://github.com/frenck/python-pvoutput/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   passthru.tests.unit-tests = nixosTests.txredisapi;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/IlyaSkriblovsky/txredisapi";
     description = "Non-blocking redis client for python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/IlyaSkriblovsky/txredisapi";
+    description = "Non-blocking redis client for python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

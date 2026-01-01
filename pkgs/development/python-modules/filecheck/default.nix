@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "filecheck" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/antonlydike/filecheck/releases/tag/${src.tag}";
     homepage = "https://github.com/antonlydike/filecheck";
@@ -31,5 +32,14 @@ buildPythonPackage rec {
     description = "Python-native clone of LLVMs FileCheck tool";
     mainProgram = "filecheck";
     maintainers = with lib.maintainers; [ yorickvp ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/antonlydike/filecheck/releases/tag/${src.tag}";
+    homepage = "https://github.com/antonlydike/filecheck";
+    license = licenses.asl20;
+    description = "Python-native clone of LLVMs FileCheck tool";
+    mainProgram = "filecheck";
+    maintainers = with maintainers; [ yorickvp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

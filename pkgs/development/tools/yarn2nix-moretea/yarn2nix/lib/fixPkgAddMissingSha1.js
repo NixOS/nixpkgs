@@ -7,7 +7,11 @@ const crypto = require("crypto");
 
 function getSha1(url) {
   return new Promise((resolve, reject) => {
+<<<<<<< HEAD
     https.get(url, (res) => {
+=======
+    https.get(url, res => {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       const { statusCode } = res;
       const hash = crypto.createHash("sha1");
 
@@ -20,7 +24,11 @@ function getSha1(url) {
         reject(err);
       }
 
+<<<<<<< HEAD
       res.on("data", (chunk) => {
+=======
+      res.on("data", chunk => {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         hash.update(chunk);
       });
 
@@ -39,7 +47,11 @@ async function fixPkgAddMissingSha1(pkg) {
 
   if (!pkg.resolved) {
     console.error(
+<<<<<<< HEAD
       `yarn2nix: can't find "resolved" field for package ${pkg.nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`,
+=======
+      `yarn2nix: can't find "resolved" field for package ${pkg.nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     );
     return pkg;
   }
@@ -57,7 +69,11 @@ async function fixPkgAddMissingSha1(pkg) {
 
   return {
     ...pkg,
+<<<<<<< HEAD
     resolved: `${url}#${newSha1}`,
+=======
+    resolved: `${url}#${newSha1}`
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 

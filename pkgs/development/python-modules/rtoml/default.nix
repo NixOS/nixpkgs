@@ -55,10 +55,17 @@ buildPythonPackage rec {
     rm -rf rtoml
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Rust based TOML library for Python";
     homepage = "https://github.com/samuelcolvin/rtoml";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Rust based TOML library for Python";
+    homepage = "https://github.com/samuelcolvin/rtoml";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

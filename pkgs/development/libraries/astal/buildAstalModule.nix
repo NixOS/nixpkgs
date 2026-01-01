@@ -65,7 +65,11 @@ let
         meta = {
           homepage = "https://aylur.github.io/astal/guide/libraries/${website-path}";
           license = lib.licenses.lgpl21;
+<<<<<<< HEAD
           maintainers = with lib.maintainers; [ PerchunPak ];
+=======
+          maintainers = with lib.maintainers; [ perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           platforms = [
             "aarch64-linux"
             "x86_64-linux"

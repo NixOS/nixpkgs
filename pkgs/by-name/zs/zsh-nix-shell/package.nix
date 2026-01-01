@@ -27,11 +27,20 @@ stdenv.mkDerivation rec {
     ln -s $out/share/zsh/plugins/zsh-nix-shell $out/share/zsh-nix-shell
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Zsh plugin that lets you use zsh in nix-shell shell";
     homepage = src.meta.homepage;
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aw ];
+=======
+  meta = with lib; {
+    description = "Zsh plugin that lets you use zsh in nix-shell shell";
+    homepage = src.meta.homepage;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ aw ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

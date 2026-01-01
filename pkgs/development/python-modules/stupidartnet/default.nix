@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stupidArtnet" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library implementation of the Art-Net protocol";
     homepage = "https://github.com/cpvalente/stupidArtnet";
     changelog = "https://github.com/cpvalente/stupidArtnet/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library implementation of the Art-Net protocol";
+    homepage = "https://github.com/cpvalente/stupidArtnet";
+    changelog = "https://github.com/cpvalente/stupidArtnet/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

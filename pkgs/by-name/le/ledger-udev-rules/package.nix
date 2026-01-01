@@ -30,6 +30,7 @@ stdenv.mkDerivation {
     cp 20-hw1.rules $out/lib/udev/rules.d/20-ledger.rules
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "udev rules for Ledger devices";
     license = lib.licenses.asl20;
@@ -38,6 +39,16 @@ stdenv.mkDerivation {
       toasteruwu
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "udev rules for Ledger devices";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      asymmetric
+      toasteruwu
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/LedgerHQ/udev-rules";
   };
 }

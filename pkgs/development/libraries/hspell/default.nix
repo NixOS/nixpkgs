@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
     version = "1.4";
   };
 
+<<<<<<< HEAD
   env.PERL_USE_UNSAFE_INC = "1";
+=======
+  PERL_USE_UNSAFE_INC = "1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
@@ -47,6 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+<<<<<<< HEAD
   __structuredAttrs = true;
 
   meta = {
@@ -54,5 +59,13 @@ stdenv.mkDerivation rec {
     homepage = "http://hspell.ivrix.org.il/";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2;
+=======
+
+  meta = with lib; {
+    description = "Hebrew spell checker";
+    homepage = "http://hspell.ivrix.org.il/";
+    platforms = platforms.all;
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

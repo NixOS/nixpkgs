@@ -48,6 +48,34 @@ let
     else
       networkList;
 
+<<<<<<< HEAD
+=======
+  # Content of wpa_supplicant.conf
+  generatedConfig = concatStringsSep "\n" (
+    (map mkNetwork allNetworks)
+    ++ optional cfg.userControlled.enable (
+      concatStringsSep "\n" [
+        "ctrl_interface=/run/wpa_supplicant"
+        "ctrl_interface_group=${cfg.userControlled.group}"
+        "update_config=1"
+      ]
+    )
+    ++ [ "pmf=1" ]
+    ++ optional (cfg.secretsFile != null) "ext_password_backend=file:${cfg.secretsFile}"
+    ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
+    ++ optional (cfg.extraConfig != "") cfg.extraConfig
+  );
+
+  configIsGenerated = with cfg; networks != { } || extraConfig != "" || userControlled.enable;
+
+  # the original configuration file
+  configFile =
+    if configIsGenerated then
+      pkgs.writeText "wpa_supplicant.conf" generatedConfig
+    else
+      "/etc/wpa_supplicant.conf";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Creates a network block for wpa_supplicant.conf
   mkNetwork =
     opts:
@@ -79,12 +107,15 @@ let
       }
     '';
 
+<<<<<<< HEAD
   hasDeclarative = lib.any id [
     (cfg.networks != { })
     (cfg.extraConfig != "")
     cfg.userControlled
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Creates a systemd unit for wpa_supplicant bound to a given (or any) interface
   mkUnit =
     iface:
@@ -95,11 +126,17 @@ let
       configStr =
         (
           if cfg.allowAuxiliaryImperativeNetworks then
+<<<<<<< HEAD
             "-c /etc/wpa_supplicant/imperative.conf -I /etc/wpa_supplicant/nixos.conf"
           else if hasDeclarative then
             "-c /etc/wpa_supplicant/nixos.conf"
           else
             "-c /etc/wpa_supplicant/imperative.conf"
+=======
+            "-c /etc/wpa_supplicant.conf -I ${configFile}"
+          else
+            "-c ${configFile}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         )
         + lib.concatMapStrings (p: " -I " + p) cfg.extraConfigFiles;
     in
@@ -111,6 +148,7 @@ let
       wants = [ "network.target" ];
       requires = deviceUnit;
       wantedBy = [ "multi-user.target" ];
+<<<<<<< HEAD
 
       stopIfChanged = false;
       restartTriggers = [ config.environment.etc."wpa_supplicant/nixos.conf".source ];
@@ -205,6 +243,34 @@ let
               args="-i${iface} $iface_args"
             ''
           else if cfg.autoDetectInterfaces then
+=======
+      stopIfChanged = false;
+
+      path = [ pkgs.wpa_supplicant ];
+      # if `userControl.enable`, the supplicant automatically changes the permissions
+      #  and owning group of the runtime dir; setting `umask` ensures the generated
+      #  config file isn't readable (except to root);  see nixpkgs#267693
+      serviceConfig.UMask = "066";
+      serviceConfig.RuntimeDirectory = "wpa_supplicant";
+      serviceConfig.RuntimeDirectoryMode = "700";
+
+      script = ''
+        ${optionalString (configIsGenerated && !cfg.allowAuxiliaryImperativeNetworks) ''
+          if [ -f /etc/wpa_supplicant.conf ]; then
+            echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+          fi
+        ''}
+
+        # ensure wpa_supplicant.conf exists, or the daemon will fail to start
+        ${optionalString cfg.allowAuxiliaryImperativeNetworks ''
+          touch /etc/wpa_supplicant.conf
+        ''}
+
+        iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
+
+        ${
+          if iface == null then
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             ''
               # detect interfaces automatically
 
@@ -227,6 +293,7 @@ let
               done
             ''
           else
+<<<<<<< HEAD
             "args=$iface_args"
         }
 
@@ -235,6 +302,17 @@ let
         exec wpa_supplicant $args
       '';
       enableStrictShellChecks = true;
+=======
+            ''
+              # add known interface to the daemon arguments
+              args="-i${iface} $iface_args"
+            ''
+        }
+
+        # finally start daemon
+        exec wpa_supplicant $args
+      '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
   systemctl = "/run/current-system/systemd/bin/systemctl";
@@ -253,8 +331,12 @@ in
           "wlan1"
         ];
         description = ''
+<<<<<<< HEAD
           The interfaces {command}`wpa_supplicant` will use. If empty and
           [](#opt-networking.wireless.autoDetectInterfaces) is true it will
+=======
+          The interfaces {command}`wpa_supplicant` will use. If empty, it will
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           automatically use all wireless interfaces.
 
           ::: {.note}
@@ -263,10 +345,13 @@ in
         '';
       };
 
+<<<<<<< HEAD
       autoDetectInterfaces = mkEnableOption "automatic detection of wireless interfaces" // {
         default = true;
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       driver = mkOption {
         type = types.str;
         default = "nl80211,wext";
@@ -556,6 +641,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       userControlled = mkOption {
         type =
           with types;
@@ -586,6 +672,29 @@ in
           is used.
           :::
         '';
+=======
+      userControlled = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
+            This is useful for laptop users that switch networks a lot and don't want
+            to depend on a large package such as NetworkManager just to pick nearby
+            access points.
+
+            When using a declarative network specification you cannot persist any
+            settings via wpa_gui or wpa_cli.
+          '';
+        };
+
+        group = mkOption {
+          type = types.str;
+          default = "wheel";
+          example = "network";
+          description = "Members of this group can control wpa_supplicant.";
+        };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
       dbusControlled = mkOption {
@@ -599,7 +708,11 @@ in
       };
 
       extraConfig = mkOption {
+<<<<<<< HEAD
         type = types.lines;
+=======
+        type = types.str;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         default = "";
         example = ''
           p2p_disabled=1
@@ -686,6 +799,7 @@ in
         }
       ];
 
+<<<<<<< HEAD
     users.groups.wpa_supplicant = { };
     users.users.wpa_supplicant = {
       isSystemUser = true;
@@ -713,6 +827,11 @@ in
       ++ optional (cfg.extraConfig != "") cfg.extraConfig
     );
 
+=======
+    hardware.wirelessRegulatoryDatabase = true;
+
+    environment.systemPackages = [ pkgs.wpa_supplicant ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     services.dbus.packages = optional cfg.dbusControlled pkgs.wpa_supplicant;
 
     systemd.services =

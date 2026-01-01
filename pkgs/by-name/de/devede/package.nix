@@ -70,6 +70,7 @@ buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "DVD Creator for Linux";
     homepage = "https://www.rastersoft.com/programas/devede.html";
@@ -77,6 +78,15 @@ buildPythonApplication rec {
     maintainers = [
       lib.maintainers.bdimcheff
       lib.maintainers.baksa
+=======
+  meta = with lib; {
+    description = "DVD Creator for Linux";
+    homepage = "https://www.rastersoft.com/programas/devede.html";
+    license = licenses.gpl3;
+    maintainers = [
+      maintainers.bdimcheff
+      maintainers.baksa
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

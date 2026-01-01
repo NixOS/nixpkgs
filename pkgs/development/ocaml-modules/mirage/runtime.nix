@@ -28,10 +28,18 @@ buildDunePackage (finalAttrs: {
   checkInputs = [ alcotest ];
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mirage/mirage";
     description = "Base MirageOS runtime library, part of every MirageOS unikernel";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mirage/mirage";
+    description = "Base MirageOS runtime library, part of every MirageOS unikernel";
+    license = licenses.isc;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

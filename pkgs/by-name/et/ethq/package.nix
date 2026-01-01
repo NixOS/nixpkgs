@@ -27,12 +27,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Ethernet NIC Queue stats viewer";
     mainProgram = "ethq";
     homepage = "https://github.com/isc-projects/ethq";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Ethernet NIC Queue stats viewer";
+    mainProgram = "ethq";
+    homepage = "https://github.com/isc-projects/ethq";
+    license = licenses.mpl20;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

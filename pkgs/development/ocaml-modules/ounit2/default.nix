@@ -24,10 +24,18 @@ buildDunePackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/gildor478/ounit";
     description = "Unit test framework for OCaml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/gildor478/ounit";
+    description = "Unit test framework for OCaml";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

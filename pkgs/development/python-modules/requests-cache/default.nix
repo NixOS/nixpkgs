@@ -102,11 +102,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_cache" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
     changelog = "https://github.com/requests-cache/requests-cache/blob/v${version}/HISTORY.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Persistent cache for requests library";
+    homepage = "https://github.com/reclosedev/requests-cache";
+    changelog = "https://github.com/requests-cache/requests-cache/blob/v${version}/HISTORY.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

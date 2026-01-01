@@ -37,10 +37,17 @@ stdenv.mkDerivation {
       --replace /usr $out
   '';
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://sourceforge.net/projects/qrc/";
     description = "Remote control your desktop from your mobile";
     mainProgram = "qremotecontrol-server";

@@ -21,11 +21,19 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal based application that provides stock price information";
     homepage = "https://github.com/shweshi/terminal-stocks";
     maintainers = with lib.maintainers; [ mislavzanic ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Terminal based application that provides stock price information";
+    homepage = "https://github.com/shweshi/terminal-stocks";
+    maintainers = with maintainers; [ mislavzanic ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "terminal-stocks";
   };
 }

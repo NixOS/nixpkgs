@@ -217,6 +217,10 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       pierron
       globin
+<<<<<<< HEAD
+=======
+      lsix
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

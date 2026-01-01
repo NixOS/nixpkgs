@@ -16,18 +16,30 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gel";
+<<<<<<< HEAD
   version = "7.10.2";
+=======
+  version = "7.7.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "geldata";
     repo = "gel-cli";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Fy4J7puunqB5TeUsafnOotoWNvtTGiMJZ06YII14zIM=";
+=======
+    hash = "sha256-4dFajTGYczolQXnpcRBPWCD68EUiPVDRGIMwGh/K2UY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
+<<<<<<< HEAD
     hash = "sha256-VRZjI8C0u+6MkQgzt0PApeUtrGR5UqvnLZxityMGnDo=";
+=======
+    hash = "sha256-4LLGg+f8Q7jskQr/wY0eCDkn9bC+zDpMvyF5D0A1oG4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -68,7 +80,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Gel cli";
     homepage = "https://docs.geldata.com/reference/cli";
+<<<<<<< HEAD
     changelog = "https://github.com/geldata/gel-cli/compare/v7.7.0...v7.10.2";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = with lib.licenses; [
       asl20
       # or

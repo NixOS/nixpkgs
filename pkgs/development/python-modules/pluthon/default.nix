@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pluthon" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pluto-like programming language for Cardano Smart Contracts in Python";
     homepage = "https://github.com/OpShin/pluthon";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aciceri ];
+=======
+  meta = with lib; {
+    description = "Pluto-like programming language for Cardano Smart Contracts in Python";
+    homepage = "https://github.com/OpShin/pluthon";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aciceri ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

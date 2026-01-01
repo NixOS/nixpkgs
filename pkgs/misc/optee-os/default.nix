@@ -95,13 +95,22 @@ let
         '';
 
         meta =
+<<<<<<< HEAD
 
+=======
+          with lib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           {
             description = "Trusted Execution Environment for ARM";
             homepage = "https://github.com/OP-TEE/optee_os";
             changelog = "https://github.com/OP-TEE/optee_os/blob/${defaultVersion}/CHANGELOG.md";
+<<<<<<< HEAD
             license = lib.licenses.bsd2;
             maintainers = [ lib.maintainers.jmbaur ];
+=======
+            license = licenses.bsd2;
+            maintainers = [ maintainers.jmbaur ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           }
           // extraMeta;
       }

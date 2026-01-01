@@ -3,7 +3,10 @@
   include,
   libcMinimal,
   libgcc,
+<<<<<<< HEAD
   libsys,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   csu,
 }:
 
@@ -27,7 +30,10 @@ mkDerivation {
     include
     libcMinimal
     libgcc
+<<<<<<< HEAD
     libsys
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   preBuild = ''

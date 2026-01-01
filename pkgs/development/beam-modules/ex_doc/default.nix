@@ -14,12 +14,20 @@
 
 let
   pname = "ex_doc";
+<<<<<<< HEAD
   version = "0.39.3";
+=======
+  version = "0.39.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-LLy4gemj3oiMbZKc9ZUWY3g2fyY1Rvxjtzx/sbAp8JE=";
+=======
+    hash = "sha256-edK484d5Fn5Kb/UEV1g3XinFF1rQJ1DypLEueET//Bg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 mixRelease {
@@ -50,14 +58,25 @@ mixRelease {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/elixir-lang/ex_doc";
     description = ''
       ExDoc produces HTML and EPUB documentation for Elixir projects
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     mainProgram = "ex_doc";
     maintainers = with lib.maintainers; [ chiroptical ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    mainProgram = "ex_doc";
+    maintainers = with maintainers; [ chiroptical ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -60,7 +60,11 @@ buildPythonPackage rec {
     glibcLocales
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env.LC_ALL = "en_US.UTF8";
 
@@ -78,12 +82,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "urwid" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Full-featured console (xterm et al.) user interface library";
     changelog = "https://github.com/urwid/urwid/releases/tag/${src.tag}";
     downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
+=======
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

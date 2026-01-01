@@ -62,7 +62,11 @@ stdenv.mkDerivation {
     chmod +x $out/bin/discrete_vga_poweroff $out/bin/discrete_vga_poweron
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Module for powering off hybrid GPUs";
     platforms = [
       "x86_64-linux"
@@ -70,6 +74,10 @@ stdenv.mkDerivation {
     ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
+=======
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

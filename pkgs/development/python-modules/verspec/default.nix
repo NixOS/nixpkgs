@@ -31,11 +31,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "verspec" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible version handling";
     homepage = "https://github.com/jimporter/verspec";
     changelog = "https://github.com/jimporter/averspec/releases/tag/v${version}";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Flexible version handling";
+    homepage = "https://github.com/jimporter/verspec";
+    changelog = "https://github.com/jimporter/averspec/releases/tag/v${version}";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd2 # and
       asl20
     ];

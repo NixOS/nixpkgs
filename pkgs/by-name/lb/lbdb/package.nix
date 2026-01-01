@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     ./add-methods-to-rc.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.spinnaker.de/lbdb/";
     description = "Little Brother's Database";
@@ -66,5 +67,16 @@ stdenv.mkDerivation rec {
       bfortz
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.spinnaker.de/lbdb/";
+    description = "Little Brother's Database";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      kaiha
+      bfortz
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

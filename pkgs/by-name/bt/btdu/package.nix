@@ -30,6 +30,7 @@ buildDubPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Sampling disk usage profiler for btrfs";
     homepage = "https://github.com/CyberShadow/btdu";
@@ -37,6 +38,15 @@ buildDubPackage rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Sampling disk usage profiler for btrfs";
+    homepage = "https://github.com/CyberShadow/btdu";
+    changelog = "https://github.com/CyberShadow/btdu/releases/tag/${src.rev}";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       atila
       cybershadow
     ];

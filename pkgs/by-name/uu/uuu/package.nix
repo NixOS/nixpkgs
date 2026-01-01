@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uuu";
+<<<<<<< HEAD
   version = "1.5.243";
+=======
+  version = "1.5.233";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "mfgtools";
     rev = "uuu_${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-+m3r/QxOnTjemqIaZ/2cxDHtHlw7qxu9PbTsQYyMaEY=";
+=======
+    hash = "sha256-x3C9bEE99XOIpnPjVV7Je5mfdhwN0nTkiuBxrwWZ7CI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru.updateScript = nix-update-script {
@@ -63,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Freescale/NXP I.MX Chip image deploy tools";
     homepage = "https://github.com/nxp-imx/mfgtools";
@@ -70,5 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ otavio ];
     mainProgram = "uuu";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Freescale/NXP I.MX Chip image deploy tools";
+    homepage = "https://github.com/nxp-imx/mfgtools";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ otavio ];
+    mainProgram = "uuu";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -39,11 +39,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Rule-based double-entry bookkeeping importer (from Alipay/WeChat/Huobi etc. to Beancount/Ledger)";
     homepage = "https://github.com/deb-sig/double-entry-generator";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rennsax ];
+=======
+  meta = with lib; {
+    description = "Rule-based double-entry bookkeeping importer (from Alipay/WeChat/Huobi etc. to Beancount/Ledger)";
+    homepage = "https://github.com/deb-sig/double-entry-generator";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rennsax ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "double-entry-generator";
   };
 }

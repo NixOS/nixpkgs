@@ -33,12 +33,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "socialscan" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library and CLI for accurately querying username and email usage on online platforms";
     mainProgram = "socialscan";
     homepage = "https://github.com/iojw/socialscan";
     changelog = "https://github.com/iojw/socialscan/releases/tag/v${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [ mpl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mpl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

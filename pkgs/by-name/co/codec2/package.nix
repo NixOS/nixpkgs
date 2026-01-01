@@ -77,12 +77,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Speech codec designed for communications quality speech at low data rates";
     homepage = "https://www.rowetel.com/codec2.html";
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ markuskowa ];
+=======
+  meta = with lib; {
+    description = "Speech codec designed for communications quality speech at low data rates";
+    homepage = "https://www.rowetel.com/codec2.html";
+    license = licenses.lgpl21Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "codec2" ];
   };
 })

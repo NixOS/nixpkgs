@@ -1,5 +1,6 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
@@ -7,10 +8,18 @@
   wcwidth,
   six,
   pytestCheckHook,
+=======
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  wcwidth,
+  pytest,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mock,
   glibcLocales,
 }:
 
+<<<<<<< HEAD
 buildPythonPackage {
   pname = "blessed";
   # We need https://github.com/jquast/blessed/pull/311 to fix 3.13
@@ -33,11 +42,26 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
+=======
+buildPythonPackage rec {
+  pname = "blessed";
+  version = "1.21.0";
+  format = "setuptools";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-7Oi7xHWKuRdkUvTjpxnXAIjrVzl5jNVYLJ4F8qKDN+w=";
+  };
+
+  nativeCheckInputs = [
+    pytest
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mock
     glibcLocales
   ];
 
   # Default tox.ini parameters not needed
+<<<<<<< HEAD
   preCheck = ''
     rm tox.ini
   '';
@@ -52,5 +76,22 @@ buildPythonPackage {
     description = "Thin, practical wrapper around terminal capabilities in Python";
     maintainers = with lib.maintainers; [ eqyiel ];
     license = lib.licenses.mit;
+=======
+  checkPhase = ''
+    rm tox.ini
+    pytest
+  '';
+
+  propagatedBuildInputs = [
+    wcwidth
+    six
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/jquast/blessed";
+    description = "Thin, practical wrapper around terminal capabilities in Python";
+    maintainers = with maintainers; [ eqyiel ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

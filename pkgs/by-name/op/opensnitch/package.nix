@@ -1,6 +1,10 @@
 {
   buildGoModule,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   protobuf,
   go-protobuf,
   pkg-config,
@@ -34,15 +38,39 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "opensnitch";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.7.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Bz5h2DEC61vpkeWZxFlogh6NvTubJcnHuwgTNSzZd68=";
   };
 
+=======
+    hash = "sha256-XAR7yZjAzbMxIVGSV82agpAGwlejkILGgDI6iRicZuQ=";
+  };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/evilsocket/opensnitch/pull/1418
+      # allow configuring the audit socket path
+      url = "https://github.com/evilsocket/opensnitch/commit/f9358a464f204068359bf5174e6ff43288f12c7e.patch?full_index=1";
+      hash = "sha256-s9CM1CyGpfJZXEtihXCM7nfPhBY8XuwubynTotqtf3E=";
+    })
+    (fetchpatch {
+      # add missing colon in test definition
+      url = "https://github.com/evilsocket/opensnitch/commit/4b38ca1260295d2e0f8c4a7313529f83dcca4554.patch?full_index=1";
+      hash = "sha256-/z3iFRpcv75FyarVnpK8/PTU2fcFHS+SNbHn7M5Etk8=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     # Allow configuring Version at build time
     substituteInPlace daemon/core/version.go --replace-fail "const " "var "
@@ -72,11 +100,21 @@ buildGoModule (finalAttrs: {
   postBuild = ''
     mv $GOPATH/bin/daemon $GOPATH/bin/opensnitchd
     mkdir -p $out/etc/opensnitchd $out/lib/systemd/system
+<<<<<<< HEAD
     cp -r data/{rules,*.json} $out/etc/opensnitchd/
     substituteInPlace $out/etc/opensnitchd/default-config.json \
       --replace-fail "/var/log/opensnitchd.log" "/dev/stdout"
     # Fixup hardcoded paths
     substitute data/init/opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
+=======
+    cp system-fw.json $out/etc/opensnitchd/
+    substitute default-config.json $out/etc/opensnitchd/default-config.json \
+      --replace-fail "/var/log/opensnitchd.log" "/dev/stdout"
+    # Do not mkdir rules path
+    sed -i '8d' opensnitchd.service
+    # Fixup hardcoded paths
+    substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       --replace-fail "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd"
   '';
 

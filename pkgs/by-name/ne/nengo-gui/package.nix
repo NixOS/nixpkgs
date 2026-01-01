@@ -22,10 +22,17 @@ python3Packages.buildPythonPackage rec {
   #   pyimgur
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Nengo interactive visualizer";
     homepage = "https://nengo.ai/";
     license = lib.licenses.unfreeRedistributable;
+=======
+  meta = with lib; {
+    description = "Nengo interactive visualizer";
+    homepage = "https://nengo.ai/";
+    license = licenses.unfreeRedistributable;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

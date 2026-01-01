@@ -31,11 +31,19 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://torger.se/anders/brutefir.html";
     description = "Software convolution engine";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ auchter ];
+=======
+  meta = with lib; {
+    homepage = "https://torger.se/anders/brutefir.html";
+    description = "Software convolution engine";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ auchter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"

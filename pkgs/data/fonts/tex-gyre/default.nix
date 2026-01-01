@@ -34,14 +34,24 @@ let
       outputHashMode = "recursive";
       inherit outputHash;
 
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         homepage = "http://www.gust.org.pl/projects/e-foundry/tex-gyre";
         # "The TeX Gyre fonts are licensed under the GUST Font License (GFL),
         # which is a free license, legally equivalent to the LaTeX Project Public
         # License (LPPL), version 1.3c or later." - GUST website
+<<<<<<< HEAD
         license = lib.licenses.lppl13c;
         maintainers = [ ];
         platforms = lib.platforms.all;
+=======
+        license = licenses.lppl13c;
+        maintainers = [ ];
+        platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in

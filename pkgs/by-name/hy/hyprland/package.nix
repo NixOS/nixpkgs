@@ -1,6 +1,10 @@
 {
   lib,
+<<<<<<< HEAD
   gcc15Stdenv,
+=======
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenvAdapters,
   fetchFromGitHub,
   pkg-config,
@@ -19,7 +23,10 @@
   hyprland-qtutils,
   hyprlang,
   hyprutils,
+<<<<<<< HEAD
   hyprwire,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   hyprwayland-scanner,
   libGL,
   libdrm,
@@ -28,7 +35,10 @@
   libuuid,
   libxkbcommon,
   libgbm,
+<<<<<<< HEAD
   muparser,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pango,
   pciutils,
   pkgconf,
@@ -43,7 +53,11 @@
   xwayland,
   debug ? false,
   enableXWayland ? true,
+<<<<<<< HEAD
   withSystemd ? lib.meta.availableOn gcc15Stdenv.hostPlatform systemd,
+=======
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   wrapRuntimeDeps ? true,
   # deprecated flags
   nvidiaPatches ? false,
@@ -64,7 +78,12 @@ let
   inherit (lib.strings)
     makeBinPath
     optionalString
+<<<<<<< HEAD
     cmakeBool
+=======
+    mesonBool
+    mesonEnable
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ;
   inherit (lib.trivial)
     importJSON
@@ -76,11 +95,19 @@ let
   # which would be controlled by the `debug` flag
   # Condition on darwin to avoid breaking eval for darwin in CI,
   # even though darwin is not supported anyway.
+<<<<<<< HEAD
   adapters = lib.optionals (!gcc15Stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
   customStdenv = foldl' (acc: adapter: adapter acc) gcc15Stdenv adapters;
+=======
+  adapters = lib.optionals (!stdenv.targetPlatform.isDarwin) [
+    stdenvAdapters.useMoldLinker
+  ];
+
+  customStdenv = foldl' (acc: adapter: adapter acc) stdenv adapters;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
 assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
@@ -92,14 +119,22 @@ assert assertMsg (
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
+<<<<<<< HEAD
   version = "0.53.0";
+=======
+  version = "0.52.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-1jZK7hqNhQRqhj+2eb/JvnBoARxUgoVXKLSwp2RPmNQ=";
+=======
+    hash = "sha256-Lr8kwriXtUxjYsi1sGRMIR2LZilgrxYQA1TTmbpSJ+g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -108,6 +143,7 @@ customStdenv.mkDerivation (finalAttrs: {
 
     # Remove extra @PREFIX@ to fix pkg-config paths
     sed -i "s#@PREFIX@/##g" hyprland.pc.in
+<<<<<<< HEAD
     sed -i "s#@PREFIX@/##g" example/hyprland.desktop.in
   '';
 
@@ -121,6 +157,18 @@ customStdenv.mkDerivation (finalAttrs: {
     GIT_COMMIT_MESSAGE = info.commit_message;
     GIT_TAG = info.tag;
   };
+=======
+  '';
+
+  # variables used by generateVersion.sh script, and shown in `hyprctl version`
+  BRANCH = info.branch;
+  COMMITS = info.commit_hash;
+  DATE = info.date;
+  DIRTY = "";
+  HASH = info.commit_hash;
+  MESSAGE = info.commit_message;
+  TAG = info.tag;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   depsBuildBuild = [
     # to find wayland-scanner when cross-compiling
@@ -129,15 +177,23 @@ customStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     hyprwayland-scanner
+<<<<<<< HEAD
     hyprwire
     makeWrapper
     cmake
     # meson + ninja are used to build the hyprland-protocols submodule
+=======
+    makeWrapper
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     meson
     ninja
     pkg-config
     wayland-scanner
     # for udis86
+<<<<<<< HEAD
+=======
+    cmake
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python3
   ];
 
@@ -163,7 +219,10 @@ customStdenv.mkDerivation (finalAttrs: {
       libuuid
       libxkbcommon
       libgbm
+<<<<<<< HEAD
       muparser
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pango
       pciutils
       re2
@@ -184,11 +243,16 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals withSystemd [ systemd ])
   ];
 
+<<<<<<< HEAD
   cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
+=======
+  mesonBuildType = if debug then "debug" else "release";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dontStrip = debug;
   strictDeps = true;
 
+<<<<<<< HEAD
   cmakeFlags = mapAttrsToList cmakeBool {
     "BUILT_WITH_NIX" = true;
     "NO_XWAYLAND" = !enableXWayland;
@@ -198,6 +262,21 @@ customStdenv.mkDerivation (finalAttrs: {
     "NO_HYPRPM" = true;
     "TRACY_ENABLE" = false;
   };
+=======
+  mesonFlags = concatLists [
+    (mapAttrsToList mesonEnable {
+      "xwayland" = enableXWayland;
+      "systemd" = withSystemd;
+      "uwsm" = false;
+      "hyprpm" = false;
+    })
+    (mapAttrsToList mesonBool {
+      # PCH provides no benefits when building with Nix
+      "b_pch" = false;
+      "tracy_enable" = false;
+    })
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     ${optionalString wrapRuntimeDeps ''

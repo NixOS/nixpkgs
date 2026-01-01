@@ -146,9 +146,15 @@ stdenv.mkDerivation rec {
     moveToOutput share/cmake $dev
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.gromacs.org";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    homepage = "https://www.gromacs.org";
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
@@ -169,8 +175,13 @@ stdenv.mkDerivation rec {
 
       See: https://www.gromacs.org/about.html for details.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sheepforce
       markuskowa
     ];

@@ -35,12 +35,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "semver" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
     homepage = "https://python-semver.readthedocs.io/";
     changelog = "https://github.com/python-semver/python-semver/releases/tag/3.0.0";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ np ];
+=======
+  meta = with lib; {
+    description = "Python package to work with Semantic Versioning (http://semver.org/)";
+    homepage = "https://python-semver.readthedocs.io/";
+    changelog = "https://github.com/python-semver/python-semver/releases/tag/3.0.0";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ np ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pysemver";
   };
 }

@@ -13,16 +13,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "foundry";
+<<<<<<< HEAD
   version = "1.5.1";
+=======
+  version = "1.4.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-dMYuv5noIn86WuUJkUixnoNGLgByacung/TBU+EYhUw=";
   };
 
   cargoHash = "sha256-+5RLCkAQR8UepdUIsq1FnQmjKMg7YNC1Sxu0CVpWcnc=";
+=======
+    hash = "sha256-u+JCurH1gx4onC5Poxxd9+gVrUyyebcd6xnXY4Le6Rs=";
+  };
+
+  cargoHash = "sha256-JLuCZckiNv0t+kPuDk6TWmPIXKOvqf3HR/oFrQ5fKKQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config
@@ -39,6 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/forge";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

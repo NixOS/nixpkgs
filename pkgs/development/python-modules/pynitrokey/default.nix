@@ -80,6 +80,7 @@ buildPythonPackage {
       --fish <(_NITROPY_COMPLETE=fish_source $out/bin/${mainProgram})
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/pynitrokey";
@@ -89,6 +90,17 @@ buildPythonPackage {
       mit
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python client for Nitrokey devices";
+    homepage = "https://github.com/Nitrokey/pynitrokey";
+    changelog = "https://github.com/Nitrokey/pynitrokey/releases/tag/v${version}";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       frogamic
     ];
     inherit mainProgram;

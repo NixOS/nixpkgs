@@ -25,12 +25,21 @@ stdenvNoCC.mkDerivation rec {
       --prefix PATH ":" "${lib.makeBinPath [ rclone ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/DanielDent/git-annex-remote-rclone";
     description = "Use rclone supported cloud storage providers with git-annex";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.montag451 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/DanielDent/git-annex-remote-rclone";
+    description = "Use rclone supported cloud storage providers with git-annex";
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = [ maintainers.montag451 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-annex-remote-rclone";
   };
 }

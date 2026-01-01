@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Action-adventure dungeon crawl game";
     homepage = "https://gitlab.com/meritous/meritous";
@@ -61,5 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "meritous";
     maintainers = [ lib.maintainers.alexvorobiev ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Action-adventure dungeon crawl game";
+    homepage = "https://gitlab.com/meritous/meritous";
+    changelog = "https://gitlab.com/meritous/meritous/-/blob/master/NEWS";
+    license = licenses.gpl3Only;
+    mainProgram = "meritous";
+    maintainers = [ maintainers.alexvorobiev ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

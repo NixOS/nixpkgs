@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "overpy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Wrapper to access the Overpass API";
     homepage = "https://github.com/DinoTools/python-overpy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ firefly-cpp ];
+=======
+  meta = with lib; {
+    description = "Python Wrapper to access the Overpass API";
+    homepage = "https://github.com/DinoTools/python-overpy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ firefly-cpp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

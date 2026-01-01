@@ -46,11 +46,19 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) trezord; };
 
+<<<<<<< HEAD
   meta = {
     description = "Trezor Communication Daemon aka Trezor Bridge";
     homepage = "https://trezor.io";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Trezor Communication Daemon aka Trezor Bridge";
+    homepage = "https://trezor.io";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       canndrew
       jb55
       prusnak

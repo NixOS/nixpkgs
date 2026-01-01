@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "headerparser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to parse key-value pairs in the style of RFC 822 (e-mail) headers";
     homepage = "https://github.com/jwodder/headerparser";
     changelog = "https://github.com/wheelodex/headerparser/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ayazhafiz ];
+=======
+  meta = with lib; {
+    description = "Module to parse key-value pairs in the style of RFC 822 (e-mail) headers";
+    homepage = "https://github.com/jwodder/headerparser";
+    changelog = "https://github.com/wheelodex/headerparser/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ ayazhafiz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

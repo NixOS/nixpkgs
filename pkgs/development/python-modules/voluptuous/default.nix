@@ -29,12 +29,21 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "voluptuous/tests/" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python data validation library";
     downloadPage = "https://github.com/alecthomas/voluptuous";
     homepage = "http://alecthomas.github.io/voluptuous/";
     changelog = "https://github.com/alecthomas/voluptuous/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

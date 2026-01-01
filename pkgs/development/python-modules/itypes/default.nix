@@ -23,10 +23,17 @@ buildPythonPackage rec {
     pytest tests.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple immutable types for python";
     homepage = "https://github.com/tomchristie/itypes";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Simple immutable types for python";
+    homepage = "https://github.com/tomchristie/itypes";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

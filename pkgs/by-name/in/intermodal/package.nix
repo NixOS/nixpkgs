@@ -39,6 +39,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/casey/intermodal/releases/tag/v${version}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       xrelkd
     ];
     mainProgram = "imdl";

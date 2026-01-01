@@ -60,11 +60,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lib4sbom" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to ingest and generate SBOMs";
     homepage = "https://github.com/anthonyharrison/lib4sbom";
     changelog = "https://github.com/anthonyharrison/lib4sbom/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ teatwig ];
+=======
+  meta = with lib; {
+    description = "Library to ingest and generate SBOMs";
+    homepage = "https://github.com/anthonyharrison/lib4sbom";
+    changelog = "https://github.com/anthonyharrison/lib4sbom/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ teatwig ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

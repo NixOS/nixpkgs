@@ -37,12 +37,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gptcache" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Semantic cache for LLMs and fully integrated with LangChain and llama_index";
     mainProgram = "gptcache_server";
     homepage = "https://github.com/zilliztech/GPTCache";
     changelog = "https://github.com/zilliztech/GPTCache/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

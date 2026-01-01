@@ -29,6 +29,7 @@ rec {
     inherit version;
     inherit src;
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://www.rust-lang.org/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -38,6 +39,17 @@ rec {
       license = [
         lib.licenses.mit
         lib.licenses.asl20
+=======
+    meta = with lib; {
+      homepage = "https://www.rust-lang.org/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      description = "Safe, concurrent, practical language";
+      mainProgram = "rustc";
+      maintainers = with maintainers; [ qknight ];
+      license = [
+        licenses.mit
+        licenses.asl20
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     };
 
@@ -137,6 +149,7 @@ rec {
     inherit version;
     inherit src;
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://doc.rust-lang.org/cargo/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -145,6 +158,16 @@ rec {
       license = [
         lib.licenses.mit
         lib.licenses.asl20
+=======
+    meta = with lib; {
+      homepage = "https://doc.rust-lang.org/cargo/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      description = "Rust package manager";
+      maintainers = with maintainers; [ qknight ];
+      license = [
+        licenses.mit
+        licenses.asl20
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     };
 

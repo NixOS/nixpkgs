@@ -48,11 +48,20 @@ stdenv.mkDerivation rec {
     patchelf $out/lib/libvdpau.so --add-rpath $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/VDPAU/";
     description = "Library to use the Video Decode and Presentation API for Unix (VDPAU)";
     license = lib.licenses.mit; # expat version
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vcunat ];
+=======
+  meta = with lib; {
+    homepage = "https://www.freedesktop.org/wiki/Software/VDPAU/";
+    description = "Library to use the Video Decode and Presentation API for Unix (VDPAU)";
+    license = licenses.mit; # expat version
+    platforms = platforms.unix;
+    maintainers = [ maintainers.vcunat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,10 +31,18 @@ buildPythonPackage {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Standalone module for Locality-Aware NMS";
     homepage = "https://github.com/gen-ko/lanms-neo";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Standalone module for Locality-Aware NMS";
+    homepage = "https://github.com/gen-ko/lanms-neo";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

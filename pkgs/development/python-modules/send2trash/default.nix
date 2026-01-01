@@ -29,12 +29,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Send file to trash natively under macOS, Windows and Linux";
     mainProgram = "send2trash";
     homepage = "https://github.com/hsoft/send2trash";
     changelog = "https://github.com/arsenetar/send2trash/blob/${version}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

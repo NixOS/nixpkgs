@@ -29,6 +29,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evdev" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provides bindings to the generic input event interface in Linux";
     homepage = "https://python-evdev.readthedocs.io/";
@@ -36,5 +37,14 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Provides bindings to the generic input event interface in Linux";
+    homepage = "https://python-evdev.readthedocs.io/";
+    changelog = "https://github.com/gvalkov/python-evdev/blob/v${version}/docs/changelog.rst";
+    license = licenses.bsd3;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

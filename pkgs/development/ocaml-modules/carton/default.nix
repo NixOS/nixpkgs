@@ -87,10 +87,18 @@ buildDunePackage rec {
     mirage-flow
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of PACKv2 file in OCaml";
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/ocaml-git";
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Implementation of PACKv2 file in OCaml";
+    license = licenses.mit;
+    homepage = "https://github.com/mirage/ocaml-git";
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

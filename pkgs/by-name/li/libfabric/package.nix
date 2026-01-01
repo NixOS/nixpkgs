@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     (if enableOpx then "--enable-opx" else "--disable-opx")
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ofiwg.github.io/libfabric/";
     description = "Open Fabric Interfaces";
@@ -56,5 +57,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bzizou ];
+=======
+  meta = with lib; {
+    homepage = "https://ofiwg.github.io/libfabric/";
+    description = "Open Fabric Interfaces";
+    license = with licenses; [
+      gpl2
+      bsd2
+    ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.bzizou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

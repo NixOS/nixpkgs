@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyperpyyaml" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extensions to YAML syntax for better python interaction";
     homepage = "https://github.com/speechbrain/HyperPyYAML";
     changelog = "https://github.com/speechbrain/HyperPyYAML/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    description = "Extensions to YAML syntax for better python interaction";
+    homepage = "https://github.com/speechbrain/HyperPyYAML";
+    changelog = "https://github.com/speechbrain/HyperPyYAML/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

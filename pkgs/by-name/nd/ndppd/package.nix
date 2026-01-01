@@ -34,11 +34,20 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ndppd; };
 
+<<<<<<< HEAD
   meta = {
     description = "Daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
     homepage = "https://github.com/DanielAdolfsson/ndppd";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Daemon that proxies NDP (Neighbor Discovery Protocol) messages between interfaces";
+    homepage = "https://github.com/DanielAdolfsson/ndppd";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fadenb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ndppd";
   };
 }

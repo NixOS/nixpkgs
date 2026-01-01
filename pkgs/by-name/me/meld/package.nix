@@ -68,12 +68,21 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Visual diff and merge tool";
     homepage = "https://meld.app/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Visual diff and merge tool";
+    homepage = "https://meld.app/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jtojnar
       mimame
     ];

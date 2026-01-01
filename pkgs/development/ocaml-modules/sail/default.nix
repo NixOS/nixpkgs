@@ -76,10 +76,18 @@ buildDunePackage {
     wrapProgram $out/bin/sail --set SAIL_DIR $out/share/sail
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rems-project/sail";
     description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
     maintainers = with lib.maintainers; [ genericnerdyusername ];
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rems-project/sail";
+    description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
+    maintainers = with maintainers; [ genericnerdyusername ];
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

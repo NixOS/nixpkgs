@@ -21,11 +21,19 @@ buildGoModule {
     cp -r templates $out/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "IMAP/SMTP autodiscover feature for Thunderbird, Apple Mail and Microsoft Outlook";
     homepage = "https://github.com/L11R/go-autoconfig";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "IMAP/SMTP autodiscover feature for Thunderbird, Apple Mail and Microsoft Outlook";
+    homepage = "https://github.com/L11R/go-autoconfig";
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "go-autoconfig";
   };
 }

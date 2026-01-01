@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyaftership" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper package for the AfterShip API";
     homepage = "https://github.com/ludeeus/pyaftership";
     changelog = "https://github.com/ludeeus/pyaftership/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  meta = with lib; {
+    description = "Python wrapper package for the AfterShip API";
+    homepage = "https://github.com/ludeeus/pyaftership";
+    changelog = "https://github.com/ludeeus/pyaftership/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

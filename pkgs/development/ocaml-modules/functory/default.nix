@@ -40,11 +40,19 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.lri.fr/~filliatr/functory/";
     description = "Distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    homepage = "https://www.lri.fr/~filliatr/functory/";
+    description = "Distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast ocaml.version "5.0";
     inherit (ocaml.meta) platforms;
   };

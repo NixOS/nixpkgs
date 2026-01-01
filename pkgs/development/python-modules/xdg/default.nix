@@ -30,10 +30,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xdg" ];
 
+<<<<<<< HEAD
   meta = {
     description = "XDG Base Directory Specification for Python";
     homepage = "https://github.com/srstevenson/xdg";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "XDG Base Directory Specification for Python";
+    homepage = "https://github.com/srstevenson/xdg";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

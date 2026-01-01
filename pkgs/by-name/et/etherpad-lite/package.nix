@@ -4,21 +4,37 @@
   fetchFromGitHub,
   nix-update-script,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeWrapper,
   nodejs,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "etherpad-lite";
   version = "2.6.0";
+=======
+let
+  pnpm = pnpm_9;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "etherpad-lite";
+  version = "2.5.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ether";
     repo = "etherpad-lite";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-zsW4hBilhhkP9H0rTLDr6S0BZBGb9XqGNKcftkoivOs=";
+=======
+    hash = "sha256-0Qrmpz9ehblS2Jdw137CJVKYmhkXt8c9B6kDG8OxZPo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -28,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-fail-on-plugins-json.patch
   ];
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
@@ -38,6 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pnpmConfigHook
     pnpm_9
+=======
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-gajm1yXQPZZ/oB27HwgTEoKLzwMKsHDoo2w+mIOnJrc=";
+  };
+
+  nativeBuildInputs = [
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     makeWrapper
   ];
 
@@ -70,7 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe nodejs} $out/bin/etherpad-lite \
       --inherit-argv0 \
       --add-flags "--require tsx/cjs $out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node/server.ts" \
+<<<<<<< HEAD
       --suffix PATH : "${lib.makeBinPath [ pnpm_9 ]}" \
+=======
+      --suffix PATH : "${lib.makeBinPath [ pnpm ]}" \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       --set NODE_PATH "$out/lib/node_modules:$out/lib/etherpad-lite/node_modules/ep_etherpad-lite/node_modules" \
       --set-default NODE_ENV production
     find $out/lib -xtype l -delete

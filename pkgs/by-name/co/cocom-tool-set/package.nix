@@ -19,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=implicit-int"
       "-Wno-error=implicit-function-declaration"
+<<<<<<< HEAD
       "-std=gnu17"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 

@@ -19,11 +19,20 @@ buildPythonPackage rec {
   enabledTestPaths = [ "razdel" ];
   pythonImportsCheck = [ "razdel" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rule-based system for Russian sentence and word tokenization";
     mainProgram = "razdel-ctl";
     homepage = "https://github.com/natasha/razdel";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ npatsakula ];
+=======
+  meta = with lib; {
+    description = "Rule-based system for Russian sentence and word tokenization";
+    mainProgram = "razdel-ctl";
+    homepage = "https://github.com/natasha/razdel";
+    license = licenses.mit;
+    maintainers = with maintainers; [ npatsakula ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,11 +31,20 @@ buildGoModule rec {
       --fish <($out/bin/kaf completion fish)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modern CLI for Apache Kafka, written in Go";
     mainProgram = "kaf";
     homepage = "https://github.com/birdayz/kaf";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ zarelit ];
+=======
+  meta = with lib; {
+    description = "Modern CLI for Apache Kafka, written in Go";
+    mainProgram = "kaf";
+    homepage = "https://github.com/birdayz/kaf";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ zarelit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casacore";
+<<<<<<< HEAD
   version = "3.8.0";
+=======
+  version = "3.7.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "casacore";
     repo = "casacore";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-NOxuHMCuHGk9XuWXMwQTN6kOFDI0QuHMgfNRDdlPw44=";
+=======
+    hash = "sha256-6zgTSGNKp2hHsh3GFl+o6ElavSNYnQvLsfb1xUrgNZI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

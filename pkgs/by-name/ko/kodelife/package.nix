@@ -99,12 +99,21 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://hexler.net/kodelife";
     description = "Real-time GPU shader editor";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    homepage = "https://hexler.net/kodelife";
+    description = "Real-time GPU shader editor";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "aarch64-linux"
       "armv7l-linux"

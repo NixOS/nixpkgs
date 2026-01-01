@@ -53,12 +53,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Extensible System Settings app for Pantheon";
     homepage = "https://github.com/elementary/switchboard";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Extensible System Settings app for Pantheon";
+    homepage = "https://github.com/elementary/switchboard";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "io.elementary.settings";
   };
 }

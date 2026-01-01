@@ -22,11 +22,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Nanum Korean font set";
     homepage = "https://hangeul.naver.com/font";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Nanum Korean font set";
+    homepage = "https://hangeul.naver.com/font";
+    license = licenses.ofl;
+    maintainers = with lib.maintainers; [ serge ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

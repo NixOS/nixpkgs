@@ -45,11 +45,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Conveniently store reference to request user on thread/db level";
     homepage = "https://github.com/zsoldosp/django-currentuser";
     changelog = "https://github.com/zsoldosp/django-currentuser/#release-notes";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ augustebaum ];
+=======
+  meta = with lib; {
+    description = "Conveniently store reference to request user on thread/db level";
+    homepage = "https://github.com/zsoldosp/django-currentuser";
+    changelog = "https://github.com/zsoldosp/django-currentuser/#release-notes";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ augustebaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

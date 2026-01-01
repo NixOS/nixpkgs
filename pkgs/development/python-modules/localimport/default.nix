@@ -16,10 +16,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "localimport" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/NiklasRosenstein/py-localimport";
     description = "Isolated import of Python modules";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/NiklasRosenstein/py-localimport";
+    description = "Isolated import of Python modules";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

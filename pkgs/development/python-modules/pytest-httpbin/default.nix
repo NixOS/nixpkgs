@@ -46,11 +46,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_httpbin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Test your HTTP library against a local copy of httpbin.org";
     homepage = "https://github.com/kevin1024/pytest-httpbin";
     changelog = "https://github.com/kevin1024/pytest-httpbin/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Test your HTTP library against a local copy of httpbin.org";
+    homepage = "https://github.com/kevin1024/pytest-httpbin";
+    changelog = "https://github.com/kevin1024/pytest-httpbin/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

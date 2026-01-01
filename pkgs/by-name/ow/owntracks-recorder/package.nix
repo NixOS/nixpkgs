@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     version = finalAttrs.version;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Store and access data published by OwnTracks apps";
     homepage = "https://github.com/owntracks/recorder";
@@ -81,6 +82,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ gaelreyrol ];
+=======
+  meta = with lib; {
+    description = "Store and access data published by OwnTracks apps";
+    homepage = "https://github.com/owntracks/recorder";
+    changelog = "https://github.com/owntracks/recorder/blob/master/Changelog";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ gaelreyrol ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ot-recorder";
   };
 })

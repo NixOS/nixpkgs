@@ -8,7 +8,10 @@
 # The same tests should work without modification on the official bitwarden server, if we ever package that.
 
 let
+<<<<<<< HEAD
   certs = import ./common/acme/server/snakeoil-certs.nix;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeVaultwardenTest =
     name:
     {
@@ -54,7 +57,11 @@ let
               driver = Firefox(options=options)
 
               driver.implicitly_wait(20)
+<<<<<<< HEAD
               driver.get('https://localhost/#/signup')
+=======
+              driver.get('http://localhost:8080/#/signup')
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
               wait = WebDriverWait(driver, 10)
 
@@ -150,7 +157,10 @@ let
               .${backend}
 
               {
+<<<<<<< HEAD
                 networking.hosts."::1" = [ certs.domain ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 services.vaultwarden = {
                   enable = true;
                   dbBackend = backend;
@@ -159,6 +169,7 @@ let
                     rocketPort = 8080;
                   };
                 };
+<<<<<<< HEAD
                 services.nginx = {
                   enable = true;
                   virtualHosts."${certs.domain}" = {
@@ -176,6 +187,10 @@ let
                   80
                   443
                 ];
+=======
+
+                networking.firewall.allowedTCPPorts = [ 8080 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
                 environment.systemPackages = [
                   pkgs.firefox-unwrapped
@@ -187,6 +202,7 @@ let
         }
         // lib.optionalAttrs withClient {
           client =
+<<<<<<< HEAD
             {
               nodes,
               pkgs,
@@ -197,6 +213,11 @@ let
               networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ certs.domain ];
               environment.systemPackages = [ pkgs.bitwarden-cli ];
               security.pki.certificateFiles = [ certs.ca.cert ];
+=======
+            { pkgs, ... }:
+            {
+              environment.systemPackages = [ pkgs.bitwarden-cli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             };
         };
 
@@ -209,10 +230,17 @@ let
 
               start_all()
               server.wait_for_unit("vaultwarden.service")
+<<<<<<< HEAD
               server.wait_for_open_port(443)
 
               with subtest("configure the cli"):
                   client.succeed("bw --nointeraction config server https://${certs.domain}")
+=======
+              server.wait_for_open_port(8080)
+
+              with subtest("configure the cli"):
+                  client.succeed("bw --nointeraction config server http://server:8080")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
               with subtest("can't login to nonexistent account"):
                   client.fail(
@@ -249,7 +277,11 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
     testScript = ''
       start_all()
       server.wait_for_unit("vaultwarden.service")
+<<<<<<< HEAD
       server.wait_for_open_port(443)
+=======
+      server.wait_for_open_port(8080)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       with subtest("Set up vaultwarden"):
           server.succeed("PYTHONUNBUFFERED=1 test-runner | systemd-cat -t test-runner")

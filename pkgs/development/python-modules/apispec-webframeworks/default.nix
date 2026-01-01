@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apispec_webframeworks" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Web framework plugins for apispec";
     homepage = "https://github.com/marshmallow-code/apispec-webframeworks";
     changelog = "https://github.com/marshmallow-code/apispec-webframeworks/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Web framework plugins for apispec";
+    homepage = "https://github.com/marshmallow-code/apispec-webframeworks";
+    changelog = "https://github.com/marshmallow-code/apispec-webframeworks/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

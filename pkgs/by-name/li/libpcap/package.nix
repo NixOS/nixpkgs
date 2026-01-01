@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
     haskell-pcap = haskellPackages.pcap;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";
@@ -101,5 +102,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://www.tcpdump.org";
+    description = "Packet Capture Library";
+    mainProgram = "pcap-config";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,15 +27,27 @@ rustPlatform.buildRustPackage {
     shellPath = "/bin/ion";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Modern system shell with simple (and powerful) syntax";
     homepage = "https://gitlab.redox-os.org/redox-os/ion";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Modern system shell with simple (and powerful) syntax";
+    homepage = "https://gitlab.redox-os.org/redox-os/ion";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dywedir
       arthsmn
     ];
     mainProgram = "ion";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

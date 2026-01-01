@@ -73,9 +73,12 @@ stdenv.mkDerivation rec {
       --replace-fail "char buf[1024], buf2[1024];" "char buf[1024], buf2[1066];"
   '';
 
+<<<<<<< HEAD
   # fix build with gcc15
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ autoreconfHook ];
 
   postInstall = ''
@@ -94,9 +97,16 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for encoding and decoding binary files in MIME";
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ tomodachi94 ];
+=======
+  meta = with lib; {
+    description = "Utilities for encoding and decoding binary files in MIME";
+    license = licenses.free;
+    maintainers = with maintainers; [ tomodachi94 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

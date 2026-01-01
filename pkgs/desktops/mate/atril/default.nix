@@ -31,16 +31,28 @@
   gitUpdater,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "atril";
   version = "1.28.3";
+=======
+stdenv.mkDerivation rec {
+  pname = "atril";
+  version = "1.28.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "atril";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-y+J/goOl5ol3j0ySLkyQSndS8zc+dOKhyrPv0FmVkZg=";
+=======
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-NnWD3Gcxn8ZZKdHzg6iclLiSwj3sBvF+BwpNtcU+dSY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -73,11 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags =
     [ ]
     ++ lib.optionals enableDjvu [ "--enable-djvu" ]
+<<<<<<< HEAD
     ++ lib.optionals enableEpub [
       # FIXME: We ship this with non-existent fallback mathjax-directory
       # because `MathJax.js` is only available in MathJax 2.7.x.
       "--enable-epub"
     ]
+=======
+    ++ lib.optionals enableEpub [ "--enable-epub" ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ lib.optionals enablePostScript [ "--enable-ps" ]
     ++ lib.optionals enableXps [ "--enable-xps" ]
     ++ lib.optionals enableImages [ "--enable-pixbuf" ];
@@ -93,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     odd-unstable = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
@@ -101,3 +118,13 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+  meta = with lib; {
+    description = "Simple multi-page document viewer for the MATE desktop";
+    homepage = "https://mate-desktop.org";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

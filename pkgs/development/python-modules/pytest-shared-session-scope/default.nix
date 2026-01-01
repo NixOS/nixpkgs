@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "pytest-shared-session-scope";
+<<<<<<< HEAD
   version = "0.5.2";
+=======
+  version = "0.5.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "StefanBRas";
     repo = "pytest-shared-session-scope";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-IPTktwOJhzoC7/gPgMVwbLCkRuhbPf90m23yznqHha4=";
+=======
+    hash = "sha256-HB8RuF/+BmW3KBZ7C8EpUMuBntvcjSsrkLUiBvPwcf8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];

@@ -6,11 +6,19 @@
 
 stdenvNoCC.mkDerivation {
   pname = "typodermic-free-fonts";
+<<<<<<< HEAD
   version = "2024-12";
 
   src = fetchzip {
     url = "https://typodermicfonts.com/wp-content/uploads/2024/12/typodermic-free-fonts-2024d.zip";
     hash = "sha256-tfv0PTu1gOWXxaoiQJNqnhJKGChGlGJqsqsb/xvBfGU=";
+=======
+  version = "2024-04";
+
+  src = fetchzip {
+    url = "https://typodermicfonts.com/wp-content/uploads/2024/04/typodermic-free-fonts-2024b.zip";
+    hash = "sha256-EbK2wrYdIFmz/gdM+46CNb4Z21jrVYZMh+dtduwC8aI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     curlOptsList = [
       "--user-agent"
       "Mozilla/5.0"
@@ -22,8 +30,13 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
+<<<<<<< HEAD
     mkdir -p $out/share/fonts/opentype/
     cp "$src/"*.otf $out/share/fonts/opentype/
+=======
+    mkdir -p $out/share/fonts
+    cp -a "$src/Typodermic Fonts" "$out/share/fonts/opentype"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     runHook postInstall
   '';
 

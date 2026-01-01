@@ -43,12 +43,21 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/git-quick-stats --suffix PATH : ${path}
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/arzzen/git-quick-stats";
     description = "Simple and efficient way to access various statistics in git repository";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.kmein ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/arzzen/git-quick-stats";
+    description = "Simple and efficient way to access various statistics in git repository";
+    platforms = platforms.all;
+    maintainers = [ maintainers.kmein ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-quick-stats";
   };
 }

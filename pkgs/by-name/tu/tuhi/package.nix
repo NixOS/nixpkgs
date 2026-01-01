@@ -65,6 +65,7 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn $out/libexec "$out $pythonPath"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "DBus daemon to access Wacom SmartPad devices";
     mainProgram = "tuhi";
@@ -72,5 +73,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ lammermann ];
+=======
+  meta = with lib; {
+    description = "DBus daemon to access Wacom SmartPad devices";
+    mainProgram = "tuhi";
+    homepage = "https://github.com/tuhiproject/tuhi";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lammermann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

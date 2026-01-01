@@ -38,6 +38,7 @@ stdenv.mkDerivation {
     cp i3-easyfocus $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Focus and select windows in i3";
     mainProgram = "i3-easyfocus";
@@ -45,5 +46,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ teto ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Focus and select windows in i3";
+    mainProgram = "i3-easyfocus";
+    homepage = "https://github.com/cornerman/i3-easyfocus";
+    maintainers = with maintainers; [ teto ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -788,9 +788,12 @@
   "var-stdenv-depsTargetTargetPropagated": [
     "index.html#var-stdenv-depsTargetTargetPropagated"
   ],
+<<<<<<< HEAD
   "var-stdenv-strictDeps": [
     "index.html#var-stdenv-strictDeps"
   ],
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "ssec-stdenv-attributes": [
     "index.html#ssec-stdenv-attributes"
   ],
@@ -3428,6 +3431,18 @@
   "javascript-using-node_modules": [
     "index.html#javascript-using-node_modules"
   ],
+<<<<<<< HEAD
+=======
+  "javascript-packages-nixpkgs": [
+    "index.html#javascript-packages-nixpkgs"
+  ],
+  "javascript-adding-or-updating-packages": [
+    "index.html#javascript-adding-or-updating-packages"
+  ],
+  "javascript-git-error": [
+    "index.html#javascript-git-error"
+  ],
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "javascript-tool-specific": [
     "index.html#javascript-tool-specific"
   ],
@@ -4398,9 +4413,12 @@
   "sec-linux-kernel-developing-modules": [
     "index.html#sec-linux-kernel-developing-modules"
   ],
+<<<<<<< HEAD
   "sec-linux-new-kernels": [
     "index.html#sec-linux-new-kernels"
   ],
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "ex-edit-compile-run-kernel-modules": [
     "index.html#ex-edit-compile-run-kernel-modules"
   ],
@@ -4669,8 +4687,17 @@
     "index.html#reviewing-contributions--merging-pull-requests"
   ],
   "chap-contributing": [
+<<<<<<< HEAD
     "index.html#chap-contributing",
     "index.html#sec-contributing-devmode",
+=======
+    "index.html#chap-contributing"
+  ],
+  "sec-contributing-devmode": [
+    "index.html#sec-contributing-devmode"
+  ],
+  "sec-contributing-markup": [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "index.html#sec-contributing-markup"
   ],
   "part-interoperability": [

@@ -73,11 +73,19 @@ stdenv.mkDerivation rec {
     "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://confluence.ecmwf.int/display/ECC/";
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "ECMWF library for reading and writing GRIB, BUFR and GTS abbreviated header";
   };
 }

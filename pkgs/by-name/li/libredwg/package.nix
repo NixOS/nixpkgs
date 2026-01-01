@@ -70,11 +70,20 @@ stdenv.mkDerivation rec {
     libxml2.dev
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Free implementation of the DWG file format";
     homepage = "https://savannah.gnu.org/projects/libredwg/";
     maintainers = with lib.maintainers; [ tweber ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Free implementation of the DWG file format";
+    homepage = "https://savannah.gnu.org/projects/libredwg/";
+    maintainers = with maintainers; [ tweber ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

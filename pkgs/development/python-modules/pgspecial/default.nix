@@ -58,11 +58,19 @@ buildPythonPackage rec {
     "test_slash_ddp_pattern"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Meta-commands handler for Postgres Database";
     homepage = "https://github.com/dbcli/pgspecial";
     changelog = "https://github.com/dbcli/pgspecial/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Meta-commands handler for Postgres Database";
+    homepage = "https://github.com/dbcli/pgspecial";
+    changelog = "https://github.com/dbcli/pgspecial/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.SuperSandro2000 ];
   };
 }

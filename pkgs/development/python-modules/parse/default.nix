@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/r1chardj0n3s/parse";
     description = "parse() is the opposite of format()";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ alunduil ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/r1chardj0n3s/parse";
+    description = "parse() is the opposite of format()";
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ alunduil ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

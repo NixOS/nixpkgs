@@ -94,7 +94,11 @@ stdenv.mkDerivation rec {
     nginx-modsecurity = nixosTests.nginx-modsecurity;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/owasp-modsecurity/ModSecurity";
     description = ''
       ModSecurity v3 library component.
@@ -107,9 +111,15 @@ stdenv.mkDerivation rec {
       the ModSecurity SecRules format and apply them to HTTP content provided
       by your application via Connectors.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ izorkin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "modsec-rules-check";
   };
 }

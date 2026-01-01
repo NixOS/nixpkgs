@@ -17,11 +17,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-TfAT36/JeBjBxymnX1gIyCEPZcxTW4fPVIOhHF3z9wA=";
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool for processing CSV, JSON and other structured data";
     mainProgram = "each";
     homepage = "https://github.com/arraypad/each";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ thiagokokada ];
+=======
+  meta = with lib; {
+    description = "Command-line tool for processing CSV, JSON and other structured data";
+    mainProgram = "each";
+    homepage = "https://github.com/arraypad/each";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ thiagokokada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

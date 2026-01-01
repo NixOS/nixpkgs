@@ -93,10 +93,17 @@ py.pkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/healthchecks/healthchecks";
     description = "Cron monitoring tool written in Python & Django";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/healthchecks/healthchecks";
+    description = "Cron monitoring tool written in Python & Django";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

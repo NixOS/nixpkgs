@@ -48,11 +48,20 @@ buildPythonApplication rec {
     "gnome_extensions_cli"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/essembeh/gnome-extensions-cli";
     description = "Command line tool to manage your GNOME Shell extensions";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dylanmtaylor ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/essembeh/gnome-extensions-cli";
+    description = "Command line tool to manage your GNOME Shell extensions";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dylanmtaylor ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

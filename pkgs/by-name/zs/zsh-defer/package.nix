@@ -23,11 +23,20 @@ stdenv.mkDerivation {
     cp zsh-defer* $out/share/zsh-defer
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Deferred execution of zsh commands";
     homepage = "https://github.com/romkatv/zsh-defer";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.vinnymeller ];
+=======
+  meta = with lib; {
+    description = "Deferred execution of zsh commands";
+    homepage = "https://github.com/romkatv/zsh-defer";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.vinnymeller ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

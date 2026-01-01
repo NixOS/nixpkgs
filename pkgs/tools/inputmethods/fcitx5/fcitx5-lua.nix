@@ -34,11 +34,20 @@ stdenv.mkDerivation rec {
     extraLdLibraries = [ lua ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Lua support for Fcitx 5";
     homepage = "https://github.com/fcitx/fcitx5-lua";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Lua support for Fcitx 5";
+    homepage = "https://github.com/fcitx/fcitx5-lua";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ poscat ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

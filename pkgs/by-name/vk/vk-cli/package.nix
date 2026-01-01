@@ -50,12 +50,21 @@ stdenv.mkDerivation rec {
       }"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Console (ncurses) client for vk.com written in D";
     mainProgram = "vk-cli";
     homepage = "https://github.com/vk-cli/vk";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Console (ncurses) client for vk.com written in D";
+    mainProgram = "vk-cli";
+    homepage = "https://github.com/vk-cli/vk";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

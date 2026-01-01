@@ -18,10 +18,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Pny/RBtr65jKu2DdyIrluZWeZIgGb8Ev7mxvTMWPlyI=";
 
+<<<<<<< HEAD
   meta = {
     description = "Scriptable, curses-based, digital habit tracker";
     homepage = "https://github.com/oppiliappan/dijo";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Scriptable, curses-based, digital habit tracker";
+    homepage = "https://github.com/oppiliappan/dijo";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "dijo";
   };

@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "traitsui" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/traitsui";
     changelog = "https://github.com/enthought/traitsui/releases/tag/${version}";
     license = lib.licenses.bsdOriginal;
+=======
+  meta = with lib; {
+    description = "Traits-capable windowing framework";
+    homepage = "https://github.com/enthought/traitsui";
+    changelog = "https://github.com/enthought/traitsui/releases/tag/${version}";
+    license = licenses.bsdOriginal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -4,7 +4,11 @@
   fetchurl,
   nixosTests,
   makeWrapper,
+<<<<<<< HEAD
   openjdk21,
+=======
+  openjdk17,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   which,
   gawk,
   bashNonInteractive,
@@ -12,11 +16,19 @@
 
 stdenv.mkDerivation rec {
   pname = "neo4j";
+<<<<<<< HEAD
   version = "2025.10.1";
 
   src = fetchurl {
     url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
     hash = "sha256-aa3hZeM0ehMt6mZk/Of9qG85GnrvsasA8hzpQOppLwk=";
+=======
+  version = "5.26.1";
+
+  src = fetchurl {
+    url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
+    hash = "sha256-RiCUpsUxUaMSz1a4ptNQ8rp99ffj0r4DPggt8RgSj7U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,12 +47,20 @@ stdenv.mkDerivation rec {
             "$out/bin/$NEO4J_SCRIPT" \
             --prefix PATH : "${
               lib.makeBinPath [
+<<<<<<< HEAD
                 openjdk21
+=======
+                openjdk17
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 which
                 gawk
               ]
             }" \
+<<<<<<< HEAD
             --set JAVA_HOME "${openjdk21}"
+=======
+            --set JAVA_HOME "${openjdk17}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     done
 
     patchShebangs $out/share/neo4j/bin/neo4j-admin
@@ -52,11 +72,20 @@ stdenv.mkDerivation rec {
 
   passthru.tests.nixos = nixosTests.neo4j;
 
+<<<<<<< HEAD
   meta = {
     description = "Highly scalable, robust (fully ACID) native graph database";
     homepage = "https://neo4j.com/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Highly scalable, robust (fully ACID) native graph database";
+    homepage = "https://neo4j.com/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ offline ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

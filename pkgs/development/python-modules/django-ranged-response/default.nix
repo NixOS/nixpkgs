@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
+<<<<<<< HEAD
   meta = {
     description = "Modified FileResponse that returns `Content-Range` headers with the HTTP response, so browsers (read Safari 9+) that request the file, can stream the response properly";
     homepage = "https://github.com/wearespindle/django-ranged-fileresponse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mrmebelman ];
+=======
+  meta = with lib; {
+    description = "Modified FileResponse that returns `Content-Range` headers with the HTTP response, so browsers (read Safari 9+) that request the file, can stream the response properly";
+    homepage = "https://github.com/wearespindle/django-ranged-fileresponse";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mrmebelman ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

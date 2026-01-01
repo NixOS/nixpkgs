@@ -8,13 +8,21 @@
 
 buildGoModule rec {
   pname = "ginkgo";
+<<<<<<< HEAD
   version = "2.27.3";
+=======
+  version = "2.27.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-qEGV5QLRVuy0pNBat19u3kp8jUrUHFjyY1pC1nkyZC0=";
+=======
+    sha256 = "sha256-+B/yl6Jl7BwtyGUWuyBPPK2bT+vulHtUbn8GygPlbh0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   vendorHash = "sha256-Vmcva/iMaOszQi87avO7utD0ahlB2gFBmVEI86hvnyQ=";
 
@@ -32,7 +40,11 @@ buildGoModule rec {
     command = "ginkgo version";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://onsi.github.io/ginkgo/";
     changelog = "https://github.com/onsi/ginkgo/blob/master/CHANGELOG.md";
     description = "Modern Testing Framework for Go";
@@ -48,8 +60,13 @@ buildGoModule rec {
       active use across a wide variety of testing contexts: unit tests,
       integration tests, acceptance test, performance tests, etc.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       saschagrunert
       jk
     ];

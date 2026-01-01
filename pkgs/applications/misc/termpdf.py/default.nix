@@ -40,14 +40,23 @@ buildPythonApplication {
   # upstream doesn't contain tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       A graphical pdf (and epub, cbz, ...) reader that works
       inside the kitty terminal.
     '';
     mainProgram = "termpdf.py";
     homepage = "https://github.com/dsanson/termpdf.py";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ teto ];
     license = lib.licenses.mit;
+=======
+    maintainers = with maintainers; [ teto ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

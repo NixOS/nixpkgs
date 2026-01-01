@@ -34,12 +34,21 @@ buildGoModule rec {
       --zsh <($out/bin/yanic completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to collect and aggregate respondd data";
     homepage = "https://github.com/FreifunkBremen/yanic";
     changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${src.rev}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ herbetom ];
+=======
+  meta = with lib; {
+    description = "Tool to collect and aggregate respondd data";
+    homepage = "https://github.com/FreifunkBremen/yanic";
+    changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${src.rev}";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ herbetom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yanic";
   };
 }

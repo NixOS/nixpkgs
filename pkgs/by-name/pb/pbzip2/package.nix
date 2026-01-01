@@ -43,11 +43,20 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://compression.ca/pbzip2/";
     description = "Parallel implementation of bzip2 for multi-core machines";
     license = lib.licenses.bsd2;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://compression.ca/pbzip2/";
+    description = "Parallel implementation of bzip2 for multi-core machines";
+    license = licenses.bsd2;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

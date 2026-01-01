@@ -34,11 +34,19 @@ stdenv.mkDerivation {
       --replace " xargs " " /run/booted-system/sw/bin/xargs "
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://launchpad.net/ubuntu/+source/kmod";
     description = "Linux kernel module blacklists from Ubuntu";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://launchpad.net/ubuntu/+source/kmod";
+    description = "Linux kernel module blacklists from Ubuntu";
+    platforms = platforms.linux;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       lgpl21Plus
     ];

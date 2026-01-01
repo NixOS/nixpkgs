@@ -40,10 +40,18 @@ buildPythonPackage rec {
     "est_stream_setproperty"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Control Snapcast, a multi-room synchronous audio solution";
     homepage = "https://github.com/happyleavesaoc/python-snapcast/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Control Snapcast, a multi-room synchronous audio solution";
+    homepage = "https://github.com/happyleavesaoc/python-snapcast/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

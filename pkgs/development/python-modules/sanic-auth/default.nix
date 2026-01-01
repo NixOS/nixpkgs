@@ -41,10 +41,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sanic_auth" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple Authentication for Sanic";
     homepage = "https://github.com/pyx/sanic-auth/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ arnoldfarkas ];
+=======
+  meta = with lib; {
+    description = "Simple Authentication for Sanic";
+    homepage = "https://github.com/pyx/sanic-auth/";
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ arnoldfarkas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

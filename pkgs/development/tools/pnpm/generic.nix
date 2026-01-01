@@ -2,8 +2,12 @@
   lib,
   stdenvNoCC,
   writeScript,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+  callPackages,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchurl,
   installShellFiles,
   nodejs,
@@ -72,6 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru =
     let
+<<<<<<< HEAD
       pnpm' = buildPackages."pnpm_${lib.versions.major version}";
     in
     {
@@ -97,6 +102,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               ];
             })
           );
+=======
+      fetchDepsAttrs = callPackages ./fetch-deps {
+        pnpm = buildPackages."pnpm_${lib.versions.major version}";
+      };
+    in
+    {
+      inherit (fetchDepsAttrs) fetchDeps configHook;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit majorVersion;
 
       tests.version = lib.optionalAttrs withNode (

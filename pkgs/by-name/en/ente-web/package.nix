@@ -19,7 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web-${enteApp}";
+<<<<<<< HEAD
   version = "1.2.22";
+=======
+  version = "1.2.20";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ente-io";

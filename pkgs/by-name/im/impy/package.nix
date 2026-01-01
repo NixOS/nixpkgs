@@ -35,11 +35,20 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple library for loading/saving images and animations, written in C";
     homepage = "https://github.com/bcampbell/impy";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Simple library for loading/saving images and animations, written in C";
+    homepage = "https://github.com/bcampbell/impy";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

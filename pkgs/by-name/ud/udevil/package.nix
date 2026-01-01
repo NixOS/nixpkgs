@@ -17,8 +17,13 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "udevil";
+<<<<<<< HEAD
     tag = version;
     hash = "sha256-TTW2gPa4ND6ILq4yxKEL07AQpSqfiEo66S72lVEmpFk=";
+=======
+    rev = version;
+    sha256 = "0nd44r8rbxifx4x4m24z5aji1c6k1fhw8cmf5s43wd5qys0bcdad";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -53,6 +58,7 @@ stdenv.mkDerivation rec {
   patches = [
     # sys/stat.h header missing on src/device-info.h
     ./device-info-sys-stat.patch
+<<<<<<< HEAD
 
     ./fix-gcc15.patch
   ];
@@ -63,5 +69,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  ];
+
+  meta = with lib; {
+    homepage = "https://ignorantguru.github.io/udevil/";
+    description = "Mount without password";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

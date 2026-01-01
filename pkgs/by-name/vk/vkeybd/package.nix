@@ -40,11 +40,19 @@ stdenv.mkDerivation rec {
     "TCLLIB=-l${tcl.libPrefix}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Virtual MIDI keyboard";
     homepage = "https://www.alsa-project.org/~tiwai/alsa.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Virtual MIDI keyboard";
+    homepage = "https://www.alsa-project.org/~tiwai/alsa.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

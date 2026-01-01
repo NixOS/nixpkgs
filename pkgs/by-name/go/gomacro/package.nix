@@ -19,11 +19,20 @@ buildGoModule {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive Go interpreter and debugger with generics and macros";
     mainProgram = "gomacro";
     homepage = "https://github.com/cosmos72/gomacro";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ shofius ];
+=======
+  meta = with lib; {
+    description = "Interactive Go interpreter and debugger with generics and macros";
+    mainProgram = "gomacro";
+    homepage = "https://github.com/cosmos72/gomacro";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ shofius ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

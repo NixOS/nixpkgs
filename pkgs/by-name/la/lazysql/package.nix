@@ -33,10 +33,17 @@ buildGoModule rec {
     command = "lazysql --version";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform TUI database management tool written in Go";
     homepage = "https://github.com/jorgerojas26/lazysql";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Cross-platform TUI database management tool written in Go";
+    homepage = "https://github.com/jorgerojas26/lazysql";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "lazysql";
   };

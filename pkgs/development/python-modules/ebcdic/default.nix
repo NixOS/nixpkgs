@@ -37,10 +37,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ebcdic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Additional EBCDIC codecs";
     homepage = "https://github.com/roskakori/CodecMapper/tree/master/ebcdic";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Additional EBCDIC codecs";
+    homepage = "https://github.com/roskakori/CodecMapper/tree/master/ebcdic";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

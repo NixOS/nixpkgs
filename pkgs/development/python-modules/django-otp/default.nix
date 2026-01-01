@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "django-otp";
+<<<<<<< HEAD
   version = "1.6.3";
+=======
+  version = "1.6.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-otp";
     repo = "django-otp";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-sYwt41YWQQN6nKXGmrrZ75t/i1XNVjIgRKVElVaCGRc=";
+=======
+    hash = "sha256-//i2KSsrkofcNE2JUlIG9zPCe/cIzBo/zmueC4I5g7I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];
@@ -50,11 +58,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_otp" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/django-otp/django-otp";
     changelog = "https://github.com/django-otp/django-otp/blob/${src.tag}/CHANGES.rst";
     description = "Pluggable framework for adding two-factor authentication to Django using one-time passwords";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/django-otp/django-otp";
+    changelog = "https://github.com/django-otp/django-otp/blob/${src.tag}/CHANGES.rst";
+    description = "Pluggable framework for adding two-factor authentication to Django using one-time passwords";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

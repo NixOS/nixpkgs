@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) firefox firefox-esr;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://firefox-source-docs.mozilla.org/nspr/index.html";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
@@ -61,5 +62,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    homepage = "https://firefox-source-docs.mozilla.org/nspr/index.html";
+    description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
+    maintainers = with maintainers; [
+      ajs124
+      hexa
+    ];
+    platforms = platforms.all;
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

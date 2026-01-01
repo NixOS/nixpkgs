@@ -43,11 +43,20 @@ buildGoModule rec {
     yara
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "YARA-based IOC scanner";
     mainProgram = "spyre";
     homepage = "https://github.com/spyre-project/spyre";
     license = with lib.licenses; [ lgpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "YARA-based IOC scanner";
+    mainProgram = "spyre";
+    homepage = "https://github.com/spyre-project/spyre";
+    license = with licenses; [ lgpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

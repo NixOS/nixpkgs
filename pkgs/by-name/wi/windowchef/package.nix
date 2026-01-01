@@ -32,11 +32,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stacking window manager that cooks windows with orders from the Waitron";
     homepage = "https://github.com/tudurom/windowchef";
     maintainers = with lib.maintainers; [ bhougland ];
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Stacking window manager that cooks windows with orders from the Waitron";
+    homepage = "https://github.com/tudurom/windowchef";
+    maintainers = with maintainers; [ bhougland ];
+    license = licenses.isc;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

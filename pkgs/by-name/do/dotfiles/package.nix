@@ -23,10 +23,18 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytest ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easily manage your dotfiles";
     mainProgram = "dotfiles";
     homepage = "https://github.com/jbernard/dotfiles";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Easily manage your dotfiles";
+    mainProgram = "dotfiles";
+    homepage = "https://github.com/jbernard/dotfiles";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

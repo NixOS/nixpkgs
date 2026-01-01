@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yaml-stubs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Typing stubs for PyYAML";
     homepage = "https://github.com/python/typeshed";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dnr ];
+=======
+  meta = with lib; {
+    description = "Typing stubs for PyYAML";
+    homepage = "https://github.com/python/typeshed";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dnr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

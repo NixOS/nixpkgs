@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ratelimit" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API Rate Limit Decorator";
     homepage = "https://github.com/tomasbasham/ratelimit";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API Rate Limit Decorator";
+    homepage = "https://github.com/tomasbasham/ratelimit";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

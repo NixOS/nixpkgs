@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "serpent" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple serialization library based on ast.literal_eval";
     homepage = "https://github.com/irmen/Serpent";
     changelog = "https://github.com/irmen/Serpent/releases/tag/serpent-${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Simple serialization library based on ast.literal_eval";
+    homepage = "https://github.com/irmen/Serpent";
+    changelog = "https://github.com/irmen/Serpent/releases/tag/serpent-${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

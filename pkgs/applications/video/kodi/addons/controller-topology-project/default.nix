@@ -32,11 +32,19 @@ let
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://github.com/kodi-game/controller-topology-project";
       description = "Models how controllers connect to and map to each other for all gaming history";
       license = with lib.licenses; [ odbl ];
       teams = [ lib.teams.kodi ];
+=======
+    meta = with lib; {
+      homepage = "https://github.com/kodi-game/controller-topology-project";
+      description = "Models how controllers connect to and map to each other for all gaming history";
+      license = with licenses; [ odbl ];
+      teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

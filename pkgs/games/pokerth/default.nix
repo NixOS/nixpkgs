@@ -87,6 +87,7 @@ mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL}/include/SDL";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.pokerth.net";
     description = "Poker game ${target}";
@@ -94,5 +95,14 @@ mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.pokerth.net";
+    description = "Poker game ${target}";
+    mainProgram = "pokerth";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ obadz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyimpfuzzy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module which calculates and compares the impfuzzy (import fuzzy hashing)";
     homepage = "https://github.com/JPCERTCC/impfuzzy";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Python module which calculates and compares the impfuzzy (import fuzzy hashing)";
+    homepage = "https://github.com/JPCERTCC/impfuzzy";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

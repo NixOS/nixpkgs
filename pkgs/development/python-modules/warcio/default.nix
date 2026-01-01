@@ -61,12 +61,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "warcio" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Streaming WARC/ARC library for fast web archive IO";
     mainProgram = "warcio";
     homepage = "https://github.com/webrecorder/warcio";
     changelog = "https://github.com/webrecorder/warcio/blob/master/CHANGELIST.rst";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

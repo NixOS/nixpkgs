@@ -22,11 +22,19 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
+<<<<<<< HEAD
   meta = {
     description = "Obtains certificates from Let's Encrypt using DNS-01 without the need for API access to the DNS provider";
     homepage = "https://github.com/krtab/agnos";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ justinas ];
+=======
+  meta = with lib; {
+    description = "Obtains certificates from Let's Encrypt using DNS-01 without the need for API access to the DNS provider";
+    homepage = "https://github.com/krtab/agnos";
+    license = licenses.mit;
+    maintainers = with maintainers; [ justinas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru.tests = nixosTests.agnos;

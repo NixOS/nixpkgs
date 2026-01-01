@@ -20,11 +20,20 @@ buildGoModule rec {
   # Tests require network connection, but is not allowed by nix
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Run common networking tests against your site";
     mainProgram = "dstp";
     homepage = "https://github.com/ycd/dstp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jlesquembre ];
+=======
+  meta = with lib; {
+    description = "Run common networking tests against your site";
+    mainProgram = "dstp";
+    homepage = "https://github.com/ycd/dstp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jlesquembre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

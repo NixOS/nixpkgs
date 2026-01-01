@@ -12,7 +12,11 @@
   fftw,
   libint,
   libvori,
+<<<<<<< HEAD
   libxc_7,
+=======
+  libxc,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dftd4,
   simple-dftd3,
   tblite,
@@ -165,7 +169,11 @@ stdenv.mkDerivation rec {
     gsl
     libint
     libvori
+<<<<<<< HEAD
     libxc_7
+=======
+    libxc
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libxsmm
     mpi
     spglib

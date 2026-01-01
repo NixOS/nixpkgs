@@ -20,12 +20,21 @@ buildGoModule rec {
 
   passthru.tests.restic = nixosTests.restic-rest-server;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/restic/rest-server/blob/${src.rev}/CHANGELOG.md";
     description = "High performance HTTP server that implements restic's REST backend API";
     mainProgram = "rest-server";
     homepage = "https://github.com/restic/rest-server";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

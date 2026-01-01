@@ -44,11 +44,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "High-quality data compression program";
     license = lib.licenses.bsdOriginal;
     pkgConfigModules = [ "bz2" ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "High-quality data compression program";
+    license = licenses.bsdOriginal;
+    pkgConfigModules = [ "bz2" ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

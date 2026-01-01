@@ -27,14 +27,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "LXMF" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lightweight Extensible Message Format for Reticulum";
     homepage = "https://github.com/markqvist/lxmf";
     changelog = "https://github.com/markqvist/LXMF/releases/tag/${src.tag}";
     # Reticulum License
     # https://github.com/markqvist/LXMF/blob/master/LICENSE
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.unfree;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lxmd";
   };
 }

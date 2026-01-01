@@ -42,6 +42,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://editorconfig-checker.github.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      uri-canva
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zowoq
     ];
   };

@@ -33,12 +33,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xdoctest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rewrite of Python's builtin doctest module (with pytest plugin integration) with AST instead of REGEX";
     homepage = "https://github.com/Erotemic/xdoctest";
     changelog = "https://github.com/Erotemic/xdoctest/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Rewrite of Python's builtin doctest module (with pytest plugin integration) with AST instead of REGEX";
+    homepage = "https://github.com/Erotemic/xdoctest";
+    changelog = "https://github.com/Erotemic/xdoctest/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xdoctest";
   };
 }

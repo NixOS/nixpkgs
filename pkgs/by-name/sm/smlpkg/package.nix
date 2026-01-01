@@ -39,12 +39,21 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generic package manager for Standard ML libraries and programs";
     homepage = "https://github.com/diku-dk/smlpkg";
     license = lib.licenses.mit;
     platforms = mlton.meta.platforms;
     maintainers = with lib.maintainers; [ athas ];
+=======
+  meta = with lib; {
+    description = "Generic package manager for Standard ML libraries and programs";
+    homepage = "https://github.com/diku-dk/smlpkg";
+    license = licenses.mit;
+    platforms = mlton.meta.platforms;
+    maintainers = with maintainers; [ athas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "smlpkg";
   };
 }

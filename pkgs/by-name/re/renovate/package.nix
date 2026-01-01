@@ -5,8 +5,11 @@
   makeWrapper,
   nodejs,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python3,
   testers,
   xcbuild,
@@ -14,15 +17,26 @@
   nix-update-script,
   yq-go,
 }:
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
   version = "42.57.1";
+=======
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "renovate";
+  version = "42.24.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-IMUnOk4D0CDKgrkM9geyaj80Pir6pORlWUPW2UIoKOM=";
+=======
+    hash = "sha256-TGk8/qr213jEPpsJM091G7LvUc/UNKB9DnVg5j0C6uw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -33,18 +47,29 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python3
     yq-go
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 2;
     hash = "sha256-WTShVxWhdAPbITBaSw6BrqSwSJ9pc2imB+ovjhTT6qY=";
+=======
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
+    hash = "sha256-cUpMiCM6fv8n/tMQJ8UHNaP48MNdc7VD+Q+ka+CQ3EE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   env.COREPACK_ENABLE_STRICT = 0;

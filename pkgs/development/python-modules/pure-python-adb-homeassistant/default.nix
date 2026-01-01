@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "adb_messenger" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of the ADB client";
     homepage = "https://github.com/JeffLIrion/pure-python-adb";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.makefu ];
+=======
+  meta = with lib; {
+    description = "Python implementation of the ADB client";
+    homepage = "https://github.com/JeffLIrion/pure-python-adb";
+    license = licenses.mit;
+    maintainers = [ maintainers.makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

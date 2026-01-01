@@ -4,7 +4,11 @@
   writeShellApplication,
   buildFHSEnv,
   webkitgtk_4_1,
+<<<<<<< HEAD
   ffmpeg_7,
+=======
+  ffmpeg-full,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gtk3,
   pango,
   atk,
@@ -49,7 +53,11 @@ buildFHSEnv {
     custom_lsb_release
     webkitgtk_4_1
     gtk3
+<<<<<<< HEAD
     ffmpeg_7
+=======
+    ffmpeg-full
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pango
     atk
     cairo

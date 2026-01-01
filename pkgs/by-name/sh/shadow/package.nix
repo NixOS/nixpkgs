@@ -19,7 +19,10 @@
   libbsd,
   withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
   tcb,
+<<<<<<< HEAD
   cmocka,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 let
   glibc' =
@@ -69,6 +72,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withTcb tcb;
 
   patches = [
+<<<<<<< HEAD
     # Don't set $PATH to /bin:/usr/bin but inherit the $PATH of the caller.
     ./keep-path.patch
     # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
@@ -80,6 +84,12 @@ stdenv.mkDerivation rec {
     # This unit test fails: https://github.com/shadow-maint/shadow/issues/1382
     # Can be removed after the next release
     ./disable-xaprintf-test.patch
+=======
+    ./keep-path.patch
+    # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
+    ./respect-xml-catalog-files-var.patch
+    ./fix-install-with-tcb.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''
@@ -112,11 +122,14 @@ stdenv.mkDerivation rec {
     substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc'.bin}/bin/nscd
   '';
 
+<<<<<<< HEAD
   doCheck = true;
   nativeCheckInputs = [
     cmocka
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postInstall = ''
     # Move the su binary into the su package
     mkdir -p $su/bin
@@ -129,16 +142,27 @@ stdenv.mkDerivation rec {
     stdenv.buildPlatform != stdenv.hostPlatform
   ) stdenv.shellPackage;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/shadow-maint/shadow";
     description = "Suite containing authentication-related tools such as passwd and su";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/shadow-maint/shadow";
+    description = "Suite containing authentication-related tools such as passwd and su";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {
     shellPath = "/bin/nologin";
+<<<<<<< HEAD
     # TODO: Run system tests: https://github.com/shadow-maint/shadow/blob/master/doc/contributions/tests.md#system-tests
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     tests = { inherit (nixosTests) shadow; };
   };
 }

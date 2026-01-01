@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ppscore" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of the Predictive Power Score (PPS)";
     homepage = "https://github.com/8080labs/ppscore/";
     changelog = "https://github.com/8080labs/ppscore/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evax ];
+=======
+  meta = with lib; {
+    description = "Python implementation of the Predictive Power Score (PPS)";
+    homepage = "https://github.com/8080labs/ppscore/";
+    changelog = "https://github.com/8080labs/ppscore/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ evax ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

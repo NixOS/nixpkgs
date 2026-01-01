@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hnswlib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Header-only C++/python library for fast approximate nearest neighbors";
     homepage = "https://github.com/chroma-core/hnswlib";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Header-only C++/python library for fast approximate nearest neighbors";
+    homepage = "https://github.com/chroma-core/hnswlib";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

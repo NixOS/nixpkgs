@@ -8,16 +8,27 @@
 
 buildNpmPackage rec {
   pname = "node-red";
+<<<<<<< HEAD
   version = "4.1.2";
+=======
+  version = "4.1.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "node-red";
     repo = "node-red";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-Xr00S9Q8EPPGcd3kNHjmqYuzdzN6+W8xVuJsUVr4yII=";
   };
 
   npmDepsHash = "sha256-8nwIEu/p5kVYoG3+jXBss352MciCnk/aGV9nbDGHDdA=";
+=======
+    hash = "sha256-guyWY5Bk9mP5WBjPAKGq/Hp4BYF1rDYDG0m1rOLnpio=";
+  };
+
+  npmDepsHash = "sha256-GMbUAdAHrDJZIrUzXtDxW8kP0KZK2GTxsHWxoZTaqAQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postPatch =
     let

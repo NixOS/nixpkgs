@@ -25,9 +25,16 @@ buildPythonPackage rec {
     py.test
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pydanny/whichcraft";
     description = "Cross-platform cross-python shutil.which functionality";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pydanny/whichcraft";
+    description = "Cross-platform cross-python shutil.which functionality";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

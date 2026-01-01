@@ -102,12 +102,21 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pacemaker;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://corosync.org/";
     description = "Group Communication System with features for implementing high availability within applications";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://corosync.org/";
+    description = "Group Communication System with features for implementing high availability within applications";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       montag451
       ryantm
     ];

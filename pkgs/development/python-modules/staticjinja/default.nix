@@ -58,11 +58,20 @@ buildPythonPackage rec {
     minimal-template = callPackage ./test-minimal-template { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library and cli tool that makes it easy to build static sites using Jinja2";
     mainProgram = "staticjinja";
     homepage = "https://staticjinja.readthedocs.io/en/latest/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    description = "Library and cli tool that makes it easy to build static sites using Jinja2";
+    mainProgram = "staticjinja";
+    homepage = "https://staticjinja.readthedocs.io/en/latest/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

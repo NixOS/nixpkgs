@@ -1,5 +1,11 @@
 {
+<<<<<<< HEAD
   lib,
+=======
+  config,
+  lib,
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   newScope,
   useMupdf ? true,
 }:
@@ -7,7 +13,11 @@
 lib.makeScope newScope (
   self:
   let
+<<<<<<< HEAD
     inherit (self) callPackage;
+=======
+    callPackage = self.callPackage;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   in
   {
     inherit useMupdf;

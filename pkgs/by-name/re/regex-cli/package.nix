@@ -18,11 +18,19 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tool for debugging, ad hoc benchmarking and generating regular expressions";
     mainProgram = "regex-cli";
     homepage = "https://github.com/rust-lang/regex/tree/master/regex-cli";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Command line tool for debugging, ad hoc benchmarking and generating regular expressions";
+    mainProgram = "regex-cli";
+    homepage = "https://github.com/rust-lang/regex/tree/master/regex-cli";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       mit
     ];

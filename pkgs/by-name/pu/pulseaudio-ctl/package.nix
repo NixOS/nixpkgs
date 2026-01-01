@@ -21,10 +21,18 @@ let
     pulseaudio
   ];
   pname = "pulseaudio-ctl";
+<<<<<<< HEAD
   version = "1.70";
 in
 stdenv.mkDerivation {
   inherit pname version;
+=======
+
+in
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  version = "1.70";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "graysky2";
@@ -48,6 +56,7 @@ stdenv.mkDerivation {
       --prefix PATH : ${path}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Control pulseaudio volume from the shell or mapped to keyboard shortcuts. No need for alsa-utils";
     mainProgram = "pulseaudio-ctl";
@@ -55,5 +64,14 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Control pulseaudio volume from the shell or mapped to keyboard shortcuts. No need for alsa-utils";
+    mainProgram = "pulseaudio-ctl";
+    homepage = "https://bbs.archlinux.org/viewtopic.php?id=124513";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

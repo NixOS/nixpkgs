@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pothosware/SoapyRTLSDR";
     description = "SoapySDR plugin for RTL-SDR devices";
@@ -54,5 +55,16 @@ stdenv.mkDerivation (finalAttrs: {
       luizribeiro
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pothosware/SoapyRTLSDR";
+    description = "SoapySDR plugin for RTL-SDR devices";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      ragge
+      luizribeiro
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

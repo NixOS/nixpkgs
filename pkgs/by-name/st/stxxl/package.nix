@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the C++ standard template library STL for external memory (out-of-core) computations";
     homepage = "https://github.com/stxxl/stxxl";
@@ -46,5 +47,14 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "stxxl_tool";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Implementation of the C++ standard template library STL for external memory (out-of-core) computations";
+    homepage = "https://github.com/stxxl/stxxl";
+    license = licenses.boost;
+    maintainers = [ ];
+    mainProgram = "stxxl_tool";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,10 +29,18 @@ stdenv.mkDerivation (finalAttrs: {
     pulseaudio
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pulseaudio bindings for Qt";
     homepage = "https://invent.kde.org/libraries/pulseaudio-qt";
     license = with lib.licenses; [ lgpl2 ];
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "Pulseaudio bindings for Qt";
+    homepage = "https://invent.kde.org/libraries/pulseaudio-qt";
+    license = with licenses; [ lgpl2 ];
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -10,12 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ferron";
+<<<<<<< HEAD
   version = "2.2.1";
+=======
+  version = "1.3.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ferronweb";
     repo = "ferron";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-+Esbsr+pqRSRd3M7mFhNl+KVcz3wO5YlZrna8mYsV80=";
   };
 
@@ -26,6 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   cargoHash = "sha256-/F1CqzOKscT/rOsJaY+PwZPMBDxSEoI+zN/GsH5P37k=";
+=======
+    hash = "sha256-bBIhLkh9UV2MJKovQaFk3cC1rYafiyxknRlKWVQ5gwY=";
+  };
+
+  cargoHash = "sha256-xsJJglSq8hpWWi0zknPL03nle99GxznPI3HON2o8zco=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config
@@ -42,6 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {

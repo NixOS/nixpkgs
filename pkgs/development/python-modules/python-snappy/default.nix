@@ -30,10 +30,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for the snappy compression library from Google";
     homepage = "https://github.com/intake/python-snappy";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python library for the snappy compression library from Google";
+    homepage = "https://github.com/intake/python-snappy";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -31,12 +31,21 @@ stdenv.mkDerivation rec {
 
   enabledTestPaths = [ "test.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Storage conversion and expression calculator";
     mainProgram = "bcal";
     homepage = "https://github.com/jarun/bcal";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Storage conversion and expression calculator";
+    mainProgram = "bcal";
+    homepage = "https://github.com/jarun/bcal";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

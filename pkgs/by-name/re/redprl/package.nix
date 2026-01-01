@@ -32,6 +32,7 @@ stdenv.mkDerivation {
     mv ./bin/redprl $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Proof assistant for Nominal Computational Type Theory";
     mainProgram = "redprl";
@@ -39,5 +40,14 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ acowley ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Proof assistant for Nominal Computational Type Theory";
+    mainProgram = "redprl";
+    homepage = "http://www.redprl.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ acowley ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

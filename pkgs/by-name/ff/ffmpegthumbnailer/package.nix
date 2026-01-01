@@ -53,7 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '=ffmpegthumbnailer' "=$out/bin/ffmpegthumbnailer"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lightweight video thumbnailer";
     longDescription = "FFmpegthumbnailer is a lightweight video
         thumbnailer that can be used by file managers to create thumbnails
@@ -64,8 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
         The only dependencies are ffmpeg and libpng/libjpeg.
     ";
     homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.jagajaga ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ffmpegthumbnailer";
   };
 })

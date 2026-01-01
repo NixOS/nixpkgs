@@ -70,7 +70,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -83,12 +87,21 @@ buildPythonPackage rec {
     "integration"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to do automated pentest reporting with SysReptor";
     homepage = "https://github.com/Syslifters/reptor";
     changelog = "https://github.com/Syslifters/reptor/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to do automated pentest reporting with SysReptor";
+    homepage = "https://github.com/Syslifters/reptor";
+    changelog = "https://github.com/Syslifters/reptor/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "reptor";
   };
 }

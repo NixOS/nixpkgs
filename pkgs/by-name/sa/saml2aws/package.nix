@@ -36,11 +36,19 @@ buildGoModule rec {
       --zsh <($out/bin/saml2aws --completion-script-zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool which enables you to login and retrieve AWS temporary credentials using a SAML IDP";
     mainProgram = "saml2aws";
     homepage = "https://github.com/Versent/saml2aws";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "CLI tool which enables you to login and retrieve AWS temporary credentials using a SAML IDP";
+    mainProgram = "saml2aws";
+    homepage = "https://github.com/Versent/saml2aws";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.pmyjavec ];
   };
 }

@@ -34,11 +34,20 @@ buildPythonPackage rec {
   # No tests yet
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Functional testing tool";
     homepage = "https://github.com/RostanTabet/refery";
     mainProgram = "refery";
     maintainers = with lib.maintainers; [ rostan-t ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Functional testing tool";
+    homepage = "https://github.com/RostanTabet/refery";
+    mainProgram = "refery";
+    maintainers = with maintainers; [ rostan-t ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

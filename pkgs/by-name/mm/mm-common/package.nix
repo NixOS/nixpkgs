@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Common build files of GLib/GTK C++ bindings";
     longDescription = ''
       The mm-common module provides the build infrastructure and utilities
@@ -49,8 +53,14 @@ stdenv.mkDerivation rec {
       building tarball releases, unless configured to use maintainer-mode.
     '';
     homepage = "https://www.gtkmm.org";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

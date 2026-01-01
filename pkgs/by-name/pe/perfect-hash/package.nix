@@ -25,7 +25,11 @@ python3.pkgs.buildPythonApplication rec {
     cp -r examples $out/share/doc/perfect-hash
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Minimal perfect hash function generator";
     mainProgram = "perfect-hash";
     longDescription = ''
@@ -34,10 +38,18 @@ python3.pkgs.buildPythonApplication rec {
       output is code which implements the hash function. Templates can
       easily be constructed for any programming language.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.kaction ];
 
     homepage = "https://github.com/ilanschnell/perfect-hash";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd3;
+    maintainers = [ maintainers.kaction ];
+
+    homepage = "https://github.com/ilanschnell/perfect-hash";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

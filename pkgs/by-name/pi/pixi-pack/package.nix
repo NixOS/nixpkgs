@@ -26,7 +26,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   # Needed to get openssl-sys to use pkgconfig.
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Tests require downloading artifacts from conda.
   doCheck = false;
@@ -34,6 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

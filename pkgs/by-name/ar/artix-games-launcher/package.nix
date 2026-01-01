@@ -29,7 +29,11 @@ appimageTools.wrapType2 {
     description = "Launcher for games by Artix Entertainment";
     homepage = "https://www.artix.com/downloads/artixlauncher";
     license = lib.licenses.unfree;
+<<<<<<< HEAD
     mainProgram = "artix-games-launcher";
+=======
+    mainProgram = "artix-game-launcher";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ jtliang24 ];
     platforms = [ "x86_64-linux" ];
   };

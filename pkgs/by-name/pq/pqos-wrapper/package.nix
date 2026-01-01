@@ -23,11 +23,19 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "pqos_wrapper" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper for Intel PQoS for the purpose of using it in BenchExec";
     homepage = "https://gitlab.com/sosy-lab/software/pqos-wrapper";
     maintainers = with lib.maintainers; [ lorenzleutgeb ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Wrapper for Intel PQoS for the purpose of using it in BenchExec";
+    homepage = "https://gitlab.com/sosy-lab/software/pqos-wrapper";
+    maintainers = with maintainers; [ lorenzleutgeb ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "pqos_wrapper";
   };

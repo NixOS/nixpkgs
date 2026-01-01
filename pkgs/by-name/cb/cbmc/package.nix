@@ -91,8 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=unused-but-set-variable"
       # fix "passing no argument for the '...' parameter of a variadic macro is a C++20 extension"
       "-Wno-error=c++20-extensions"
+<<<<<<< HEAD
       # fix "first argument in call to 'memset' is a pointer to non-trivially copyable type"
       "-Wno-error=nontrivial-memcall"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ]
   );
 
@@ -107,6 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/cbmc";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

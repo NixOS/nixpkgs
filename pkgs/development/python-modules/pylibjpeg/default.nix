@@ -50,11 +50,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylibjpeg" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python framework for decoding JPEG images, with a focus on supporting Pydicom";
     homepage = "https://github.com/pydicom/pylibjpeg";
     changelog = "https://github.com/pydicom/pylibjpeg/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Python framework for decoding JPEG images, with a focus on supporting Pydicom";
+    homepage = "https://github.com/pydicom/pylibjpeg";
+    changelog = "https://github.com/pydicom/pylibjpeg/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

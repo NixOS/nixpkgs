@@ -42,10 +42,17 @@ buildPythonPackage rec {
     "parsimonious.nodes"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Arbitrary-lookahead parser";
     homepage = "https://github.com/erikrose/parsimonious";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Arbitrary-lookahead parser";
+    homepage = "https://github.com/erikrose/parsimonious";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

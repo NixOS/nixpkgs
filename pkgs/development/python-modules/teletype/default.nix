@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "teletype" ];
 
+<<<<<<< HEAD
   meta = {
     description = "High-level cross platform tty library";
     homepage = "https://github.com/jkwill87/teletype";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urlordjames ];
+=======
+  meta = with lib; {
+    description = "High-level cross platform tty library";
+    homepage = "https://github.com/jkwill87/teletype";
+    license = licenses.mit;
+    maintainers = with maintainers; [ urlordjames ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

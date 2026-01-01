@@ -77,11 +77,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jnpr.junos" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Junos 'EZ' automation for non-programmers";
     homepage = "https://github.com/Juniper/py-junos-eznc";
     changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ xnaveira ];
+=======
+  meta = with lib; {
+    description = "Junos 'EZ' automation for non-programmers";
+    homepage = "https://github.com/Juniper/py-junos-eznc";
+    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ xnaveira ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

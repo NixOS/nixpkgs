@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "--with-tls"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GGZ Gaming zone libraries";
     mainProgram = "ggz-config";
@@ -42,6 +43,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "GGZ Gaming zone libraries";
+    mainProgram = "ggz-config";
+    maintainers = with maintainers; [
+      raskin
+    ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "http://www.ggzgamingzone.org/releases/";
   };
 }

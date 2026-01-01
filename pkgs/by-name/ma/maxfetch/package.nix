@@ -35,6 +35,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Nice fetching program written in sh";
     homepage = "https://github.com/jobcmax/maxfetch";
@@ -42,5 +43,14 @@ stdenvNoCC.mkDerivation {
     mainProgram = "maxfetch";
     maintainers = with lib.maintainers; [ jtbx ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Nice fetching program written in sh";
+    homepage = "https://github.com/jobcmax/maxfetch";
+    license = licenses.gpl2Plus;
+    mainProgram = "maxfetch";
+    maintainers = with maintainers; [ jtbx ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,10 +27,17 @@ buildPythonPackage rec {
   # pypi tarball has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Navigate HTTP resources using WADL files as guides";
     homepage = "https://launchpad.net/wadllib";
     license = lib.licenses.lgpl3Only;
+=======
+  meta = with lib; {
+    description = "Navigate HTTP resources using WADL files as guides";
+    homepage = "https://launchpad.net/wadllib";
+    license = licenses.lgpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

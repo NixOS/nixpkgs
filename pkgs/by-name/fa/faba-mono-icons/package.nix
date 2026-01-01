@@ -41,6 +41,7 @@ stdenvNoCC.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Full set of Faba monochrome panel icons";
     homepage = "https://snwh.org/moka";
@@ -48,5 +49,14 @@ stdenvNoCC.mkDerivation {
     # moka-icon-theme dependency is restricted to linux
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    description = "Full set of Faba monochrome panel icons";
+    homepage = "https://snwh.org/moka";
+    license = licenses.gpl3;
+    # moka-icon-theme dependency is restricted to linux
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -44,10 +44,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "green" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python test runner";
     homepage = "https://github.com/CleanCut/green";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python test runner";
+    homepage = "https://github.com/CleanCut/green";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

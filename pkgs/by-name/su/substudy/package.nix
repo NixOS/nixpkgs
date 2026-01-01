@@ -37,10 +37,17 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Learn foreign languages using audio and subtitles extracted from video files";
     homepage = "https://www.randomhacks.net/substudy";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Learn foreign languages using audio and subtitles extracted from video files";
+    homepage = "https://www.randomhacks.net/substudy";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "substudy";
     maintainers = [ ];
   };

@@ -36,6 +36,7 @@ stdenv.mkDerivation {
     install -D rastertozj $out/lib/cups/filter/rastertozj
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CUPS filter for thermal printer Zjiang ZJ-58";
     homepage = "https://github.com/klirichek/zj-58";
@@ -45,5 +46,16 @@ stdenv.mkDerivation {
       deimelias
     ];
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "CUPS filter for thermal printer Zjiang ZJ-58";
+    homepage = "https://github.com/klirichek/zj-58";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      makefu
+      deimelias
+    ];
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

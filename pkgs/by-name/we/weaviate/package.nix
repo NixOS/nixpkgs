@@ -29,10 +29,18 @@ buildGoModule rec {
     ln -s $out/bin/weaviate-server $out/bin/weaviate
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "ML-first vector search engine";
     homepage = "https://github.com/semi-technologies/weaviate";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "ML-first vector search engine";
+    homepage = "https://github.com/semi-technologies/weaviate";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

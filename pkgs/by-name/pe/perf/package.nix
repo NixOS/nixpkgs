@@ -163,11 +163,20 @@ stdenv.mkDerivation {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
     mainProgram = "perf";
     maintainers = with lib.maintainers; [ tobim ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://perf.wiki.kernel.org/";
+    description = "Linux tools to profile with performance counters";
+    mainProgram = "perf";
+    maintainers = with maintainers; [ tobim ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

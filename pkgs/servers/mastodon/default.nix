@@ -66,9 +66,12 @@ stdenv.mkDerivation rec {
 
       bundle exec rails assets:precompile
 
+<<<<<<< HEAD
       # Install packages for streaming server while remove others
       rm -rf node_modules/*
       yarn workspaces focus --production @mastodon/streaming
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rm -rf node_modules/.cache
 
       # Remove workspace "package" as it contains broken symlinks
@@ -173,16 +176,27 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = lib.licenses.agpl3Plus;
+=======
+  meta = with lib; {
+    description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
+    homepage = "https://joinmastodon.org";
+    license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       happy-river
       erictapen
       izorkin

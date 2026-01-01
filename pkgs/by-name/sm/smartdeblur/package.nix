@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Y-Vladimir/SmartDeblur";
     description = "Tool for restoring blurry and defocused images";
@@ -43,5 +44,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Y-Vladimir/SmartDeblur";
+    description = "Tool for restoring blurry and defocused images";
+    mainProgram = "SmartDeblur";
+    license = licenses.gpl3;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

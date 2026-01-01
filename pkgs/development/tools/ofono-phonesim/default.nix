@@ -30,6 +30,7 @@ mkDerivation {
     "UIC=${qtbase.dev}/bin/uic"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Phone Simulator for modem testing";
     mainProgram = "phonesim";
@@ -37,5 +38,14 @@ mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Phone Simulator for modem testing";
+    mainProgram = "phonesim";
+    homepage = "https://01.org/ofono";
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

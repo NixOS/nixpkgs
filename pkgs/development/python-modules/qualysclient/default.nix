@@ -53,11 +53,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qualysclient" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python SDK for interacting with the Qualys API";
     homepage = "https://qualysclient.readthedocs.io/";
     changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python SDK for interacting with the Qualys API";
+    homepage = "https://qualysclient.readthedocs.io/";
+    changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

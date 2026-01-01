@@ -38,11 +38,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libcloud" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unified interface to many cloud providers";
     homepage = "https://libcloud.apache.org/";
     changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Unified interface to many cloud providers";
+    homepage = "https://libcloud.apache.org/";
+    changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

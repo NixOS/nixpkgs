@@ -97,6 +97,7 @@ linkFarm name [
     };
   }
   {
+<<<<<<< HEAD
     name = "zigini-0.3.3-36M0FRJJAADZVq5HPm-hYKMpFFTr0OgjbEYcK2ijKZ5n";
     path = fetchZigArtifact {
       name = "zigini";
@@ -110,6 +111,21 @@ linkFarm name [
       name = "ini";
       url = "https://github.com/AnErrupTion/ini/archive/918f16d0dcf893d0c1cdffe204faa08bb3584e04.tar.gz";
       hash = "sha256-z2IMS0grfnf33h6tz1ERv2i6gfnS6p8oMWFz+AmGoA8=";
+=======
+    name = "zigini-0.3.2-BSkB7WJJAADybd5DGd9MLCp6ikGGUq9wicxsjv0HF1Qc";
+    path = fetchZigArtifact {
+      name = "zigini";
+      url = "https://github.com/AnErrupTion/zigini/archive/96ca1d9f1a7ec741f07ceb104dae2b3a7bdfd48a.tar.gz";
+      hash = "sha256-Hhc/+a8ToHI9RAJTIQ6Z3KZKQFvoPvd5ODz7HRbytdw=";
+    };
+  }
+  {
+    name = "ini-0.1.0-YCQ9YkUnAAA7SjpLwvomwrngMn3TConSAlNgo7Q8ibMZ";
+    path = fetchZigArtifact {
+      name = "ini";
+      url = "https://github.com/AnErrupTion/ini/archive/ac6e656157b2ac6c98392283a139b47c44a85d54.tar.gz";
+      hash = "sha256-rOXuHsd4WiLDODruQioADMWQ7UkNtx5LUdTcK2dve40=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   {

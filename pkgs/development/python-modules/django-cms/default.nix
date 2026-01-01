@@ -21,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "django-cms";
+<<<<<<< HEAD
   version = "5.0.5";
+=======
+  version = "5.0.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +34,11 @@ buildPythonPackage rec {
     owner = "django-cms";
     repo = "django-cms";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-s7sgENs1A5weAiZ2zQYIbAKFOWR3Jmhbsli3vLyqi/4=";
+=======
+    hash = "sha256-bhF1FJO+EHg49ZnwykVmyM/kkdXMCyfoV+EFQ5IZFF4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

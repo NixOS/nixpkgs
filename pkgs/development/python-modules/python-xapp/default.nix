@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "python-xapp";
+<<<<<<< HEAD
   version = "3.0.1";
+=======
+  version = "3.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   format = "other";
 
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "linuxmint";
     repo = "python-xapp";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-mrFKK8541HuMHpRMGvvJcSshbpA99Y712ztAMfFj5m4=";
+=======
+    hash = "sha256-OvYbMu/2cQLTHHbHh4zESf1X22AfZe8ZEfzeOBDcU90=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -57,11 +65,20 @@ buildPythonPackage rec {
     skipBulkUpdate = true; # This should be bumped as part of Cinnamon update.
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/python-xapp";
     description = "Cross-desktop libraries and common resources for python";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/python-xapp";
+    description = "Cross-desktop libraries and common resources for python";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

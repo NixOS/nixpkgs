@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.blessed
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/thisisparker/cursewords";
     description = "Graphical command line program for solving crossword puzzles in the terminal";
@@ -36,5 +37,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/thisisparker/cursewords";
+    description = "Graphical command line program for solving crossword puzzles in the terminal";
+    mainProgram = "cursewords";
+    license = licenses.agpl3Only;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

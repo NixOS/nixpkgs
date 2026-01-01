@@ -25,11 +25,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Audio Processing Technology codec (aptX)";
     license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/pali/libopenaptx";
     platforms = lib.platforms.linux;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Audio Processing Technology codec (aptX)";
+    license = licenses.gpl3Plus;
+    homepage = "https://github.com/pali/libopenaptx";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

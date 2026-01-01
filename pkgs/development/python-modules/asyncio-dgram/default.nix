@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncio_dgram" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python support for higher level Datagram";
     homepage = "https://github.com/jsbronder/asyncio-dgram";
     changelog = "https://github.com/jsbronder/asyncio-dgram/blob/v${version}/ChangeLog";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python support for higher level Datagram";
+    homepage = "https://github.com/jsbronder/asyncio-dgram";
+    changelog = "https://github.com/jsbronder/asyncio-dgram/blob/v${version}/ChangeLog";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

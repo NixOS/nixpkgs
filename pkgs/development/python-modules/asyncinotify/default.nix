@@ -26,7 +26,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test.py" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # Unsupported and crashing on import in dlsym with symbol not found
       "aarch64-darwin"
@@ -35,7 +39,12 @@ buildPythonPackage rec {
     description = "Module for inotify";
     homepage = "https://github.com/absperf/asyncinotify/";
     changelog = "https://github.com/absperf/asyncinotify/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ cynerd ];
+=======
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ cynerd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

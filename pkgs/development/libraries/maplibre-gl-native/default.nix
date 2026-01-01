@@ -70,11 +70,20 @@ mkDerivation rec {
     ]
   );
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source alternative to Mapbox GL Native";
     homepage = "https://maplibre.org/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open-source alternative to Mapbox GL Native";
+    homepage = "https://maplibre.org/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

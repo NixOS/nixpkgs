@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
   doCheck = true;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
+<<<<<<< HEAD
   meta = {
     description = "JSON Bindings for GNU Guile";
     homepage = "https://savannah.nongnu.org/projects/guile-json";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "JSON Bindings for GNU Guile";
+    homepage = "https://savannah.nongnu.org/projects/guile-json";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ethancedwards8 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

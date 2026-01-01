@@ -28,11 +28,19 @@ buildGoModule rec {
     wrapProgram $out/bin/gox --prefix PATH : ${lib.makeBinPath [ go ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mitchellh/gox";
     description = "Dead simple, no frills Go cross compile tool";
     mainProgram = "gox";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mitchellh/gox";
+    description = "Dead simple, no frills Go cross compile tool";
+    mainProgram = "gox";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

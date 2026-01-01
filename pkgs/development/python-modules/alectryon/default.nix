@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/cpitclaudel/alectryon";
     description = "Collection of tools for writing technical documents that mix Coq code and prose";
     mainProgram = "alectryon";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Zimmi48 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/cpitclaudel/alectryon";
+    description = "Collection of tools for writing technical documents that mix Coq code and prose";
+    mainProgram = "alectryon";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Zimmi48 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

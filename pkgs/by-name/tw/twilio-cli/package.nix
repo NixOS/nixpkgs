@@ -8,11 +8,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "twilio-cli";
+<<<<<<< HEAD
   version = "6.2.2";
 
   src = fetchzip {
     url = "https://twilio-cli-prod.s3.amazonaws.com/twilio-v${finalAttrs.version}/twilio-v${finalAttrs.version}.tar.gz";
     hash = "sha256-de4LGEuBxuCeySpsUi6iIIf4asJLdR7HcqflnSD7jyw=";
+=======
+  version = "6.2.1";
+
+  src = fetchzip {
+    url = "https://twilio-cli-prod.s3.amazonaws.com/twilio-v${finalAttrs.version}/twilio-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-yxtMpmPB3w+28aU0G4hAF3I+uijdI5yavqHlthZ9eIs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [ nodejs-slim ];
@@ -31,11 +39,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Unleash the power of Twilio from your command prompt";
     homepage = "https://github.com/twilio/twilio-cli";
     changelog = "https://github.com/twilio/twilio-cli/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Unleash the power of Twilio from your command prompt";
+    homepage = "https://github.com/twilio/twilio-cli";
+    changelog = "https://github.com/twilio/twilio-cli/blob/${finalAttrs.version}/CHANGES.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = nodejs-slim.meta.platforms;
     mainProgram = "twilio";

@@ -3,46 +3,72 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+<<<<<<< HEAD
   nixosTests,
   testers,
   nodejs,
   node-gyp,
   gnutar,
+=======
+  testers,
+  nodejs,
+  node-gyp,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inter,
   python3,
   srcOnly,
   removeReferencesTo,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
   version = "0.29.3";
+=======
+}:
+let
+  pnpm = pnpm_9;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "karakeep";
+  version = "0.27.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-MmurmQ/z8ME7Y6lpEWGaf7sFRSYhwd8flM4f0GBbUIM=";
+=======
+    hash = "sha256-KkRCMS/g+xCQyVh1qB/kf5Seqrn2McYBaUHqKOeigCA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
     ./patches/use-local-font.patch
     ./patches/dont-lock-pnpm-version.patch
   ];
+<<<<<<< HEAD
 
   postPatch = ''
     ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
 
     substituteInPlace apps/cli/src/commands/dump.ts \
       --replace-fail 'spawn("tar"' 'spawn("${lib.getExe gnutar}"'
+=======
+  postPatch = ''
+    ln -s ${inter}/share/fonts/truetype ./apps/web/app/fonts
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   nativeBuildInputs = [
     python3
     nodejs
     node-gyp
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
   ];
@@ -54,6 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version;
     pnpm = pnpm_9;
+=======
+    pnpm.configHook
+  ];
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # We need to pass the patched source code, so pnpm sees the patched version
     src = stdenv.mkDerivation {
@@ -64,8 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
+<<<<<<< HEAD
     fetcherVersion = 3;
     hash = "sha256-LEdI9chVuOli4XiA0VRV9h8L3ho0IRbPsXtAyQM6Du8=";
+=======
+    fetcherVersion = 1;
+    hash = "sha256-74jLff9v2+qc09b8ArooUX6qpFt2tDNW3ZayHPcDVj0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   buildPhase = ''
     runHook preBuild
@@ -121,9 +158,15 @@ stdenv.mkDerivation (finalAttrs: {
       HELPER_SCRIPT_NAME="$(basename "$HELPER_SCRIPT")"
       cp "$HELPER_SCRIPT" "$KARAKEEP_LIB_PATH/"
       substituteInPlace "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME" \
+<<<<<<< HEAD
         --subst-var-by KARAKEEP_LIB_PATH "$KARAKEEP_LIB_PATH" \
         --subst-var-by VERSION "${finalAttrs.version}" \
         --subst-var-by NODEJS "${nodejs}"
+=======
+        --replace-warn "KARAKEEP_LIB_PATH=" "KARAKEEP_LIB_PATH=$KARAKEEP_LIB_PATH" \
+        --replace-warn "RELEASE=" "RELEASE=${finalAttrs.version}" \
+        --replace-warn "NODEJS=" "NODEJS=${nodejs}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       chmod +x "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
       patchShebangs "$KARAKEEP_LIB_PATH/$HELPER_SCRIPT_NAME"
     done
@@ -145,12 +188,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
+<<<<<<< HEAD
       inherit (nixosTests) karakeep;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         # remove hardcoded version if upstream syncs general version with cli
         # version
+<<<<<<< HEAD
         version = "0.27.1";
+=======
+        version = "0.25.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
     updateScript = nix-update-script { };

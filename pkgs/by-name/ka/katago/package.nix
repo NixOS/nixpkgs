@@ -134,12 +134,21 @@ stdenv'.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Go engine modeled after AlphaGo Zero";
     mainProgram = "katago";
     homepage = "https://github.com/lightvector/katago";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.omnipotententity ];
+=======
+  meta = with lib; {
+    description = "Go engine modeled after AlphaGo Zero";
+    mainProgram = "katago";
+    homepage = "https://github.com/lightvector/katago";
+    license = licenses.mit;
+    maintainers = [ maintainers.omnipotententity ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

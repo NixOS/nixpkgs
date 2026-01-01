@@ -48,10 +48,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "numexpr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast numerical array expression evaluator for NumPy";
     homepage = "https://github.com/pydata/numexpr";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Fast numerical array expression evaluator for NumPy";
+    homepage = "https://github.com/pydata/numexpr";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

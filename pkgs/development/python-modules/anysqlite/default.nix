@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anysqlite" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sqlite3 for asyncio and trio";
     homepage = "https://github.com/karpetrosyan/anysqlite";
     changelog = "https://github.com/karpetrosyan/anysqlite/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Sqlite3 for asyncio and trio";
+    homepage = "https://github.com/karpetrosyan/anysqlite";
+    changelog = "https://github.com/karpetrosyan/anysqlite/blob/${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

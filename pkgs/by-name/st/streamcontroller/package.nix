@@ -197,12 +197,21 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Elegant Linux app for the Elgato Stream Deck with support for plugins";
     homepage = "https://core447.com/";
     license = lib.licenses.gpl3;
     mainProgram = "streamcontroller";
     maintainers = with lib.maintainers; [ sifmelcara ];
+=======
+  meta = with lib; {
+    description = "Elegant Linux app for the Elgato Stream Deck with support for plugins";
+    homepage = "https://core447.com/";
+    license = licenses.gpl3;
+    mainProgram = "streamcontroller";
+    maintainers = with maintainers; [ sifmelcara ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 }

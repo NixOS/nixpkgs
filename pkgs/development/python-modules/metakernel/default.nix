@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "metakernel" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jupyter/IPython Kernel Tools";
     homepage = "https://github.com/Calysto/metakernel";
     changelog = "https://github.com/Calysto/metakernel/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ thomasjm ];
+=======
+  meta = with lib; {
+    description = "Jupyter/IPython Kernel Tools";
+    homepage = "https://github.com/Calysto/metakernel";
+    changelog = "https://github.com/Calysto/metakernel/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ thomasjm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

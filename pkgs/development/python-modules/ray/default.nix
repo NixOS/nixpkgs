@@ -74,7 +74,11 @@
 
 let
   pname = "ray";
+<<<<<<< HEAD
   version = "2.53.0";
+=======
+  version = "2.52.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -94,6 +98,7 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
+<<<<<<< HEAD
           cp310 = "sha256-TbtfzhNkdj8pdBBV9Qq+M89yY5cUH5zA6EXdPMlj5FU=";
           cp311 = "sha256-6wAMF/cwEHH90VxExM06wPeVO7THwifmFxn+cEgZW80=";
           cp312 = "sha256-FPRjY+m0zwwci02GI+wzfFvUCDd4MbXltQBnkwE3u8o=";
@@ -110,6 +115,24 @@ buildPythonPackage rec {
           cp311 = "sha256-vT7Ew0J3bdrCOuKxCMZPWTn0F8zEh1kA1YbHyXhGMmk=";
           cp312 = "sha256-2LldBH2UdJOAP7hBeuoxIl3KzasVr9x1uKI4kBlJ1Fc=";
           cp313 = "sha256-hbRyq2+48RifjO+BkT/ZGyTdabP6fcyn4USCe9kk9sA=";
+=======
+          cp310 = "sha256-iPeskSt4y0NrSo5bNwrRFjGPkm1U+HMQIAMs+wnPx9w=";
+          cp311 = "sha256-WaItjqIbrU5wOsWjoZR8L8CaQ7TpBDZm2fjTls7ruXQ=";
+          cp312 = "sha256-VAxy0ZDsgn4xIkiEhakpoakIRgqlH9IkdpaoU0O3qxY=";
+          cp313 = "sha256-NvmUXgFmH2oQEPREDVqVXKot6hC5MPe9Na5kAWtYEpw=";
+        };
+        aarch64-linux = {
+          cp310 = "sha256-D1XiF+55XKyziEui6vleRn+ilTJiaqZ/c8GmS39BPUQ=";
+          cp311 = "sha256-qZCjrmzRPboh7cO1ZOJXOvVYu4KrY9LZJTKkNqh4v3w=";
+          cp312 = "sha256-9u3su848Tq4zXpcTTT/6yVP0Yz+nxvEuPeppY0kYqKI=";
+          cp313 = "sha256-tU6gRycJrC1NdhjNecx6EL90m+7hCxKWRHTo6EEl+g8=";
+        };
+        aarch64-darwin = {
+          cp310 = "sha256-T6s0v0vZBUYaSMzlfG+QHbo/LlLZLk8LA3ODEQhJS+w=";
+          cp311 = "sha256-pe8+qUnfLplVJ/6R4C4p1Vqr6FbTV+kBn0OsA70rnvQ=";
+          cp312 = "sha256-5wCpzAoPnUqSsea64/QQHo0Gh3rUOSnuOpKlchBP9Q8=";
+          cp313 = "sha256-jWpJg3XWwFRA6ljlr+WCE01wDNjUWntrEocbdbIRcZ0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       };
     in
@@ -119,9 +142,13 @@ buildPythonPackage rec {
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
+<<<<<<< HEAD
       sha256 =
         hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
           or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
+=======
+      sha256 = hashes.${stdenv.hostPlatform.system}.${pyShortVersion} or { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [

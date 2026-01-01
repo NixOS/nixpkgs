@@ -8,6 +8,10 @@
 let
   pname = "capacities";
   version = "1.52.6";
+<<<<<<< HEAD
+=======
+  name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchurl {
     url = "https://web.archive.org/web/20250519011655/https://capacities-desktop-app.fra1.cdn.digitaloceanspaces.com/capacities-${version}.AppImage";

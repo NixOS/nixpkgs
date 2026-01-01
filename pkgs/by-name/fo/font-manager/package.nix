@@ -86,7 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://fontmanager.github.io/";
     changelog = "https://github.com/FontManager/font-manager/raw/refs/tags/${finalAttrs.version}/CHANGELOG";
     description = "Simple font management for GTK desktop environments";
@@ -100,8 +104,14 @@ stdenv.mkDerivation (finalAttrs: {
 
       Font Manager is NOT a professional-grade font management solution.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

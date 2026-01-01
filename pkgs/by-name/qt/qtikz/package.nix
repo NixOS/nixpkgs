@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   version = "0.12";
   pname = "qtikz";
 
+<<<<<<< HEAD
   meta = {
     description = "Editor for the TikZ language";
     mainProgram = "qtikz";
@@ -24,6 +25,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.layus ];
+=======
+  meta = with lib; {
+    description = "Editor for the TikZ language";
+    mainProgram = "qtikz";
+    homepage = "https://github.com/fhackenberger/ktikz";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.layus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       You will also need a working *tex installation in your PATH, containing at least `preview` and `pgf`.
     '';

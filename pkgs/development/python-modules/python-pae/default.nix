@@ -27,10 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_pae" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pre-authentication encoding (PAE) implementation in Python";
     homepage = "https://github.com/MatthiasValvekens/python-pae";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pre-authentication encoding (PAE) implementation in Python";
+    homepage = "https://github.com/MatthiasValvekens/python-pae";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -19,7 +19,11 @@ gccStdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://cc65.github.io/";
     description = "C compiler for processors of 6502 family";
     longDescription = ''
@@ -55,8 +59,14 @@ gccStdenv.mkDerivation rec {
       The libraries are fairly portable, so creating a version for other 6502s
       shouldn't be too much work.
     '';
+<<<<<<< HEAD
     license = lib.licenses.zlib;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.zlib;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

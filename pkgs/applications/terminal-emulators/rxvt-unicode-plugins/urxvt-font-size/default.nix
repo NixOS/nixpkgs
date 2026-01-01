@@ -26,11 +26,20 @@ stdenv.mkDerivation rec {
     cp font-size $out/lib/urxvt/perl
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Change the urxvt font size on the fly";
     homepage = "https://github.com/majutsushi/urxvt-font-size";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Change the urxvt font size on the fly";
+    homepage = "https://github.com/majutsushi/urxvt-font-size";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

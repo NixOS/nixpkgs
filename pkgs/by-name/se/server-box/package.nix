@@ -13,13 +13,21 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.0.1276";
+=======
+  version = "1.0.1270";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-fmL03BNVi1aKhb0jV7MnEtRKTOEaLBGl6uMJtLr6cFk=";
+=======
+    hash = "sha256-3erwb2e9iINe4MVuOQKzBuBdUJyBgW2zIImZwVyll6Q=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 flutter335.buildFlutterApplication {

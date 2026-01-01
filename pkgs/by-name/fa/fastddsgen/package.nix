@@ -87,11 +87,19 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Fast-DDS IDL code generator tool";
     mainProgram = "fastddsgen";
     homepage = "https://github.com/eProsima/Fast-DDS-Gen";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Fast-DDS IDL code generator tool";
+    mainProgram = "fastddsgen";
+    homepage = "https://github.com/eProsima/Fast-DDS-Gen";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       eProsima Fast DDS-Gen is a Java application that generates
       eProsima Fast DDS C++ or Python source code using the data types
@@ -100,7 +108,11 @@ stdenv.mkDerivation (finalAttrs: {
       order to define the data type of a topic, which will later be
       used to publish or subscribe.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ wentasah ];
+=======
+    maintainers = with maintainers; [ wentasah ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = openjdk.meta.platforms;
   };
 })

@@ -9,9 +9,15 @@
   openssl,
   sqlcipher,
   boost,
+<<<<<<< HEAD
   curl,
   glib,
   libcpr,
+=======
+  cpr,
+  curl,
+  glib,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libsecret,
   libmaddy-markdown,
   testers,
@@ -48,7 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     curl
+<<<<<<< HEAD
     libcpr
+=======
+    cpr
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libsecret
     libmaddy-markdown
     sqlcipher

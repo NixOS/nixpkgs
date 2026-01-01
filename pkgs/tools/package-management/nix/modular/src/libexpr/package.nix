@@ -51,6 +51,14 @@ mkMesonLibrary (finalAttrs: {
     nix-util
     nix-store
     nix-fetchers
+<<<<<<< HEAD
+=======
+  ]
+  ++ finalAttrs.passthru.externalPropagatedBuildInputs;
+
+  # Hack for sake of the dev shell
+  passthru.externalPropagatedBuildInputs = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     boost
     nlohmann_json
   ]

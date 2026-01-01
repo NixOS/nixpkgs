@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 7dbc2c3..cfdd98d 100644
 --- a/CMakeLists.txt
@@ -15,6 +16,11 @@ index 67c458c..2873530 100644
 --- a/tests/CMakeLists.txt
 +++ b/tests/CMakeLists.txt
 @@ -5,18 +5,9 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 new)
+=======
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -5,18 +5,9 @@
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  set(CMAKE_POLICY_WARNING_CMP0126 new)
  
  include(${CMAKE_SOURCE_DIR}/cmake/compiler_options.cmake)
@@ -23,7 +29,11 @@ index 67c458c..2873530 100644
 +find_package(Catch2 REQUIRED)
  
 -CPMAddPackage(Catch2
+<<<<<<< HEAD
 -  VERSION 3.10.0
+=======
+-  VERSION 3.7.0
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 -  GITHUB_REPOSITORY catchorg/Catch2
 -  OPTIONS
 -  "CATCH_INSTALL_DOCS Off"
@@ -33,4 +43,8 @@ index 67c458c..2873530 100644
 -  
  enable_testing()
  
+<<<<<<< HEAD
  # list the test sources
+=======
+ set(TEST_SRCS
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

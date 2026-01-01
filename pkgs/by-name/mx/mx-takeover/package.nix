@@ -23,12 +23,21 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to work with DNS MX records";
     homepage = "https://github.com/musana/mx-takeover";
     changelog = "https://github.com/musana/mx-takeover/releases/tag/v${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to work with DNS MX records";
+    homepage = "https://github.com/musana/mx-takeover";
+    changelog = "https://github.com/musana/mx-takeover/releases/tag/v${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mx-takeover";
     broken = stdenv.hostPlatform.isDarwin;
   };

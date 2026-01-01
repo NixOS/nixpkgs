@@ -22,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
+<<<<<<< HEAD
   version = "46.0.3";
+=======
+  version = "46.0.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,12 +35,20 @@ buildPythonPackage rec {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-6t7f/BaMkA24MY05B7aYa0myxnCjrCsh1qk6RgAjeQc=";
+=======
+    hash = "sha256-gsEHKEYiMw2eliEpxwzFGDetOp77PivlMoBD3HBbbFA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
+<<<<<<< HEAD
     hash = "sha256-5ElDEl7MdcQfu/hy+POSBcvkNCFAMo6La5s6uRhZ/fM=";
+=======
+    hash = "sha256-aCQzY2gBjVVwiqlqAxkH4y6yf4lqdQuSEnQSIjLPRJg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

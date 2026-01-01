@@ -1,7 +1,10 @@
 {
   lib,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rustPlatform,
   nix-update-script,
   versionCheckHook,
@@ -18,6 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-i+ryTF2hlZFbyFft/769c800FkzL26E4snUsxU79sKY=";
   };
 
+<<<<<<< HEAD
   cargoPatches = [
     (fetchpatch2 {
       url = "https://github.com/uutils/findutils/commit/90845d95ceb12289a1b5ee50704ed66f2f7349c3.patch";
@@ -26,6 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoHash = "sha256-TQRt1eecT500JaJB2P10T1yV+z2/T8cgTNtF9r5zQpg=";
+=======
+  cargoHash = "sha256-gtaD2jqnGhoJGw9FAJefnU9BSGIODi/RrhTeB3MC69U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     rm $out/bin/testing-commandline
@@ -38,6 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/find";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {
@@ -50,7 +61,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/uutils/findutils";
     license = lib.licenses.mit;
     mainProgram = "find";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ defelo ];
+=======
+    maintainers = with lib.maintainers; [
+      defelo
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 })

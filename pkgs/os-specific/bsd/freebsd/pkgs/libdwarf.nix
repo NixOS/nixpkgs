@@ -3,7 +3,10 @@
   m4,
   compatIfNeeded,
   zlib,
+<<<<<<< HEAD
   libelf,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 mkDerivation {
@@ -16,9 +19,13 @@ mkDerivation {
     "sys/sys/elf_common.h"
   ];
   extraNativeBuildInputs = [ m4 ];
+<<<<<<< HEAD
   buildInputs = compatIfNeeded ++ [
     zlib
     libelf
   ];
+=======
+  buildInputs = compatIfNeeded ++ [ zlib ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   MK_TESTS = "no";
 }

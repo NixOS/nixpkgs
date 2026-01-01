@@ -116,11 +116,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tables" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hierarchical datasets for Python";
     homepage = "https://www.pytables.org/";
     changelog = "https://github.com/PyTables/PyTables/releases/tag/v${version}";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Hierarchical datasets for Python";
+    homepage = "https://www.pytables.org/";
+    changelog = "https://github.com/PyTables/PyTables/releases/tag/v${version}";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

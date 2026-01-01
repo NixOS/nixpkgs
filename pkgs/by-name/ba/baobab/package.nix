@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical application to analyse disk usage in any GNOME environment";
     mainProgram = "baobab";
@@ -60,5 +61,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Graphical application to analyse disk usage in any GNOME environment";
+    mainProgram = "baobab";
+    homepage = "https://apps.gnome.org/Baobab/";
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

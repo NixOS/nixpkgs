@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSimpleITK_USE_ELASTIX=ON"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.simpleitk.org";
     description = "Simplified interface to ITK";
@@ -44,5 +45,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://www.simpleitk.org";
+    description = "Simplified interface to ITK";
+    changelog = "https://github.com/SimpleITK/SimpleITK/releases/tag/v${finalAttrs.version}";
+    maintainers = with maintainers; [ bcdarwin ];
+    platforms = platforms.linux;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

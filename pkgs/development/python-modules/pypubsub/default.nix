@@ -26,7 +26,11 @@ buildPythonPackage {
     py.test
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/schollii/pypubsub";
     description = "Python 3 publish-subcribe library";
     longDescription = ''
@@ -39,6 +43,10 @@ buildPythonPackage {
       maintaining topics and messages in larger desktop- or server-based
       applications.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
+=======
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

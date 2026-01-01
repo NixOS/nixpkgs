@@ -63,7 +63,11 @@ buildPythonPackage rec {
     intake-parquet
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   optional-dependencies = {
     server = [
@@ -135,11 +139,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "intake" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Data load and catalog system";
     homepage = "https://github.com/ContinuumIO/intake";
     changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Data load and catalog system";
+    homepage = "https://github.com/ContinuumIO/intake";
+    changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

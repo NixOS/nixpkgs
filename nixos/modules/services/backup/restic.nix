@@ -494,7 +494,11 @@ in
               ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
             ''}
             ${lib.optionalString fileBackup ''
+<<<<<<< HEAD
               rm -f ${filesFromTmpFile}
+=======
+              rm ${filesFromTmpFile}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             ''}
           '';
         }

@@ -27,12 +27,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple general purpose plotting utility for tty with data input from stdin";
     homepage = "https://github.com/tenox7/ttyplot";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ lassulus ];
+=======
+  meta = with lib; {
+    description = "Simple general purpose plotting utility for tty with data input from stdin";
+    homepage = "https://github.com/tenox7/ttyplot";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ lassulus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ttyplot";
   };
 }

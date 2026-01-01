@@ -37,7 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--build=arm"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Find Win32 applications";
     longDescription = ''
       Miss Identify is a program to find Win32 applications. In
@@ -52,8 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "missidentify";
     homepage = "https://missidentify.sourceforge.net";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;
+=======
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

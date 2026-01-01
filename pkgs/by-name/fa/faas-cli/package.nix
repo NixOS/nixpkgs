@@ -66,12 +66,21 @@ buildGoModule rec {
     package = faas-cli;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Official CLI for OpenFaaS";
     mainProgram = "faas-cli";
     homepage = "https://github.com/openfaas/faas-cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Official CLI for OpenFaaS";
+    mainProgram = "faas-cli";
+    homepage = "https://github.com/openfaas/faas-cli";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       welteki
       techknowlogick
     ];

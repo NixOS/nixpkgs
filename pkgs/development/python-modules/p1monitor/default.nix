@@ -49,11 +49,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "p1monitor" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for interacting with the P1 Monitor";
     homepage = "https://github.com/klaasnicolaas/python-p1monitor";
     changelog = "https://github.com/klaasnicolaas/python-p1monitor/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for interacting with the P1 Monitor";
+    homepage = "https://github.com/klaasnicolaas/python-p1monitor";
+    changelog = "https://github.com/klaasnicolaas/python-p1monitor/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

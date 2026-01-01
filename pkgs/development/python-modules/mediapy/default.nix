@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mediapy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read/write/show images and videos in an IPython notebook";
     homepage = "https://github.com/google/mediapy";
     changelog = "https://github.com/google/mediapy/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mcwitt ];
+=======
+  meta = with lib; {
+    description = "Read/write/show images and videos in an IPython notebook";
+    homepage = "https://github.com/google/mediapy";
+    changelog = "https://github.com/google/mediapy/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mcwitt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

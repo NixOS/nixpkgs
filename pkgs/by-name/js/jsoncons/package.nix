@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncons";
+<<<<<<< HEAD
   version = "1.5.0";
+=======
+  version = "1.4.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "danielaparker";
     repo = "jsoncons";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-brcOFD6EO6lVL4A+LrZp6CxZFY2mu+i10IQmjwf4XMo=";
+=======
+    hash = "sha256-7ySbnWiX5pHMG2BcnLowKegEwjSdkKReh72Y3z8cpLg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ cmake ];

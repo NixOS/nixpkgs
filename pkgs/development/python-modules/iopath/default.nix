@@ -56,11 +56,20 @@ buildPythonPackage {
     aws = [ boto3 ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python library that provides common I/O interface across different storage backends";
     homepage = "https://github.com/facebookresearch/iopath";
     changelog = "https://github.com/facebookresearch/iopath/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Python library that provides common I/O interface across different storage backends";
+    homepage = "https://github.com/facebookresearch/iopath";
+    changelog = "https://github.com/facebookresearch/iopath/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

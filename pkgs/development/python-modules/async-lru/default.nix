@@ -3,7 +3,10 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
   typing-extensions,
   pytestCheckHook,
@@ -24,6 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-FJ1q6W9IYs0OSMZc+bI4v22hOAAWAv2OW3BAqixm8Hs=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch2 {
       # https://github.com/aio-libs/async-lru/issues/635
@@ -33,6 +37,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
@@ -46,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_lru" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/aio-libs/async-lru/releases/tag/${src.tag}";
     description = "Simple lru cache for asyncio";
     homepage = "https://github.com/wikibusiness/async_lru";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/aio-libs/async-lru/releases/tag/${src.tag}";
+    description = "Simple lru cache for asyncio";
+    homepage = "https://github.com/wikibusiness/async_lru";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

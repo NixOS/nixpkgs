@@ -21,11 +21,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Codeforces CLI (Submit, Parse, Test, etc.). Support Contests, Gym, Groups, acmsguru, Windows, macOS, Linux, 7 MB";
     homepage = "https://github.com/sempr/cf-tool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
+=======
+  meta = with lib; {
+    description = "Codeforces CLI (Submit, Parse, Test, etc.). Support Contests, Gym, Groups, acmsguru, Windows, macOS, Linux, 7 MB";
+    homepage = "https://github.com/sempr/cf-tool";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bot-wxt1221 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cf";
   };
 }

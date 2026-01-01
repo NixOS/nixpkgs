@@ -19,11 +19,20 @@ buildPythonPackage rec {
   # Test directory contains examples, not tests.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/montag451/pytun";
     description = "Linux TUN/TAP wrapper for Python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ montag451 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/montag451/pytun";
+    description = "Linux TUN/TAP wrapper for Python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ montag451 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

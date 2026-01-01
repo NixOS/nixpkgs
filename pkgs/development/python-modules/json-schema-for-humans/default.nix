@@ -67,12 +67,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "json_schema_for_humans" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Quickly generate HTML documentation from a JSON schema";
     homepage = "https://github.com/coveooss/json-schema-for-humans";
     changelog = "https://github.com/coveooss/json-schema-for-humans/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ astro ];
+=======
+  meta = with lib; {
+    description = "Quickly generate HTML documentation from a JSON schema";
+    homepage = "https://github.com/coveooss/json-schema-for-humans";
+    changelog = "https://github.com/coveooss/json-schema-for-humans/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "generate-schema-doc";
   };
 }

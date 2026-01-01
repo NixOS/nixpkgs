@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
       --replace \''${OPENVDB_INCLUDEDIR} $dev/include
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open framework for voxel";
     mainProgram = "vdb_print";
@@ -54,5 +55,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.guibou ];
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Open framework for voxel";
+    mainProgram = "vdb_print";
+    homepage = "https://www.openvdb.org";
+    maintainers = [ maintainers.guibou ];
+    platforms = platforms.unix;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

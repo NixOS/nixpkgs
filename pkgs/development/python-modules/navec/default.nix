@@ -30,11 +30,20 @@ buildPythonPackage rec {
   disabledTests = [ "test_gensim" ];
   pythonImportsCheck = [ "navec" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Compact high quality word embeddings for Russian language";
     mainProgram = "navec-train";
     homepage = "https://github.com/natasha/navec";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ npatsakula ];
+=======
+  meta = with lib; {
+    description = "Compact high quality word embeddings for Russian language";
+    mainProgram = "navec-train";
+    homepage = "https://github.com/natasha/navec";
+    license = licenses.mit;
+    maintainers = with maintainers; [ npatsakula ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

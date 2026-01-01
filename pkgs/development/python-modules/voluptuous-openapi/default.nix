@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "voluptuous_openapi" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/home-assistant-libs/voluptuous-openapi/releases/tag/${src.tag}";
     description = "Convert voluptuous schemas to OpenAPI Schema object";
     homepage = "https://github.com/home-assistant-libs/voluptuous-openapi";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/home-assistant-libs/voluptuous-openapi/releases/tag/${src.tag}";
+    description = "Convert voluptuous schemas to OpenAPI Schema object";
+    homepage = "https://github.com/home-assistant-libs/voluptuous-openapi";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

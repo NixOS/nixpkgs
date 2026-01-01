@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage {
     "--skip=ilorest::chif::IloRestChif"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool to read/get/extract and write/change/modify BIOS/UEFI settings";
     homepage = "https://github.com/linuxboot/uefisettings";
@@ -36,5 +37,14 @@ rustPlatform.buildRustPackage {
     mainProgram = "uefisettings";
     maintainers = with lib.maintainers; [ surfaceflinger ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "CLI tool to read/get/extract and write/change/modify BIOS/UEFI settings";
+    homepage = "https://github.com/linuxboot/uefisettings";
+    license = with licenses; [ bsd3 ];
+    mainProgram = "uefisettings";
+    maintainers = with maintainers; [ surfaceflinger ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

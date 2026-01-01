@@ -80,11 +80,19 @@ buildGoModule rec {
     command = "HOME=$(mktemp -d) colima version";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Container runtimes with minimal setup";
     homepage = "https://github.com/abiosoft/colima";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Container runtimes with minimal setup";
+    homepage = "https://github.com/abiosoft/colima";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aaschmid
       tricktron
     ];

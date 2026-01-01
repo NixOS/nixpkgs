@@ -135,7 +135,11 @@ pythonpkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Self hosted recipe manager and meal planner";
     longDescription = ''
       Mealie is a self hosted recipe manager and meal planner with a REST API and a reactive frontend
@@ -145,8 +149,13 @@ pythonpkgs.buildPythonApplication rec {
     '';
     homepage = "https://mealie.io";
     changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       litchipi
       anoa
     ];

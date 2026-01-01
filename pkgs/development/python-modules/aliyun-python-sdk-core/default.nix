@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aliyunsdkcore" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Core module of Aliyun Python SDK";
     homepage = "https://github.com/aliyun/aliyun-openapi-python-sdk";
     changelog = "https://github.com/aliyun/aliyun-openapi-python-sdk/blob/master/aliyun-python-sdk-core/ChangeLog.txt";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Core module of Aliyun Python SDK";
+    homepage = "https://github.com/aliyun/aliyun-openapi-python-sdk";
+    changelog = "https://github.com/aliyun/aliyun-openapi-python-sdk/blob/master/aliyun-python-sdk-core/ChangeLog.txt";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -9,6 +9,7 @@ Signed-off-by: Moritz Sanft <58110325+msanft@users.noreply.github.com>
 ---
  mkosi/__init__.py   | 17 +++++++----------
  mkosi/bootloader.py |  3 +--
+<<<<<<< HEAD
  mkosi/run.py        |  6 +++---
  3 files changed, 11 insertions(+), 15 deletions(-)
 
@@ -17,6 +18,16 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..8f85f923b41feaa7716ae409cc2e983a
 --- a/mkosi/__init__.py
 +++ b/mkosi/__init__.py
 @@ -613,7 +613,7 @@ def finalize_host_scripts(
+=======
+ mkosi/run.py        |  8 ++++----
+ 3 files changed, 12 insertions(+), 16 deletions(-)
+
+diff --git a/mkosi/__init__.py b/mkosi/__init__.py
+index 65cac772bf1fc9feabec5740ed89a958ba406125..c0debc09a76f36ae878bd172294eee6637b95bcb 100644
+--- a/mkosi/__init__.py
++++ b/mkosi/__init__.py
+@@ -570,7 +570,7 @@ def finalize_host_scripts(
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
          if context.config.find_binary(binary):
              scripts[binary] = (binary, "--root", "/buildroot")
      if ukify := context.config.find_binary("ukify"):
@@ -25,7 +36,11 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..8f85f923b41feaa7716ae409cc2e983a
      return finalize_scripts(context.config, scripts | dict(helpers))
  
  
+<<<<<<< HEAD
 @@ -755,7 +755,7 @@ def script_maybe_chroot_sandbox(
+=======
+@@ -702,7 +702,7 @@ def script_maybe_chroot_sandbox(
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  
      helpers = {
          "mkosi-chroot": [
@@ -34,7 +49,11 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..8f85f923b41feaa7716ae409cc2e983a
              "--bind", "/buildroot", "/",
              "--bind", "/var/tmp", "/var/tmp",
              *apivfs_options(root=Path("/")),
+<<<<<<< HEAD
 @@ -1587,7 +1587,7 @@ def run_ukify(
+=======
+@@ -1593,7 +1593,7 @@ def run_ukify(
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
      sign: bool = True,
      json_out: bool = False,
  ) -> dict[str, Any]:
@@ -43,7 +62,11 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..8f85f923b41feaa7716ae409cc2e983a
      if not ukify:
          die("Could not find ukify")
  
+<<<<<<< HEAD
 @@ -1599,7 +1599,6 @@ def run_ukify(
+=======
+@@ -1605,7 +1605,6 @@ def run_ukify(
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
      (context.workspace / "cmdline").write_text(f"{' '.join(cmdline)}\x00")
  
      cmd = [
@@ -51,7 +74,11 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..8f85f923b41feaa7716ae409cc2e983a
          ukify,
          "build",
          *arguments,
+<<<<<<< HEAD
 @@ -1694,7 +1693,7 @@ def build_uki(
+=======
+@@ -1700,7 +1699,7 @@ def build_uki(
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
      profiles: Sequence[Path],
      output: Path,
  ) -> dict[str, Any]:
@@ -60,15 +87,24 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..8f85f923b41feaa7716ae409cc2e983a
          die("Could not find ukify")
  
      json_out = False
+<<<<<<< HEAD
 @@ -1755,7 +1754,6 @@ def build_uki(
  
+=======
+@@ -1759,7 +1758,6 @@ def build_uki(
+         # TODO: bump version to 258 once it is released
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
          if (
              systemd_tool_version(
 -                python_binary(context.config),
                  ukify,
                  sandbox=context.sandbox,
              )
+<<<<<<< HEAD
 @@ -1815,7 +1813,6 @@ def build_uki(
+=======
+@@ -1819,7 +1817,6 @@ def build_uki(
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
          # new .ucode section support?
          if (
              systemd_tool_version(
@@ -76,16 +112,26 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..8f85f923b41feaa7716ae409cc2e983a
                  ukify,
                  sandbox=context.sandbox,
              )
+<<<<<<< HEAD
 @@ -1883,7 +1880,7 @@ def want_uki(context: Context) -> bool:
          or (
              context.config.unified_kernel_images == UnifiedKernelImage.auto
+=======
+@@ -1887,7 +1884,7 @@ def want_uki(context: Context) -> bool:
+         or (
+             context.config.unified_kernel_images == ConfigFeature.auto
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
              and systemd_stub_binary(context).exists()
 -            and context.config.find_binary("ukify", "/usr/lib/systemd/ukify") is not None
 +            and context.config.find_binary("ukify", "@UKIFY@") is not None
          )
      )
  
+<<<<<<< HEAD
 @@ -2799,9 +2796,9 @@ def check_ukify(
+=======
+@@ -2769,9 +2766,9 @@ def check_ukify(
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
      reason: str,
      hint: Optional[str] = None,
  ) -> None:
@@ -98,10 +144,17 @@ index f4766ae71244a21caa5bcbf5b5376f617c706b33..8f85f923b41feaa7716ae409cc2e983a
          die(
              f"Found '{ukify}' with version {v} but version {version} or newer is required to {reason}.",
 diff --git a/mkosi/bootloader.py b/mkosi/bootloader.py
+<<<<<<< HEAD
 index 7d434bb4776980c6fa58ae8f7795f3ffc319baeb..8960a6d17d153b06b029f9072a464a12f5cafe65 100644
 --- a/mkosi/bootloader.py
 +++ b/mkosi/bootloader.py
 @@ -316,8 +316,7 @@ def find_signed_grub_image(context: Context) -> Optional[Path]:
+=======
+index 6f112b854f72a8863dc5e7348f0154851d3dda96..28b32b9c8fcaa7c49a7d69e7e303ccf332d47d58 100644
+--- a/mkosi/bootloader.py
++++ b/mkosi/bootloader.py
+@@ -270,8 +270,7 @@ def find_signed_grub_image(context: Context) -> Optional[Path]:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  def python_binary(config: Config) -> PathString:
      # If there's no tools tree, prefer the interpreter from MKOSI_INTERPRETER. If there is a tools
      # tree, just use the default python3 interpreter.
@@ -112,6 +165,7 @@ index 7d434bb4776980c6fa58ae8f7795f3ffc319baeb..8960a6d17d153b06b029f9072a464a12
  
  def extract_pe_section(context: Context, binary: Path, section: str, output: Path) -> Path:
 diff --git a/mkosi/run.py b/mkosi/run.py
+<<<<<<< HEAD
 index 159b75c1af1b5d84e409426e566e098571086c8e..7ade34fc6a9d53e010f5f45cce53a9c92407f49d 100644
 --- a/mkosi/run.py
 +++ b/mkosi/run.py
@@ -125,6 +179,12 @@ index 159b75c1af1b5d84e409426e566e098571086c8e..7ade34fc6a9d53e010f5f45cce53a9c9
              ]  # fmt: skip
  
 @@ -321,7 +321,7 @@ def finalize_path(
+=======
+index 422006d889802182d7e2f1734b2c342318583e7b..b9a1490bcd7780fea75d834e3ea4fb9a7033cc51 100644
+--- a/mkosi/run.py
++++ b/mkosi/run.py
+@@ -277,7 +277,7 @@ def finalize_path(
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
          # Make sure that /usr/bin and /usr/sbin are always in $PATH.
          path += [s for s in ("/usr/bin", "/usr/sbin") if s not in path]
      else:
@@ -133,7 +193,20 @@ index 159b75c1af1b5d84e409426e566e098571086c8e..7ade34fc6a9d53e010f5f45cce53a9c9
  
      if prefix_usr:
          path = [os.fspath(root / s.lstrip("/")) if s in ("/usr/bin", "/usr/sbin") else s for s in path]
+<<<<<<< HEAD
 @@ -690,7 +690,7 @@ def chroot_options() -> list[PathString]:
+=======
+@@ -463,7 +463,7 @@ def sandbox_cmd(
+         cmdline: list[PathString] = [
+             *setup,
+             *(["strace", "--detach-on=execve"] if ARG_DEBUG_SANDBOX.get() else []),
+-            sys.executable, "-SI", module / "sandbox.py",
++            @MKOSI_SANDBOX@,
+             "--proc", "/proc",
+             # We mounted a subdirectory of TMPDIR to /var/tmp so we unset TMPDIR so that /tmp or /var/tmp are
+             # used instead.
+@@ -633,7 +633,7 @@ def chroot_options() -> list[PathString]:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
          "--unshare-ipc",
          "--setenv", "container", "mkosi",
          "--setenv", "HOME", "/",
@@ -142,3 +215,15 @@ index 159b75c1af1b5d84e409426e566e098571086c8e..7ade34fc6a9d53e010f5f45cce53a9c9
          "--setenv", "BUILDROOT", "/",
      ]  # fmt: skip
  
+<<<<<<< HEAD
+=======
+@@ -647,7 +647,7 @@ def chroot_cmd(
+ ) -> Iterator[list[PathString]]:
+     with vartmpdir() as dir, resource_path(sys.modules[__package__ or __name__]) as module:
+         cmdline: list[PathString] = [
+-            sys.executable, "-SI", module / "sandbox.py",
++            @MKOSI_SANDBOX@,
+             *root("/"),
+             # We mounted a subdirectory of TMPDIR to /var/tmp so we unset TMPDIR so that /tmp or /var/tmp are
+             # used instead.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

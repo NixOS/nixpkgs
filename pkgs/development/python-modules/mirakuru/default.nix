@@ -57,11 +57,20 @@ buildPythonPackage rec {
     "test_daemons_killing"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dbfixtures/mirakuru";
     description = "Process orchestration tool designed for functional and integration tests";
     changelog = "https://github.com/ClearcodeHQ/mirakuru/blob/v${version}/CHANGES.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dbfixtures/mirakuru";
+    description = "Process orchestration tool designed for functional and integration tests";
+    changelog = "https://github.com/ClearcodeHQ/mirakuru/blob/v${version}/CHANGES.rst";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
     bootstrap = startFPC;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Free Pascal Compiler from a source distribution";
     homepage = "https://www.freepascal.org";
@@ -108,6 +109,17 @@ stdenv.mkDerivation rec {
       lgpl2
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Free Pascal Compiler from a source distribution";
+    homepage = "https://www.freepascal.org";
+    maintainers = [ maintainers.raskin ];
+    license = with licenses; [
+      gpl2
+      lgpl2
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # See:
     # * <https://gitlab.com/freepascal.org/fpc/source/-/issues/41045>
     # * <https://gitlab.com/freepascal.org/fpc/source/-/merge_requests/887>

@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
     sha256 = "1bhh8hlsl9597x0bnfl563k2c09b61qnkb9mfyqcmzlq63m1zw5y";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library for Posting Electronic Mail";
     longDescription = ''
       libESMTP is an SMTP client library which manages submission of electronic mail
@@ -37,6 +41,10 @@ stdenv.mkDerivation rec {
       and PIPELINING for high performance.
     '';
     homepage = "https://libesmtp.github.io/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
+=======
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

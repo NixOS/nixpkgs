@@ -42,11 +42,20 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Component library used by the fre:ac audio converter";
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/enzo1982/boca";
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Component library used by the fre:ac audio converter";
+    license = licenses.gpl2Plus;
+    homepage = "https://github.com/enzo1982/boca";
+    maintainers = with maintainers; [ shamilton ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

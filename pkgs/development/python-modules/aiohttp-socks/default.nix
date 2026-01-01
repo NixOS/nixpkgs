@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-socks";
+<<<<<<< HEAD
   version = "0.11.0";
+=======
+  version = "0.10.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "aiohttp_socks";
+<<<<<<< HEAD
     hash = "sha256-Cv5RY4Unx5B35L1uVwUsh8SCQjPW4guwYcU3ZkIbEPA=";
+=======
+    hash = "sha256-lC18huLleUGPx6c0YQ3ZfarwBwfHRi9sz2ebIyV2eTA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

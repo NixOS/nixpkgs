@@ -53,10 +53,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keystoneclient" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client Library for OpenStack Identity";
     homepage = "https://github.com/openstack/python-keystoneclient";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Client Library for OpenStack Identity";
+    homepage = "https://github.com/openstack/python-keystoneclient";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

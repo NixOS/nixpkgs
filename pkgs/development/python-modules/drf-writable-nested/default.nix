@@ -30,10 +30,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Writable nested model serializer for Django REST Framework";
     homepage = "https://github.com/beda-software/drf-writable-nested";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Writable nested model serializer for Django REST Framework";
+    homepage = "https://github.com/beda-software/drf-writable-nested";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

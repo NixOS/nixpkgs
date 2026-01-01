@@ -28,10 +28,18 @@ buildPythonPackage rec {
     cd tests
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for many Nintendo DS file formats";
     homepage = "https://github.com/RoadrunnerWMC/ndspy";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
+=======
+  meta = with lib; {
+    description = "Python library for many Nintendo DS file formats";
+    homepage = "https://github.com/RoadrunnerWMC/ndspy";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ marius851000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

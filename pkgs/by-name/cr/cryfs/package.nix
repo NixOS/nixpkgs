@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cryfs";
+<<<<<<< HEAD
   version = "1.0.3";
+=======
+  version = "1.0.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cryfs";
     repo = "cryfs";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-bBe//AjA9QmdSDlb0xiOboE5F4g6LJ03cHQZpfOk+Y4=";
+=======
+    hash = "sha256-QzxJUh6nD6243x443b0tIb1v2Zs8jRUk8IVarNqs47M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

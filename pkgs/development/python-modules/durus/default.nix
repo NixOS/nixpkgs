@@ -27,11 +27,20 @@ buildPythonPackage rec {
     "durus.sqlite_storage"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Object persistence layer";
     mainProgram = "durus";
     homepage = "https://github.com/nascheme/durus";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ grindhold ];
+=======
+  meta = with lib; {
+    description = "Object persistence layer";
+    mainProgram = "durus";
+    homepage = "https://github.com/nascheme/durus";
+    license = licenses.mit;
+    maintainers = with maintainers; [ grindhold ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -16,9 +16,16 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "HTML/XML templating engine used by supervisor";
     homepage = "https://github.com/supervisor/meld3";
     license = lib.licenses.free;
+=======
+  meta = with lib; {
+    description = "HTML/XML templating engine used by supervisor";
+    homepage = "https://github.com/supervisor/meld3";
+    license = licenses.free;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1,5 +1,14 @@
 import ./make-test-python.nix (
+<<<<<<< HEAD
   { pkgs, lib, ... }:
+=======
+  {
+    pkgs,
+    lib,
+    withNg ? false,
+    ...
+  }:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   {
     name = "nixos-rebuild-install-bootloader";
 
@@ -19,6 +28,10 @@ import ./make-test-python.nix (
           };
 
           system.includeBuildDependencies = true;
+<<<<<<< HEAD
+=======
+          system.rebuild.enableNg = withNg;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           virtualisation = {
             cores = 2;
@@ -46,6 +59,10 @@ import ./make-test-python.nix (
                   forceInstall = true;
                 };
 
+<<<<<<< HEAD
+=======
+                system.rebuild.enableNg = ${lib.boolToString withNg};
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 documentation.enable = false;
               }
             '';

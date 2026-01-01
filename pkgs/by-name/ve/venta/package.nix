@@ -40,11 +40,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Gtk theme based on windows 10 style";
     homepage = "https://www.pling.com/p/1386774/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Gtk theme based on windows 10 style";
+    homepage = "https://www.pling.com/p/1386774/";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

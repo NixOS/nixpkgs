@@ -36,12 +36,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/baruch/diskscan";
     description = "Scan HDD/SSD for failed and near failed sectors";
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ peterhoeg ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/baruch/diskscan";
+    description = "Scan HDD/SSD for failed and near failed sectors";
+    platforms = with platforms; linux;
+    maintainers = with maintainers; [ peterhoeg ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "diskscan";
   };
 }

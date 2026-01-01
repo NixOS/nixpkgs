@@ -30,15 +30,25 @@ stdenv.mkDerivation rec {
     "bindir=/bin"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for working with Logitech Unifying receivers and devices";
     longDescription = ''
       This tool requires either to be run with root/sudo or alternatively to have the udev rules files installed. On NixOS this can be achieved by setting `hardware.logitech.wireless.enable`.
     '';
     homepage = "https://lekensteyn.nl/logitech-unifying.html";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ltunify";
   };
 }

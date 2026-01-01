@@ -45,11 +45,19 @@ stdenv.mkDerivation {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "XMPP client fully composed of plugins";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "XMPP client fully composed of plugins";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.vacuum-im.org";
   };
 }

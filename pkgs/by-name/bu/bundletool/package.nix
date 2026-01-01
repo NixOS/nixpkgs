@@ -8,11 +8,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bundletool";
+<<<<<<< HEAD
   version = "1.18.3";
 
   src = fetchurl {
     url = "https://github.com/google/bundletool/releases/download/${finalAttrs.version}/bundletool-all-${finalAttrs.version}.jar";
     sha256 = "sha256-oJnPoVQ/VVk7wu0Wpwp8Z/5UsXR7tzAfN/39bZECjik=";
+=======
+  version = "1.18.2";
+
+  src = fetchurl {
+    url = "https://github.com/google/bundletool/releases/download/${finalAttrs.version}/bundletool-all-${finalAttrs.version}.jar";
+    sha256 = "sha256-N4tUNM0TeL72srxSe4x/D/JYSyc4MDNbzlTW0IE8hYQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dontUnpack = true;

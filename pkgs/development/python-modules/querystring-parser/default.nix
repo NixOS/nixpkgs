@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "querystring_parser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to handle nested dictionaries";
     homepage = "https://github.com/bernii/querystring-parser";
     changelog = "https://github.com/bernii/querystring-parser/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tbenst ];
+=======
+  meta = with lib; {
+    description = "Module to handle nested dictionaries";
+    homepage = "https://github.com/bernii/querystring-parser";
+    changelog = "https://github.com/bernii/querystring-parser/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tbenst ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

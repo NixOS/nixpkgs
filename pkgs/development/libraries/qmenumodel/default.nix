@@ -91,16 +91,26 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Qt5 renderer for Ayatana Indicators";
     longDescription = ''
       QMenuModel - a Qt/QML binding for GMenuModel
       (see http://developer.gnome.org/gio/unstable/GMenuModel.html)
     '';
     homepage = "https://github.com/AyatanaIndicators/qmenumodel";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.lgpl3Only;
+    teams = [ teams.lomiri ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "qmenumodel"
     ];

@@ -38,11 +38,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of XMP (Adobe's Extensible Metadata Platform)";
     mainProgram = "exempi";
     homepage = "https://libopenraw.freedesktop.org/exempi/";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Implementation of XMP (Adobe's Extensible Metadata Platform)";
+    mainProgram = "exempi";
+    homepage = "https://libopenraw.freedesktop.org/exempi/";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

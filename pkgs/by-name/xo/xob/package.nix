@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lightweight overlay bar for the X Window System";
     longDescription = ''
       A lightweight configurable overlay volume/backlight/progress/anything bar
@@ -39,9 +43,15 @@ stdenv.mkDerivation rec {
       is also support for overflows (when the value exceeds the maximum).
     '';
     inherit (src.meta) homepage;
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ florentc ];
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ florentc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xob";
   };
 }

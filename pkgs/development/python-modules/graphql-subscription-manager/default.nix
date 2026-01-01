@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "graphql_subscription_manager" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python3 library for graphql subscription manager";
     homepage = "https://github.com/Danielhiversen/PyGraphqlWebsocketManager";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python3 library for graphql subscription manager";
+    homepage = "https://github.com/Danielhiversen/PyGraphqlWebsocketManager";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

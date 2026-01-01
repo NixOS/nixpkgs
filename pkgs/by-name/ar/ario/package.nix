@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GTK client for MPD (Music player daemon)";
     mainProgram = "ario";
@@ -62,5 +63,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.garrison ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "GTK client for MPD (Music player daemon)";
+    mainProgram = "ario";
+    homepage = "https://ario-player.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.garrison ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

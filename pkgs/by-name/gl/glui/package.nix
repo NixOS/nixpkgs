@@ -41,10 +41,18 @@ stdenv.mkDerivation rec {
     cp LICENSE.txt "$out/share/glui/doc"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "User interface library using OpenGL";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "User interface library using OpenGL";
+    license = licenses.zlib;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

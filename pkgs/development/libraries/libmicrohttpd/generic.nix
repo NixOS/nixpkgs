@@ -42,7 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   meta =
+<<<<<<< HEAD
 
+=======
+    with lib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     {
       description = "Embeddable HTTP server library";
 
@@ -51,12 +55,21 @@ stdenv.mkDerivation (finalAttrs: {
         it easy to run an HTTP server as part of another application.
       '';
 
+<<<<<<< HEAD
       license = lib.licenses.lgpl2Plus;
 
       homepage = "https://www.gnu.org/software/libmicrohttpd/";
 
       maintainers = with lib.maintainers; [ fpletz ];
       platforms = lib.platforms.unix;
+=======
+      license = licenses.lgpl2Plus;
+
+      homepage = "https://www.gnu.org/software/libmicrohttpd/";
+
+      maintainers = with maintainers; [ fpletz ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     // meta;
 })

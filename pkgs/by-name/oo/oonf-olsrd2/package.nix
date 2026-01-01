@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Adhoc wireless mesh routing daemon";
     license = lib.licenses.bsd3;
     homepage = "http://olsr.org/";
     maintainers = with lib.maintainers; [ mkg20001 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Adhoc wireless mesh routing daemon";
+    license = licenses.bsd3;
+    homepage = "http://olsr.org/";
+    maintainers = with maintainers; [ mkg20001 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

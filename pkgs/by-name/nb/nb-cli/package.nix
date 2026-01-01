@@ -8,13 +8,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nb-cli";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     pname = "nb_cli";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-IbYyPZuhTkr4RInIR1lpMzl2+VYzu4IFQt2pOko92ZQ=";
+=======
+    hash = "sha256-vZxBjavim4xNp24s7hNsoZK7xoeRJST7NvSRbRTYSz8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [
@@ -37,7 +45,10 @@ python3.pkgs.buildPythonApplication rec {
     jinja2
     noneprompt
     nonestorage
+<<<<<<< HEAD
     packaging
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pydantic
     pyfiglet
     textual

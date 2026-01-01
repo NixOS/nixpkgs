@@ -32,11 +32,20 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Java-based agent for software power monitoring at the source code level";
     homepage = "https://github.com/joular/joularjx";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ julienmalka ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Java-based agent for software power monitoring at the source code level";
+    homepage = "https://github.com/joular/joularjx";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ julienmalka ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

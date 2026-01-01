@@ -23,6 +23,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   buildInputs = [
+<<<<<<< HEAD
+=======
+    darwin.DarwinTools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     darwin.libffi
   ];
 
@@ -38,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "objc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python <-> Objective-C bridge";
     homepage = "https://github.com/ronaldoussoren/pyobjc/tree/main/pyobjc-core";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ samuela ];
+=======
+  meta = with lib; {
+    description = "Python <-> Objective-C bridge";
+    homepage = "https://github.com/ronaldoussoren/pyobjc";
+    license = licenses.mit;
+    platforms = platforms.darwin;
+    maintainers = with maintainers; [ samuela ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

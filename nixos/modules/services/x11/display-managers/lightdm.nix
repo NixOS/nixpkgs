@@ -72,8 +72,13 @@ let
 
 in
 {
+<<<<<<< HEAD
   meta = {
     maintainers = [ ] ++ lib.teams.pantheon.members;
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Note: the order in which lightdm greeter modules are imported
@@ -282,11 +287,14 @@ in
       account   include       login
       password  substack      login
       session   include       login
+<<<<<<< HEAD
     ''
     # https://github.com/elementary/switchboard-plug-parental-controls/blob/8.0.1/src/daemon/Server.vala#L325
     # Must specify conffile since pam_time defaults to ${linux-pam}/etc/security/time.conf.
     + lib.optionalString config.services.pantheon.parental-controls.enable ''
       account   required      pam_time.so conffile=/etc/security/time.conf
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '';
 
     security.pam.services.lightdm-greeter.text = ''

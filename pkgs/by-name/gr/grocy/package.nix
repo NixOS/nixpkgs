@@ -19,9 +19,13 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-MnN6TIkNZWT+pAQf0+z5l3hj/7K/d3BfI7VAaUEKG8s=";
   };
 
+<<<<<<< HEAD
   # Upstream composer.json file is missing the name, description and license fields
   composerStrictValidation = false;
   vendorHash = "sha256-11+NIZX8i9uwcImwSE0HAeMc/WOCsecpMRqiba1mkrs=";
+=======
+  vendorHash = "sha256-6vWV8+4tETUFBLeEoG7d8lHKILXvM7ezWbDiG11GA/s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
@@ -33,6 +37,12 @@ php.buildComposerProject2 (finalAttrs: {
     fixup-yarn-lock
   ];
 
+<<<<<<< HEAD
+=======
+  # Upstream composer.json file is missing the name, description and license fields
+  composerStrictValidation = false;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # NOTE: if patches are created from a git checkout, those should be modified
   # with `unix2dos` to make sure those apply here.
   patches = [
@@ -59,9 +69,15 @@ php.buildComposerProject2 (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) grocy; };
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ diogotcorreia ];
+=======
+  meta = with lib; {
+    license = licenses.mit;
+    maintainers = with maintainers; [ diogotcorreia ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
   };

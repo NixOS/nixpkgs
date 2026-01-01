@@ -2,6 +2,10 @@
   stdenv,
   lib,
   fetchFromGitLab,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gitUpdater,
   nixosTests,
   testers,
@@ -32,13 +36,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-content-hub";
+<<<<<<< HEAD
   version = "2.2.1";
+=======
+  version = "2.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-content-hub";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-L0CX383AMu8XlNbGL01VvBxvawJwAWHhTh3ak0sjo20=";
+=======
+    hash = "sha256-S/idjDdcRvqZqKmflkYJyQckz4/9k/8JY6eRDACk9Ag=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -48,6 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
     "examples"
   ];
 
+<<<<<<< HEAD
+=======
+  patches = [
+    # Remove when version > 2.1.0
+    (fetchpatch {
+      name = "0001-lomiri-content-hub-treewide-Add-missing-LDM-include-dirs.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-content-hub/-/commit/cdd3371714c183d4caf166157082288c022bb98d.patch";
+      hash = "sha256-Uubd425T+0KxPR9lJW6+ejO2fFzcDwEIpJATSZ9jYD4=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     substituteInPlace import/*/Content/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
@@ -59,10 +83,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't override default theme search path (which honours XDG_DATA_DIRS) with a FHS assumption
     substituteInPlace import/Lomiri/Content/contenthubplugin.cpp \
       --replace-fail 'QIcon::setThemeSearchPaths(QStringList() << ("/usr/share/icons/"));' ""
+<<<<<<< HEAD
 
     # https://gitlab.com/ubports/development/core/lomiri-content-hub/-/merge_requests/54
     substituteInPlace src/com/lomiri/content/service/registry.h \
       --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   strictDeps = true;
@@ -110,7 +137,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_DOC" true)
     (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # in case something still depends on it
+<<<<<<< HEAD
     (lib.cmakeBool "ENABLE_WERROR" true)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   preBuild =

@@ -24,12 +24,21 @@ buildGoModule rec {
     wrapProgram $out/bin/unflac --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tool for fast frame accurate audio image + cue sheet splitting";
     homepage = "https://sr.ht/~ft/unflac/";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ felipeqq2 ];
+=======
+  meta = with lib; {
+    description = "Command line tool for fast frame accurate audio image + cue sheet splitting";
+    homepage = "https://sr.ht/~ft/unflac/";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ felipeqq2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "unflac";
   };
 }

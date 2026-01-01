@@ -42,15 +42,27 @@ rustPlatform.buildRustPackage rec {
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Modern Volume Mixer for PulseAudio";
     homepage = "https://github.com/Aurailus/Myxer";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Modern Volume Mixer for PulseAudio";
+    homepage = "https://github.com/Aurailus/Myxer";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       erin
       rster2002
     ];
     mainProgram = "myxer";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

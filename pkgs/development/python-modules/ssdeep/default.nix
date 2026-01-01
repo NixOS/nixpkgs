@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ssdeep" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the ssdeep library";
     homepage = "https://github.com/DinoTools/python-ssdeep";
     changelog = "https://github.com/DinoTools/python-ssdeep/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for the ssdeep library";
+    homepage = "https://github.com/DinoTools/python-ssdeep";
+    changelog = "https://github.com/DinoTools/python-ssdeep/blob/${version}/CHANGELOG.rst";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

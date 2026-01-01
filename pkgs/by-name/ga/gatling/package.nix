@@ -44,10 +44,18 @@ stdenv.mkDerivation rec {
     make gatling
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "High performance web server";
     homepage = "http://www.fefe.de/gatling/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "High performance web server";
+    homepage = "http://www.fefe.de/gatling/";
+    license = lib.licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

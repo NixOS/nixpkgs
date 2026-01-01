@@ -8,12 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-language-tools";
+<<<<<<< HEAD
   version = "0.8.0";
+=======
+  version = "0.7.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "g-plane";
     repo = "wasm-language-tools";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-4PnagT1pufsEy1ROvhYYtkuSsU+irGpYV9iffwIQPmk=";
   };
 
@@ -21,6 +26,16 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/wat_server";
+=======
+    hash = "sha256-6lZBDBjqHIMLMrWsnFeGuaGZDe3LKyBbbMbyvS3i29M=";
+  };
+
+  cargoHash = "sha256-npVrDGvTqKk9NkMiuWnSJRFEWfG9pGA7LEUrorNJ978=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/wat_server";
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

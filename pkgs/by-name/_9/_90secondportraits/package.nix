@@ -75,11 +75,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Silly speed painting game";
     mainProgram = "90secondportraits";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Silly speed painting game";
+    mainProgram = "90secondportraits";
+    platforms = platforms.linux;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zlib
       cc-by-sa-40
       cc-by-sa-30 # vendored

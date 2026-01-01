@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyenvisalink" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface for Envisalink 2DS/3 Alarm API";
     homepage = "https://github.com/Cinntax/pyenvisalink";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python interface for Envisalink 2DS/3 Alarm API";
+    homepage = "https://github.com/Cinntax/pyenvisalink";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

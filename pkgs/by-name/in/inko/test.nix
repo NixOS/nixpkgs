@@ -7,6 +7,7 @@
 
 let
   source =
+<<<<<<< HEAD
     # https://docs.inko-lang.org/manual/v0.19.1/getting-started/hello-concurrency/#channels
     writeText "hello.inko" # inko
       ''
@@ -18,11 +19,23 @@ let
         type async Printer {
           fn async print(message: String, channel: uni Channel[Nil]) {
             let _ = Stdout.new.print(message)
+=======
+    writeText "hello.inko" # inko
+      ''
+        import std.process (sleep)
+        import std.stdio (STDOUT)
+        import std.time (Duration)
+
+        class async Printer {
+          fn async print(message: String, channel: Channel[Nil]) {
+            let _ = STDOUT.new.print(message)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
             channel.send(nil)
           }
         }
 
+<<<<<<< HEAD
         type async Main {
           fn async main {
             let channel = Channel.new
@@ -31,6 +44,14 @@ let
             Printer().print('world', recover channel.clone)
 
             sleep(Duration.from_millis(500))
+=======
+        class async Main {
+          fn async main {
+            let channel = Channel.new(size: 2)
+
+            Printer().print('Hello', channel)
+            Printer().print('world', channel)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
             channel.receive
             channel.receive

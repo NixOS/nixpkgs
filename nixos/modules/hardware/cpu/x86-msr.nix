@@ -107,7 +107,12 @@ in
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     maintainers = with lib.maintainers; [ lorenzleutgeb ];
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ lorenzleutgeb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

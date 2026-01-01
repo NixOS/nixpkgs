@@ -58,11 +58,19 @@ buildPythonPackage rec {
     "tests/key_service_test.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for managing secrets in the cloud using AWS KMS and DynamoDB";
     homepage = "https://github.com/LuminalOSS/credstash";
     changelog = "https://github.com/fugue/credstash/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Utility for managing secrets in the cloud using AWS KMS and DynamoDB";
+    homepage = "https://github.com/LuminalOSS/credstash";
+    changelog = "https://github.com/fugue/credstash/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "credstash";
   };

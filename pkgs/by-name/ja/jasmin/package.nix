@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     minimal-module = callPackage ./test-assemble-hello-world { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Assembler for the Java Virtual Machine";
     downloadPage = "https://sourceforge.net/projects/jasmin/files/latest/download";
@@ -60,5 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "jasmin";
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Assembler for the Java Virtual Machine";
+    downloadPage = "https://sourceforge.net/projects/jasmin/files/latest/download";
+    homepage = "https://jasmin.sourceforge.net/";
+    license = licenses.bsd3;
+    mainProgram = "jasmin";
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -54,11 +54,20 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "De novo assembler for single molecule sequencing reads using repeat graphs";
     homepage = "https://github.com/fenderglass/Flye";
     license = lib.licenses.bsd3;
     mainProgram = "flye";
     maintainers = with lib.maintainers; [ assistant ];
+=======
+  meta = with lib; {
+    description = "De novo assembler for single molecule sequencing reads using repeat graphs";
+    homepage = "https://github.com/fenderglass/Flye";
+    license = licenses.bsd3;
+    mainProgram = "flye";
+    maintainers = with maintainers; [ assistant ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

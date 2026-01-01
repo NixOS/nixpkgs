@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library and command-line utility for reading GDSII geometry files";
     mainProgram = "GDSIIConvert";
@@ -33,5 +34,17 @@ stdenv.mkDerivation rec {
       markuskowa
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library and command-line utility for reading GDSII geometry files";
+    mainProgram = "GDSIIConvert";
+    homepage = "https://github.com/HomerReid/libGDSII";
+    license = [ licenses.gpl2Only ];
+    maintainers = with maintainers; [
+      sheepforce
+      markuskowa
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

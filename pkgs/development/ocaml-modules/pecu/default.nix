@@ -29,10 +29,18 @@ buildDunePackage rec {
     astring
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Encoder/Decoder of Quoted-Printable (RFC2045 & RFC2047)";
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/pecu";
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Encoder/Decoder of Quoted-Printable (RFC2045 & RFC2047)";
+    license = licenses.mit;
+    homepage = "https://github.com/mirage/pecu";
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

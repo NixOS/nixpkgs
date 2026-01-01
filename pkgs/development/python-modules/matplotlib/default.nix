@@ -197,6 +197,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python plotting library, making publication quality plots";
     homepage = "https://matplotlib.org/";
@@ -206,6 +207,17 @@ buildPythonPackage rec {
       bsd0
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python plotting library, making publication quality plots";
+    homepage = "https://matplotlib.org/";
+    changelog = "https://github.com/matplotlib/matplotlib/releases/tag/v${version}";
+    license = with licenses; [
+      psfl
+      bsd0
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lovek323
       veprbl
     ];

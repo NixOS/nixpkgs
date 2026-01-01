@@ -20,10 +20,18 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ portaudio ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savonet/ocaml-portaudio";
     description = "Bindings for the portaudio library which provides high-level functions for using soundcards";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savonet/ocaml-portaudio";
+    description = "Bindings for the portaudio library which provides high-level functions for using soundcards";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

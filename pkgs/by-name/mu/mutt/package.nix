@@ -126,6 +126,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Small but very powerful text-based mail client";
     homepage = "http://www.mutt.org";
@@ -133,5 +134,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ rnhmjoj ];
+=======
+  meta = with lib; {
+    description = "Small but very powerful text-based mail client";
+    homepage = "http://www.mutt.org";
+    mainProgram = "mutt";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ rnhmjoj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

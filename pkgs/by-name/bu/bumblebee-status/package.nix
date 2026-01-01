@@ -79,6 +79,7 @@ python3.pkgs.buildPythonPackage {
     cp -r ./themes $out/${python3.sitePackages}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modular, theme-able status line generator for the i3 window manager";
     homepage = "https://github.com/tobi-wan-kenobi/bumblebee-status";
@@ -86,5 +87,14 @@ python3.pkgs.buildPythonPackage {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ jamerrq ];
+=======
+  meta = with lib; {
+    description = "Modular, theme-able status line generator for the i3 window manager";
+    homepage = "https://github.com/tobi-wan-kenobi/bumblebee-status";
+    mainProgram = "bumblebee-status";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jamerrq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -65,7 +65,11 @@
 
 buildPythonPackage rec {
   pname = "dvc";
+<<<<<<< HEAD
   version = "3.64.1";
+=======
+  version = "3.63.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -74,7 +78,11 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-zbqxJ6rlxiYZWFYmdqAlu00jkMLS0aIabVqMy5NAvUk=";
+=======
+    hash = "sha256-7wuxNPELHdxQSHKHQo8KTQ9yj8KW8RVEN0ykJN/he9E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [
@@ -86,7 +94,11 @@ buildPythonPackage rec {
     substituteInPlace dvc/analytics.py \
       --replace-fail 'enabled = not os.getenv(DVC_NO_ANALYTICS)' 'enabled = False'
     substituteInPlace dvc/daemon.py \
+<<<<<<< HEAD
       --subst-var-by dvc "$out/bin/dvc"
+=======
+      --subst-var-by dvc "$out/bin/dcv"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   build-system = [ setuptools-scm ];
@@ -162,12 +174,21 @@ buildPythonPackage rec {
     "dvc.api"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
     changelog = "https://github.com/iterative/dvc/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Version Control System for Machine Learning Projects";
+    homepage = "https://dvc.org";
+    changelog = "https://github.com/iterative/dvc/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cmcdragonkai
       fab
     ];

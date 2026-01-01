@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tarantool";
+<<<<<<< HEAD
   version = "3.6.0";
+=======
+  version = "3.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "tarantool";
     repo = "tarantool";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-fkAjzAS7LV+bME8FeImg1OXNfNhXTH6qb53TzHz4SFY=";
+=======
+    hash = "sha256-NU+0R07Qrnew7+HeeJu6QnGfktEXFRxSZFwl48vjGZE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 

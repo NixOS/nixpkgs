@@ -24,11 +24,20 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     # This description is terrible, but it's what upstream uses.
     description = "Package to update stuff";
     homepage = "https://github.com/ludeeus/pyupdate";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    # This description is terrible, but it's what upstream uses.
+    description = "Package to update stuff";
+    homepage = "https://github.com/ludeeus/pyupdate";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

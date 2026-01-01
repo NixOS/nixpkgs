@@ -10,13 +10,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "tektoncd-cli-pac";
+<<<<<<< HEAD
   version = "0.40.0";
+=======
+  version = "0.39.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "openshift-pipelines";
     repo = "pipelines-as-code";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-FHhJyOHaYaYvizNZ3iKsWy+CH9VWa8LXBmaawVdcaFo=";
+=======
+    hash = "sha256-iGa4aemterN59wLQCzg8RMl2z71obabQ5GTwz7I/mPs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = null;
@@ -42,12 +50,16 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
       "v([0-9.]+)"
     ];
   };
+=======
+  passthru.updateScript = nix-update-script { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     homepage = "https://pipelinesascode.com";

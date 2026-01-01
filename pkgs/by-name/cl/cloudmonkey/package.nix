@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for Apache CloudStack";
     homepage = "https://github.com/apache/cloudstack-cloudmonkey";
     license = [ lib.licenses.asl20 ];
     maintainers = [ lib.maintainers.womfoo ];
+=======
+  meta = with lib; {
+    description = "CLI for Apache CloudStack";
+    homepage = "https://github.com/apache/cloudstack-cloudmonkey";
+    license = [ licenses.asl20 ];
+    maintainers = [ maintainers.womfoo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cloudstack-cloudmonkey";
   };
 

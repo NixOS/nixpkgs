@@ -90,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/223967
     # https://lists.gnu.org/archive/html/bug-mailutils/2023-04/msg00000.html
     ./don-t-use-descrypt-password-in-the-test-suite.patch
+<<<<<<< HEAD
     # Fix build with gcc15
     # https://lists.gnu.org/archive/html/bug-mailutils/2025-06/msg00000.html
     (fetchpatch {
@@ -97,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/mailutils/-/raw/87c3614083260f52dd1222e872a1836f0ff9abe1/fix-build.patch";
       hash = "sha256-RN62l5mYqtViEjXpAlQKWhFez1TPynRMj/1nvZkq5Gs=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   enableParallelBuilding = true;
@@ -148,7 +151,11 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Plus # tools
     ];
 
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     homepage = "https://www.gnu.org/software/mailutils/";
     changelog = "https://git.savannah.gnu.org/cgit/mailutils.git/tree/NEWS";

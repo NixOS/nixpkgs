@@ -30,14 +30,22 @@ stdenv.mkDerivation {
       INSTALL_MOD_PATH=$out M=$(pwd) modules_install $makeFlags
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Driver for MacBook models 2018 and newer, which makes the keyboard, mouse and audio output work";
     longDescription = ''
       A driver for MacBook models 2018 and newer, implementing the VHCI (required for mouse/keyboard/etc.) and audio functionality.
     '';
     homepage = "https://github.com/MCMrARM/mbp2018-bridge-drv";
     license = lib.licenses.gpl2Only;
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.hlolli ];
     broken = kernel.kernelOlder "5.4";
   };

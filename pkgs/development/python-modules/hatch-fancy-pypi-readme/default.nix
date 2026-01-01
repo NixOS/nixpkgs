@@ -44,10 +44,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hatch_fancy_pypi_readme" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fancy PyPI READMEs with Hatch";
     mainProgram = "hatch-fancy-pypi-readme";
     homepage = "https://github.com/hynek/hatch-fancy-pypi-readme";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Fancy PyPI READMEs with Hatch";
+    mainProgram = "hatch-fancy-pypi-readme";
+    homepage = "https://github.com/hynek/hatch-fancy-pypi-readme";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tjni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

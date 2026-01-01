@@ -110,7 +110,11 @@ lib.extendMkDerivation {
         args.melpaVersion or (
           let
             parsed =
+<<<<<<< HEAD
               lib.flip builtins.match finalAttrs.version
+=======
+              lib.flip builtins.match version
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 # match <version>-unstable-YYYY-MM-DD format
                 "^.*-unstable-([[:digit:]]{4})-([[:digit:]]{2})-([[:digit:]]{2})$";
             unstableVersionInNixFormat = parsed != null; # heuristics

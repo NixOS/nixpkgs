@@ -94,7 +94,11 @@ stdenv.mkDerivation rec {
     "-DMANUAL_SUBMODULES=ON"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       A privacy-centric memecoin that was fairly launched on April 1, 2018 with
       no pre-mine, stealth-mine or ICO
@@ -107,8 +111,14 @@ stdenv.mkDerivation rec {
       opposing forks.
     '';
     homepage = "https://wownero.org/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd3;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

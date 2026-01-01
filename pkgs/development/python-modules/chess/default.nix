@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Chess library with move generation, move validation, and support for common formats";
     homepage = "https://github.com/niklasf/python-chess";
     changelog = "https://github.com/niklasf/python-chess/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ smancill ];
+=======
+  meta = with lib; {
+    description = "Chess library with move generation, move validation, and support for common formats";
+    homepage = "https://github.com/niklasf/python-chess";
+    changelog = "https://github.com/niklasf/python-chess/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ smancill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

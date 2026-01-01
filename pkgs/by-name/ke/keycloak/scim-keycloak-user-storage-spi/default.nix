@@ -21,6 +21,7 @@ maven.buildMavenPackage {
     install -D "target/scim-user-spi-0.0.1-SNAPSHOT.jar" "$out/scim-user-spi-0.0.1-SNAPSHOT.jar"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/justin-stephenson/scim-keycloak-user-storage-spi";
     description = "Third party module that extends Keycloak, allow for user storage in an external scimv2 server";
@@ -29,5 +30,15 @@ maven.buildMavenPackage {
     ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ s1341 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/justin-stephenson/scim-keycloak-user-storage-spi";
+    description = "Third party module that extends Keycloak, allow for user storage in an external scimv2 server";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+    ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ s1341 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

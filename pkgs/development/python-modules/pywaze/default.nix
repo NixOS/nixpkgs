@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywaze" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for calculating WAZE routes and travel times";
     homepage = "https://github.com/eifinger/pywaze";
     changelog = "https://github.com/eifinger/pywaze/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for calculating WAZE routes and travel times";
+    homepage = "https://github.com/eifinger/pywaze";
+    changelog = "https://github.com/eifinger/pywaze/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,11 +29,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Configuration manager for python applications";
     mainProgram = "kaptan";
     homepage = "https://kaptan.readthedocs.io/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Configuration manager for python applications";
+    mainProgram = "kaptan";
+    homepage = "https://kaptan.readthedocs.io/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

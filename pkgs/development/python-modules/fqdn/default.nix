@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fqdn" ];
 
+<<<<<<< HEAD
   meta = {
     description = "RFC-compliant FQDN validation and manipulation";
     homepage = "https://github.com/ypcrts/fqdn";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "RFC-compliant FQDN validation and manipulation";
+    homepage = "https://github.com/ypcrts/fqdn";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

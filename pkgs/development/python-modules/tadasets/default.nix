@@ -28,10 +28,17 @@ buildPythonPackage rec {
     scipy
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Great data sets for Topological Data Analysis";
     homepage = "https://tadasets.scikit-tda.org";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Great data sets for Topological Data Analysis";
+    homepage = "https://tadasets.scikit-tda.org";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

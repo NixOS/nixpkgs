@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aemet_opendata.interface" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for AEMET OpenData Rest API";
     homepage = "https://github.com/Noltari/AEMET-OpenData";
     changelog = "https://github.com/Noltari/AEMET-OpenData/releases/tag/${version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python client for AEMET OpenData Rest API";
+    homepage = "https://github.com/Noltari/AEMET-OpenData";
+    changelog = "https://github.com/Noltari/AEMET-OpenData/releases/tag/${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -73,7 +73,11 @@ buildPythonPackage rec {
     requests
     sure
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Skip http tests, they require network access
   env.SKIP_TRUE_HTTP = true;
@@ -96,11 +100,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mocket" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
     description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
+    description = "Socket mock framework for all kinds of sockets including web-clients";
+    homepage = "https://github.com/mindflayer/python-mocket";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

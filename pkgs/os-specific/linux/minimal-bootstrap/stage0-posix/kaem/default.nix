@@ -54,11 +54,19 @@ derivationWithMeta {
       // (removeAttrs env [ "nativeBuildInputs" ])
     );
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal build tool for running scripts on systems that lack any shell";
     homepage = "https://github.com/oriansj/mescc-tools";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.minimal-bootstrap ];
+=======
+  meta = with lib; {
+    description = "Minimal build tool for running scripts on systems that lack any shell";
+    homepage = "https://github.com/oriansj/mescc-tools";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit platforms;
   };
 }

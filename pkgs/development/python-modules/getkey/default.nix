@@ -27,10 +27,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read single characters and key-strokes";
     homepage = "https://github.com/kcsaff/getkey";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.symphorien ];
+=======
+  meta = with lib; {
+    description = "Read single characters and key-strokes";
+    homepage = "https://github.com/kcsaff/getkey";
+    license = licenses.mit;
+    maintainers = [ maintainers.symphorien ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

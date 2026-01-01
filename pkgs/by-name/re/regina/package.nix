@@ -20,10 +20,18 @@ stdenv.mkDerivation rec {
     "--libdir=$(out)/lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "REXX interpreter";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
+=======
+  meta = with lib; {
+    description = "REXX interpreter";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
+    license = licenses.lgpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

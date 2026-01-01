@@ -53,10 +53,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Firmware related ARM stubs for the Raspberry Pi";
     homepage = "https://github.com/raspberrypi/tools";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Firmware related ARM stubs for the Raspberry Pi";
+    homepage = "https://github.com/raspberrypi/tools";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "armv6l-linux"
       "armv7l-linux"

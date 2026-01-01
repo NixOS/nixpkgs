@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Minimalist builder for Rust";
     mainProgram = "minicargo";
     longDescription = ''
@@ -35,8 +39,13 @@ stdenv.mkDerivation rec {
       (like the Rust compiler itself).
     '';
     inherit (src.meta) homepage;
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       progval
       r-burns
     ];

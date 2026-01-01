@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytradfri" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";
     homepage = "https://github.com/home-assistant-libs/pytradfri";
     changelog = "https://github.com/home-assistant-libs/pytradfri/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";
+    homepage = "https://github.com/home-assistant-libs/pytradfri";
+    changelog = "https://github.com/home-assistant-libs/pytradfri/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

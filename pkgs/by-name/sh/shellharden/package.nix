@@ -19,7 +19,11 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = "patchShebangs moduletests/run";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Corrective bash syntax highlighter";
     mainProgram = "shellharden";
     longDescription = ''
@@ -27,7 +31,12 @@ rustPlatform.buildRustPackage rec {
       rewriting of scripts to ShellCheck conformance, mainly focused on quoting.
     '';
     homepage = "https://github.com/anordal/shellharden";
+<<<<<<< HEAD
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

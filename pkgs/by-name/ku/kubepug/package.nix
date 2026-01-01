@@ -23,10 +23,18 @@ buildGoModule rec {
     "-X sigs.k8s.io/release-utils/version.gitVersion=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Checks a Kubernetes cluster for objects using deprecated API versions";
     homepage = "https://github.com/kubepug/kubepug";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mausch ];
+=======
+  meta = with lib; {
+    description = "Checks a Kubernetes cluster for objects using deprecated API versions";
+    homepage = "https://github.com/kubepug/kubepug";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mausch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

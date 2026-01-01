@@ -1,7 +1,10 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchurl,
   autoreconfHook,
   ...

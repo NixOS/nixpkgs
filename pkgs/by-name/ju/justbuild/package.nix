@@ -2,7 +2,10 @@
   gccStdenv,
   fetchFromGitHub,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   fmt,
   nlohmann_json,
@@ -53,6 +56,7 @@ stdenv.mkDerivation rec {
     hash = "sha256:1r33jj8yipxjgiarddcxr1yc5kmn98rwrjl9qxfx0fzn1bsg04q5";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch2 {
       name = "blob-tree-add-hash.patch";
@@ -61,6 +65,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     # Tools for the bootstrap process
     jq

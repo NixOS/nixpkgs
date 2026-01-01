@@ -24,12 +24,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python markup module for Telegram messenger";
     downloadPage = "https://github.com/SKY-ALIN/telegram-text";
     homepage = "https://telegram-text.alinsky.tech/";
     changelog = "https://github.com/SKY-ALIN/telegram-text/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

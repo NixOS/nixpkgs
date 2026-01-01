@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://bitmath.org/code/mtdev/";
     description = "Multitouch Protocol Translation Library";
     mainProgram = "mtdev-test";
@@ -33,7 +37,12 @@ stdenv.mkDerivation rec {
       tracking, type A with contact tracking, or type B with contact tracking.
       See the kernel documentation for further details.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = with lib.platforms; freebsd ++ linux;
+=======
+    license = licenses.mit;
+    platforms = with platforms; freebsd ++ linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

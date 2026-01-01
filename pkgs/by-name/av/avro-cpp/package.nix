@@ -43,13 +43,21 @@ stdenv.mkDerivation rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/avrogencpp";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "C++ library which implements parts of the Avro Specification";
     mainProgram = "avrogencpp";
     homepage = "https://avro.apache.org/";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ rasendubi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 }

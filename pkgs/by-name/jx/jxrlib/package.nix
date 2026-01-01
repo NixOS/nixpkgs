@@ -36,11 +36,20 @@ stdenv.mkDerivation {
     QUILT_PATCHES=debian/patches quilt push -a
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the JPEG XR image codec standard";
     homepage = "https://jxrlib.codeplex.com";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    description = "Implementation of the JPEG XR image codec standard";
+    homepage = "https://jxrlib.codeplex.com";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

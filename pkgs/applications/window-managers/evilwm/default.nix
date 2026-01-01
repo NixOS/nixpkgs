@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
   # Allow users set their own list of patches
   inherit patches;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.6809.org.uk/evilwm/";
     description = "Minimalist window manager for the X Window System";
     license = {
@@ -45,8 +49,13 @@ stdenv.mkDerivation rec {
       url = "http://www.6809.org.uk/evilwm/";
       free = true;
     }; # like BSD/MIT, but Share-Alike'y; See README.
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ amiloradovsky ];
     platforms = lib.platforms.all;
+=======
+    maintainers = with maintainers; [ amiloradovsky ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "evilwm";
   };
 }

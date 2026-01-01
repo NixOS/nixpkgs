@@ -34,12 +34,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "get_image_size" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Get image width and height given a file path using minimal dependencies";
     homepage = "https://github.com/opsdroid/image_size";
     changelog = "https://github.com/opsdroid/image_size/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Get image width and height given a file path using minimal dependencies";
+    homepage = "https://github.com/opsdroid/image_size";
+    changelog = "https://github.com/opsdroid/image_size/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ globin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "get-image-size";
   };
 }

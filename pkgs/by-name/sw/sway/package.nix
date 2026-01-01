@@ -28,7 +28,11 @@ let
   inherit (lib.meta) getExe;
   inherit (lib.strings) concatMapStrings optionalString;
 
+<<<<<<< HEAD
   sway = sway-unwrapped.overrideAttrs (old: {
+=======
+  sway = sway-unwrapped.overrideAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit isNixOS enableXWayland;
   });
   baseWrapper = writeShellScriptBin sway.meta.mainProgram ''
@@ -46,9 +50,16 @@ let
     fi
   '';
 in
+<<<<<<< HEAD
 symlinkJoin {
   pname = replaceStrings [ "-unwrapped" ] [ "" ] sway.pname;
   inherit (sway) version;
+=======
+symlinkJoin rec {
+  pname = replaceStrings [ "-unwrapped" ] [ "" ] sway.pname;
+  inherit (sway) version;
+  name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   paths = (optional withBaseWrapper baseWrapper) ++ [ sway ];
 

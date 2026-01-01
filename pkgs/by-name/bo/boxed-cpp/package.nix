@@ -21,10 +21,18 @@ stdenv.mkDerivation (final: {
 
   buildInputs = [ catch2 ];
 
+<<<<<<< HEAD
   meta = {
     description = "Boxing primitive types in C++";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.moni ];
+=======
+  meta = with lib; {
+    description = "Boxing primitive types in C++";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
@@ -96,6 +97,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Automatic and interactive theorem prover";
+    homepage = "https://leanprover.github.io/";
+    changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.tag}/RELEASES.md";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       danielbritten
       jthulhu
     ];

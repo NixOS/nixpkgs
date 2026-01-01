@@ -24,10 +24,18 @@ buildPythonPackage rec {
     scipy
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of the LPSD algorithm for computing power spectral density with logarithmically spaced points";
     homepage = "https://github.com/bleykauf/py-lpsd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "Python implementation of the LPSD algorithm for computing power spectral density with logarithmically spaced points";
+    homepage = "https://github.com/bleykauf/py-lpsd";
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

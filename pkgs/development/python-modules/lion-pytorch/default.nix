@@ -24,10 +24,18 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lion_pytorch" ];
   doCheck = false; # no tests currently
 
+<<<<<<< HEAD
   meta = {
     description = "Optimizer tuned by Google Brain using genetic algorithms";
     homepage = "https://github.com/lucidrains/lion-pytorch";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Optimizer tuned by Google Brain using genetic algorithms";
+    homepage = "https://github.com/lucidrains/lion-pytorch";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

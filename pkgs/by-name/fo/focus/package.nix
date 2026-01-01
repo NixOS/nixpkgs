@@ -24,15 +24,25 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=\${out}" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Focus window, workspace or monitor by direction or cycle through them";
     longDescription = ''
       A collection of utilities that change the focus of windows, workspaces or
       monitors.
     '';
     homepage = "https://github.com/phillbush/focus";
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.publicDomain;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

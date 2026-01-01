@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elmax_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interacting with the Elmax cloud";
     homepage = "https://github.com/albertogeniola/elmax-api";
     changelog = "https://github.com/albertogeniola/elmax-api/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for interacting with the Elmax cloud";
+    homepage = "https://github.com/albertogeniola/elmax-api";
+    changelog = "https://github.com/albertogeniola/elmax-api/releases/tag/v${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

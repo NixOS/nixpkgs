@@ -5,8 +5,11 @@
   fetchFromGitHub,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   python3,
   makeWrapper,
@@ -36,17 +39,26 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-x792VA4PZleqUUgarh59JxJVXrvT95/rINYk8t9i3X0=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
+=======
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-F8H0eYltIJ0S8AX+2S3cR+v8dvePw09VWToVOLM8qII=";
   };
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python3
     makeWrapper
   ];

@@ -23,11 +23,20 @@ buildGoModule rec {
     "-X github.com/gofireflyio/aiac/v4/libaiac.Version=v${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = ''Artificial Intelligence Infrastructure-as-Code Generator'';
     mainProgram = "aiac";
     homepage = "https://github.com/gofireflyio/aiac/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
+=======
+  meta = with lib; {
+    description = ''Artificial Intelligence Infrastructure-as-Code Generator'';
+    mainProgram = "aiac";
+    homepage = "https://github.com/gofireflyio/aiac/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ qjoly ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

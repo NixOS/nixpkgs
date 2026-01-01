@@ -57,12 +57,20 @@ let
       };
     };
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       changelog = "https://github.com/textX/textX/blob/${src.tag}/CHANGELOG.md";
       description = "Domain-specific languages and parsers in Python";
       mainProgram = "textx";
       homepage = "https://github.com/textx/textx/";
+<<<<<<< HEAD
       license = lib.licenses.mit;
+=======
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maintainers = [ ];
     };
   };

@@ -37,12 +37,21 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Matrix-Discord puppeting bridge";
     homepage = "https://github.com/mautrix/discord";
     changelog = "https://github.com/mautrix/discord/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Matrix-Discord puppeting bridge";
+    homepage = "https://github.com/mautrix/discord";
+    changelog = "https://github.com/mautrix/discord/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       MoritzBoehme
       sumnerevans
     ];

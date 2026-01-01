@@ -52,11 +52,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rarfile" ];
 
+<<<<<<< HEAD
   meta = {
     description = "RAR archive reader for Python";
     homepage = "https://github.com/markokr/rarfile";
     changelog = "https://github.com/markokr/rarfile/releases/tag/v${version}";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "RAR archive reader for Python";
+    homepage = "https://github.com/markokr/rarfile";
+    changelog = "https://github.com/markokr/rarfile/releases/tag/v${version}";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

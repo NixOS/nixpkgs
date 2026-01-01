@@ -58,12 +58,21 @@ stdenv.mkDerivation rec {
     nixos-iso-boots-and-verifies = nixosTests.boot.biosCdrom;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/plougher/squashfs-tools";
     description = "Tool for creating and unpacking squashfs filesystems";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ruuda ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/plougher/squashfs-tools";
+    description = "Tool for creating and unpacking squashfs filesystems";
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ruuda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mksquashfs";
   };
 }

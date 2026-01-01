@@ -40,12 +40,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "idasen" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python API and CLI for the ikea IDÅSEN desk";
     mainProgram = "idasen";
     homepage = "https://github.com/newAM/idasen";
     changelog = "https://github.com/newAM/idasen/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ newam ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ newam ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

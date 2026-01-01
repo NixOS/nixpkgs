@@ -16,8 +16,13 @@ let
 in
 {
   name = "btrbk";
+<<<<<<< HEAD
   meta = {
     maintainers = with pkgs.lib.maintainers; [ symphorien ];
+=======
+  meta = with pkgs.lib; {
+    maintainers = with maintainers; [ symphorien ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes = {

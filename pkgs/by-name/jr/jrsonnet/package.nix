@@ -39,11 +39,19 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Purely-functional configuration language that helps you define JSON data";
     homepage = "https://github.com/CertainLach/jrsonnet";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Purely-functional configuration language that helps you define JSON data";
+    homepage = "https://github.com/CertainLach/jrsonnet";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lach
     ];
   };

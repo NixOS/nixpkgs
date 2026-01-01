@@ -83,11 +83,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psqlextra" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bringing all of PostgreSQL's awesomeness to Django";
     homepage = "https://github.com/SectorLabs/django-postgres-extra";
     changelog = "https://github.com/SectorLabs/django-postgres-extra/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ b4dm4n ];
+=======
+  meta = with lib; {
+    description = "Bringing all of PostgreSQL's awesomeness to Django";
+    homepage = "https://github.com/SectorLabs/django-postgres-extra";
+    changelog = "https://github.com/SectorLabs/django-postgres-extra/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ b4dm4n ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

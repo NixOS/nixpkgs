@@ -21,11 +21,20 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "JSON to TSV converter";
     homepage = "https://codemadness.org/json2tsv.html";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "JSON to TSV converter";
+    homepage = "https://codemadness.org/json2tsv.html";
+    license = licenses.isc;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX="
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extensible Binary Meta Language library";
     homepage = "https://dl.matroska.org/downloads/libebml/";
     license = lib.licenses.lgpl21;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Extensible Binary Meta Language library";
+    homepage = "https://dl.matroska.org/downloads/libebml/";
+    license = licenses.lgpl21;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -58,12 +58,21 @@ buildPythonPackage rec {
     "test_coloring_black_works"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Word cloud generator in Python";
     mainProgram = "wordcloud_cli";
     homepage = "https://github.com/amueller/word_cloud";
     changelog = "https://github.com/amueller/word_cloud/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jm2dev ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ jm2dev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

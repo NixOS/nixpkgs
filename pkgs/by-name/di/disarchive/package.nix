@@ -54,12 +54,21 @@ stdenv.mkDerivation rec {
       --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Disassemble software into data and metadata";
     homepage = "https://ngyro.com/software/disarchive.html";
     license = lib.licenses.gpl3Plus;
     mainProgram = "disarchive";
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Disassemble software into data and metadata";
+    homepage = "https://ngyro.com/software/disarchive.html";
+    license = licenses.gpl3Plus;
+    mainProgram = "disarchive";
+    maintainers = with maintainers; [ foo-dogsquared ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 }

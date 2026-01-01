@@ -53,7 +53,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "MEGA Model Optimization Package";
     longDescription = ''
       The software here is an implementation of maximum likelihood and maximum a
@@ -63,7 +67,12 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.umiacs.umd.edu/~hal/megam";
     license = lib.licenses.unfree;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ leixb ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ leixb ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

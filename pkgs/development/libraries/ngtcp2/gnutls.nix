@@ -43,12 +43,21 @@ stdenv.mkDerivation rec {
     inherit curlWithGnuTls;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ngtcp2/ngtcp2";
     description = "Effort to implement RFC9000 QUIC protocol";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ngtcp2/ngtcp2";
+    description = "Effort to implement RFC9000 QUIC protocol";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       vcunat # for knot-dns
     ];
   };

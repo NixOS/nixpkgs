@@ -33,10 +33,18 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/gjaldon/simple_diff";
     description = "Simple_diff is a pure OCaml diffing algorithm";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ ulrikstrid ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/gjaldon/simple_diff";
+    description = "Simple_diff is a pure OCaml diffing algorithm";
+    license = licenses.isc;
+    maintainers = with maintainers; [ ulrikstrid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

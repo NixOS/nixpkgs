@@ -19,11 +19,20 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of RFC-0125's datatype and synthesis tooling";
     homepage = "https://github.com/DeterminateSystems/bootspec";
     license = lib.licenses.mit;
     teams = [ lib.teams.determinatesystems ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Implementation of RFC-0125's datatype and synthesis tooling";
+    homepage = "https://github.com/DeterminateSystems/bootspec";
+    license = licenses.mit;
+    teams = [ teams.determinatesystems ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

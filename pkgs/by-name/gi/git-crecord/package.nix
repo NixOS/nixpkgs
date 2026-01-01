@@ -23,11 +23,19 @@ python3.pkgs.buildPythonApplication rec {
   # has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/andrewshadura/git-crecord";
     description = "Git subcommand to interactively select changes to commit or stage";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/andrewshadura/git-crecord";
+    description = "Git subcommand to interactively select changes to commit or stage";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-crecord";
   };
 }

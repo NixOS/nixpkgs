@@ -38,6 +38,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "PICO-8 platformer about climbing a mountain, made in four days${lib.optionalString practiceMod " (Practice Mod)"}";
     homepage = "https://celesteclassic.github.io/";
@@ -46,5 +47,15 @@ stdenvNoCC.mkDerivation {
     mainProgram = outbin;
     maintainers = with lib.maintainers; [ mrtnvgr ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "PICO-8 platformer about climbing a mountain, made in four days${lib.optionalString practiceMod " (Practice Mod)"}";
+    homepage = "https://celesteclassic.github.io/";
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    mainProgram = outbin;
+    maintainers = with maintainers; [ mrtnvgr ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,11 +17,20 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP server for testing Wasm";
     mainProgram = "wasmserve";
     homepage = "https://github.com/hajimehoshi/wasmserve";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kirillrdy ];
+=======
+  meta = with lib; {
+    description = "HTTP server for testing Wasm";
+    mainProgram = "wasmserve";
+    homepage = "https://github.com/hajimehoshi/wasmserve";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kirillrdy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

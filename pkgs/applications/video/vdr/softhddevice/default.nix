@@ -44,11 +44,19 @@ stdenv.mkDerivation rec {
       --replace "LOCALBASE \"/bin/X\"" "\"${xorgserver}/bin/X\""
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "VDR SoftHDDevice Plug-in";
     maintainers = [ lib.maintainers.ck3d ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "VDR SoftHDDevice Plug-in";
+    maintainers = [ maintainers.ck3d ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (vdr.meta) platforms;
   };
 

@@ -62,7 +62,11 @@ let
     stdenv.cc.cc
     stdenv.cc.libc
   ];
+<<<<<<< HEAD
   version = "1.498.21";
+=======
+  version = "1.0.48";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 stdenv.mkDerivation {
   pname = "tana";
@@ -70,7 +74,11 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/tanainc/tana-desktop-releases/releases/download/v${version}/tana_${version}_amd64.deb";
+<<<<<<< HEAD
     hash = "sha256-6rX6UxOdSk29SYLwyVX6zkLuIxeKVfQfap1Q2zGpN7g=";
+=======
+    hash = "sha256-IQ7KRqPvLiUzNU279IirHq21Q9DeFfkQ+B3i9rTgYR0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -100,7 +108,11 @@ stdenv.mkDerivation {
       --replace "Name=tana" "Name=Tana"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Intelligent all-in-one workspace";
     longDescription = ''
       At its core, Tana is an outline editor which can be extended to
@@ -113,9 +125,15 @@ stdenv.mkDerivation {
     '';
     homepage = "https://tana.inc";
     changelog = "https://tana.inc/releases";
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.massimogengarelli ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.unfree;
+    maintainers = [ maintainers.massimogengarelli ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tana";
   };
 }

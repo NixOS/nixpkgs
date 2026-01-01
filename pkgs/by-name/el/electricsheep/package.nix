@@ -75,11 +75,20 @@ stdenv.mkDerivation {
     sed -i "s|/usr|$out|" Makefile
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
     homepage = "https://electricsheep.org/";
     maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
+    homepage = "https://electricsheep.org/";
+    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

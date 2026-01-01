@@ -49,10 +49,18 @@ buildPythonPackage rec {
     "test_ok_code"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python subprocess interface";
     homepage = "https://pypi.python.org/pypi/sh/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+=======
+  meta = with lib; {
+    description = "Python subprocess interface";
+    homepage = "https://pypi.python.org/pypi/sh/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siriobalmelli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

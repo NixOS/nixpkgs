@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tgcrypto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast and Portable Telegram Crypto Library for Python";
     homepage = "https://github.com/pyrogram/tgcrypto";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Fast and Portable Telegram Crypto Library for Python";
+    homepage = "https://github.com/pyrogram/tgcrypto";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

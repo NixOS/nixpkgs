@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "romy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to control Wi-Fi enabled ROMY vacuum cleaners";
     homepage = "https://github.com/xeniter/romy";
     changelog = "https://github.com/xeniter/romy/releases/tag/${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to control Wi-Fi enabled ROMY vacuum cleaners";
+    homepage = "https://github.com/xeniter/romy";
+    changelog = "https://github.com/xeniter/romy/releases/tag/${version}";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

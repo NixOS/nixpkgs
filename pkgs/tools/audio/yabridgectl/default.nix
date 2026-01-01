@@ -36,12 +36,21 @@ rustPlatform.buildRustPackage {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Small, optional utility to help set up and update yabridge for several directories at once";
     homepage = "${yabridge.src.meta.homepage}/tree/${yabridge.version}/tools/yabridgectl";
     changelog = yabridge.meta.changelog;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ kira-bruneau ];
+=======
+  meta = with lib; {
+    description = "Small, optional utility to help set up and update yabridge for several directories at once";
+    homepage = "${yabridge.src.meta.homepage}/tree/${yabridge.version}/tools/yabridgectl";
+    changelog = yabridge.meta.changelog;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ kira-bruneau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = yabridge.meta.platforms;
     mainProgram = "yabridgectl";
   };

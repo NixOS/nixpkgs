@@ -76,7 +76,11 @@ makeScopeWithSplicing' {
 
         futuresql = callPackage ../development/libraries/futuresql { };
 
+<<<<<<< HEAD
         qgpgme = callPackage ../development/libraries/qgpgme { };
+=======
+        qgpgme = callPackage ../development/libraries/gpgme { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         grantlee = callPackage ../development/libraries/grantlee/5 { };
 

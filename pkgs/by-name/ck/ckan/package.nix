@@ -78,16 +78,29 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Mod manager for Kerbal Space Program";
     mainProgram = "ckan";
     homepage = "https://github.com/KSP-CKAN/CKAN";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Mod manager for Kerbal Space Program";
+    mainProgram = "ckan";
+    homepage = "https://github.com/KSP-CKAN/CKAN";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       Baughn
       ymarkus
       nullcube
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

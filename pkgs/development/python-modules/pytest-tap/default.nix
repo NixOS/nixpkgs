@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_tap" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Test Anything Protocol (TAP) reporting plugin for pytest";
     homepage = "https://github.com/python-tap/pytest-tap";
     changelog = "https://github.com/python-tap/pytest-tap/blob/v${version}/docs/releases.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ cynerd ];
+=======
+  meta = with lib; {
+    description = "Test Anything Protocol (TAP) reporting plugin for pytest";
+    homepage = "https://github.com/python-tap/pytest-tap";
+    changelog = "https://github.com/python-tap/pytest-tap/blob/v${version}/docs/releases.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ cynerd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

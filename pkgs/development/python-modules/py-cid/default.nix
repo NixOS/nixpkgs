@@ -47,10 +47,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cid" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Self-describing content-addressed identifiers for distributed systems implementation in Python";
     homepage = "https://github.com/ipld/py-cid";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    description = "Self-describing content-addressed identifiers for distributed systems implementation in Python";
+    homepage = "https://github.com/ipld/py-cid";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

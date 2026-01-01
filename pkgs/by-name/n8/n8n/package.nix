@@ -5,8 +5,11 @@
   fetchFromGitHub,
   nodejs,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python3,
   node-gyp,
   cctools,
@@ -16,14 +19,22 @@
   libpq,
   makeWrapper,
 }:
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
   version = "1.123.5";
+=======
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "n8n";
+  version = "1.120.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-3vXJnLqQz60Sq1A8lLW0x6xAoN3DneFYVsaHAD0nzng=";
   };
 
@@ -37,6 +48,19 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pnpmConfigHook
     pnpm_10
+=======
+    hash = "sha256-gUqQM/eA7GnvFYiduSGkj/MCvgWNQPhDLExAJz67bHg=";
+  };
+
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 2;
+    hash = "sha256-UWiN3NvI8We16KwY5JspyX0ok1PJWVg0T5zw+0SnrWk=";
+  };
+
+  nativeBuildInputs = [
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     makeWrapper

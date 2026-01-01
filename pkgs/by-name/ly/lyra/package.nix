@@ -29,11 +29,19 @@ stdenv.mkDerivation rec {
     cp -R $src/include/* $out/include
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bfgroup/Lyra";
     description = "Simple to use, composable, command line parser for C++ 11 and beyond";
     platforms = lib.platforms.unix;
     license = lib.licenses.boost;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bfgroup/Lyra";
+    description = "Simple to use, composable, command line parser for C++ 11 and beyond";
+    platforms = platforms.unix;
+    license = licenses.boost;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -60,14 +60,22 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qiskit_optimization" ];
   pytestFlags = [ "--durations=10" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # broken because it depends on qiskit-algorithms which is not yet packaged in nixpkgs
     broken = true;
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -31,11 +31,20 @@ python3Packages.buildPythonApplication rec {
     cp -ra bin/scripts/name_parser $out/lib/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Font patcher to generate Nerd font";
     mainProgram = "nerd-font-patcher";
     homepage = "https://nerdfonts.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ck3d ];
+=======
+  meta = with lib; {
+    description = "Font patcher to generate Nerd font";
+    mainProgram = "nerd-font-patcher";
+    homepage = "https://nerdfonts.com/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ck3d ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,12 +33,21 @@ appimageTools.wrapType2 {
     echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/92-viia.rules
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Yet another keyboard configurator";
     homepage = "https://caniusevia.com/";
     # Upstream claims to be GPL-3 but doesn't release source code
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ emilytrau ];
+=======
+  meta = with lib; {
+    description = "Yet another keyboard configurator";
+    homepage = "https://caniusevia.com/";
+    # Upstream claims to be GPL-3 but doesn't release source code
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "via";
   };

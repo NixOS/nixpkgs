@@ -9,13 +9,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "numcpp";
+<<<<<<< HEAD
   version = "2.15.0";
+=======
+  version = "2.14.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "dpilger26";
     repo = "NumCpp";
     tag = "Version_${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-5HWemgBhTUvoeommFOChWOplfEZPOXwQktkCeO5FnSU=";
+=======
+    hash = "sha256-A2x7Ar/Ihk4iGb7J93hGULtfoI8xidkGtpkVWgicSFI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./pytest-CMakeLists.patch ];

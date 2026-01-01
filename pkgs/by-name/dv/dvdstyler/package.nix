@@ -92,7 +92,11 @@ stdenv.mkDerivation rec {
       )
     '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.dvdstyler.org/";
     description = "DVD authoring software";
     longDescription = ''
@@ -126,9 +130,15 @@ stdenv.mkDerivation rec {
       - copy any menu object or whole menu
       - customize navigation using DVD scripting
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dvdstyler";
   };
 }

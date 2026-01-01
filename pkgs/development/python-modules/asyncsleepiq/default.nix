@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncsleepiq" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Async interface to SleepIQ API";
     homepage = "https://github.com/kbickar/asyncsleepiq";
     changelog = "https://github.com/kbickar/asyncsleepiq/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Async interface to SleepIQ API";
+    homepage = "https://github.com/kbickar/asyncsleepiq";
+    changelog = "https://github.com/kbickar/asyncsleepiq/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -40,12 +40,21 @@ stdenv.mkDerivation (finalAttrs: {
     "CXXFLAGS=-D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/museoa/steghide";
     description = "Open source steganography program";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/museoa/steghide";
+    description = "Open source steganography program";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "steghide";
   };
 })

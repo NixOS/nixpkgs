@@ -23,10 +23,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srt" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/cdown/srt";
     description = "Tiny but featureful Python library for parsing, modifying, and composing SRT files";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/cdown/srt";
+    description = "Tiny but featureful Python library for parsing, modifying, and composing SRT files";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

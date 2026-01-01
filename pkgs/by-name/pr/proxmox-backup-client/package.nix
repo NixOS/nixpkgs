@@ -150,6 +150,7 @@ rustPlatform.buildRustPackage {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
+<<<<<<< HEAD
   meta = {
     description = "Command line client for Proxmox Backup Server";
     homepage = "https://pbs.proxmox.com/docs/backup-client.html";
@@ -160,6 +161,18 @@ rustPlatform.buildRustPackage {
       christoph-heiss
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Command line client for Proxmox Backup Server";
+    homepage = "https://pbs.proxmox.com/docs/backup-client.html";
+    changelog = "https://git.proxmox.com/?p=proxmox-backup.git;a=blob;f=debian/changelog;hb=${proxmox-backup_src.rev}";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+      cofob
+      christoph-heiss
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "proxmox-backup-client";
   };
 }

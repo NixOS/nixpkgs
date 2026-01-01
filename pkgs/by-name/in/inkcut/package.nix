@@ -71,11 +71,20 @@ python3.pkgs.buildPythonApplication rec {
     sed -i "s|cmd = \['inkcut'\]|cmd = \['$out/bin/inkcut'\]|" $out/share/inkscape/extensions/inkcut_open.py
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.codelv.com/projects/inkcut/";
     description = "Control 2D plotters, cutters, engravers, and CNC machines";
     mainProgram = "inkcut";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ raboof ];
+=======
+  meta = with lib; {
+    homepage = "https://www.codelv.com/projects/inkcut/";
+    description = "Control 2D plotters, cutters, engravers, and CNC machines";
+    mainProgram = "inkcut";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ raboof ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

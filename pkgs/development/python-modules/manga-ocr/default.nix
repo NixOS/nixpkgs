@@ -46,12 +46,21 @@ buildPythonPackage rec {
     unidic-lite
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "manga_ocr";
     description = "Optical character recognition for Japanese text, with the main focus being Japanese manga";
     homepage = "https://github.com/kha-white/manga-ocr";
     changelog = "https://github.com/kha-white/manga-ocr/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ laurent-f1z1 ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ laurent-f1z1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

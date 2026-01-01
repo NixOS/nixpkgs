@@ -27,7 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "biplist" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://bitbucket.org/wooster/biplist/src/master/";
     description = "Binary plist parser/generator for Python";
     longDescription = ''
@@ -37,7 +41,12 @@ buildPythonPackage rec {
       This is a library for generating binary plists which can be read
       by OS X, iOS, or other clients.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ siriobalmelli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -48,6 +48,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versionCheckProgram = "${placeholder "out"}/bin/piston";
 
   pythonImportsCheck = [ "piston" ];

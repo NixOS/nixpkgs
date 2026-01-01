@@ -21,7 +21,11 @@
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   version = "0.9.4";
+=======
+  version = "0.9.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "numbagg";
   pyproject = true;
 
@@ -29,7 +33,11 @@ buildPythonPackage rec {
     owner = "numbagg";
     repo = "numbagg";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-JYgjeExpL+rbiaFPO9IHsm4Qh6GTLdTWB5dO3zIIPbs=";
+=======
+    hash = "sha256-MEgSxxKZaL0sPhERFa8DWF+Vkc/VuHDyyB2yfFv/uYw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

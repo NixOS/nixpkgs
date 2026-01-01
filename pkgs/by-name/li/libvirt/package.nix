@@ -412,6 +412,10 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       fpletz
+<<<<<<< HEAD
+=======
+      globin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lovesegfault
     ];
   };

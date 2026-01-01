@@ -32,12 +32,21 @@ rustPlatform.buildRustPackage rec {
     installManPage safe-rm.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool intended to prevent the accidental deletion of important files";
     homepage = "https://launchpad.net/safe-rm";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Tool intended to prevent the accidental deletion of important files";
+    homepage = "https://launchpad.net/safe-rm";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "safe-rm";
   };
 }

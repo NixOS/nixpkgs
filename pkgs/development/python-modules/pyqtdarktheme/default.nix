@@ -54,10 +54,17 @@ buildPythonPackage rec {
     export QT_QPA_PLATFORM=offscreen
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Flat dark theme for PySide and PyQt";
     homepage = "https://pyqtdarktheme.readthedocs.io/en/stable";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Flat dark theme for PySide and PyQt";
+    homepage = "https://pyqtdarktheme.readthedocs.io/en/stable";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

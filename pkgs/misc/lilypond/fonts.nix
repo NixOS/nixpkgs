@@ -43,11 +43,19 @@ let
         done
       '';
 
+<<<<<<< HEAD
       meta = {
         inherit (lilypond.meta) homepage platforms;
         description = "${fontName} font for LilyPond";
         license = lib.licenses.ofl;
         maintainers = with lib.maintainers; [ yurrriq ];
+=======
+      meta = with lib; {
+        inherit (lilypond.meta) homepage platforms;
+        description = "${fontName} font for LilyPond";
+        license = licenses.ofl;
+        maintainers = with maintainers; [ yurrriq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 

@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ghapi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to GitHub's API";
     homepage = "https://github.com/fastai/ghapi";
     changelog = "https://github.com/fastai/ghapi/releases/tag/${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python interface to GitHub's API";
+    homepage = "https://github.com/fastai/ghapi";
+    changelog = "https://github.com/fastai/ghapi/releases/tag/${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

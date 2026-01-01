@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for reading & writing the E57 file format";
     homepage = "https://github.com/asmaloney/libE57Format";
@@ -86,5 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
       nh2
     ];
     platforms = lib.platforms.linux; # because of the .so buiding in `postInstall` above
+=======
+  meta = with lib; {
+    description = "Library for reading & writing the E57 file format";
+    homepage = "https://github.com/asmaloney/libE57Format";
+    license = licenses.boost;
+    maintainers = with maintainers; [
+      chpatrick
+      nh2
+    ];
+    platforms = platforms.linux; # because of the .so buiding in `postInstall` above
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

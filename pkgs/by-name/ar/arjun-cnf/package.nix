@@ -43,12 +43,21 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "cmake_minimum_required(VERSION 3.3 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CNF minimizer and minimal independent set calculator";
     homepage = "https://github.com/meelgroup/arjun";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ t4ccer ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "CNF minimizer and minimal independent set calculator";
+    homepage = "https://github.com/meelgroup/arjun";
+    license = licenses.mit;
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "arjun";
   };
 })

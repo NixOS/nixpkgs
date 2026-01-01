@@ -61,11 +61,19 @@ buildPythonPackage rec {
     "openapi_spec_validator.readers"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${src.tag}";
     description = "Validates OpenAPI Specs against the OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0.0 specification";
     mainProgram = "openapi-spec-validator";
     homepage = "https://github.com/p1c2u/openapi-spec-validator";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

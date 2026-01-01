@@ -33,7 +33,11 @@ stdenv.mkDerivation {
     "usbdropdir=$(out)/pcsc/drivers"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "PC/SC IFD Handler based on libnfc";
     mainProgram = "ifdnfc-activate";
     longDescription = ''
@@ -51,8 +55,14 @@ stdenv.mkDerivation {
       the SCM SCL3711.
     '';
     homepage = "https://github.com/nfc-tools/ifdnfc";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ makefu ];
+=======
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -9,6 +9,7 @@
   jre,
   fetchzip,
   buildNpmPackage,
+<<<<<<< HEAD
   _experimental-update-script-combinators,
   nix-update-script,
   writeShellScript,
@@ -21,6 +22,14 @@ let
   version = "0.29.1";
   apalacheVersion = "0.51.1";
   evaluatorVersion = "0.3.0";
+=======
+}:
+
+let
+  version = "0.25.1";
+  apalacheVersion = "0.47.2";
+  evaluatorVersion = "0.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   metaCommon = {
     description = "Formal specification language with TLA+ semantics";
@@ -34,7 +43,11 @@ let
     owner = "informalsystems";
     repo = "quint";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-lnvtyL4GKOyKdBDC5vevx5LgaiB7xTkfuN1rRTxKyv4=";
+=======
+    hash = "sha256-CYQesIoDlIGCKXIJ/hpZqOZBVd19Or5VEKVERchJz68=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Build the Quint CLI from source
@@ -46,7 +59,11 @@ let
 
     sourceRoot = "${src.name}/quint";
 
+<<<<<<< HEAD
     npmDepsHash = "sha256-CBwovC7PTdjJHwL9lKRlJbl8rNjd9J3hVBFJz24+cbw=";
+=======
+    npmDepsHash = "sha256-FYNSr5B0/oJ4PbU/HUVqSdPG8kFvq4vRFnYwwdMf+jQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     npmBuildScript = "compile";
 
@@ -88,7 +105,11 @@ let
   # Download Apalache. It runs on the JVM, so no need to build it from source.
   apalacheDist = fetchzip {
     url = "https://github.com/apalache-mc/apalache/releases/download/v${apalacheVersion}/apalache.tgz";
+<<<<<<< HEAD
     hash = "sha256-xYQQH9XxPwf3+YmjiRs7XlW49LdHrEnMeuvd16Ir0B4=";
+=======
+    hash = "sha256-P0QOxB14OSlphqBALR1YL9WJ0XYaUYE/R52yZytVzds=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -119,6 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   passthru = {
     inherit
       quint-cli
@@ -143,6 +165,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = metaCommon // {
     mainProgram = "quint";
   };

@@ -16,10 +16,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-zMQw3Q9t6JSMDt7xHMGTgAu9LW6MhG+Rrjpp5IEs/qQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Rust tool to monitor Nix processes";
     homepage = "https://github.com/DieracDelta/nix-btm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DieracDelta ];
+=======
+  meta = with lib; {
+    description = "Rust tool to monitor Nix processes";
+    homepage = "https://github.com/DieracDelta/nix-btm";
+    license = licenses.mit;
+    maintainers = with maintainers; [ DieracDelta ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -74,11 +74,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "samsungtvws" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Samsung Smart TV WS API wrapper";
     homepage = "https://github.com/xchwarze/samsung-tv-ws-api";
     changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Samsung Smart TV WS API wrapper";
+    homepage = "https://github.com/xchwarze/samsung-tv-ws-api";
+    changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

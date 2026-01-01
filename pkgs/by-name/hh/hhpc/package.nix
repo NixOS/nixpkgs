@@ -25,10 +25,17 @@ stdenv.mkDerivation rec {
     cp hhpc $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Hides the mouse pointer in X11";
     maintainers = with lib.maintainers; [ nico202 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Hides the mouse pointer in X11";
+    maintainers = with maintainers; [ nico202 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.bsd3;
     mainProgram = "hhpc";
   };

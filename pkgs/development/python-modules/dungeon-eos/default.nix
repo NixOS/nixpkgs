@@ -19,10 +19,18 @@ buildPythonPackage rec {
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "dungeon_eos" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/SkyTemple/dungeon-eos";
     description = "Package that simulates PMD EoS dungeon generation";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/SkyTemple/dungeon-eos";
+    description = "Package that simulates PMD EoS dungeon generation";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ marius851000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

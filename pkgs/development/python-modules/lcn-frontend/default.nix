@@ -7,13 +7,21 @@
 
 buildPythonPackage rec {
   pname = "lcn-frontend";
+<<<<<<< HEAD
   version = "0.2.8";
+=======
+  version = "0.2.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     pname = "lcn_frontend";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-1NOZGV2sLlJABBa3pzfOcBanSgqQ4DQGb61nkRgNVzw=";
+=======
+    hash = "sha256-YymktD+w07A97KNmpdonrFrTf8w5J7FuDg4k1lIwxC8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

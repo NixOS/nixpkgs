@@ -57,10 +57,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rustworkx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "High performance Python graph library implemented in Rust";
     homepage = "https://github.com/Qiskit/rustworkx";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ raitobezarius ];
+=======
+  meta = with lib; {
+    description = "High performance Python graph library implemented in Rust";
+    homepage = "https://github.com/Qiskit/rustworkx";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raitobezarius ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

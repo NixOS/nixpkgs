@@ -11,14 +11,22 @@
 
 buildPythonPackage rec {
   pname = "jiter";
+<<<<<<< HEAD
   version = "0.12.0";
+=======
+  version = "0.11.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "jiter";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-d87RUXKEmZXxVQZnAvjwRKSP6F3Z+kXxg/LdY2l9B+k=";
+=======
+    hash = "sha256-/OSLwqSy/CkAFv0hn1zED70MRsWV8/NTrSfqP7OSRFc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

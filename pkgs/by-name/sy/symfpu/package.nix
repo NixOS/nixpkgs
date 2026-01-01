@@ -45,11 +45,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of SMT-LIB / IEEE-754 operations in terms of bit-vector operations";
     homepage = "https://github.com/martin-cs/symfpu";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ shadaj ];
+=======
+  meta = with lib; {
+    description = "Implementation of SMT-LIB / IEEE-754 operations in terms of bit-vector operations";
+    homepage = "https://github.com/martin-cs/symfpu";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ shadaj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

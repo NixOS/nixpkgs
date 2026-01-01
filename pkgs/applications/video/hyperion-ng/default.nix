@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
     cd ../ && ./test/testrunner.sh && cd -
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Opensource Bias or Ambient Lighting implementation";
     homepage = "https://github.com/hyperion-project/hyperion.ng";
@@ -103,5 +104,16 @@ stdenv.mkDerivation rec {
       kazenyuk
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Opensource Bias or Ambient Lighting implementation";
+    homepage = "https://github.com/hyperion-project/hyperion.ng";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      algram
+      kazenyuk
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

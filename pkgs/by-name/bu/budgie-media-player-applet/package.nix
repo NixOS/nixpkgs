@@ -8,7 +8,11 @@
   ninja,
   nix-update-script,
   python3Packages,
+<<<<<<< HEAD
   libxfce4windowing,
+=======
+  xfce,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
+<<<<<<< HEAD
     libxfce4windowing
+=======
+    xfce.libxfce4windowing
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pythonPath = with python3Packages; [

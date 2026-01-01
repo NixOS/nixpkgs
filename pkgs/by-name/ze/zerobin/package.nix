@@ -60,6 +60,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "zerobin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client side encrypted pastebin";
     homepage = "https://github.com/Tygs/0bin";
@@ -67,5 +68,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.wtfpl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ julm ];
+=======
+  meta = with lib; {
+    description = "Client side encrypted pastebin";
+    homepage = "https://github.com/Tygs/0bin";
+    changelog = "https://github.com/Tygs/0bin/releases/tag/v${version}";
+    license = licenses.wtfpl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ julm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

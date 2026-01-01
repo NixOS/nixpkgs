@@ -2,8 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   pkg-config,
   gdal,
@@ -31,6 +34,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-oxLGhIE1qJ9+GOztD1HvrLGRGVO3gyy7Rc6CyzKTFec=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix for GDAL 3.12
     # https://github.com/openstreetmap/merkaartor/pull/316
@@ -40,6 +44,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -82,7 +88,11 @@ stdenv.mkDerivation rec {
     homepage = "https://merkaartor.be/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "merkaartor";
+<<<<<<< HEAD
     teams = [ lib.teams.geospatial ];
+=======
+    maintainers = with lib.maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 }

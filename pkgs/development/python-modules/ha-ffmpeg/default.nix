@@ -38,11 +38,20 @@ buildPythonPackage rec {
     "haffmpeg.tools"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Home Assistant to handle ffmpeg";
     homepage = "https://github.com/home-assistant-libs/ha-ffmpeg/";
     changelog = "https://github.com/home-assistant-libs/ha-ffmpeg/releases/tag/${version}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.home-assistant ];
+=======
+  meta = with lib; {
+    description = "Library for Home Assistant to handle ffmpeg";
+    homepage = "https://github.com/home-assistant-libs/ha-ffmpeg/";
+    changelog = "https://github.com/home-assistant-libs/ha-ffmpeg/releases/tag/${version}";
+    license = licenses.bsd3;
+    teams = [ teams.home-assistant ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

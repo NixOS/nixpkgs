@@ -42,11 +42,20 @@ buildDunePackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tmcgilchrist/ocaml-gitlab";
     description = "Native OCaml bindings to Gitlab REST API v4";
     license = lib.licenses.bsd3;
     changelog = "https://github.com/tmcgilchrist/ocaml-gitlab/releases/tag/${version}";
     maintainers = with lib.maintainers; [ zazedd ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tmcgilchrist/ocaml-gitlab";
+    description = "Native OCaml bindings to Gitlab REST API v4";
+    license = licenses.bsd3;
+    changelog = "https://github.com/tmcgilchrist/ocaml-gitlab/releases/tag/${version}";
+    maintainers = with maintainers; [ zazedd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

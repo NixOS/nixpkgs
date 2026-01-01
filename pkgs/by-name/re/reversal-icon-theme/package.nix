@@ -85,11 +85,20 @@ lib.checkListOfEnum "${pname}: color variants"
 
     passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
     meta = {
       description = "Colorful Design Rectangle icon theme";
       homepage = "https://github.com/yeyushengfan258/Reversal-icon-theme";
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [ romildo ];
+=======
+    meta = with lib; {
+      description = "Colorful Design Rectangle icon theme";
+      homepage = "https://github.com/yeyushengfan258/Reversal-icon-theme";
+      license = licenses.gpl3Plus;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }

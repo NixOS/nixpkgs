@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "waybackpy" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://akamhy.github.io/waybackpy/";
     description = "Wayback Machine API interface & a command-line tool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ chpatrick ];
+=======
+  meta = with lib; {
+    homepage = "https://akamhy.github.io/waybackpy/";
+    description = "Wayback Machine API interface & a command-line tool";
+    license = licenses.mit;
+    maintainers = with maintainers; [ chpatrick ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

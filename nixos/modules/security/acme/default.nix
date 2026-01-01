@@ -211,8 +211,12 @@ let
           ${toString acmeServer} ${toString data.dnsProvider}
           ${toString data.ocspMustStaple} ${data.keyType}
         ''
+<<<<<<< HEAD
         + lib.optionalString (data.csr != null) " - ${data.csr}"
         + lib.optionalString (data.profile != null) " - ${data.profile}";
+=======
+        + (lib.optionalString (data.csr != null) (" - " + data.csr));
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       certDir = mkHash hashData;
       # TODO remove domainHash usage entirely. Waiting on go-acme/lego#1532
       domainHash = mkHash "${lib.concatStringsSep " " extraDomains} ${data.domain}";
@@ -285,7 +289,10 @@ let
         commonOpts
         ++ [ "run" ]
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
+<<<<<<< HEAD
         ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ++ data.extraLegoRunFlags
       );
       renewOpts = lib.escapeShellArgs (
@@ -295,7 +302,10 @@ let
           "--no-random-sleep"
         ]
         ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
+<<<<<<< HEAD
         ++ lib.optionals (data.profile != null) [ "--profile=${data.profile}" ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ++ data.extraLegoRenewFlags
       );
 
@@ -802,6 +812,7 @@ let
           '';
         };
 
+<<<<<<< HEAD
         profile = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           inherit (defaultAndText "profile" null) default defaultText;
@@ -810,6 +821,8 @@ let
           '';
         };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         extraLegoFlags = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           inherit (defaultAndText "extraLegoFlags" [ ]) default defaultText;

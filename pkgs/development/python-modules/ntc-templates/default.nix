@@ -40,11 +40,19 @@ buildPythonPackage rec {
     yamllint
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "TextFSM templates for parsing show commands of network devices";
     homepage = "https://github.com/networktocode/ntc-templates";
     changelog = "https://github.com/networktocode/ntc-templates/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "TextFSM templates for parsing show commands of network devices";
+    homepage = "https://github.com/networktocode/ntc-templates";
+    changelog = "https://github.com/networktocode/ntc-templates/releases/tag/${src.tag}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     extraArgs = [ "--version=branch" ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Linux driver for QC71 laptop";
     homepage = "https://github.com/pobrn/qc71_laptop/";
@@ -43,6 +44,13 @@ stdenv.mkDerivation rec {
       aacebedo
       lucasfa
     ];
+=======
+  meta = with lib; {
+    description = "Linux driver for QC71 laptop";
+    homepage = "https://github.com/pobrn/qc71_laptop/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ aacebedo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

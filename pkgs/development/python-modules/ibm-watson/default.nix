@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ibm_watson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library to use the IBM Watson Services";
     homepage = "https://github.com/watson-developer-cloud/python-sdk";
     changelog = "https://github.com/watson-developer-cloud/python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Client library to use the IBM Watson Services";
+    homepage = "https://github.com/watson-developer-cloud/python-sdk";
+    changelog = "https://github.com/watson-developer-cloud/python-sdk/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ globin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

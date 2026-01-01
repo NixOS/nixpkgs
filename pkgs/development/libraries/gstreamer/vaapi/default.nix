@@ -97,11 +97,19 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = directoryListingUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Set of VAAPI GStreamer Plug-ins";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

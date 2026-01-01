@@ -87,7 +87,11 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
 
     patchShebangs .
+<<<<<<< HEAD
     ./jb/project/tools/linux/scripts/mkimages_${arch}.sh -w ${build} ${
+=======
+    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")
     }
 
@@ -162,7 +166,11 @@ openjdk17.overrideAttrs (oldAttrs: rec {
   ]
   ++ oldAttrs.nativeBuildInputs;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "OpenJDK fork which better supports Jetbrains's products";
     longDescription = ''
       JetBrains Runtime is a runtime environment for running IntelliJ Platform
@@ -176,6 +184,10 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (openjdk17.meta) license platforms mainProgram;
+<<<<<<< HEAD
+=======
+    maintainers = with maintainers; [ edwtjo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     broken = stdenv.hostPlatform.isDarwin;
   };

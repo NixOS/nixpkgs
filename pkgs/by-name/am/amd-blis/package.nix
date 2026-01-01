@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   perl,
   python3,
 
@@ -37,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Set the date stamp to $SOURCE_DATE_EPOCH
     ./build-date.patch
+<<<<<<< HEAD
     # backporting a fix for a GCC15 build error
     # ./frame/include/bli_x86_asm_macros.h:102:21: error: 'asm' operand has impossible constraints or there are not enough registers
     (fetchpatch {
@@ -49,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/amd/blis/commit/30c42202d78fd5ee5e54d50ad57348e5e541a7d5.patch";
       hash = "sha256-FCMWQzfzQxCQqngULoXfh35BFGaNTu732iu3HctNcFM=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   inherit blas64;

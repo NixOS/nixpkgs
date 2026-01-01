@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_randomly" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/pytest-dev/pytest-randomly/blob/${version}/CHANGELOG.rst";
     description = "Pytest plugin to randomly order tests and control random.seed";
     homepage = "https://github.com/pytest-dev/pytest-randomly";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/pytest-dev/pytest-randomly/blob/${version}/CHANGELOG.rst";
+    description = "Pytest plugin to randomly order tests and control random.seed";
+    homepage = "https://github.com/pytest-dev/pytest-randomly";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

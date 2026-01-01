@@ -29,10 +29,18 @@ buildDunePackage {
     ppxlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "PPX syntax extension that generates code for converting OCaml types to and from Yojson";
     homepage = "https://github.com/janestreet/ppx_yojson_conv";
     maintainers = with lib.maintainers; [ djacu ];
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    description = "PPX syntax extension that generates code for converting OCaml types to and from Yojson";
+    homepage = "https://github.com/janestreet/ppx_yojson_conv";
+    maintainers = with maintainers; [ djacu ];
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

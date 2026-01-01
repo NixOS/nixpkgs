@@ -26,7 +26,11 @@ buildGoModule rec {
     install -Dm444 -t $out/share/applications scripts/open-in-mpv.desktop
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple web extension to open videos in mpv";
     longDescription = ''
       To function the browser extension must be installed and open-in-mpv must be set as the default scheme-handler for mpv:// eg.:
@@ -36,8 +40,13 @@ buildGoModule rec {
       https://chrome.google.com/webstore/detail/open-in-mpv/ggijpepdpiehgbiknmfpfbhcalffjlbj
     '';
     homepage = "https://github.com/Baldomo/open-in-mpv";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "open-in-mpv";
   };
 }

@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
         $out/opt/Wonderdraft/Wonderdraft.x86_64
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://wonderdraft.net/";
     description = "Mapmaking tool for Tabletop Roleplaying Games, designed for city, region, or world scale";
@@ -63,5 +64,14 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ jsusk ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    homepage = "https://wonderdraft.net/";
+    description = "Mapmaking tool for Tabletop Roleplaying Games, designed for city, region, or world scale";
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ jsusk ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

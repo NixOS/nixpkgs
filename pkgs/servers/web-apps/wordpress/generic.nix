@@ -47,11 +47,20 @@ stdenv.mkDerivation rec {
     update-source-version wordpress $version --file=./pkgs/servers/web-apps/wordpress/default.nix
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://wordpress.org";
     description = "Open source software you can use to create a beautiful website, blog, or app";
     license = [ lib.licenses.gpl2Plus ];
     maintainers = [ lib.maintainers.basvandijk ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://wordpress.org";
+    description = "Open source software you can use to create a beautiful website, blog, or app";
+    license = [ licenses.gpl2Plus ];
+    maintainers = [ maintainers.basvandijk ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

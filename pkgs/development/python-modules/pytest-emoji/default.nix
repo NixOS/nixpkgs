@@ -34,11 +34,20 @@ buildPythonPackage rec {
     "test_emoji_enabled_custom_verbose"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin that adds emojis to test result report";
     homepage = "https://github.com/hackebrot/pytest-emoji";
     changelog = "https://github.com/hackebrot/pytest-emoji/releases/tag/0.2.0";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin that adds emojis to test result report";
+    homepage = "https://github.com/hackebrot/pytest-emoji";
+    changelog = "https://github.com/hackebrot/pytest-emoji/releases/tag/0.2.0";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

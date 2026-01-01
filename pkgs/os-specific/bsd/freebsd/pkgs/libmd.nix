@@ -23,8 +23,11 @@ mkDerivation (
     extraPaths = [
       "sys/crypto"
       "sys/sys"
+<<<<<<< HEAD
       "sys/kern"
       "lib/libc/Versions.def"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ]
     ++ extraSrc;
 
@@ -36,8 +39,11 @@ mkDerivation (
 
     noLibc = !bootstrapInstallation;
 
+<<<<<<< HEAD
     MK_TESTS = "no";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     buildInputs =
       lib.optionals (!bootstrapInstallation) [
         libcMinimal

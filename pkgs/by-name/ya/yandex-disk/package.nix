@@ -71,6 +71,10 @@ stdenv.mkDerivation rec {
     description = "Free cloud file storage service";
     maintainers = with lib.maintainers; [
       smironov
+<<<<<<< HEAD
+=======
+      jagajaga
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = [
       "i686-linux"

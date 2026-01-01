@@ -56,12 +56,21 @@ buildPythonPackage rec {
       });
   };
 
+<<<<<<< HEAD
   meta = {
     description = "LISP dialect embedded in Python";
     homepage = "https://hylang.org/";
     changelog = "https://github.com/hylang/hy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "LISP dialect embedded in Python";
+    homepage = "https://hylang.org/";
+    changelog = "https://github.com/hylang/hy/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mazurel
       nixy
     ];

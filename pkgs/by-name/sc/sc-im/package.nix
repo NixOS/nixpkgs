@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/sc-im" --prefix PATH : "${lib.makeBinPath [ gnuplot ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/andmarti1424/sc-im/blob/${src.rev}/CHANGES";
     homepage = "https://github.com/andmarti1424/sc-im";
@@ -64,5 +65,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/andmarti1424/sc-im/blob/${src.rev}/CHANGES";
+    homepage = "https://github.com/andmarti1424/sc-im";
+    description = "Ncurses spreadsheet program for terminal";
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

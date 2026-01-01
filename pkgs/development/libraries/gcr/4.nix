@@ -99,7 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 
+<<<<<<< HEAD
   env.PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+=======
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postPatch = ''
     patchShebangs gcr/fixtures/
@@ -118,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
@@ -125,6 +130,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gcr-viewer-gtk4";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";
     license = lib.licenses.lgpl2Plus;
+=======
+  meta = with lib; {
+    platforms = platforms.unix;
+    teams = [ teams.gnome ];
+    description = "GNOME crypto services (daemon and tools)";
+    mainProgram = "gcr-viewer-gtk4";
+    homepage = "https://gitlab.gnome.org/GNOME/gcr";
+    license = licenses.lgpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       GCR is a library for displaying certificates, and crypto UI, accessing

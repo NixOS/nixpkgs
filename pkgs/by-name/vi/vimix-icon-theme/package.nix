@@ -72,11 +72,20 @@ lib.checkListOfEnum "${pname}: color variants"
 
     passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
     meta = {
       description = "Material Design icon theme based on Paper icon theme";
       homepage = "https://github.com/vinceliuice/vimix-icon-theme";
       license = with lib.licenses; [ cc-by-sa-40 ];
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ romildo ];
+=======
+    meta = with lib; {
+      description = "Material Design icon theme based on Paper icon theme";
+      homepage = "https://github.com/vinceliuice/vimix-icon-theme";
+      license = with licenses; [ cc-by-sa-40 ];
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }

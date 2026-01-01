@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-t4tfQaFq4EV4ZWeU+IestSFiSAIeVQslTZhLbpKVoO4=";
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line utility that takes grep-formatted lines and performs a find-and-replace on them";
     homepage = "https://github.com/robenkleene/rep-grep";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ philiptaron ];
+=======
+  meta = with lib; {
+    description = "Command-line utility that takes grep-formatted lines and performs a find-and-replace on them";
+    homepage = "https://github.com/robenkleene/rep-grep";
+    license = licenses.mit;
+    maintainers = with maintainers; [ philiptaron ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rep";
   };
 }

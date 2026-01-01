@@ -45,12 +45,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+<<<<<<< HEAD
   meta = {
     description = "Glorified WM-Independent Dropdown Creator";
     mainProgram = "tdrop";
     homepage = "https://github.com/noctuid/tdrop";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Glorified WM-Independent Dropdown Creator";
+    mainProgram = "tdrop";
+    homepage = "https://github.com/noctuid/tdrop";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

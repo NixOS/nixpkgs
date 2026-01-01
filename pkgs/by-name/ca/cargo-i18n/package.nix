@@ -28,11 +28,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [ "--lib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rust Cargo sub-command and libraries to extract and build localization resources to embed in your application/library";
     homepage = "https://github.com/kellpossible/cargo-i18n";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xrelkd ];
+=======
+  meta = with lib; {
+    description = "Rust Cargo sub-command and libraries to extract and build localization resources to embed in your application/library";
+    homepage = "https://github.com/kellpossible/cargo-i18n";
+    license = licenses.mit;
+    maintainers = with maintainers; [ xrelkd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cargo-i18n";
   };
 }

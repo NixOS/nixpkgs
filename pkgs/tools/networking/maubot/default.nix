@@ -133,16 +133,28 @@ let
         withBaseConfig = baseConfig: wrapper { inherit baseConfig; };
       };
 
+<<<<<<< HEAD
     meta = {
       description = "Plugin-based Matrix bot system written in Python";
       homepage = "https://maubot.xyz/";
       changelog = "https://github.com/maubot/maubot/blob/v${version}/CHANGELOG.md";
       license = lib.licenses.agpl3Plus;
+=======
+    meta = with lib; {
+      description = "Plugin-based Matrix bot system written in Python";
+      homepage = "https://maubot.xyz/";
+      changelog = "https://github.com/maubot/maubot/blob/v${version}/CHANGELOG.md";
+      license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # Presumably, people running "nix run nixpkgs#maubot" will want to run the tool
       # for interacting with Maubot rather than Maubot itself, which should be used as
       # a NixOS module.
       mainProgram = "mbc";
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [ chayleaf ];
+=======
+      maintainers = with maintainers; [ chayleaf ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

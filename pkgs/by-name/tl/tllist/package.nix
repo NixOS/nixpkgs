@@ -27,7 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://codeberg.org/dnkl/tllist";
     changelog = "https://codeberg.org/dnkl/tllist/releases/tag/${finalAttrs.version}";
     description = "C header file only implementation of a typed linked list";
@@ -42,8 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
       primitive data types are supported as well as aggregated ones such as
       structs, enums and unions.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fionera ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ fionera ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

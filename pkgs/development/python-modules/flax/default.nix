@@ -38,14 +38,22 @@
 
 buildPythonPackage rec {
   pname = "flax";
+<<<<<<< HEAD
   version = "0.12.2";
+=======
+  version = "0.12.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Wdfc35/iah98C5WNYZWiAd2FJUJlyGLJ8xELpuYD3GU=";
+=======
+    hash = "sha256-AUgNU1ww1Ic+lfdHtdP4fdFuvIatAXqs7AX615aVPKM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -83,11 +91,14 @@ buildPythonPackage rec {
     tensorflow
   ];
 
+<<<<<<< HEAD
   pytestFlags = [
     # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
     "-Wignore::FutureWarning"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabledTestPaths = [
     # Docs test, needs extra deps + we're not interested in it.
     "docs/_ext/codediff_test.py"

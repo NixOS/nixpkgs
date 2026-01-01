@@ -60,12 +60,21 @@ stdenv.mkDerivation rec {
     installManPage doc/gitstats.1
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitstats.sourceforge.net/";
     description = "Git history statistics generator";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    homepage = "https://gitstats.sourceforge.net/";
+    description = "Git history statistics generator";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gitstats";
   };
 }

@@ -21,10 +21,18 @@ buildGoModule {
 
   excludedPackages = "cmd/fillswitch/test-fixtures";
 
+<<<<<<< HEAD
   meta = {
     description = "Refactoring tools for Go";
     homepage = "https://github.com/davidrjenni/reftools";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ kalbasit ];
+=======
+  meta = with lib; {
+    description = "Refactoring tools for Go";
+    homepage = "https://github.com/davidrjenni/reftools";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ kalbasit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

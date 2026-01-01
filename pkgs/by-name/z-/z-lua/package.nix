@@ -34,10 +34,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/skywind3000/z.lua";
     description = "New cd command that helps you navigate faster by learning your habits";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/skywind3000/z.lua";
+    description = "New cd command that helps you navigate faster by learning your habits";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "z.lua";
   };

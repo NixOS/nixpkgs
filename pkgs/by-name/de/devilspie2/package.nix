@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
     cp devilspie2.1 $out/share/man/man1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Window matching utility";
     longDescription = ''
       Devilspie2 is a window matching utility, allowing the user to
@@ -46,8 +50,14 @@ stdenv.mkDerivation rec {
       on a specific workspace.
     '';
     homepage = "https://www.nongnu.org/devilspie2/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3;
+    maintainers = [ maintainers.ebzzry ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "devilspie2";
   };
 }

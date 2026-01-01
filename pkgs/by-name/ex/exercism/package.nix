@@ -34,6 +34,7 @@ buildGoModule rec {
       --zsh shell/exercism_completion.zsh
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Go based command line tool for exercism.io";
@@ -41,6 +42,15 @@ buildGoModule rec {
     maintainers = [
       lib.maintainers.rbasso
       lib.maintainers.nobbz
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Go based command line tool for exercism.io";
+    license = licenses.mit;
+    maintainers = [
+      maintainers.rbasso
+      maintainers.nobbz
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "exercism";
   };

@@ -43,11 +43,19 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 src/resources/com.github.weclaw1.ImageRoll.metainfo.xml -t $out/share/metainfo/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and fast GTK image viewer with basic image manipulation tools";
     mainProgram = "image-roll";
     homepage = "https://github.com/weclaw1/image-roll";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple and fast GTK image viewer with basic image manipulation tools";
+    mainProgram = "image-roll";
+    homepage = "https://github.com/weclaw1/image-roll";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

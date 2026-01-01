@@ -54,11 +54,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hickle" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
     changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Serialize Python data to HDF5";
+    homepage = "https://github.com/telegraphic/hickle";
+    changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,11 +36,19 @@ buildGoModule rec {
     installManPage docs/loop.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lightning Loop Client";
     homepage = "https://github.com/lightninglabs/loop";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Lightning Loop Client";
+    homepage = "https://github.com/lightninglabs/loop";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       proofofkeags
       starius
     ];

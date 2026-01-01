@@ -9,10 +9,17 @@
 }:
 let
   pname = "beeper";
+<<<<<<< HEAD
   version = "4.2.367";
   src = fetchurl {
     url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
     hash = "sha256-t2knYAy6G/Xd/dOAvqA+wiTa6K//maHiwjY7Apshjhk=";
+=======
+  version = "4.2.229";
+  src = fetchurl {
+    url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
+    hash = "sha256-AW976i1JO2nKqm7QV35lYFPftClOpEz+0/Zaec4sly8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   appimageContents = appimageTools.extract {
     inherit pname version src;
@@ -70,7 +77,11 @@ appimageTools.wrapAppImage {
     inherit src;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Universal chat app";
     longDescription = ''
       Beeper is a universal chat app. With Beeper, you can send
@@ -78,9 +89,16 @@ appimageTools.wrapAppImage {
       many different chat networks.
     '';
     homepage = "https://beeper.com";
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       jshcmpbll
+=======
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      jshcmpbll
+      edmundmiller
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zh4ngx
     ];
     platforms = [ "x86_64-linux" ];

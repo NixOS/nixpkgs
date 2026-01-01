@@ -49,10 +49,18 @@ buildPythonPackage rec {
     "testEnableDisable"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Little library for sweet and creamy print debugging";
     homepage = "https://github.com/gruns/icecream";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ renatoGarcia ];
+=======
+  meta = with lib; {
+    description = "Little library for sweet and creamy print debugging";
+    homepage = "https://github.com/gruns/icecream";
+    license = licenses.mit;
+    maintainers = with maintainers; [ renatoGarcia ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

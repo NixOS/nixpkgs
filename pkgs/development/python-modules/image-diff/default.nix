@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool for comparing images";
     mainProgram = "image-diff";
     homepage = "https://github.com/simonw/image-diff";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "CLI tool for comparing images";
+    mainProgram = "image-diff";
+    homepage = "https://github.com/simonw/image-diff";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

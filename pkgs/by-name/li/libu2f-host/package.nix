@@ -34,14 +34,25 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "C library and command-line tool that implements the host-side of the U2F protocol";
     homepage = "https://developers.yubico.com/libu2f-host";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "C library and command-line tool that implements the host-side of the U2F protocol";
+    homepage = "https://developers.yubico.com/libu2f-host";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Plus
       lgpl21Plus
     ];
     mainProgram = "u2f-host";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

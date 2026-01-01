@@ -25,11 +25,19 @@ buildGoModule rec {
     "-X main.vshVersion=v${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "HashiCorp Vault interactive shell";
     homepage = "https://github.com/fishi0x01/vsh";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fishi0x01 ];
+=======
+  meta = with lib; {
+    description = "HashiCorp Vault interactive shell";
+    homepage = "https://github.com/fishi0x01/vsh";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fishi0x01 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vsh";
   };
 }

@@ -49,12 +49,22 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "tuir" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Browse Reddit from your Terminal (fork of rtv)";
     mainProgram = "tuir";
     homepage = "https://gitlab.com/Chocimier/tuir";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Browse Reddit from your Terminal (fork of rtv)";
+    mainProgram = "tuir";
+    homepage = "https://gitlab.com/Chocimier/tuir";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
       brokenpip3
     ];

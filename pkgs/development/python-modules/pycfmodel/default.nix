@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pycfmodel";
+<<<<<<< HEAD
   version = "1.2.0";
+=======
+  version = "1.1.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "Skyscanner";
     repo = "pycfmodel";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ta6kS+MiSa2DZx18EQr7hvWYrK55j48hSBACtcklCpI=";
+=======
+    hash = "sha256-ITgha0gZxGPCE+7HVQyDNiPI5uAYZo9Rz8fZVgCYgeM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [ "pydantic" ];
@@ -48,11 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycfmodel" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Model for Cloud Formation scripts";
     homepage = "https://github.com/Skyscanner/pycfmodel";
     changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Model for Cloud Formation scripts";
+    homepage = "https://github.com/Skyscanner/pycfmodel";
+    changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

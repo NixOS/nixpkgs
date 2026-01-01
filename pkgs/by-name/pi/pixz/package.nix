@@ -47,11 +47,19 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Parallel compressor/decompressor for xz format";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Parallel compressor/decompressor for xz format";
+    license = licenses.bsd2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pixz";
   };
 }

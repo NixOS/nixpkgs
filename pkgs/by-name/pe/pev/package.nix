@@ -25,11 +25,20 @@ stdenv.mkDerivation {
 
   installFlags = [ "prefix=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Full-featured, open source, multiplatform command line toolkit to work with PE (Portable Executables) binaries";
     homepage = "https://pev.sourceforge.net/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ jeschli ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Full-featured, open source, multiplatform command line toolkit to work with PE (Portable Executables) binaries";
+    homepage = "https://pev.sourceforge.net/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ jeschli ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -13,7 +13,11 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "node_exporter";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
+=======
+    tag = "${finalAttrs.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-UaybbRmcvifXNwTNXg7mIYN9JnonSxwG62KfvU5auIE=";
   };
 

@@ -19,11 +19,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/vzaliva/simpleproxy";
     description = "Simple TCP proxy";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.montag451 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/vzaliva/simpleproxy";
+    description = "Simple TCP proxy";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.montag451 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "simpleproxy";
   };
 }

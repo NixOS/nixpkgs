@@ -37,12 +37,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "masky" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library to remotely dump domain credentials";
     mainProgram = "masky";
     homepage = "https://github.com/Z4kSec/Masky";
     changelog = "https://github.com/Z4kSec/Masky/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ elasticdog ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ elasticdog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

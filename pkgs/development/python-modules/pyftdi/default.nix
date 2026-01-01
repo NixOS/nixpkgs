@@ -34,7 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyftdi" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "User-space driver for modern FTDI devices";
     longDescription = ''
       PyFtdi aims at providing a user-space driver for popular FTDI devices.
@@ -43,7 +47,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/eblot/pyftdi";
     changelog = "https://github.com/eblot/pyftdi/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -52,18 +52,31 @@ stdenv.mkDerivation rec {
   installTargets = [ "install-lib" ];
   installFlags = [ "LDCONF=true" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free C++ class library of cryptographic schemes";
     homepage = "https://cryptopp.com/";
     changelog = [
       "https://raw.githubusercontent.com/weidai11/cryptopp/CRYPTOPP_${underscoredVersion}/History.txt"
       "https://github.com/weidai11/cryptopp/releases/tag/CRYPTOPP_${underscoredVersion}"
     ];
+<<<<<<< HEAD
     license = with lib.licenses; [
       boost
       publicDomain
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ c0bw3b ];
+=======
+    license = with licenses; [
+      boost
+      publicDomain
+    ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ c0bw3b ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

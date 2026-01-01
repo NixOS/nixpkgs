@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fork of libstrophe (https://github.com/strophe/libstrophe) for use with Profanity XMPP Client";
     longDescription = ''
       Reasons for forking:
@@ -50,6 +54,7 @@ stdenv.mkDerivation rec {
       TLS functionality such as manual SSL certificate verification.
     '';
     homepage = "https://github.com/profanity-im/libmesode/";
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl3Only
       mit
@@ -57,5 +62,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ devhell ];
+=======
+    license = with licenses; [
+      gpl3Only
+      mit
+    ];
+    platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [ devhell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

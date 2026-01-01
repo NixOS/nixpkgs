@@ -10,9 +10,15 @@
 }:
 
 let
+<<<<<<< HEAD
   version_4 = "4.12.0";
   version_3 = "3.8.7";
   hash_4 = "sha256-HuUqk4g+MaDI7r1cKAwAtQeNrJ6G9T9IdPgybv2W2pU=";
+=======
+  version_4 = "4.11.0";
+  version_3 = "3.8.7";
+  hash_4 = "sha256-6TfmeUdLkZi5SMtcrgvJWUS66HvENKOIvbavbO0+L2I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   hash_3 = "sha256-vRrk+Fs/7dZha3h7yI5NpMfd1xezesnigpFgTRCACZo=";
 in
 
@@ -63,17 +69,30 @@ stdenv.mkDerivation (finalAttrs: {
   }
   // (callPackage ./fetcher { yarn-berry = finalAttrs; });
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://yarnpkg.com/";
     changelog = "https://github.com/yarnpkg/berry/releases/tag/${finalAttrs.src.tag}";
     description = "Fast, reliable, and secure dependency management";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://yarnpkg.com/";
+    changelog = "https://github.com/yarnpkg/berry/releases/tag/${finalAttrs.src.tag}";
+    description = "Fast, reliable, and secure dependency management";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ryota-ka
       pyrox0
       DimitarNestorov
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yarn";
   };
 })

@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "logfury" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module that allows for responsible, low-boilerplate logging of method calls";
     homepage = "https://github.com/ppolewicz/logfury";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jwiegley ];
+=======
+  meta = with lib; {
+    description = "Python module that allows for responsible, low-boilerplate logging of method calls";
+    homepage = "https://github.com/ppolewicz/logfury";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jwiegley ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

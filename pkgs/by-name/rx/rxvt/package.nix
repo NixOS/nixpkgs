@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
     LIBTOOL=${libtool}/bin/libtool ./configure --prefix=$out --enable-everything --enable-smart-resize --enable-256-color
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://rxvt.sourceforge.net/";
     description = "Colour vt102 terminal emulator with less features and lower memory consumption";
     longDescription = ''
@@ -45,8 +49,13 @@ stdenv.mkDerivation rec {
       emulation and toolkit-style configurability.
     '';
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     knownVulnerabilities = [
       "Usage of ANSI escape sequences causes unexpected newline-termination, leading to unexpected command execution (https://www.openwall.com/lists/oss-security/2021/05/17/1)"
     ];

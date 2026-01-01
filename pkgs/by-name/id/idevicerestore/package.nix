@@ -42,7 +42,11 @@ stdenv.mkDerivation rec {
     export RELEASE_VERSION=${version}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/libimobiledevice/idevicerestore";
     description = "Restore/upgrade firmware of iOS devices";
     longDescription = ''
@@ -59,9 +63,15 @@ stdenv.mkDerivation rec {
 
       This will download and restore a device to the latest firmware available.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nh2 ];
+=======
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ nh2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "idevicerestore";
   };
 }

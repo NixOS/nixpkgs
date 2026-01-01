@@ -25,11 +25,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiozeroconf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of multicast DNS service discovery";
     homepage = "https://github.com/jstasiak/python-zeroconf";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ obadz ];
+=======
+  meta = with lib; {
+    description = "Implementation of multicast DNS service discovery";
+    homepage = "https://github.com/jstasiak/python-zeroconf";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ obadz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aiozeroconf";
   };
 }

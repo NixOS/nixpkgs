@@ -45,7 +45,10 @@ in
   pkgs,
   stdenv,
   patchelf,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build time
   autoconf,
@@ -59,9 +62,13 @@ in
   pkgsCross, # wasm32 rlbox
   python3,
   runCommand,
+<<<<<<< HEAD
   rustc,
   rust-cbindgen,
   rustPlatform,
+=======
+  rust-cbindgen,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   unzip,
   which,
   wrapGAppsHook3,
@@ -203,9 +210,31 @@ assert elfhackSupport -> isElfhackPlatform stdenv;
 let
   inherit (lib) enableFeature;
 
+<<<<<<< HEAD
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
   llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
+=======
+  rustPackages =
+    pkgs:
+    (pkgs.rust.override (
+      # aarch64-darwin firefox crashes on loading favicons due to a llvm 21 bug:
+      # https://github.com/NixOS/nixpkgs/issues/453372
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1995582#c16
+      lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
+        llvmPackages = pkgs.llvmPackages_20;
+      }
+    )).packages.stable;
+
+  toRustC = pkgs: (rustPackages pkgs).rustc;
+
+  rustc = toRustC pkgs;
+  inherit (rustPackages pkgs) rustPlatform;
+
+  # Target the LLVM version that rustc is built with for LTO.
+  llvmPackages0 = rustc.llvmPackages;
+  llvmPackagesBuildBuild0 = (toRustC pkgsBuildBuild).llvmPackages;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
@@ -220,7 +249,11 @@ let
   # LTO requires LLVM bintools including ld.lld and llvm-ar.
   buildStdenv = overrideCC llvmPackages.stdenv (
     llvmPackages.stdenv.cc.override {
+<<<<<<< HEAD
       bintools = if ltoSupport then buildPackages.rustc.llvmPackages.bintools else stdenv.cc.bintools;
+=======
+      bintools = if ltoSupport then (toRustC buildPackages).llvmPackages.bintools else stdenv.cc.bintools;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
   );
 
@@ -315,6 +348,7 @@ buildStdenv.mkDerivation {
       # https://hg-edge.mozilla.org/mozilla-central/rev/aa8a29bd1fb9
       ./139-wayland-drag-animation.patch
     ]
+<<<<<<< HEAD
     # Revert apple sdk bump to 26.1
     ++
       lib.optionals (lib.versionAtLeast version "146" && lib.versionOlder apple-sdk_26.version "26.1")
@@ -325,6 +359,8 @@ buildStdenv.mkDerivation {
             revert = true;
           })
         ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ extraPatches;
 
   postPatch = ''
@@ -448,7 +484,25 @@ buildStdenv.mkDerivation {
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
+<<<<<<< HEAD
   '';
+=======
+  ''
+  +
+    # fileport.h was exposed in SDK 15.4 but we have only 15.2 in nixpkgs so far.
+    lib.optionalString
+      (
+        stdenv.hostPlatform.isDarwin
+        && lib.versionAtLeast version "143"
+        && lib.versionOlder version "145"
+        && lib.versionOlder apple-sdk_15.version "15.4"
+      )
+      ''
+        mkdir -p xnu/sys
+        cp ${apple-sdk_15.sourceRelease "xnu"}/bsd/sys/fileport.h xnu/sys
+        export CXXFLAGS="-isystem $(pwd)/xnu"
+      '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
   configurePlatforms = [ ];

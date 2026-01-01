@@ -49,12 +49,21 @@ stdenv.mkDerivation rec {
     sed -e "s|^HEADER=.*|HEADER=${sharePath}/makeself-header.sh|" -i $out/bin/makeself
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://makeself.io";
     description = "Utility to create self-extracting packages";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.wmertens ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://makeself.io";
+    description = "Utility to create self-extracting packages";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.wmertens ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "makeself";
   };
 }

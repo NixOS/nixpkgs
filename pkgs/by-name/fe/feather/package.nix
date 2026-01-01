@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Free Monero desktop wallet";
     homepage = "https://featherwallet.org/";
@@ -86,5 +87,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     mainProgram = "feather";
     maintainers = with lib.maintainers; [ surfaceflinger ];
+=======
+  meta = with lib; {
+    description = "Free Monero desktop wallet";
+    homepage = "https://featherwallet.org/";
+    changelog = "https://featherwallet.org/changelog/#${finalAttrs.version}%20changelog";
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+    mainProgram = "feather";
+    maintainers = with maintainers; [ surfaceflinger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

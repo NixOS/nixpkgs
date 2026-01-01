@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "irctokens" ];
 
+<<<<<<< HEAD
   meta = {
     description = "RFC1459 and IRCv3 protocol tokeniser library for python3";
     license = lib.licenses.mit;
     homepage = "https://github.com/jesopo/irctokens";
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "RFC1459 and IRCv3 protocol tokeniser library for python3";
+    license = licenses.mit;
+    homepage = "https://github.com/jesopo/irctokens";
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

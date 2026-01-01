@@ -17,12 +17,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-kkR49UwwkpZhKvBadPTUn0D/4sRVlVJowQ1+BqtBVOs=";
 
+<<<<<<< HEAD
   meta = {
     description = "Wordle TUI in Rust";
     homepage = "https://github.com/conradludgate/wordle";
     # repo has no license, but crates.io says it's MIT
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Wordle TUI in Rust";
+    homepage = "https://github.com/conradludgate/wordle";
+    # repo has no license, but crates.io says it's MIT
+    license = licenses.mit;
+    maintainers = with maintainers; [ lom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wordle";
   };
 }

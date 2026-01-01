@@ -39,7 +39,11 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
+<<<<<<< HEAD
   version = "1.10.0";
+=======
+  version = "1.9.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   libmathdx = callPackage ./libmathdx.nix { };
 in
@@ -59,16 +63,45 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-9OEyYdVq+/SzxHfNT+sa/YeBKklaUfpKUiJZuiuzxhQ=";
   };
 
   patches = lib.optionals standaloneSupport [
     (replaceVars ./dynamic-link.patch {
+=======
+    hash = "sha256-Atp3WyxQ7GYwWLmQIUgoPULyVlNjduh4/9CBixNWFwc=";
+  };
+
+  patches = [
+    ./cxx11-abi.patch
+  ]
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+    (replaceVars ./darwin-libcxx.patch {
+      LIBCXX_LIB = llvmPackages.libcxx;
+    })
+
+    ./darwin-single-target.patch
+  ]
+  ++ lib.optionals (effectiveStdenv.cc.isClang || standaloneSupport) [
+    (replaceVars ./clang-path.patch {
+      CLANG = "${effectiveStdenv.cc}/bin/cc";
+    })
+
+    (replaceVars ./clang-libs.patch {
+      LLVM_DEV = llvmPackages.llvm.dev;
+      LIBCLANG_DEV = llvmPackages.libclang.dev;
+    })
+  ]
+  ++ lib.optionals standaloneSupport [
+    (replaceVars ./llvm-libs.patch {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       LLVM_LIB = llvmPackages.llvm.lib;
       LIBCLANG_LIB = llvmPackages.libclang.lib;
     })
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     nixLog "patching $PWD/build_llvm.py to remove pre-C++11 ABI flag"
     substituteInPlace "$PWD/build_llvm.py" \
@@ -147,6 +180,66 @@ buildPythonPackage {
         'add_function_test(TestReload, "test_reload_references", test_reload_references, devices=get_test_devices("basic"))' \
         ""
   '';
+=======
+  postPatch =
+    # Patch build_dll.py to use our gencode flags rather than NVIDIA's very broad defaults.
+    lib.optionalString cudaSupport ''
+      nixLog "patching $PWD/warp/build_dll.py to use our gencode flags"
+      substituteInPlace "$PWD/warp/build_dll.py" \
+        --replace-fail \
+          '*gencode_opts,' \
+          '${
+            lib.concatMapStringsSep ", " (gencodeString: ''"${gencodeString}"'') cudaPackages.flags.gencode
+          },' \
+        --replace-fail \
+          '*clang_arch_flags,' \
+          '${
+            lib.concatMapStringsSep ", " (
+              realArch: ''"--cuda-gpu-arch=${realArch}"''
+            ) cudaPackages.flags.realArches
+          },'
+    ''
+    # Patch build_dll.py to use dynamic libraries rather than static ones.
+    # NOTE: We do not patch the `nvptxcompiler_static` path because it is not available as a dynamic library.
+    + lib.optionalString cudaSupport ''
+      nixLog "patching $PWD/warp/build_dll.py to use dynamic libraries"
+      substituteInPlace "$PWD/warp/build_dll.py" \
+        --replace-fail \
+          '-lcudart_static' \
+          '-lcudart' \
+        --replace-fail \
+          '-lnvrtc_static' \
+          '-lnvrtc' \
+        --replace-fail \
+          '-lnvrtc-builtins_static' \
+          '-lnvrtc-builtins' \
+        --replace-fail \
+          '-lnvJitLink_static' \
+          '-lnvJitLink' \
+        --replace-fail \
+          '-lmathdx_static' \
+          '-lmathdx'
+    ''
+    # AssertionError: 0.4082476496696472 != 0.40824246406555176 within 5 places
+    + lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
+      nixLog "patching $PWD/warp/tests/test_fem.py to disable broken tests on darwin"
+      substituteInPlace "$PWD/warp/tests/test_codegen.py" \
+        --replace-fail \
+          'places=5' \
+          'places=4'
+    ''
+    # These tests fail on CPU and CUDA.
+    + ''
+      nixLog "patching $PWD/warp/tests/test_reload.py to disable broken tests"
+      substituteInPlace "$PWD/warp/tests/test_reload.py" \
+        --replace-fail \
+          'add_function_test(TestReload, "test_reload", test_reload, devices=devices)' \
+          "" \
+        --replace-fail \
+          'add_function_test(TestReload, "test_reload_references", test_reload_references, devices=get_test_devices("basic"))' \
+          ""
+    '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   build-system = [
     setuptools
@@ -318,7 +411,11 @@ buildPythonPackage {
     homepage = "https://github.com/NVIDIA/warp";
     changelog = "https://github.com/NVIDIA/warp/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
+=======
+    platforms = with lib.platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ yzx9 ];
   };
 }

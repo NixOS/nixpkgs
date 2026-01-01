@@ -40,10 +40,18 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "-p ockam" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Orchestrate end-to-end encryption, cryptographic identities, mutual authentication, and authorization policies between distributed applications – at massive scale";
     homepage = "https://github.com/build-trust/ockam";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Orchestrate end-to-end encryption, cryptographic identities, mutual authentication, and authorization policies between distributed applications – at massive scale";
+    homepage = "https://github.com/build-trust/ockam";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

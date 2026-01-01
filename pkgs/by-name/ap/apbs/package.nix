@@ -40,6 +40,7 @@ let
       suitesparse
     ];
 
+<<<<<<< HEAD
     meta = {
       description = "Fork of the Finite Element ToolKit from fetk.org";
       homepage = "https://github.com/Electrostatics/FETK";
@@ -47,6 +48,15 @@ let
       license = lib.licenses.lgpl21Plus;
       maintainers = with lib.maintainers; [ natsukium ];
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      description = "Fork of the Finite Element ToolKit from fetk.org";
+      homepage = "https://github.com/Electrostatics/FETK";
+      changelog = "https://github.com/Electrostatics/FETK/releases/tag/${finalAttrs.version}";
+      license = licenses.lgpl21Plus;
+      maintainers = with maintainers; [ natsukium ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   });
 in
@@ -96,13 +106,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Software for biomolecular electrostatics and solvation calculations";
     mainProgram = "apbs";
     homepage = "https://www.poissonboltzmann.org/";
     changelog = "https://github.com/Electrostatics/apbs/releases/tag/v${finalAttrs.version}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ natsukium ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

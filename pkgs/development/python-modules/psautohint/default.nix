@@ -66,10 +66,18 @@ buildPythonPackage rec {
     fullTestsuite = psautohint.override { runAllTests = true; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Script to normalize the XML and other data inside of a UFO";
     homepage = "https://github.com/adobe-type-tools/psautohint";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Script to normalize the XML and other data inside of a UFO";
+    homepage = "https://github.com/adobe-type-tools/psautohint";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

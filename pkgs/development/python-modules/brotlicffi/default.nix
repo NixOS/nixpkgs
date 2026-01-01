@@ -48,10 +48,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "brotlicffi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python CFFI bindings to the Brotli library";
     homepage = "https://github.com/python-hyper/brotlicffi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python CFFI bindings to the Brotli library";
+    homepage = "https://github.com/python-hyper/brotlicffi";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

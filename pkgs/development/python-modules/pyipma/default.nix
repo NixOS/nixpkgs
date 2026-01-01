@@ -51,11 +51,20 @@ buildPythonPackage rec {
     "tests/test_sea_forecast.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to retrieve information from Instituto Português do Mar e Atmosfera";
     homepage = "https://github.com/dgomes/pyipma";
     changelog = "https://github.com/dgomes/pyipma/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to retrieve information from Instituto Português do Mar e Atmosfera";
+    homepage = "https://github.com/dgomes/pyipma";
+    changelog = "https://github.com/dgomes/pyipma/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

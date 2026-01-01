@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # ImportError: No module named runtests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Drop-in replacement for Python2's stdlib csv module, with unicode support";
     homepage = "https://github.com/jdunck/python-unicodecsv";
     maintainers = with lib.maintainers; [ koral ];
+=======
+  meta = with lib; {
+    description = "Drop-in replacement for Python2's stdlib csv module, with unicode support";
+    homepage = "https://github.com/jdunck/python-unicodecsv";
+    maintainers = with maintainers; [ koral ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

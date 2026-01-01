@@ -141,7 +141,11 @@ def test_parse_args() -> None:
 @patch("subprocess.run", autospec=True)
 def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
+<<<<<<< HEAD
     (nixpkgs_path / ".git").mkdir(parents=True)
+=======
+    nixpkgs_path.mkdir()
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -932,7 +936,11 @@ def test_execute_nix_switch_flake_build_host(
 @patch("subprocess.run", autospec=True)
 def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
+<<<<<<< HEAD
     (nixpkgs_path / ".git").mkdir(parents=True)
+=======
+    nixpkgs_path.touch()
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix-instantiate":

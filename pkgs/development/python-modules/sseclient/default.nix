@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   disabledTests = [ "event_stream" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for reading Server Sent Event streams";
     homepage = "https://github.com/btubbs/sseclient";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Client library for reading Server Sent Event streams";
+    homepage = "https://github.com/btubbs/sseclient";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

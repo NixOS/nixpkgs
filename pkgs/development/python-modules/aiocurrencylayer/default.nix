@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiocurrencylayer" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for interacting with currencylayer";
     homepage = "https://github.com/home-assistant-ecosystem/aiocurrencylayer";
     changelog = "https://github.com/home-assistant-ecosystem/aiocurrencylayer/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API for interacting with currencylayer";
+    homepage = "https://github.com/home-assistant-ecosystem/aiocurrencylayer";
+    changelog = "https://github.com/home-assistant-ecosystem/aiocurrencylayer/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

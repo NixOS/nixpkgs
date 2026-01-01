@@ -67,11 +67,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modern instant messaging for home and work that prioritizes chat interoperability and security";
     homepage = "https://www.trillian.im/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ majiir ];
+=======
+  meta = with lib; {
+    description = "Modern instant messaging for home and work that prioritizes chat interoperability and security";
+    homepage = "https://www.trillian.im/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ majiir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -12,13 +12,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
+<<<<<<< HEAD
   version = "0.14.2";
+=======
+  version = "0.14.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-EXcmL/KNj9vCChCs6RH1J/+aetYcXnEdGEhvVzGNNZA=";
+=======
+    hash = "sha256-Sdl60VNjrSVj8YFZR/b2WOzN8taZ6wsJx5FnED9XQbw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -27,7 +35,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
+<<<<<<< HEAD
   cargoHash = "sha256-HDu7/kgpBgUe/CrHm17BkNlg3DYlegTevgAeBCXp6so=";
+=======
+  cargoHash = "sha256-6o7IbDBJU+FGYezfm37Z4eBBWa7G06vFbopI0FqJu7c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     installShellFiles
@@ -67,6 +79,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = nix-update-script { };

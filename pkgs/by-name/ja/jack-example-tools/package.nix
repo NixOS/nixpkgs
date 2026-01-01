@@ -61,11 +61,19 @@ stdenv.mkDerivation (final: {
   # no tests defined, but prepare for some in the future.
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Official examples and tools from the JACK project";
     homepage = "https://jackaudio.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Official examples and tools from the JACK project";
+    homepage = "https://jackaudio.org";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

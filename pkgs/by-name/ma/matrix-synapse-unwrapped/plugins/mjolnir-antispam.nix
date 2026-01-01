@@ -25,7 +25,11 @@ buildPythonPackage rec {
   doCheck = false; # no tests
   pythonImportsCheck = [ "mjolnir" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "AntiSpam / Banlist plugin to be used with mjolnir";
     longDescription = ''
       Primarily meant to block invites from undesired homeservers/users,
@@ -33,8 +37,13 @@ buildPythonPackage rec {
       them to your entire homeserver.
     '';
     homepage = "https://github.com/matrix-org/mjolnir/blob/main/docs/synapse_module.md";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jojosch ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jojosch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

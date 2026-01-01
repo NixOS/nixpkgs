@@ -25,10 +25,17 @@ buildPythonPackage rec {
   # tests not included with pypi release
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Use an URL to configure email backend settings in your Django Application";
     homepage = "https://github.com/migonzalvar/dj-email-url";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    description = "Use an URL to configure email backend settings in your Django Application";
+    homepage = "https://github.com/migonzalvar/dj-email-url";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

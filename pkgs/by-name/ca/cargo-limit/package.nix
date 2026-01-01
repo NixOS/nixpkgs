@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo subcommand \"limit\": reduces the noise of compiler messages";
     homepage = "https://github.com/alopatindev/cargo-limit";
@@ -30,6 +31,16 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cargo subcommand \"limit\": reduces the noise of compiler messages";
+    homepage = "https://github.com/alopatindev/cargo-limit";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       otavio
       matthiasbeyer
     ];

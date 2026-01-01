@@ -20,10 +20,17 @@ buildPythonPackage rec {
   # https://github.com/PyCQA/mccabe/issues/93
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "McCabe checker, plugin for flake8";
     homepage = "https://github.com/flintwork/mccabe";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "McCabe checker, plugin for flake8";
+    homepage = "https://github.com/flintwork/mccabe";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -29,10 +29,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "ifconfigparser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for parsing raw output of ifconfig";
     homepage = "https://github.com/KnightWhoSayNi/ifconfig-parser";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ atemu ];
+=======
+  meta = with lib; {
+    description = "Module for parsing raw output of ifconfig";
+    homepage = "https://github.com/KnightWhoSayNi/ifconfig-parser";
+    license = licenses.mit;
+    maintainers = with maintainers; [ atemu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

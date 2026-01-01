@@ -29,9 +29,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colour" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";
     homepage = "https://github.com/vaab/colour";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";
+    homepage = "https://github.com/vaab/colour";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

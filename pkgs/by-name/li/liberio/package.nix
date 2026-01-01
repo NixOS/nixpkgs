@@ -29,11 +29,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Ettus Research DMA I/O Library";
     homepage = "https://github.com/EttusResearch/liberio";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.doronbehar ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Ettus Research DMA I/O Library";
+    homepage = "https://github.com/EttusResearch/liberio";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.doronbehar ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

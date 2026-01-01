@@ -62,8 +62,13 @@ let
   withRedis = cfg.settings.redis.location != null;
 in
 {
+<<<<<<< HEAD
   meta = {
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   options.services.pretix = {

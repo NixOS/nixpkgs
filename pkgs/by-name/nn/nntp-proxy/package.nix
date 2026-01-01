@@ -41,6 +41,10 @@ stdenv.mkDerivation {
     description = "Simple NNTP proxy with SSL support";
     homepage = "https://github.com/nieluj/nntp-proxy";
     license = lib.licenses.gpl2Plus;
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.fadenb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
     mainProgram = "nntp-proxy";
   };

@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hakuin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Blind SQL Injection optimization and automation framework";
     homepage = "https://github.com/pruzko/hakuin";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Blind SQL Injection optimization and automation framework";
+    homepage = "https://github.com/pruzko/hakuin";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

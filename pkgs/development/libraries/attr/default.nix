@@ -37,11 +37,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.microblaze;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://savannah.nongnu.org/projects/attr/";
+    description = "Library and tools for manipulating extended attributes";
+    platforms = platforms.linux;
+    badPlatforms = platforms.microblaze;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

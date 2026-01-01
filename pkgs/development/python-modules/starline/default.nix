@@ -41,10 +41,18 @@ buildPythonPackage rec {
   # https://github.com/Anonym-tsk/starline/issues/4
   passthru.skipBulkUpdate = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Unofficial python library for StarLine API";
     homepage = "https://github.com/Anonym-tsk/starline";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Unofficial python library for StarLine API";
+    homepage = "https://github.com/Anonym-tsk/starline";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

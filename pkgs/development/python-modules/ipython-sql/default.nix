@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sql" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Introduces a %sql (or %%sql) magic";
     homepage = "https://github.com/catherinedevlin/ipython-sql";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "Introduces a %sql (or %%sql) magic";
+    homepage = "https://github.com/catherinedevlin/ipython-sql";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

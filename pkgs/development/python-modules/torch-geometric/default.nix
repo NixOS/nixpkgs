@@ -231,9 +231,12 @@ buildPythonPackage rec {
     "test_multiprocessing"
     "test_share_memory"
     "test_storage_tensor_methods"
+<<<<<<< HEAD
 
     # NotImplementedError: The operator 'aten::logspace.out' is not currently implemented for the MPS device.
     "test_positional_encoding"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     # RuntimeError: Dynamo is not supported on Python 3.13+
@@ -249,6 +252,7 @@ buildPythonPackage rec {
 
     # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
     "test_feature_store"
+<<<<<<< HEAD
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -262,6 +266,12 @@ buildPythonPackage rec {
     "test/nn/norm/test_layer_norm.py::test_layer_norm[node-True-mps]"
     "test/nn/norm/test_layer_norm.py::test_layer_norm[node-False-mps]"
     "test/utils/test_scatter.py::test_group_cat[mps]"
+=======
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # NotImplementedError: The operator 'aten::logspace.out' is not currently implemented for the MPS device.
+    "test_positional_encoding"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {

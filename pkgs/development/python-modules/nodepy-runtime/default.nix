@@ -25,7 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nodepy" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/nodepy/nodepy";
     description = "Runtime for Python inspired by Node.JS";
     longDescription = ''
@@ -41,7 +45,11 @@ buildPythonPackage rec {
       dependencies of the package manager you must specify the [pm] install
       extra.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

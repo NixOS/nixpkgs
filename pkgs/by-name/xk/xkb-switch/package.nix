@@ -28,12 +28,21 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Switch your X keyboard layouts from the command line";
     homepage = "https://github.com/ierton/xkb-switch";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ smironov ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Switch your X keyboard layouts from the command line";
+    homepage = "https://github.com/ierton/xkb-switch";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ smironov ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xkb-switch";
   };
 }

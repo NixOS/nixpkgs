@@ -22,11 +22,20 @@ stdenv.mkDerivation {
     "-std=c++14"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to access GSM mobile phones through GSM modems";
     homepage = "https://github.com/x-logLT/gsmlib";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.misuzu ];
+=======
+  meta = with lib; {
+    description = "Library to access GSM mobile phones through GSM modems";
+    homepage = "https://github.com/x-logLT/gsmlib";
+    license = licenses.lgpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.misuzu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

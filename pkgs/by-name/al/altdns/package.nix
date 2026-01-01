@@ -39,11 +39,19 @@ python3.pkgs.buildPythonApplication {
     "altdns"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generates permutations, alterations and mutations of subdomains and then resolves them";
     homepage = "https://github.com/infosec-au/altdns";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ octodi ];
+=======
+  meta = with lib; {
+    description = "Generates permutations, alterations and mutations of subdomains and then resolves them";
+    homepage = "https://github.com/infosec-au/altdns";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ octodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "altdns";
   };
 }

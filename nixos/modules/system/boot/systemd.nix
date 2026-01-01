@@ -181,10 +181,16 @@ let
     "machines.target"
     "systemd-machined.service"
   ]
+<<<<<<< HEAD
   ++ optionals cfg.package.withNspawn [
     "systemd-nspawn@.service"
   ]
   ++ [
+=======
+  ++ [
+    "systemd-nspawn@.service"
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Misc.
     "systemd-sysctl.service"
     "systemd-machine-id-commit.service"

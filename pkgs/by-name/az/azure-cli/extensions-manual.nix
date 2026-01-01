@@ -196,15 +196,24 @@
 
   connectedk8s = mkAzExtension rec {
     pname = "connectedk8s";
+<<<<<<< HEAD
     version = "1.11.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/connectedk8s-${version}-py2.py3-none-any.whl";
     hash = "sha256-Hl/+mS1Aj5Vsq2VFWrJuYmhXglt/wCr0ld67tK+tMak=";
+=======
+    version = "1.9.3";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/connectedk8s-${version}-py2.py3-none-any.whl";
+    hash = "sha256-4OuN92PXzIWgOWhWu/S4ofQ4AbITH6XSG1soUOljY+8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Microsoft Azure Command-Line Tools Connectedk8s Extension";
     propagatedBuildInputs = with python3Packages; [
       azure-graphrbac
       azure-mgmt-hybridcompute
       kubernetes
+<<<<<<< HEAD
       oras
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pycryptodome
       pyyaml
     ];

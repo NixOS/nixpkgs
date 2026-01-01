@@ -26,16 +26,28 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Monitoring software for AMD Zen-based CPUs";
     mainProgram = "zenmonitor";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Monitoring software for AMD Zen-based CPUs";
+    mainProgram = "zenmonitor";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       alexbakker
       artturin
     ];

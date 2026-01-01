@@ -9,7 +9,10 @@
   ninja,
   pkg-config,
   gst_all_1,
+<<<<<<< HEAD
   openssl,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   protobuf,
   libspelling,
   libsecret,
@@ -17,21 +20,43 @@
   gtksourceview5,
   rustPlatform,
   rustc,
+<<<<<<< HEAD
+=======
+  yq,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   appstream,
   blueprint-compiler,
   desktop-file-utils,
   wrapGAppsHook4,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
   version = "0.17.5";
+=======
+let
+  presage = fetchFromGitHub {
+    owner = "whisperfish";
+    repo = "presage";
+    # match with commit from Cargo.toml
+    rev = "559591c0e5886f101d3c25c27d8010214e9ea0c3";
+    hash = "sha256-WEWVhG/azf9BjLLzTEys+JGWbd+FzIDHm9QeWAeMLGA=";
+  };
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "flare";
+  # NOTE: also update presage commit
+  version = "0.17.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-mmw1g1MG1oNGYmQOsnLZgdMFuZSiWehZ7ltPrQxQLys=";
   };
 
@@ -39,6 +64,32 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     hash = "sha256-m1IlDGCelklgXNCm0nsDczuUUMM+A6TyWkQiOo/JVVU=";
   };
+=======
+    hash = "sha256-W26RR4BmGeXL6AoWMkf9BmU3nLY4rTnVf2OJPWKmKYc=";
+  };
+
+  cargoDeps =
+    let
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname version src;
+        hash = "sha256-bpafm+yyHNAoHVAgzc3BgM3+Jm7L+2gdoOdRSJ05iTE=";
+      };
+    in
+    # Replace with simpler solution:
+    # https://github.com/NixOS/nixpkgs/pull/432651#discussion_r2312796706
+    # depending on sqlx release and update in flare-signal
+    runCommand "${finalAttrs.pname}-${finalAttrs.version}-vendor-patched" { inherit cargoDeps; }
+      # https://github.com/flathub/de.schmidhuberj.Flare/commit/b1352087beaf299569c798bc69e31660712853db
+      # bash
+      ''
+        mkdir $out
+        find $cargoDeps -maxdepth 1 -exec sh -c "ln -s {} $out/\$(basename {})" \;
+        rm $out/presage-store-sqlite-*
+        cp -r $cargoDeps/presage-store-sqlite-* $out
+        chmod +w $out/presage-store-sqlite-*
+        ln -s ${presage}/.sqlx $out/presage-store-sqlite-*
+      '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     appstream # for appstream-util
@@ -51,14 +102,39 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+<<<<<<< HEAD
   ];
 
+=======
+    # yq contains tomlq
+    yq
+  ];
+
+  postPatch = ''
+    cargoPresageRev="$(tomlq -r '.dependencies.presage.rev' Cargo.toml)"
+    actualPresageRev="${presage.rev}"
+    if [ "$cargoPresageRev" != "$actualPresageRev" ]; then
+      echo ""
+      echo "fetchFromGitHub presage revision does not match revision specified in Cargo.toml"
+      echo "consider replacing fetchFromGitHub's revision with revision specified in Cargo.toml"
+      echo ""
+      echo "  fetchFromGitHub = ''${actualPresageRev}"
+      echo "  Cargo.toml = ''${cargoPresageRev}"
+      echo ""
+      exit 1
+    fi
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [
     gtksourceview5
     libadwaita
     libsecret
     libspelling
+<<<<<<< HEAD
     openssl
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     protobuf
 
     # To reproduce audio messages

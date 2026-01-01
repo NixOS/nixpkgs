@@ -20,11 +20,19 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Language server implementation for htmx";
     homepage = "https://github.com/ThePrimeagen/htmx-lsp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vinnymeller ];
+=======
+  meta = with lib; {
+    description = "Language server implementation for htmx";
+    homepage = "https://github.com/ThePrimeagen/htmx-lsp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vinnymeller ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "htmx-lsp";
   };
 }

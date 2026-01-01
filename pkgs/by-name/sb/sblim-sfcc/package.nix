@@ -23,11 +23,20 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Small Footprint CIM Client Library";
     homepage = "https://sourceforge.net/projects/sblim/";
     license = lib.licenses.cpl10;
     maintainers = with lib.maintainers; [ deepfire ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Small Footprint CIM Client Library";
+    homepage = "https://sourceforge.net/projects/sblim/";
+    license = licenses.cpl10;
+    maintainers = with maintainers; [ deepfire ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

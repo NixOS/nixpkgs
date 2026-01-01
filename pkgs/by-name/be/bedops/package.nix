@@ -65,11 +65,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Suite of tools for addressing questions arising in genomics studies";
     homepage = "https://github.com/bedops/bedops";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.x86_64;
+=======
+  meta = with lib; {
+    description = "Suite of tools for addressing questions arising in genomics studies";
+    homepage = "https://github.com/bedops/bedops";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ jbedo ];
+    platforms = platforms.x86_64;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

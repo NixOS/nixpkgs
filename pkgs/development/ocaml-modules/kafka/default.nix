@@ -21,11 +21,19 @@ buildDunePackage rec {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/didier-wenzek/ocaml-kafka";
     description = "OCaml bindings for Kafka";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/didier-wenzek/ocaml-kafka";
+    description = "OCaml bindings for Kafka";
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast ocaml.version "5.0";
   };
 }

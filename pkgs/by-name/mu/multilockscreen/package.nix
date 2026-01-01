@@ -55,7 +55,11 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/multilockscreen" --prefix PATH : "${binPath}"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Wrapper script for i3lock-color";
     mainProgram = "multilockscreen";
     longDescription = ''
@@ -63,8 +67,14 @@ stdenv.mkDerivation rec {
       It allows you to cache background images for i3lock-color with a variety of different effects and adds a stylish indicator.
     '';
     homepage = "https://github.com/jeffmhubbard/multilockscreen";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ kylesferrazza ];
+=======
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ kylesferrazza ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

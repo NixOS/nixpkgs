@@ -101,11 +101,20 @@ stdenv.mkDerivation rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/latchset/pkcs11-provider";
     description = "OpenSSL 3.x provider to access hardware or software tokens using the PKCS#11 Cryptographic Token Interface";
     maintainers = with lib.maintainers; [ numinit ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/latchset/pkcs11-provider";
+    description = "OpenSSL 3.x provider to access hardware or software tokens using the PKCS#11 Cryptographic Token Interface";
+    maintainers = with maintainers; [ numinit ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

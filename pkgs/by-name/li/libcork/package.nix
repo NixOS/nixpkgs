@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libcork.so $out/lib/libcork.so.1
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dcreager/libcork";
     description = "Simple, easily embeddable cross-platform C library";
@@ -55,5 +56,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ lovesegfault ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dcreager/libcork";
+    description = "Simple, easily embeddable cross-platform C library";
+    mainProgram = "cork-hash";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ lovesegfault ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

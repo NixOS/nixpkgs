@@ -9,10 +9,18 @@ grafanaPlugin {
     x86_64-darwin = "sha256-BuOMpZK+NoJx32f3pqcDI5szIW4bQl3+yFZI9zjzYE8=";
     aarch64-darwin = "sha256-ss/HxouKDZYZvF42KWJgMbOh9kSviH5oz6f/mrlcXk8=";
   };
+<<<<<<< HEAD
   meta = {
     description = "Visualize data from JSON, CSV, XML, GraphQL and HTML endpoints in Grafana";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nagisa ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Visualize data from JSON, CSV, XML, GraphQL and HTML endpoints in Grafana";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nagisa ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -26,11 +26,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Boot 64-bit Marvell EBU SoC over UART";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ lukegb ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Boot 64-bit Marvell EBU SoC over UART";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ lukegb ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mvebu64boot";
   };
 }

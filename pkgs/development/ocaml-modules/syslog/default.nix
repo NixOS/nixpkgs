@@ -17,10 +17,18 @@ buildDunePackage rec {
     hash = "sha256-WybNZBPhv4fhjzzb95E+6ZHcZUnfROLlNF3PMBGO9ys=";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/geneanet/ocaml-syslog";
     description = "Simple wrapper to access the system logger from OCaml";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.rixed ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/geneanet/ocaml-syslog";
+    description = "Simple wrapper to access the system logger from OCaml";
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.rixed ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

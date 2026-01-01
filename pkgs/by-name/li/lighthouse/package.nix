@@ -335,11 +335,19 @@ rustPlatform.buildRustPackage rec {
   # This is needed by the unit tests.
   FORK_NAME = "capella";
 
+<<<<<<< HEAD
   meta = {
     description = "Ethereum consensus client in Rust";
     homepage = "https://lighthouse.sigmaprime.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Ethereum consensus client in Rust";
+    homepage = "https://lighthouse.sigmaprime.io/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       centromere
       pmw
     ];

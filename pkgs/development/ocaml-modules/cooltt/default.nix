@@ -106,10 +106,18 @@ buildDunePackage {
     qcheck
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/RedPRL/cooltt";
     description = "Cool implementation of normalization by evaluation (nbe) & elaboration for Cartesian cubical type theory";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moni ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/RedPRL/cooltt";
+    description = "Cool implementation of normalization by evaluation (nbe) & elaboration for Cartesian cubical type theory";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

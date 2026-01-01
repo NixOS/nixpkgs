@@ -225,12 +225,21 @@ let
             };
           };
 
+<<<<<<< HEAD
           meta = {
             homepage = "https://octoprint.org/";
             description = "Snappy web interface for your 3D printer";
             mainProgram = "octoprint";
             license = lib.licenses.agpl3Only;
             maintainers = with lib.maintainers; [
+=======
+          meta = with lib; {
+            homepage = "https://octoprint.org/";
+            description = "Snappy web interface for your 3D printer";
+            mainProgram = "octoprint";
+            license = licenses.agpl3Only;
+            maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               WhittlesJr
               gador
             ];

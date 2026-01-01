@@ -30,11 +30,19 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "journalwatch" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to find error messages in the systemd journal";
     homepage = "https://github.com/The-Compiler/journalwatch";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ florianjacob ];
+=======
+  meta = with lib; {
+    description = "Tool to find error messages in the systemd journal";
+    homepage = "https://github.com/The-Compiler/journalwatch";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ florianjacob ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "journalwatch";
   };
 }

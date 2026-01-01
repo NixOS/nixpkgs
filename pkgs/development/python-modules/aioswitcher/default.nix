@@ -72,11 +72,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioswitcher" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to interact with Switcher water heater";
     homepage = "https://github.com/TomerFi/aioswitcher";
     changelog = "https://github.com/TomerFi/aioswitcher/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to interact with Switcher water heater";
+    homepage = "https://github.com/TomerFi/aioswitcher";
+    changelog = "https://github.com/TomerFi/aioswitcher/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

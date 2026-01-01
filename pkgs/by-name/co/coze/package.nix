@@ -21,11 +21,20 @@ buildGoModule rec {
     mv $out/bin/coze_cli $out/bin/coze
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI client for Coze, a cryptographic JSON messaging specification";
     mainProgram = "coze";
     homepage = "https://github.com/Cyphrme/coze_cli";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ qbit ];
+=======
+  meta = with lib; {
+    description = "CLI client for Coze, a cryptographic JSON messaging specification";
+    mainProgram = "coze";
+    homepage = "https://github.com/Cyphrme/coze_cli";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ qbit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,11 +33,20 @@ rustPlatform.buildRustPackage {
       plugin/parinfer.vim > $rtpPath/parinfer.vim
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Infer parentheses for Clojure, Lisp, and Scheme";
     mainProgram = "parinfer-rust";
     homepage = "https://github.com/eraserhd/parinfer-rust";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ eraserhd ];
+=======
+  meta = with lib; {
+    description = "Infer parentheses for Clojure, Lisp, and Scheme";
+    mainProgram = "parinfer-rust";
+    homepage = "https://github.com/eraserhd/parinfer-rust";
+    license = licenses.isc;
+    maintainers = with maintainers; [ eraserhd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

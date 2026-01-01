@@ -51,11 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Suite of graphical applications for the terminal";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/buffybox";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ colinsane ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Suite of graphical applications for the terminal";
+    homepage = "https://gitlab.postmarketos.org/postmarketOS/buffybox";
+    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ colinsane ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -34,12 +34,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "websocket" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Websocket client for Python";
     homepage = "https://github.com/websocket-client/websocket-client";
     changelog = "https://github.com/websocket-client/websocket-client/blob/v${version}/ChangeLog";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Websocket client for Python";
+    homepage = "https://github.com/websocket-client/websocket-client";
+    changelog = "https://github.com/websocket-client/websocket-client/blob/v${version}/ChangeLog";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wsdump";
   };
 }

@@ -19,6 +19,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command code search tool";
     homepage = "https://github.com/boyter/cs";
@@ -27,6 +28,16 @@ buildGoModule rec {
       unlicense
     ];
     maintainers = with lib.maintainers; [ viraptor ];
+=======
+  meta = with lib; {
+    description = "Command code search tool";
+    homepage = "https://github.com/boyter/cs";
+    license = with licenses; [
+      mit
+      unlicense
+    ];
+    maintainers = with maintainers; [ viraptor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cs";
   };
 }

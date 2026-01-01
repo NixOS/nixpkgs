@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for Freedompro API";
     homepage = "https://github.com/stefano055415/pyfreedompro";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python library for Freedompro API";
+    homepage = "https://github.com/stefano055415/pyfreedompro";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

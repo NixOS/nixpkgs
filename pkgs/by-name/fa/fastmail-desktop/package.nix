@@ -22,6 +22,10 @@ callPackage (if isDarwin then ./darwin.nix else ./linux.nix) {
     license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = [
+<<<<<<< HEAD
+=======
+      lib.maintainers.Enzime
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lib.maintainers.nekowinston
     ];
     platforms = [

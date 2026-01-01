@@ -57,12 +57,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohappyeyeballs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Happy Eyeballs for pre-resolved hosts";
     homepage = "https://github.com/bdraco/aiohappyeyeballs";
     changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Happy Eyeballs for pre-resolved hosts";
+    homepage = "https://github.com/bdraco/aiohappyeyeballs";
+    changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/v${version}/CHANGELOG.md";
+    license = licenses.psfl;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fab
       hexa
     ];

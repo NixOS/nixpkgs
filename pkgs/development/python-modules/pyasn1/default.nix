@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyasn1" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generic ASN.1 library for Python";
     homepage = "https://pyasn1.readthedocs.io";
     changelog = "https://github.com/etingof/pyasn1/blob/master/CHANGES.rst";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Generic ASN.1 library for Python";
+    homepage = "https://pyasn1.readthedocs.io";
+    changelog = "https://github.com/etingof/pyasn1/blob/master/CHANGES.rst";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

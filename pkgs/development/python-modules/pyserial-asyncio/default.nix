@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "serial_asyncio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asyncio extension package for pyserial";
     homepage = "https://github.com/pyserial/pyserial-asyncio";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Asyncio extension package for pyserial";
+    homepage = "https://github.com/pyserial/pyserial-asyncio";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

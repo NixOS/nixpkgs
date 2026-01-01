@@ -28,10 +28,18 @@ python3.pkgs.buildPythonApplication rec {
     poetry-core
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/siddhantgoel/beancount-ing-diba";
     description = "Beancount Importers for ING-DiBa (Germany) CSV Exports";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/siddhantgoel/beancount-ing-diba";
+    description = "Beancount Importers for ING-DiBa (Germany) CSV Exports";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

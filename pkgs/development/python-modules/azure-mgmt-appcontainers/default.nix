@@ -38,10 +38,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.appcontainers" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Appcontainers Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/appcontainers/azure-mgmt-appcontainers";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jfroche ];
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Appcontainers Management Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/appcontainers/azure-mgmt-appcontainers";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jfroche ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

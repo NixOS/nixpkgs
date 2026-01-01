@@ -45,11 +45,20 @@ stdenv.mkDerivation rec {
     substitute ./src/ibmsl.c ./src/ibmsl.c --subst-var out
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux-native graphical uploader for iBroadcast";
     downloadPage = "https://github.com/tobz619/MediaSyncLiteLinuxNix";
     homepage = "https://github.com/iBroadcastMediaServices/MediaSyncLiteLinux";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ tobz619 ];
+=======
+  meta = with lib; {
+    description = "Linux-native graphical uploader for iBroadcast";
+    downloadPage = "https://github.com/tobz619/MediaSyncLiteLinuxNix";
+    homepage = "https://github.com/iBroadcastMediaServices/MediaSyncLiteLinux";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ tobz619 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

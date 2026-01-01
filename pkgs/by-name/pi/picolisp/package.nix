@@ -52,11 +52,20 @@ stdenv.mkDerivation {
     substituteInPlace $out/bin/pil --replace-fail /usr $out
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pragmatic programming language";
     homepage = "https://picolisp.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nat-418 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Pragmatic programming language";
+    homepage = "https://picolisp.com/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nat-418 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

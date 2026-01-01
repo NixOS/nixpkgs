@@ -53,11 +53,20 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Utility library providing GObject-based interfaces and classes for commonly used data structures";
     homepage = "https://gitlab.gnome.org/GNOME/libgee";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "Utility library providing GObject-based interfaces and classes for commonly used data structures";
+    homepage = "https://gitlab.gnome.org/GNOME/libgee";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

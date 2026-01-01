@@ -50,11 +50,20 @@ buildGoModule rec {
     "-X github.com/zinclabs/zincsearch/pkg/meta.Version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight alternative to elasticsearch that requires minimal resources, written in Go";
     mainProgram = "zincsearch";
     homepage = "https://zincsearch-docs.zinc.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Lightweight alternative to elasticsearch that requires minimal resources, written in Go";
+    mainProgram = "zincsearch";
+    homepage = "https://zincsearch-docs.zinc.dev/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

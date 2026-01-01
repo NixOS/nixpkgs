@@ -47,7 +47,11 @@ buildPythonPackage rec {
     pytest-django
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.app.settings
@@ -60,11 +64,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_bootstrap5" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bootstrap 5 integration with Django";
     homepage = "https://github.com/zostera/django-bootstrap5";
     changelog = "https://github.com/zostera/django-bootstrap5/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ netali ];
+=======
+  meta = with lib; {
+    description = "Bootstrap 5 integration with Django";
+    homepage = "https://github.com/zostera/django-bootstrap5";
+    changelog = "https://github.com/zostera/django-bootstrap5/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ netali ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

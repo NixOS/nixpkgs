@@ -34,12 +34,21 @@ buildPecl {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/couchbase/php-couchbase/releases/tag/v${version}";
     description = "Couchbase Server PHP extension";
     license = lib.licenses.asl20;
     homepage = "https://docs.couchbase.com/php-sdk/current/project-docs/sdk-release-notes.html";
     teams = [ lib.teams.php ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/couchbase/php-couchbase/releases/tag/v${version}";
+    description = "Couchbase Server PHP extension";
+    license = licenses.asl20;
+    homepage = "https://docs.couchbase.com/php-sdk/current/project-docs/sdk-release-notes.html";
+    teams = [ teams.php ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast php.version "8.3";
   };
 }

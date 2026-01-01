@@ -62,6 +62,7 @@ buildGoModule rec {
         '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "In-memory Google Cloud Bigtable server";
     homepage = "https://github.com/googleapis/google-cloud-go/blob/bigtable/v${version}/bigtable/cmd/emulator/cbtemulator.go";
@@ -69,5 +70,14 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.flokli ];
     mainProgram = "cbtemulator";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "In-memory Google Cloud Bigtable server";
+    homepage = "https://github.com/googleapis/google-cloud-go/blob/bigtable/v${version}/bigtable/cmd/emulator/cbtemulator.go";
+    license = licenses.asl20;
+    maintainers = [ maintainers.flokli ];
+    mainProgram = "cbtemulator";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
 
+<<<<<<< HEAD
   # On Darwin, non-static build segfaults on python module import.
   # See: https://github.com/NixOS/nixpkgs/issues/466092
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -48,5 +49,13 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pashashocky ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/google/sentencepiece";
+    description = "Unsupervised text tokenizer for Neural Network-based text generation";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pashashocky ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

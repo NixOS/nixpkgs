@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   aiohttp,
   cryptography,
   distro,
@@ -23,17 +24,39 @@
   requests,
   sentry-sdk,
   setuptools,
+=======
+  cryptography,
+  fido2,
+  setuptools,
+  jinja2,
+  proton-core,
+  pynacl,
+  aiohttp,
+  pyopenssl,
+  pytest-asyncio,
+  requests,
+  sentry-sdk,
+  pyxdg,
+  distro,
+  pytestCheckHook,
+  pytest-cov-stub,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
+<<<<<<< HEAD
   version = "4.14.1";
+=======
+  version = "4.13.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-xyCjzcSasLGm2DMMViI1wpzcLd0mmaBvIyI1HrtW+Gg=";
   };
 
@@ -52,6 +75,11 @@ buildPythonPackage rec {
     networkmanager
   ];
 
+=======
+    hash = "sha256-oFTlN/mi4TACmqbebKirYdqDEYzUejK4SKbKgFWONDo=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     setuptools
   ];
@@ -61,6 +89,7 @@ buildPythonPackage rec {
     distro
     fido2
     jinja2
+<<<<<<< HEAD
     proton-core
     proton-vpn-local-agent
     pycairo
@@ -82,6 +111,20 @@ buildPythonPackage rec {
     "proton.vpn.logging"
     "proton.vpn.session"
     "proton.vpn.split_tunneling"
+=======
+    pynacl
+    proton-core
+    sentry-sdk
+    pyxdg
+  ];
+
+  pythonImportsCheck = [
+    "proton.vpn.core"
+    "proton.vpn.connection"
+    "proton.vpn.killswitch.interface"
+    "proton.vpn.logging"
+    "proton.vpn.session"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [
@@ -93,7 +136,11 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+<<<<<<< HEAD
   # Needed for `pythonImportsCheck`, `postInstall` happens between `pythonImportsCheckPhase` and `pytestCheckPhase`.
+=======
+  # Needed for `pythonImportsCheck`, `preCheck` happens between `pythonImportsCheckPhase` and `pytestCheckPhase`.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postInstall = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
@@ -118,7 +165,10 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
       anthonyroussel
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sebtm
       rapiteanu
     ];

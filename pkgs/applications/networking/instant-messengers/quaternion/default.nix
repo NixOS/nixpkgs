@@ -66,12 +66,21 @@ stdenv.mkDerivation (finalAttrs: {
           --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
       '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform desktop IM client for the Matrix protocol";
     mainProgram = "quaternion";
     homepage = "https://matrix.org/ecosystem/clients/quaternion/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Cross-platform desktop IM client for the Matrix protocol";
+    mainProgram = "quaternion";
+    homepage = "https://matrix.org/ecosystem/clients/quaternion/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (qtbase.meta) platforms;
   };
 })

@@ -17,7 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -rv ./* $out/share/gshhg-gmt
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.soest.hawaii.edu/pwessel/gshhg/";
     description = "High-resolution shoreline data set, for use with GMT";
     longDescription = ''
@@ -28,7 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
       rivers, and political boundaries. This data is for use by GMT, the Generic
       Mapping Tools.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
+=======
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ tviti ];
     teams = [ lib.teams.geospatial ];
   };

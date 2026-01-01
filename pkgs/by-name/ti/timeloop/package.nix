@@ -91,11 +91,20 @@ stdenv.mkDerivation rec {
     cp -r ./problem-shapes ./configs $out/data
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Chip modeling/mapping benchmarking framework";
     homepage = "https://timeloop.csail.mit.edu";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ gdinh ];
+=======
+  meta = with lib; {
+    description = "Chip modeling/mapping benchmarking framework";
+    homepage = "https://timeloop.csail.mit.edu";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ gdinh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

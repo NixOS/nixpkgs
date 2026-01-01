@@ -187,7 +187,11 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${mruby-zest}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "High quality software synthesizer (${guiName} GUI)";
     mainProgram = "zynaddsubfx";
     homepage =
@@ -196,9 +200,15 @@ stdenv.mkDerivation rec {
       else
         "https://zynaddsubfx.sourceforge.io";
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # On macOS:
     # - Tests don't compile (ld: unknown option: --no-as-needed)

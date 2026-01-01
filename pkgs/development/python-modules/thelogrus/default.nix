@@ -38,12 +38,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thelogrus" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python 3 version of logrus";
     mainProgram = "human-time";
     homepage = "https://github.com/unixorn/thelogrus";
     changelog = "https://github.com/unixorn/thelogrus/blob/${version}/ChangeLog.md";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

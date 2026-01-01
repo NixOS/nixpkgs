@@ -28,6 +28,7 @@ let
 
         subPackages = [ package ];
 
+<<<<<<< HEAD
         meta = {
           homepage = "https://www.elastic.co/products/beats";
           license = lib.licenses.asl20;
@@ -36,6 +37,17 @@ let
             dfithian
           ];
           platforms = lib.platforms.linux;
+=======
+        meta = with lib; {
+          homepage = "https://www.elastic.co/products/beats";
+          license = licenses.asl20;
+          maintainers = with maintainers; [
+            fadenb
+            basvandijk
+            dfithian
+          ];
+          platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       } extraArgs
     );

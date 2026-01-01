@@ -64,7 +64,11 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Houston4444/RaySession";
     description = "Session manager for Linux musical programs";
     license = lib.licenses.gpl2;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 }

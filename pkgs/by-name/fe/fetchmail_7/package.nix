@@ -38,7 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -a contrib/. $out/share/fetchmail-contrib
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.fetchmail.info/";
     description = "Full-featured remote-mail retrieval and forwarding utility";
     longDescription = ''
@@ -49,7 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
       all flavors of IMAP, ETRN, and ODMR. It can even support IPv6 and
       IPSEC.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

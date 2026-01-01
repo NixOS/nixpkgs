@@ -44,11 +44,20 @@ buildPythonPackage rec {
     py.test -vv -k "not test_uwsgi"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ionelmc/python-manhole";
     description = "Debugging manhole for Python applications";
     mainProgram = "manhole-cli";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ivan ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ionelmc/python-manhole";
+    description = "Debugging manhole for Python applications";
+    mainProgram = "manhole-cli";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ivan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

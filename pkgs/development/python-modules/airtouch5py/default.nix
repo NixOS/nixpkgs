@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "airtouch5py" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/danzel/airtouch5py/releases/tag/${src.tag}";
     description = "Python client for the airtouch 5";
     homepage = "https://github.com/danzel/airtouch5py";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/danzel/airtouch5py/releases/tag/${src.tag}";
+    description = "Python client for the airtouch 5";
+    homepage = "https://github.com/danzel/airtouch5py";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

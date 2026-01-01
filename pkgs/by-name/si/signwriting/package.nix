@@ -22,12 +22,21 @@ runCommand "signwriting-1.1.4"
     outputHashMode = "recursive";
     outputHash = "0cn37s3lc7gbr8036l7ia2869qmxglkmgllh3r9q5j54g3sfjc7q";
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://github.com/Slevinski/signwriting_2010_fonts";
       description = "Typeface for written sign languages";
       maintainers = with lib.maintainers; [ mathnerd314 ];
       license = lib.licenses.ofl;
       platforms = lib.platforms.all;
+=======
+    meta = with lib; {
+      homepage = "https://github.com/Slevinski/signwriting_2010_fonts";
+      description = "Typeface for written sign languages";
+      maintainers = with maintainers; [ mathnerd314 ];
+      license = licenses.ofl;
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

@@ -84,6 +84,7 @@ stdenv.mkDerivation {
 
   passthru.tests.test = nixosTests.terminal-emulators.wayst;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple terminal emulator";
     mainProgram = "wayst";
@@ -91,5 +92,14 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ berbiche ];
+=======
+  meta = with lib; {
+    description = "Simple terminal emulator";
+    mainProgram = "wayst";
+    homepage = "https://github.com/91861/wayst";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ berbiche ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

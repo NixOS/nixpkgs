@@ -1,28 +1,52 @@
 {
   lib,
   flutter335,
+<<<<<<< HEAD
   python3Packages,
+=======
+  python3,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   pcre2,
   libnotify,
   libappindicator,
+<<<<<<< HEAD
   gnome-screenshot,
   removeReferencesTo,
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
   nix-update-script,
+=======
+  pkg-config,
+  gnome-screenshot,
+  makeWrapper,
+  removeReferencesTo,
+  runCommand,
+  yq,
+  yubioath-flutter,
+  _experimental-update-script-combinators,
+  gitUpdater,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 flutter335.buildFlutterApplication rec {
   pname = "yubioath-flutter";
+<<<<<<< HEAD
   version = "7.3.1";
+=======
+  version = "7.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-jfWLj5pN1NGfnmYQ0lYeKwlc0v7pCdvAjmmWX5GP7aM=";
+=======
+    hash = "sha256-1Hr8ZDHXiLiYfQg4PEpmIuIJR/USbsGCgI4YZSex2Eg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -36,7 +60,15 @@ flutter335.buildFlutterApplication rec {
       --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ removeReferencesTo ];
+=======
+  nativeBuildInputs = [
+    makeWrapper
+    removeReferencesTo
+    pkg-config
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = [
     pcre2
@@ -79,6 +111,7 @@ flutter335.buildFlutterApplication rec {
   '';
 
   passthru = {
+<<<<<<< HEAD
     helper = python3Packages.callPackage ./helper.nix { inherit src version meta; };
     pubspecSource =
       runCommand "pubspec.lock.json"
@@ -97,6 +130,21 @@ flutter335.buildFlutterApplication rec {
           supportedFeatures = [ ];
         }
       )
+=======
+    helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          nativeBuildInputs = [ yq ];
+          inherit (yubioath-flutter) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "yubioath-flutter.pubspecSource" ./pubspec.lock.json)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 

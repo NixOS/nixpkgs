@@ -21,11 +21,20 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
+<<<<<<< HEAD
   meta = {
     description = "Submit pull requests for individual, amendable, rebaseable commits to GitHub";
     mainProgram = "spr";
     homepage = "https://github.com/spacedentist/spr";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ spacedentist ];
+=======
+  meta = with lib; {
+    description = "Submit pull requests for individual, amendable, rebaseable commits to GitHub";
+    mainProgram = "spr";
+    homepage = "https://github.com/spacedentist/spr";
+    license = licenses.mit;
+    maintainers = with maintainers; [ spacedentist ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

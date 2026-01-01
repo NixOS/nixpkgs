@@ -42,11 +42,20 @@ python3.pkgs.buildPythonApplication {
     "holehe"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI to check if the mail is used on different sites";
     mainProgram = "holehe";
     homepage = "https://github.com/megadose/holehe";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "CLI to check if the mail is used on different sites";
+    mainProgram = "holehe";
+    homepage = "https://github.com/megadose/holehe";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

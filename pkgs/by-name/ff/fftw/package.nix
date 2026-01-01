@@ -29,7 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
       "https://fftw.org/fftw-${finalAttrs.version}.tar.gz"
       "ftp://ftp.fftw.org/pub/fftw/fftw-${finalAttrs.version}.tar.gz"
     ];
+<<<<<<< HEAD
     hash = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
+=======
+    sha256 = "sha256-VskyVJhSzdz6/as4ILAgDHdCZ1vpIXnlnmIVs0DiZGc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -66,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (precision != "double") "--enable-${precision}"
   # https://www.fftw.org/fftw3_doc/SIMD-alignment-and-fftw_005fmalloc.html
   # FFTW will try to detect at runtime whether the CPU supports these extensions
+<<<<<<< HEAD
   ++
     lib.optionals (stdenv.hostPlatform.isx86_64 && (precision == "single" || precision == "double"))
       [
@@ -75,6 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
         "--enable-avx512"
         "--enable-avx128-fma"
       ]
+=======
+  ++ lib.optional (
+    stdenv.hostPlatform.isx86_64 && (precision == "single" || precision == "double")
+  ) "--enable-sse2 --enable-avx --enable-avx2 --enable-avx512 --enable-avx128-fma"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optionals enableMpi [
     "--enable-mpi"
     # link libfftw3_mpi explicitly with -lmpi
@@ -89,22 +99,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   # fftw builds with -mtune=native by default
   postPatch = ''
+<<<<<<< HEAD
     substituteInPlace configure --replace-fail "-mtune=native" "-mtune=generic"
   '';
 
   strictDeps = true;
+=======
+    substituteInPlace configure --replace "-mtune=native" "-mtune=generic"
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   enableParallelBuilding = true;
 
   nativeCheckInputs = [ perl ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   __structuredAttrs = true;
 
   meta = {
     description = "Fastest Fourier Transform in the West library";
     homepage = "https://www.fftw.org/";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Fastest Fourier Transform in the West library";
+    homepage = "https://www.fftw.org/";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     pkgConfigModules = [
       {
@@ -115,8 +138,14 @@ stdenv.mkDerivation (finalAttrs: {
       }
       .${precision}
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     # quad-precision requires libquadmath from gfortran, but libquadmath is not supported on aarch64
     badPlatforms = lib.optionals (precision == "quad-precision") lib.platforms.aarch64;
+=======
+    platforms = platforms.unix;
+    # quad-precision requires libquadmath from gfortran, but libquadmath is not supported on aarch64
+    badPlatforms = lib.optionals (precision == "quad-precision") platforms.aarch64;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

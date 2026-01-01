@@ -31,11 +31,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-XhF4oizOZ6g0351Q71Wp9IA3aFpocC5xGovDefIoL78=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/DarthSim/overmind";
     description = "Process manager for Procfile-based applications and tmux";
     mainProgram = "overmind";
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/DarthSim/overmind";
+    description = "Process manager for Procfile-based applications and tmux";
+    mainProgram = "overmind";
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

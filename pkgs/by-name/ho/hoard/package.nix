@@ -25,12 +25,21 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI command organizer written in rust";
     homepage = "https://github.com/hyde46/hoard";
     changelog = "https://github.com/Hyde46/hoard/blob/${src.rev}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "CLI command organizer written in rust";
+    homepage = "https://github.com/hyde46/hoard";
+    changelog = "https://github.com/Hyde46/hoard/blob/${src.rev}/CHANGES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       builditluc
     ];
     mainProgram = "hoard";

@@ -13,8 +13,11 @@
   moreutils,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cacert,
   valkey,
   dataDir ? "/var/lib/zammad",
@@ -72,8 +75,12 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     valkey
     postgresql
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
     procps
     cacert
@@ -81,9 +88,14 @@ stdenvNoCC.mkDerivation {
 
   env.RAILS_ENV = "production";
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit pname src;
     pnpm = pnpm_9;
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit pname src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     fetcherVersion = 1;
     hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
@@ -112,12 +124,20 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
+<<<<<<< HEAD
     # dataDir will be set in the module, and the package gets overridden there
     ln -s ${dataDir}/config/database.yml $out/config/database.yml
     ln -s ${dataDir}/config/secrets.yml $out/config/secrets.yml
     ln -s ${dataDir}/log $out/log
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/tmp $out/tmp
+=======
+    # dataDir will be set in the module, and the package gets overriden there
+    ln -s ${dataDir}/config/database.yml $out/config/database.yml
+    ln -s ${dataDir}/config/secrets.yml $out/config/secrets.yml
+    ln -s ${dataDir}/tmp $out/tmp
+    ln -s ${dataDir}/log $out/log
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru = {

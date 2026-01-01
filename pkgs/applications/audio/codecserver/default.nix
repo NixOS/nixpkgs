@@ -36,11 +36,19 @@ stdenv.mkDerivation rec {
       --replace-fail '=''${exec_prefix}//' '=/'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jketterl/codecserver";
     description = "Modular audio codec server";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jketterl/codecserver";
+    description = "Modular audio codec server";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "codecserver";
   };
 }

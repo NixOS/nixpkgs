@@ -48,12 +48,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+<<<<<<< HEAD
     # Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
     # which isn't valid on NixOS (and a compatibility link on most other modern
     # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
     # bits: only build when cpu_set_t is available
     # Otherwise, the build fails on macOS
+=======
+    ./rtcwake-search-PATH-for-shutdown.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (fetchurl {
       name = "bits-only-build-when-cpu_set_t-is-available.patch";
       url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";
@@ -183,7 +187,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
     ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
 
+<<<<<<< HEAD
     rm -f bash-completion/Makemodule.am
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     installShellCompletion --bash bash-completion/*
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''

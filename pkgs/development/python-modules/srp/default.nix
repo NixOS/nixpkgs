@@ -25,14 +25,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srp" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Implementation of the Secure Remote Password protocol (SRP)";
     longDescription = ''
       This package provides an implementation of the Secure Remote Password protocol (SRP).
       SRP is a cryptographically strong authentication protocol for password-based, mutual authentication over an insecure network connection.
     '';
     homepage = "https://github.com/cocagne/pysrp";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jefflabonte ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ jefflabonte ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

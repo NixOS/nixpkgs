@@ -35,12 +35,21 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Find fonts which can show a specified character and preview them in browser";
     homepage = "https://github.com/7sDream/fontfor";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Find fonts which can show a specified character and preview them in browser";
+    homepage = "https://github.com/7sDream/fontfor";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ shamilton ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fontfor";
   };
 }

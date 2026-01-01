@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   mkDerivation,
   libjail,
@@ -7,5 +8,10 @@ mkDerivation {
   buildInputs = [
     libjail
   ];
+=======
+{ mkDerivation, ... }:
+mkDerivation {
+  path = "sbin/sysctl";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   MK_TESTS = "no";
 }

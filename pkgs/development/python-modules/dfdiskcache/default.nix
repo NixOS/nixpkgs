@@ -37,10 +37,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "dfdiskcache" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for caching pandas.DataFrame objects to local disk";
     homepage = "https://github.com/thombashi/df-diskcache";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ henrirosten ];
+=======
+  meta = with lib; {
+    description = "Python library for caching pandas.DataFrame objects to local disk";
+    homepage = "https://github.com/thombashi/df-diskcache";
+    license = licenses.mit;
+    maintainers = with maintainers; [ henrirosten ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

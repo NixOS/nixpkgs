@@ -7,14 +7,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "voicevox-engine";
+<<<<<<< HEAD
   version = "0.25.0";
+=======
+  version = "0.24.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-ZthTXHXzexbffWoi8AKJrgX9/gd7fmKbYpCwuZZiQWQ=";
+=======
+    hash = "sha256-WoHTv4VjLFJPIi47WETMQM8JmgBctAWlue8yKmi1+6A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -35,7 +43,10 @@ python3Packages.buildPythonApplication rec {
     kanalizer
     numpy
     platformdirs
+<<<<<<< HEAD
     psutil
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pydantic
     python-multipart
     pyworld
@@ -53,10 +64,13 @@ python3Packages.buildPythonApplication rec {
     "fastapi-slim"
   ];
 
+<<<<<<< HEAD
   pythonRelaxDeps = [
     "psutil" # at the time of writing, psutil has not reached version 7.1.1
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preConfigure = ''
     # copy demo metadata to temporary directory
     mv resources/character_info test_character_info
@@ -78,7 +92,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [
+<<<<<<< HEAD
     ''--add-flags "--voicelib_dir=${voicevox-core.wrapped}/lib"''
+=======
+    ''--add-flags "--voicelib_dir=${voicevox-core}/lib"''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   preCheck = ''
@@ -103,7 +121,11 @@ python3Packages.buildPythonApplication rec {
       owner = "VOICEVOX";
       repo = "voicevox_resource";
       tag = version;
+<<<<<<< HEAD
       hash = "sha256-yj3bwEB1qeoXAf3Dr02FF/HB6g7toAd2VUmR2937yzc=";
+=======
+      hash = "sha256-4D9b5MjJQq+oCqSv8t7CILgFcotbNBH3m2F/up12pPE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };

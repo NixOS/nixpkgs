@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonrpc_base" ];
 
+<<<<<<< HEAD
   meta = {
     description = "JSON-RPC client library base interface";
     homepage = "https://github.com/emlove/jsonrpc-base";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "JSON-RPC client library base interface";
+    homepage = "https://github.com/emlove/jsonrpc-base";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

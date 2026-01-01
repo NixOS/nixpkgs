@@ -17,14 +17,25 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--features=cli" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Represent numbers in French language";
     homepage = "https://github.com/evenfurther/french-numbers";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Represent numbers in French language";
+    homepage = "https://github.com/evenfurther/french-numbers";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20 # or
       mit
     ];
     mainProgram = "french-numbers";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ samueltardieu ];
+=======
+    maintainers = with maintainers; [ samueltardieu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

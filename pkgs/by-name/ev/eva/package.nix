@@ -15,11 +15,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7vhhm2qAaSwBjbYfDER9bnC3OOOun4brn7Ft4mO6jfI=";
 
+<<<<<<< HEAD
   meta = {
     description = "Calculator REPL, similar to bc";
     homepage = "https://github.com/oppiliappan/eva";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Calculator REPL, similar to bc";
+    homepage = "https://github.com/oppiliappan/eva";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ma27
     ];
     mainProgram = "eva";

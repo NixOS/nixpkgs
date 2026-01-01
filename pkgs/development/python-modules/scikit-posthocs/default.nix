@@ -43,11 +43,20 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scikit_posthocs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multiple Pairwise Comparisons (Post Hoc) Tests in Python";
     homepage = "https://github.com/maximtrp/scikit-posthocs";
     changelog = "https://github.com/maximtrp/scikit-posthocs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Multiple Pairwise Comparisons (Post Hoc) Tests in Python";
+    homepage = "https://github.com/maximtrp/scikit-posthocs";
+    changelog = "https://github.com/maximtrp/scikit-posthocs/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

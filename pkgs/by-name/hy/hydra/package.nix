@@ -1,7 +1,11 @@
 {
   stdenv,
   lib,
+<<<<<<< HEAD
   nixVersions,
+=======
+  nix,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   perlPackages,
   buildEnv,
   makeWrapper,
@@ -38,7 +42,11 @@
   mdbook,
   foreman,
   python3,
+<<<<<<< HEAD
   netcat,
+=======
+  libressl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cacert,
   glibcLocales,
   meson,
@@ -50,8 +58,11 @@
 }:
 
 let
+<<<<<<< HEAD
   nix = nixVersions.nix_2_32;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
     paths =
@@ -119,12 +130,20 @@ let
         TermReadKey
         Test2Harness
         TestPostgreSQL
+<<<<<<< HEAD
+=======
+        TestSimple13
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         TextDiff
         TextTable
         UUID4Tiny
         XMLSimple
         YAML
+<<<<<<< HEAD
         (nix.libs.nix-perl-bindings or nix.perl-bindings or null)
+=======
+        (nix.libs.nix-perl-bindings or nix.perl-bindings)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         git
       ];
   };
@@ -209,7 +228,11 @@ stdenv.mkDerivation (finalAttrs: {
     foreman
     glibcLocales
     python3
+<<<<<<< HEAD
     netcat
+=======
+    libressl.nc
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nix-eval-jobs
     openldap
     postgresql
@@ -259,6 +282,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Nix-based continuous build system";
     homepage = "https://nixos.org/hydra";
@@ -266,5 +290,14 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mindavi ];
     teams = [ lib.teams.helsinki-systems ];
+=======
+  meta = with lib; {
+    description = "Nix-based continuous build system";
+    homepage = "https://nixos.org/hydra";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mindavi ];
+    teams = [ teams.helsinki-systems ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

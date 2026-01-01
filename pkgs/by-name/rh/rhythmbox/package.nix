@@ -122,11 +122,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/rhythmbox";
     description = "Music playing application for GNOME";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/rhythmbox";
+    description = "Music playing application for GNOME";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.rasendubi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

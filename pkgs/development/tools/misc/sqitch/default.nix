@@ -3,6 +3,10 @@
   lib,
   perlPackages,
   makeWrapper,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mysqlSupport ? false,
   postgresqlSupport ? false,
   sqliteSupport ? false,
@@ -24,7 +28,11 @@ stdenv.mkDerivation {
   pname = "sqitch";
   version = sqitch.version;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ makeWrapper ];
+=======
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = sqitch;
   dontBuild = true;
@@ -38,6 +46,12 @@ stdenv.mkDerivation {
         ln -s ${sqitch}/$d $out/$d
       fi
     done
+<<<<<<< HEAD
+=======
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/sqitch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
   dontStrip = true;
   postFixup = ''

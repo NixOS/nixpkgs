@@ -111,6 +111,7 @@ stdenv.mkDerivation rec {
         "-I${harfbuzz.dev}/include/harfbuzz"
       ]
     );
+<<<<<<< HEAD
     NIX_CFLAGS_COMPILE = toString (
       [ ]
       ++ lib.optional stdenv.cc.isGNU [
@@ -121,6 +122,11 @@ stdenv.mkDerivation rec {
         "-Wno-error=implicit-function-declaration"
       ]
     );
+=======
+  }
+  // lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   #doCheck = true; # all tests fail (no idea why)
@@ -132,9 +138,15 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Small open source library for using 3D graphics hardware for rendering";
     maintainers = with lib.maintainers; [ lovek323 ];
+=======
+  meta = with lib; {
+    description = "Small open source library for using 3D graphics hardware for rendering";
+    maintainers = with maintainers; [ lovek323 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       Cogl is a small open source library for using 3D graphics hardware for
@@ -143,8 +155,13 @@ stdenv.mkDerivation rec {
       render without stepping on each other's toes.
     '';
 
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = with lib.licenses; [
+=======
+    platforms = platforms.unix;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       bsd3
       publicDomain

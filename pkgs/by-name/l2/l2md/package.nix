@@ -21,7 +21,11 @@ stdenv.mkDerivation {
     cp l2md $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Convert public-inbox archives to maildir messages";
     mainProgram = "l2md";
     longDescription = ''
@@ -30,8 +34,14 @@ stdenv.mkDerivation {
       periodically synced.
     '';
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/dborkman/l2md.git";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ yoctocell ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ yoctocell ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

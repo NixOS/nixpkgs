@@ -13,8 +13,11 @@
   gvfs,
   cinnamon-desktop,
   xapp,
+<<<<<<< HEAD
   xapp-symbolic-icons,
   xdg-user-dirs,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libexif,
   json-glib,
   exempi,
@@ -37,13 +40,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nemo";
+<<<<<<< HEAD
   version = "6.6.2";
+=======
+  version = "6.4.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-5jgD2C71sQkqnAGsnsjK8W9qaLtNtGeYLXsV2+7u2jU=";
+=======
+    hash = "sha256-9JfCBC5YjfQadF7KzPgZ1yPkiSjmuEO1tfMU2BmJES8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -95,6 +106,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+<<<<<<< HEAD
     gappsWrapperArgs+=(
        --prefix XDG_DATA_DIRS : "${
          lib.makeSearchPath "share" [
@@ -109,12 +121,18 @@ stdenv.mkDerivation rec {
            xdg-user-dirs
          ]
        }"
+=======
+    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${xapp}/share"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     )
   '';
 
   # Taken from libnemo-extension.pc.
   passthru.extensiondir = "lib/nemo/extensions-3.0";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/nemo";
     description = "File browser for Cinnamon";
@@ -124,6 +142,17 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/nemo";
+    description = "File browser for Cinnamon";
+    license = [
+      licenses.gpl2
+      licenses.lgpl2
+    ];
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nemo";
   };
 }

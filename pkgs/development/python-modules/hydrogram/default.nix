@@ -54,11 +54,20 @@ buildPythonPackage rec {
     "hydrogram.types"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asynchronous Telegram MTProto API framework for fluid user and bot interactions";
     homepage = "https://github.com/hydrogram/hydrogram";
     changelog = "https://github.com/hydrogram/hydrogram/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ tholo ];
+=======
+  meta = with lib; {
+    description = "Asynchronous Telegram MTProto API framework for fluid user and bot interactions";
+    homepage = "https://github.com/hydrogram/hydrogram";
+    changelog = "https://github.com/hydrogram/hydrogram/releases/tag/${src.tag}";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ tholo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

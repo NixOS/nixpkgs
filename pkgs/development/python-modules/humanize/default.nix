@@ -46,12 +46,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "humanize" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python humanize utilities";
     homepage = "https://github.com/python-humanize/humanize";
     changelog = "https://github.com/python-humanize/humanize/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python humanize utilities";
+    homepage = "https://github.com/python-humanize/humanize";
+    changelog = "https://github.com/python-humanize/humanize/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rmcgibbo
       Luflosi
     ];

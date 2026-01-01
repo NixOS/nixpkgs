@@ -22,14 +22,22 @@
 }:
 buildPythonPackage rec {
   pname = "stable-baselines3";
+<<<<<<< HEAD
   version = "2.7.1";
+=======
+  version = "2.7.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ucfdXyOYgevrKQ+RQbuoLjhGEvlzwH80yognMNbJlgQ=";
+=======
+    hash = "sha256-Ms2qoq1fokhUQ1/Wus786oYPT6C2lnHOZ+D7E7qUbjI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch =

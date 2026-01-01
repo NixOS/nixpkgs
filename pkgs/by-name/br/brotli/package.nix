@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   python3Packages,
   staticOnly ? stdenv.hostPlatform.isStatic,
@@ -10,15 +14,37 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brotli";
+<<<<<<< HEAD
   version = "1.2.0";
+=======
+  version = "1.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-kl8ZHt71v17QR2bDP+ad/5uixf+GStEPLQ5ooFoC5i8=";
   };
 
+=======
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-MvceRcle2dSkkucC2PlsCizsIf8iv95d8Xjqew266wc=";
+  };
+
+  patches = [
+    # revert runpath change, breaks curl on darwin:
+    #   https://github.com/NixOS/nixpkgs/pull/254532#issuecomment-1722337476
+    (fetchpatch {
+      name = "revert-runpath.patch";
+      url = "https://github.com/google/brotli/commit/f842c1bcf9264431cd3b15429a72b7dafbe80509.patch";
+      hash = "sha256-W3LY3EjoHP74YsKOOcYQrzo+f0HbooOvEbnOibtN6TM=";
+      revert = true;
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = lib.optional staticOnly "-DBUILD_SHARED_LIBS=OFF";
@@ -46,9 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     python = python3Packages.brotli;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/google/brotli";
     changelog = "https://github.com/google/brotli/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+=======
+  meta = with lib; {
+    homepage = "https://github.com/google/brotli";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "General-purpose lossless compression library with CLI";
     longDescription = ''
       Brotli is a generic-purpose lossless compression algorithm that
@@ -62,13 +93,21 @@ stdenv.mkDerivation (finalAttrs: {
       in the following Internet-Draft:
       https://datatracker.ietf.org/doc/html/rfc7932
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     pkgConfigModules = [
       "libbrotlidec"
       "libbrotlienc"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "brotli";
   };
 })

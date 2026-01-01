@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage usbrelay.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to control USB HID relays";
     mainProgram = "usbrelay";
@@ -41,5 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wentasah ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool to control USB HID relays";
+    mainProgram = "usbrelay";
+    homepage = "https://github.com/darrylb123/usbrelay";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wentasah ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

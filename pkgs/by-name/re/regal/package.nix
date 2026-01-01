@@ -24,12 +24,21 @@ buildGoModule rec {
     "-X github.com/styrainc/regal/pkg/version.Commit=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Linter and language server for Rego";
     mainProgram = "regal";
     homepage = "https://github.com/StyraInc/regal";
     changelog = "https://github.com/StyraInc/regal/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rinx ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rinx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

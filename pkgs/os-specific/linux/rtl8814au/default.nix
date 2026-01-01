@@ -37,11 +37,19 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Realtek 8814AU USB WiFi driver";
     homepage = "https://github.com/morrownr/8814au";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.lassulus ];
+=======
+  meta = with lib; {
+    description = "Realtek 8814AU USB WiFi driver";
+    homepage = "https://github.com/morrownr/8814au";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.lassulus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = kernel.kernelOlder "5.2" || kernel.kernelAtLeast "6.15";
   };
 }

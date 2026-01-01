@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
     "install-devel"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rhinstaller/isomd5sum";
     description = "Utilities for working with md5sum implanted in ISO images";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ knl ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rhinstaller/isomd5sum";
+    description = "Utilities for working with md5sum implanted in ISO images";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ knl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

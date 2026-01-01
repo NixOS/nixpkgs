@@ -11,13 +11,21 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgroonga";
+<<<<<<< HEAD
   version = "4.0.5";
+=======
+  version = "4.0.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
     tag = "${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-PwUnjwqnmoWQ9kKZuKsAVzVBRyKvT+aexrm5eeRiRIQ=";
+=======
+    hash = "sha256-SXQH+L7FKhu+2+9QyQTNi+3nFYtkE7WXv2A5LdvjG2w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ pkg-config ];

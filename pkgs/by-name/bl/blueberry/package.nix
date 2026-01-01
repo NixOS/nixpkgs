@@ -87,12 +87,21 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn $out/lib "$out $pythonPath"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bluetooth configuration tool";
     homepage = "https://github.com/linuxmint/blueberry";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Bluetooth configuration tool";
+    homepage = "https://github.com/linuxmint/blueberry";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bobby285271
       romildo
     ];

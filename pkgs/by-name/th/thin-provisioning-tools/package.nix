@@ -66,11 +66,19 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/bin/pdata_tools $out/bin/thin_trim
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jthornber/thin-provisioning-tools/";
     description = "Suite of tools for manipulating the metadata of the dm-thin device-mapper target";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jthornber/thin-provisioning-tools/";
+    description = "Suite of tools for manipulating the metadata of the dm-thin device-mapper target";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

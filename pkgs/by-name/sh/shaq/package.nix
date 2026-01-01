@@ -54,12 +54,21 @@ python3.pkgs.buildPythonApplication rec {
     (lib.makeBinPath [ ffmpeg ])
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI client for Shazam";
     homepage = "https://github.com/woodruffw/shaq";
     changelog = "https://github.com/woodruffw/shaq/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "CLI client for Shazam";
+    homepage = "https://github.com/woodruffw/shaq";
+    changelog = "https://github.com/woodruffw/shaq/releases/tag/${src.rev}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mig4ng
     ];
     mainProgram = "shaq";

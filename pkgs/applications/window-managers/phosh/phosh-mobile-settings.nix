@@ -58,7 +58,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
+<<<<<<< HEAD
   version = "0.51.0";
+=======
+  version = "0.50.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -66,7 +70,11 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = "phosh-mobile-settings";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-eIRhxhU+u4cocqyw7ab5BefTp9om5UaiqrJWwN+RtoQ=";
+=======
+    hash = "sha256-hcq99ilfclZCviFhpQ9mQLcpf7wc+IvlUOb0duQM6fk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

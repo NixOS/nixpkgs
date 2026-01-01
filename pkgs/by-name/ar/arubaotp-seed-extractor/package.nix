@@ -38,11 +38,20 @@ python3Packages.buildPythonApplication {
     ln -s "$libdir/main.py" $out/bin/arubaotp-seed-extractor
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/andry08/ArubaOTP-seed-extractor";
     description = "Extract TOTP seed instead of using ArubaOTP app";
     mainProgram = "arubaotp-seed-extractor";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/andry08/ArubaOTP-seed-extractor";
+    description = "Extract TOTP seed instead of using ArubaOTP app";
+    mainProgram = "arubaotp-seed-extractor";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

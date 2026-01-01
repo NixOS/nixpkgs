@@ -30,11 +30,20 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "light-entity-card.js";
 
+<<<<<<< HEAD
   meta = {
     description = "Control any light or switch entity";
     homepage = "https://github.com/ljmerza/light-entity-card";
     changelog = "https://github.com/ljmerza/light-entity-card/releases/tag/${version}";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Control any light or switch entity";
+    homepage = "https://github.com/ljmerza/light-entity-card";
+    changelog = "https://github.com/ljmerza/light-entity-card/releases/tag/${version}";
+    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

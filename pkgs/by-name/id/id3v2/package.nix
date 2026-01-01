@@ -32,11 +32,19 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/man/man1}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line editor for id3v2 tags";
     homepage = "https://id3v2.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Command line editor for id3v2 tags";
+    homepage = "https://id3v2.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "id3v2";
   };
 }

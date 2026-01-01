@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynello" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for nello.io intercoms";
     mainProgram = "nello";
     homepage = "https://github.com/pschmitt/pynello";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for nello.io intercoms";
+    mainProgram = "nello";
+    homepage = "https://github.com/pschmitt/pynello";
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

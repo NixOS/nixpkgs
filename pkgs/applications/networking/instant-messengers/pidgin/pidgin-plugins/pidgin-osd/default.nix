@@ -32,10 +32,18 @@ stdenv.mkDerivation rec {
     pidgin
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mbroemme/pidgin-osd";
     description = "Plugin for Pidgin which implements on-screen display via libxosd";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mbroemme/pidgin-osd";
+    description = "Plugin for Pidgin which implements on-screen display via libxosd";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

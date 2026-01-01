@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   passthru.imagemagick = imagemagickBig;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://docs.wand-py.org/en/${version}/changes.html";
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://docs.wand-py.org/en/${version}/changes.html";
+    description = "Ctypes-based simple MagickWand API binding for Python";
+    homepage = "http://wand-py.org/";
+    license = [ licenses.mit ];
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

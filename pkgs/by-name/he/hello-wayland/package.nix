@@ -42,12 +42,21 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Hello world Wayland client";
     homepage = "https://github.com/emersion/hello-wayland";
     maintainers = with lib.maintainers; [ qyliss ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Hello world Wayland client";
+    homepage = "https://github.com/emersion/hello-wayland";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hello-wayland";
   };
 }

@@ -25,12 +25,15 @@ buildPythonPackage rec {
     hash = "sha256-AH/T6pa/CHtQNox67fqqs/BBnUcmThvbnSHug2p33qM=";
   };
 
+<<<<<<< HEAD
   patches = [
     ./marshmallow-4.0-compat.patch
     # https://github.com/lidatong/dataclasses-json/pull/565
     ./python-3.14-compat.patch
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'documentation =' 'Documentation =' \
@@ -42,8 +45,11 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
+<<<<<<< HEAD
   pythonRelaxDeps = [ "marshmallow" ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dependencies = [
     typing-inspect
     marshmallow
@@ -54,11 +60,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # fails to deserialize None with marshmallow 4.0
     "test_deserialize"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabledTestPaths = [
     # fails with the following error and avoid dependency on mypy
     # mypy_main(None, text_io, text_io, [__file__], clean_exit=True)
@@ -68,11 +77,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dataclasses_json" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";
     homepage = "https://github.com/lidatong/dataclasses-json";
     changelog = "https://github.com/lidatong/dataclasses-json/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ albakham ];
+=======
+  meta = with lib; {
+    description = "Simple API for encoding and decoding dataclasses to and from JSON";
+    homepage = "https://github.com/lidatong/dataclasses-json";
+    changelog = "https://github.com/lidatong/dataclasses-json/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ albakham ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

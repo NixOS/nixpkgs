@@ -30,6 +30,7 @@ let
 
   baseAttrs = {
     src = fetchurl {
+<<<<<<< HEAD
       url =
         if lib.versionAtLeast version "78.1" then
           "https://github.com/unicode-org/icu/releases/download/release-${version}/icu4c-${version}-sources.tgz"
@@ -37,6 +38,11 @@ let
           "https://github.com/unicode-org/icu/releases/download/release-${release}/icu4c-${
             lib.replaceStrings [ "." ] [ "_" ] version
           }-src.tgz";
+=======
+      url = "https://github.com/unicode-org/icu/releases/download/release-${release}/icu4c-${
+        lib.replaceStrings [ "." ] [ "_" ] version
+      }-src.tgz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit hash;
     };
 
@@ -81,16 +87,27 @@ let
 
     enableParallelBuilding = true;
 
+<<<<<<< HEAD
     meta = {
       description = "Unicode and globalization support library";
       homepage = "https://icu.unicode.org/";
       maintainers = with lib.maintainers; [ raskin ];
+=======
+    meta = with lib; {
+      description = "Unicode and globalization support library";
+      homepage = "https://icu.unicode.org/";
+      maintainers = with maintainers; [ raskin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pkgConfigModules = [
         "icu-i18n"
         "icu-io"
         "icu-uc"
       ];
+<<<<<<< HEAD
       platforms = lib.platforms.all;
+=======
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

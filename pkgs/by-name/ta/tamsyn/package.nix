@@ -44,7 +44,11 @@ stdenv.mkDerivation {
     mkfontdir "$out/share/fonts/misc"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Monospace bitmap font aimed at programmers";
     longDescription = ''
       Tamsyn is a monospace bitmap font, primarily aimed at
@@ -54,7 +58,12 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.fial.com/~scott/tamsyn-font/";
     downloadPage = "http://www.fial.com/~scott/tamsyn-font/download";
+<<<<<<< HEAD
     license = lib.licenses.free;
     maintainers = [ lib.maintainers.rps ];
+=======
+    license = licenses.free;
+    maintainers = [ maintainers.rps ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -3,14 +3,20 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cargo,
   capstone,
   libbfd,
   libelf,
   libiberty,
   readline,
+<<<<<<< HEAD
   versionCheckHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "endrazine";
     repo = "wcc";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-cg8rf8R3xYNJTJhrDfIdVAUR/OOd6JjB0NYHRosUzvU=";
+=======
+    hash = "sha256-hyelDAsE3IFvUxBqttYW7QmM6NPEa6pOREmawFjW2Q8=";
+    deepClone = true;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -40,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
+<<<<<<< HEAD
   patches = [
     # The upstream forgot to bump WVERSION in header before tagging `v0.0.11`.
     (fetchpatch2 {
@@ -48,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
     sed -i src/wsh/include/libwitch/wsh.h src/wsh/scripts/INDEX \
@@ -80,12 +94,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "https://github.com/endrazine/wcc";
     description = "Witchcraft compiler collection: tools to convert and script ELF files";
@@ -95,8 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
       DieracDelta
     ];
     mainProgram = "wcc";
+=======
+      orivej
+      DieracDelta
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

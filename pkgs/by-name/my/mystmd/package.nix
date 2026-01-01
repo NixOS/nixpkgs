@@ -38,11 +38,19 @@ buildNpmPackage rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tools for working with MyST Markdown";
     homepage = "https://github.com/executablebooks/mystmd";
     changelog = "https://github.com/executablebooks/mystmd/blob/${src.rev}/packages/myst-cli/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Command line tools for working with MyST Markdown";
+    homepage = "https://github.com/executablebooks/mystmd";
+    changelog = "https://github.com/executablebooks/mystmd/blob/${src.rev}/packages/myst-cli/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "myst";
   };

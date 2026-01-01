@@ -89,7 +89,11 @@ python3Packages.buildPythonApplication rec {
     "solaar.gtk"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Linux devices manager for the Logitech Unifying Receiver";
     longDescription = ''
       Solaar is a Linux manager for many Logitech keyboards, mice, and trackpads that
@@ -102,13 +106,23 @@ python3Packages.buildPythonApplication rec {
       This tool requires either to be run with root/sudo or alternatively to have the udev rules files installed. On NixOS this can be achieved by setting `hardware.logitech.wireless.enable`.
     '';
     homepage = "https://pwr-solaar.github.io/Solaar/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     mainProgram = "solaar";
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl2Only;
+    mainProgram = "solaar";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       spinus
       ysndr
       oxalica
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

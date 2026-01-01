@@ -30,11 +30,19 @@ buildGoModule rec {
     "."
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/gojuno/minimock";
     description = "Golang mock generator from interfaces";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ svrana ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/gojuno/minimock";
+    description = "Golang mock generator from interfaces";
+    license = licenses.mit;
+    maintainers = with maintainers; [ svrana ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "minimock";
   };
 }

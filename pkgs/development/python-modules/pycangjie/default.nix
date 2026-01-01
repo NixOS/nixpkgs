@@ -52,11 +52,20 @@ buildPythonPackage rec {
     mesonCheckPhase
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper to libcangjie";
     homepage = "https://cangjians.github.io/projects/pycangjie/";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Python wrapper to libcangjie";
+    homepage = "https://cangjians.github.io/projects/pycangjie/";
+    license = licenses.lgpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -19,11 +19,20 @@ buildPythonPackage rec {
   # Raspberry Pi
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/p/raspberry-gpio-python";
     description = "Python module to control the GPIO on a Raspberry Pi";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/p/raspberry-gpio-python";
+    description = "Python module to control the GPIO on a Raspberry Pi";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

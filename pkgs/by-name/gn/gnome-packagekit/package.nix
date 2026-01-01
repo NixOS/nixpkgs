@@ -50,11 +50,19 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.freedesktop.org/software/PackageKit/";
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://www.freedesktop.org/software/PackageKit/";
+    platforms = platforms.linux;
+    teams = [ teams.gnome ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tools for installing software on the GNOME desktop using PackageKit";
   };
 }

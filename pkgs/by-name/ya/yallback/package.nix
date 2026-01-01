@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/yallback --prefix PATH : ${lib.makeBinPath [ coreutils ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Callbacks for YARA rule matches";
     mainProgram = "yallback";
@@ -35,5 +36,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ abathur ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Callbacks for YARA rule matches";
+    mainProgram = "yallback";
+    homepage = "https://github.com/abathur/yallback";
+    license = licenses.mit;
+    maintainers = with maintainers; [ abathur ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -9,13 +9,21 @@
 
 buildDotnetModule rec {
   pname = "Boogie";
+<<<<<<< HEAD
   version = "3.5.6";
+=======
+  version = "3.5.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-rJJXUeUbvJLrqVPY5uHnhoZN4aMJFGkwJ+zOsID7wYs=";
+=======
+    hash = "sha256-tmcio1GCyfMhjnbBE/pUqYso5HCu4SLHOYx/t0/PZTQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -62,7 +70,11 @@ buildDotnetModule rec {
 
       This derivation may be used as a vim plugin to provide syntax highlighting.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = lib.licenses.mspl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "boogie";
     maintainers = with lib.maintainers; [ taktoa ];
     platforms = with lib.platforms; linux ++ darwin;

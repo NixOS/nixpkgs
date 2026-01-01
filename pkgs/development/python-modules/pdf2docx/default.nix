@@ -57,12 +57,21 @@ buildPythonPackage {
   # Test fails due to "RuntimeError: cannot find builtin font with name 'Arial'":
   disabledTests = [ "test_unnamed_fonts" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Convert PDF to DOCX";
     mainProgram = "pdf2docx";
     homepage = "https://github.com/ArtifexSoftware/pdf2docx";
     changelog = "https://github.com/ArtifexSoftware/pdf2docx/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

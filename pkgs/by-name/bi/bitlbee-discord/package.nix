@@ -30,12 +30,21 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bitlbee plugin for Discord";
 
     homepage = "https://github.com/sm00th/bitlbee-discord";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lassulus ];
+=======
+  meta = with lib; {
+    description = "Bitlbee plugin for Discord";
+
+    homepage = "https://github.com/sm00th/bitlbee-discord";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lassulus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 }

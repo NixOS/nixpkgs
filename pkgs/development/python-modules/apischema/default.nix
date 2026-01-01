@@ -39,6 +39,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest8_3CheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "apischema" ];
@@ -49,5 +50,17 @@ buildPythonPackage rec {
     changelog = "https://github.com/wyfo/apischema/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "apischema" ];
+
+  meta = with lib; {
+    description = "JSON (de)serialization, GraphQL and JSON schema generation using typing";
+    homepage = "https://github.com/wyfo/apischema";
+    changelog = "https://github.com/wyfo/apischema/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -59,12 +59,21 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://notepadqq.com/";
     description = "Notepad++-like editor for the Linux desktop";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.rszibele ];
+=======
+  meta = with lib; {
+    homepage = "https://notepadqq.com/";
+    description = "Notepad++-like editor for the Linux desktop";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.rszibele ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "notepadqq";
   };
 }

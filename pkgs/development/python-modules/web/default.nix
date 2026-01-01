@@ -41,14 +41,23 @@ buildPythonPackage rec {
     psycopg2
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Makes web apps";
     longDescription = ''
       Think about the ideal way to write a web app.
       Write the code to make it happen.
     '';
     homepage = "https://webpy.org/";
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ layus ];
+=======
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ layus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

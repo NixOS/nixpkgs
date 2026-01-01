@@ -39,12 +39,21 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small and simple console-based live network and disk io bandwidth monitor";
     mainProgram = "bwm-ng";
     homepage = "http://www.gropp.org/?id=projects&sub=bwm-ng";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Small and simple console-based live network and disk io bandwidth monitor";
+    mainProgram = "bwm-ng";
+    homepage = "http://www.gropp.org/?id=projects&sub=bwm-ng";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     longDescription = ''
       bwm-ng supports:

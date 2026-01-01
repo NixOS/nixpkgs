@@ -36,10 +36,18 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pydantic types for SCIM";
     homepage = "https://github.com/chalk-ai/pydantic-scim";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Pydantic types for SCIM";
+    homepage = "https://github.com/chalk-ai/pydantic-scim";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

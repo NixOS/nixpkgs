@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tailscale" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for the Tailscale API";
     homepage = "https://github.com/frenck/python-tailscale";
     changelog = "https://github.com/frenck/python-tailscale/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client for the Tailscale API";
+    homepage = "https://github.com/frenck/python-tailscale";
+    changelog = "https://github.com/frenck/python-tailscale/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

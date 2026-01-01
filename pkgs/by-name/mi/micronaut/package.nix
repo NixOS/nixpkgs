@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Modern, JVM-based, full-stack framework for building microservice applications";
     longDescription = ''
       Micronaut is a modern, JVM-based, full stack microservices framework
@@ -42,9 +46,15 @@ stdenv.mkDerivation rec {
       not bound to the size of your codebase.
     '';
     homepage = "https://micronaut.io/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moaxcp ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ moaxcp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mn";
   };
 }

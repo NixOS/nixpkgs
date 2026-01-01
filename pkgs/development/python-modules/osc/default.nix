@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "osc";
+<<<<<<< HEAD
   version = "1.23.0";
+=======
+  version = "1.22.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-FcoFWNiuSdU5qGNGJACxD9RpDDw1D9yRzVGVaXy39GY=";
+=======
+    hash = "sha256-sohuRbWoLZ6/tBMRIKlvhmsDOgHaB8oGF58veVQBWpk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
@@ -49,6 +57,7 @@ buildPythonPackage rec {
 
   preCheck = "HOME=$TOP/tmp";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/openSUSE/osc";
     description = "Opensuse-commander with svn like handling";
@@ -58,5 +67,16 @@ buildPythonPackage rec {
       saschagrunert
     ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/openSUSE/osc";
+    description = "Opensuse-commander with svn like handling";
+    mainProgram = "osc";
+    maintainers = with maintainers; [
+      peti
+      saschagrunert
+    ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -50,7 +50,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/elixir-lsp/elixir-ls";
     changelog = "https://github.com/elixir-lsp/elixir-ls/releases/tag/v${version}";
     description = ''
@@ -62,10 +66,17 @@ stdenv.mkDerivation rec {
       It adheres to the Language Server Protocol, a standard for frontend-independent IDE support.
       Debugger integration is accomplished through the similar VS Code Debug Protocol.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     mainProgram = "elixir-ls";
     teams = [ lib.teams.beam ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    mainProgram = "elixir-ls";
+    teams = [ teams.beam ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   passthru.updateScript = nix-update-script { };
 }

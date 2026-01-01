@@ -26,7 +26,11 @@ buildGoModule rec {
   # tests require network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool to test generated HTML output";
     mainProgram = "htmltest";
     longDescription = ''
@@ -34,7 +38,12 @@ buildGoModule rec {
       links, images, scripts references work, your alt tags are filled in, etc.
     '';
     homepage = "https://github.com/wjdp/htmltest";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

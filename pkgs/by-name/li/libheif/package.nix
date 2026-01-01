@@ -58,7 +58,11 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix installation path for gdk-pixbuf module
+<<<<<<< HEAD
   env.PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "lib"}/${gdk-pixbuf.moduleDir}";
+=======
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "lib"}/${gdk-pixbuf.moduleDir}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/heif.thumbnailer \

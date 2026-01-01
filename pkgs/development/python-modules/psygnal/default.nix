@@ -56,11 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psygnal" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of Qt Signals";
     homepage = "https://github.com/pyapp-kit/psygnal";
     changelog = "https://github.com/pyapp-kit/psygnal/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
+=======
+  meta = with lib; {
+    description = "Implementation of Qt Signals";
+    homepage = "https://github.com/pyapp-kit/psygnal";
+    changelog = "https://github.com/pyapp-kit/psygnal/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ SomeoneSerge ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

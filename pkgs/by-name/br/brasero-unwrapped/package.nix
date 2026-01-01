@@ -78,12 +78,21 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Gnome CD/DVD Burner";
     homepage = "https://gitlab.gnome.org/GNOME/brasero";
     maintainers = [ lib.maintainers.bdimcheff ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Gnome CD/DVD Burner";
+    homepage = "https://gitlab.gnome.org/GNOME/brasero";
+    maintainers = [ maintainers.bdimcheff ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "brasero";
   };
 }

@@ -55,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Dynamic wallpaper maker for Gnome";
     homepage = "https://github.com/dusansimic/dynamic-wallpaper";
@@ -62,5 +63,14 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "me.dusansimic.DynamicWallpaper";
     maintainers = with lib.maintainers; [ zendo ];
+=======
+  meta = with lib; {
+    description = "Dynamic wallpaper maker for Gnome";
+    homepage = "https://github.com/dusansimic/dynamic-wallpaper";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    mainProgram = "me.dusansimic.DynamicWallpaper";
+    maintainers = with maintainers; [ zendo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

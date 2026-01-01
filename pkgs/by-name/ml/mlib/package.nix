@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library of generic and type safe containers in pure C language";
     longDescription = ''
       M*LIB (M star lib) is a C library enabling to define and use generic and
@@ -36,8 +40,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/P-p-H-d/mlib";
     changelog = "https://github.com/P-p-H-d/mlib/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ azahi ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ azahi ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

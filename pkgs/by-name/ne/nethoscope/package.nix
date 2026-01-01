@@ -44,16 +44,26 @@ rustPlatform.buildRustPackage rec {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Listen to your network traffic";
     longDescription = ''
       Employ your built-in wetware pattern recognition and
       signal processing facilities to understand your network traffic.
     '';
     homepage = "https://github.com/vvilhonen/nethoscope";
+<<<<<<< HEAD
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.isc;
+    maintainers = with maintainers; [ _0x4A6F ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nethoscope";
   };
 

@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hlk_sw16" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for HLK-SW16";
     homepage = "https://github.com/jameshilliard/hlk-sw16";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python client for HLK-SW16";
+    homepage = "https://github.com/jameshilliard/hlk-sw16";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

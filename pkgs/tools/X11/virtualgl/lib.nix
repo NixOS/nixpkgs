@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
       --replace "LD_PRELOAD=libgefaker" "LD_PRELOAD=$out/lib/libgefaker"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.virtualgl.org/";
     description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
@@ -71,6 +72,16 @@ stdenv.mkDerivation rec {
       wxWindowsException31
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.virtualgl.org/";
+    description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
+    license = with licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

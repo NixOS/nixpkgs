@@ -157,11 +157,15 @@ let
     # "snappy"
     "flac"
     "libjpeg"
+<<<<<<< HEAD
   ]
   ++ lib.optionals needsLibpng [
     "libpng"
   ]
   ++ [
+=======
+    "libpng"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Use the vendored libwebp for M124+ until we figure out how to solve:
     # Running phase: configurePhase
     # ERROR Unresolved dependencies.
@@ -221,9 +225,12 @@ let
 
   isElectron = packageName == "electron";
   rustcVersion = buildPackages.rustc.version;
+<<<<<<< HEAD
   # libpng has been replaced by the png rust crate
   # https://github.com/image-rs/image-png/discussions/562
   needsLibpng = !chromiumVersionAtLeast "143";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -328,10 +335,15 @@ let
     # maintain a separate list of buildPlatform-dependencies, we
     # simply throw in the kitchen sink.
     # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
+<<<<<<< HEAD
     ++ lib.optionals needsLibpng [
       (buildPackages.libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
     ]
     ++ [
+=======
+    ++ [
+      (buildPackages.libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       (buildPackages.libopus.override { withCustomModes = true; })
       bzip2
       flac
@@ -387,11 +399,15 @@ let
     ++ lib.optional pulseSupport libpulseaudio;
 
     buildInputs = [
+<<<<<<< HEAD
     ]
     ++ lib.optionals needsLibpng [
       (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
     ]
     ++ [
+=======
+      (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       (libopus.override { withCustomModes = true; })
       bzip2
       flac

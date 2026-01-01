@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/libmikmod-config "$dev"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for playing tracker music module files";
     mainProgram = "libmikmod-config";
@@ -46,6 +47,17 @@ stdenv.mkDerivation rec {
       lovek323
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for playing tracker music module files";
+    mainProgram = "libmikmod-config";
+    homepage = "https://mikmod.shlomifish.org/";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [
+      lovek323
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       A library for playing tracker music module files supporting many formats,

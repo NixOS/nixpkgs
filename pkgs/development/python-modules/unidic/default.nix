@@ -52,10 +52,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unidic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Contemporary Written Japanese dictionary";
     homepage = "https://github.com/polm/unidic-py";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ laurent-f1z1 ];
+=======
+  meta = with lib; {
+    description = "Contemporary Written Japanese dictionary";
+    homepage = "https://github.com/polm/unidic-py";
+    license = licenses.mit;
+    maintainers = with maintainers; [ laurent-f1z1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

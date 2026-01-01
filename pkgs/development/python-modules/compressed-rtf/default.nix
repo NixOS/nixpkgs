@@ -30,10 +30,18 @@ buildPythonPackage {
 
   enabledTestPaths = [ "tests/tests.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Compressed Rich Text Format (RTF) compression and decompression";
     homepage = "https://github.com/delimitry/compressed_rtf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Compressed Rich Text Format (RTF) compression and decompression";
+    homepage = "https://github.com/delimitry/compressed_rtf";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

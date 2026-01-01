@@ -101,11 +101,20 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dt $dev/bin prepare_builtins
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://libclc.llvm.org/";
     description = "Implementation of the library requirements of the OpenCL C programming language";
     mainProgram = "prepare_builtins";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://libclc.llvm.org/";
+    description = "Implementation of the library requirements of the OpenCL C programming language";
+    mainProgram = "prepare_builtins";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

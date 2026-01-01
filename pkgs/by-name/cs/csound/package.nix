@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   libsndfile,
   libsamplerate,
@@ -37,6 +40,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-NDYltwmjBsX1DWCjy8/4cXMSl3/mK+HaQHSKUmRR9TI=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix typo that breaks build
     (fetchpatch {
@@ -45,6 +49,8 @@ stdenv.mkDerivation {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmakeFlags = [
     "-DBUILD_CSOUND_AC=0"
   ] # fails to find Score.hpp

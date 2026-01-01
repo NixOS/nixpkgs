@@ -12,7 +12,11 @@
   pkg-config,
   librsvg,
   glib,
+<<<<<<< HEAD
   gtk3,
+=======
+  gtk2,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libXext,
   libXxf86vm,
   poppler,
@@ -32,6 +36,7 @@
   extraRuntimeDeps ? [ ],
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "eaglemode";
   version = "0.96.3";
@@ -39,15 +44,28 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "mirror://sourceforge/eaglemode/eaglemode-${finalAttrs.version}.tar.bz2";
     hash = "sha256-AHeupgEnyQylRWFDrPeo4b0mNONqG+6QwWnRpYknqOQ=";
+=======
+stdenv.mkDerivation rec {
+  pname = "eaglemode";
+  version = "0.96.2";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
+    hash = "sha256:1al5n2mcjp0hmsvi4hsdmzd7i0id5i3255xplk0il1nmzydh312a";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Fixes "Error: No time zones found." on the clock
   postPatch = ''
+<<<<<<< HEAD
     substituteInPlace src/emClock/emTimeZonesModel.cpp \
       --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
 
     substituteInPlace makers/emPdf.maker.pm \
       --replace-fail gtk+-2.0 gtk+-3.0
+=======
+    substituteInPlace src/emClock/emTimeZonesModel.cpp --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   nativeBuildInputs = [
@@ -65,7 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     librsvg
     glib
+<<<<<<< HEAD
     gtk3
+=======
+    gtk2
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libXxf86vm
     libXext
     poppler
@@ -113,18 +135,30 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/eaglemode --set EM_DIR "$out" --prefix LD_LIBRARY_PATH : "$out/lib" --prefix PATH : "${runtimeDeps}"
       for i in 32 48 96; do
         mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
+<<<<<<< HEAD
         ln -s $out/res/icons/eaglemode$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/eaglemode.png
+=======
+        ln -s $out/res/icons/${pname}$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       done
       runHook postInstall
     '';
 
   desktopItems = [
     (makeDesktopItem {
+<<<<<<< HEAD
       name = "eaglemode";
       exec = "eaglemode";
       icon = "eaglemode";
       desktopName = "Eagle Mode";
       genericName = "Zoomable User Interface";
+=======
+      name = pname;
+      exec = pname;
+      icon = pname;
+      desktopName = "Eagle Mode";
+      genericName = meta.description;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       categories = [
         "Game"
         "Graphics"
@@ -136,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = directoryListingUpdater {
     url = "https://eaglemode.sourceforge.net/download.html";
+<<<<<<< HEAD
     extraRegex = "(?!.*(x86_64|setup64|livecd|amd64)).*";
   };
 
@@ -150,3 +185,19 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
   };
 })
+=======
+    extraRegex = "(?!.*(x86_64|setup64|livecd)).*";
+  };
+
+  meta = with lib; {
+    homepage = "https://eaglemode.sourceforge.net";
+    description = "Zoomable User Interface";
+    changelog = "https://eaglemode.sourceforge.net/ChangeLog.html";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+      chuangzhu
+    ];
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

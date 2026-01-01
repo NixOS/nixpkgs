@@ -26,11 +26,20 @@ buildGoModule rec {
   # 2. Operation on `/var/empty` not permitted on macOS
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tool to switch between different versions of terragrunt";
     mainProgram = "tgswitch";
     homepage = "https://github.com/warrensbox/tgswitch";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psibi ];
+=======
+  meta = with lib; {
+    description = "Command line tool to switch between different versions of terragrunt";
+    mainProgram = "tgswitch";
+    homepage = "https://github.com/warrensbox/tgswitch";
+    license = licenses.mit;
+    maintainers = with maintainers; [ psibi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

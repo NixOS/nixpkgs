@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbt_extractor" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool that processes the most common jinja value templates in dbt model files";
     homepage = "https://github.com/dbt-labs/dbt-extractor";
@@ -45,6 +46,16 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mausch
+=======
+  meta = with lib; {
+    description = "Tool that processes the most common jinja value templates in dbt model files";
+    homepage = "https://github.com/dbt-labs/dbt-extractor";
+    changelog = "https://github.com/dbt-labs/dbt-extractor/blob/main/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      mausch
+      tjni
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

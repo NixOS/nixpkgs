@@ -67,7 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "C-to-rustls bindings";
     homepage = "https://github.com/rustls/rustls-ffi/";
     pkgConfigModules = [ "rustls" ];
@@ -76,6 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       isc
     ];
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.lesuisse ];
+=======
+    maintainers = [ maintainers.lesuisse ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

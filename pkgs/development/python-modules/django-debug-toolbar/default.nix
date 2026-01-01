@@ -65,11 +65,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debug_toolbar" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Configurable set of panels that display debug information about the current request/response";
     homepage = "https://github.com/jazzband/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Configurable set of panels that display debug information about the current request/response";
+    homepage = "https://github.com/jazzband/django-debug-toolbar";
+    changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -48,12 +48,21 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out
   '';
 
+<<<<<<< HEAD
   meta = {
     isIbusEngine = true;
     description = "IBus interface to the anthy input method";
     homepage = "https://github.com/fujiwarat/ibus-anthy";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    isIbusEngine = true;
+    description = "IBus interface to the anthy input method";
+    homepage = "https://github.com/fujiwarat/ibus-anthy";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

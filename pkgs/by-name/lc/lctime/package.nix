@@ -11,7 +11,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lctime";
+<<<<<<< HEAD
   version = "0.0.27";
+=======
+  version = "0.0.26";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitea {
@@ -19,7 +23,11 @@ python3Packages.buildPythonApplication rec {
     owner = "librecell";
     repo = "lctime";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-KKZhsKNTr+J5+rLUdlwGMsUCa6NYY1X9yaujPe1c0Do=";
+=======
+    hash = "sha256-oNmeV8r1dtO2y27jAJnlx4mKGjhzL07ad2yBdOLwgF0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python3Packages; [
@@ -30,6 +38,10 @@ python3Packages.buildPythonApplication rec {
     joblib
     klayout
     liberty-parser
+<<<<<<< HEAD
+=======
+    matplotlib
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     networkx
     numpy
     pyspice
@@ -37,8 +49,11 @@ python3Packages.buildPythonApplication rec {
     sympy
   ];
 
+<<<<<<< HEAD
   optional-dependencies.debug = with python3Packages; [ matplotlib ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     ngspice

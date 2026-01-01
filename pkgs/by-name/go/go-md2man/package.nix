@@ -17,11 +17,20 @@ buildGoModule rec {
     sha256 = "sha256-DKqGvdidl6J4lPhIk3okhU4k6MvtSr+hJ9huU/JTai0=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Go tool to convert markdown to man pages";
     mainProgram = "go-md2man";
     license = lib.licenses.mit;
     homepage = "https://github.com/cpuguy83/go-md2man";
     maintainers = with lib.maintainers; [ offline ];
+=======
+  meta = with lib; {
+    description = "Go tool to convert markdown to man pages";
+    mainProgram = "go-md2man";
+    license = licenses.mit;
+    homepage = "https://github.com/cpuguy83/go-md2man";
+    maintainers = with maintainers; [ offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

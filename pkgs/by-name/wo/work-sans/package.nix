@@ -21,11 +21,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Grotesque sans";
     homepage = "https://weiweihuanghuang.github.io/Work-Sans/";
     license = lib.licenses.ofl;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Grotesque sans";
+    homepage = "https://weiweihuanghuang.github.io/Work-Sans/";
+    license = licenses.ofl;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

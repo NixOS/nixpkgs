@@ -10,12 +10,17 @@
 buildHomeAssistantComponent rec {
   owner = "robinostlund";
   domain = "volkswagencarnet";
+<<<<<<< HEAD
   version = "5.3.4";
+=======
+  version = "5.1.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "robinostlund";
     repo = "homeassistant-volkswagencarnet";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-FQBbd8Yq9SdWPxSlThd5NUWUJqc1zFgyVQIj85qP218=";
   };
 
@@ -23,6 +28,11 @@ buildHomeAssistantComponent rec {
     python3 manage/update_manifest.py --version '${version}'
   '';
 
+=======
+    hash = "sha256-deOZqF7WNBCySo3GJVJ5JZAvlmYCk5dqx/GKMXWr4Yk=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dependencies = [ volkswagencarnet ];
 
   nativeCheckInputs = [

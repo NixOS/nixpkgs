@@ -41,10 +41,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reportlab_qrcode" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Allows to create QR codes for use with the ReportLab PDF library";
     homepage = "https://pypi.org/project/reportlab-qrcode/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xanderio ];
+=======
+  meta = with lib; {
+    description = "Allows to create QR codes for use with the ReportLab PDF library";
+    homepage = "https://pypi.org/project/reportlab-qrcode/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ xanderio ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evtx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bindings for evtx";
     homepage = "https://github.com/omerbenamram/pyevtx-rs";
     changelog = "https://github.com/omerbenamram/pyevtx-rs/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Bindings for evtx";
+    homepage = "https://github.com/omerbenamram/pyevtx-rs";
+    changelog = "https://github.com/omerbenamram/pyevtx-rs/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

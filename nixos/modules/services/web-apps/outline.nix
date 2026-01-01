@@ -788,6 +788,7 @@ in
         '';
 
         script = ''
+<<<<<<< HEAD
           SECRET_KEY="$(head -n1 ${lib.escapeShellArg cfg.secretKeyFile})"
           export SECRET_KEY
           UTILS_SECRET="$(head -n1 ${lib.escapeShellArg cfg.utilsSecretFile})"
@@ -831,19 +832,60 @@ in
           ${lib.optionalString (cfg.smtp != null) ''
             SMTP_PASSWORD="$(head -n1 ${lib.escapeShellArg cfg.smtp.passwordFile})"
             export SMTP_PASSWORD
+=======
+          export SECRET_KEY="$(head -n1 ${lib.escapeShellArg cfg.secretKeyFile})"
+          export UTILS_SECRET="$(head -n1 ${lib.escapeShellArg cfg.utilsSecretFile})"
+          ${lib.optionalString (cfg.storage.storageType == "s3") ''
+            export AWS_SECRET_ACCESS_KEY="$(head -n1 ${lib.escapeShellArg cfg.storage.secretKeyFile})"
+          ''}
+          ${lib.optionalString (cfg.slackAuthentication != null) ''
+            export SLACK_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.slackAuthentication.secretFile})"
+          ''}
+          ${lib.optionalString (cfg.googleAuthentication != null) ''
+            export GOOGLE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.googleAuthentication.clientSecretFile})"
+          ''}
+          ${lib.optionalString (cfg.azureAuthentication != null) ''
+            export AZURE_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.azureAuthentication.clientSecretFile})"
+          ''}
+          ${lib.optionalString (cfg.oidcAuthentication != null) ''
+            export OIDC_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.oidcAuthentication.clientSecretFile})"
+          ''}
+          ${lib.optionalString (cfg.discordAuthentication != null) ''
+            export DISCORD_CLIENT_SECRET="$(head -n1 ${lib.escapeShellArg cfg.discordAuthentication.clientSecretFile})"
+          ''}
+          ${lib.optionalString (cfg.sslKeyFile != null) ''
+            export SSL_KEY="$(head -n1 ${lib.escapeShellArg cfg.sslKeyFile})"
+          ''}
+          ${lib.optionalString (cfg.sslCertFile != null) ''
+            export SSL_CERT="$(head -n1 ${lib.escapeShellArg cfg.sslCertFile})"
+          ''}
+          ${lib.optionalString (cfg.slackIntegration != null) ''
+            export SLACK_VERIFICATION_TOKEN="$(head -n1 ${lib.escapeShellArg cfg.slackIntegration.verificationTokenFile})"
+          ''}
+          ${lib.optionalString (cfg.smtp != null) ''
+            export SMTP_PASSWORD="$(head -n1 ${lib.escapeShellArg cfg.smtp.passwordFile})"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ''}
 
           ${
             if (cfg.databaseUrl == "local") then
               ''
+<<<<<<< HEAD
                 DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
                 export DATABASE_URL
+=======
+                export DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 export PGSSLMODE=disable
               ''
             else
               ''
+<<<<<<< HEAD
                 DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
                 export DATABASE_URL
+=======
+                export DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               ''
           }
 

@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
   #     pth_uctx.c:31:10: fatal error: pth_p.h: No such file
   enableParallelBuilding = false;
 
+<<<<<<< HEAD
   meta = {
     description = "GNU Portable Threads library";
     mainProgram = "pth-config";
     homepage = "https://www.gnu.org/software/pth";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "GNU Portable Threads library";
+    mainProgram = "pth-config";
+    homepage = "https://www.gnu.org/software/pth";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

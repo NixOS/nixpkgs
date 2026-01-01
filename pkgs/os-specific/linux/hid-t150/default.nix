@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
     make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd) modules_install $makeFlags
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux kernel driver for Thrustmaster T150 and TMX Force Feedback wheel";
     homepage = "https://github.com/scarburato/t150_driver";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.dbalan ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Linux kernel driver for Thrustmaster T150 and TMX Force Feedback wheel";
+    homepage = "https://github.com/scarburato/t150_driver";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.dbalan ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

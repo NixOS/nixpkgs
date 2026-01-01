@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     "--skip tables_multiple_geom_ok"
   ];
 
+<<<<<<< HEAD
   meta = {
     # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
     broken = true;
@@ -63,5 +64,15 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Blazing fast and lightweight PostGIS vector tiles server";
+    homepage = "https://martin.maplibre.org/";
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

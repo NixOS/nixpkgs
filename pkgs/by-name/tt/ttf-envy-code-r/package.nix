@@ -22,10 +22,17 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://damieng.com/blog/tag/envy-code-r";
     description = "Free scalable coding font by DamienG";
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    homepage = "https://damieng.com/blog/tag/envy-code-r";
+    description = "Free scalable coding font by DamienG";
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

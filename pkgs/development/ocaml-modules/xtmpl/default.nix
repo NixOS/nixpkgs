@@ -28,10 +28,18 @@ buildDunePackage rec {
     uutf
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "XML templating library for OCaml";
     homepage = "https://www.good-eris.net/xtmpl/";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ regnat ];
+=======
+  meta = with lib; {
+    description = "XML templating library for OCaml";
+    homepage = "https://www.good-eris.net/xtmpl/";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ regnat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

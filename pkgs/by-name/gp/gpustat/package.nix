@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}:/run/opengl-driver/lib"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple utility for viewing GPU utilization";
     homepage = "https://github.com/arduano/gpustat";
@@ -68,5 +69,14 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ arduano ];
     mainProgram = "gpustat";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Simple utility for viewing GPU utilization";
+    homepage = "https://github.com/arduano/gpustat";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ arduano ];
+    mainProgram = "gpustat";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

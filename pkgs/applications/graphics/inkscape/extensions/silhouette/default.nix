@@ -84,11 +84,20 @@ python3.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/inkscape/extensions/" "$out $pythonPath"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Extension to drive Silhouette vinyl cutters (e.g. Cameo, Portrait, Curio series) from within Inkscape";
     homepage = "https://github.com/fablabnbg/inkscape-silhouette";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ jfly ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Extension to drive Silhouette vinyl cutters (e.g. Cameo, Portrait, Curio series) from within Inkscape";
+    homepage = "https://github.com/fablabnbg/inkscape-silhouette";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ jfly ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

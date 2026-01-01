@@ -7,14 +7,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mycli";
+<<<<<<< HEAD
   version = "1.42.0";
+=======
+  version = "1.31.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "mycli";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-V8HqrhC+bVEgXlRPAZEo5KI8Bpz8qWbqd0qyLzSbSEQ=";
+=======
+    hash = "sha256-s5PzWrxG2z0sOyQIyACLkG7dau+MHYLtLNLig6UfuCs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [
@@ -34,10 +42,16 @@ python3Packages.buildPythonApplication rec {
       click
       configobj
       cryptography
+<<<<<<< HEAD
       llm
       paramiko
       prompt-toolkit
       pycryptodomex
+=======
+      paramiko
+      prompt-toolkit
+      pyaes
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pygments
       pymysql
       pyperclip

@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     cp include/pa_mac_core.h $out/include/pa_mac_core.h
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Portable cross-platform Audio API";
     homepage = "https://www.portaudio.com/";
@@ -66,6 +67,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Portable cross-platform Audio API";
+    homepage = "https://www.portaudio.com/";
+    # Not exactly a bsd license, but alike
+    license = licenses.mit;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {

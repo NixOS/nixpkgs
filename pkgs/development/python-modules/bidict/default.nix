@@ -45,12 +45,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bidict" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://bidict.readthedocs.io";
     changelog = "https://bidict.readthedocs.io/changelog.html";
     description = "Bidirectional mapping library for Python";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://bidict.readthedocs.io";
+    changelog = "https://bidict.readthedocs.io/changelog.html";
+    description = "Bidirectional mapping library for Python";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jab
       jakewaksbaum
     ];

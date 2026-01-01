@@ -35,10 +35,17 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_minimize_dfa" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast, pure-Python full text indexing, search, and spell checking library";
     homepage = "https://github.com/mchaput/whoosh";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Fast, pure-Python full text indexing, search, and spell checking library";
+    homepage = "https://github.com/mchaput/whoosh";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

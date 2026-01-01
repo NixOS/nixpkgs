@@ -31,15 +31,25 @@ buildPythonApplication rec {
 
   setupHook = ./setup-hook.sh;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/openSUSE/unrar_wrapper";
     description = "Backwards compatibility between unar and unrar";
     longDescription = ''
       unrar_wrapper is a wrapper python script that transforms the basic UnRAR commands
       to unar and lsar calls in order to provide a backwards compatibility.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ artturin ];
+=======
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ artturin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -37,9 +37,16 @@ buildDunePackage rec {
     ounit2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "MirageOS disk block driver for Unix";
     homepage = "https://github.com/mirage/mirage-block-unix";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "MirageOS disk block driver for Unix";
+    homepage = "https://github.com/mirage/mirage-block-unix";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

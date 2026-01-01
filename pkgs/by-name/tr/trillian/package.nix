@@ -24,10 +24,17 @@ buildGoModule rec {
     "cmd/updatetree"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/google/trillian";
     description = "Transparent, highly scalable and cryptographically verifiable data store";
     license = [ lib.licenses.asl20 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/google/trillian";
+    description = "Transparent, highly scalable and cryptographically verifiable data store";
+    license = [ licenses.asl20 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

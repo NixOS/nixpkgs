@@ -46,13 +46,22 @@ python3Packages.buildPythonApplication rec {
     installManPage *.1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.coderholic.com/pyradio/";
     description = "Curses based internet radio player";
     mainProgram = "pyradio";
     changelog = "https://github.com/coderholic/pyradio/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       contrun
       yayayayaka
     ];

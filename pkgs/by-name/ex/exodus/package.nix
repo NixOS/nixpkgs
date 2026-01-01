@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
         $out/Exodus
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.exodus.io/";
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
@@ -103,6 +104,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://www.exodus.io/";
+    description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mmahut
       rople380
       Crafter

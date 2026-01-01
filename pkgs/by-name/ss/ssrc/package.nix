@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
     cp ssrc ssrc_hp $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "High quality audio sampling rate converter";
     longDescription = ''
       This program converts sampling rates of PCM wav files. This
@@ -38,7 +42,12 @@ stdenv.mkDerivation rec {
 
     version = version;
     homepage = "https://shibatch.sourceforge.net/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

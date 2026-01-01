@@ -33,12 +33,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "LLEF is a plugin for LLDB to make it more useful for RE and VR";
     homepage = "https://github.com/foundryzero/llef";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ nrabulinski ];
+=======
+  meta = with lib; {
+    description = "LLEF is a plugin for LLDB to make it more useful for RE and VR";
+    homepage = "https://github.com/foundryzero/llef";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ nrabulinski ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "llef";
   };
 })

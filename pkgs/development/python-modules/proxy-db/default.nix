@@ -45,12 +45,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proxy_db" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Module to manage proxies in a local database";
     mainProgram = "proxy-db";
     homepage = "https://github.com/Nekmo/proxy-db/";
     changelog = "https://github.com/Nekmo/proxy-db/blob/v${version}/HISTORY.rst";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

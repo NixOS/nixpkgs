@@ -22,14 +22,22 @@
 let
   self = python3.pkgs.buildPythonApplication rec {
     pname = "duplicity";
+<<<<<<< HEAD
     version = "3.0.6.3";
+=======
+    version = "3.0.6.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     format = "setuptools";
 
     src = fetchFromGitLab {
       owner = "duplicity";
       repo = "duplicity";
       rev = "rel.${version}";
+<<<<<<< HEAD
       hash = "sha256-WY2pQlWlqdsFGONUBdAoJM1sNr+Hu496pThhn8IKSXE=";
+=======
+      hash = "sha256-S0bfE7ddfUsqhobbldu8RSVsOKHtq2ijL/PgDB5e+sw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     patches = [
@@ -84,7 +92,10 @@ let
         pygobject3
         fasteners
         paramiko
+<<<<<<< HEAD
         pexpect
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         # Currently marked as broken.
         # pydrive2
       ]
@@ -161,6 +172,7 @@ let
       };
     };
 
+<<<<<<< HEAD
     meta = {
       changelog = "https://gitlab.com/duplicity/duplicity/-/blob/${src.rev}/CHANGELOG.md";
       description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
@@ -168,6 +180,15 @@ let
       license = lib.licenses.gpl2Plus;
       mainProgram = "duplicity";
       maintainers = with lib.maintainers; [ corngood ];
+=======
+    meta = with lib; {
+      changelog = "https://gitlab.com/duplicity/duplicity/-/blob/${src.rev}/CHANGELOG.md";
+      description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
+      homepage = "https://duplicity.gitlab.io/duplicity-web/";
+      license = licenses.gpl2Plus;
+      mainProgram = "duplicity";
+      maintainers = with maintainers; [ corngood ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

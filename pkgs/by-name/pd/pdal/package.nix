@@ -31,13 +31,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
+<<<<<<< HEAD
   version = "2.9.3";
+=======
+  version = "2.9.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-htuvNheRwzpdSKc4FbwugBWWaCNC7/20TSKwRpLr+7Y=";
+=======
+    hash = "sha256-W3HTgdLHzETfmp/DZ5s9pWXQeBaic4/O55ckGzDDtxs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -101,7 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests = [
     # Tests failing due to TileDB library implementation, disabled also
     # by upstream CI.
+<<<<<<< HEAD
     # See: https://github.com/PDAL/PDAL/blob/2.9.3/.github/workflows/linux.yml#L81
+=======
+    # See: https://github.com/PDAL/PDAL/blob/2.9.2/.github/workflows/linux.yml#L81
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "pdal_io_tiledb_writer_test"
     "pdal_io_tiledb_reader_test"
     "pdal_io_tiledb_time_writer_test"
@@ -137,12 +149,21 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Point Data Abstraction Library. GDAL for point cloud data";
+    homepage = "https://pdal.io";
+    license = licenses.bsd3;
+    teams = [ teams.geospatial ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "pdal" ];
   };
 })

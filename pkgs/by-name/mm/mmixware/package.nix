@@ -47,11 +47,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "MMIX simulator and assembler";
     homepage = "https://www-cs-faculty.stanford.edu/~knuth/mmix-news.html";
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
     license = lib.licenses.publicDomain;
+=======
+  meta = with lib; {
+    description = "MMIX simulator and assembler";
+    homepage = "https://www-cs-faculty.stanford.edu/~knuth/mmix-news.html";
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.unix;
+    license = licenses.publicDomain;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

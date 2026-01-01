@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyModeS" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Mode-S and ADS-B Decoder";
     homepage = "https://github.com/junzis/pyModeS";
     changelog = "https://github.com/junzis/pyModeS/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ snicket2100 ];
+=======
+  meta = with lib; {
+    description = "Python Mode-S and ADS-B Decoder";
+    homepage = "https://github.com/junzis/pyModeS";
+    changelog = "https://github.com/junzis/pyModeS/releases/tag/${src.tag}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ snicket2100 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

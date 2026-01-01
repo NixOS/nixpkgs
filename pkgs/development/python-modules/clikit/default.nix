@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clikit" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Group of utilities to build beautiful and testable command line interfaces";
     homepage = "https://github.com/sdispater/clikit";
     changelog = "https://github.com/sdispater/clikit/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
+=======
+  meta = with lib; {
+    description = "Group of utilities to build beautiful and testable command line interfaces";
+    homepage = "https://github.com/sdispater/clikit";
+    changelog = "https://github.com/sdispater/clikit/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jakewaksbaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

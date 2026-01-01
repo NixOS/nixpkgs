@@ -94,12 +94,21 @@ stdenv.mkDerivation rec {
   # autoPatchelfHook/patchelf are not used because they cause the binary to coredump.
   dontPatchELF = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Note-taking tool for networked thought";
     homepage = "https://roamresearch.com/";
     maintainers = with lib.maintainers; [ dbalan ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    description = "Note-taking tool for networked thought";
+    homepage = "https://roamresearch.com/";
+    maintainers = with lib.maintainers; [ dbalan ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "roam-research";
   };

@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "georss_qld_bushfire_alert_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for accessing Queensland Bushfire Alert feed";
     homepage = "https://github.com/exxamalte/python-georss-qld-bushfire-alert-client";
     changelog = "https://github.com/exxamalte/python-georss-qld-bushfire-alert-client/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for accessing Queensland Bushfire Alert feed";
+    homepage = "https://github.com/exxamalte/python-georss-qld-bushfire-alert-client";
+    changelog = "https://github.com/exxamalte/python-georss-qld-bushfire-alert-client/releases/tag/v${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

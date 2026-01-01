@@ -75,12 +75,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Minimalistic scrobbler for ListenBrainz, libre.fm, & last.fm";
     homepage = "https://github.com/mariusor/mpris-scrobbler";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emantor ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Minimalistic scrobbler for ListenBrainz, libre.fm, & last.fm";
+    homepage = "https://github.com/mariusor/mpris-scrobbler";
+    license = licenses.mit;
+    maintainers = with maintainers; [ emantor ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mpris-scrobbler";
   };
 }

@@ -10,16 +10,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ssh-vault";
+<<<<<<< HEAD
   version = "1.2.0";
+=======
+  version = "1.1.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ssh-vault";
     repo = "ssh-vault";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-d4XhH9i43AkgZR/6XE6iR8pSC5xSuWiX8VghJsC8Ek4=";
   };
 
   cargoHash = "sha256-7IOX69MIrSLU6vit0/rg7IRbz9Dn0rSN5RuM4dJ49/A=";
+=======
+    hash = "sha256-po0Zb52TVfqHxqlHPmBCqr5zgj49Ks5n0rZDiOvixcM=";
+  };
+
+  cargoHash = "sha256-pd52vYtN4JmOyDstNBX7ssJk/IpiGnekc7L+knf+RzQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -38,6 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script { };
 

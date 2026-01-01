@@ -50,11 +50,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/Amertz08/drf_ujson2/releases/tag/v${version}";
     description = "JSON parser and renderer using ujson for Django Rest Framework";
     homepage = "https://github.com/Amertz08/drf_ujson2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/Amertz08/drf_ujson2/releases/tag/v${version}";
+    description = "JSON parser and renderer using ujson for Django Rest Framework";
+    homepage = "https://github.com/Amertz08/drf_ujson2";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

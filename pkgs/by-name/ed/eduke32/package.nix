@@ -184,6 +184,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [
       qubitnano
+<<<<<<< HEAD
+=======
+      sander
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = lib.platforms.all;
   };

@@ -16,13 +16,21 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "alpine-make-rootfs";
+<<<<<<< HEAD
   version = "0.8.1";
+=======
+  version = "0.7.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "alpinelinux";
     repo = "alpine-make-rootfs";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ktGJXPJK94RbdqcgsA3fA8+MO0inaRcwaDLx18KFo1w=";
+=======
+    hash = "sha256-sNqaMBtbklSBcKxsc3ROI30bE1PUzJJeZqLqC9p3H+U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -47,6 +55,7 @@ stdenvNoCC.mkDerivation rec {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/alpinelinux/alpine-make-rootfs";
     description = "Make customized Alpine Linux rootfs (base image) for containers";
@@ -54,5 +63,14 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ danielsidhion ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/alpinelinux/alpine-make-rootfs";
+    description = "Make customized Alpine Linux rootfs (base image) for containers";
+    mainProgram = "alpine-make-rootfs";
+    maintainers = with maintainers; [ danielsidhion ];
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

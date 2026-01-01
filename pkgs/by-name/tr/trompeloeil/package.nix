@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Header only C++14 mocking framework";
     homepage = "https://github.com/rollbear/trompeloeil";
     license = lib.licenses.boost;
     maintainers = [ lib.maintainers.bjornfor ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Header only C++14 mocking framework";
+    homepage = "https://github.com/rollbear/trompeloeil";
+    license = licenses.boost;
+    maintainers = [ maintainers.bjornfor ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

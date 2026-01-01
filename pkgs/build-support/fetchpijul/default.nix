@@ -7,11 +7,15 @@
 
 lib.makeOverridable (
   {
+<<<<<<< HEAD
     # Remote to fetch
     url,
     # Additional list of remotes specifying alternative download location to be
     # tried in order, if the prior remote failed to fetch.
     mirrors ? [ ],
+=======
+    url,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash ? "",
     change ? null,
     state ? null,
@@ -40,6 +44,7 @@ lib.makeOverridable (
       installPhase = ''
         runHook preInstall
 
+<<<<<<< HEAD
         success=
         for remote in $remotes; do
           if
@@ -59,6 +64,14 @@ lib.makeOverridable (
           echo "Error: couldn’t clone remote from any mirror" 1>&2
           exit 1
         fi
+=======
+        pijul clone \
+          ''${change:+--change "$change"} \
+          ''${state:+--state "$state"} \
+          --channel "$channel" \
+          "$url" \
+          "$out"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         runHook postInstall
       '';
@@ -76,13 +89,20 @@ lib.makeOverridable (
       outputHash = if hash != "" then hash else lib.fakeHash;
 
       inherit
+<<<<<<< HEAD
+=======
+        url
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         change
         state
         channel
         ;
 
+<<<<<<< HEAD
       remotes = [ url ] ++ mirrors;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
     }
 )

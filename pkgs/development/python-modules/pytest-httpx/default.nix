@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_httpx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Send responses to httpx";
     homepage = "https://github.com/Colin-b/pytest_httpx";
     changelog = "https://github.com/Colin-b/pytest_httpx/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Send responses to httpx";
+    homepage = "https://github.com/Colin-b/pytest_httpx";
+    changelog = "https://github.com/Colin-b/pytest_httpx/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

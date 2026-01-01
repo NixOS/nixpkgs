@@ -54,14 +54,25 @@ buildGoModule rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Create and manage the lifecycle of MicroVMs backed by containerd";
     homepage = "https://github.com/weaveworks-liquidmetal/flintlock";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "Create and manage the lifecycle of MicroVMs backed by containerd";
+    homepage = "https://github.com/weaveworks-liquidmetal/flintlock";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ techknowlogick ];
+=======
+    maintainers = with maintainers; [ techknowlogick ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

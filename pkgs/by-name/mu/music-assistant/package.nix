@@ -15,13 +15,21 @@ let
       music-assistant-frontend = self.callPackage ./frontend.nix { };
 
       music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
+<<<<<<< HEAD
         version = "1.1.86";
+=======
+        version = "1.1.47";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         src = fetchFromGitHub {
           owner = "music-assistant";
           repo = "models";
           tag = version;
+<<<<<<< HEAD
           hash = "sha256-dQwFsuelp/3s2CO/5jxNrZcmWxE9xYhrpx0O37Tq/TQ=";
+=======
+          hash = "sha256-NNKF61CRBe+N9kY+JUa77ClHSJ9RhpsiheMg7Ytyq2M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
 
         postPatch = ''
@@ -47,14 +55,22 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
+<<<<<<< HEAD
   version = "2.7.2";
+=======
+  version = "2.6.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-JOS7t4vXkxHXvcI0tCAw3KfcrohUD4NV4w6oYIncQv4=";
+=======
+    hash = "sha256-vvhynBor5tj5n53Dm3K4ZOkFZ5LM7bFevOCdZjJsbbM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -71,6 +87,7 @@ python.pkgs.buildPythonApplication rec {
 
     # Fix running the built-in snapcast server
     ./builtin-snapcast-server.patch
+<<<<<<< HEAD
 
     # Fix running the webserver pytests in our nix sandbox, which only has a loopback interface,
     # by not skipping over its loopback IPv4 address:
@@ -81,16 +98,21 @@ python.pkgs.buildPythonApplication rec {
     #                          ^^^^^^^^^^^^^^^
     # E   IndexError: tuple index out of range
     ./fix-webserver-tests-in-sandbox.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "0.0.0" "${version}"
 
+<<<<<<< HEAD
     # get-mac is a deprecated alias of getmac since 2018
     substituteInPlace pyproject.toml \
       --replace-fail "get-mac" "getmac"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rm -rv music_assistant/providers/spotify/bin
   '';
 
@@ -101,16 +123,25 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "aiohttp"
     "aiosqlite"
+<<<<<<< HEAD
     "aiovban" # PyPi and GitHub versioning is out of sync
     "certifi"
     "colorlog"
     "cryptography"
     "getmac"
+=======
+    "certifi"
+    "colorlog"
+    "cryptography"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "mashumaro"
     "orjson"
     "pillow"
     "podcastparser"
+<<<<<<< HEAD
     "pycares"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "xmltodict"
     "zeroconf"
   ];
@@ -120,6 +151,7 @@ python.pkgs.buildPythonApplication rec {
     "uv"
   ];
 
+<<<<<<< HEAD
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
@@ -166,12 +198,53 @@ python.pkgs.buildPythonApplication rec {
       pytest-aiohttp
       pytest-cov-stub
       syrupy
+=======
+  dependencies =
+    with python.pkgs;
+    [
+      aiohttp
+      chardet
+      mashumaro
+      orjson
+    ]
+    ++ optional-dependencies.server;
+
+  optional-dependencies = with python.pkgs; {
+    server = [
+      aiodns
+      aiofiles
+      aiohttp
+      aiorun
+      aiosqlite
+      asyncio-throttle
+      brotli
+      certifi
+      colorlog
+      cryptography
+      eyed3
+      faust-cchardet
+      ifaddr
+      mashumaro
+      memory-tempfile
+      music-assistant-frontend
+      music-assistant-models
+      mutagen
+      orjson
+      pillow
+      podcastparser
+      python-slugify
+      shortuuid
+      unidecode
+      xmltodict
+      zeroconf
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 
   nativeCheckInputs =
     with python.pkgs;
     [
+<<<<<<< HEAD
       pytestCheckHook
     ]
     ++ lib.concatAttrValues optional-dependencies
@@ -187,6 +260,26 @@ python.pkgs.buildPythonApplication rec {
     "tests/core/test_server_base.py::test_events"
     # provider is missing dependencies
     "tests/providers/nicovideo"
+=======
+      pytest-aiohttp
+      pytest-cov-stub
+      pytest-timeout
+      pytestCheckHook
+      syrupy
+      pytest-timeout
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ (providerPackages.jellyfin python.pkgs)
+    ++ (providerPackages.opensubsonic python.pkgs);
+
+  disabledTestPaths = [
+    # blocks in poll()
+    "tests/providers/jellyfin/test_init.py::test_initial_sync"
+    "tests/core/test_server_base.py::test_start_and_stop_server"
+    "tests/core/test_server_base.py::test_events"
+    # not compatible with the required py-subsonic version
+    "tests/providers/opensubsonic/test_parsers.py"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pythonImportsCheck = [ "music_assistant" ];

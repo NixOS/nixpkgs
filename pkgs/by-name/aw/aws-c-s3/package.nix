@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C99 library implementation for communicating with the S3 service";
     homepage = "https://github.com/awslabs/aws-c-s3";
@@ -56,5 +57,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ r-burns ];
     mainProgram = "s3";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C99 library implementation for communicating with the S3 service";
+    homepage = "https://github.com/awslabs/aws-c-s3";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ r-burns ];
+    mainProgram = "s3";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

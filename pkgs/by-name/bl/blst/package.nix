@@ -44,17 +44,28 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/pkgconfig
     cat <<EOF > $out/lib/pkgconfig/libblst.pc
     prefix=$out
+<<<<<<< HEAD
     exec_prefix=\''${prefix}
     libdir=\''${exec_prefix}/lib
     includedir=\''${prefix}/include
+=======
+    exec_prefix=''\\''${prefix}
+    libdir=''\\''${exec_prefix}/lib
+    includedir=''\\''${prefix}/include
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     Name: libblst
     Description: ${finalAttrs.meta.description}
     URL: ${finalAttrs.meta.homepage}
     Version: ${finalAttrs.version}
 
+<<<<<<< HEAD
     Cflags: -I \''${includedir}
     Libs: -L \''${libdir} -lblst
+=======
+    Cflags: -I''\\''${includedir}
+    Libs: -L''\\''${libdir} -lblst
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     Libs.private:
     EOF
 
@@ -71,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/supranational/blst/releases/tag/${finalAttrs.src.tag}";
     description = "Multilingual BLS12-381 signature library";
@@ -81,5 +93,17 @@ stdenv.mkDerivation (finalAttrs: {
       yvan-sraka
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/supranational/blst/releases/tag/${finalAttrs.src.tag}";
+    description = "Multilingual BLS12-381 signature library";
+    homepage = "https://github.com/supranational/blst";
+    license = licenses.isc;
+    maintainers = with maintainers; [
+      iquerejeta
+      yvan-sraka
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

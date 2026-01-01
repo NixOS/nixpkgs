@@ -30,11 +30,19 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "MIT/GNU Scheme compatibility library for Chez Scheme";
     homepage = "https://github.com/fedeinthemix/chez-mit/";
     maintainers = [ lib.maintainers.jitwit ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "MIT/GNU Scheme compatibility library for Chez Scheme";
+    homepage = "https://github.com/fedeinthemix/chez-mit/";
+    maintainers = [ maintainers.jitwit ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 

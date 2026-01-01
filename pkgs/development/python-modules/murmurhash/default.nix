@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "murmurhash" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cython bindings for MurmurHash2";
     homepage = "https://github.com/explosion/murmurhash";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aborsu ];
+=======
+  meta = with lib; {
+    description = "Cython bindings for MurmurHash2";
+    homepage = "https://github.com/explosion/murmurhash";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aborsu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

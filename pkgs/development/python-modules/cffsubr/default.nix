@@ -15,12 +15,20 @@
 
 buildPythonPackage rec {
   pname = "cffsubr";
+<<<<<<< HEAD
   version = "0.4.0";
+=======
+  version = "0.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-LDIbaAe9lYVtkh7Z3OhQZJXPSfx6iaY8uULovs4Trd0=";
+=======
+    hash = "sha256-d0UVC9uBZ5+s3RHB87hwlsT029SVfo/Ou4jEVoeVLvs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -47,12 +55,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cffsubr" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/adobe-type-tools/cffsubr/releases/tag/v${version}";
     description = "Standalone CFF subroutinizer based on AFDKO tx";
     mainProgram = "cffsubr";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

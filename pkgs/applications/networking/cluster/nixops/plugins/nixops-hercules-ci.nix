@@ -31,10 +31,18 @@ buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Use Hercules CI as a NixOps backend";
     homepage = "https://github.com/hercules-ci/nixops-hercules-ci";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ roberth ];
+=======
+  meta = with lib; {
+    description = "Use Hercules CI as a NixOps backend";
+    homepage = "https://github.com/hercules-ci/nixops-hercules-ci";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ roberth ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

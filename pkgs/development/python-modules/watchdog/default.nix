@@ -80,12 +80,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "watchdog" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python API and shell utilities to monitor file system events";
     mainProgram = "watchmedo";
     homepage = "https://github.com/gorakhargosh/watchdog";
     changelog = "https://github.com/gorakhargosh/watchdog/blob/v${version}/changelog.rst";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

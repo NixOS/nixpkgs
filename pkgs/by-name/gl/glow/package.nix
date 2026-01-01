@@ -4,7 +4,10 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+<<<<<<< HEAD
   nix-update-script,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildGoModule rec {
@@ -37,14 +40,21 @@ buildGoModule rec {
       --zsh <($out/bin/glow completion zsh)
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Render markdown on the CLI, with pizzazz";
     homepage = "https://github.com/charmbracelet/glow";
     changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ higherorderlogic ];
+=======
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "glow";
   };
 }

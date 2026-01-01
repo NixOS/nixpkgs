@@ -33,12 +33,21 @@ stdenv.mkDerivation (finalAttrs: {
     louvain-community
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Approximate Model Counter";
     homepage = "https://github.com/meelgroup/approxmc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ t4ccer ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Approximate Model Counter";
+    homepage = "https://github.com/meelgroup/approxmc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ t4ccer ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "approxmc";
   };
 })

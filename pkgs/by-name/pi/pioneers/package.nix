@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Addicting game based on The Settlers of Catan";
     homepage = "https://pio.sourceforge.net/"; # https does not work
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Addicting game based on The Settlers of Catan";
+    homepage = "https://pio.sourceforge.net/"; # https does not work
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

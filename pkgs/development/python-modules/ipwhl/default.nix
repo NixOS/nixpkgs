@@ -31,10 +31,18 @@ buildPythonPackage rec {
   doCheck = false; # there's no test
   pythonImportsCheck = [ "ipwhl" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for the InterPlanetary Wheels";
     homepage = "https://git.sr.ht/~cnx/ipwhl-utils";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
+=======
+  meta = with lib; {
+    description = "Utilities for the InterPlanetary Wheels";
+    homepage = "https://git.sr.ht/~cnx/ipwhl-utils";
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.McSinyx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

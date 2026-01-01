@@ -24,12 +24,21 @@ stdenv.mkDerivation rec {
     cp docs/*.1 $out/man
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ovh/ovh-ttyrec/";
     description = "Terminal interaction recorder and player";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ovh/ovh-ttyrec/";
+    description = "Terminal interaction recorder and player";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       chaduffy
       zimbatm
     ];

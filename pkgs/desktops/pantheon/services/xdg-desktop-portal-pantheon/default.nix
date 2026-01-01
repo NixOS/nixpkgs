@@ -54,11 +54,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Backend implementation for xdg-desktop-portal for the Pantheon desktop environment";
     homepage = "https://github.com/elementary/portals";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Backend implementation for xdg-desktop-portal for the Pantheon desktop environment";
+    homepage = "https://github.com/elementary/portals";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

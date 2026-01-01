@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-PbOMUrKigCUuu5Hv3h0ZYSYezS+64DIZSubnQZ12HOE=";
 
+<<<<<<< HEAD
   meta = {
     description = "Ultimate Plumber is a tool for writing Linux pipes with instant live preview";
     homepage = "https://github.com/akavel/up";
     maintainers = with lib.maintainers; [ ma27 ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Ultimate Plumber is a tool for writing Linux pipes with instant live preview";
+    homepage = "https://github.com/akavel/up";
+    maintainers = with maintainers; [ ma27 ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "up";
   };
 }

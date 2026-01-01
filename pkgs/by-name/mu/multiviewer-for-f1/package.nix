@@ -25,6 +25,7 @@
   writeScript,
 }:
 let
+<<<<<<< HEAD
   id = "305607196";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -34,6 +35,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://releases.multiviewer.dev/download/${id}/multiviewer_${finalAttrs.version}_amd64.deb";
     hash = "sha256-Uc4db2o4XBV9eRNugxS6pA9Z5YhjY5QnEkwOICXmUwc=";
+=======
+  id = "289869947";
+in
+stdenvNoCC.mkDerivation rec {
+  pname = "multiviewer-for-f1";
+  version = "2.1.0";
+
+  src = fetchurl {
+    url = "https://releases.multiviewer.dev/download/${id}/multiviewer_${version}_amd64.deb";
+    sha256 = "sha256-H+tt2FiT1UxkWBxpuyOIUjRMOMl7kN/SFH/WqoRdVUU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -105,12 +117,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     id=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").id')
     version=$(echo $latest | jq -r '.version')
 
+<<<<<<< HEAD
     if [ "$version" != "${finalAttrs.version}" ]
+=======
+    if [ "$version" != "${version}" ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     then
       # Pre-calculate package hash
       hash=$(nix-prefetch-url --type sha256 $link)
 
       # Update ID and version in source
+<<<<<<< HEAD
       update-source-version ${finalAttrs.pname} "$id" --version-key=id
       update-source-version ${finalAttrs.pname} "$version" "$hash" --system=x86_64-linux
     fi
@@ -126,3 +143,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "multiviewer";
   };
 })
+=======
+      update-source-version ${pname} "$id" --version-key=id
+      update-source-version ${pname} "$version" "$hash" --system=x86_64-linux
+    fi
+  '';
+
+  meta = with lib; {
+    description = "Unofficial desktop client for F1 TV";
+    homepage = "https://multiviewer.app";
+    downloadPage = "https://multiviewer.app/download";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ babeuh ];
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "multiviewer";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -17,11 +17,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-yPDysaslL/7N60eZ/hqZl5ZXIsof/pvlgHYfW1mIWtI=";
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal-based, real-time traffic monitoring and statistics for your AdGuard Home instance";
     mainProgram = "adguardian";
     homepage = "https://github.com/Lissy93/AdGuardian-Term";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    description = "Terminal-based, real-time traffic monitoring and statistics for your AdGuard Home instance";
+    mainProgram = "adguardian";
+    homepage = "https://github.com/Lissy93/AdGuardian-Term";
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

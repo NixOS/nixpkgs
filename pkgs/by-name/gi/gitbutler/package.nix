@@ -17,9 +17,13 @@
   nodejs,
   openssl,
   pkg-config,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
+=======
+  pnpm_10,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rust,
   rustPlatform,
   turbo,
@@ -29,6 +33,10 @@
 }:
 
 let
+<<<<<<< HEAD
+=======
+  pnpm = pnpm_10;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   excludeSpec = spec: [
     "--exclude"
     spec
@@ -66,7 +74,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-H8YR+euwMGiGckURAWJIE9fOcu/ddJ6ENcnA1gHD9B8=";
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-I55RNWP6csT08SBIFEyUp9JTC5EzQXjKIPPSxkSpg7Y=";
@@ -81,8 +93,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     moreutils
     nodejs
     pkg-config
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     turbo
     wrapGAppsHook4
     yq # For `tomlq`
@@ -132,7 +148,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # https://github.com/gitbutlerapp/gitbutler/blob/56b64d778042d0e93fa362f808c35a7f095ab1d1/crates/gitbutler-tauri/inject-git-binaries.sh#L10C10-L10C26
     TRIPLE_OVERRIDE = rust.envVars.rustHostPlatformSpec;
 
+<<<<<<< HEAD
     # `fetchPnpmDeps` and `pnpmConfigHook` use a specific version of pnpm, not upstream's
+=======
+    # `pnpm`'s `fetchDeps` and `configHook` uses a specific version of pnpm, not upstream's
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     COREPACK_ENABLE_STRICT = 0;
 
     # We depend on nightly features

@@ -31,10 +31,18 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_local" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mopidy/mopidy-local";
     description = "Mopidy extension for playing music from your local music archive";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ruuda ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mopidy/mopidy-local";
+    description = "Mopidy extension for playing music from your local music archive";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ruuda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

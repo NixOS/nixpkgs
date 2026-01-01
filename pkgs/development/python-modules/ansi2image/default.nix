@@ -33,12 +33,21 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/tests.py" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Module to convert ANSI text to an image";
     mainProgram = "ansi2image";
     homepage = "https://github.com/helviojunior/ansi2image";
     changelog = "https://github.com/helviojunior/ansi2image/blob/${version}/CHANGELOG";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

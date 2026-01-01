@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
     mpfr
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lattice algorithms using floating-point arithmetic";
     changelog = [
       # Some release notes are added to the github tags, though they are not
@@ -42,8 +46,14 @@ stdenv.mkDerivation rec {
       # this search should find it.
       "https://groups.google.com/forum/#!searchin/fplll-devel/FPLLL$20${version}"
     ];
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.lgpl21Plus;
+    teams = [ teams.sage ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

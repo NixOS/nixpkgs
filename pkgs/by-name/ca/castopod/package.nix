@@ -47,11 +47,20 @@ stdenv.mkDerivation {
   passthru.tests.castopod = nixosTests.castopod;
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source hosting platform made for podcasters who want to engage and interact with their audience";
     homepage = "https://castopod.org";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ alexoundos ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Open-source hosting platform made for podcasters who want to engage and interact with their audience";
+    homepage = "https://castopod.org";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ alexoundos ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

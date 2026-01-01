@@ -55,10 +55,17 @@ stdenv.mkDerivation rec {
 
   postFixup = "wrapPythonPrograms";
 
+<<<<<<< HEAD
   meta = {
     description = "Fix for Intel CPU throttling issues";
     homepage = "https://github.com/erpalma/throttled";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Fix for Intel CPU throttling issues";
+    homepage = "https://github.com/erpalma/throttled";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };

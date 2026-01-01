@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   nativeBuildInputs = pythonEnv;
 
+<<<<<<< HEAD
   meta = {
     description = "JSON-RPC 1/2 transport implementation";
     homepage = "https://github.com/pavlov99/json-rpc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+  meta = with lib; {
+    description = "JSON-RPC 1/2 transport implementation";
+    homepage = "https://github.com/pavlov99/json-rpc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

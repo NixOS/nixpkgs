@@ -36,7 +36,11 @@ stdenv.mkDerivation {
 
   postInstall = "install -Dm444 --target-directory $out/share/doc README.md";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Utility to configure modifier keys to act as other keys";
     longDescription = ''
       xcape allows you to use a modifier key as another key when
@@ -47,9 +51,15 @@ stdenv.mkDerivation {
       released on its own.
     '';
     homepage = "https://github.com/alols/xcape";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xcape";
   };
 }

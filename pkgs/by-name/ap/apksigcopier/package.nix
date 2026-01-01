@@ -61,7 +61,11 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Copy/extract/patch android apk signatures & compare APKs";
     mainProgram = "apksigcopier";
     longDescription = ''
@@ -76,7 +80,12 @@ python3.pkgs.buildPythonApplication rec {
       * compare two APKs with different signatures (requires apksigner)
     '';
     homepage = "https://github.com/obfusk/apksigcopier";
+<<<<<<< HEAD
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ obfusk ];
+=======
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ obfusk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

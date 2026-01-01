@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nmap" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python class to use nmap and access scan results from python3";
     homepage = "https://github.com/home-assistant-libs/python-nmap";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python class to use nmap and access scan results from python3";
+    homepage = "https://github.com/home-assistant-libs/python-nmap";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

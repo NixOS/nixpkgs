@@ -85,7 +85,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ustreamer; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/pikvm/ustreamer";
     description = "Lightweight and fast MJPG-HTTP streamer";
     longDescription = ''
@@ -95,12 +99,21 @@ stdenv.mkDerivation rec {
       µStreamer is a part of the Pi-KVM project designed to stream VGA and HDMI
       screencast hardware data with the highest resolution and FPS possible.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       tfc
       matthewcroughan
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      tfc
+      matthewcroughan
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ustreamer";
   };
 }

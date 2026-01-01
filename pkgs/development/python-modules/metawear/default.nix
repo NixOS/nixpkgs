@@ -49,11 +49,20 @@ buildPythonPackage rec {
     "mbientlab.metawear"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the MetaWear C++ SDK by MbientLab";
     homepage = "https://github.com/mbientlab/metawear-sdk-python";
     license = with lib.licenses; [ unfree ];
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Python bindings for the MetaWear C++ SDK by MbientLab";
+    homepage = "https://github.com/mbientlab/metawear-sdk-python";
+    license = with licenses; [ unfree ];
+    maintainers = with maintainers; [ stepbrobd ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

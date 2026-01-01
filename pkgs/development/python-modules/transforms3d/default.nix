@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "transforms3d" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://matthew-brett.github.io/transforms3d";
     description = "Convert between various geometric transformations";
     changelog = "https://github.com/matthew-brett/transforms3d/blob/main/Changelog";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    homepage = "https://matthew-brett.github.io/transforms3d";
+    description = "Convert between various geometric transformations";
+    changelog = "https://github.com/matthew-brett/transforms3d/blob/main/Changelog";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

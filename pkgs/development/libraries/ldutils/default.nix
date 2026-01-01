@@ -31,11 +31,20 @@ mkDerivation {
   LDUTILS_LIB = placeholder "out";
   LDUTILS_INCLUDE = placeholder "out";
 
+<<<<<<< HEAD
   meta = {
     description = "Headers and link library for other ldutils projects";
     homepage = "https://gitlab.com/ldutils-projects/ldutils";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ sohalt ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Headers and link library for other ldutils projects";
+    homepage = "https://gitlab.com/ldutils-projects/ldutils";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sohalt ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

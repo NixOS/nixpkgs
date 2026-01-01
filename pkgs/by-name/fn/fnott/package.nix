@@ -31,7 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-II8fij64ufwXg71VoSayVpSFim9+2w3j4gdTRDBrYQE=";
   };
 
+<<<<<<< HEAD
   env.PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/services";
+=======
+  PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/services";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   strictDeps = true;
   depsBuildBuild = [

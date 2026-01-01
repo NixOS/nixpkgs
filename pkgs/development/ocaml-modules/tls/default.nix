@@ -46,10 +46,18 @@ buildDunePackage rec {
     ounit2
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mirleft/ocaml-tls";
     description = "TLS in pure OCaml";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mirleft/ocaml-tls";
+    description = "TLS in pure OCaml";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

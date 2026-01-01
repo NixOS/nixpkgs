@@ -65,7 +65,12 @@ buildPythonPackage rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTestPaths = [
     # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'

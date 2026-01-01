@@ -37,6 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/zigpy/zigpy-xbee/releases/tag/${version}";
     description = "Library which communicates with XBee radios for zigpy";
@@ -44,5 +45,14 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/zigpy/zigpy-xbee/releases/tag/${version}";
+    description = "Library which communicates with XBee radios for zigpy";
+    homepage = "https://github.com/zigpy/zigpy-xbee";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ mvnetbiz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

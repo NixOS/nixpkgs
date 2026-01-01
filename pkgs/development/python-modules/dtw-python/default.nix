@@ -46,12 +46,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dtw" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python port of R's Comprehensive Dynamic Time Warp algorithms package";
     homepage = "https://github.com/DynamicTimeWarping/dtw-python";
     changelog = "https://github.com/DynamicTimeWarping/dtw-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Python port of R's Comprehensive Dynamic Time Warp algorithms package";
+    homepage = "https://github.com/DynamicTimeWarping/dtw-python";
+    changelog = "https://github.com/DynamicTimeWarping/dtw-python/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dtw";
   };
 }

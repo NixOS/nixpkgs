@@ -6,26 +6,41 @@
   fetchFromGitHub,
   replaceVars,
 
+<<<<<<< HEAD
   copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
 
   electron_37,
   nodejs_22,
+=======
+  makeWrapper,
+
+  electron_36,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   commandLineArgs ? "",
 }:
 
 let
+<<<<<<< HEAD
   electron = electron_37;
 in
 buildNpmPackage rec {
   pname = "lx-music-desktop";
   version = "2.12.0";
+=======
+  electron = electron_36;
+in
+buildNpmPackage rec {
+  pname = "lx-music-desktop";
+  version = "2.11.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "lyswhut";
     repo = "lx-music-desktop";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-g4QVpymzoRKIq70aRLXGFmUmIpSiXIZThrp8fumBKTQ=";
   };
 
@@ -51,6 +66,11 @@ buildNpmPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-NMj8rb5PAejT1HCE5nxi2+SS9lFUVdLEqN0id23QjVc=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   patches = [
     # set electron version and dist dir
     # disable before-pack: it would copy prebuilt libraries
@@ -61,6 +81,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
+<<<<<<< HEAD
     copyDesktopItems
   ];
 
@@ -68,6 +89,11 @@ buildNpmPackage rec {
   nodejs = nodejs_22;
 
   npmDepsHash = "sha256-t6I8ch36Yh6N+qZy4/yr/gSyJ3qdyMWss5LbsagEFMQ=";
+=======
+  ];
+
+  npmDepsHash = "sha256-cA9NdHe3lEg8twMLWoeomWgobidZ34TKwdC5rDezZ5g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   makeCacheWritable = true;
 
@@ -104,19 +130,28 @@ buildNpmPackage rec {
     cp -r build/*-unpacked/{locales,resources{,.pak}} "$out/opt/lx-music-desktop"
     rm "$out/opt/lx-music-desktop/resources/app-update.yml"
 
+<<<<<<< HEAD
     for size in 16 32 48 64 128 256 512; do
       install -D -m 444 resources/icons/"$size"x"$size".png \
         $out/share/icons/hicolor/"$size"x"$size"/apps/lx-music-desktop.png
     done
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     runHook postInstall
   '';
 
   postFixup = ''
     makeWrapper ${lib.getExe electron} $out/bin/lx-music-desktop \
+<<<<<<< HEAD
       --add-flags $out/opt/lx-music-desktop/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
+=======
+        --add-flags $out/opt/lx-music-desktop/resources/app.asar \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   meta = {
@@ -128,6 +163,10 @@ buildNpmPackage rec {
     platforms = electron.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ starryreverie ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,7 +22,11 @@
 }:
 let
   pname = "positron-bin";
+<<<<<<< HEAD
   version = "2025.12.2-5";
+=======
+  version = "2025.11.0-234";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -31,17 +35,29 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
+<<<<<<< HEAD
         hash = "sha256-V4akD75XoycUu3wcWIRr4pRkR/QZu5zpsgjpftj6YlU=";
+=======
+        hash = "sha256-C9OUYvO+bNpiObbTHdtYmcTNM31Ff5dO5tMI4+OvkNs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
+<<<<<<< HEAD
         hash = "sha256-zbG4dZlcrlHNMWUMBvHOIUnNQ0nXR9OTbDSboPkyACg=";
+=======
+        hash = "sha256-yhbDTpvfGPbCzRQZ7Ih6QE42fy+bBHaSKeS+molYiEU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";
+<<<<<<< HEAD
         hash = "sha256-IQIBz4g5H6bOcmEI0FAWqEEK02zZKKUy3LeySeGbWUo=";
+=======
+        hash = "sha256-rIs0LnwK6QcUMI8CbkBwf+uuqAJXpNHRBNpWpBgd3Po=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
   buildInputs = [
@@ -130,11 +146,19 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Positron, a next-generation data science IDE";
     homepage = "https://github.com/posit-dev/positron";
     license = lib.licenses.elastic20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Positron, a next-generation data science IDE";
+    homepage = "https://github.com/posit-dev/positron";
+    license = licenses.elastic20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       b-rodrigues
       detroyejr
     ];
@@ -143,6 +167,10 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
     ]
+<<<<<<< HEAD
     ++ lib.platforms.darwin;
+=======
+    ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

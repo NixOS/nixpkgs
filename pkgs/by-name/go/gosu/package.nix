@@ -29,6 +29,7 @@ buildGoModule rec {
     package = gosu;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
     mainProgram = "gosu";
@@ -36,5 +37,14 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
+    mainProgram = "gosu";
+    homepage = "https://github.com/tianon/gosu";
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

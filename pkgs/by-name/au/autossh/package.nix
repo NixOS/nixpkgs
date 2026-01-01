@@ -30,12 +30,21 @@ stdenv.mkDerivation rec {
     install -D -m644 autossh.1    $out/man/man1/autossh.1                   || return 1
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.harding.motd.ca/autossh/";
     description = "Automatically restart SSH sessions and tunnels";
     license = lib.licenses.bsd1;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    homepage = "https://www.harding.motd.ca/autossh/";
+    description = "Automatically restart SSH sessions and tunnels";
+    license = licenses.bsd1;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "autossh";
   };
 }

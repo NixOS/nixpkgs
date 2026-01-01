@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "htmllistparse" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/gumblex/htmllisting-parser";
     description = "Python parser for Apache/nginx-style HTML directory listing";
     mainProgram = "rehttpfs";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/gumblex/htmllisting-parser";
+    description = "Python parser for Apache/nginx-style HTML directory listing";
+    mainProgram = "rehttpfs";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

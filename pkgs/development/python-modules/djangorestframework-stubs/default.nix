@@ -57,18 +57,30 @@ buildPythonPackage rec {
     pytest-mypy-plugins
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Upstream recommends mypy > 1.7 which we don't have yet, thus all tests are failing with 3.14.5 and below
   doCheck = false;
 
   pythonImportsCheck = [ "rest_framework-stubs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PEP-484 stubs for Django REST Framework";
     homepage = "https://github.com/typeddjango/djangorestframework-stubs";
     changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "PEP-484 stubs for Django REST Framework";
+    homepage = "https://github.com/typeddjango/djangorestframework-stubs";
+    changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${src.tag}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

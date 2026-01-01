@@ -43,11 +43,20 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "servefile" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Serve files from shell via a small HTTP server";
     mainProgram = "servefile";
     homepage = "https://github.com/sebageek/servefile";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ samuela ];
+=======
+  meta = with lib; {
+    description = "Serve files from shell via a small HTTP server";
+    mainProgram = "servefile";
+    homepage = "https://github.com/sebageek/servefile";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ samuela ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

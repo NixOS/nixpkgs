@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sscg";
+<<<<<<< HEAD
   version = "4.0.3";
+=======
+  version = "4.0.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "sgallagher";
     repo = "sscg";
     tag = "sscg-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-0t3ntUxfh1jFukWGwmdbt0axFfUiH1QEq6wFrGoI7Jk=";
+=======
+    hash = "sha256-SWsKYvUDnPuDZfoQGFhSDeYbeaWN0M8GuOfuAMn90gE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -40,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = gitUpdater { rev-prefix = "sscg-"; };

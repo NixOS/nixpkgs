@@ -58,11 +58,19 @@ stdenv.mkDerivation rec {
     jbigkit
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CUPS drivers for SPL (Samsung Printer Language) printers";
     homepage = "http://splix.ap2c.org";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "CUPS drivers for SPL (Samsung Printer Language) printers";
+    homepage = "http://splix.ap2c.org";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -33,11 +33,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plac" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parsing the Command Line the Easy Way";
     mainProgram = "plac_runner.py";
     homepage = "https://github.com/micheles/plac";
     license = lib.licenses.bsdOriginal;
+=======
+  meta = with lib; {
+    description = "Parsing the Command Line the Easy Way";
+    mainProgram = "plac_runner.py";
+    homepage = "https://github.com/micheles/plac";
+    license = licenses.bsdOriginal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

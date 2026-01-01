@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pkg-config,
   gdbm,
   glib,
@@ -35,6 +38,7 @@ stdenv.mkDerivation rec {
   #   sha256 = "1k9zxqybl1l5h0a8px2awc920qrdyp1qls50h3kfrj3g65d08aq2";
   # };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with gcc15
     # https://github.com/skk-dev/skktools/pull/30
@@ -45,6 +49,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gdbm

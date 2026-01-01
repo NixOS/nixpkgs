@@ -35,11 +35,20 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # requires multiple dbs to be installed
 
+<<<<<<< HEAD
   meta = {
     description = "Seed your development database with real data";
     mainProgram = "replibyte";
     homepage = "https://github.com/Qovery/replibyte";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Seed your development database with real data";
+    mainProgram = "replibyte";
+    homepage = "https://github.com/Qovery/replibyte";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

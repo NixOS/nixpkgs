@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for ots (OpenType Sanitizer)";
     homepage = "https://github.com/googlefonts/ots-python";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for ots (OpenType Sanitizer)";
+    homepage = "https://github.com/googlefonts/ots-python";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

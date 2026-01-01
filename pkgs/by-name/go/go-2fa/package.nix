@@ -23,11 +23,20 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://rsc.io/2fa";
     description = "Two-factor authentication on the command line";
     mainProgram = "2fa";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rvolosatovs ];
+=======
+  meta = with lib; {
+    homepage = "https://rsc.io/2fa";
+    description = "Two-factor authentication on the command line";
+    mainProgram = "2fa";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ rvolosatovs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

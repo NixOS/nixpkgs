@@ -6,6 +6,10 @@
   makeWrapper,
   matrix-sdk-crypto-nodejs,
   yarnConfigHook,
+<<<<<<< HEAD
+=======
+  yarnInstallHook,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cargo,
   rustPlatform,
   rustc,
@@ -42,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     yarnConfigHook
+<<<<<<< HEAD
+=======
+    yarnInstallHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkg-config
     cargo
     rustc
@@ -69,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+<<<<<<< HEAD
   installPhase = ''
     runHook preInstall
 
@@ -94,6 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" \
       --set NODE_ENV "production" \
       --add-flags "$out/lib/node_modules/matrix-hookshot/App/BridgeApp.js"
+=======
+  postInstall = ''
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" --add-flags \
+        "$out/lib/node_modules/matrix-hookshot/lib/App/BridgeApp.js"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru.updateScript = nix-update-script { };

@@ -24,10 +24,18 @@ buildPythonPackage rec {
   # requires network
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "eBay SDK for Python";
     homepage = "https://github.com/timotheus/ebaysdk-python";
     license = lib.licenses.cddl;
     maintainers = [ lib.maintainers.mkg20001 ];
+=======
+  meta = with lib; {
+    description = "eBay SDK for Python";
+    homepage = "https://github.com/timotheus/ebaysdk-python";
+    license = licenses.cddl;
+    maintainers = [ maintainers.mkg20001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

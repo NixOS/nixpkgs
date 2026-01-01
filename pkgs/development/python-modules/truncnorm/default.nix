@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "truncnorm" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pypi.org/project/truncnorm";
     description = "Moments for doubly truncated multivariate normal distributions";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    homepage = "https://pypi.org/project/truncnorm";
+    description = "Moments for doubly truncated multivariate normal distributions";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

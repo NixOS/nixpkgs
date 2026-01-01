@@ -40,9 +40,16 @@ buildPythonPackage rec {
   # dictionaries needed for tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the Enchant spellchecker";
     homepage = "https://github.com/pyenchant/pyenchant";
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    description = "Python bindings for the Enchant spellchecker";
+    homepage = "https://github.com/pyenchant/pyenchant";
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

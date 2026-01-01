@@ -63,11 +63,20 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man1 $out/share/texmf/tex/generic $out/share/emacs $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Literate Programming in C/C++";
     platforms = with lib.platforms; unix;
     maintainers = [ ];
     license = lib.licenses.abstyles;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Literate Programming in C/C++";
+    platforms = with platforms; unix;
+    maintainers = [ ];
+    license = licenses.abstyles;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

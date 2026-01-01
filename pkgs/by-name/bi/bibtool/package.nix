@@ -25,12 +25,21 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for manipulating BibTeX bibliographies";
     homepage = "http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
+=======
+  meta = with lib; {
+    description = "Tool for manipulating BibTeX bibliographies";
+    homepage = "http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.rycee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bibtool";
   };
 }

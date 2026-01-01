@@ -48,6 +48,7 @@ stdenv.mkDerivation {
     mv $out/doc $out/share/doc/icon
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Very high level general-purpose programming language";
     maintainers = with lib.maintainers; [ yurrriq ];
@@ -55,6 +56,13 @@ stdenv.mkDerivation {
       with lib.platforms;
       linux ++ darwin ++ freebsd ++ netbsd ++ openbsd ++ cygwin ++ illumos;
     license = lib.licenses.publicDomain;
+=======
+  meta = with lib; {
+    description = "Very high level general-purpose programming language";
+    maintainers = with maintainers; [ yurrriq ];
+    platforms = with platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd ++ cygwin ++ illumos;
+    license = licenses.publicDomain;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.cs.arizona.edu/icon/";
   };
 }

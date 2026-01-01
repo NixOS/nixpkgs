@@ -26,6 +26,7 @@ buildGoModule rec {
     "cowthink"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cowsay reborn, written in Go";
     homepage = "https://github.com/Code-Hex/Neo-cowsay";
@@ -33,6 +34,16 @@ buildGoModule rec {
       artistic1 # or
       gpl3
     ];
+=======
+  meta = with lib; {
+    description = "Cowsay reborn, written in Go";
+    homepage = "https://github.com/Code-Hex/Neo-cowsay";
+    license = with licenses; [
+      artistic1 # or
+      gpl3
+    ];
+    maintainers = with maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cowsay";
   };
 }

@@ -51,11 +51,19 @@ buildPythonPackage rec {
     "pims/tests/test_display.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to load video and sequential images in various formats";
     homepage = "https://github.com/soft-matter/pims";
     changelog = "https://github.com/soft-matter/pims/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Module to load video and sequential images in various formats";
+    homepage = "https://github.com/soft-matter/pims";
+    changelog = "https://github.com/soft-matter/pims/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

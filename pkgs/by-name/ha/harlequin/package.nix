@@ -12,14 +12,22 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
+<<<<<<< HEAD
   version = "2.5.1";
+=======
+  version = "2.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-hy72GgugzNRXqxlN0MAWrjfSUY1FZv2O5aa2494hInY=";
+=======
+    hash = "sha256-W/Za/k/XusZmPLiX4ER9XaQWG4jdkrIh7JualHeeqZM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [

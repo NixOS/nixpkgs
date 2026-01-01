@@ -12,12 +12,20 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "gzip";
   version = "1.14";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "mirror://gnu/gzip/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+=======
+    url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-Aae4gb0iC/32Ffl7hxj4C9/T9q3ThbmT3Pbv0U6MCsY=";
   };
 
@@ -63,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       gzip (GNU zip) is a popular data compression program written by
       Jean-loup Gailly for the GNU project.  Mark Adler wrote the
@@ -74,9 +86,20 @@ stdenv.mkDerivation (finalAttrs: {
       and we needed a replacement.  The superior compression ratio of gzip
       is just a bonus.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
     mainProgram = "gzip";
     maintainers = [ lib.maintainers.mdaniels5757 ];
   };
 })
+=======
+
+    platforms = lib.platforms.all;
+
+    license = lib.licenses.gpl3Plus;
+
+    mainProgram = "gzip";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

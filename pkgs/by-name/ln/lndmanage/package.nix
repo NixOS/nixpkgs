@@ -45,11 +45,19 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "lndmanage" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Channel management tool for lightning network daemon (LND) operators";
     homepage = "https://github.com/bitromortac/lndmanage";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmilata ];
+=======
+  meta = with lib; {
+    description = "Channel management tool for lightning network daemon (LND) operators";
+    homepage = "https://github.com/bitromortac/lndmanage";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmilata ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lndmanage";
   };
 }

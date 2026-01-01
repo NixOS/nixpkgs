@@ -59,11 +59,19 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Automatic error monitoring for Python applications";
     homepage = "https://github.com/bugsnag/bugsnag-python";
     changelog = "https://github.com/bugsnag/bugsnag-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Automatic error monitoring for Python applications";
+    homepage = "https://github.com/bugsnag/bugsnag-python";
+    changelog = "https://github.com/bugsnag/bugsnag-python/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

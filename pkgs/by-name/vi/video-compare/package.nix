@@ -45,7 +45,11 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/pixop/video-compare";
     description = "Split screen video comparison tool";
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl2Only;
     mainProgram = "video-compare";
     platforms = lib.platforms.unix;

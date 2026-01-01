@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykeepass" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/libkeepass/pykeepass";
     changelog = "https://github.com/libkeepass/pykeepass/blob/${src.rev}/CHANGELOG.rst";
     description = "Python library to interact with keepass databases (supports KDBX3 and KDBX4)";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/libkeepass/pykeepass";
+    changelog = "https://github.com/libkeepass/pykeepass/blob/${src.rev}/CHANGELOG.rst";
+    description = "Python library to interact with keepass databases (supports KDBX3 and KDBX4)";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

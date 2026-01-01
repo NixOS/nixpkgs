@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
     "keama"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Kea Migration Assistent";
 
     longDescription = ''
@@ -31,9 +35,15 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://gitlab.isc.org/isc-projects/dhcp/-/wikis/kea-migration-assistant";
+<<<<<<< HEAD
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ blitz ];
+=======
+    license = licenses.mpl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ blitz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "keama";
   };
 }

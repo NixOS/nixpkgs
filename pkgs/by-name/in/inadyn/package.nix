@@ -38,12 +38,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://troglobit.com/projects/inadyn/";
     description = "Free dynamic DNS client";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://troglobit.com/projects/inadyn/";
+    description = "Free dynamic DNS client";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "inadyn";
   };
 }

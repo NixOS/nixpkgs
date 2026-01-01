@@ -18,6 +18,7 @@ python3Packages.buildPythonPackage rec {
     setuptools
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hyperminimal https server";
     mainProgram = "hyp";
@@ -28,5 +29,17 @@ python3Packages.buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Hyperminimal https server";
+    mainProgram = "hyp";
+    homepage = "https://github.com/rnhmjoj/hyp";
+    license = with licenses; [
+      gpl3Plus
+      mit
+    ];
+    maintainers = with maintainers; [ rnhmjoj ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

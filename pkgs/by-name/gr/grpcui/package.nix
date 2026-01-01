@@ -27,12 +27,21 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive web UI for gRPC, along the lines of postman";
     homepage = "https://github.com/fullstorydev/grpcui";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pradyuman ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Interactive web UI for gRPC, along the lines of postman";
+    homepage = "https://github.com/fullstorydev/grpcui";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pradyuman ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "grpcui";
   };
 }

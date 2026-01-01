@@ -47,11 +47,19 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "GNU software calculator";
     homepage = "https://www.gnu.org/software/bc/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "GNU software calculator";
+    homepage = "https://www.gnu.org/software/bc/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bc";
   };
 }

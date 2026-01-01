@@ -53,7 +53,11 @@ stdenv.mkDerivation rec {
       cp -v -r ${desktopItem}/share/applications $out/share
     '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Java GUI for SANE scanner servers (saned)";
     longDescription = ''
       SwingSane is a powerful, cross platform, open source Java front-end for
@@ -65,9 +69,15 @@ stdenv.mkDerivation rec {
       crop, etc), PDF and PNG output.
     '';
     homepage = "http://swingsane.com/";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "swingsane";
   };
 }

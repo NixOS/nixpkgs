@@ -188,14 +188,24 @@ buildGoModule {
     inherit frontend collectors;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Six Degrees of Domain Admin";
     homepage = "https://github.com/SpecterOps/BloodHound";
     changelog = "https://github.com/SpecterOps/BloodHound/releases/tag/v${version}";
     downloadPage = "https://github.com/SpecterOps/BloodHound/releases";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ eleonora ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ eleonora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bloodhound-ce";
   };
 }

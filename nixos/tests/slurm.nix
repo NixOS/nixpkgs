@@ -8,7 +8,10 @@ let
       extraConfig = ''
         AccountingStorageHost=dbd
         AccountingStorageType=accounting_storage/slurmdbd
+<<<<<<< HEAD
         AuthAltTypes=auth/jwt
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       '';
     };
     environment.systemPackages = [ mpitest ];
@@ -88,9 +91,12 @@ in
           services.slurm = {
             server.enable = true;
           };
+<<<<<<< HEAD
           systemd.tmpfiles.rules = [
             "f /var/spool/slurmctld/jwt_hs256.key 0400 slurm slurm - thisisjustanexamplejwttoken0000"
           ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
 
       submit =
@@ -135,6 +141,7 @@ in
           };
         };
 
+<<<<<<< HEAD
       rest =
         { ... }:
         {
@@ -142,6 +149,8 @@ in
           services.slurm.rest.enable = true;
         };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       node1 = computeNode;
       node2 = computeNode;
       node3 = computeNode;
@@ -181,10 +190,13 @@ in
     with subtest("run_sbatch"):
         submit.succeed("sbatch --wait ${sbatchScript}")
         submit.succeed("grep 'sbatch success' ${sbatchOutput}")
+<<<<<<< HEAD
 
     with subtest("rest"):
         rest.wait_for_unit("slurmrestd.service")
         token = control.succeed("scontrol token").split('=')[1].rstrip()
         rest.succeed("${pkgs.curl}/bin/curl -sk -H X-SLURM-USER-TOKEN:%s -X GET 'http://localhost:6820/slurm/v0.0.43/diag'" % token)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 }

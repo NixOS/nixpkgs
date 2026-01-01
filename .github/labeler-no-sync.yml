@@ -23,11 +23,16 @@
               - nixos/doc/**/*
 
 "backport release-25.05":
+<<<<<<< HEAD
   - all:
+=======
+  - any:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       - changed-files:
           - any-glob-to-any-file:
               - .github/actions/*
               - .github/workflows/*
+<<<<<<< HEAD
               - .github/labeler*.yml
               - ci/**/*.*
               - maintainers/github-teams.json
@@ -35,13 +40,25 @@
 
 "backport release-25.11":
   - all:
+=======
+              - ci/**/*.*
+              - maintainers/github-teams.json
+
+"backport release-25.11":
+  - any:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       - changed-files:
           - any-glob-to-any-file:
               - .github/actions/*
               - .github/workflows/*
+<<<<<<< HEAD
               - .github/labeler*.yml
               - ci/**/*.*
               - maintainers/github-teams.json
       - base-branch: ['master']
+=======
+              - ci/**/*.*
+              - maintainers/github-teams.json
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 # keep-sorted end

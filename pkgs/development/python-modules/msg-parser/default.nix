@@ -29,11 +29,20 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to read, parse and converting Microsoft Outlook MSG E-Mail files";
     mainProgram = "msg_parser";
     homepage = "https://github.com/vikramarsid/msg_parser";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Python module to read, parse and converting Microsoft Outlook MSG E-Mail files";
+    mainProgram = "msg_parser";
+    homepage = "https://github.com/vikramarsid/msg_parser";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

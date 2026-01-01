@@ -28,10 +28,17 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jupyter Python Comm implementation, for usage in ipykernel, xeus-python etc";
     homepage = "https://github.com/ipython/comm";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Jupyter Python Comm implementation, for usage in ipykernel, xeus-python etc";
+    homepage = "https://github.com/ipython/comm";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

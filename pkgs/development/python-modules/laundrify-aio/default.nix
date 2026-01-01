@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "laundrify_aio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to communicate with the laundrify API";
     homepage = "https://github.com/laundrify/laundrify-pypi";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to communicate with the laundrify API";
+    homepage = "https://github.com/laundrify/laundrify-pypi";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

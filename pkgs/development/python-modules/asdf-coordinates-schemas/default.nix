@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf_coordinates_schemas" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ASDF schemas for coordinates";
     homepage = "https://github.com/asdf-format/asdf-coordinates-schemas";
     changelog = "https://github.com/asdf-format/asdf-coordinates-schemas/blob/${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "ASDF schemas for coordinates";
+    homepage = "https://github.com/asdf-format/asdf-coordinates-schemas";
+    changelog = "https://github.com/asdf-format/asdf-coordinates-schemas/blob/${version}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

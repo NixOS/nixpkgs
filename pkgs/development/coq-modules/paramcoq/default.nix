@@ -43,9 +43,16 @@ mkCoqDerivation {
   release."1.1.2+coq8.7".sha256 = "09n0ky7ldb24by7yf5j3hv410h85x50ksilf7qacl7xglj4gy5hj";
   releaseRev = v: "v${v}";
   mlPlugin = true;
+<<<<<<< HEAD
   meta = {
     description = "Coq plugin for parametricity";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "Coq plugin for parametricity";
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

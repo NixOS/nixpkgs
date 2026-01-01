@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Programming language/shell calculator";
     mainProgram = "tab";
@@ -43,5 +44,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ mstarzyk ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Programming language/shell calculator";
+    mainProgram = "tab";
+    homepage = "https://tab-lang.xyz";
+    license = licenses.boost;
+    maintainers = with maintainers; [ mstarzyk ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,11 +36,19 @@ buildGoModule rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Run bash, Python, and JS snippets from your Markdown files directly from the command-line";
     homepage = "https://github.com/scripthaus-dev/scripthaus";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ raspher ];
+=======
+  meta = with lib; {
+    description = "Run bash, Python, and JS snippets from your Markdown files directly from the command-line";
+    homepage = "https://github.com/scripthaus-dev/scripthaus";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ raspher ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "scripthaus";
   };
 }

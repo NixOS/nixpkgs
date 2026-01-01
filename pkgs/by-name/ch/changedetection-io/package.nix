@@ -7,14 +7,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
+<<<<<<< HEAD
   version = "0.51.4";
+=======
+  version = "0.51.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-Qm3dI5ZHkLK3hTsadnzIDdmeiDM/QovGw2FZDVml5tE=";
+=======
+    hash = "sha256-R0IL2skCUKLD/Gt9jru23aIMUVpvpx+KxQvQr4YIono=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = true;
@@ -60,10 +68,17 @@ python3.pkgs.buildPythonApplication rec {
       pluggy
       price-parser
       psutil
+<<<<<<< HEAD
       puremagic
       pyppeteer-ng
       # pyppeteerstealth
       python-engineio
+=======
+      pyppeteer-ng
+      # pyppeteerstealth
+      python-engineio
+      python-magic
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       python-socketio
       pytz
       referencing

@@ -136,7 +136,11 @@ stdenv.mkDerivation {
     patchShebangs build-aux/* src/generate-resource-xml.{py,sh}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # webkitgtk_4_0 was removed
     broken = true;
     description = "Inform 7 for the Gnome platform";
@@ -144,9 +148,15 @@ stdenv.mkDerivation {
       This version of Inform 7 for the Gnome platform was created by Philip Chimento, based on a design by Graham Nelson and Andrew Hunter.
     '';
     homepage = "https://github.com/ptomato/gnome-inform7";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.fitzgibbon ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.fitzgibbon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gnome-inform7";
   };
 }

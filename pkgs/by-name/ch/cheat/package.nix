@@ -44,10 +44,17 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Create and view interactive cheatsheets on the command-line";
     maintainers = with lib.maintainers; [ mic92 ];
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Create and view interactive cheatsheets on the command-line";
+    maintainers = with maintainers; [ mic92 ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3
       mit
     ];

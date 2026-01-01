@@ -10,7 +10,11 @@
 
 let
   pname = "trezor-suite";
+<<<<<<< HEAD
   version = "25.12.2";
+=======
+  version = "25.11.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   suffix =
     {
@@ -24,8 +28,13 @@ let
     hash =
       {
         # curl -Lfs https://github.com/trezor/trezor-suite/releases/download/v${version}/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
+<<<<<<< HEAD
         aarch64-linux = "sha512-AneflaNO3OXomrhwiCQC0bw1hvFVVWy9YQ63zmeAAU5YQYFRhdlvXXNCxQEFKXfy6079MvLM67+42FGGsVAf6w==";
         x86_64-linux = "sha512-/kjqLGF7MY+2UGSE7DnS64o8U2HntzGrw3c5b5AGoXc8wx3emEBjPmTELnDxQpgMdl7L7uaV3O1Sj2ebfweRpQ==";
+=======
+        aarch64-linux = "sha512-y+nUowpLmE7yIE3VeWzD/cnnL+o65/fK4W8/IhZKf02V2LoGUipwdZMnQ4xRVY/GVbzmk06qmrAiA7pxRAIEpA==";
+        x86_64-linux = "sha512-8eZSx5ZOjjJKXxINfMSIbxA+y4RiXd9V87wWaDv687Dl+EYdcAGVWnce2rDneXd2QuKYazfR+QOQcDEhHqP/+A==";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };

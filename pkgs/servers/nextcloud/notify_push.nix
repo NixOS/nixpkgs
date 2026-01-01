@@ -56,13 +56,23 @@ rustPlatform.buildRustPackage rec {
       };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/nextcloud/notify_push/releases/tag/v${version}";
     description = "Update notifications for nextcloud clients";
     mainProgram = "notify_push";
     homepage = "https://github.com/nextcloud/notify_push";
+<<<<<<< HEAD
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.helsinki-systems ];
+=======
+    license = licenses.agpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.helsinki-systems ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

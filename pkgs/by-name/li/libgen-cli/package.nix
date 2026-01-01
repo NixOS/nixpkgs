@@ -37,7 +37,11 @@ buildGoModule rec {
       --zsh <($out/bin/libgen-cli completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/ciehanski/libgen-cli";
     description = "CLI tool used to access the Library Genesis dataset; written in Go";
     longDescription = ''
@@ -45,8 +49,13 @@ buildGoModule rec {
       quickly query the Library Genesis dataset and download any of its
       contents.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ zaninime ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ zaninime ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "libgen-cli";
   };
 }

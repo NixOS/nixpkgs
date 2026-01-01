@@ -18,11 +18,19 @@ mkPulumiPackage rec {
   ];
   __darwinAllowLocalNetworking = true;
   env.GOWORK = "off";
+<<<<<<< HEAD
   meta = {
     description = "Unofficial Yandex Cloud Resource Provider";
     homepage = "https://github.com/Regrau/pulumi-yandex";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Unofficial Yandex Cloud Resource Provider";
+    homepage = "https://github.com/Regrau/pulumi-yandex";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tie
       veehaitch
     ];

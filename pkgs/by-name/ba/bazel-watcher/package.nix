@@ -9,13 +9,21 @@
 
 buildGoModule rec {
   pname = "bazel-watcher";
+<<<<<<< HEAD
   version = "0.28.0";
+=======
+  version = "0.27.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-zbZhV1IjFW4USdj3MGdyfPabfCPUmAAaGBaguXqmcnY=";
+=======
+    hash = "sha256-b99Fx9OY9SKYp56hQd39kmVQI5NvYnxKyIsqIxkQ2tE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-u1Zg/M9DSkwscy49qtPQygk1gyxKaPbhlFDYNtBQ9NY=";
@@ -36,6 +44,7 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bazelbuild/bazel-watcher";
     description = "Tools for building Bazel targets when source files change";
@@ -43,5 +52,14 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kalbasit ];
     mainProgram = "ibazel";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bazelbuild/bazel-watcher";
+    description = "Tools for building Bazel targets when source files change";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "ibazel";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

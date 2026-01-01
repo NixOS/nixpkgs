@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://fuse-emulator.sourceforge.net/libspectrum.php";
     description = "ZX Spectrum input and output support library";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://fuse-emulator.sourceforge.net/libspectrum.php";
+    description = "ZX Spectrum input and output support library";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -56,12 +56,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/elementary/iconbrowser";
     description = "Browse and find system icons";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/elementary/iconbrowser";
+    description = "Browse and find system icons";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "io.elementary.iconbrowser";
   };
 }

@@ -177,7 +177,11 @@ builder rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
     longDescription = ''
@@ -188,8 +192,14 @@ builder rec {
       system calls, networking support, multiple threads, dynamic linking, a
       foreign function call interface, and powerful string processing.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.lgpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

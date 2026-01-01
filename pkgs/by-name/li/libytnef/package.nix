@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Yeraze's TNEF Stream Reader - for winmail.dat files";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fpletz ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Yeraze's TNEF Stream Reader - for winmail.dat files";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ fpletz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

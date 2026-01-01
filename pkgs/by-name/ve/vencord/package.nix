@@ -7,8 +7,11 @@
   nix-update,
   nodejs,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenv,
   writeShellScript,
   discord,
@@ -17,15 +20,26 @@
   discord-development,
   buildWebExtension ? false,
 }:
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
   version = "1.13.11";
+=======
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "vencord";
+  version = "1.13.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-PSA1CD5YMDSNrP6JUEfdqSC1fNXXWHKsu5hCXnoXGCA=";
+=======
+    hash = "sha256-QY23r5URr0yDuZXamnW7Nrp+GAJOZ2Q+yZiyEHB8+o8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./fix-deps.patch ];
@@ -35,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"@types/react": "18.3.1"' '"@types/react": "19.0.12"'
   '';
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
@@ -46,12 +61,25 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 2;
     hash = "sha256-K9rjPsODn56kM2k5KZHxY99n8fKvWbRbxuxFpYVXYks=";
   };
+=======
+  pnpmDeps =
+    (pnpm_10.fetchDeps {
+      inherit (finalAttrs) pname src;
+      fetcherVersion = 2;
+      hash = "sha256-5MjxEs+jbowJJbJ9+Z+vppFImpB+PZzEhntwRAgv+xM=";
+    }).overrideAttrs
+      { inherit (finalAttrs) patches postPatch; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     git
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   env = {

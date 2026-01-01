@@ -57,7 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Small and lightweight IDE";
     longDescription = ''
       Geany is a small and lightweight Integrated Development Environment.
@@ -79,9 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
       - Plugin interface
     '';
     homepage = "https://www.geany.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ frlan ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ frlan ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "geany";
   };
 })

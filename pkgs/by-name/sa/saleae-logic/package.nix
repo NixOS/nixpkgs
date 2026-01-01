@@ -126,6 +126,7 @@ stdenv.mkDerivation rec {
     cp Drivers/99-SaleaeLogic.rules "$out/etc/udev/rules.d/"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Software for Saleae logic analyzers";
     homepage = "https://www.saleae.com/";
@@ -133,5 +134,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Software for Saleae logic analyzers";
+    homepage = "https://www.saleae.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = intersectLists platforms.x86_64 platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

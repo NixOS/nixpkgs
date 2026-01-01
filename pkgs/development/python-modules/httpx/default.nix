@@ -79,7 +79,11 @@ buildPythonPackage rec {
     trustme
     uvicorn
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''
@@ -111,12 +115,21 @@ buildPythonPackage rec {
   # FileNotFoundError: [Errno 2] No such file or directory
   setupHook = ./setup-hook.sh;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/encode/httpx/blob/${src.rev}/CHANGELOG.md";
     description = "Next generation HTTP client";
     mainProgram = "httpx";
     homepage = "https://github.com/encode/httpx";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

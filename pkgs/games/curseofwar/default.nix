@@ -28,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast-paced action strategy game";
     homepage = "https://a-nikolaev.github.io/curseofwar/";
@@ -35,5 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = if SDL != null then "curseofwar-sdl" else "curseofwar";
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Fast-paced action strategy game";
+    homepage = "https://a-nikolaev.github.io/curseofwar/";
+    license = licenses.gpl3;
+    mainProgram = if SDL != null then "curseofwar-sdl" else "curseofwar";
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

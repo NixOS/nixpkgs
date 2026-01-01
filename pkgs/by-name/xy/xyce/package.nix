@@ -3,9 +3,16 @@
   fetchFromGitHub,
   fetchgit,
   lib,
+<<<<<<< HEAD
   bison,
   blas,
   cmake,
+=======
+  autoconf,
+  automake,
+  bison,
+  blas,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   flex,
   fftw,
   gfortran,
@@ -30,11 +37,16 @@
 assert withMPI -> trilinos.withMPI;
 
 let
+<<<<<<< HEAD
   version = "7.10.0";
+=======
+  version = "7.9.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # using fetchurl or fetchFromGitHub doesn't include the manuals
   # due to .gitattributes files
   xyce_src = fetchgit {
+<<<<<<< HEAD
     name = "Xyce";
     url = "https://github.com/Xyce/Xyce.git";
     rev = "Release-${version}";
@@ -47,6 +59,18 @@ let
     repo = "Xyce_Regression";
     rev = "Release-${version}";
     hash = "sha256-aA/4UpzSb+EeJ1RVkVwSKiNh7BDcLHxNDnKXZmnCBmI=";
+=======
+    url = "https://github.com/Xyce/Xyce.git";
+    rev = "Release-${version}";
+    sha256 = "sha256-m8tHQYBs0hjepTDswrDJFRCPY941Ew98gYRPuQMdKZA=";
+  };
+
+  regression_src = fetchFromGitHub {
+    owner = "Xyce";
+    repo = "Xyce_Regression";
+    rev = "Release-${version}";
+    sha256 = "sha256-7Jvt2LUw2C201pMp9CHnhOwMzxU7imfrRKCb3wu3Okk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 
@@ -61,15 +85,37 @@ stdenv.mkDerivation rec {
 
   sourceRoot = xyce_src.name;
 
+<<<<<<< HEAD
   cmakeFlags = lib.optionals withMPI [
     "-DCMAKE_C_COMPILER=mpicc"
     "-DCMAKE_CXX_COMPILER=mpicxx"
+=======
+  preConfigure = "./bootstrap";
+
+  configureFlags = [
+    "CXXFLAGS=-O3"
+    "--enable-xyce-shareable"
+    "--enable-shared"
+    "--enable-stokhos"
+    "--enable-amesos2"
+  ]
+  ++ lib.optionals withMPI [
+    "--enable-mpi"
+    "CXX=mpicxx"
+    "CC=mpicc"
+    "F77=mpif77"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     cmake
+=======
+    autoconf
+    automake
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     gfortran
     libtool_2
   ]
@@ -134,7 +180,11 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     XYCE_BINARY="$(pwd)/src/Xyce"
     EXECSTRING="${lib.optionalString withMPI "mpirun -np 2 "}$XYCE_BINARY"
+<<<<<<< HEAD
     TEST_ROOT="$(pwd)/../../${regression_src.name}"
+=======
+    TEST_ROOT="$(pwd)/../${regression_src.name}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Honor the TMP variable
     sed -i -E 's|/tmp|\$TMP|' $TEST_ROOT/TestScripts/suggestXyceTagList.sh
@@ -160,7 +210,10 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString enableDocs ''
+<<<<<<< HEAD
     pushd ../../${xyce_src.name}
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     local docFiles=("doc/Users_Guide/Xyce_UG"
       "doc/Reference_Guide/Xyce_RG"
       "doc/Release_Notes/Release_Notes_${lib.versions.majorMinor version}/Release_Notes_${lib.versions.majorMinor version}")
@@ -182,10 +235,16 @@ stdenv.mkDerivation rec {
       install -t $doc/share/doc/${pname}-${version}/ $(basename $d.pdf)
       popd
     done
+<<<<<<< HEAD
     popd
   '';
 
   meta = {
+=======
+  '';
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken =
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "High-performance analog circuit simulator";
@@ -195,8 +254,13 @@ stdenv.mkDerivation rec {
       large-scale parallel computing platforms.
     '';
     homepage = "https://xyce.sandia.gov";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ fbeffa ];
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ fbeffa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

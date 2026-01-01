@@ -41,17 +41,29 @@ buildDunePackage rec {
   # Alcotest depends on fmt that needs 4.08 or newer
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/aantron/luv";
     description = "Binding to libuv: cross-platform asynchronous I/O";
     # MIT-licensed, extra licenses apply partially to libuv vendor
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/aantron/luv";
+    description = "Binding to libuv: cross-platform asynchronous I/O";
+    # MIT-licensed, extra licenses apply partially to libuv vendor
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       bsd2
       bsd3
       cc-by-sa-40
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       locallycompact
       sternenseemann
     ];

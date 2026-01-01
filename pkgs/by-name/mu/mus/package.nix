@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-1ruRKqHW5/MH4THRAozofAROZT6zE3JFKGluuWWa1ms=";
 
+<<<<<<< HEAD
   meta = {
     description = "Pretty good mpd client";
     homepage = "https://sr.ht/~nbsp/mus";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nbsp ];
+=======
+  meta = with lib; {
+    description = "Pretty good mpd client";
+    homepage = "https://sr.ht/~nbsp/mus";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nbsp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mus";
   };
 }

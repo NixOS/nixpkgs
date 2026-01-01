@@ -41,11 +41,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "convertertools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for converting python data types";
     homepage = "https://github.com/bluetooth-devices/convertertools";
     changelog = "https://github.com/bluetooth-devices/convertertools/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tools for converting python data types";
+    homepage = "https://github.com/bluetooth-devices/convertertools";
+    changelog = "https://github.com/bluetooth-devices/convertertools/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

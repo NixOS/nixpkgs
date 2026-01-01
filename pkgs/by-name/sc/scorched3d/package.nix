@@ -67,11 +67,19 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lopenal";
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://scorched3d.co.uk/";
     description = "3D Clone of the classic Scorched Earth";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux; # maybe more
+=======
+  meta = with lib; {
+    homepage = "http://scorched3d.co.uk/";
+    description = "3D Clone of the classic Scorched Earth";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux; # maybe more
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

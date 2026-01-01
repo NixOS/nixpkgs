@@ -8,7 +8,10 @@
   pdm-backend,
 
   # dependencies
+<<<<<<< HEAD
   annotated-doc,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   starlette,
   pydantic,
   typing-extensions,
@@ -19,7 +22,10 @@
   flask,
   inline-snapshot,
   passlib,
+<<<<<<< HEAD
   pwdlib,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyjwt,
   pytest-asyncio,
   pytestCheckHook,
@@ -43,7 +49,11 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
+<<<<<<< HEAD
   version = "0.121.1";
+=======
+  version = "0.116.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -52,7 +62,11 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-uUUARIHY8VBoLfWfMvveapypqiB00cTTWpJ4fi9nvUo=";
+=======
+    hash = "sha256-sd0SnaxuuF3Zaxx7rffn4ttBpRmWQoOtXln/amx9rII=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ pdm-backend ];
@@ -63,7 +77,10 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+<<<<<<< HEAD
     annotated-doc
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     starlette
     pydantic
     typing-extensions
@@ -106,7 +123,10 @@ buildPythonPackage rec {
     flask
     inline-snapshot
     passlib
+<<<<<<< HEAD
     pwdlib
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pyjwt
     pytestCheckHook
     pytest-asyncio
@@ -139,11 +159,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastapi" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/fastapi/fastapi/releases/tag/${src.tag}";
     description = "Web framework for building APIs";
     homepage = "https://github.com/fastapi/fastapi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wd15 ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/fastapi/fastapi/releases/tag/${src.tag}";
+    description = "Web framework for building APIs";
+    homepage = "https://github.com/fastapi/fastapi";
+    license = licenses.mit;
+    maintainers = with maintainers; [ wd15 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

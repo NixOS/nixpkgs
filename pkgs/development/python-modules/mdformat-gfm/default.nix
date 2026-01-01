@@ -45,11 +45,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_gfm" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mdformat plugin for GitHub Flavored Markdown compatibility";
     homepage = "https://github.com/hukkin/mdformat-gfm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Mdformat plugin for GitHub Flavored Markdown compatibility";
+    homepage = "https://github.com/hukkin/mdformat-gfm";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aldoborrero
       polarmutex
     ];

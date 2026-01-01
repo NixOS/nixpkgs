@@ -9,11 +9,19 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
+<<<<<<< HEAD
   version = "3.9.12";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
     hash = "sha256-+iyZSHKSlsI6/Rj9AakPYs3aCaRhkbVKi8N2TC7ugS4=";
+=======
+  version = "3.9.11";
+
+  src = fetchurl {
+    url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
+    hash = "sha256-S3GVtqT1yBr0wCEmd6Mu6BQ2Q0AbxuHoQS5rBuqCvqw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = ".";

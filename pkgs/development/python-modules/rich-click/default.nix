@@ -36,12 +36,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rich_click" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to format click help output nicely with rich";
     homepage = "https://github.com/ewels/rich-click";
     changelog = "https://github.com/ewels/rich-click/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to format click help output nicely with rich";
+    homepage = "https://github.com/ewels/rich-click";
+    changelog = "https://github.com/ewels/rich-click/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rich-click";
   };
 }

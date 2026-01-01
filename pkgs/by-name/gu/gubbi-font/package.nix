@@ -24,10 +24,18 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -Dm444 -t $out/share/fonts/truetype/ Gubbi.ttf";
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Kannada font";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Kannada font";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

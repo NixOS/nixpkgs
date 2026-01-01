@@ -80,7 +80,11 @@ buildPythonPackage rec {
     "OpenGL.GLX"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://mcfletch.github.io/pyopengl/";
     description = "PyOpenGL, the Python OpenGL bindings";
     longDescription = ''
@@ -89,7 +93,11 @@ buildPythonPackage rec {
       Python 2.5) ctypes library, and is provided under an extremely
       liberal BSD-style Open-Source license.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (mesa.meta) platforms;
   };
 }

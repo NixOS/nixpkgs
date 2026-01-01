@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "javaobj" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for serializing and de-serializing Java objects";
     homepage = "https://github.com/tcalmant/python-javaobj";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "Module for serializing and de-serializing Java objects";
+    homepage = "https://github.com/tcalmant/python-javaobj";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,10 +30,18 @@ buildPythonPackage rec {
   # Fails to import module 'cxxfilt' from pygccxml on Py3k
   doCheck = (!isPy3k);
 
+<<<<<<< HEAD
   meta = {
     description = "Python Bindings Generator";
     homepage = "https://github.com/gjcarneiro/pybindgen";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ teto ];
+=======
+  meta = with lib; {
+    description = "Python Bindings Generator";
+    homepage = "https://github.com/gjcarneiro/pybindgen";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ teto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

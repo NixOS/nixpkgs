@@ -24,6 +24,7 @@ buildGoModule rec {
     chromium
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Archiving tool with an IM-style interface";
     homepage = "https://docs.wabarc.eu.org";
@@ -31,5 +32,14 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ _2gn ];
     # binary build for darwin is possible, but it requires chromium for runtime dependency, whose build (for nix) is not supported on darwin.
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Archiving tool with an IM-style interface";
+    homepage = "https://docs.wabarc.eu.org";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ _2gn ];
+    # binary build for darwin is possible, but it requires chromium for runtime dependency, whose build (for nix) is not supported on darwin.
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

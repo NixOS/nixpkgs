@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "Md5sum-alike program that works with Tiger/THEX hashes";
     longDescription = ''
@@ -39,8 +43,14 @@ stdenv.mkDerivation rec {
       http://adc.sourceforge.net/draft-jchapweske-thex-02.html
     '';
     homepage = "http://tthsum.devs.nu/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.ebzzry ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tthsum";
   };
 }

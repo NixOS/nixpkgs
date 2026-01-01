@@ -78,7 +78,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://wiki.sagemath.org/spkg/rubiks";
     description = "Several programs for working with Rubik's cubes";
     # The individual websites are no longer available
@@ -104,11 +108,20 @@ stdenv.mkDerivation rec {
           cubex - A fast, non-optimal 3x3x3 solver
           mcube - A fast, non-optimal 4x4x4 solver
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl2 # Michael Reid's and Eric Dietz software
       mit # Dik T. Winter's software
     ];
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
+=======
+    license = with licenses; [
+      gpl2 # Michael Reid's and Eric Dietz software
+      mit # Dik T. Winter's software
+    ];
+    teams = [ teams.sage ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

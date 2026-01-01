@@ -41,11 +41,19 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jjsullivan5196/wvkbd";
     description = "On-screen keyboard for wlroots";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jjsullivan5196/wvkbd";
+    description = "On-screen keyboard for wlroots";
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wvkbd-mobintl";
     maintainers = with lib.maintainers; [ colinsane ];
   };

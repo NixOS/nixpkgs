@@ -43,10 +43,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_http_signature" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mmai ];
+=======
+  meta = with lib; {
+    description = "Requests authentication module for HTTP Signature";
+    homepage = "https://github.com/kislyuk/requests-http-signature";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mmai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

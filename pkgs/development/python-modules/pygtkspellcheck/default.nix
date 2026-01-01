@@ -34,10 +34,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gtkspellcheck" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/koehlma/pygtkspellcheck";
     description = "Python spell-checking library for GtkTextViews based on Enchant";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/koehlma/pygtkspellcheck";
+    description = "Python spell-checking library for GtkTextViews based on Enchant";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "gnome-session-ctl extracted from gnome-session for nixpkgs";
     homepage = "https://github.com/nix-community/gnome-session-ctl";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "gnome-session-ctl extracted from gnome-session for nixpkgs";
+    homepage = "https://github.com/nix-community/gnome-session-ctl";
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

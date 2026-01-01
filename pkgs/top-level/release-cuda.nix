@@ -91,6 +91,10 @@ let
       firefox-devedition-unwrapped = linux;
       freecad = linux;
       gimp = linux;
+<<<<<<< HEAD
+=======
+      gimp3 = linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
       jellyfin-ffmpeg = linux;

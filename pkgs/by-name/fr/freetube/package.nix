@@ -20,14 +20,23 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
+<<<<<<< HEAD
   version = "0.23.12-unstable-2025-12-13";
+=======
+  version = "0.23.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
+<<<<<<< HEAD
     # tag = "v${finalAttrs.version}-beta";
     rev = "6717114de5653b08caec20b7bf3f3217723866a4";
     hash = "sha256-PfK4Ny8MyBJ9Xw6ozJUzu+4rX+/rLWNac3lE8dBNPE0=";
+=======
+    tag = "v${finalAttrs.version}-beta";
+    hash = "sha256-DH5uT3dPDFZnFYoiMjxpNouNDRbWDctVqvDwHpUlnkY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Darwin requires writable Electron dist
@@ -39,7 +48,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ''
     else
       ''
+<<<<<<< HEAD
         ln -s ${electron.dist} source/electron-dist
+=======
+        ln -s ${electron.dist} electron-dist
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       '';
 
   patches = [
@@ -50,7 +63,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
+<<<<<<< HEAD
     hash = "sha256-at/Kq7M8qSjlDmB6R4z51VRZRvkKAGyjU6sgHho8tBQ=";
+=======
+    hash = "sha256-sM9CkDnATSEUf/uuUyT4JuRmjzwa1WzIyNYEw69MPtU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

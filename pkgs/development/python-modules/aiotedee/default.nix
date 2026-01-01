@@ -30,11 +30,20 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with Tedee locks";
     homepage = "https://github.com/zweckj/aiotedee";
     changelog = "https://github.com/zweckj/aiotedee/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with Tedee locks";
+    homepage = "https://github.com/zweckj/aiotedee";
+    changelog = "https://github.com/zweckj/aiotedee/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

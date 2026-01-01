@@ -46,7 +46,11 @@ buildPythonPackage rec {
     typing-extensions
   ]
   # TODO: remove this workaround and fix breakages
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   optional-dependencies = {
     betamax = [
@@ -69,7 +73,11 @@ buildPythonPackage rec {
     testresources
     testtools
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
   # https://bugs.launchpad.net/keystoneauth/+bug/2020112
@@ -80,10 +88,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keystoneauth1" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Authentication Library for OpenStack Identity";
     homepage = "https://github.com/openstack/keystoneauth";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Authentication Library for OpenStack Identity";
+    homepage = "https://github.com/openstack/keystoneauth";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

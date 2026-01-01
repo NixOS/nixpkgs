@@ -45,11 +45,20 @@ stdenv.mkDerivation {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Chinese PinYin and Bopomofo conversion library";
     homepage = "https://github.com/openSUSE/pyzy";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ azuwis ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Chinese PinYin and Bopomofo conversion library";
+    homepage = "https://github.com/openSUSE/pyzy";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ azuwis ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,10 +29,18 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "mopidy_scrobbler" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mopidy/mopidy-scrobbler";
     description = "Mopidy extension for scrobbling played tracks to Last.fm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jakeisnt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mopidy/mopidy-scrobbler";
+    description = "Mopidy extension for scrobbling played tracks to Last.fm";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jakeisnt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

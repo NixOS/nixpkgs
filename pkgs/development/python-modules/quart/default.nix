@@ -74,12 +74,21 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
     changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

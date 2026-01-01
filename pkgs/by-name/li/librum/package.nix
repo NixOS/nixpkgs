@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
     qt6.qtwayland
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Application designed to make reading enjoyable and straightforward";
     longDescription = ''
       Librum is an application designed to make reading enjoyable
@@ -63,6 +67,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://librumreader.com";
     changelog = "https://github.com/Librum-Reader/Librum/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     mainProgram = "librum";
     maintainers = with lib.maintainers; [
@@ -70,5 +75,14 @@ stdenv.mkDerivation rec {
       oluceps
     ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    mainProgram = "librum";
+    maintainers = with maintainers; [
+      aleksana
+      oluceps
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

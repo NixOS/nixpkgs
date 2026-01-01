@@ -51,11 +51,20 @@ buildPythonApplication rec {
     wrapQtApp $out/bin/syncplay
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://syncplay.pl/";
     description = "Free software that synchronises media players";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ assistant ];
+=======
+  meta = with lib; {
+    homepage = "https://syncplay.pl/";
+    description = "Free software that synchronises media players";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ assistant ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

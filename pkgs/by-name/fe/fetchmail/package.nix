@@ -9,11 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "fetchmail";
+<<<<<<< HEAD
   version = "6.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
     hash = "sha256-pRCSlewzGeDkXt0AnS2XcEKoMmq1LGqBeoL6mHED5PM=";
+=======
+  version = "6.6.1";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
+    hash = "sha256-ONAf5ATmdRTfOUpu0agVu7YaqQwPpEAiUlk6ztDjih0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -25,7 +33,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-ssl=${openssl.dev}" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.fetchmail.info/";
     description = "Full-featured remote-mail retrieval and forwarding utility";
     longDescription = ''
@@ -36,8 +48,13 @@ stdenv.mkDerivation rec {
       all flavors of IMAP, ETRN, and ODMR. It can even support IPv6 and
       IPSEC.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fetchmail";
   };
 }

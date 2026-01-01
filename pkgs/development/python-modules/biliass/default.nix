@@ -8,8 +8,11 @@
   libiconv,
 }:
 
+<<<<<<< HEAD
 # r-ryantm wants to downgrade
 # nixpkgs-update: no auto update
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 buildPythonPackage rec {
   pname = "biliass";
   version = "2.3.1";
@@ -51,11 +54,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "biliass" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/yutto-dev/biliass";
     description = "Convert Bilibili XML/protobuf danmaku to ASS subtitle";
     mainProgram = "biliass";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ linsui ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/yutto-dev/biliass";
+    description = "Convert Bilibili XML/protobuf danmaku to ASS subtitle";
+    mainProgram = "biliass";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ linsui ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

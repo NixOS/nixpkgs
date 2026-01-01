@@ -38,12 +38,21 @@ buildGoModule rec {
       --zsh <($out/bin/fly completion --shell zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line interface to Concourse CI";
     mainProgram = "fly";
     homepage = "https://concourse-ci.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Command line interface to Concourse CI";
+    mainProgram = "fly";
+    homepage = "https://concourse-ci.org";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ivanbrennan
       SuperSandro2000
     ];

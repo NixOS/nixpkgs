@@ -9,12 +9,19 @@
   stdenv,
   version,
   which,
+<<<<<<< HEAD
   doCheck ? true,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation {
   pname = "mlton";
+<<<<<<< HEAD
   inherit version doCheck;
+=======
+  inherit version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchgit {
     inherit url rev sha256;
@@ -45,5 +52,10 @@ stdenv.mkDerivation {
       )
   '';
 
+<<<<<<< HEAD
+=======
+  doCheck = true;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = import ./meta.nix { inherit lib; };
 }

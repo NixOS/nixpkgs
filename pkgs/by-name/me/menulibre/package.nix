@@ -54,6 +54,7 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced menu editor with an easy-to-use interface";
     homepage = "https://bluesabre.org/projects/menulibre";
@@ -61,5 +62,14 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ lelgenio ];
     mainProgram = "menulibre";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Advanced menu editor with an easy-to-use interface";
+    homepage = "https://bluesabre.org/projects/menulibre";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ lelgenio ];
+    mainProgram = "menulibre";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

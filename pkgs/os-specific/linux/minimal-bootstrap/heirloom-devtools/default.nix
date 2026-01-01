@@ -44,16 +44,28 @@ kaem.runCommand "${pname}-${version}"
       coreutils
     ];
 
+<<<<<<< HEAD
     meta = {
       description = "Portable yacc and lex derived from OpenSolaris";
       homepage = "https://heirloom.sourceforge.net/devtools.html";
       license = with lib.licenses; [
+=======
+    meta = with lib; {
+      description = "Portable yacc and lex derived from OpenSolaris";
+      homepage = "https://heirloom.sourceforge.net/devtools.html";
+      license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         cddl
         bsdOriginalUC
         caldera
       ];
+<<<<<<< HEAD
       teams = [ lib.teams.minimal-bootstrap ];
       platforms = lib.platforms.unix;
+=======
+      teams = [ teams.minimal-bootstrap ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

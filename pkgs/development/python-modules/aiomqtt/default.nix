@@ -38,11 +38,19 @@ buildPythonPackage rec {
     "network"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Idiomatic asyncio MQTT client, wrapped around paho-mqtt";
     homepage = "https://github.com/sbtinstruments/aiomqtt";
     changelog = "https://github.com/sbtinstruments/aiomqtt/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Idiomatic asyncio MQTT client, wrapped around paho-mqtt";
+    homepage = "https://github.com/sbtinstruments/aiomqtt";
+    changelog = "https://github.com/sbtinstruments/aiomqtt/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

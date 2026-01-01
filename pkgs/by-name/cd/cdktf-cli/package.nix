@@ -142,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/lib/node_modules/cdktf-cli/node_modules/@cdktf/hcl2json/main.wasm"
   '';
 
+<<<<<<< HEAD
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
@@ -151,6 +152,17 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
   passthru.updateScript = nix-update-script { };
+=======
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "CDK for Terraform CLI";

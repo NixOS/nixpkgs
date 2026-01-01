@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion { package = pgcat; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/postgresml/pgcat";
     description = "PostgreSQL pooler with sharding, load balancing and failover support";
@@ -37,6 +38,15 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ cathalmullan ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/postgresml/pgcat";
+    description = "PostgreSQL pooler with sharding, load balancing and failover support";
+    changelog = "https://github.com/postgresml/pgcat/releases";
+    license = with licenses; [ mit ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ cathalmullan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pgcat";
   };
 }

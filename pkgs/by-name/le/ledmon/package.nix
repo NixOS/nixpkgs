@@ -38,11 +38,19 @@ stdenv.mkDerivation rec {
     "LEDMON_INSTDIR=${placeholder "out"}/sbin"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/intel/ledmon";
     description = "Enclosure LED Utilities";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl2Only ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/intel/ledmon";
+    description = "Enclosure LED Utilities";
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2Only ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ sorki ];
   };
 }

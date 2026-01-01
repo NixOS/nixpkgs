@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Parallel BASH commandline FLAC compressor, verifier, organizer, analyzer, and retagger";
     mainProgram = "redoflacs";
@@ -53,5 +54,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Parallel BASH commandline FLAC compressor, verifier, organizer, analyzer, and retagger";
+    mainProgram = "redoflacs";
+    homepage = src.meta.homepage;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

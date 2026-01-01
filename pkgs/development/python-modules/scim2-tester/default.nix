@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   optional-dependencies.httpx = scim2-client.optional-dependencies.httpx;
 
+<<<<<<< HEAD
   meta = {
     description = "SCIM RFCs server compliance checker";
     homepage = "https://scim2-tester.readthedocs.io/";
     changelog = "https://github.com/python-scim/scim2-tester/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "SCIM RFCs server compliance checker";
+    homepage = "https://scim2-tester.readthedocs.io/";
+    changelog = "https://github.com/python-scim/scim2-tester/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

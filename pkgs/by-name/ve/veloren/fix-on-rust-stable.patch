@@ -1,7 +1,160 @@
+<<<<<<< HEAD
 From 2de00daf09e66064e37b52664f17f3cc0f6a1161 Mon Sep 17 00:00:00 2001
 From: rnhmjoj <rnhmjoj@inventati.org>
 Date: Sat, 13 Dec 2025 07:37:19 +0100
 Subject: [PATCH] Update toolchain
+=======
+commit eca36e8293bef85493657f514cf37119bb27e2e0
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Wed Jul 30 16:34:18 2025 +0200
+
+    Update toolchain
+
+diff --git a/common/net/src/lib.rs b/common/net/src/lib.rs
+index 671aa074d..78cfdcb96 100644
+--- a/common/net/src/lib.rs
++++ b/common/net/src/lib.rs
+@@ -1,5 +1,5 @@
+ #![allow(incomplete_features)]
+-#![feature(generic_const_exprs, const_fn_floating_point_arithmetic)]
++#![feature(generic_const_exprs)]
+ pub mod msg;
+ pub mod sync;
+ pub mod synced_components;
+diff --git a/common/systems/src/mount.rs b/common/systems/src/mount.rs
+index ed1b7f3c4..9acf953ec 100644
+--- a/common/systems/src/mount.rs
++++ b/common/systems/src/mount.rs
+@@ -67,7 +67,7 @@ impl<'a> System<'a> for Sys {
+                             if !matches!(body, Some(Body::Humanoid(_))) {
+                                 let actions = c
+                                     .actions
+-                                    .extract_if(|action| match action {
++                                    .extract_if(.., |action| match action {
+                                         ControlAction::StartInput { input: i, .. }
+                                         | ControlAction::CancelInput(i) => matches!(
+                                             i,
+@@ -164,7 +164,7 @@ impl<'a> System<'a> for Sys {
+             let inputs = controllers.get_mut(entity).map(|c| {
+                 let actions: Vec<_> = c
+                     .actions
+-                    .extract_if(|action| match action {
++                    .extract_if(.., |action| match action {
+                         ControlAction::StartInput { input: i, .. }
+                         | ControlAction::CancelInput(i) => {
+                             matches!(i, InputKind::Jump | InputKind::Fly | InputKind::Roll)
+diff --git a/network/examples/fileshare/main.rs b/network/examples/fileshare/main.rs
+index 015e46e9e..fc8db3a0d 100644
+--- a/network/examples/fileshare/main.rs
++++ b/network/examples/fileshare/main.rs
+@@ -1,4 +1,3 @@
+-#![feature(async_closure)]
+ //!run with
+ //! (cd network/examples/fileshare && RUST_BACKTRACE=1 cargo run
+ //! --profile=release -Z unstable-options  -- --trace=info --port 15006)
+diff --git a/rtsim/src/lib.rs b/rtsim/src/lib.rs
+index ef62db65e..000831da3 100644
+--- a/rtsim/src/lib.rs
++++ b/rtsim/src/lib.rs
+@@ -2,7 +2,6 @@
+     never_type,
+     try_blocks,
+     trait_alias,
+-    control_flow_enum,
+     let_chains,
+     binary_heap_drain_sorted,
+     fn_traits,
+diff --git a/voxygen/benches/meshing_benchmark.rs b/voxygen/benches/meshing_benchmark.rs
+index 2cfe9563a..929d62b17 100644
+--- a/voxygen/benches/meshing_benchmark.rs
++++ b/voxygen/benches/meshing_benchmark.rs
+@@ -146,7 +146,7 @@ pub fn criterion_benchmark(c: &mut Criterion) {
+     for x in 1..GEN_SIZE - 1 {
+         for y in 1..GEN_SIZE - 1 {
+             let (volume, range) = sample(Vec2::new(x, y));
+-            meshing_benches.bench_function(&format!("Terrain mesh {}, {}", x, y), move |b| {
++            meshing_benches.bench_function(format!("Terrain mesh {}, {}", x, y), move |b| {
+                 b.iter(|| {
+                     generate_mesh(
+                         black_box(&volume),
+diff --git a/voxygen/src/lib.rs b/voxygen/src/lib.rs
+index 70ca5dd10..143791d2f 100644
+--- a/voxygen/src/lib.rs
++++ b/voxygen/src/lib.rs
+@@ -9,7 +9,6 @@
+ #![feature(
+     extract_if,
+     trait_alias,
+-    option_get_or_insert_default,
+     map_try_insert,
+     slice_as_chunks,
+     let_chains,
+diff --git a/voxygen/src/panic_handler.rs b/voxygen/src/panic_handler.rs
+index a2c0ee381..9cecff787 100644
+--- a/voxygen/src/panic_handler.rs
++++ b/voxygen/src/panic_handler.rs
+@@ -1,4 +1,4 @@
+-use std::{panic, panic::PanicInfo, path::PathBuf};
++use std::{panic, panic::PanicHookInfo, path::PathBuf};
+ use tracing::error;
+ 
+ pub fn set_panic_hook(log_filename: String, logs_dir: PathBuf) {
+@@ -113,7 +113,7 @@ enum PotentialPanicCause {
+     GraphicsCardIncompatibleWithRenderingBackend,
+ }
+ 
+-fn potential_cause(panic_info: &PanicInfo) -> Option<String> {
++fn potential_cause(panic_info: &PanicHookInfo) -> Option<String> {
+     let location = panic_info
+         .location()
+         .map_or("".to_string(), |x| x.file().to_string())
+diff --git a/voxygen/src/scene/figure/cache.rs b/voxygen/src/scene/figure/cache.rs
+index d5251b53a..e654a288b 100644
+--- a/voxygen/src/scene/figure/cache.rs
++++ b/voxygen/src/scene/figure/cache.rs
+@@ -406,7 +406,8 @@ where
+         item_key: Option<ItemKey>,
+     ) -> (FigureModelEntryLod<'c>, &'c Skel::Attr)
+     where
+-        for<'a> &'a Skel::Body: Into<Skel::Attr>,
++        Skel::Attr: 'c,
++        Skel::Attr: for<'a> From<&'a Skel::Body>,
+         Skel::Body: Clone + Send + Sync + 'static,
+         <Skel::Body as BodySpec>::Spec: Send + Sync + 'static,
+     {
+@@ -443,7 +444,7 @@ where
+                                 opaque,
+                                 bounds,
+                                 vertex_range,
+-                            }) = Arc::get_mut(recv).take().and_then(|cell| cell.take())
++                            }) = Arc::get_mut(recv).and_then(|cell| cell.take())
+                             {
+                                 let model_entry = atlas.create_figure(
+                                     renderer,
+@@ -641,6 +642,7 @@ where
+         sprite_render_state: &Arc<SpriteRenderState>,
+     ) -> (TerrainModelEntryLod<'c>, &'c Skel::Attr)
+     where
++        Skel::Attr: 'c,
+         for<'a> &'a Skel::Body: Into<Skel::Attr>,
+         Skel::Body: Clone + Send + Sync + 'static,
+         <Skel::Body as BodySpec>::Spec: Send + Sync + 'static,
+@@ -669,7 +671,7 @@ where
+                                 sprite_instances,
+                                 blocks_of_interest,
+                                 blocks_offset,
+-                            }) = Arc::get_mut(recv).take().and_then(|cell| cell.take())
++                            }) = Arc::get_mut(recv).and_then(|cell| cell.take())
+                             {
+                                 let model_entry = atlas.create_terrain(
+                                     renderer,
+
+commit 97378a437847b8860e548de3ce70c2c53f9347f6
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Wed Jul 30 00:23:35 2025 +0200
+
+    Fix wasmtime-wasi build
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 diff --git a/Cargo.lock b/Cargo.lock
 index f751793bc..593f05ec1 100644
@@ -1441,6 +1594,7 @@ index f751793bc..593f05ec1 100644
  ]
  
  [[package]]
+<<<<<<< HEAD
 diff --git a/common/Cargo.toml b/common/Cargo.toml
 index b11b5ad6f..4515fadbd 100644
 --- a/common/Cargo.toml
@@ -1519,6 +1673,8 @@ index 567332430..93ab1f49a 100644
  
  // Validate at Deserialization
  #[derive(Copy, Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 diff --git a/common/state/Cargo.toml b/common/state/Cargo.toml
 index d786873af..934e288a3 100644
 --- a/common/state/Cargo.toml
@@ -1615,6 +1771,7 @@ index 72d4f9904..3189c909c 100644
          if self.1 == tracing::Level::INFO {
              Box::new(InfoStream(self.0.clone()))
          } else {
+<<<<<<< HEAD
 diff --git a/common/systems/src/mount.rs b/common/systems/src/mount.rs
 index ed1b7f3c4..9acf953ec 100644
 --- a/common/systems/src/mount.rs
@@ -1658,6 +1815,94 @@ index ef62db65e..000831da3 100644
      let_chains,
      binary_heap_drain_sorted,
      fn_traits,
+=======
+diff --git a/voxygen/src/lib.rs b/voxygen/src/lib.rs
+index a9273e7c8..70ca5dd10 100644
+--- a/voxygen/src/lib.rs
++++ b/voxygen/src/lib.rs
+@@ -14,7 +14,6 @@
+     slice_as_chunks,
+     let_chains,
+     generic_const_exprs,
+-    maybe_uninit_uninit_array,
+     maybe_uninit_array_assume_init,
+     closure_lifetime_binder
+ )]
+
+commit d585b16256152fff3eaa69ec2b5b75dbe1c53f7a
+Author: Isse <git@isse.rs>
+Date:   Thu Jan 23 12:32:17 2025 +0100
+
+    Don't use vek::repr_simd
+
+diff --git a/common/Cargo.toml b/common/Cargo.toml
+index b11b5ad6f..4515fadbd 100644
+--- a/common/Cargo.toml
++++ b/common/Cargo.toml
+@@ -32,7 +32,7 @@ serde = { workspace = true, features = ["rc"] }
+ 
+ # Util
+ enum-map = { workspace = true, features = ["serde"] }
+-vek = { workspace = true, features = ["repr_simd"] }
++vek = { workspace = true }
+ chrono = { workspace = true }
+ chrono-tz = { workspace = true }
+ itertools = { workspace = true }
+diff --git a/common/src/comp/ori.rs b/common/src/comp/ori.rs
+index 567332430..93ab1f49a 100644
+--- a/common/src/comp/ori.rs
++++ b/common/src/comp/ori.rs
+@@ -364,6 +364,7 @@ impl From<Quaternion<f32>> for Ori {
+     fn from(quat: Quaternion<f32>) -> Self { Self::new(quat) }
+ }
+ 
++/*
+ impl From<vek::quaternion::repr_simd::Quaternion<f32>> for Ori {
+     fn from(
+         vek::quaternion::repr_simd::Quaternion { x, y, z, w }: vek::quaternion::repr_simd::Quaternion<f32>,
+@@ -371,16 +372,19 @@ impl From<vek::quaternion::repr_simd::Quaternion<f32>> for Ori {
+         Self::from(Quaternion { x, y, z, w })
+     }
+ }
++*/
+ 
+ impl From<Ori> for Quaternion<f32> {
+     fn from(Ori(q): Ori) -> Self { q }
+ }
+ 
++/*
+ impl From<Ori> for vek::quaternion::repr_simd::Quaternion<f32> {
+     fn from(Ori(Quaternion { x, y, z, w }): Ori) -> Self {
+         vek::quaternion::repr_simd::Quaternion { x, y, z, w }
+     }
+ }
++*/
+ 
+ impl From<Ori> for Dir {
+     fn from(ori: Ori) -> Self { ori.look_dir() }
+@@ -390,17 +394,21 @@ impl From<Ori> for Vec3<f32> {
+     fn from(ori: Ori) -> Self { ori.look_vec() }
+ }
+ 
++/*
+ impl From<Ori> for vek::vec::repr_simd::Vec3<f32> {
+     fn from(ori: Ori) -> Self { vek::vec::repr_simd::Vec3::from(ori.look_vec()) }
+ }
++*/
+ 
+ impl From<Ori> for Vec2<f32> {
+     fn from(ori: Ori) -> Self { ori.look_dir().to_horizontal().unwrap_or_default().xy() }
+ }
+ 
++/*
+ impl From<Ori> for vek::vec::repr_simd::Vec2<f32> {
+     fn from(ori: Ori) -> Self { vek::vec::repr_simd::Vec2::from(ori.look_vec().xy()) }
+ }
++*/
+ 
+ // Validate at Deserialization
+ #[derive(Copy, Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 diff --git a/voxygen/anim/src/plugin/mod.rs b/voxygen/anim/src/plugin/mod.rs
 index 224cc644e..534f6426d 100644
 --- a/voxygen/anim/src/plugin/mod.rs
@@ -1689,6 +1934,7 @@ index a056cd664..b4ded62a9 100644
      quaternion::repr_c::*, transform::repr_c::*, transition::*, vec::repr_c::*,
 -};*/
 +};
+<<<<<<< HEAD
 diff --git a/voxygen/benches/meshing_benchmark.rs b/voxygen/benches/meshing_benchmark.rs
 index 2cfe9563a..929d62b17 100644
 --- a/voxygen/benches/meshing_benchmark.rs
@@ -1778,6 +2024,8 @@ index d5251b53a..e654a288b 100644
                              {
                                  let model_entry = atlas.create_terrain(
                                      renderer,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 diff --git a/voxygen/src/scene/math.rs b/voxygen/src/scene/math.rs
 index 6caf30b7d..7ca3d7953 100644
 --- a/voxygen/src/scene/math.rs
@@ -1795,6 +2043,7 @@ index 6caf30b7d..7ca3d7953 100644
  
  pub fn aabb_to_points<T: Float>(bounds: Aabb<T>) -> [Vec3<T>; 8] {
      [
+<<<<<<< HEAD
 -- 
 2.51.2
 
@@ -4273,3 +4522,5 @@ index 31a200315..941ba9310 100644
 -- 
 2.51.2
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Encode binary files to printable utf16be";
     mainProgram = "base16384";
@@ -25,5 +26,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Encode binary files to printable utf16be";
+    mainProgram = "base16384";
+    homepage = "https://github.com/fumiama/base16384";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

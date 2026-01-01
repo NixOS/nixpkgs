@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library and command line interface for interacting with a Flywheel site";
     mainProgram = "fw";
@@ -51,6 +52,15 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rbreslow ];
+=======
+  meta = with lib; {
+    description = "Library and command line interface for interacting with a Flywheel site";
+    mainProgram = "fw";
+    homepage = "https://gitlab.com/flywheel-io/public/python-cli";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ rbreslow ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"

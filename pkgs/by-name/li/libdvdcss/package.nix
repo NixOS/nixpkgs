@@ -13,10 +13,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IzzJL13AHF06lvWzWCvn1c7lo1pS06CBWHRdPYYHAHk=";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.videolan.org/developers/libdvdcss.html";
     description = "Library for decrypting DVDs";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://www.videolan.org/developers/libdvdcss.html";
+    description = "Library for decrypting DVDs";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

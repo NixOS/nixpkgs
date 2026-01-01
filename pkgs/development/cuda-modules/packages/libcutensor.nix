@@ -36,6 +36,10 @@ buildRedist (finalAttrs: {
     homepage = "https://developer.nvidia.com/cutensor";
     changelog = "https://docs.nvidia.com/cuda/cutensor/latest/release_notes.html";
 
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.obsidian-systems-maintenance ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = _cuda.lib.licenses.cutensor;
   };
 })

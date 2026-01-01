@@ -1,6 +1,12 @@
 { pkgs, ... }:
 {
   name = "hub";
+<<<<<<< HEAD
+=======
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ nequissimus ];
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nodes.hub =
     { pkgs, ... }:

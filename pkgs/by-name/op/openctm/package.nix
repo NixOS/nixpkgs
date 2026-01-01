@@ -60,10 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall = "mkdir -p $bin/bin $dev/include $out/lib $man/share/man/man1";
 
+<<<<<<< HEAD
   meta = {
     description = "File format, software library and a tool set for compression of 3D triangle meshes";
     homepage = "https://sourceforge.net/projects/openctm/";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ nim65s ];
+=======
+  meta = with lib; {
+    description = "File format, software library and a tool set for compression of 3D triangle meshes";
+    homepage = "https://sourceforge.net/projects/openctm/";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ nim65s ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

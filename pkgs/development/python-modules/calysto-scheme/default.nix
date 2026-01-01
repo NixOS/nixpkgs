@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "calysto_scheme" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Scheme kernel for Jupyter that can use Python libraries";
     homepage = "https://github.com/Calysto/calysto_scheme";
     changelog = "https://github.com/Calysto/calysto_scheme/blob/${src.rev}/ChangeLog.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kranzes ];
+=======
+  meta = with lib; {
+    description = "Scheme kernel for Jupyter that can use Python libraries";
+    homepage = "https://github.com/Calysto/calysto_scheme";
+    changelog = "https://github.com/Calysto/calysto_scheme/blob/${src.rev}/ChangeLog.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ kranzes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

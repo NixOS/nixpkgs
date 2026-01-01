@@ -65,11 +65,19 @@ mkDerivation {
     "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Core libraries of Maliit and server";
     mainProgram = "maliit-server";
     homepage = "http://maliit.github.io/";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "Core libraries of Maliit and server";
+    mainProgram = "maliit-server";
+    homepage = "http://maliit.github.io/";
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -41,12 +41,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzp-fteqw";
+<<<<<<< HEAD
   version = "0-unstable-2025-09-25";
+=======
+  version = "0-unstable-2024-09-11";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "nzp-team";
     repo = "fteqw";
+<<<<<<< HEAD
     rev = "f68a2b547d2dc4bf6886b922baa1bff487cc5038";
+=======
+    rev = "593345a7f03245fc45580ac252857e5db5105033";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-ANDHh4PKh8fAvbBiiW47l1XeGOCes0Sg595+65NFG6w=";
   };
 
@@ -93,7 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FTE_TOOL_IMAGE" false)
     (lib.cmakeBool "FTE_TOOL_QTV" false)
     (lib.cmakeBool "FTE_TOOL_MASTER" false)
+<<<<<<< HEAD
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postInstall = ''

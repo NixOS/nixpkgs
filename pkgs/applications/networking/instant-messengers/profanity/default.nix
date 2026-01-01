@@ -108,16 +108,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   LC_ALL = "en_US.utf8";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://profanity-im.github.io";
+=======
+  meta = with lib; {
+    homepage = "http://www.profanity.im/";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Console based XMPP client";
     mainProgram = "profanity";
     longDescription = ''
       Profanity is a console based XMPP client written in C using ncurses and
       libstrophe, inspired by Irssi.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.devhell ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.devhell ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -1,0 +1,5 @@
+restartPolicy: "Never"
+runCommand: ""
+image:
+  repository: foo
+  tag: 1.0.0

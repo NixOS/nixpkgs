@@ -58,7 +58,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "POS-based cryptocurrency that rewards users for participating on the BOINC network";
     longDescription = ''
       A POS-based cryptocurrency that rewards users for participating on the BOINC network,
@@ -66,8 +70,14 @@ stdenv.mkDerivation rec {
       issuing money and contributing to scientific research are carried out collectively by the network
     '';
     homepage = "https://gridcoin.us/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gigglesquid ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ gigglesquid ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

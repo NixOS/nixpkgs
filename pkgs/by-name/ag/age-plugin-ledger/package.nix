@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
     rage
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Ledger Nano plugin for age";
     mainProgram = "age-plugin-ledger";
@@ -43,5 +44,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ erdnaxe ];
+=======
+  meta = with lib; {
+    description = "Ledger Nano plugin for age";
+    mainProgram = "age-plugin-ledger";
+    homepage = "https://github.com/Ledger-Donjon/age-plugin-ledger";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [ erdnaxe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

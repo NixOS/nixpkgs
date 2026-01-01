@@ -73,11 +73,20 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=django_markup.tests
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generic Django application to convert text with specific markup to html";
     homepage = "https://github.com/bartTC/django-markup";
     changelog = "https://github.com/bartTC/django-markup/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Generic Django application to convert text with specific markup to html";
+    homepage = "https://github.com/bartTC/django-markup";
+    changelog = "https://github.com/bartTC/django-markup/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

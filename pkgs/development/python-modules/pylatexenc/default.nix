@@ -20,12 +20,20 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pylatexenc" ];
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple LaTeX parser providing latex-to-unicode and unicode-to-latex conversion";
     homepage = "https://pylatexenc.readthedocs.io";
     downloadPage = "https://www.github.com/phfaist/pylatexenc/releases";
     changelog = "https://pylatexenc.readthedocs.io/en/latest/changes/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

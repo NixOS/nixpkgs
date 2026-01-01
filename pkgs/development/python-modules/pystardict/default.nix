@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pystardict" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for manipulating StarDict dictionaries from within Python";
     homepage = "https://github.com/lig/pystardict";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ thornycrackers ];
+=======
+  meta = with lib; {
+    description = "Library for manipulating StarDict dictionaries from within Python";
+    homepage = "https://github.com/lig/pystardict";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ thornycrackers ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

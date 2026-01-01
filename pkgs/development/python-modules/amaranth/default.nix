@@ -71,12 +71,21 @@ buildPythonPackage rec {
     "tests/test_lib_fifo.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Modern hardware definition language and toolchain based on Python";
     homepage = "https://amaranth-lang.org/docs/amaranth";
     changelog = "https://github.com/amaranth-lang/amaranth/blob/${src.tag}/docs/changes.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Modern hardware definition language and toolchain based on Python";
+    homepage = "https://amaranth-lang.org/docs/amaranth";
+    changelog = "https://github.com/amaranth-lang/amaranth/blob/${src.tag}/docs/changes.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       pbsds
     ];

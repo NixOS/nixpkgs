@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xkbcommon" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sde1000/python-xkbcommon";
     description = "Python bindings for libxkbcommon using cffi";
@@ -39,5 +40,12 @@ buildPythonPackage rec {
       chvp
       doronbehar
     ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sde1000/python-xkbcommon";
+    description = "Python bindings for libxkbcommon using cffi";
+    license = licenses.mit;
+    maintainers = with maintainers; [ chvp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

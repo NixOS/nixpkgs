@@ -70,7 +70,11 @@ buildPythonPackage rec {
     "tests"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://cvxopt.org/";
     description = "Python Software for Convex Optimization";
     longDescription = ''
@@ -83,7 +87,12 @@ buildPythonPackage rec {
       standard library and on the strengths of Python as a high-level
       programming language.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ edwtjo ];
     license = lib.licenses.gpl3Plus;
+=======
+    maintainers = with maintainers; [ edwtjo ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

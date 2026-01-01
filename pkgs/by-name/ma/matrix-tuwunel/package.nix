@@ -43,8 +43,13 @@ let
             # The commit on the rocksdb fork, tuwunel-changes branch referenced by the upstream
             # tuwunel flake.lock:
             # https://github.com/matrix-construct/tuwunel/blob/main/flake.lock#L557C17-L557C57
+<<<<<<< HEAD
             rev = "9a3a213b55df0b11408102c899a940675c0d90e4";
             hash = "sha256-aOV/jJjRjNJ3hrRqhCsXlIz05NvEhDF/j5Q5UOQuvp8=";
+=======
+            rev = "cf7f65d0b377af019661c240f9165b3ef60640c3";
+            hash = "sha256-ZSjvAZBfZkJrBIpw8ANZMbJVb8AeuogvuAipGVE4Qe4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           };
           version = "tuwunel-changes";
           patches = [ ];
@@ -88,16 +93,27 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
+<<<<<<< HEAD
   version = "1.4.8";
+=======
+  version = "1.4.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-NKq5bEn40nHIewmaVPQ2aFJEZ4jkmnXDAZ/lL3rD8iQ=";
   };
 
   cargoHash = "sha256-7BC8I3urT9/fArVm9Ji5U0jzAqovUE914jgZz8ejiUk=";
+=======
+    hash = "sha256-EmIBhSxYD52BzwewcIL53e3/7GLY+5nccmAYGf1LPqI=";
+  };
+
+  cargoHash = "sha256-aVMJr216gkYpanCee6UhNGINAi/EZ0V5m0WaTYpQJcY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config

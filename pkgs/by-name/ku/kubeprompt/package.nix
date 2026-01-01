@@ -25,11 +25,20 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Kubernetes prompt";
     mainProgram = "kubeprompt";
     homepage = "https://github.com/jlesquembre/kubeprompt";
     license = lib.licenses.epl20;
     maintainers = with lib.maintainers; [ jlesquembre ];
+=======
+  meta = with lib; {
+    description = "Kubernetes prompt";
+    mainProgram = "kubeprompt";
+    homepage = "https://github.com/jlesquembre/kubeprompt";
+    license = licenses.epl20;
+    maintainers = with maintainers; [ jlesquembre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

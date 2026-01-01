@@ -8,7 +8,11 @@
   symlinkJoin,
   autoAddDriverRunpath,
 
+<<<<<<< HEAD
   # build-system
+=======
+  # build system
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   jinja2,
   ninja,
@@ -52,8 +56,11 @@
   importlib-metadata,
   partial-json-parser,
   compressed-tensors,
+<<<<<<< HEAD
   mcp,
   ijson,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mistral-common,
   msgspec,
   model-hosting-container-standards,
@@ -156,6 +163,7 @@ let
     '';
   };
 
+<<<<<<< HEAD
   # grep for DEFAULT_TRITON_KERNELS_TAG in the following file
   # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/triton_kernels.cmake
   triton-kernels = fetchFromGitHub {
@@ -165,6 +173,8 @@ let
     hash = "sha256-F6T0n37Lbs+B7UHNYzoIQHjNNv3TcMtoXjNrT8ZUlxY=";
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # grep for GIT_TAG in the following file
   # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/qutlass.cmake
   qutlass = fetchFromGitHub {
@@ -186,8 +196,13 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
+<<<<<<< HEAD
       rev = "86f8f157cf82aa2342743752b97788922dd7de43";
       hash = "sha256-+h43jMte/29kraNtPiloSQFfCay4W3NNIlzvs47ygyM=";
+=======
+      rev = "58e0626a692f09241182582659e3bf8f16472659";
+      hash = "sha256-ewdZd7LuBKBV0y3AaGRWISJzjg6cu59D2OtgqoDjrbM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     patches = [
@@ -315,7 +330,11 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
+<<<<<<< HEAD
   version = "0.13.0";
+=======
+  version = "0.11.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -324,7 +343,11 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-pI9vQBhjRPlKOjZp6kH+n8Y0Q4t9wLYM7SnLftSfYgs=";
+=======
+    hash = "sha256-DoSlkFmR3KKEtfSfdRB++0CZeeXgxmM3zZjONlxbe8U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -356,6 +379,13 @@ buildPythonPackage rec {
       --replace-fail \
         'set(PYTHON_SUPPORTED_VERSIONS' \
         'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+<<<<<<< HEAD
+=======
+
+    # Pass build environment PYTHONPATH to vLLM's Python configuration scripts
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '$PYTHONPATH' '$ENV{PYTHONPATH}'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   nativeBuildInputs = [
@@ -419,10 +449,15 @@ buildPythonPackage rec {
     cbor2
     depyf
     fastapi
+<<<<<<< HEAD
     ijson
     llguidance
     lm-format-enforcer
     mcp
+=======
+    llguidance
+    lm-format-enforcer
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     numpy
     openai
     opencv-python-headless
@@ -509,7 +544,10 @@ buildPythonPackage rec {
     lib.optionalAttrs cudaSupport {
       VLLM_TARGET_DEVICE = "cuda";
       CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
+<<<<<<< HEAD
       TRITON_KERNELS_SRC_DIR = "${lib.getDev triton-kernels}/python/triton_kernels/triton_kernels";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     // lib.optionalAttrs rocmSupport {
       VLLM_TARGET_DEVICE = "rocm";

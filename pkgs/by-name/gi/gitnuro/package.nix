@@ -63,16 +63,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "FOSS Git multiplatform client based on Compose and JGit";
     homepage = "https://gitnuro.com/";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "FOSS Git multiplatform client based on Compose and JGit";
+    homepage = "https://gitnuro.com/";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ zendo ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ zendo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gitnuro";
   };
 }

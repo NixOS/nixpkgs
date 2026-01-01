@@ -12,6 +12,10 @@
 let
   rev = "a7e046db4b29d422fc9aac60ea6b82b31399951a";
   sha256 = "sha256-6ZQ0OLijq6UtOtUqRdFC19+helhU0Av6MvGCZf6XmcQ=";
+<<<<<<< HEAD
+=======
+  inherit (nix.libs) nix-perl-bindings;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 
 stdenv.mkDerivation {
@@ -36,7 +40,11 @@ stdenv.mkDerivation {
         p.DBDSQLite
         p.Plack
         p.Starman
+<<<<<<< HEAD
         nix.libs.nix-perl-bindings or null
+=======
+        nix-perl-bindings
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ])
     }/bin/starman $out/bin/nix-serve \
       --prefix PATH : "${
@@ -58,11 +66,19 @@ stdenv.mkDerivation {
     nix-serve-ssh = nixosTests.nix-serve-ssh;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/edolstra/nix-serve";
     description = "Utility for sharing a Nix store as a binary cache";
     maintainers = [ lib.maintainers.eelco ];
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/edolstra/nix-serve";
+    description = "Utility for sharing a Nix store as a binary cache";
+    maintainers = [ maintainers.eelco ];
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # See https://github.com/edolstra/nix-serve/issues/57
     broken = stdenv.hostPlatform.isDarwin;
     platforms = nix.meta.platforms;

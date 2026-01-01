@@ -49,7 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ahlstromcj/seq66";
     description = "Loop based midi sequencer with Qt GUI derived from seq24 and sequencer64";
     license = lib.licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qseq66";
     platforms = lib.platforms.linux;
   };

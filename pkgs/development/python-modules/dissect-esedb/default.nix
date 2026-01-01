@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.esedb" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dissect module implementing a parser for Microsofts Extensible Storage Engine Database (ESEDB)";
     homepage = "https://github.com/fox-it/dissect.esedb";
     changelog = "https://github.com/fox-it/dissect.esedb/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Dissect module implementing a parser for Microsofts Extensible Storage Engine Database (ESEDB)";
+    homepage = "https://github.com/fox-it/dissect.esedb";
+    changelog = "https://github.com/fox-it/dissect.esedb/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

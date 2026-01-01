@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-loader";
+<<<<<<< HEAD
   version = "1.4.335.0";
+=======
+  version = "1.4.328.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
     rev = "vulkan-sdk-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-1xLT4AynJumzwkYOBS5i0OpCi3EdE8QctctDn+DGrvU=";
+=======
+    hash = "sha256-+cuKdhdCMIL4b+GzIpCNrDBmC7cVX0iX2QW7BQIj9Tc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./fix-pkgconfig.patch ];
@@ -73,12 +81,21 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "LunarG Vulkan loader";
     homepage = "https://www.lunarg.com";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ralith ];
+=======
+  meta = with lib; {
+    description = "LunarG Vulkan loader";
+    homepage = "https://www.lunarg.com";
+    platforms = platforms.unix ++ platforms.windows;
+    license = licenses.asl20;
+    maintainers = [ maintainers.ralith ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = finalAttrs.version != vulkan-headers.version;
     pkgConfigModules = [ "vulkan" ];
   };

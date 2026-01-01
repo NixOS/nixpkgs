@@ -35,12 +35,20 @@ python3Packages.buildPythonApplication rec {
     testfixtures
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     homepage = "https://github.com/cpplint/cpplint";
     description = "Static code checker for C++";
     changelog = "https://github.com/cpplint/cpplint/releases/tag/${version}";
     mainProgram = "cpplint";
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = [ lib.licenses.bsd3 ];
   };
 }

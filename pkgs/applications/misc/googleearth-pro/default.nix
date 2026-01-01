@@ -128,6 +128,7 @@ mkDerivation rec {
       --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "World sphere viewer";
     homepage = "https://www.google.com/earth/";
@@ -138,6 +139,18 @@ mkDerivation rec {
       xddxdd
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "World sphere viewer";
+    homepage = "https://www.google.com/earth/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      shamilton
+      xddxdd
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     knownVulnerabilities = [
       "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj."
     ];

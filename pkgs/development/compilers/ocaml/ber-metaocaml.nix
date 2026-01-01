@@ -85,18 +85,32 @@ stdenv.mkDerivation rec {
     nativeCompilers = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-Stage Programming extension for OCaml";
     homepage = "https://okmij.org/ftp/ML/MetaOCaml.html";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Multi-Stage Programming extension for OCaml";
+    homepage = "https://okmij.org/ftp/ML/MetaOCaml.html";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # compiler
       qpl # library
       lgpl2
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ thoughtpolice ];
 
     branch = baseOcamlBranch;
     platforms = with lib.platforms; linux ++ darwin;
+=======
+    maintainers = with maintainers; [ thoughtpolice ];
+
+    branch = baseOcamlBranch;
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isMips;
 
     longDescription = ''

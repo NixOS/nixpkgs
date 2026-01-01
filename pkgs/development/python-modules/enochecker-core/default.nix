@@ -23,11 +23,20 @@ buildPythonPackage rec {
   # no tests upstream
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Base library for enochecker libs";
     homepage = "https://github.com/enowars/enochecker_core";
     changelog = "https://github.com/enowars/enochecker_core/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fwc ];
+=======
+  meta = with lib; {
+    description = "Base library for enochecker libs";
+    homepage = "https://github.com/enowars/enochecker_core";
+    changelog = "https://github.com/enowars/enochecker_core/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fwc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

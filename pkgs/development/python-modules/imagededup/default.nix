@@ -76,11 +76,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imagededup" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://idealo.github.io/imagededup/";
     changelog = "https://github.com/idealo/imagededup/releases/tag/${src.tag}";
     description = "Finding duplicate images made easy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ stunkymonkey ];
+=======
+  meta = with lib; {
+    homepage = "https://idealo.github.io/imagededup/";
+    changelog = "https://github.com/idealo/imagededup/releases/tag/${src.tag}";
+    description = "Finding duplicate images made easy";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ stunkymonkey ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

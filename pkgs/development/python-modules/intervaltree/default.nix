@@ -27,10 +27,18 @@ buildPythonPackage rec {
     rm -rf build
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Editable interval tree data structure for Python 2 and 3";
     homepage = "https://github.com/chaimleib/intervaltree";
     license = [ lib.licenses.asl20 ];
     maintainers = [ lib.maintainers.bennofs ];
+=======
+  meta = with lib; {
+    description = "Editable interval tree data structure for Python 2 and 3";
+    homepage = "https://github.com/chaimleib/intervaltree";
+    license = [ licenses.asl20 ];
+    maintainers = [ maintainers.bennofs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

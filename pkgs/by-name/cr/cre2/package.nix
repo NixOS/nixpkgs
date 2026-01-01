@@ -36,10 +36,18 @@ stdenv.mkDerivation rec {
     "--enable-maintainer-mode"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://marcomaggi.github.io/docs/cre2.html";
     description = "C Wrapper for RE2";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://marcomaggi.github.io/docs/cre2.html";
+    description = "C Wrapper for RE2";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

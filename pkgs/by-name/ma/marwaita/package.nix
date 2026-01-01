@@ -41,11 +41,20 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";
     homepage = "https://www.pling.com/p/1239855/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";
+    homepage = "https://www.pling.com/p/1239855/";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

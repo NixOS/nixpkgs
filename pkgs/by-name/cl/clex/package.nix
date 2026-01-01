@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "File manager with full-screen terminal interface";
     longDescription = ''
       CLEX (pronounced KLEKS) displays directory contents including the file
@@ -28,7 +32,12 @@ stdenv.mkDerivation rec {
       add-on to your favorite shell.
     '';
     homepage = "https://github.com/xitop/clex";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux ++ darwin;
+=======
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

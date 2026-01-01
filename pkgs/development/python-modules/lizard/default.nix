@@ -41,13 +41,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lizard" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/terryyin/lizard/blob/${version}/CHANGELOG.md";
     description = "Code analyzer without caring the C/C++ header files";
     mainProgram = "lizard";
     downloadPage = "https://github.com/terryyin/lizard";
     homepage = "http://www.lizard.ws";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

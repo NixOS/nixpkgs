@@ -30,12 +30,21 @@ stdenv_32bit.mkDerivation rec {
     cp mpclient $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/taviso/loadlibrary";
     description = "Porting Windows Dynamic Link Libraries to Linux";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eleanor ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/taviso/loadlibrary";
+    description = "Porting Windows Dynamic Link Libraries to Linux";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eleanor ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mpclient";
   };
 }

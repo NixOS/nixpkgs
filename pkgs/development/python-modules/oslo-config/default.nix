@@ -51,10 +51,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_config" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Oslo Configuration API";
     homepage = "https://github.com/openstack/oslo.config";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Oslo Configuration API";
+    homepage = "https://github.com/openstack/oslo.config";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trovoApi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the Trovo API";
     homepage = "https://codeberg.org/wolfangaukang/python-trovo";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Python wrapper for the Trovo API";
+    homepage = "https://codeberg.org/wolfangaukang/python-trovo";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

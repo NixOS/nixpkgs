@@ -27,10 +27,18 @@ buildGoModule rec {
     ln -s $out/bin/microplane $out/bin/mp
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool to make git changes across many repos";
     homepage = "https://github.com/Clever/microplane";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dbirks ];
+=======
+  meta = with lib; {
+    description = "CLI tool to make git changes across many repos";
+    homepage = "https://github.com/Clever/microplane";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dbirks ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

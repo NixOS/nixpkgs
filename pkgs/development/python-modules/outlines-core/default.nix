@@ -34,7 +34,11 @@
 
 buildPythonPackage rec {
   pname = "outlines-core";
+<<<<<<< HEAD
   version = "0.2.13";
+=======
+  version = "0.2.11";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pyproject = true;
 
@@ -42,7 +46,11 @@ buildPythonPackage rec {
     owner = "dottxt-ai";
     repo = "outlines-core";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-mfw/cOLZPRcL3HWmrm/SyA0zDCPWr5F19EWIUdNu9jM=";
+=======
+    hash = "sha256-lLMTHFytJT2MhnzT0RlRCaSBPijA81fjxUqx4IGfVo8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -97,7 +105,11 @@ buildPythonPackage rec {
     rm -rf outlines_core
   '';
 
+<<<<<<< HEAD
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+=======
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # Tests that need to download from Hugging Face Hub.

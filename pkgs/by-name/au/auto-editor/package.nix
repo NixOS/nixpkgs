@@ -19,17 +19,30 @@
 
   python3,
   python3Packages,
+<<<<<<< HEAD
+=======
+  nimble,
+  nim,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildNimPackage rec {
   pname = "auto-editor";
+<<<<<<< HEAD
   version = "29.4.0";
+=======
+  version = "29.3.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-DzgR/GyVIUq6Dfes6OnTdYO/vyGBPcKSeD2IikF7sIM=";
+=======
+    hash = "sha256-Nne6niGnhaEQNvvFURmF0N9oyuG1ZvJ4NzxddJdSQtY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   lockFile = ./lock.json;
@@ -69,6 +82,7 @@ buildNimPackage rec {
       --replace-fail '"main=auto-editor"' '"main"'
   '';
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     python3
     python3Packages.av
@@ -86,6 +100,28 @@ buildNimPackage rec {
 
     runHook postCheck
   '';
+=======
+  # TODO: Fix checks
+  /*
+    nativeCheckInputs = [
+      python3Packages.av
+      python3
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+
+      nim c \
+      ${if withHEVC then "-d:enable_hevc" else ""} \
+      ${if withWhisper then "-d:enable_whisper" else ""} \
+      -r $src/src/rationals
+
+      python3 $src/tests/test.py
+
+      runHook postCheck
+    '';
+  */
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     mv $out/bin/main $out/bin/auto-editor

@@ -43,13 +43,20 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+<<<<<<< HEAD
     mkdir -p $out/{bin,lib,include,lib/udev/rules.d}
+=======
+    mkdir -p $out/{bin,lib,include}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libName="libsdrplay_api"
     cp "${arch}/$libName.so.$majorMinorVersion" $out/lib/
     ln -s "$out/lib/$libName.so.$majorMinorVersion" "$out/lib/$libName.so.$majorVersion"
     ln -s "$out/lib/$libName.so.$majorVersion" "$out/lib/$libName.so"
     cp "${arch}/sdrplay_apiService" $out/bin/
     cp -r inc/* $out/include/
+<<<<<<< HEAD
     awk 'index($0, "cat > /etc/udev/rules.d/66-sdrplay.rules"){flag=1; next} /EOF/{flag=0} flag' install_lib.sh > $out/lib/udev/rules.d/66-sdrplay.rules
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 }

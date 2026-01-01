@@ -55,11 +55,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Default settings and configuration files for elementary";
     homepage = "https://github.com/elementary/default-settings";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Default settings and configuration files for elementary";
+    homepage = "https://github.com/elementary/default-settings";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

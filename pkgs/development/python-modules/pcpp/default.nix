@@ -17,11 +17,20 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ned14/pcpp";
     description = "C99 preprocessor written in pure Python";
     mainProgram = "pcpp";
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ rakesh4g ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ned14/pcpp";
+    description = "C99 preprocessor written in pure Python";
+    mainProgram = "pcpp";
+    license = licenses.bsd0;
+    maintainers = with maintainers; [ rakesh4g ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "growattServer" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package to retrieve information from Growatt units";
     homepage = "https://github.com/indykoning/PyPi_GrowattServer";
     changelog = "https://github.com/indykoning/PyPi_GrowattServer/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python package to retrieve information from Growatt units";
+    homepage = "https://github.com/indykoning/PyPi_GrowattServer";
+    changelog = "https://github.com/indykoning/PyPi_GrowattServer/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

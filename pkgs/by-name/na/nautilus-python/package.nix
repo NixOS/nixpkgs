@@ -61,11 +61,20 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the Nautilus Extension API";
     homepage = "https://gitlab.gnome.org/GNOME/nautilus-python";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Python bindings for the Nautilus Extension API";
+    homepage = "https://gitlab.gnome.org/GNOME/nautilus-python";
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

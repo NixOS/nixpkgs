@@ -22,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "scapy";
+<<<<<<< HEAD
   version = "2.7.0";
+=======
+  version = "2.6.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   disabled = isPyPy;
@@ -31,7 +35,11 @@ buildPythonPackage rec {
     owner = "secdev";
     repo = "scapy";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Pp7pPfaWyzJGf+soENfOPynN8logc5FM848hyVCcdKk=";
+=======
+    hash = "sha256-m2L30aEpPp9cfW652yd+0wFkNlMij6FF1RzWZbwJ79A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./find-library.patch ];
@@ -77,7 +85,11 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "scapy" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python-based network packet manipulation program and library";
     mainProgram = "scapy";
     longDescription = ''
@@ -103,9 +115,15 @@ buildPythonPackage rec {
     '';
     homepage = "https://scapy.net/";
     changelog = "https://github.com/secdev/scapy/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
     ];
   };

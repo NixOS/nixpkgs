@@ -121,10 +121,17 @@ stdenv.mkDerivation rec {
     nixos = nixosTests.man;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://man-db.nongnu.org";
     description = "Implementation of the standard Unix documentation system accessed using the man command";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "http://man-db.nongnu.org";
+    description = "Implementation of the standard Unix documentation system accessed using the man command";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
     mainProgram = "man";
   };

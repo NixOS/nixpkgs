@@ -46,11 +46,20 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Analyze and edit Mach-O headers, the executable format used by Mac OS X";
     homepage = "https://github.com/ronaldoussoren/macholib";
     changelog = "https://github.com/ronaldoussoren/macholib/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eveeifyeve ];
+=======
+  meta = with lib; {
+    description = "Analyze and edit Mach-O headers, the executable format used by Mac OS X";
+    homepage = "https://github.com/ronaldoussoren/macholib";
+    changelog = "https://github.com/ronaldoussoren/macholib/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ eveeifyeve ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

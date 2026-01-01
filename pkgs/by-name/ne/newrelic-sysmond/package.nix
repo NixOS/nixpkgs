@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
       $out/bin/nrsysmond
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "System-wide monitoring for newrelic";
     homepage = "https://newrelic.com/";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ lnl7 ];
+=======
+  meta = with lib; {
+    description = "System-wide monitoring for newrelic";
+    homepage = "https://newrelic.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lnl7 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin that parses environment files before running tests";
     homepage = "https://github.com/quiqua/pytest-dotenv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cleeyv ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin that parses environment files before running tests";
+    homepage = "https://github.com/quiqua/pytest-dotenv";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cleeyv ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

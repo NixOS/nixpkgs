@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.pygments
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Quick-and-dirty, literate-programming-style documentation generator for / in POSIX shell";
     mainProgram = "shocco";
@@ -34,5 +35,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Quick-and-dirty, literate-programming-style documentation generator for / in POSIX shell";
+    mainProgram = "shocco";
+    homepage = "https://rtomayko.github.io/shocco/";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

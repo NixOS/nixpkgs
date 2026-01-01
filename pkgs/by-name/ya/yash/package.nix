@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ ncurses ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://yash.osdn.jp/index.html.en";
     description = "Yet another POSIX-compliant shell";
@@ -32,6 +33,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ qbit ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://yash.osdn.jp/index.html.en";
+    description = "Yet another POSIX-compliant shell";
+    mainProgram = "yash";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ qbit ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru.shellPath = "/bin/yash";

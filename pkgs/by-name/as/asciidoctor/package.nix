@@ -17,6 +17,7 @@ bundlerApp {
     updateScript = bundlerUpdateScript "asciidoctor";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Faster Asciidoc processor written in Ruby";
     homepage = "https://asciidoctor.org/";
@@ -26,5 +27,16 @@ bundlerApp {
       nicknovitski
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Faster Asciidoc processor written in Ruby";
+    homepage = "https://asciidoctor.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      gpyh
+      nicknovitski
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

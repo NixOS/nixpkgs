@@ -42,10 +42,17 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion finalfusion.{bash,fish,zsh}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for converting, quantizing, and querying word embeddings";
     homepage = "https://github.com/finalfusion/finalfusion-utils/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Utility for converting, quantizing, and querying word embeddings";
+    homepage = "https://github.com/finalfusion/finalfusion-utils/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "finalfusion";
   };

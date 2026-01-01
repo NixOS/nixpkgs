@@ -18,17 +18,30 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error=c++11-narrowing"
   ]);
 
+<<<<<<< HEAD
   meta = {
     description = "Open Dynamics Engine";
     mainProgram = "ode-config";
     homepage = "https://www.ode.org";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Open Dynamics Engine";
+    mainProgram = "ode-config";
+    homepage = "https://www.ode.org";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd3
       lgpl21Only
       lgpl3Only
       zlib
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

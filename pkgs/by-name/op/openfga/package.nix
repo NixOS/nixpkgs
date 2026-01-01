@@ -7,7 +7,11 @@
 
 let
   pname = "openfga";
+<<<<<<< HEAD
   version = "1.11.2";
+=======
+  version = "1.11.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 
 buildGoModule {
@@ -17,7 +21,11 @@ buildGoModule {
     owner = "openfga";
     repo = "openfga";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-L8rzLTMcE2tcXrYQdTlkuIrRzZ+gHBj/NYZaq9zpUik=";
+=======
+    hash = "sha256-GI0ZII1PlZMTjgxoJJP45mHAUF4BAXGDqV3bNlFB5ec=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-pwEyPHQZ6XYa/HhopvY/hDFHIAbnC51d2IQBSpvMBY8=";

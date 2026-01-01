@@ -53,7 +53,11 @@ stdenv.mkDerivation rec {
     # webkitgtk_4_0
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # webkitgtk_4_0 was removed
     broken = true;
     homepage = "https://tkashkin.github.io/projects/gamehub";
@@ -63,8 +67,14 @@ stdenv.mkDerivation rec {
       your games from different platforms into one program to make it easier
       for you to manage your games.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ pasqui23 ];
     license = with lib.licenses; [ gpl3Only ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ pasqui23 ];
+    license = with licenses; [ gpl3Only ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

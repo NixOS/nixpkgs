@@ -42,11 +42,20 @@ stdenv.mkDerivation rec {
     cp unicorn.png "$out/public/img/unicorn.png"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Unicorn theme for IcingaWeb 2";
     homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-unicorn";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ das_j ];
+=======
+  meta = with lib; {
+    description = "Unicorn theme for IcingaWeb 2";
+    homepage = "https://github.com/Mikesch-mp/icingaweb2-theme-unicorn";
+    license = licenses.publicDomain;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ das_j ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

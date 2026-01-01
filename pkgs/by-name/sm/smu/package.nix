@@ -22,11 +22,20 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple markup - markdown like syntax";
     mainProgram = "smu";
     homepage = "https://github.com/Gottox/smu";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+  meta = with lib; {
+    description = "Simple markup - markdown like syntax";
+    mainProgram = "smu";
+    homepage = "https://github.com/Gottox/smu";
+    license = licenses.mit;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

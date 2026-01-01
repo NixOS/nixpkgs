@@ -80,10 +80,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "miio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interfacing with Xiaomi smart appliances";
     homepage = "https://github.com/rytilahti/python-miio";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ flyfloh ];
+=======
+  meta = with lib; {
+    description = "Python library for interfacing with Xiaomi smart appliances";
+    homepage = "https://github.com/rytilahti/python-miio";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ flyfloh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -52,16 +52,28 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/so-fancy/diff-so-fancy";
     description = "Good-looking diffs filter for git";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/so-fancy/diff-so-fancy";
+    description = "Good-looking diffs filter for git";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       diff-so-fancy builds on the good-lookin' output of git contrib's
       diff-highlight to upgrade your diffs' appearances.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fpletz
       ma27
     ];

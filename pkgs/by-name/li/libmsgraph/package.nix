@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library to access MS Graph API for Office 365";
     homepage = "https://gitlab.gnome.org/GNOME/msgraph";
@@ -70,5 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library to access MS Graph API for Office 365";
+    homepage = "https://gitlab.gnome.org/GNOME/msgraph";
+    changelog = "https://gitlab.gnome.org/GNOME/msgraph/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    license = licenses.lgpl3Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

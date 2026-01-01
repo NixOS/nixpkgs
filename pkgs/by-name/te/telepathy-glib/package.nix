@@ -66,10 +66,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://telepathy.freedesktop.org";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://telepathy.freedesktop.org";
+    platforms = platforms.unix;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd2
       bsd3
       lgpl21Plus

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { callPackage, stdenv }:
+=======
+{ callPackage }:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 rec {
   mlton20130715 = callPackage ./20130715.nix { };
@@ -21,6 +25,7 @@ rec {
     sha256 = "sha256-rqL8lnzVVR+5Hc7sWXK8dCXN92dU76qSoii3/4StODM=";
   };
 
+<<<<<<< HEAD
   mlton20241230 = callPackage ./from-git-source.nix {
     mltonBootstrap = mlton20210117Binary;
     version = "20241230";
@@ -37,5 +42,12 @@ rec {
     sha256 = "sha256-nWR7ZaXfKxeXfZ9IHipAQ39ASVtva4BeDHP3Zq8mqPo=";
     # https://github.com/MLton/mlton/issues/631
     doCheck = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin);
+=======
+  mltonHEAD = callPackage ./from-git-source.nix {
+    mltonBootstrap = mlton20210117Binary;
+    version = "HEAD";
+    rev = "875f7912a0b135a9a7e86a04ecac9cacf0bfe5e5";
+    sha256 = "sha256-/MIoVqqv8qrJPehU7VRFpXtAAo8UUzE3waEvB7WnS9A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

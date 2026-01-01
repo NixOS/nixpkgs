@@ -136,11 +136,20 @@ buildPythonPackage rec {
     inherit mpi;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Density functional theory and beyond within the projector-augmented wave method";
     homepage = "https://wiki.fysik.dtu.dk/gpaw/index.html";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Density functional theory and beyond within the projector-augmented wave method";
+    homepage = "https://wiki.fysik.dtu.dk/gpaw/index.html";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

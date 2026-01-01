@@ -38,11 +38,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Gnome docking library";
     homepage = "https://developer.gnome.org/gdl/";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Gnome docking library";
+    homepage = "https://developer.gnome.org/gdl/";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

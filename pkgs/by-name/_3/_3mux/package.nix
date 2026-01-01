@@ -61,6 +61,10 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aaronjanse
+<<<<<<< HEAD
+=======
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = lib.platforms.unix;
   };

@@ -2,8 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
   anyio,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gobject-introspection,
   gtk3,
   imagemagick,
@@ -13,7 +16,10 @@
   pytest-asyncio,
   pytest-lazy-fixture,
   pytest-rerunfailures,
+<<<<<<< HEAD
   pytest-xdist,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytestCheckHook,
   python-dateutil,
   qtile,
@@ -24,13 +30,18 @@
 }:
 buildPythonPackage rec {
   pname = "qtile-extras";
+<<<<<<< HEAD
   version = "0.34.1";
+=======
+  version = "0.33.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-CtmTZmUQlqkDPd++n3fPbRB4z1NA4ZxnmIR84IjsURw=";
   };
 
@@ -43,12 +54,20 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-3aN2MrD1U5iBneVbYtNeWpK+JAQunGpemDpJnDuQdVI=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools-scm ];
 
   dependencies = [ gtk3 ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     anyio
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     gobject-introspection
     imagemagick
     keyring
@@ -56,7 +75,10 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-lazy-fixture
     pytest-rerunfailures
+<<<<<<< HEAD
     pytest-xdist
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pytestCheckHook
     python-dateutil
     qtile
@@ -102,11 +124,20 @@ buildPythonPackage rec {
 
   passthru.tests.qtile-extras = nixosTests.qtile-extras;
 
+<<<<<<< HEAD
   meta = {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
     changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arjan-s ];
+=======
+  meta = with lib; {
+    description = "Extra modules and widgets for the Qtile tiling window manager";
+    homepage = "https://github.com/elParaguayo/qtile-extras";
+    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.tag}/CHANGELOG";
+    license = licenses.mit;
+    maintainers = with maintainers; [ arjan-s ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

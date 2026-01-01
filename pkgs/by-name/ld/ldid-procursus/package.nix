@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --cmd ldid --zsh _ldid
   '';
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "ldid";
     description = "Put real or fake signatures in a Mach-O binary";
@@ -59,5 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ keto ];
     platforms = lib.platforms.unix;
     license = lib.licenses.agpl3Only;
+=======
+  meta = with lib; {
+    mainProgram = "ldid";
+    description = "Put real or fake signatures in a Mach-O binary";
+    homepage = "https://github.com/ProcursusTeam/ldid";
+    maintainers = with maintainers; [ keto ];
+    platforms = platforms.unix;
+    license = licenses.agpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

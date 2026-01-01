@@ -48,13 +48,22 @@ buildPythonPackage rec {
 
   passthru.tests.version = testers.testVersion { package = sqlite-utils; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python CLI utility and library for manipulating SQLite databases";
     mainProgram = "sqlite-utils";
     homepage = "https://github.com/simonw/sqlite-utils";
     changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       meatcar
       techknowlogick
     ];

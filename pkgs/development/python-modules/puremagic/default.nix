@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "puremagic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of magic file detection";
     homepage = "https://github.com/cdgriffith/puremagic";
     changelog = "https://github.com/cdgriffith/puremagic/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Implementation of magic file detection";
+    homepage = "https://github.com/cdgriffith/puremagic";
+    changelog = "https://github.com/cdgriffith/puremagic/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ globin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

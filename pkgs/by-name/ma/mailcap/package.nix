@@ -56,11 +56,20 @@ stdenv.mkDerivation rec {
 
   passthru.tests.nginx-mime = nixosTests.nginx-mime;
 
+<<<<<<< HEAD
   meta = {
     description = "Helper application and MIME type associations for file types";
     homepage = "https://pagure.io/mailcap";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ c0bw3b ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Helper application and MIME type associations for file types";
+    homepage = "https://pagure.io/mailcap";
+    license = licenses.mit;
+    maintainers = with maintainers; [ c0bw3b ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -5,19 +5,32 @@
   nodejs,
   faketty,
   openssl,
+<<<<<<< HEAD
   prisma_6,
   prisma-engines_6,
+=======
+  prisma,
+  prisma-engines,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildNpmPackage rec {
   pname = "ghostfolio";
+<<<<<<< HEAD
   version = "2.225.0";
+=======
+  version = "2.219.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ghostfolio";
     repo = "ghostfolio";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-nzXQfi4N7t/tm5Zub29AIYKgBYzZN8k/fPLqRK3PKwM=";
+=======
+    hash = "sha256-WXBKUvwfllH6HQFgUBcUSaaHqhMrWU3V969ZtJ9y7KQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -27,10 +40,17 @@ buildNpmPackage rec {
     '';
   };
 
+<<<<<<< HEAD
   npmDepsHash = "sha256-TADFJd6kWmEsXi9+04OAGlhR2rX+++K5OraaQatLSho=";
 
   nativeBuildInputs = [
     prisma_6
+=======
+  npmDepsHash = "sha256-Xn+8+CHgCQ6Zh2/HUbl1xW8LkIypCfHAFzflc6vIeKQ=";
+
+  nativeBuildInputs = [
+    prisma
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     faketty
   ];
 
@@ -67,11 +87,19 @@ buildNpmPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \
       ${lib.concatStringsSep " " (
         lib.mapAttrsToList (name: value: "--set ${name} ${lib.escapeShellArg value}") {
+<<<<<<< HEAD
           PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_6 "schema-engine";
           PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_6 "query-engine";
           PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_6}/lib/libquery_engine.node";
           PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines_6 "introspection-engine";
           PRISMA_FMT_BINARY = lib.getExe' prisma-engines_6 "prisma-fmt";
+=======
+          PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
+          PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
+          PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
+          PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines "introspection-engine";
+          PRISMA_FMT_BINARY = lib.getExe' prisma-engines "prisma-fmt";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         }
       )}
 

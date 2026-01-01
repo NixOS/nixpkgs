@@ -51,9 +51,15 @@ buildGoModule rec {
       --zsh <($out/bin/wal-g completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/wal-g/wal-g";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/wal-g/wal-g";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Archival restoration tool for PostgreSQL";
     mainProgram = "wal-g";
     maintainers = [ ];

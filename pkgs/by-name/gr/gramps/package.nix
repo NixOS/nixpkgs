@@ -104,11 +104,19 @@ python3Packages.buildPythonApplication rec {
   # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-hooks-gobject-introspection
   strictDeps = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Genealogy software";
     mainProgram = "gramps";
     homepage = "https://gramps-project.org";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Genealogy software";
+    mainProgram = "gramps";
+    homepage = "https://gramps-project.org";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jk
       pinpox
       tomasajt
@@ -121,6 +129,10 @@ python3Packages.buildPythonApplication rec {
       people, places and events. All of your research is kept organized,
       searchable and as precise as you need it to be.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
+=======
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

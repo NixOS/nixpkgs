@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "MarkupPy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HTML/XML generator";
     homepage = "https://github.com/tylerbakke/MarkupPy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephi ];
+=======
+  meta = with lib; {
+    description = "HTML/XML generator";
+    homepage = "https://github.com/tylerbakke/MarkupPy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sephi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

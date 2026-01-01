@@ -30,7 +30,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "kanjidraw" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Handwritten kanji recognition";
     mainProgram = "kanjidraw";
     longDescription = ''
@@ -44,10 +48,18 @@ python3.pkgs.buildPythonApplication rec {
       Kanji draw Android app.
     '';
     homepage = "https://github.com/obfusk/kanjidraw";
+<<<<<<< HEAD
     license = with lib.licenses; [
       agpl3Plus # code
       cc-by-sa-30 # data.json
     ];
     maintainers = [ lib.maintainers.obfusk ];
+=======
+    license = with licenses; [
+      agpl3Plus # code
+      cc-by-sa-30 # data.json
+    ];
+    maintainers = [ maintainers.obfusk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

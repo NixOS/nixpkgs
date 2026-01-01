@@ -12,14 +12,22 @@
   gitUpdater,
 }:
 
+<<<<<<< HEAD
 stdenvNoCC.mkDerivation (finalAttrs: {
+=======
+stdenvNoCC.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "mate-wayland-session";
   version = "1.28.4";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-wayland-session";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
+=======
+    rev = "v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-jcYkiJOo1k0bMP/LkBW+QIrSyoj6qi8zZMTxqmuNQd0=";
   };
 
@@ -46,6 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Wayland session using Wayfire for the MATE desktop";
     homepage = "https://mate-desktop.org";
@@ -54,3 +63,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+  meta = with lib; {
+    description = "Wayland session using Wayfire for the MATE desktop";
+    homepage = "https://mate-desktop.org";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

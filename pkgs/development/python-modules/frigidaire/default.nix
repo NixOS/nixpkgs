@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frigidaire" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for the Frigidaire devices";
     homepage = "https://github.com/bm1549/frigidaire";
     changelog = "https://github.com/bm1549/frigidaire/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API for the Frigidaire devices";
+    homepage = "https://github.com/bm1549/frigidaire";
+    changelog = "https://github.com/bm1549/frigidaire/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

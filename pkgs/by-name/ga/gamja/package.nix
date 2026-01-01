@@ -31,11 +31,19 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple IRC web client";
     homepage = "https://codeberg.org/emersion/gamja";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Simple IRC web client";
+    homepage = "https://codeberg.org/emersion/gamja";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       motiejus
       apfelkuchen6
     ];

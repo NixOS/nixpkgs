@@ -22,11 +22,20 @@
     sha256 = "04164190vv1fzfk014mgqqmy5cml5amh63df31q2yc2kzvfajfc3";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple web handlers for Gerbil Scheme";
     homepage = "https://github.com/drewc/ftw";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "Simple web handlers for Gerbil Scheme";
+    homepage = "https://github.com/drewc/ftw";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

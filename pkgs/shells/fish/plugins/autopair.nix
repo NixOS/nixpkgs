@@ -15,11 +15,19 @@ buildFishPlugin rec {
     sha256 = "sha256-s1o188TlwpUQEN3X5MxUlD/2CFCpEkWu83U9O+wg3VU=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Auto-complete matching pairs in the Fish command line";
     homepage = "https://github.com/jorgebucaran/autopair.fish";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Auto-complete matching pairs in the Fish command line";
+    homepage = "https://github.com/jorgebucaran/autopair.fish";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kidonng
     ];
   };

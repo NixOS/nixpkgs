@@ -44,12 +44,21 @@ stdenv.mkDerivation rec {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Rofi frontend to pinentry";
     homepage = "https://github.com/plattfot/pinentry-rofi";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ seqizz ];
+=======
+  meta = with lib; {
+    description = "Rofi frontend to pinentry";
+    homepage = "https://github.com/plattfot/pinentry-rofi";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ seqizz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pinentry-rofi";
   };
 }

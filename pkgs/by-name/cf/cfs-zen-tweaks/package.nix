@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tweak Linux CPU scheduler for desktop responsiveness";
     homepage = "https://github.com/igo95862/cfs-zen-tweaks";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mkg20001 ];
+=======
+  meta = with lib; {
+    description = "Tweak Linux CPU scheduler for desktop responsiveness";
+    homepage = "https://github.com/igo95862/cfs-zen-tweaks";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mkg20001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

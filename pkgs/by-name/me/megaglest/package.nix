@@ -157,11 +157,20 @@ stdenv.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
     license = lib.licenses.gpl3;
     homepage = "https://megaglest.org/";
     maintainers = [ lib.maintainers.matejc ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
+    license = licenses.gpl3;
+    homepage = "https://megaglest.org/";
+    maintainers = [ maintainers.matejc ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

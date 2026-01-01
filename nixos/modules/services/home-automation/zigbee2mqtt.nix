@@ -114,7 +114,10 @@ in
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
+<<<<<<< HEAD
           "AF_NETLINK"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

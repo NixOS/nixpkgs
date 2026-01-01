@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakebite" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python HDFS client";
     mainProgram = "snakebite";
     homepage = "https://github.com/spotify/snakebite";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Pure Python HDFS client";
+    mainProgram = "snakebite";
+    homepage = "https://github.com/spotify/snakebite";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

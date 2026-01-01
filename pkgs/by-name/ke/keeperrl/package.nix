@@ -90,12 +90,21 @@ stdenv.mkDerivation {
     ${lib.optionalString unfree_assets "cp -r data $out/share"}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Dungeon management rogue-like";
     mainProgram = "keeper";
     homepage = "https://keeperrl.com/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Dungeon management rogue-like";
+    mainProgram = "keeper";
+    homepage = "https://keeperrl.com/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # TODO: Add OS X
     platforms = [
       "i686-linux"

@@ -41,11 +41,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_cov" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
     homepage = "https://github.com/pytest-dev/pytest-cov";
     changelog = "https://github.com/pytest-dev/pytest-cov/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
+    homepage = "https://github.com/pytest-dev/pytest-cov";
+    changelog = "https://github.com/pytest-dev/pytest-cov/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -42,11 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/yelp-xsl";
     description = "Yelp's universal stylesheets for Mallard and DocBook";
     teams = [ lib.teams.gnome ];
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/yelp-xsl";
+    description = "Yelp's universal stylesheets for Mallard and DocBook";
+    teams = [ teams.gnome ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # See https://gitlab.gnome.org/GNOME/yelp-xsl/blob/master/COPYING
       # Stylesheets
       lgpl2Plus
@@ -55,6 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
       # highlight.js
       bsd3
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

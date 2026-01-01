@@ -18,12 +18,21 @@ buildGoModule {
   vendorHash = "sha256-58zK6t3rb+19ilaQaNgsMVFQBYKPIV40ww8klrGbpnw=";
   proxyVendor = true;
 
+<<<<<<< HEAD
   meta = {
     description = "xmonad DBus monitoring solution";
     homepage = "https://github.com/xintron/xmonad-log";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ joko ];
+=======
+  meta = with lib; {
+    description = "xmonad DBus monitoring solution";
+    homepage = "https://github.com/xintron/xmonad-log";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ joko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xmonad-log";
   };
 }

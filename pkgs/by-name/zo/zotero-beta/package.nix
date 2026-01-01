@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
         "$out/usr/lib/zotero-bin-${version}/{}" \;
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
@@ -124,6 +125,16 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://www.zotero.org";
+    description = "Collect, organize, cite, and share your research sources";
+    mainProgram = "zotero";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.agpl3Only;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       atila
       justanotherariel
     ];

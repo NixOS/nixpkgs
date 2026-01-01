@@ -25,11 +25,20 @@ stdenv.mkDerivation rec {
       $out/share/zsh-history-substring-search
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fish shell history-substring-search for Zsh";
     homepage = "https://github.com/zsh-users/zsh-history-substring-search";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ qyliss ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Fish shell history-substring-search for Zsh";
+    homepage = "https://github.com/zsh-users/zsh-history-substring-search";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ qyliss ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "PEP 518 build backend that uses setuptools_scm to generate a version file from your version control system, then flit to build the package";
     homepage = "https://gitlab.com/WillDaSilva/flit_scm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "PEP 518 build backend that uses setuptools_scm to generate a version file from your version control system, then flit to build the package";
+    homepage = "https://gitlab.com/WillDaSilva/flit_scm";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

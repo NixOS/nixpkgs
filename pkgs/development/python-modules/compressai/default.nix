@@ -10,6 +10,7 @@
 
   # dependencies
   einops,
+<<<<<<< HEAD
   matplotlib,
   numpy,
   pandas,
@@ -21,6 +22,16 @@
   torchvision,
   tqdm,
   typing-extensions,
+=======
+  numpy,
+  matplotlib,
+  pandas,
+  pytorch-msssim,
+  scipy,
+  torch,
+  torch-geometric,
+  torchvision,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # optional-dependencies
   ipywidgets,
@@ -33,14 +44,22 @@
 
 buildPythonPackage rec {
   pname = "compressai";
+<<<<<<< HEAD
   version = "1.2.8";
+=======
+  version = "1.2.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "InterDigitalInc";
     repo = "CompressAI";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Fgobh7Q1rKomcqAT4kJl2RsM1W13ErO8sFB2urCqrCk=";
+=======
+    hash = "sha256-xvzhhLn0iBzq3h1nro8/83QWEQe9K4zRa3RSZk+hy3Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -49,6 +68,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
+<<<<<<< HEAD
   pythonRelaxDeps = [
     "numpy"
   ];
@@ -65,6 +85,18 @@ buildPythonPackage rec {
     torchvision
     tqdm
     typing-extensions
+=======
+  dependencies = [
+    einops
+    numpy
+    matplotlib
+    pandas
+    pytorch-msssim
+    scipy
+    torch
+    torch-geometric
+    torchvision
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   optional-dependencies = {
@@ -79,9 +111,17 @@ buildPythonPackage rec {
     "compressai._CXX"
   ];
 
+<<<<<<< HEAD
   # We have to delete the source because otherwise it is used intead the installed package.
   preCheck = ''
     rm -rf compressai
+=======
+  preCheck = ''
+    # We have to delete the source because otherwise it is used intead the installed package.
+    rm -rf compressai
+
+    export HOME=$(mktemp -d)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   nativeCheckInputs = [
@@ -98,7 +138,10 @@ buildPythonPackage rec {
     "test_pretrained"
 
     # Flaky (AssertionError: assert 0.08889999999999998 < 0.064445)
+<<<<<<< HEAD
     "test_compiling"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_find_close"
   ];
 

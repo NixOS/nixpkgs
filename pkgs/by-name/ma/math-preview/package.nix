@@ -25,12 +25,21 @@ buildNpmPackage rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Emacs preview math inline";
     mainProgram = "math-preview";
     license = lib.licenses.gpl3Plus;
     homepage = "https://gitlab.com/matsievskiysv/math-preview";
     maintainers = with lib.maintainers; [ renesat ];
+=======
+  meta = with lib; {
+    description = "Emacs preview math inline";
+    mainProgram = "math-preview";
+    license = licenses.gpl3Plus;
+    homepage = "https://gitlab.com/matsievskiysv/math-preview";
+    maintainers = with maintainers; [ renesat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (nodejs.meta) platforms;
   };
 }

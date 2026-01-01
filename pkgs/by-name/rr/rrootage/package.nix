@@ -77,11 +77,20 @@ stdenv.mkDerivation {
     install -m 644 readme_linux "$out"/share/doc/rrootage/README
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Abstract shooter created by Kenta Cho";
     mainProgram = "rrootage";
     homepage = "https://rrootage.sourceforge.net/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    description = "Abstract shooter created by Kenta Cho";
+    mainProgram = "rrootage";
+    homepage = "https://rrootage.sourceforge.net/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

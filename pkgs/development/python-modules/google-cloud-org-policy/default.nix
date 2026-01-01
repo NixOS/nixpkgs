@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.orgpolicy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Protobufs for Google Cloud Organization Policy";
     homepage = "https://github.com/googleapis/python-org-policy";
     changelog = "https://github.com/googleapis/python-org-policy/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ austinbutler ];
+=======
+  meta = with lib; {
+    description = "Protobufs for Google Cloud Organization Policy";
+    homepage = "https://github.com/googleapis/python-org-policy";
+    changelog = "https://github.com/googleapis/python-org-policy/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ austinbutler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

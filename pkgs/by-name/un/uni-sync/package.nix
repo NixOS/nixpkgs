@@ -25,11 +25,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ot2pbCddvw3njsz36WbFFJ9AAtmojUnRxlUbym1RcgU=";
 
+<<<<<<< HEAD
   meta = {
     description = "Synchronization tool for Lian Li Uni Controllers";
     homepage = "https://github.com/EightB1ts/uni-sync";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yunfachi ];
+=======
+  meta = with lib; {
+    description = "Synchronization tool for Lian Li Uni Controllers";
+    homepage = "https://github.com/EightB1ts/uni-sync";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yunfachi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "uni-sync";
   };
 })

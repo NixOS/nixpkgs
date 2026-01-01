@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/lib/fabric/fabric-installer.jar"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://fabricmc.net/";
     description = "Lightweight, experimental modding toolchain for Minecraft";
@@ -38,5 +39,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://fabricmc.net/";
+    description = "Lightweight, experimental modding toolchain for Minecraft";
+    mainProgram = "fabric-installer";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

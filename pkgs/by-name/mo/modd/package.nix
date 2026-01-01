@@ -22,11 +22,19 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible developer tool that runs processes and responds to filesystem changes";
     mainProgram = "modd";
     homepage = "https://github.com/cortesi/modd";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Flexible developer tool that runs processes and responds to filesystem changes";
+    mainProgram = "modd";
+    homepage = "https://github.com/cortesi/modd";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -4,7 +4,11 @@
   fetchFromGitHub,
   setuptools,
   addBinToPathHook,
+<<<<<<< HEAD
   curl-impersonate,
+=======
+  curl-impersonate-chrome,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cffi,
   certifi,
   charset-normalizer,
@@ -18,24 +22,62 @@
   python-multipart,
   trustme,
   uvicorn,
+<<<<<<< HEAD
   websockets,
   writableTmpDirAsHomeHook,
 }:
 buildPythonPackage rec {
   pname = "curl-cffi";
   version = "0.14.0";
+=======
+  writableTmpDirAsHomeHook,
+}:
+let
+  # This is only used for testing and requires 12.0 specifically
+  # due to incompatible API changes in later versions.
+  websockets = buildPythonPackage rec {
+    pname = "websockets";
+    version = "12.0";
+    pyproject = true;
+
+    src = fetchFromGitHub {
+      owner = "aaugustin";
+      repo = "websockets";
+      tag = version;
+      hash = "sha256-sOL3VI9Ib/PncZs5KN4dAIHOrBc7LfXqT15LO4M6qKg=";
+    };
+
+    build-system = [ setuptools ];
+
+    doCheck = false;
+
+    pythonImportsCheck = [ "websockets" ];
+  };
+in
+buildPythonPackage rec {
+  pname = "curl-cffi";
+  version = "0.14.0b2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-5Q9oHAOjefihxj6xU1UGVTl6Ib31XqhrxLtOgI5VABs=";
+=======
+    hash = "sha256-JXfqZTf26kl2P0OMAw/aTdjQaGtdyTpNnhRPlwMiZNw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./use-system-libs.patch ];
 
+<<<<<<< HEAD
   buildInputs = [ curl-impersonate ];
+=======
+  buildInputs = [ curl-impersonate-chrome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   build-system = [
     cffi
@@ -93,8 +135,11 @@ buildPythonPackage rec {
     # FIXME ImpersonateError: Impersonating chrome136 is not supported
     "test_impersonate_without_version"
     "test_with_impersonate"
+<<<<<<< HEAD
     # Impersonating chrome142 is not supported
     "test_cli"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # InvalidURL: Invalid URL component 'path'
     "test_update_params"
     # tests access network

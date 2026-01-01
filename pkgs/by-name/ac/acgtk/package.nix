@@ -4,7 +4,10 @@
   fetchFromGitLab,
   fetchpatch,
   ocamlPackages,
+<<<<<<< HEAD
   dune,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation {
@@ -40,7 +43,11 @@ stdenv.mkDerivation {
     menhir
     ocaml
     findlib
+<<<<<<< HEAD
     dune
+=======
+    dune_3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = with ocamlPackages; [

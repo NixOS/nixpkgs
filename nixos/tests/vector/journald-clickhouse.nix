@@ -199,11 +199,19 @@ in
         )
 
       clickhouse.fail(
+<<<<<<< HEAD
         "cat ${selectQuery} | clickhouse-client --user vector --password helloclickhouseworld | grep -v 0"
       )
 
       clickhouse.wait_until_succeeds(
         "cat ${selectQuery} | clickhouse-client --user grafana --password helloclickhouseworld2 | grep -v 0"
+=======
+        "cat ${selectQuery} | clickhouse-client --user vector --password helloclickhouseworld | grep 2"
+      )
+
+      clickhouse.wait_until_succeeds(
+        "cat ${selectQuery} | clickhouse-client --user grafana --password helloclickhouseworld2 | grep 2"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       )
     '';
 }

@@ -1,9 +1,17 @@
 # similar to interpreters/python/default.nix
 {
   stdenv,
+<<<<<<< HEAD
   lib,
   callPackage,
   fetchFromGitHub,
+=======
+  config,
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  fetchurl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeBinaryWrapper,
 }:
 
@@ -60,7 +68,16 @@ let
                 selfTargetTarget = luaOnTargetForTarget.pkgs or { };
               };
 
+<<<<<<< HEAD
               extensions = lib.composeManyExtensions [
+=======
+              aliases =
+                final: prev:
+                lib.optionalAttrs config.allowAliases (import ../../lua-modules/aliases.nix lib final prev);
+
+              extensions = lib.composeManyExtensions [
+                aliases
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 generatedPackages
                 overriddenPackages
                 overrides

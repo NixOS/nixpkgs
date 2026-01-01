@@ -33,6 +33,7 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required( VERSION 3.2.0 )" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple creation and editing of screenshots";
     mainProgram = "qScreenshot";
@@ -40,6 +41,15 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Simple creation and editing of screenshots";
+    mainProgram = "qScreenshot";
+    homepage = "https://sourceforge.net/projects/qscreenshot/";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # last successful hydra build on darwin was in 2019
     broken = stdenv.hostPlatform.isDarwin;
   };

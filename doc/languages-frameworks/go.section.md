@@ -84,7 +84,11 @@ nix-prefetch -E "{ sha256 }: ((import ./. { }).my-package.overrideAttrs { vendor
       version = "0.4.0";
       src = fetchFromGitHub {
         inherit (previousAttrs.src) owner repo;
+<<<<<<< HEAD
         tag = "v${finalAttrs.version}";
+=======
+        rev = "v${finalAttrs.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         hash = "sha256-gVTpzmXekQxGMucDKskGi+e+34nJwwsXwvQTjRO6Gdg=";
       };
       vendorHash = "sha256-dUvp7FEW09V0xMuhewPGw3TuAic/sD7xyXEYviZ2Ivs=";

@@ -12,16 +12,27 @@
 
 buildGoModule rec {
   pname = "vault";
+<<<<<<< HEAD
   version = "1.21.1";
+=======
+  version = "1.20.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Vkn3l4blbUhT2D1ParNacVwwt/aDQlm12peoHvPNbk4=";
   };
 
   vendorHash = "sha256-8IK8M328dXWk+NHjK7d+Zj8ltLQqJOofvLDfDieDFnk=";
+=======
+    hash = "sha256-GZ+/NzOjcKTYOq4HajKGD68RNxIdXxfLo/pAewaZ8F8=";
+  };
+
+  vendorHash = "sha256-mhT5s1nIdX/57TDEaWwbni0E7DX0W0WwwvrSr7L66hI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   proxyVendor = true;
 

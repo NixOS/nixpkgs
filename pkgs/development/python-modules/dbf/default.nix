@@ -32,10 +32,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
     homepage = "https://github.com/ethanfurman/dbf";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Module for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
+    homepage = "https://github.com/ethanfurman/dbf";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

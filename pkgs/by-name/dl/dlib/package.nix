@@ -89,11 +89,20 @@
       ;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "General purpose cross-platform C++ machine learning library";
     homepage = "http://www.dlib.net";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ christopherpoole ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "General purpose cross-platform C++ machine learning library";
+    homepage = "http://www.dlib.net";
+    license = licenses.boost;
+    maintainers = with maintainers; [ christopherpoole ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

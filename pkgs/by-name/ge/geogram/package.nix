@@ -133,7 +133,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Programming Library with Geometric Algorithms";
     longDescription = ''
       Geogram contains the main results in Geometry Processing from the former ALICE Inria project,
@@ -141,7 +145,11 @@ stdenv.mkDerivation rec {
       Symposium on Geometry Processing and Eurographics.
     '';
     homepage = "https://github.com/BrunoLevy/geogram";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     platforms = [
       "x86_64-linux"
@@ -149,6 +157,10 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ tmarkus ];
+=======
+    maintainers = with maintainers; [ tmarkus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

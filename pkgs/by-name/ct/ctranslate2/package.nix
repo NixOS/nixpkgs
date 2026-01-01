@@ -28,14 +28,22 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
+<<<<<<< HEAD
   version = "4.6.2";
+=======
+  version = "4.6.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-AUi/MODxCSVuJhFjlhbMUyrGnK0X28B2+uTIHIg7oMg=";
+=======
+    hash = "sha256-nnbBK1dIHwhq8n1mJe2wOLcDkIuScFbQwZvJ8x+knCk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Fix CMake 4 compatibility
@@ -49,8 +57,11 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail \
         'CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)' \
         'CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)'
+<<<<<<< HEAD
 
     sed -e '1i #include <cstdint>' -i third_party/cxxopts/include/cxxopts.hpp
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   nativeBuildInputs = [
@@ -74,9 +85,12 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "WITH_ACCELERATE" true)
+<<<<<<< HEAD
   ]
   ++ lib.optionals (stdenv.hostPlatform.gcc.arch or null != null) [
     (lib.cmakeBool "ENABLE_CPU_DISPATCH" false)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs =

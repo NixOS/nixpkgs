@@ -34,11 +34,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_file" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Transport adapter for fetching file:// URLs with the requests python library";
     homepage = "https://github.com/dashea/requests-file";
     changelog = "https://github.com/dashea/requests-file/blob/${version}/CHANGES.rst";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Transport adapter for fetching file:// URLs with the requests python library";
+    homepage = "https://github.com/dashea/requests-file";
+    changelog = "https://github.com/dashea/requests-file/blob/${version}/CHANGES.rst";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

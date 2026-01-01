@@ -134,10 +134,17 @@ buildBazelPackage {
     inherit (nixosTests) fcitx5;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Mozc - a Japanese Input Method Editor designed for multi-platform";
     homepage = "https://github.com/fcitx/mozc";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Mozc - a Japanese Input Method Editor designed for multi-platform";
+    homepage = "https://github.com/fcitx/mozc";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20 # abseil-cpp
       bsd3 # mozc, breakpad, gtest, gyp, japanese-usage-dictionary, protobuf
       mit # wil
@@ -145,11 +152,19 @@ buildBazelPackage {
       publicDomain # src/data/test/stress_test, Okinawa dictionary
       unicode-30 # src/data/unicode, breakpad
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       berberman
       govanify
       musjj
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

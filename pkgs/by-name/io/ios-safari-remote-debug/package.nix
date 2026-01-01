@@ -1,18 +1,33 @@
 {
   lib,
   buildGoModule,
+<<<<<<< HEAD
   fetchgit,
+=======
+  fetchFromGitea,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildGoModule rec {
   pname = "ios-safari-remote-debug";
   version = "unstable-2024-09-09";
 
+<<<<<<< HEAD
   src = fetchgit {
     url = "https://git.gay/besties/ios-safari-remote-debug.git";
     rev = "b3c69873997c08fce83c48a5ab42f5a2354efdf2";
     hash = "sha256-Hh/CeH0ba4uPMlEo+OZ3w36pTpsW6OLtYIE5v6dkUjo=";
   };
+=======
+  src = fetchFromGitea {
+    domain = "git.gay";
+    owner = "besties";
+    repo = "ios-safari-remote-debug";
+    rev = "b3c69873997c08fce83c48a5ab42f5a2354efdf2";
+    hash = "sha256-Hh/CeH0ba4uPMlEo+OZ3w36pTpsW6OLtYIE5v6dkUjo=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   vendorHash = "sha256-O8Dr4UAISZmCUGao0cBnAx4dUJm6+u4Swiw0H5NVeeA=";
 
   patches = [ ./add-permissions-to-the-output-directory.patch ];

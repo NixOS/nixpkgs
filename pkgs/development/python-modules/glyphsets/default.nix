@@ -66,12 +66,21 @@ buildPythonPackage rec {
     "test_definitions"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Google Fonts glyph set metadata";
     homepage = "https://github.com/googlefonts/glyphsets";
     changelog = "https://github.com/googlefonts/glyphsets/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Google Fonts glyph set metadata";
+    homepage = "https://github.com/googlefonts/glyphsets";
+    changelog = "https://github.com/googlefonts/glyphsets/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "glyphsets";
   };
 }

@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Free MUD client for macOS, Linux and Windows";
     homepage = "https://tintin.mudhalla.net/index.php";
@@ -35,5 +36,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ abathur ];
     mainProgram = "tt++";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Free MUD client for macOS, Linux and Windows";
+    homepage = "https://tintin.mudhalla.net/index.php";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ abathur ];
+    mainProgram = "tt++";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

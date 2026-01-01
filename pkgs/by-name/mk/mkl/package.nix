@@ -197,7 +197,11 @@ stdenvNoCC.mkDerivation (
       };
     };
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Intel OneAPI Math Kernel Library";
       longDescription = ''
         Intel OneAPI Math Kernel Library (Intel oneMKL) optimizes code with minimal
@@ -206,12 +210,21 @@ stdenvNoCC.mkDerivation (
         threading models.
       '';
       homepage = "https://software.intel.com/en-us/mkl";
+<<<<<<< HEAD
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.issl;
+=======
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      license = licenses.issl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = [
         "x86_64-linux"
         "x86_64-darwin"
       ];
+<<<<<<< HEAD
+=======
+      maintainers = with maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   // lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {

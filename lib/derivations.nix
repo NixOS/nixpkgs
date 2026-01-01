@@ -86,7 +86,11 @@ in
       This can be used for adding package attributes, such as `tests`.
 
     `outputs`
+<<<<<<< HEAD
     : Optional list of assumed outputs. Default: `[ "out" ]`
+=======
+    : Optional list of assumed outputs. Default: ["out"]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       This must match the set of outputs that the returned derivation has.
       You must use this when the derivation has multiple outputs.

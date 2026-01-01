@@ -37,11 +37,20 @@ stdenv.mkDerivation {
       "cmake_minimum_required(VERSION 3.5)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Commandline tools for DAB and DAB+ digital radio broadcasts";
     homepage = "https://github.com/Opendigitalradio/dabtools";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.markuskowa ];
+=======
+  meta = with lib; {
+    description = "Commandline tools for DAB and DAB+ digital radio broadcasts";
+    homepage = "https://github.com/Opendigitalradio/dabtools";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

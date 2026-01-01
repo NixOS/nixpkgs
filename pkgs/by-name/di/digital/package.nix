@@ -82,6 +82,7 @@ maven.buildMavenPackage rec {
 
   desktopItems = [ desktopItem ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/hneemann/Digital";
     description = pkgDescription;
@@ -89,5 +90,14 @@ maven.buildMavenPackage rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ Dettorer ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/hneemann/Digital";
+    description = pkgDescription;
+    mainProgram = "digital";
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ Dettorer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

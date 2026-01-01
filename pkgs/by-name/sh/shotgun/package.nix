@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Hv/lQhxRJvvMB5LC5K7k9SmuUCfaVZJynWIz8QOeL9A=";
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal X screenshot utility";
     homepage = "https://github.com/neXromancers/shotgun";
@@ -25,6 +26,16 @@ rustPlatform.buildRustPackage rec {
       lumi
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Minimal X screenshot utility";
+    homepage = "https://github.com/neXromancers/shotgun";
+    license = with licenses; [ mpl20 ];
+    maintainers = with maintainers; [
+      lumi
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "shotgun";
   };
 }

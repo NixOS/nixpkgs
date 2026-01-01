@@ -9,15 +9,26 @@
   mate-panel,
   hicolor-icon-theme,
   wrapGAppsHook3,
+<<<<<<< HEAD
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+  mateUpdateScript,
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "mate-indicator-applet";
   version = "1.28.0";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-indicator-applet-${finalAttrs.version}.tar.xz";
+=======
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "zrPXA5cKPlWNfNffCxwhceOvdSolSVrO0uIiwemtSc0=";
   };
 
@@ -44,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/mate-indicator-applet";
     odd-unstable = true;
@@ -51,6 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/mate-desktop/mate-indicator-applet";
     description = "MATE panel indicator applet";
     longDescription = ''
@@ -64,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       Existing indicators include the Message Menu, Battery Menu and Sound
       menu.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl3Plus
       lgpl2Plus
@@ -72,3 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+    license = with licenses; [
+      gpl3Plus
+      lgpl2Plus
+    ];
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

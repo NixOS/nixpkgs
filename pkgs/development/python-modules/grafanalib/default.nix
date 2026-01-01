@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grafanalib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for building Grafana dashboards";
     homepage = "https://github.com/weaveworks/grafanalib/";
     changelog = "https://github.com/weaveworks/grafanalib/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ michaelgrahamevans ];
+=======
+  meta = with lib; {
+    description = "Library for building Grafana dashboards";
+    homepage = "https://github.com/weaveworks/grafanalib/";
+    changelog = "https://github.com/weaveworks/grafanalib/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ michaelgrahamevans ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

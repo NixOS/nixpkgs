@@ -58,6 +58,7 @@ in
     (lib.mkAliasOptionModule [ "systemd" "socket" ] [ "systemd" "sockets" "" ])
   ];
   options = {
+<<<<<<< HEAD
     systemd.lib = mkOption {
       description = ''
         Library functions for working with systemd services.
@@ -113,6 +114,8 @@ in
       defaultText = lib.literalExpression "config.systemd.lib.escapeSystemdExecArgs config.process.argv";
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     systemd.services = mkOption {
       description = ''
         This module configures systemd services, with the notable difference that their unit names will be prefixed with the abstract service name.
@@ -161,10 +164,13 @@ in
     };
   };
   config = {
+<<<<<<< HEAD
     systemd.lib = {
       inherit escapeSystemdExecArgs;
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Note that this is the systemd.services option above, not the system one.
     systemd.services."" = {
       # TODO description;
@@ -174,7 +180,11 @@ in
         Restart = lib.mkDefault "always";
         RestartSec = lib.mkDefault "5";
         ExecStart = [
+<<<<<<< HEAD
           config.systemd.mainExecStart
+=======
+          (escapeSystemdExecArgs config.process.argv)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ];
       };
     };

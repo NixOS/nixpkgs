@@ -1,11 +1,19 @@
 {
   lib,
+<<<<<<< HEAD
   gcc15Stdenv,
+=======
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   meson,
   ninja,
 }:
+<<<<<<< HEAD
 gcc15Stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation (finalAttrs: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "hyprland-protocols";
   version = "0.7.0";
 

@@ -24,9 +24,16 @@ buildPythonPackage rec {
   # Tests require an old version of hypothesis
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Macaroon library for Python";
     homepage = "https://github.com/ecordell/pymacaroons";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Macaroon library for Python";
+    homepage = "https://github.com/ecordell/pymacaroons";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

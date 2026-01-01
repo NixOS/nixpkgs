@@ -63,10 +63,13 @@ mkDerivation {
     sed -E -i -e 's/mktemp -t ka/mktemp -t kaXXXXXX/' $BSDSRCDIR/bin/sh/mkbuiltins $BSDSRCDIR/bin/sh/mktokens
   '';
 
+<<<<<<< HEAD
   NIX_CFLAGS_COMPILE = [
     "-Wno-unterminated-string-initialization"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preBuild = ''
     export NIX_CFLAGS_COMPILE="-I$BSDSRCDIR/sys $NIX_CFLAGS_COMPILE"
 

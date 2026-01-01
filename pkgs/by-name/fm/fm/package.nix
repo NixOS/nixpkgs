@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage {
     poppler
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small, general purpose file manager built with GTK4";
     homepage = "https://github.com/euclio/fm";
@@ -42,5 +43,14 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "fm";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Small, general purpose file manager built with GTK4";
+    homepage = "https://github.com/euclio/fm";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aleksana ];
+    mainProgram = "fm";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

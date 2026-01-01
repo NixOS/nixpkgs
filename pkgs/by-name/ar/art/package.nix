@@ -22,7 +22,11 @@
   lcms2,
   libraw,
   libiptcdata,
+<<<<<<< HEAD
   fftwSinglePrec,
+=======
+  fftw,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   expat,
   pcre2,
   libsigcxx,
@@ -40,13 +44,21 @@
 
 stdenv.mkDerivation rec {
   pname = "art";
+<<<<<<< HEAD
   version = "1.25.12";
+=======
+  version = "1.25.11";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "artpixls";
     repo = "ART";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-iF409zromKDliFRjGWYHBeK38UsxUCH70dgSsHLHhhw=";
+=======
+    hash = "sha256-viX2GjPV4ZvaK7u6KgANbbMLCFRLbCwd48NiIcsHqSY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Fix the build with CMake 4.
@@ -81,7 +93,11 @@ stdenv.mkDerivation rec {
     lcms2
     libraw
     libiptcdata
+<<<<<<< HEAD
     fftwSinglePrec
+=======
+    fftw
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     expat
     pcre2
     libsigcxx
@@ -114,7 +130,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Raw converter based on RawTherapee";
+<<<<<<< HEAD
     homepage = "https://artraweditor.github.io";
+=======
+    homepage = "https://art.pixls.us";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "ART";

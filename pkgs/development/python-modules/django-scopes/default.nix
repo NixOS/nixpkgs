@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_scopes" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Safely separate multiple tenants in a Django database";
     homepage = "https://github.com/raphaelm/django-scopes";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Safely separate multiple tenants in a Django database";
+    homepage = "https://github.com/raphaelm/django-scopes";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,16 +23,23 @@ maturinBuildHook() {
         "--target" "@rustcTargetSpec@"
         "--manylinux" "off"
         "--strip"
+<<<<<<< HEAD
+=======
+        "--release"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "--out" "$dist"
         "--interpreter" "$interpreter_name"
     )
 
+<<<<<<< HEAD
     if [ -n "${maturinBuildProfile}" ]; then
       flagsArray+=("--profile" "${maturinBuildProfile}")
     else
       flagsArray+=("--release")
     fi
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     concatTo flagsArray maturinBuildFlags
 
     echoCmd 'maturinBuildHook flags' "${flagsArray[@]}"

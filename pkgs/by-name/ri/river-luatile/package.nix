@@ -27,12 +27,21 @@ rustPlatform.buildRustPackage rec {
     luajit
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Write your own river layout generator in lua";
     homepage = "https://github.com/MaxVerevkin/river-luatile";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pinpox ];
+=======
+  meta = with lib; {
+    description = "Write your own river layout generator in lua";
+    homepage = "https://github.com/MaxVerevkin/river-luatile";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pinpox ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "river-luatile";
   };
 }

@@ -40,6 +40,7 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+<<<<<<< HEAD
 
   meta = {
     description = "Lightweight LDAP server for development, home use, or CI";
@@ -47,6 +48,16 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/glauth/glauth/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  versionCheckProgramArg = "--version";
+
+  meta = with lib; {
+    description = "Lightweight LDAP server for development, home use, or CI";
+    homepage = "https://github.com/glauth/glauth";
+    changelog = "https://github.com/glauth/glauth/releases/tag/v${finalAttrs.version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       christoph-heiss
       xddxdd

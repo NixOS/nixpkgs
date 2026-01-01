@@ -8,7 +8,11 @@ passed and a selection of packages has been built successfully
 (see `nixos/release-combined.nix` and `nixos/release-small.nix`).
 These channels are:
 
+<<<<<<< HEAD
 -   *Stable channels*, such as [`nixos-25.11`](https://channels.nixos.org/nixos-25.11).
+=======
+-   *Stable channels*, such as [`nixos-25.05`](https://channels.nixos.org/nixos-25.05).
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     These only get conservative bug fixes and package upgrades. For
     instance, a channel update may cause the Linux kernel on your system
     to be upgraded from 4.19.34 to 4.19.38 (a minor bug fix), but not
@@ -21,7 +25,11 @@ These channels are:
     radical changes between channel updates. It's not recommended for
     production systems.
 
+<<<<<<< HEAD
 -   *Small channels*, such as [`nixos-25.11-small`](https://channels.nixos.org/nixos-25.11-small)
+=======
+-   *Small channels*, such as [`nixos-25.05-small`](https://channels.nixos.org/nixos-25.05-small)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     or [`nixos-unstable-small`](https://channels.nixos.org/nixos-unstable-small).
     These are identical to the stable and unstable channels described above,
     except that they contain fewer binary packages. This means they get updated
@@ -40,8 +48,13 @@ supported stable release.
 
 When you first install NixOS, you're automatically subscribed to the
 NixOS channel that corresponds to your installation source. For
+<<<<<<< HEAD
 instance, if you installed from a 25.11 ISO, you will be subscribed to
 the `nixos-25.11` channel. To see which NixOS channel you're subscribed
+=======
+instance, if you installed from a 25.05 ISO, you will be subscribed to
+the `nixos-25.05` channel. To see which NixOS channel you're subscribed
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 to, run the following as root:
 
 ```ShellSession
@@ -56,16 +69,27 @@ To switch to a different NixOS channel, do
 ```
 
 (Be sure to include the `nixos` parameter at the end.) For instance, to
+<<<<<<< HEAD
 use the NixOS 25.11 stable channel:
 
 ```ShellSession
 # nix-channel --add https://channels.nixos.org/nixos-25.11 nixos
+=======
+use the NixOS 25.05 stable channel:
+
+```ShellSession
+# nix-channel --add https://channels.nixos.org/nixos-25.05 nixos
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 ```
 
 If you have a server, you may want to use the "small" channel instead:
 
 ```ShellSession
+<<<<<<< HEAD
 # nix-channel --add https://channels.nixos.org/nixos-25.11-small nixos
+=======
+# nix-channel --add https://channels.nixos.org/nixos-25.05-small nixos
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 ```
 
 And if you want to live on the bleeding edge:
@@ -118,5 +142,9 @@ the new generation contains a different kernel, initrd or kernel
 modules. You can also specify a channel explicitly, e.g.
 
 ```nix
+<<<<<<< HEAD
 { system.autoUpgrade.channel = "https://channels.nixos.org/nixos-25.11"; }
+=======
+{ system.autoUpgrade.channel = "https://channels.nixos.org/nixos-25.05"; }
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 ```

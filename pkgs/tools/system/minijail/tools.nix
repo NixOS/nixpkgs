@@ -38,10 +38,17 @@ buildPythonApplication {
     cp -v constants.json $out/share/constants.json
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://android.googlesource.com/platform/external/minijail/+/refs/heads/master/tools/";
     description = "Set of tools for minijail";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://android.googlesource.com/platform/external/minijail/+/refs/heads/master/tools/";
+    description = "Set of tools for minijail";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (minijail.meta) maintainers platforms;
   };
 }

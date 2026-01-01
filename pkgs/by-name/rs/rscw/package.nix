@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
     install -D -m 0755 rscwx $out/bin/rscwx
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Receive CW through the soundcard";
     homepage = "https://www.pa3fwm.nl/software/rscw/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ earldouglas ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Receive CW through the soundcard";
+    homepage = "https://www.pa3fwm.nl/software/rscw/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ earldouglas ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

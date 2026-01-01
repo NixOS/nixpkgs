@@ -100,8 +100,12 @@ in
     maxAttachmentSize = lib.mkOption {
       type = lib.types.int;
       default = 18;
+<<<<<<< HEAD
       apply =
         configuredMaxAttachmentSize: "${toString (builtins.ceil (configuredMaxAttachmentSize * 1.37))}M";
+=======
+      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.37)}M";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = ''
         The maximum attachment size in MB.
         [upstream issue comment]: https://github.com/roundcube/roundcubemail/issues/7979#issuecomment-808879209

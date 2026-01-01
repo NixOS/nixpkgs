@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [ "test_find_patches_2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convenient approach to monkey patching";
     homepage = "https://github.com/christophercrouzet/gorilla";
     changelog = "https://github.com/christophercrouzet/gorilla/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tbenst ];
+=======
+  meta = with lib; {
+    description = "Convenient approach to monkey patching";
+    homepage = "https://github.com/christophercrouzet/gorilla";
+    changelog = "https://github.com/christophercrouzet/gorilla/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tbenst ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

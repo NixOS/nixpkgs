@@ -60,7 +60,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "INav flight control system configuration tool";
     mainProgram = "inav-configurator";
     longDescription = ''
@@ -69,6 +73,7 @@ stdenv.mkDerivation rec {
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
     homepage = "https://github.com/iNavFlight/inav/wiki";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
@@ -76,5 +81,14 @@ stdenv.mkDerivation rec {
       wucke13
     ];
     platforms = lib.platforms.linux;
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+      tilcreator
+      wucke13
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

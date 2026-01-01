@@ -47,11 +47,20 @@ stdenv.mkDerivation rec {
       "cmake_minimum_required (VERSION 3.10.0)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Official library to interface with the Discord client";
     homepage = "https://github.com/discordapp/discord-rpc";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Official library to interface with the Discord client";
+    homepage = "https://github.com/discordapp/discord-rpc";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

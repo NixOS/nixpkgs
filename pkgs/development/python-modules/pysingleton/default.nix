@@ -19,10 +19,18 @@ buildPythonPackage rec {
   # No tests in the Pypi package.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Provides a decorator to create thread-safe singleton classes";
     homepage = "https://github.com/timofurrer/pysingleton";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kalbasit ];
+=======
+  meta = with lib; {
+    description = "Provides a decorator to create thread-safe singleton classes";
+    homepage = "https://github.com/timofurrer/pysingleton";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kalbasit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

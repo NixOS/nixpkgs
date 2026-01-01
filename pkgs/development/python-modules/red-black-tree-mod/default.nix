@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "red_black_dict_mod" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible python implementation of red black trees";
     homepage = "https://stromberg.dnsalias.org/~strombrg/red-black-tree-mod/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Flexible python implementation of red black trees";
+    homepage = "https://stromberg.dnsalias.org/~strombrg/red-black-tree-mod/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,11 +29,19 @@ buildGoModule rec {
     command = "cf-vault version";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for managing your Cloudflare credentials, securely";
     homepage = "https://github.com/jacobbednarz/cf-vault/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ viraptor ];
+=======
+  meta = with lib; {
+    description = "Tool for managing your Cloudflare credentials, securely";
+    homepage = "https://github.com/jacobbednarz/cf-vault/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ viraptor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cf-vault";
   };
 }

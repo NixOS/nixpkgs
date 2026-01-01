@@ -37,11 +37,19 @@ buildPythonPackage rec {
     testtools
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mock out responses from the requests package";
     homepage = "https://requests-mock.readthedocs.io";
     changelog = "https://github.com/jamielennox/requests-mock/releases/tag/${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Mock out responses from the requests package";
+    homepage = "https://requests-mock.readthedocs.io";
+    changelog = "https://github.com/jamielennox/requests-mock/releases/tag/${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

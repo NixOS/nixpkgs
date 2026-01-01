@@ -49,11 +49,20 @@ buildPythonPackage rec {
     "systemd.login"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for native access to the systemd facilities";
     homepage = "https://www.freedesktop.org/software/systemd/python-systemd/";
     changelog = "https://github.com/systemd/python-systemd/blob/v${version}/NEWS";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ raitobezarius ];
+=======
+  meta = with lib; {
+    description = "Python module for native access to the systemd facilities";
+    homepage = "https://www.freedesktop.org/software/systemd/python-systemd/";
+    changelog = "https://github.com/systemd/python-systemd/blob/v${version}/NEWS";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ raitobezarius ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

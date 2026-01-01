@@ -36,10 +36,17 @@ buildPythonPackage rec {
   ];
   pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Terminals served by Tornado websockets";
     homepage = "https://github.com/jupyter/terminado";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Terminals served by Tornado websockets";
+    homepage = "https://github.com/jupyter/terminado";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

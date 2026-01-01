@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) startx;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tiling window manager based on binary space partitioning";
     homepage = "https://github.com/baskerville/bspwm";
@@ -44,5 +45,16 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tiling window manager based on binary space partitioning";
+    homepage = "https://github.com/baskerville/bspwm";
+    maintainers = with maintainers; [
+      meisternu
+      ncfavier
+    ];
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

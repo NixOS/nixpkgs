@@ -31,10 +31,17 @@ python3Packages.buildPythonApplication rec {
   # There are no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Compute the DR14 of a given audio file according to the procedure described by the Pleasurize Music Foundation";
     mainProgram = "dr14_tmeter";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Compute the DR14 of a given audio file according to the procedure described by the Pleasurize Music Foundation";
+    mainProgram = "dr14_tmeter";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://dr14tmeter.sourceforge.net/";
     maintainers = [ ];
   };

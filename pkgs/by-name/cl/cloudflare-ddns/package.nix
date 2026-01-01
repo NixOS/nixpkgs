@@ -20,7 +20,11 @@ buildGoModule (finalAttrs: {
     "cmd/ddns"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Dynamic DNS (DDNS) client for Cloudflare";
     longDescription = ''
       A feature-rich and robust Cloudflare DDNS updater with a small footprint.
@@ -28,8 +32,14 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/favonia/cloudflare-ddns";
     mainProgram = "ddns";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shokerplz ];
     platforms = lib.platforms.unix ++ lib.platforms.darwin;
+=======
+    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ shokerplz ];
+    platforms = platforms.unix ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

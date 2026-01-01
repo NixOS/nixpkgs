@@ -45,11 +45,19 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo extension to build & run your codspeed benchmarks";
     homepage = "https://github.com/CodSpeedHQ/codspeed-rust";
     changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/${src.rev}";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Cargo extension to build & run your codspeed benchmarks";
+    homepage = "https://github.com/CodSpeedHQ/codspeed-rust";
+    changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/${src.rev}";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       asl20
     ];

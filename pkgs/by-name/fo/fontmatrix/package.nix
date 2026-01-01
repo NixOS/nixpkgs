@@ -27,10 +27,18 @@ stdenv.mkDerivation rec {
     libsForQt5.wrapQtAppsHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Free/libre font explorer for Linux, Windows and Mac";
     homepage = "https://github.com/fontmatrix/fontmatrix";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Free/libre font explorer for Linux, Windows and Mac";
+    homepage = "https://github.com/fontmatrix/fontmatrix";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
     lv2
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://drobilla.net/software/mda-lv2.html";
     description = "LV2 port of the MDA plugins by Paul Kellett";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://drobilla.net/software/mda-lv2.html";
+    description = "LV2 port of the MDA plugins by Paul Kellett";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

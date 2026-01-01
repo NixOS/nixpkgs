@@ -133,7 +133,11 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./updater.sh;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://ryujinx.app";
     changelog = "https://git.ryujinx.app/ryubing/ryujinx/-/wikis/changelog";
     description = "Experimental Nintendo Switch Emulator written in C# (community fork of Ryujinx)";
@@ -145,8 +149,13 @@ buildDotnetModule rec {
       2017. The project has since been abandoned on October 1st 2024 and QoL
       updates are now managed under a fork.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jk
       artemist
       willow

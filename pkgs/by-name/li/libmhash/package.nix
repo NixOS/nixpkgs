@@ -17,9 +17,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./autotools-define-conflict-debian-fix.patch ];
 
+<<<<<<< HEAD
   # Fix build with gcc15
   configureFlags = [ "CFLAGS=-std=gnu17" ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Hash algorithms library";
     longDescription = ''

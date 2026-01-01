@@ -45,11 +45,19 @@ buildPythonPackage rec {
     "tests/pytest_mypy_testing/"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python utility libraries for doing stuff in a functional way";
     homepage = "https://pydash.readthedocs.io";
     changelog = "https://github.com/dgilland/pydash/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python utility libraries for doing stuff in a functional way";
+    homepage = "https://pydash.readthedocs.io";
+    changelog = "https://github.com/dgilland/pydash/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

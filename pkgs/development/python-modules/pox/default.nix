@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pox" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for filesystem exploration and automated builds";
     mainProgram = "pox";
     homepage = "https://pox.readthedocs.io/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Utilities for filesystem exploration and automated builds";
+    mainProgram = "pox";
+    homepage = "https://pox.readthedocs.io/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

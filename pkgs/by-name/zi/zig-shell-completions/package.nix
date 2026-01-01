@@ -8,14 +8,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-shell-completions";
+<<<<<<< HEAD
   version = "0-unstable-2025-11-25";
+=======
+  version = "0-unstable-2025-06-29";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "ziglang";
     repo = "shell-completions";
+<<<<<<< HEAD
     rev = "c2983a75dcbcaf3a1df74ab563a9bd3c8e7f448e";
     hash = "sha256-+sV3BitKhALNQys3u+wsMSHTH3QxoRZ1i75fazIgOjQ=";
+=======
+    rev = "4f91bcbe28cec28ff707d5e032333cbdbfa01161";
+    hash = "sha256-4uzM5pFnYf5dTkw3igzWUCYYsBZVTrb/mFf5iHFiGT4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ installShellFiles ];

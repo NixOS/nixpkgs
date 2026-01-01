@@ -21,7 +21,11 @@ stdenv.mkDerivation {
       --replace "/bin/stty" "${coreutils}/bin/stty"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.pjrc.com/teensy/00-teensy.rules";
     description = "udev rules for the Teensy microcontrollers";
     longDescription = ''
@@ -32,7 +36,12 @@ stdenv.mkDerivation {
       devices, which includes the Teensy.  See comments in the .rules file (or
       this package's homepage) for possible workarounds.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree; # No license specified.
+=======
+    platforms = platforms.linux;
+    license = licenses.unfree; # No license specified.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

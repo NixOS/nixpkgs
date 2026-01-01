@@ -54,14 +54,25 @@ buildPythonPackage rec {
     "tests/SMB_RPC/"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Network protocols Constructors and Dissectors";
     homepage = "https://github.com/SecureAuthCorp/impacket";
     changelog =
       "https://github.com/fortra/impacket/releases/tag/impacket_"
+<<<<<<< HEAD
       + lib.replaceStrings [ "." ] [ "_" ] version;
     # Modified Apache Software License, Version 1.1
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ fab ];
+=======
+      + replaceStrings [ "." ] [ "_" ] version;
+    # Modified Apache Software License, Version 1.1
+    license = licenses.free;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

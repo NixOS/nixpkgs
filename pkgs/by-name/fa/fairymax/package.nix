@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
     cp fmax.ini "$out/share/fairymax"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://home.hccnet.nl/h.g.muller/dwnldpage.html";
     description = "Small chess engine supporting fairy pieces";
     mainProgram = "fairymax";
@@ -47,8 +51,14 @@ stdenv.mkDerivation rec {
       fmax.ini, so that arbitrary fairy pieces can be implemented. This version
       (4.8J) supports up to 15 piece types, and board sizes up to 12x8.
     '';
+<<<<<<< HEAD
     license = lib.licenses.free;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.free;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

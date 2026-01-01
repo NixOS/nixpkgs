@@ -70,11 +70,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://shibboleth.net/products/service-provider.html";
     description = "Enables SSO and Federation web applications written with any programming language or framework";
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://shibboleth.net/products/service-provider.html";
+    description = "Enables SSO and Federation web applications written with any programming language or framework";
+    platforms = platforms.unix;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

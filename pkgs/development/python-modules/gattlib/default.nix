@@ -60,10 +60,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gattlib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to use the GATT Protocol for Bluetooth LE devices";
     homepage = "https://github.com/oscaracena/pygattlib";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Python library to use the GATT Protocol for Bluetooth LE devices";
+    homepage = "https://github.com/oscaracena/pygattlib";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

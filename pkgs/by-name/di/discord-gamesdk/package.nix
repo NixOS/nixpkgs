@@ -39,12 +39,21 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://discord.com/developers/docs/game-sdk/sdk-starter-guide";
     description = "Library to allow other programs to interact with the Discord desktop application";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ tomodachi94 ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    homepage = "https://discord.com/developers/docs/game-sdk/sdk-starter-guide";
+    description = "Library to allow other programs to interact with the Discord desktop application";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ tomodachi94 ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

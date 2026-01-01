@@ -20,8 +20,11 @@
   webkitgtk_4_1,
   wrapGAppsHook3,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   makeDesktopItem,
   copyDesktopItems,
@@ -39,9 +42,14 @@ let
     pname = "firezone-gui-client-frontend";
     inherit version src;
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
       inherit pname version;
       pnpm = pnpm_9;
+=======
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit pname version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       src = "${src}/rust/gui-client";
       fetcherVersion = 1;
       hash = "sha256-ttbTYBuUv0vyiYzrFATF4x/zngsRXjuLPfL3qW2HEe4=";
@@ -51,8 +59,12 @@ let
     env.GITHUB_SHA = version;
 
     nativeBuildInputs = [
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_9
+=======
+      pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nodejs
     ];
 

@@ -372,7 +372,12 @@ in
     };
   };
 
+<<<<<<< HEAD
   meta = {
     maintainers = [ ] ++ lib.teams.pantheon.members;
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

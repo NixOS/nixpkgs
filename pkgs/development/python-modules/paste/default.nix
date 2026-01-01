@@ -47,11 +47,19 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "paste" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for using a Web Server Gateway Interface stack";
     homepage = "https://pythonpaste.readthedocs.io/";
     changelog = "https://github.com/pasteorg/paste/blob/${version}/docs/news.txt";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tools for using a Web Server Gateway Interface stack";
+    homepage = "https://pythonpaste.readthedocs.io/";
+    changelog = "https://github.com/pasteorg/paste/blob/${version}/docs/news.txt";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

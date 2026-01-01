@@ -61,11 +61,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywbem" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Support for the WBEM standard for systems management";
     homepage = "https://pywbem.github.io";
     changelog = "https://github.com/pywbem/pywbem/blob/${version}/docs/changes.rst";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "Support for the WBEM standard for systems management";
+    homepage = "https://pywbem.github.io";
+    changelog = "https://github.com/pywbem/pywbem/blob/${version}/docs/changes.rst";
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

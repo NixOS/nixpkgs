@@ -33,11 +33,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_cache_url" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Use Cache URLs in your Django application";
     homepage = "https://github.com/epicserve/django-cache-url";
     changelog = "https://github.com/epicserve/django-cache-url/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Use Cache URLs in your Django application";
+    homepage = "https://github.com/epicserve/django-cache-url";
+    changelog = "https://github.com/epicserve/django-cache-url/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

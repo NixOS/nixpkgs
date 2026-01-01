@@ -107,7 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Image manipulation library";
 
     longDescription = ''
@@ -120,9 +124,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://docs.enlightenment.org/api/imlib2/html";
     changelog = "https://git.enlightenment.org/old/legacy-imlib2/raw/tag/v${finalAttrs.version}/ChangeLog";
+<<<<<<< HEAD
     license = lib.licenses.imlib2;
     pkgConfigModules = [ "imlib2" ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.imlib2;
+    pkgConfigModules = [ "imlib2" ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

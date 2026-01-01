@@ -42,11 +42,19 @@ buildGoModule rec {
       --zsh <($out/bin/cf-terraforming completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line utility to facilitate terraforming your existing Cloudflare resources";
     homepage = "https://github.com/cloudflare/cf-terraforming/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ benley ];
+=======
+  meta = with lib; {
+    description = "Command line utility to facilitate terraforming your existing Cloudflare resources";
+    homepage = "https://github.com/cloudflare/cf-terraforming/";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ benley ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cf-terraforming";
   };
 }

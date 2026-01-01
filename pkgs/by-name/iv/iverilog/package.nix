@@ -14,20 +14,43 @@
   readline,
   zlib,
   buildPackages,
+<<<<<<< HEAD
   addBinToPathHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "iverilog";
   version = "12.0";
 
   src = fetchFromGitHub {
     owner = "steveicarus";
     repo = "iverilog";
+<<<<<<< HEAD
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
   };
 
+=======
+    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
+  };
+
+  nativeBuildInputs = [
+    autoconf
+    bison
+    flex
+    gperf
+  ];
+
+  CC_FOR_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
+  CXX_FOR_BUILD = "${buildPackages.stdenv.cc}/bin/c++";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   patches = [
     # NOTE(jleightcap): `-Werror=format-security` warning patched shortly after release, backport the upstream fix
     (fetchpatch {
@@ -37,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     autoconf
     bison
@@ -52,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [
     bzip2
     ncurses
@@ -63,6 +89,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
+=======
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # NOTE(jleightcap): the `make check` target only runs a "Hello, World"-esque sanity check.
   # the tests in the doInstallCheck phase run a full regression test suite.
   # however, these tests currently fail upstream on aarch64
@@ -78,11 +111,15 @@ stdenv.mkDerivation (finalAttrs: {
         docopt
       ]
     ))
+<<<<<<< HEAD
     addBinToPathHook
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   installCheckPhase = ''
     runHook preInstallCheck
+<<<<<<< HEAD
 
     sh .github/test.sh
 
@@ -106,3 +143,21 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 })
+=======
+    export PATH="$PATH:$out/bin"
+    sh .github/test.sh
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
+    description = "Icarus Verilog compiler";
+    homepage = "https://steveicarus.github.io/iverilog";
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
+    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = platforms.all;
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

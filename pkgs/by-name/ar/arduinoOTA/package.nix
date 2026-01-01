@@ -24,6 +24,7 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/arduino/arduinoOTA";
     description = "Tool for uploading programs to Arduino boards over a network";
@@ -31,5 +32,14 @@ buildGoModule rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ poelzi ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/arduino/arduinoOTA";
+    description = "Tool for uploading programs to Arduino boards over a network";
+    mainProgram = "arduinoOTA";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ poelzi ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

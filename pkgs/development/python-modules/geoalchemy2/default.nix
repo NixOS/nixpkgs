@@ -68,11 +68,20 @@ buildPythonPackage rec {
     shapely = [ shapely ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Toolkit for working with spatial databases";
     homepage = "https://geoalchemy-2.readthedocs.io/";
     changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Toolkit for working with spatial databases";
+    homepage = "https://geoalchemy-2.readthedocs.io/";
+    changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

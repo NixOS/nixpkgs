@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${cctools}/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Utility to ease bundling libraries into executables for OSX";
     longDescription = ''
       dylibbundler is a small command-line programs that aims to make bundling
@@ -37,9 +41,15 @@ stdenv.mkDerivation rec {
       program uses plug-ins that have dependencies too.
     '';
     homepage = "https://github.com/auriamg/macdylibbundler";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.nomeata ];
+=======
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.nomeata ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   };
 }

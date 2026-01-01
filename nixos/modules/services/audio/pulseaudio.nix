@@ -36,7 +36,10 @@ let
           a = cfg.tcp.anonymousClients.allowedIpRanges;
         in
         lib.optional (a != [ ]) ''auth-ip-acl=${lib.concatStringsSep ";" a}'';
+<<<<<<< HEAD
       port = lib.optional (!(isNull cfg.tcp.port)) "port=${toString cfg.tcp.port}";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     in
     pkgs.writeTextFile {
       name = "default.pa";
@@ -45,7 +48,11 @@ let
         ${addModuleIf cfg.zeroconf.publish.enable "module-zeroconf-publish"}
         ${addModuleIf cfg.zeroconf.discovery.enable "module-zeroconf-discover"}
         ${addModuleIf cfg.tcp.enable (
+<<<<<<< HEAD
           lib.concatStringsSep " " ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon ++ port)
+=======
+          lib.concatStringsSep " " ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         )}
         ${addModuleIf config.services.jack.jackd.enable "module-jack-sink"}
         ${addModuleIf config.services.jack.jackd.enable "module-jack-source"}
@@ -206,6 +213,7 @@ in
       # TODO: enable by default?
       tcp = {
         enable = lib.mkEnableOption "tcp streaming support";
+<<<<<<< HEAD
         openFirewall = lib.mkEnableOption "Open firewall for the specified port";
 
         port = lib.mkOption {
@@ -219,6 +227,8 @@ in
           example = 4713;
           default = null;
         };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         anonymousClients = {
           allowAll = lib.mkEnableOption "all anonymous clients to stream to the server";
@@ -240,12 +250,15 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+<<<<<<< HEAD
         assertions = [
           {
             assertion = cfg.tcp.openFirewall -> (!isNull cfg.tcp.port);
             message = "If you wish to open the firewall for the Pulseaudio's tcp.port, set the port explicitly";
           }
         ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         environment.etc."pulse/client.conf".source = clientConf;
 
         environment.systemPackages = [ overriddenPackage ];
@@ -300,9 +313,12 @@ in
         services.avahi.publish.enable = true;
         services.avahi.publish.userServices = true;
       })
+<<<<<<< HEAD
       (lib.mkIf cfg.tcp.openFirewall {
         networking.firewall.allowedTCPPorts = [ cfg.tcp.port ];
       })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       (lib.mkIf (!cfg.systemWide) {
         environment.etc = {

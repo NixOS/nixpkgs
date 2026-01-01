@@ -39,11 +39,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source survey application";
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.limesurvey.org";
     maintainers = with lib.maintainers; [ offline ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Open source survey application";
+    license = licenses.gpl2Plus;
+    homepage = "https://www.limesurvey.org";
+    maintainers = with maintainers; [ offline ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

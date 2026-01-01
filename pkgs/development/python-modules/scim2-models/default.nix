@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scim2_models" ];
 
+<<<<<<< HEAD
   meta = {
     description = "SCIM2 models serialization and validation with pydantic";
     homepage = "https://github.com/python-scim/scim2-models";
     changelog = "https://github.com/python-scim/scim2-models/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "SCIM2 models serialization and validation with pydantic";
+    homepage = "https://github.com/python-scim/scim2-models";
+    changelog = "https://github.com/python-scim/scim2-models/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -67,23 +67,38 @@ stdenv.mkDerivation (
 )
 // {
   meta =
+<<<<<<< HEAD
 
+=======
+    with lib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     let
       pos = builtins.unsafeGetAttrPos "pname" args;
     in
     {
       homepage = "https://www.qt.io/";
       description = "Cross-platform application framework for C++";
+<<<<<<< HEAD
       license = with lib.licenses; [
+=======
+      license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         fdl13Plus
         gpl2Plus
         lgpl21Plus
         lgpl3Plus
       ];
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [
         nickcao
       ];
       platforms = lib.platforms.unix;
+=======
+      maintainers = with maintainers; [
+        nickcao
+      ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       position = "${pos.file}:${toString pos.line}";
     }
     // (args.meta or { });

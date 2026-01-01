@@ -25,11 +25,19 @@ buildGoModule rec {
     "-X github.com/pachyderm/pachyderm/v${lib.versions.major version}/src/version.AppVersion=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Containerized Data Analytics";
     homepage = "https://www.pachyderm.com/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ offline ];
+=======
+  meta = with lib; {
+    description = "Containerized Data Analytics";
+    homepage = "https://www.pachyderm.com/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pachctl";
   };
 }

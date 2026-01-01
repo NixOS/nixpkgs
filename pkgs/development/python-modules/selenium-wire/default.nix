@@ -67,6 +67,7 @@ buildPythonPackage rec {
     "tests/end2end/test_end2end.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extends Selenium's Python bindings to give you the ability to inspect requests made by the browser";
     homepage = "https://github.com/wkeeling/selenium-wire";
@@ -74,5 +75,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     broken = lib.versionAtLeast blinker.version "1.8";
+=======
+  meta = with lib; {
+    description = "Extends Selenium's Python bindings to give you the ability to inspect requests made by the browser";
+    homepage = "https://github.com/wkeeling/selenium-wire";
+    changelog = "https://github.com/wkeeling/selenium-wire/blob/${version}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast blinker.version "1.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

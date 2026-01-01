@@ -37,11 +37,20 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/lib/purple-2 build/lurch.so
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/gkdr/lurch";
     description = "XEP-0384: OMEMO Encryption for libpurple";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ emmanuelrosa ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/gkdr/lurch";
+    description = "XEP-0384: OMEMO Encryption for libpurple";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ emmanuelrosa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

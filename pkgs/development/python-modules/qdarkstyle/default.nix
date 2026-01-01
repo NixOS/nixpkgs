@@ -25,10 +25,18 @@ buildPythonPackage rec {
     qtpy
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dark stylesheet for Python and Qt applications";
     homepage = "https://github.com/ColinDuquesnoy/QDarkStyleSheet";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    description = "Dark stylesheet for Python and Qt applications";
+    homepage = "https://github.com/ColinDuquesnoy/QDarkStyleSheet";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # backport patch for cmake 4 compatibility
     (fetchpatch {
+<<<<<<< HEAD
       url = "https://github.com/Blosc/c-blosc/commit/051b9d2cb9437e375dead8574f66d80ebce47bee.patch?full_index=1";
       hash = "sha256-90dUd8KQqq+uVbngfoKF45rmFxbLVVgZjg0Xfc/vpcc=";
     })
@@ -35,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/Blosc/c-blosc/commit/774f6a0ebaa0c617f7f13ccf6bc89d17eba04654.patch?full_index=1";
       hash = "sha256-C5nwMXjmlxkBvN1/4fuGTgFANqTD/+ikxYPLo1fwm6Q=";
     })
+=======
+      url = "https://github.com/Blosc/c-blosc/commit/051b9d2cb9437e375dead8574f66d80ebce47bee.patch";
+      hash = "sha256-90dUd8KQqq+uVbngfoKF45rmFxbLVVgZjg0Xfc/vpcc=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -70,13 +76,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Blocking, shuffling and loss-less compression library";
     homepage = "https://www.blosc.org";
     changelog = "https://github.com/Blosc/c-blosc/releases/tag/v${finalAttrs.version}";
     pkgConfigModules = [ "blosc" ];
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ris ];
+=======
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

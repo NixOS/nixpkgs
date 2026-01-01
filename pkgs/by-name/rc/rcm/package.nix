@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/thoughtbot/rcm";
     description = "Management Suite for Dotfiles";
@@ -29,5 +30,15 @@ stdenv.mkDerivation rec {
       malyn
     ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/thoughtbot/rcm";
+    description = "Management Suite for Dotfiles";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+      malyn
+    ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

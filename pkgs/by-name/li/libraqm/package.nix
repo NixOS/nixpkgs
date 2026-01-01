@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Library for complex text layout";
     homepage = "https://github.com/HOST-Oman/libraqm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sifmelcara ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Library for complex text layout";
+    homepage = "https://github.com/HOST-Oman/libraqm";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sifmelcara ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

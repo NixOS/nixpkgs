@@ -37,11 +37,20 @@ stdenv.mkDerivation rec {
       ./autogen.sh
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/psmisc/psmisc";
     description = "Set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ryantm ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/psmisc/psmisc";
+    description = "Set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ryantm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

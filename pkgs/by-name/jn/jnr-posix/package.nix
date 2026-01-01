@@ -18,8 +18,13 @@ let
   };
 
   deps = stdenv.mkDerivation {
+<<<<<<< HEAD
     pname = "deps-${pname}";
     inherit src version;
+=======
+    name = "${pname}-${version}-deps";
+    inherit src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     nativeBuildInputs = [
       jdk
@@ -78,10 +83,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight cross-platform POSIX emulation layer for Java, written in Java and is part of the JNR project";
     homepage = "https://github.com/jnr/jnr-posix";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Lightweight cross-platform POSIX emulation layer for Java, written in Java and is part of the JNR project";
+    homepage = "https://github.com/jnr/jnr-posix";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       epl20
       gpl2Only
       lgpl21Only

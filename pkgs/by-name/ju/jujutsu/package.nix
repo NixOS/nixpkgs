@@ -14,16 +14,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
+<<<<<<< HEAD
   version = "0.36.0";
+=======
+  version = "0.35.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-HGMzNXm6vWKf/RHPwB/soDqxAvCOW1J6BPs0tsrEuTI=";
   };
 
   cargoHash = "sha256-jai0FNuCUcgN+ZmmYgbFrMK1Z1vcv21wALkEb74h7H0=";
+=======
+    hash = "sha256-YUrjP2tzABdy4eAV1hPmgYWU8ChcJ5B4IlmQUGm95ro=";
+  };
+
+  cargoHash = "sha256-9VCAmtY029+CFNFcYLdA/VyT5CIvJnuA3iwPOKZpYV0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     installShellFiles
@@ -75,6 +86,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/jj";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = nix-update-script { };

@@ -42,7 +42,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ ncurses ];
   preInstall = "mkdir -p $out/bin";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Build tool for OCaml";
     longDescription = ''
       ocp-build is a build system for OCaml application, based on simple
@@ -52,8 +56,13 @@ stdenv.mkDerivation rec {
       between source files.
     '';
     homepage = "https://www.typerex.org/ocp-build.html";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.jirkamarsik ];
+=======
+    license = licenses.gpl3;
+    maintainers = [ maintainers.jirkamarsik ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ocp-build";
     broken = lib.versionAtLeast ocaml.version "5.0";
     inherit (ocaml.meta) platforms;

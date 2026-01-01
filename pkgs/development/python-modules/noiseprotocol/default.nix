@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "noise" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Noise Protocol Framework";
     homepage = "https://github.com/plizonczyk/noiseprotocol/";
     changelog = "https://github.com/plizonczyk/noiseprotocol/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Noise Protocol Framework";
+    homepage = "https://github.com/plizonczyk/noiseprotocol/";
+    changelog = "https://github.com/plizonczyk/noiseprotocol/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

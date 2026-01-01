@@ -8,18 +8,30 @@
 
 buildGoModule rec {
   pname = "prow";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-23";
   rev = "f0341d7b566080979b11661dc61a98f64db0d028";
+=======
+  version = "0-unstable-2025-11-17";
+  rev = "cfbb719bc9007c483499c37e5cda8e0046b21fb1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     inherit rev;
 
     owner = "kubernetes-sigs";
     repo = "prow";
+<<<<<<< HEAD
     hash = "sha256-V0tdABcZ/ob3duUkKbdcLn4AyOA8um7WkcohoH5J/pQ=";
   };
 
   vendorHash = "sha256-/ZAnYxUHHq+tqk0hcJrt6ZrpDDRqyLITWGL/hgW4A6A=";
+=======
+    hash = "sha256-tMbq6W0wquqABV6Q9IS9M7IJ8J0OoeK/SO2QNwmFaPw=";
+  };
+
+  vendorHash = "sha256-J/DQbAWKHQdE+V/uRuo6rAwGGpEq4OeV1NUpB27xJTg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # doCheck = false;
 

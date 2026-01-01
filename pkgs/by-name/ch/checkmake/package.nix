@@ -47,12 +47,21 @@ buildGoModule rec {
     installManPage man/man1/checkmake.1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Experimental tool for linting and checking Makefiles";
     mainProgram = "checkmake";
     homepage = "https://github.com/mrtazz/checkmake";
     changelog = "https://github.com/mrtazz/checkmake/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ vidbina ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       checkmake is an experimental tool for linting and checking
       Makefiles. It may not do what you want it to.

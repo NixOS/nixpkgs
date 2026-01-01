@@ -39,7 +39,11 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line admin tool for Synapse";
     mainProgram = "synadm";
     longDescription = ''
@@ -50,7 +54,12 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://codeberg.org/synadm/synadm/releases/tag/${src.tag}";
     downloadPage = "https://codeberg.org/synadm/synadm";
     homepage = "https://synadm.readthedocs.io/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tzdata" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provider of IANA time zone data";
     homepage = "https://github.com/python/tzdata";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Provider of IANA time zone data";
+    homepage = "https://github.com/python/tzdata";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

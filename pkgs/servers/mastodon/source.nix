@@ -5,14 +5,22 @@
   patches ? [ ],
 }:
 let
+<<<<<<< HEAD
   version = "4.5.3";
+=======
+  version = "4.5.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 applyPatches {
   src = fetchFromGitHub {
     owner = "mastodon";
     repo = "mastodon";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-OOcy4eBGao2cVnRYhAogeSw0X234TEr50tFT2sSjmaQ=";
+=======
+    hash = "sha256-LePly+CcM+Dv6ipX9jIWWKhy2PiF1j8vgc9CXn2o+DQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     passthru = {
       inherit version;
       yarnHash = "sha256-2MOl6kHidkGU2I/cZaUmbQCiEl9SDfL/j9fT/6eNdFA=";

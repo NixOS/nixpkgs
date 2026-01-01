@@ -72,7 +72,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     mainProgram = "ghidra";
     homepage = "https://github.com/NationalSecurityAgency/ghidra";
@@ -82,9 +86,15 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ck3d
       govanify
       mic92

@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple formatter designed for elementary OS";
     homepage = "https://github.com/Djaler/Formatter";
@@ -74,6 +75,15 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2Plus;
+=======
+  meta = with lib; {
+    description = "Simple formatter designed for elementary OS";
+    homepage = "https://github.com/Djaler/Formatter";
+    maintainers = with maintainers; [ xiorcale ];
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+    license = licenses.lgpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "com.github.djaler.formatter";
   };
 }

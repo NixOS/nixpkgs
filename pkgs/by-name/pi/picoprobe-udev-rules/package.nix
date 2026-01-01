@@ -33,11 +33,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://probe.rs/docs/getting-started/probe-setup/#udev-rules";
     description = "Picoprobe udev rules list";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    homepage = "https://probe.rs/docs/getting-started/probe-setup/#udev-rules";
+    description = "Picoprobe udev rules list";
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

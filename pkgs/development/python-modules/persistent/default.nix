@@ -41,11 +41,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "persistent" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Automatic persistence for Python objects";
     homepage = "https://github.com/zopefoundation/persistent/";
     changelog = "https://github.com/zopefoundation/persistent/blob/${version}/CHANGES.rst";
     license = lib.licenses.zpl21;
+=======
+  meta = with lib; {
+    description = "Automatic persistence for Python objects";
+    homepage = "https://github.com/zopefoundation/persistent/";
+    changelog = "https://github.com/zopefoundation/persistent/blob/${version}/CHANGES.rst";
+    license = licenses.zpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

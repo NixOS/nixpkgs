@@ -19,14 +19,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayback";
+<<<<<<< HEAD
   version = "0.3";
+=======
+  version = "0.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "wayback";
     repo = "wayback";
     tag = "${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-/H0+zOAdrejHMNRcc94Wjgc4/s/M1rUegPcX+pBQcrY=";
+=======
+    hash = "sha256-8pfW1tu7OI6dLSR9iiVuJDdK76fRgpQmesW5wJUVN/0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;

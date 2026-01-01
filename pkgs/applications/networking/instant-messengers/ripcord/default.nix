@@ -96,12 +96,21 @@ mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Desktop chat client for Slack and Discord";
     homepage = "https://cancel.fm/ripcord/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = lib.licenses.unfreeRedistributable;
+=======
+  meta = with lib; {
+    description = "Desktop chat client for Slack and Discord";
+    homepage = "https://cancel.fm/ripcord/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    # See: https://cancel.fm/ripcord/shareware-redistribution/
+    license = licenses.unfreeRedistributable;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

@@ -35,10 +35,18 @@ buildPecl {
     sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${oracle-instantclient.dev}/include"|' config.m4
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Extension for Oracle Database";
     license = lib.licenses.php301;
     homepage = "https://pecl.php.net/package/oci8";
     teams = [ lib.teams.php ];
+=======
+  meta = with lib; {
+    description = "Extension for Oracle Database";
+    license = licenses.php301;
+    homepage = "https://pecl.php.net/package/oci8";
+    teams = [ teams.php ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

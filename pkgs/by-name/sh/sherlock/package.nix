@@ -7,14 +7,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sherlock";
+<<<<<<< HEAD
   version = "0.16.0";
+=======
+  version = "0.15.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MP/INeD/dkS0lwACa9g3JqROuOinfr3LKmxjHnVUOdk=";
+=======
+    hash = "sha256-+fQDvvwsLpiEvy+vC49AzlOA/KaKrhhpS97sZvFbpLA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -57,7 +65,10 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python3.pkgs; [
+<<<<<<< HEAD
     rstr
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pytestCheckHook
     poetry-core
     jsonschema

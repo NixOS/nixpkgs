@@ -28,10 +28,18 @@ python3.pkgs.buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/EugeneLoy/coq_jupyter";
     description = "Jupyter kernel for Coq";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thomasjm ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/EugeneLoy/coq_jupyter";
+    description = "Jupyter kernel for Coq";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ thomasjm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "re.sonny.Junction";
     description = "Choose the application to open files and links";
@@ -76,5 +77,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ hqurve ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    mainProgram = "re.sonny.Junction";
+    description = "Choose the application to open files and links";
+    homepage = "https://apps.gnome.org/Junction/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ hqurve ];
+    teams = [ teams.gnome-circle ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

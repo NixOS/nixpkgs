@@ -30,5 +30,9 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "httpstat";
     homepage = "https://github.com/reorx/httpstat";
     license = lib.licenses.mit;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ nequissimus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

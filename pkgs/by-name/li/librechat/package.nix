@@ -7,7 +7,10 @@
   node-gyp,
   vips,
   nix-update-script,
+<<<<<<< HEAD
   nixosTests,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildNpmPackage rec {
@@ -85,9 +88,12 @@ buildNpmPackage rec {
         "^v(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
+<<<<<<< HEAD
     tests = {
       inherit (nixosTests) librechat;
     };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   meta = {

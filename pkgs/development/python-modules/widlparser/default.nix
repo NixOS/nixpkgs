@@ -42,10 +42,17 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Stand-alone WebIDL Parser in Python";
     homepage = "https://github.com/plinss/widlparser";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Stand-alone WebIDL Parser in Python";
+    homepage = "https://github.com/plinss/widlparser";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -28,11 +28,19 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for generating qr codes for iwd networks";
     homepage = "https://git.kroner.dev/kreny/iwqr";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ h7x4 ];
+=======
+  meta = with lib; {
+    description = "Tool for generating qr codes for iwd networks";
+    homepage = "https://git.kroner.dev/kreny/iwqr";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ h7x4 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "iwqr";
   };
 }

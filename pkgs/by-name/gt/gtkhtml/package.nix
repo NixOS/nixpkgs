@@ -57,8 +57,13 @@ stdenv.mkDerivation rec {
     isocodes
   ];
 
+<<<<<<< HEAD
   meta = {
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

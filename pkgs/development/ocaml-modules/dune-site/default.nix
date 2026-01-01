@@ -19,10 +19,18 @@ buildDunePackage {
     rm -r vendor/csexp
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for embedding location information inside executable and libraries";
     inherit (dune_3.meta) homepage;
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library for embedding location information inside executable and libraries";
+    inherit (dune_3.meta) homepage;
+    maintainers = [ ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

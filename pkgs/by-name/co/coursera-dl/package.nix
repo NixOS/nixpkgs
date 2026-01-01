@@ -63,13 +63,23 @@ python3.pkgs.buildPythonApplication rec {
     "test_quiz_exam_to_markup_converter"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "CLI for downloading Coursera.org videos and naming them";
     mainProgram = "coursera-dl";
     homepage = "https://github.com/coursera-dl/coursera-dl";
     changelog = "https://github.com/coursera-dl/coursera-dl/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ alexfmpe ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+=======
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ alexfmpe ];
+    platforms = platforms.darwin ++ platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

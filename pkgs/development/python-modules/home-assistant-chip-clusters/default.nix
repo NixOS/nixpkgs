@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "Python-base APIs and tools for CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
     changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
+=======
+  meta = with lib; {
+    description = "Python-base APIs and tools for CHIP";
+    homepage = "https://github.com/home-assistant-libs/chip-wheels";
+    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
+    license = licenses.asl20;
+    teams = [ teams.home-assistant ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

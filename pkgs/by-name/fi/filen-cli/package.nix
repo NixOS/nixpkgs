@@ -64,6 +64,10 @@ buildNpmPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/filen";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Writes $HOME/Library/Application Support on darwin
   doInstallCheck = !stdenv.hostPlatform.isDarwin;

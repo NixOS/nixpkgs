@@ -29,7 +29,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
+<<<<<<< HEAD
   version = "14.6";
+=======
+  version = "14.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -38,7 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f "$out"
       tryDownload "$url" "$out"
     '';
+<<<<<<< HEAD
     hash = "sha256-OST2QIhPhKl9Qh4nHIno5XAJmLPNki0bU5A1ZXcUVTw=";
+=======
+    hash = "sha256-+qfj1zf3V5xxtvXgCa0QDDRhEPQ3Qzii5eKiMySuUUY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = ".";
@@ -60,10 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     touch zen/warn_static.h
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
@@ -141,6 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open Source File Synchronization & Backup Software";
     homepage = "https://freefilesync.org";
@@ -152,5 +164,18 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open Source File Synchronization & Backup Software";
+    homepage = "https://freefilesync.org";
+    license = [
+      licenses.gpl3Only
+      licenses.openssl
+      licenses.curl
+      licenses.bsd3
+    ];
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

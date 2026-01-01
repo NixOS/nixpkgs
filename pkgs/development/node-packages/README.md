@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 > [!IMPORTANT]
 > There is currently an active project to [remove packages from `nodePackages`](https://github.com/NixOS/nixpkgs/issues/229475).
 > Please consider adding new packages using [another method](https://nixos.org/manual/nixpkgs/unstable/#javascript-tool-specific).
@@ -86,3 +87,6 @@ Use the following Git configuration to resolve the issue:
 ```sh
 git config --global url."https://github.com/".insteadOf git://github.com/
 ```
+=======
+Moved to [/doc/languages-frameworks/javascript.section.md](/doc/languages-frameworks/javascript.section.md)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

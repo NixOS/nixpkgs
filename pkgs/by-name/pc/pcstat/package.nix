@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-fdfiHTE8lySfyiKKiYJsQNCY6MBfjaVYSIZXtofIz3E=";
 
+<<<<<<< HEAD
   meta = {
     description = "Page Cache stat: get page cache stats for files on Linux";
     homepage = "https://github.com/tobert/pcstat";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aminechikhaoui ];
+=======
+  meta = with lib; {
+    description = "Page Cache stat: get page cache stats for files on Linux";
+    homepage = "https://github.com/tobert/pcstat";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aminechikhaoui ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pcstat";
   };
 }

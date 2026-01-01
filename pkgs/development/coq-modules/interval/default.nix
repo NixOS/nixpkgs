@@ -70,9 +70,16 @@ mkCoqDerivation rec {
   mlPlugin = true;
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Tactics for simplifying the proofs of inequalities on expressions of real numbers for the Coq proof assistant";
     license = lib.licenses.cecill-c;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    description = "Tactics for simplifying the proofs of inequalities on expressions of real numbers for the Coq proof assistant";
+    license = licenses.cecill-c;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

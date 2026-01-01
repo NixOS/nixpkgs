@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "General purpose formula parser, interpreter, formula cell dependency tracker and spreadsheet document model backend all in one package";
     homepage = "https://gitlab.com/ixion/ixion";
@@ -43,5 +44,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "General purpose formula parser, interpreter, formula cell dependency tracker and spreadsheet document model backend all in one package";
+    homepage = "https://gitlab.com/ixion/ixion";
+    changelog = "https://gitlab.com/ixion/ixion/-/blob/${src.rev}/CHANGELOG";
+    license = licenses.mpl20;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

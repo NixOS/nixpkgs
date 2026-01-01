@@ -95,12 +95,21 @@ py.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "prowler" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
     changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
+    homepage = "https://github.com/prowler-cloud/prowler";
+    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "prowler";
   };
 }

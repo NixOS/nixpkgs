@@ -31,11 +31,19 @@ buildGoModule rec {
     version = src.rev;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Wireguard client that exposes itself as a socks5 proxy";
     homepage = "https://github.com/pufferffish/wireproxy";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
+=======
+  meta = with lib; {
+    description = "Wireguard client that exposes itself as a socks5 proxy";
+    homepage = "https://github.com/pufferffish/wireproxy";
+    license = licenses.isc;
+    maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wireproxy";
   };
 }

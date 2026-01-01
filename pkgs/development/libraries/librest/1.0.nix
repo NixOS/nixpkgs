@@ -69,11 +69,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Helper library for RESTful services";
     homepage = "https://gitlab.gnome.org/GNOME/librest";
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "Helper library for RESTful services";
+    homepage = "https://gitlab.gnome.org/GNOME/librest";
+    license = licenses.lgpl21Only;
+    platforms = platforms.unix;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

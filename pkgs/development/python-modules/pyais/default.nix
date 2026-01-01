@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pyais";
+<<<<<<< HEAD
   version = "2.14.0";
+=======
+  version = "2.13.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "M0r13n";
     repo = "pyais";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-3KZCfJkXofxMcqAOa6IInCbQIGZSJ/1+L9cM/GCCGog=";
+=======
+    hash = "sha256-GtM4jUtGZ49NlfZZ8Ji6fErtuFBlnOKXvN8OIshUOBM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   __darwinAllowLocalNetworking = true;
@@ -47,11 +55,20 @@ buildPythonPackage rec {
     "test_full_message_flow"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for decoding and encoding AIS messages (AIVDM/AIVDO)";
     homepage = "https://github.com/M0r13n/pyais";
     changelog = "https://github.com/M0r13n/pyais/blob/${src.tag}/CHANGELOG.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for decoding and encoding AIS messages (AIVDM/AIVDO)";
+    homepage = "https://github.com/M0r13n/pyais";
+    changelog = "https://github.com/M0r13n/pyais/blob/${src.tag}/CHANGELOG.txt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

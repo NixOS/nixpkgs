@@ -90,12 +90,21 @@ mkDerivation rec {
     "--qtlibs=${lib.getLib qtbase}/lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mind-mapping application for KDE";
     license = lib.licenses.mit;
     homepage = "https://waf.io/semantik.html";
     maintainers = [ lib.maintainers.shamilton ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Mind-mapping application for KDE";
+    license = licenses.mit;
+    homepage = "https://waf.io/semantik.html";
+    maintainers = [ maintainers.shamilton ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "semantik";
   };
 }

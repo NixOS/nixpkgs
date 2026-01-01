@@ -16,11 +16,20 @@ buildPythonPackage rec {
     sha256 = "YxhZd8V6ofphcNdcbBbrT5mc37O9c6W1mfhsvFVC+KM=";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/AxiaCore/py-expression-eval/";
     description = "Python Mathematical Expression Evaluator";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cynerd ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/AxiaCore/py-expression-eval/";
+    description = "Python Mathematical Expression Evaluator";
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ cynerd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

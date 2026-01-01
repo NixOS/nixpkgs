@@ -40,13 +40,21 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucc";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.5.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-xt138R3lSArfkxi/qJgR2xMlhhtm0hAwIUZBLpwFwvc=";
+=======
+    hash = "sha256-gNLpcVvOsBCR0+KL21JSdWZyt/Z8EjQQTiHJw5vzOOo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -114,6 +122,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/ucc_info "$dev"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Collective communication operations API";
     homepage = "https://openucx.github.io/ucc/";
@@ -121,5 +130,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Collective communication operations API";
+    homepage = "https://openucx.github.io/ucc/";
+    mainProgram = "ucc_info";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.markuskowa ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -42,10 +42,18 @@ buildPythonPackage rec {
     "test_thing_with_submodule"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for serializing any arbitrary object graph into JSON";
     downloadPage = "https://github.com/jsonpickle/jsonpickle";
     homepage = "http://jsonpickle.github.io/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python library for serializing any arbitrary object graph into JSON";
+    downloadPage = "https://github.com/jsonpickle/jsonpickle";
+    homepage = "http://jsonpickle.github.io/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

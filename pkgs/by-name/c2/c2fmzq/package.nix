@@ -32,6 +32,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) c2fmzq; };
 
+<<<<<<< HEAD
   meta = {
     description = "Securely encrypt, store, and share files, including but not limited to pictures and videos";
     homepage = "https://github.com/c2FmZQ/c2FmZQ";
@@ -39,5 +40,14 @@ buildGoModule rec {
     mainProgram = "c2FmZQ-server";
     maintainers = with lib.maintainers; [ hmenke ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Securely encrypt, store, and share files, including but not limited to pictures and videos";
+    homepage = "https://github.com/c2FmZQ/c2FmZQ";
+    license = licenses.gpl3Only;
+    mainProgram = "c2FmZQ-server";
+    maintainers = with maintainers; [ hmenke ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

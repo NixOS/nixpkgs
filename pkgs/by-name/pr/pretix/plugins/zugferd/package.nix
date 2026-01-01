@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretix_zugferd" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Annotate pretix' invoices with ZUGFeRD data";
     homepage = "https://github.com/pretix/pretix-zugferd";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Annotate pretix' invoices with ZUGFeRD data";
+    homepage = "https://github.com/pretix/pretix-zugferd";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

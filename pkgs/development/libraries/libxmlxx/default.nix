@@ -47,11 +47,19 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://libxmlplusplus.sourceforge.net/";
     description = "C++ wrapper for the libxml2 XML parser library";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://libxmlplusplus.sourceforge.net/";
+    description = "C++ wrapper for the libxml2 XML parser library";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

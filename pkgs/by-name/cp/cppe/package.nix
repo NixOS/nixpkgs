@@ -25,11 +25,20 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "C++ and Python library for Polarizable Embedding";
     homepage = "https://github.com/maxscheurer/cppe";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "C++ and Python library for Polarizable Embedding";
+    homepage = "https://github.com/maxscheurer/cppe";
+    license = licenses.lgpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

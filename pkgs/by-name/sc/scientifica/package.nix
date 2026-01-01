@@ -25,11 +25,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tall and condensed bitmap font for geeks";
     homepage = "https://github.com/oppiliappan/scientifica";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moni ];
+=======
+  meta = with lib; {
+    description = "Tall and condensed bitmap font for geeks";
+    homepage = "https://github.com/oppiliappan/scientifica";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

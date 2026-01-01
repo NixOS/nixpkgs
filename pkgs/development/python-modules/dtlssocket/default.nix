@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "DTLSSocket" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cython wrapper for tinydtls with a Socket like interface";
     homepage = "https://git.fslab.de/jkonra2m/tinydtls-cython";
     license = lib.licenses.epl10;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Cython wrapper for tinydtls with a Socket like interface";
+    homepage = "https://git.fslab.de/jkonra2m/tinydtls-cython";
+    license = licenses.epl10;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

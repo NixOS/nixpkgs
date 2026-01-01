@@ -49,17 +49,30 @@
       "ethercrow": 222467,
       "groodt": 343415,
       "kalbasit": 87115,
+<<<<<<< HEAD
       "mboes": 51356
+=======
+      "mboes": 51356,
+      "uri-canva": 33242106
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "name": "Bazel"
   },
   "beam": {
     "description": "Maintain BEAM-related packages and modules.",
+<<<<<<< HEAD
     "id": 15530553,
+=======
+    "id": 4502493,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "maintainers": {
       "happysalada": 5317234
     },
     "members": {
+<<<<<<< HEAD
+=======
+      "Br1ght0ne": 12615679,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "DianaOlympos": 15774340,
       "adamcstephens": 2071575,
       "ankhers": 750786,
@@ -139,11 +152,19 @@
   },
   "crystal-lang": {
     "description": "The Crystal Lang eco-system",
+<<<<<<< HEAD
     "id": 15530580,
+=======
+    "id": 3806663,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "maintainers": {
       "peterhoeg": 722550
     },
     "members": {
+<<<<<<< HEAD
+=======
+      "Br1ght0ne": 12615679,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "manveru": 3507
     },
     "name": "crystal-lang"
@@ -153,12 +174,20 @@
     "id": 5704451,
     "maintainers": {
       "ConnorBaker": 3880346,
+<<<<<<< HEAD
       "GaetanLepage": 33058747,
       "SomeoneSerge": 9720532,
       "YorikSar": 428074,
       "samuela": 226872
     },
     "members": {
+=======
+      "SomeoneSerge": 9720532,
+      "samuela": 226872
+    },
+    "members": {
+      "GaetanLepage": 33058747,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "prusnak": 42201
     },
     "name": "cuda-maintainers"
@@ -259,6 +288,10 @@
       "thefloweringash": 42933,
       "tricktron": 16036882,
       "uncenter": 47499684,
+<<<<<<< HEAD
+=======
+      "uri-canva": 33242106,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "usertam": 22500027,
       "veprbl": 245573,
       "viraptor": 188063,
@@ -306,7 +339,12 @@
     "description": "",
     "id": 2516946,
     "maintainers": {
+<<<<<<< HEAD
       "jian-lin": 75130626
+=======
+      "jian-lin": 75130626,
+      "matthewbauer": 19036
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "members": {
       "AndersonTorres": 5954806,
@@ -343,6 +381,7 @@
     },
     "name": "exotic-platform-maintainers"
   },
+<<<<<<< HEAD
   "feel-co": {
     "description": "Managing packages related to https://github.com/feel-co",
     "id": 15169000,
@@ -355,6 +394,8 @@
     },
     "name": "feel-co"
   },
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "flutter": {
     "description": "Maintain Flutter and Dart-related packages and build tools",
     "id": 7718198,
@@ -484,7 +525,10 @@
       "wrmilling": 6162814
     },
     "members": {
+<<<<<<< HEAD
       "azey7f": 41077433,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "frederictobiasc": 26125115,
       "heywoodlh": 18178614,
       "rorosen": 76747196
@@ -499,6 +543,10 @@
     },
     "members": {
       "cpages": 411324,
+<<<<<<< HEAD
+=======
+      "edwtjo": 54799,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "minijackson": 1200507,
       "peterhoeg": 722550,
       "sephalon": 893474
@@ -526,6 +574,10 @@
     "members": {
       "K900": 386765,
       "Ma27": 6025220,
+<<<<<<< HEAD
+=======
+      "NeQuissimus": 628342,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "TredwellGit": 61860346
     },
     "name": "Linux kernel"
@@ -566,6 +618,10 @@
     },
     "members": {
       "Ericson2314": 1055245,
+<<<<<<< HEAD
+=======
+      "dtzWill": 817330,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "emilazy": 18535642,
       "lovek323": 265084,
       "rrbutani": 7833358,
@@ -581,7 +637,10 @@
     },
     "members": {
       "Cryolitia": 23723294,
+<<<<<<< HEAD
       "Moraxyc": 69713071,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "darkyzhou": 7220778,
       "dramforever": 2818072,
       "wegank": 9713184
@@ -693,8 +752,12 @@
       "0x4A6F": 9675338,
       "MattSturgeon": 5046562,
       "Sereja313": 112060595,
+<<<<<<< HEAD
       "dasJ": 4971975,
       "dyegoaurelio": 42411160
+=======
+      "dasJ": 4971975
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     },
     "name": "nix-formatting"
   },
@@ -727,12 +790,23 @@
     "description": "Maintain Nixpkgs' in-tree Continuous Integration, including GitHub Actions",
     "id": 13362067,
     "maintainers": {
+<<<<<<< HEAD
       "MattSturgeon": 5046562,
       "Mic92": 96200,
       "philiptaron": 43863,
       "zowoq": 59103226
     },
     "members": {},
+=======
+      "philiptaron": 43863,
+      "wolfgangwalther": 9132420
+    },
+    "members": {
+      "MattSturgeon": 5046562,
+      "Mic92": 96200,
+      "zowoq": 59103226
+    },
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "name": "Nixpkgs CI"
   },
   "nixpkgs-core": {
@@ -892,7 +966,13 @@
       "winterqt": 78392041,
       "zowoq": 59103226
     },
+<<<<<<< HEAD
     "members": {},
+=======
+    "members": {
+      "tjni": 3806110
+    },
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "name": "rust"
   },
   "scala": {
@@ -933,6 +1013,10 @@
       "alyssais": 2768870,
       "basvandijk": 576355,
       "cdepillabout": 64804,
+<<<<<<< HEAD
+=======
+      "dtzWill": 817330,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lorenzleutgeb": 542154,
       "matthewbauer": 19036,
       "r-burns": 52847440,

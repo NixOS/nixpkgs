@@ -1,7 +1,10 @@
 {
   lib,
   buildGoModule,
+<<<<<<< HEAD
   callPackage,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   hwinfo,
   libusb1,
@@ -65,8 +68,11 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) facter;
+<<<<<<< HEAD
     debug-nvd = callPackage ./test-debug-nvd.nix { };
     debug-nix-diff = nixosTests.facter.nodes.machine.hardware.facter.debug.nix-diff;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   meta = {

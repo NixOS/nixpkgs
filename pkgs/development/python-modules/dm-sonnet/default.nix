@@ -67,12 +67,15 @@ buildPythonPackage rec {
     export TF_USE_LEGACY_KERAS=True
   '';
 
+<<<<<<< HEAD
   enabledTestPaths = [
     # Prevent collecting docs/ext/link_tf_api_test.py which fails with:
     # ModuleNotFoundError: No module named 'docs.ext'
     "sonnet"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabledTests = [
     # AssertionError: 2 != 0 : 2 doctests failed
     "test_doctest_sonnet.functional"

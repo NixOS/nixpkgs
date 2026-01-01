@@ -33,10 +33,17 @@ buildPythonPackage rec {
     "tests/test_glob.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful API for invoking with external commands";
     homepage = "https://github.com/tarruda/python-ush";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Powerful API for invoking with external commands";
+    homepage = "https://github.com/tarruda/python-ush";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

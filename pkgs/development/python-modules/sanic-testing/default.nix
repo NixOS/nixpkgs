@@ -51,11 +51,19 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Core testing clients for the Sanic web framework";
     homepage = "https://github.com/sanic-org/sanic-testing";
     changelog = "https://github.com/sanic-org/sanic-testing/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Core testing clients for the Sanic web framework";
+    homepage = "https://github.com/sanic-org/sanic-testing";
+    changelog = "https://github.com/sanic-org/sanic-testing/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -24,6 +24,7 @@ appimageTools.wrapType2 {
       $out/share/icons/hicolor/512x512/apps/listen1.png
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "One for all free music in China";
     homepage = "http://listen1.github.io/listen1/";
@@ -31,6 +32,15 @@ appimageTools.wrapType2 {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "One for all free music in China";
+    homepage = "http://listen1.github.io/listen1/";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "listen1";
   };
 }

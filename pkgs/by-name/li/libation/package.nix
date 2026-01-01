@@ -13,20 +13,34 @@
 
 buildDotnetModule rec {
   pname = "libation";
+<<<<<<< HEAD
   version = "12.7.3";
+=======
+  version = "12.5.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MFrtEFgM584SGbcQNQLTlj4BBh2ct2rpQyx0/se8Eo0=";
+=======
+    hash = "sha256-W2wCtXcvft450A2cdLPbOFjHrQahSbTEbfyoSXUtH/E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/Source";
 
+<<<<<<< HEAD
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
+=======
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nugetDeps = ./deps.json;
 
@@ -57,6 +71,11 @@ buildDotnetModule rec {
   postInstall = ''
     install -Dm644 LoadByOS/LinuxConfigApp/libation_glass.svg $out/share/icons/hicolor/scalable/apps/libation.svg
     install -Dm644 LoadByOS/LinuxConfigApp/Libation.desktop $out/share/applications/libation.desktop
+<<<<<<< HEAD
+=======
+    substituteInPlace $out/share/applications/libation.desktop \
+      --replace-fail "/usr/bin/libation" "libation"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   # wrap manually, because we need lower case executables
@@ -76,9 +95,13 @@ buildDotnetModule rec {
     homepage = "https://github.com/rmcrackan/Libation";
     license = lib.licenses.gpl3Plus;
     mainProgram = "libation";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       tomasajt
       tebriel
     ];
+=======
+    maintainers = with lib.maintainers; [ tomasajt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

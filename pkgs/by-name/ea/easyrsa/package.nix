@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "easyrsa";
+<<<<<<< HEAD
   version = "3.2.5";
+=======
+  version = "3.2.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "easy-rsa";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-GD4KL8CqQ8U0ISrLm8zlnfi1AuYK0AZLiLuufEhZ7B0=";
+=======
+    hash = "sha256-X/EXiiSLDSxxSSNnb6lkPsvdA0vSp/zPN+wSNuUMzrg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -59,6 +67,7 @@ stdenv.mkDerivation rec {
     openssl x509 -in pki/ca.crt -noout -subject | tee /dev/stderr | grep -zq "$EASYRSA_REQ_CN"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple shell based CA utility";
     homepage = "https://openvpn.net/";
@@ -68,5 +77,16 @@ stdenv.mkDerivation rec {
       lib.maintainers.numinit
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple shell based CA utility";
+    homepage = "https://openvpn.net/";
+    license = licenses.gpl2Only;
+    maintainers = [
+      maintainers.offline
+      maintainers.numinit
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

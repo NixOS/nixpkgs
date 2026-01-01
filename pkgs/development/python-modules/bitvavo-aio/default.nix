@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bitvavo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for Bitvavo crypto exchange API";
     homepage = "https://github.com/cyberjunky/bitvavo-aio";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client for Bitvavo crypto exchange API";
+    homepage = "https://github.com/cyberjunky/bitvavo-aio";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

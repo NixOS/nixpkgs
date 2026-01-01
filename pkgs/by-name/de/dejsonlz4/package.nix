@@ -24,12 +24,21 @@ stdenv.mkDerivation rec {
     cp dejsonlz4 $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Decompress Mozilla Firefox bookmarks backup files";
     homepage = "https://github.com/avih/dejsonlz4";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mt-caret ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Decompress Mozilla Firefox bookmarks backup files";
+    homepage = "https://github.com/avih/dejsonlz4";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ mt-caret ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dejsonlz4";
   };
 }

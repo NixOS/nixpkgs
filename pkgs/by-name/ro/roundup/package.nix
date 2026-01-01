@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Unit testing tool for running test plans which are written in any POSIX shell";
     homepage = "http://bmizerany.github.io/roundup/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Unit testing tool for running test plans which are written in any POSIX shell";
+    homepage = "http://bmizerany.github.io/roundup/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "roundup";
   };
 }

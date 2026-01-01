@@ -24,10 +24,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "procfs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python classes to extract information from the Linux kernel /proc files";
     mainProgram = "pflags";
     homepage = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Python classes to extract information from the Linux kernel /proc files";
+    mainProgram = "pflags";
+    homepage = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Application to assign notmuch tagged mails to IMAP folders";
     mainProgram = "notmuch-mailmover";
@@ -55,5 +56,17 @@ rustPlatform.buildRustPackage rec {
       archer-65
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Application to assign notmuch tagged mails to IMAP folders";
+    mainProgram = "notmuch-mailmover";
+    homepage = "https://github.com/michaeladler/notmuch-mailmover/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      michaeladler
+      archer-65
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,7 +24,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "In-house serif typeface for the publishing house Brill, designed by John Hudson; free for non-commercial use";
     longDescription = ''
       Brill has “a neo-classical design geared towards optimum legibility”.
@@ -35,8 +39,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://brill.com/page/BrillFont/brill-typeface";
     downloadPage = "https://brill.com/page/419382";
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ trespaul ];
+=======
+    license = licenses.unfree;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ trespaul ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

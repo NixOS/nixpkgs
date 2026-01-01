@@ -47,11 +47,19 @@ buildGoModule {
 
   passthru.tests = { inherit (nixosTests) alps; };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and extensible webmail";
     homepage = "https://git.sr.ht/~migadu/alps";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Simple and extensible webmail";
+    homepage = "https://git.sr.ht/~migadu/alps";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       booklearner
       madonius
       hmenke

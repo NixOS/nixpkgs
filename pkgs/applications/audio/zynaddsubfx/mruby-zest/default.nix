@@ -63,11 +63,20 @@ stdenv.mkDerivation rec {
     touch "$out/qml/MainWindow.qml"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Zest Framework used in ZynAddSubFX's UI";
     homepage = "https://github.com/mruby-zest";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Zest Framework used in ZynAddSubFX's UI";
+    homepage = "https://github.com/mruby-zest";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

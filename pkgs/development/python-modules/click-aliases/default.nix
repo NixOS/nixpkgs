@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_aliases" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/click-contrib/click-aliases";
     description = "Enable aliases for click";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ panicgh ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/click-contrib/click-aliases";
+    description = "Enable aliases for click";
+    license = licenses.mit;
+    maintainers = with maintainers; [ panicgh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

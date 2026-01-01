@@ -33,12 +33,21 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "NixOS like terraform-json generator";
     homepage = "https://terranix.org";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "NixOS like terraform-json generator";
+    homepage = "https://terranix.org";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mrVanDalo
       sshine
     ];

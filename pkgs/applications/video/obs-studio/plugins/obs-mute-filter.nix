@@ -27,11 +27,19 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "OBS Studio plugin to mute audio of a source";
     homepage = "https://github.com/norihiro/obs-mute-filter";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "OBS Studio plugin to mute audio of a source";
+    homepage = "https://github.com/norihiro/obs-mute-filter";
+    maintainers = with maintainers; [ flexiondotorg ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

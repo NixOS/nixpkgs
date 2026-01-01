@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible scheduler for your i3bar blocks -- this is a fork to use with i3-gaps";
     mainProgram = "i3blocks";
@@ -80,5 +81,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ carlsverre ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Flexible scheduler for your i3bar blocks -- this is a fork to use with i3-gaps";
+    mainProgram = "i3blocks";
+    homepage = "https://github.com/Airblader/i3blocks-gaps";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ carlsverre ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

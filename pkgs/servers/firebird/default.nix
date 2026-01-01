@@ -17,7 +17,11 @@ let
   base = {
     pname = "firebird";
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "SQL relational database management system";
       downloadPage = "https://github.com/FirebirdSQL/firebird/";
       homepage = "https://firebirdsql.org/";
@@ -26,8 +30,13 @@ let
         mpl11
         interbase
       ];
+<<<<<<< HEAD
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [
+=======
+      platforms = platforms.linux;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         bbenno
         marcweber
       ];

@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "General-purpose library for WPE WebKit";
     license = lib.licenses.bsd2;
     homepage = "https://wpewebkit.org";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "General-purpose library for WPE WebKit";
+    license = licenses.bsd2;
+    homepage = "https://wpewebkit.org";
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

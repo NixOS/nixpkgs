@@ -20,11 +20,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ua-parser ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to identify devices by parsing user agent strings";
     homepage = "https://github.com/selwin/python-user-agents";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python library to identify devices by parsing user agent strings";
+    homepage = "https://github.com/selwin/python-user-agents";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

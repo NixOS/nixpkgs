@@ -51,15 +51,27 @@ stdenv.mkDerivation {
     set -e
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Set of AX.25 microservices, designed to be pluggable for any implementation";
     homepage = "https://github.com/ThomasHabets/ax25ms";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Set of AX.25 microservices, designed to be pluggable for any implementation";
+    homepage = "https://github.com/ThomasHabets/ax25ms";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthewcroughan
       sarcasticadmin
       pkharvey
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

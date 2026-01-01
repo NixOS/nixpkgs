@@ -38,11 +38,20 @@ stdenvNoCC.mkDerivation rec {
        --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.GetoptLong ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities to manage schema in .schema and .ldif format";
     homepage = "https://www.fusiondirectory.org/schema2ldif-project-and-components/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ das_j ];
+=======
+  meta = with lib; {
+    description = "Utilities to manage schema in .schema and .ldif format";
+    homepage = "https://www.fusiondirectory.org/schema2ldif-project-and-components/";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ das_j ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

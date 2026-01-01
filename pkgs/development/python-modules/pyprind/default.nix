@@ -25,10 +25,17 @@ buildPythonPackage rec {
     py.test tests
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python Progress Bar and Percent Indicator Utility";
     homepage = "https://github.com/rasbt/pyprind";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python Progress Bar and Percent Indicator Utility";
+    homepage = "https://github.com/rasbt/pyprind";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

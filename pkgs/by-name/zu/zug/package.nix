@@ -24,9 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/arximboldi/zug/commit/c8c74ada30d931e40636c13763b892f20d3ce1ae.patch";
       hash = "sha256-0x+ScRnziBeyHWYJowcVb2zahkcK2qKrMVVk2twhtHA=";
     })
+<<<<<<< HEAD
 
     # https://github.com/arximboldi/zug/issues/45
     ./gcc15.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [ cmake ];

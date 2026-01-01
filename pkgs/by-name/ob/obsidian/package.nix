@@ -14,13 +14,22 @@ let
   pname = "obsidian";
   version = "1.10.6";
   appname = "Obsidian";
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     mainProgram = "obsidian";
+<<<<<<< HEAD
     license = lib.licenses.obsidian;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.obsidian;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       atila
       conradmearns
       zaninime
@@ -28,6 +37,7 @@ let
       kashw2
       w-lfchen
     ];
+<<<<<<< HEAD
 
     platforms = [
       "x86_64-linux"
@@ -35,6 +45,8 @@ let
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   filename =
@@ -70,8 +82,18 @@ let
       src
       desktopItem
       icon
+<<<<<<< HEAD
       meta
       ;
+=======
+      ;
+    meta = meta // {
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nativeBuildInputs = [
       makeWrapper
       imagemagick
@@ -109,8 +131,18 @@ let
       version
       src
       appname
+<<<<<<< HEAD
       meta
       ;
+=======
+      ;
+    meta = meta // {
+      platforms = [
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper

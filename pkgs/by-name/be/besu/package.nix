@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
         '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Enterprise-grade Java-based, Apache 2.0 licensed Ethereum client";
     homepage = "https://www.hyperledger.org/projects/besu";
@@ -59,5 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ mmahut ];
+=======
+  meta = with lib; {
+    description = "Enterprise-grade Java-based, Apache 2.0 licensed Ethereum client";
+    homepage = "https://www.hyperledger.org/projects/besu";
+    changelog = "https://github.com/hyperledger/besu/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

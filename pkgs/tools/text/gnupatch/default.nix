@@ -4,15 +4,25 @@
   fetchurl,
   ed,
   autoreconfHook,
+<<<<<<< HEAD
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "patch";
   version = "2.8";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "mirror://gnu/patch/patch-${finalAttrs.version}.tar.xz";
+=======
+    url = "mirror://gnu/patch/patch-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-+Hzuae7CtPy/YKOWsDCtaqNBXxkqpffuhMrV4R9/WuM=";
   };
 
@@ -33,14 +43,30 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GNU Patch, a program to apply differences to files";
     mainProgram = "patch";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       GNU Patch takes a patch file containing a difference listing
       produced by the diff program and applies those differences to one or
       more original files, producing patched versions.
     '';
+<<<<<<< HEAD
     homepage = "https://savannah.gnu.org/projects/patch";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.all;
   };
 })
+=======
+
+    homepage = "https://savannah.gnu.org/projects/patch";
+
+    license = lib.licenses.gpl3Plus;
+
+    maintainers = [ ];
+    platforms = lib.platforms.all;
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -101,6 +101,7 @@ stdenv.mkDerivation {
     inherit cudaSupport;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ API of the PyTorch machine learning framework";
     homepage = "https://pytorch.org/";
@@ -110,6 +111,17 @@ stdenv.mkDerivation {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ junjihashimoto ];
+=======
+  meta = with lib; {
+    description = "C++ API of the PyTorch machine learning framework";
+    homepage = "https://pytorch.org/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
+    # https://docs.nvidia.com/cuda/eula/index.html
+    # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ junjihashimoto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "aarch64-darwin"
       "x86_64-linux"

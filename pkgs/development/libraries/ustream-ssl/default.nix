@@ -41,6 +41,7 @@ stdenv.mkDerivation {
     inherit ssl_implementation;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "ustream SSL wrapper";
     homepage = "https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary";
@@ -50,5 +51,16 @@ stdenv.mkDerivation {
       mkg20001
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "ustream SSL wrapper";
+    homepage = "https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary";
+    license = licenses.isc;
+    maintainers = with maintainers; [
+      fpletz
+      mkg20001
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -88,7 +88,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fonts for Code, from Font Bureau";
     longDescription = ''
       Input is a font family designed for computer programming, data,
@@ -104,11 +108,20 @@ stdenv.mkDerivation rec {
       characters — but without the limitations of a fixed width.
     '';
     homepage = "https://input.djr.com/";
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       jtojnar
       romildo
     ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      jtojnar
+      romildo
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

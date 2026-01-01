@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs_22,
@@ -11,6 +12,11 @@
 let
   pnpm' = pnpm_9.override { nodejs = nodejs_22; };
 in
+=======
+  nodejs_22,
+  versionCheckHook,
+}:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenv.mkDerivation rec {
   pname = "tsx";
   version = "4.19.3";
@@ -22,6 +28,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-wdv2oqJNc6U0Fyv4jT+0LUcYaDfodHk1vQZGMdyFF/E=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit
       pname
@@ -29,14 +36,22 @@ stdenv.mkDerivation rec {
       src
       ;
     pnpm = pnpm';
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-57KDZ9cHb7uqnypC0auIltmYMmIhs4PWyf0HTRWEFiU=";
   };
 
   nativeBuildInputs = [
     nodejs_22
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm'
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -92,6 +107,10 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "TypeScript Execute (tsx): The easiest way to run TypeScript in Node.js";

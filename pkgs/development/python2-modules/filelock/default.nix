@@ -19,10 +19,18 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/benediktschmitt/py-filelock";
     description = "Platform independent file lock for Python";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ henkkalkwater ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/benediktschmitt/py-filelock";
+    description = "Platform independent file lock for Python";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ henkkalkwater ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

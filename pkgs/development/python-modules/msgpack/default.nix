@@ -38,11 +38,20 @@ buildPythonPackage rec {
     make cython
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "MessagePack serializer implementation";
     homepage = "https://github.com/msgpack/msgpack-python";
     changelog = "https://github.com/msgpack/msgpack-python/blob/${src.tag}/ChangeLog.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "MessagePack serializer implementation";
+    homepage = "https://github.com/msgpack/msgpack-python";
+    changelog = "https://github.com/msgpack/msgpack-python/blob/${src.tag}/ChangeLog.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,10 +36,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mozilla-services/hawkauthlib";
     description = "Hawk Access Authentication protocol";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mozilla-services/hawkauthlib";
+    description = "Hawk Access Authentication protocol";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

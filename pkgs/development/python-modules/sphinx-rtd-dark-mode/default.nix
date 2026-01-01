@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_rtd_dark_mode" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Adds a toggleable dark mode to the Read the Docs theme for Sphinx";
     homepage = "https://github.com/MrDogeBro/sphinx_rtd_dark_mode";
     changelog = "https://github.com/MrDogeBro/sphinx_rtd_dark_mode/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ wolfgangwalther ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Adds a toggleable dark mode to the Read the Docs theme for Sphinx";
+    homepage = "https://github.com/MrDogeBro/sphinx_rtd_dark_mode";
+    changelog = "https://github.com/MrDogeBro/sphinx_rtd_dark_mode/releases/tag/v${version}";
+    maintainers = with maintainers; [ wolfgangwalther ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

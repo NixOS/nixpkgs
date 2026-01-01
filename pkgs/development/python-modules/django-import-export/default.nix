@@ -49,7 +49,11 @@ buildPythonPackage rec {
     psycopg2
     pytz
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   checkPhase = ''
     runHook preCheck
@@ -59,11 +63,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "import_export" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Django application and library for importing and exporting data with admin integration";
     homepage = "https://github.com/django-import-export/django-import-export";
     changelog = "https://github.com/django-import-export/django-import-export/blob/${src.tag}/docs/changelog.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sephi ];
+=======
+  meta = with lib; {
+    description = "Django application and library for importing and exporting data with admin integration";
+    homepage = "https://github.com/django-import-export/django-import-export";
+    changelog = "https://github.com/django-import-export/django-import-export/blob/${src.tag}/docs/changelog.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sephi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

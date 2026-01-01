@@ -78,14 +78,23 @@ stdenv.mkDerivation (finalAttrs: {
   # Parallel builds break reproducibility.
   enableParallelBuilding = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://jemalloc.net/";
     description = "General purpose malloc(3) implementation";
     longDescription = ''
       malloc(3)-compatible memory allocator that emphasizes fragmentation
       avoidance and scalable concurrency support.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+=======
+    license = licenses.bsd2;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

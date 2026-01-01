@@ -42,10 +42,18 @@ mkCoqDerivation {
     stdlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generic goal preprocessing tool for proof automation tactics in Coq";
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Generic goal preprocessing tool for proof automation tactics in Coq";
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.lgpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

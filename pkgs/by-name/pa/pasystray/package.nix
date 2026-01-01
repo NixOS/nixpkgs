@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "PulseAudio system tray";
     homepage = "https://github.com/christophgysin/pasystray";
@@ -65,6 +66,17 @@ stdenv.mkDerivation rec {
       kamilchm
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "PulseAudio system tray";
+    homepage = "https://github.com/christophgysin/pasystray";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [
+      exlevan
+      kamilchm
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pasystray";
   };
 }

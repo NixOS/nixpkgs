@@ -28,11 +28,20 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "vacuum-card.js";
 
+<<<<<<< HEAD
   meta = {
     description = "Vacuum cleaner card for Home Assistant Lovelace UI";
     homepage = "https://github.com/denysdovhan/vacuum-card";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ baksa ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Vacuum cleaner card for Home Assistant Lovelace UI";
+    homepage = "https://github.com/denysdovhan/vacuum-card";
+    license = licenses.mit;
+    maintainers = with maintainers; [ baksa ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

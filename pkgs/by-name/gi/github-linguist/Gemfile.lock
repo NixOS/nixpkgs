@@ -48,7 +48,11 @@ GEM
       ruby2_keywords (>= 0.0.5)
     net-http (0.6.0)
       uri
+<<<<<<< HEAD
     nokogiri (1.18.10)
+=======
+    nokogiri (1.18.8)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     octokit (9.2.0)

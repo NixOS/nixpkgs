@@ -8,16 +8,27 @@
 
 buildNpmPackage rec {
   pname = "dotenvx";
+<<<<<<< HEAD
   version = "1.51.2";
+=======
+  version = "1.51.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "dotenvx";
     repo = "dotenvx";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-WafhFmph85r377VOFJBjXU8T/GbIrgXQ2RzcVb7GETw=";
   };
 
   npmDepsHash = "sha256-YVODU+0e9T/x9RkAEiHdQ1JxFlgwsrdyzx0ZIgmy9Fw=";
+=======
+    hash = "sha256-oXq3OfMPmfbBr5wfumiql8uX+tkCtJJ5W0CT6M3cBp8=";
+  };
+
+  npmDepsHash = "sha256-scRpNiBwZBtaYTpepNw+OsMS6Dy1uUq/hkH++cr2qRQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dontNpmBuild = true;
 

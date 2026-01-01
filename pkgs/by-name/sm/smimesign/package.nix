@@ -26,11 +26,20 @@ buildGoModule rec {
   # Fails in sandbox
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "S/MIME signing utility for macOS and Windows that is compatible with Git";
     homepage = "https://github.com/github/smimesign";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin ++ lib.platforms.windows;
     maintainers = [ lib.maintainers.enorris ];
+=======
+  meta = with lib; {
+    description = "S/MIME signing utility for macOS and Windows that is compatible with Git";
+    homepage = "https://github.com/github/smimesign";
+    license = licenses.mit;
+    platforms = platforms.darwin ++ platforms.windows;
+    maintainers = [ maintainers.enorris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

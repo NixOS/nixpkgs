@@ -106,11 +106,20 @@ buildPythonPackage rec {
     "test_write_get_object_response"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Alibaba Cloud OSS SDK for Python";
     homepage = "https://github.com/aliyun/aliyun-oss-python-sdk";
     changelog = "https://github.com/aliyun/aliyun-oss-python-sdk/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Alibaba Cloud OSS SDK for Python";
+    homepage = "https://github.com/aliyun/aliyun-oss-python-sdk";
+    changelog = "https://github.com/aliyun/aliyun-oss-python-sdk/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

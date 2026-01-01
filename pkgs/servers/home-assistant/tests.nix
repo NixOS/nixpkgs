@@ -13,7 +13,10 @@ let
     air_quality = getComponentDeps "camera" ++ getComponentDeps "conversation";
     alexa = getComponentDeps "cloud" ++ getComponentDeps "frontend" ++ getComponentDeps "stream";
     android_ip_webcam = getComponentDeps "camera";
+<<<<<<< HEAD
     anthropic = getComponentDeps "ai_task";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     assist_pipeline = getComponentDeps "frontend";
     automation = getComponentDeps "frontend" ++ getComponentDeps "mobile_app";
     axis = getComponentDeps "camera" ++ getComponentDeps "deconz";
@@ -85,10 +88,15 @@ let
     microsoft = getComponentDeps "tts";
     microsoft_face_detect = getComponentDeps "conversation";
     microsoft_face_identify = getComponentDeps "conversation";
+<<<<<<< HEAD
     miele = getComponentDeps "cloud";
     mjpeg = getComponentDeps "camera";
     mobile_app = getComponentDeps "frontend";
     mopeka = getComponentDeps "switchbot";
+=======
+    mjpeg = getComponentDeps "camera";
+    mobile_app = getComponentDeps "frontend";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     motioneye = getComponentDeps "camera";
     mqtt = getComponentDeps "camera";
     nest = getComponentDeps "camera" ++ [
@@ -151,7 +159,10 @@ let
       arrow
     ];
     yandextts = getComponentDeps "tts";
+<<<<<<< HEAD
     yolink = getComponentDeps "cloud";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     zeroconf = getComponentDeps "shelly";
     zha = getComponentDeps "deconz" ++ getComponentDeps "frontend";
     zwave_js = getComponentDeps "frontend";
@@ -182,14 +193,25 @@ let
       "tests/components/nzbget/test_config_flow.py::test_user_form_cannot_connect"
       "tests/components/nzbget/test_init.py::test_async_setup_raises_entry_not_ready"
     ];
+<<<<<<< HEAD
+=======
+    openai_conversation = [
+      # Pydantic validation error
+      "tests/components/openai_conversation/test_conversation.py"
+      "tests/components/openai_conversation/test_ai_task.py"
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     overseerr = [
       # imports broken future module
       "tests/components/overseerr/test_event.py"
     ];
+<<<<<<< HEAD
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     youtube = [
       # outdated snapshot
       "tests/components/youtube/test_sensor.py::test_sensor"
@@ -201,6 +223,7 @@ let
       # intent fixture mismatch
       "test_error_no_device_on_floor"
     ];
+<<<<<<< HEAD
     homewizard = [
       # Messages don't match expected due to a change in Homewizard's outputs
       "test_identify_button"
@@ -208,6 +231,8 @@ let
       "test_select_request_error"
       "test_switch_entities"
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sensor = [
       # Failed: Translation not found for sensor
       "test_validate_unit_change_convertible"

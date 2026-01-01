@@ -25,10 +25,18 @@ buildGoModule rec {
 
   excludedPackages = [ "kobotest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "EPUB to KEPUB converter";
     homepage = "https://pgaskin.net/kepubify";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zowoq ];
+=======
+  meta = with lib; {
+    description = "EPUB to KEPUB converter";
+    homepage = "https://pgaskin.net/kepubify";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zowoq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

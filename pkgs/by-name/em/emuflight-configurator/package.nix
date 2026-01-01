@@ -51,7 +51,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Emuflight flight control system configuration tool";
     mainProgram = "emuflight-configurator";
     longDescription = ''
@@ -61,8 +65,15 @@ stdenv.mkDerivation rec {
       The application allows you to configure the Emuflight software running on any supported Emuflight target.
     '';
     homepage = "https://github.com/emuflight/EmuConfigurator";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ beezow ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

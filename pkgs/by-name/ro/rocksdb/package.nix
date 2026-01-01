@@ -20,13 +20,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
+<<<<<<< HEAD
   version = "10.7.5";
+=======
+  version = "10.5.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-kKMwgRcjELla/9aak5gZbUHg1bkgGhlobr964wdatxI=";
+=======
+    hash = "sha256-TDYXzYbOLhcIRi+qi0FW1OLVtfKOF+gUbj62Tgpp3/E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = lib.optional (
@@ -90,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       sed -e '1i #include <cstdint>' -i util/string_util.h
       sed -e '1i #include <cstdint>' -i include/rocksdb/utilities/checkpoint.h
     ''
+<<<<<<< HEAD
     + lib.optionalString (lib.versionOlder finalAttrs.version "10.4.2") ''
       # Fix gcc-15 build failures due to missing <cstdint>
       sed -e '1i #include <cstdint>' -i db/blob/blob_file_meta.h
@@ -98,6 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Some older versions don't have this
       sed -e '1i #include <cstdint>' -i include/rocksdb/trace_record.h || true
     ''
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     + lib.optionalString (lib.versionOlder finalAttrs.version "7") ''
       # Fix gcc-13 build failures due to missing <cstdint> and
       # <system_error> includes, fixed upstyream sice 7.x
@@ -123,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://rocksdb.org";
     description = "Library that provides an embeddable, persistent key-value store for fast storage";
@@ -130,6 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://rocksdb.org";
+    description = "Library that provides an embeddable, persistent key-value store for fast storage";
+    changelog = "https://github.com/facebook/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       adev
     ];
   };

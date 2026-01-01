@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     updateScript = gitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Personal task manager for GNOME";
     mainProgram = "endeavour";
@@ -76,5 +77,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Personal task manager for GNOME";
+    mainProgram = "endeavour";
+    homepage = "https://gitlab.gnome.org/World/Endeavour";
+    license = licenses.gpl3Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,12 +28,21 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "urlscan" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mutt and terminal url selector (similar to urlview)";
     homepage = "https://github.com/firecat53/urlscan";
     changelog = "https://github.com/firecat53/urlscan/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dpaetzel ];
+=======
+  meta = with lib; {
+    description = "Mutt and terminal url selector (similar to urlview)";
+    homepage = "https://github.com/firecat53/urlscan";
+    changelog = "https://github.com/firecat53/urlscan/releases/tag/${src.tag}";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dpaetzel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "urlscan";
   };
 }

@@ -437,9 +437,12 @@ rec {
     isMacho = {
       kernel.execFormat = execFormats.macho;
     };
+<<<<<<< HEAD
     isPE = {
       kernel.execFormat = execFormats.pe;
     };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # given two patterns, return a pattern which is their logical AND.

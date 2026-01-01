@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupysql_plugin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Better SQL in Jupyter";
     homepage = "https://github.com/ploomber/jupysql-plugin";
     changelog = "https://github.com/ploomber/jupysql-plugin/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ euxane ];
+=======
+  meta = with lib; {
+    description = "Better SQL in Jupyter";
+    homepage = "https://github.com/ploomber/jupysql-plugin";
+    changelog = "https://github.com/ploomber/jupysql-plugin/blob/${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ euxane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

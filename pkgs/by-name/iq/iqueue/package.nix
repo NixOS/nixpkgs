@@ -28,10 +28,19 @@ stdenv.mkDerivation rec {
     "-Wno-error=misleading-indentation"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/twosigma/iqueue";
     description = "Indexed queue";
     license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/twosigma/iqueue";
+    description = "Indexed queue";
+    license = licenses.asl20;
+    platforms = [ "x86_64-linux" ];
+    maintainers = [ maintainers.catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

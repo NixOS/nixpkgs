@@ -5,7 +5,11 @@
   gobject-introspection,
   gtk3,
   mcomix,
+<<<<<<< HEAD
   python3,
+=======
+  python312, # TODO: Revert to python3 when upgrading past 3.1.0
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   testers,
   wrapGAppsHook3,
 
@@ -17,14 +21,24 @@
   unrarSupport ? false, # unfree software
 }:
 
+<<<<<<< HEAD
 python3.pkgs.buildPythonApplication rec {
   pname = "mcomix";
   version = "3.1.1";
+=======
+python312.pkgs.buildPythonApplication rec {
+  pname = "mcomix";
+  version = "3.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/mcomix/mcomix-${version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-oQqq7XvAfet0796Tv5qKJ+G8vxgkoFGbJkz+5YK+zvg=";
+=======
+    hash = "sha256-+Shuun/7w86VKBNamTmCPEJfO76fdKY5+HBvzCi0xCc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -34,12 +48,20 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
+<<<<<<< HEAD
     python3.pkgs.setuptools
+=======
+    python312.pkgs.setuptools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     wrapGAppsHook3
   ];
 
   propagatedBuildInputs =
+<<<<<<< HEAD
     with python3.pkgs;
+=======
+    with python312.pkgs;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     [
       pillow
       pycairo
@@ -69,7 +91,11 @@ python3.pkgs.buildPythonApplication rec {
     package = mcomix;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Comic book reader and image viewer";
     mainProgram = "mcomix";
     longDescription = ''
@@ -78,10 +104,15 @@ python3.pkgs.buildPythonApplication rec {
       (including CBR, CBZ, CB7, CBT, LHA and PDF)
     '';
     homepage = "https://sourceforge.net/projects/mcomix/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       confus
       thiagokokada
     ];
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ thiagokokada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

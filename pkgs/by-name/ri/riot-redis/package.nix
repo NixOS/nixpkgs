@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/redis-developer/riot";
     description = "Get data in and out of Redis";
@@ -39,5 +40,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ wesnel ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/redis-developer/riot";
+    description = "Get data in and out of Redis";
+    mainProgram = "riot-redis";
+    license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ wesnel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

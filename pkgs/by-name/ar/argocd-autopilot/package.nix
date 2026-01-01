@@ -50,13 +50,22 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "ArgoCD Autopilot";
     mainProgram = "argocd-autopilot";
     downloadPage = "https://github.com/argoproj-labs/argocd-autopilot";
     homepage = "https://argocd-autopilot.readthedocs.io/en/stable/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sagikazarmark
     ];
   };

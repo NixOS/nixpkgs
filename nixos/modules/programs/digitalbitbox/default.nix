@@ -36,5 +36,9 @@ in
 
   meta = {
     doc = ./default.md;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ vidbina ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

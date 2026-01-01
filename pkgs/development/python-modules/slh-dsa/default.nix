@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slhdsa" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python implementation of the SLH-DSA algorithm";
     homepage = "https://github.com/colinxu2020/slhdsa";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Pure Python implementation of the SLH-DSA algorithm";
+    homepage = "https://github.com/colinxu2020/slhdsa";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

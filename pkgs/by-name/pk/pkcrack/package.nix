@@ -39,7 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Breaking PkZip-encryption";
     homepage = "https://www.unix-ag.uni-kl.de/~conrad/krypto/pkcrack.html";
     license = {
@@ -47,8 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://www.unix-ag.uni-kl.de/~conrad/krypto/pkcrack/pkcrack-readme.html";
       free = false;
     };
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.all;
+=======
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pkcrack";
   };
 })

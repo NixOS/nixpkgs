@@ -35,12 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "chat_downloader" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple tool used to retrieve chat messages from livestreams, videos, clips and past broadcasts";
     mainProgram = "chat_downloader";
     homepage = "https://github.com/xenova/chat-downloader";
     changelog = "https://github.com/xenova/chat-downloader/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

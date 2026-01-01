@@ -27,6 +27,10 @@ let
   ruby = ruby_3_4;
 
   deps = bundlerEnv rec {
+<<<<<<< HEAD
+=======
+    name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pname = "vagrant";
     inherit version;
 
@@ -135,11 +139,20 @@ buildRubyGem rec {
     inherit ruby deps;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for building complete development environments";
     homepage = "https://www.vagrantup.com/";
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [ tylerjl ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "Tool for building complete development environments";
+    homepage = "https://www.vagrantup.com/";
+    license = licenses.bsl11;
+    maintainers = with maintainers; [ tylerjl ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

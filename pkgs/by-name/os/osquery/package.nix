@@ -92,6 +92,7 @@ stdenvNoCC.mkDerivation rec {
     } (builtins.readFile ./update.py);
   };
 
+<<<<<<< HEAD
   meta = {
     description = "SQL powered operating system instrumentation, monitoring, and analytics";
     homepage = "https://osquery.io";
@@ -102,6 +103,18 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "SQL powered operating system instrumentation, monitoring, and analytics";
+    homepage = "https://osquery.io";
+    license = with licenses; [
+      gpl2Only
+      asl20
+    ];
+    platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       znewman01
       lewo
       squalus

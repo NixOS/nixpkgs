@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "volkszaehler" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for interacting with the Volkszahler API";
     homepage = "https://github.com/home-assistant-ecosystem/python-volkszaehler";
     changelog = "https://github.com/home-assistant-ecosystem/python-volkszaehler/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for interacting with the Volkszahler API";
+    homepage = "https://github.com/home-assistant-ecosystem/python-volkszaehler";
+    changelog = "https://github.com/home-assistant-ecosystem/python-volkszaehler/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

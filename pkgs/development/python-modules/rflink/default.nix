@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rflink.protocol" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library and CLI tools for interacting with RFlink 433MHz transceiver";
     homepage = "https://github.com/aequitas/python-rflink";
     changelog = "https://github.com/aequitas/python-rflink/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Library and CLI tools for interacting with RFlink 433MHz transceiver";
+    homepage = "https://github.com/aequitas/python-rflink";
+    changelog = "https://github.com/aequitas/python-rflink/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

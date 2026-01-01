@@ -132,7 +132,11 @@ stdenv.mkDerivation {
 
   preGradleUpdate = "cd ../..";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/M0Rf30/cie-middleware-linux";
     description = "Middleware for the Italian Electronic Identity Card (CIE)";
     longDescription = ''
@@ -143,8 +147,14 @@ stdenv.mkDerivation {
       distributed by the Italian government, is essentially lacking a build
       system and is in violation of the license of the PoDoFo library.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ rnhmjoj ];
+=======
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ rnhmjoj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

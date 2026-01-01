@@ -1,9 +1,17 @@
 diff --git a/meson.build b/meson.build
+<<<<<<< HEAD
 index e9bea380..53e4373e 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -206,10 +206,16 @@ if asapodep.found()
    indexamajig_sources += ['src/im-asapo.c']
+=======
+index 4717bb2a..38d8693f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -70,6 +70,12 @@ if cc.has_function('clock_gettime', prefix: '#include <time.h>')
+   conf_data.set10('HAVE_CLOCK_GETTIME', true)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  endif
  
 +if build_machine.system() == 'darwin' or build_machine.system() == 'freebsd' or not cc.links('#include <argp.h>\nstatic error_t parse_opt (int key, char *arg, struct argp_state *state) { argp_usage(state); return 0; }; void main() {}')
@@ -12,11 +20,23 @@ index e9bea380..53e4373e 100644
 +    argpdep = dependency('', required : false)
 +endif
 +
+<<<<<<< HEAD
  indexamajig = executable('indexamajig', indexamajig_sources,
                           dependencies: [mdep, rtdep, libcrystfeldep, gsldep,
                                          pthreaddep, zmqdep, asapodep, asapoproddep,
 -                                        fftwdep, cjsondep],
 +                                        fftwdep, cjsondep, argpdep],
+=======
+ if cc.has_function('sched_setaffinity',
+                    prefix: '#include <sched.h>',
+                    args: '-D_GNU_SOURCE')
+@@ -186,7 +192,7 @@ endif
+ 
+ indexamajig = executable('indexamajig', indexamajig_sources,
+                          dependencies: [mdep, libcrystfeldep, gsldep,
+-                                        pthreaddep, zmqdep, asapodep, asapoproddep],
++                                        pthreaddep, zmqdep, asapodep, asapoproddep, argpdep],
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                           install: true,
                           install_rpath: crystfel_rpath)
  

@@ -152,11 +152,20 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "xenctrl" false)
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/elogind/elogind";
     description = "systemd project's 'logind', extracted to a standalone package";
     platforms = lib.platforms.linux; # probably more
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ nh2 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/elogind/elogind";
+    description = "systemd project's 'logind', extracted to a standalone package";
+    platforms = platforms.linux; # probably more
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ nh2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

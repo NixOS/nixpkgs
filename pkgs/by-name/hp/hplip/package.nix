@@ -144,8 +144,11 @@ python3Packages.buildPythonApplication {
     # don't on NixOS).  Add the equivalent NixOS path, /var/lib/cups/path/share.
     # See: https://github.com/NixOS/nixpkgs/issues/21796
     ./hplip-3.20.11-nixos-cups-ppd-search-path.patch
+<<<<<<< HEAD
     # https://bugs.launchpad.net/hplip/+bug/2096650
     ./gcc-compatability.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Remove all ImageProcessor functionality since that is closed source
     (fetchurl {

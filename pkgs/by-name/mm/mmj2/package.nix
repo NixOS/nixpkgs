@@ -43,7 +43,11 @@ maven.buildMavenPackage {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GUI Proof Assistant for the Metamath project";
     longDescription = ''
       mmj2 is a proof assistant for the Metamath language. Metamath is a
@@ -52,9 +56,15 @@ maven.buildMavenPackage {
       and grammatical/syntax analysis.
     '';
     homepage = "https://github.com/digama0/mmj2";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ io12 ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ io12 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mmj2";
   };
 }

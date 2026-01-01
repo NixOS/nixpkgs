@@ -88,13 +88,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "saml2" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # https://github.com/IdentityPython/pysaml2/issues/947
     broken = lib.versionAtLeast xmlschema.version "4.2.0";
     description = "Python implementation of SAML Version 2 Standard";
     homepage = "https://github.com/IdentityPython/pysaml2";
     changelog = "https://github.com/IdentityPython/pysaml2/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

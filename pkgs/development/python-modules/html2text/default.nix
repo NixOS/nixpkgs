@@ -31,11 +31,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "html2text" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Turn HTML into equivalent Markdown-structured text";
     homepage = "https://github.com/Alir3z4/html2text/";
     changelog = "https://github.com/Alir3z4/html2text/blob/${src.tag}/ChangeLog.rst";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Turn HTML into equivalent Markdown-structured text";
+    homepage = "https://github.com/Alir3z4/html2text/";
+    changelog = "https://github.com/Alir3z4/html2text/blob/${src.tag}/ChangeLog.rst";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "html2text";
   };

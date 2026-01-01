@@ -34,7 +34,11 @@ rustPlatform.buildRustPackage rec {
         'std::process::Command::new("${git}/bin/git")'
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = ''
       A build system that uses ptrace to handle dependencies automatically
@@ -49,9 +53,15 @@ rustPlatform.buildRustPackage rec {
       easy to use!
     '';
     homepage = "https://physics.oregonstate.edu/~roundyd/fac";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dpercy ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dpercy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fac";
   };
 }

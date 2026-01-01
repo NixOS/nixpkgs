@@ -63,7 +63,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://sites.google.com/site/infraarcana";
     description = "Lovecraftian single-player roguelike game";
     mainProgram = "infra-arcana";
@@ -75,8 +79,14 @@ stdenv.mkDerivation rec {
       Shining Trapezohedron - a window to all secrets of the universe. Your
       ultimate goal is to unearth this artifact.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.kenran ];
     license = lib.licenses.agpl3Plus;
+=======
+    platforms = platforms.linux;
+    maintainers = [ maintainers.kenran ];
+    license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

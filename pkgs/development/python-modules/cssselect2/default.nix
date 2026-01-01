@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cssselect2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CSS selectors for Python ElementTree";
     homepage = "https://github.com/Kozea/cssselect2";
     changelog = "https://github.com/Kozea/cssselect2/releases/tag/${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "CSS selectors for Python ElementTree";
+    homepage = "https://github.com/Kozea/cssselect2";
+    changelog = "https://github.com/Kozea/cssselect2/releases/tag/${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

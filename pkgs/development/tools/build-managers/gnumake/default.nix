@@ -15,12 +15,20 @@ let
   guileEnabled = guileSupport && !inBootstrap;
 in
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "gnumake";
   version = "4.4.1";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "mirror://gnu/make/make-${finalAttrs.version}.tar.gz";
+=======
+    url = "mirror://gnu/make/make-${version}.tar.gz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
@@ -35,9 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: stdenv’s setup.sh should be aware of patch directories. It’s very
   # convenient to keep them in a separate directory but we can defer listing the
   # directory until derivation realization to avoid unnecessary Nix evaluations.
+<<<<<<< HEAD
   patches =
     lib.filesystem.listFilesRecursive ./patches
     ++ lib.optionals stdenv.hostPlatform.isMusl (lib.filesystem.listFilesRecursive ./musl-patches);
+=======
+  patches = lib.filesystem.listFilesRecursive ./patches;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     autoreconfHook
@@ -59,7 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
     gnumakeWithGuile = gnumake.override { guileSupport = true; };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
@@ -72,9 +88,19 @@ stdenv.mkDerivation (finalAttrs: {
       to build and install the program.
     '';
     homepage = "https://www.gnu.org/software/make/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.mdaniels5757 ];
     mainProgram = "make";
     platforms = lib.platforms.all;
   };
 })
+=======
+
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    mainProgram = "make";
+    platforms = platforms.all;
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

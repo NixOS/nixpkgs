@@ -16,10 +16,18 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "FIGlet in pure Python";
     mainProgram = "pyfiglet";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "FIGlet in pure Python";
+    mainProgram = "pyfiglet";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

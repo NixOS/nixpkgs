@@ -36,7 +36,10 @@ stdenv.mkDerivation rec {
       ps.pillow
       ps.setuptools
       ps.psycopg2
+<<<<<<< HEAD
       ps.webrtcvad
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ]))
   ]
   ++ runtimeProgDeps;
@@ -63,6 +66,7 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests.bazarr;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Subtitle manager for Sonarr and Radarr";
     homepage = "https://www.bazarr.media/";
@@ -70,5 +74,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     mainProgram = "bazarr";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Subtitle manager for Sonarr and Radarr";
+    homepage = "https://www.bazarr.media/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Only;
+    mainProgram = "bazarr";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

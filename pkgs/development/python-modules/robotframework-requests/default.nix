@@ -35,10 +35,17 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "utests" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Robot Framework keyword library wrapper around the HTTP client library requests";
     homepage = "https://github.com/bulkan/robotframework-requests";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Robot Framework keyword library wrapper around the HTTP client library requests";
+    homepage = "https://github.com/bulkan/robotframework-requests";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

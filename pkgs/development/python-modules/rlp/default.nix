@@ -35,10 +35,17 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_install_local_wheel" ];
 
+<<<<<<< HEAD
   meta = {
     description = "RLP serialization library";
     homepage = "https://github.com/ethereum/pyrlp";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "RLP serialization library";
+    homepage = "https://github.com/ethereum/pyrlp";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -8,7 +8,10 @@
   xorg,
   pkg-config,
   protobuf,
+<<<<<<< HEAD
   openssl,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   writableTmpDirAsHomeHook,
   nix-update-script,
   llvmPackages,
@@ -28,12 +31,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
+<<<<<<< HEAD
   version = "1.16.1";
+=======
+  version = "1.13.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-lMlpgsLkPQsvc5Ad8sRrwO27ytb5hpF3doUR18DUrvw=";
   };
 
@@ -45,17 +53,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--bin"
     "goosed"
   ];
+=======
+    hash = "sha256-61MFtAhz7yq2wStNWDIlBo+OubBVor0NnpOAX8nQ8K0=";
+  };
+
+  cargoHash = "sha256-YR/QUEE+EbwytiL0xkCr/EYE0O2/B/KmuLaF6TA7N6I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config
     protobuf
   ];
 
+<<<<<<< HEAD
   buildInputs = [
     dbus
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
+=======
+  buildInputs = [ dbus ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libxcb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 
@@ -95,9 +113,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=transport::streamable_http::tests::test_handle_outgoing_message_successful_request"
     "--skip=routes::audio::tests::test_transcribe_endpoint_requires_auth"
     "--skip=routes::config_management::tests::test_get_provider_models_openai_configured"
+<<<<<<< HEAD
     # tunnel tests that need external connectivity to Cloudflare
     "--skip=tunnel::lapstone_test::test_tunnel_end_to_end"
     "--skip=tunnel::lapstone_test::test_tunnel_post_request"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # integration tests that need network access
     "--skip=test_replayed_session::vec_uvx_mcp_server_fetch_vec_calltoolrequestparam_name_fetch_into_arguments_some_object_url_https_example_com_vec_expects"
     "--skip=test_replayed_session::vec_github_mcp_server_stdio_vec_calltoolrequestparam_name_get_file_contents_into_arguments_some_object_owner_block_repo_goose_path_readme_md_sha_ab62b863c1666232a67048b6c4e10007a2a5b83c_vec_github_personal_access_token_expects"

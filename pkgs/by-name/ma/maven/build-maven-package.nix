@@ -4,6 +4,10 @@
   jdk,
   jre-generate-cacerts,
   maven,
+<<<<<<< HEAD
+=======
+  perl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   writers,
 }:
 
@@ -12,9 +16,13 @@
   sourceRoot ? null,
   buildOffline ? false,
   doCheck ? true,
+<<<<<<< HEAD
   prePatch ? null,
   patches ? [ ],
   postPatch ? null,
+=======
+  patches ? [ ],
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname,
   version,
   mvnJdk ? jdk,
@@ -41,9 +49,13 @@ let
       inherit
         src
         sourceRoot
+<<<<<<< HEAD
         prePatch
         patches
         postPatch
+=======
+        patches
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         version
         ;
 

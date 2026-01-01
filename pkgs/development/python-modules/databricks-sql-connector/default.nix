@@ -62,11 +62,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "databricks" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Databricks SQL Connector for Python";
     homepage = "https://docs.databricks.com/dev-tools/python-sql-connector.html";
     changelog = "https://github.com/databricks/databricks-sql-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ harvidsen ];
+=======
+  meta = with lib; {
+    description = "Databricks SQL Connector for Python";
+    homepage = "https://docs.databricks.com/dev-tools/python-sql-connector.html";
+    changelog = "https://github.com/databricks/databricks-sql-python/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ harvidsen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

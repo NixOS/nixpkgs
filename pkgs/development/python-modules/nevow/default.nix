@@ -26,7 +26,11 @@ buildPythonPackage rec {
     trial formless nevow
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Nevow, a web application construction kit for Python";
     longDescription = ''
       Nevow - Pronounced as the French "nouveau", or "noo-voh", Nevow
@@ -46,6 +50,10 @@ buildPythonPackage rec {
       successfully, the method will be called with the coerced values.
     '';
     homepage = "https://github.com/twisted/nevow";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

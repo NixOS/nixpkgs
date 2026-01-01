@@ -77,11 +77,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dragonfly" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Speech recognition framework allowing powerful Python-based scripting";
     homepage = "https://github.com/dictation-toolbox/dragonfly";
     changelog = "https://github.com/dictation-toolbox/dragonfly/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Speech recognition framework allowing powerful Python-based scripting";
+    homepage = "https://github.com/dictation-toolbox/dragonfly";
+    changelog = "https://github.com/dictation-toolbox/dragonfly/blob/${version}/CHANGELOG.rst";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

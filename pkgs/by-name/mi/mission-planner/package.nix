@@ -71,7 +71,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "ArduPilot ground station";
     mainProgram = "mission-planner";
     longDescription = ''
@@ -81,8 +85,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ardupilot.org/planner/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wucke13 ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wucke13 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

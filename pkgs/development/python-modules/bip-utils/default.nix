@@ -46,12 +46,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bip_utils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of BIP39, BIP32, BIP44, BIP49 and BIP84 for wallet seeds, keys and addresses generation";
     homepage = "https://github.com/ebellocchia/bip_utils";
     changelog = "https://github.com/ebellocchia/bip_utils/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Implementation of BIP39, BIP32, BIP44, BIP49 and BIP84 for wallet seeds, keys and addresses generation";
+    homepage = "https://github.com/ebellocchia/bip_utils";
+    changelog = "https://github.com/ebellocchia/bip_utils/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       prusnak
       stargate01
     ];

@@ -9,11 +9,20 @@ grafanaPlugin rec {
     x86_64-darwin = "sha256-zS9LfvSOWCKQIv5GsRS48taM31ZN4i2REY+IIQbqisk=";
     aarch64-darwin = "sha256-0QfTdgOkfs27EW1VB+AgHPwF1GRcFBxMPBZ9nRyovrs=";
   };
+<<<<<<< HEAD
   meta = {
     description = "Connects Grafana to ClickHouse";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ moody ];
     platforms = lib.attrNames zipHash;
+=======
+  meta = with lib; {
+    description = "Connects Grafana to ClickHouse";
+    license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ moody ];
+    platforms = attrNames zipHash;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,11 +24,20 @@ buildGoModule {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Export entries from systemd's journal and send them to a graylog server using gelf";
     homepage = "https://github.com/parse-nl/SystemdJournal2Gelf";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Export entries from systemd's journal and send them to a graylog server using gelf";
+    homepage = "https://github.com/parse-nl/SystemdJournal2Gelf";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+      fadenb
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fpletz
     ];
     mainProgram = "SystemdJournal2Gelf";

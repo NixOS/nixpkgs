@@ -37,12 +37,21 @@ stdenv.mkDerivation rec {
     cp quantumminigolf "$out/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Quantum mechanics-based minigolf-like game";
     mainProgram = "quantumminigolf";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Quantum mechanics-based minigolf-like game";
+    mainProgram = "quantumminigolf";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };

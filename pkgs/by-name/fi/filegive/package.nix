@@ -21,10 +21,17 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://viric.name/cgi-bin/filegive";
     description = "Easy p2p file sending program";
     license = lib.licenses.agpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://viric.name/cgi-bin/filegive";
+    description = "Easy p2p file sending program";
+    license = licenses.agpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "filegive";
   };

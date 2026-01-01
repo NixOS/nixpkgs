@@ -36,10 +36,18 @@ buildPythonPackage rec {
     inherit sage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Cython interface for C++ primecount library";
     homepage = "https://github.com/dimpase/primecountpy/";
     teams = [ lib.teams.sage ];
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Cython interface for C++ primecount library";
+    homepage = "https://github.com/dimpase/primecountpy/";
+    teams = [ teams.sage ];
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

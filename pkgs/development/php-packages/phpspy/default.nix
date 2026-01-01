@@ -62,12 +62,21 @@ stdenv.mkDerivation (finalAttrs: {
     command = "phpspy -v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Low-overhead sampling profiler for PHP";
     homepage = "https://github.com/adsr/phpspy";
     license = lib.licenses.mit;
     mainProgram = "phpspy";
     maintainers = with lib.maintainers; [ gaelreyrol ];
+=======
+  meta = with lib; {
+    description = "Low-overhead sampling profiler for PHP";
+    homepage = "https://github.com/adsr/phpspy";
+    license = licenses.mit;
+    mainProgram = "phpspy";
+    maintainers = with maintainers; [ gaelreyrol ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 })

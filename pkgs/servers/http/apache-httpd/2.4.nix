@@ -33,11 +33,19 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
+<<<<<<< HEAD
   version = "2.4.66";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
     hash = "sha256-lNf/K0Ksu4KOhwuinky61I5VinnGI601luQRbvz+olo=";
+=======
+  version = "2.4.65";
+
+  src = fetchurl {
+    url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
+    hash = "sha256-WLi+l9mUDsF/dlbAxrn0G2GKrEaLiUtTQUjjKWxTuLM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -157,11 +165,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Apache HTTPD, the world's most popular web server";
     homepage = "https://httpd.apache.org/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ lovek323 ];
+=======
+  meta = with lib; {
+    description = "Apache HTTPD, the world's most popular web server";
+    homepage = "https://httpd.apache.org/";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ lovek323 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

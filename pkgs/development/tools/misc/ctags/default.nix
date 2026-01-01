@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
     ./unused-collision.patch
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for fast source code browsing (exuberant ctags)";
     mainProgram = "ctags";
     longDescription = ''
@@ -39,8 +43,13 @@ stdenv.mkDerivation rec {
       programming languages are supported.
     '';
     homepage = "https://ctags.sourceforge.net/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # So that Exuberant ctags is preferred over emacs's ctags
     priority = 1;

@@ -14,16 +14,26 @@
   libsoup_3,
   tzdata,
   mate-common,
+<<<<<<< HEAD
   gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
+=======
+  mateUpdateScript,
+}:
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "libmateweather";
   version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "libmateweather";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
+=======
+    tag = "v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-W0p4+OMr2sgkQP10DGjZLf2VTSGa2A+5ey+nYBr+HJQ=";
   };
 
@@ -66,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/libmateweather";
     odd-unstable = true;
@@ -80,3 +91,15 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "Library to access weather information from online services for MATE";
+    homepage = "https://github.com/mate-desktop/libmateweather";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

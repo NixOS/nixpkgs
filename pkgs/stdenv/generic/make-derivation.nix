@@ -860,12 +860,17 @@ let
       # for a fixed-output derivation, the corresponding inputDerivation should
       # *not* be fixed-output. To achieve this we simply delete the attributes that
       # would make it fixed-output.
+<<<<<<< HEAD
       fixedOutputRelatedAttrs = [
+=======
+      deleteFixedOutputRelatedAttrs = lib.flip removeAttrs [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "outputHashAlgo"
         "outputHash"
         "outputHashMode"
       ];
 
+<<<<<<< HEAD
       # inputDerivation produces the inputs; not the outputs, so any
       # restrictions on what used to be the outputs don't serve a purpose
       # anymore.
@@ -877,6 +882,8 @@ let
         "outputChecks"
       ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     in
 
     extendDerivation validity.handled (
@@ -887,10 +894,17 @@ let
         # needed to enter a nix-shell with
         #   nix-build shell.nix -A inputDerivation
         inputDerivation = derivation (
+<<<<<<< HEAD
           removeAttrs derivationArg (fixedOutputRelatedAttrs ++ outputCheckAttrs)
           // {
             # Add a name in case the original drv didn't have one
             name = "inputDerivation" + lib.optionalString (derivationArg ? name) "-${derivationArg.name}";
+=======
+          deleteFixedOutputRelatedAttrs derivationArg
+          // {
+            # Add a name in case the original drv didn't have one
+            name = derivationArg.name or "inputDerivation";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             # This always only has one output
             outputs = [ "out" ];
 
@@ -922,6 +936,28 @@ let
               ''
             ];
           }
+<<<<<<< HEAD
+=======
+          // (
+            let
+              sharedOutputChecks = {
+                # inputDerivation produces the inputs; not the outputs, so any
+                # restrictions on what used to be the outputs don't serve a purpose
+                # anymore.
+                allowedReferences = null;
+                allowedRequisites = null;
+                disallowedReferences = [ ];
+                disallowedRequisites = [ ];
+              };
+            in
+            if __structuredAttrs then
+              {
+                outputChecks.out = sharedOutputChecks;
+              }
+            else
+              sharedOutputChecks
+          )
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         );
 
         inherit passthru overrideAttrs;

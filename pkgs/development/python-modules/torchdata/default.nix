@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -55,11 +58,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: DataLoader timed out after 5 seconds
     "test_ind_worker_queue"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Iterative enhancement to the PyTorch torch.utils.data.DataLoader and torch.utils.data.Dataset/IterableDataset";
     homepage = "https://github.com/meta-pytorch/data";

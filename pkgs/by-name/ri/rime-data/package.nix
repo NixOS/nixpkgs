@@ -28,13 +28,21 @@ stdenv.mkDerivation {
     sed -i /fetch_or_update_package$/d scripts/install-packages.sh
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Schema data of Rime Input Method Engine";
     longDescription = ''
       Rime-data provides schema data for Rime Input Method Engine.
     '';
     homepage = "https://rime.im";
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # rime-array
       # rime-combo-pinyin
       # rime-double-pinyin
@@ -66,6 +74,10 @@ stdenv.mkDerivation {
       # rime-cantonese
       cc-by-40
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ pmy ];
+=======
+    maintainers = with maintainers; [ pmy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

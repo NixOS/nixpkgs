@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opencensus.common" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stats collection and distributed tracing framework";
     homepage = "https://github.com/census-instrumentation/opencensus-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
+=======
+  meta = with lib; {
+    description = "Stats collection and distributed tracing framework";
+    homepage = "https://github.com/census-instrumentation/opencensus-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ billhuang ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

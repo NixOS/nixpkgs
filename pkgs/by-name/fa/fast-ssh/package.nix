@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-qkvonLuS18BBPdBUUnIAbmA+9ZJZFmTRaewrnK9PHFE=";
 
+<<<<<<< HEAD
   meta = {
     description = "TUI tool to use the SSH config for connections";
     homepage = "https://github.com/julien-r44/fast-ssh";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "TUI tool to use the SSH config for connections";
+    homepage = "https://github.com/julien-r44/fast-ssh";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fast-ssh";
   };
 }

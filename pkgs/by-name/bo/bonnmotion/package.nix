@@ -7,6 +7,7 @@
   jre,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "bonnmotion";
   version = "3.0.1";
@@ -14,6 +15,14 @@ stdenv.mkDerivation (finalAttrs: {
   # also available at https://github.com/sys-uos/bonnmotion
   src = fetchzip {
     url = "https://bonnmotion.sys.cs.uos.de/src/bonnmotion-${finalAttrs.version}.zip";
+=======
+stdenv.mkDerivation rec {
+  pname = "bonnmotion";
+  version = "3.0.1";
+
+  src = fetchzip {
+    url = "https://sys.cs.uos.de/bonnmotion/src/bonnmotion-${version}.zip";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "16bjgr0hy6an892m5r3x9yq6rqrl11n91f9rambq5ik1cxjqarxw";
   };
 
@@ -41,7 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Mobility scenario generation and analysis tool";
     mainProgram = "bm";
     longDescription = ''
@@ -51,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       for several network simulators, such as ns-2, ns-3, GloMoSim/QualNet,
       COOJA, MiXiM, and ONE.
     '';
+<<<<<<< HEAD
     homepage = "https://bonnmotion.sys.cs.uos.de";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
@@ -60,3 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ oxzi ];
   };
 })
+=======
+    homepage = "https://sys.cs.uos.de/bonnmotion/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependency jars
+    ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ oxzi ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

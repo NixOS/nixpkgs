@@ -21,10 +21,18 @@ buildGoModule rec {
 
   subPackages = [ "cmd/hydroxide" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Third-party, open-source ProtonMail bridge";
     homepage = "https://github.com/emersion/hydroxide";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Third-party, open-source ProtonMail bridge";
+    homepage = "https://github.com/emersion/hydroxide";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hydroxide";
   };
 }

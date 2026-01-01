@@ -44,6 +44,7 @@ buildGoModule rec {
     cp -r config/* images $out/share/nwg-bar
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GTK3-based button bar for sway and other wlroots-based compositors";
     mainProgram = "nwg-bar";
@@ -51,5 +52,14 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sei40kr ];
+=======
+  meta = with lib; {
+    description = "GTK3-based button bar for sway and other wlroots-based compositors";
+    mainProgram = "nwg-bar";
+    homepage = "https://github.com/nwg-piotr/nwg-bar";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sei40kr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

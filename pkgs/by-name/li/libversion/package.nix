@@ -21,11 +21,20 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced version string comparison library";
     homepage = "https://github.com/repology/libversion";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ryantm ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Advanced version string comparison library";
+    homepage = "https://github.com/repology/libversion";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ ryantm ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

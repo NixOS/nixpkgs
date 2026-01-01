@@ -89,11 +89,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Video-conferencing application, specialized in virtual online meetings, seminars, training sessions and conferences";
     homepage = "https://alfaview.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    description = "Video-conferencing application, specialized in virtual online meetings, seminars, training sessions and conferences";
+    homepage = "https://alfaview.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "alfaview";
     platforms = [ "x86_64-linux" ];

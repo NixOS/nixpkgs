@@ -1,6 +1,11 @@
 {
   lib,
   clangStdenv,
+<<<<<<< HEAD
+=======
+  buildPackages,
+  runCommand,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchurl,
   perl,
   python3,
@@ -63,7 +68,11 @@
   bubblewrap,
   libseccomp,
   libbacktrace,
+<<<<<<< HEAD
   systemdLibs,
+=======
+  systemd,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   xdg-dbus-proxy,
   replaceVars,
   glib,
@@ -72,7 +81,11 @@
   enableGeoLocation ? true,
   enableExperimental ? false,
   withLibsecret ? true,
+<<<<<<< HEAD
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
+=======
+  systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   testers,
   fetchpatch,
 }:
@@ -84,7 +97,11 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
+<<<<<<< HEAD
   version = "2.50.4";
+=======
+  version = "2.50.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -99,7 +116,11 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-07+kc4Raz6tyY1utpeDRNP2meSxblcXFzRQbRhJb2OQ=";
+=======
+    hash = "sha256-Gath8tROYs1ENnOUPS1TQbhNCEBfZ6fDe3p3rTVQ+IA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -116,6 +137,15 @@ clangStdenv.mkDerivation (finalAttrs: {
       hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
       name = "fix_ftbfs_riscv64.patch";
     })
+<<<<<<< HEAD
+=======
+
+    # Remove the CustomToJSObject flag to avoid a link error due to an undefined toJS() symbol
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/730bffd856d2a1e56dd3bd2a0702282f19c5242a.patch";
+      hash = "sha256-QRgYzr1Flk9BOV74/H7/38sRwc44BFFBhnX+xODgYX4=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [
@@ -189,7 +219,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     xorg.libX11
   ]
   ++ lib.optionals systemdSupport [
+<<<<<<< HEAD
     systemdLibs
+=======
+    systemd
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals enableGeoLocation [
     geoclue2
@@ -258,11 +292,19 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Web content rendering engine, GTK port";
     mainProgram = "WebKitWebDriver";
     homepage = "https://webkitgtk.org/";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Web content rendering engine, GTK port";
+    mainProgram = "WebKitWebDriver";
+    homepage = "https://webkitgtk.org/";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules =
       if lib.versionAtLeast abiVersion "6.0" then
         [
@@ -276,8 +318,13 @@ clangStdenv.mkDerivation (finalAttrs: {
           "webkit2gtk-${abiVersion}"
           "webkit2gtk-web-extension-${abiVersion}"
         ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     teams = [ lib.teams.gnome ];
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = clangStdenv.hostPlatform.isDarwin;
   };
 })

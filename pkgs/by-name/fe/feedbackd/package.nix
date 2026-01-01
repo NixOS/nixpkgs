@@ -108,20 +108,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Theme based Haptic, Visual and Audio Feedback";
     homepage = "https://gitlab.freedesktop.org/agx/feedbackd/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Theme based Haptic, Visual and Audio Feedback";
+    homepage = "https://gitlab.freedesktop.org/agx/feedbackd/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # feedbackd
       gpl3Plus
 
       # libfeedback library
       lgpl21Plus
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       pacman99
       Luflosi
     ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [
+      pacman99
+      Luflosi
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

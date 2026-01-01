@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "importlab" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library that automatically infers dependencies for Python files";
     mainProgram = "importlab";
     homepage = "https://github.com/google/importlab";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sei40kr ];
+=======
+  meta = with lib; {
+    description = "Library that automatically infers dependencies for Python files";
+    mainProgram = "importlab";
+    homepage = "https://github.com/google/importlab";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sei40kr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -14,25 +14,41 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
+<<<<<<< HEAD
   version = "1.144.0";
+=======
+  version = "1.142.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-7m0VHiTNx00bgWFbbdXX6tX9pN89IXHbvx04pp2IwnE=";
+=======
+    hash = "sha256-U/o7Ld9MjVO/QIIy+UyltfieR4CAdfN6dR6WWINoW40=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
+<<<<<<< HEAD
     hash = "sha256-CKvdWo9/f8Uhi5idgRhyuZwYua6gQzoKz21XNMaXdl0=";
+=======
+    hash = "sha256-lGj66FmHSldaYRGx7QQE/cdrmy+43AL3MZP+DPOXMmQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools_rust>=1.3,<=1.11.1" "setuptools_rust<=1.12,>=1.3" \
+<<<<<<< HEAD
       --replace-fail "poetry-core>=2.0.0,<=2.1.3" "poetry-core>=2.0.0,<=2.3.0"
+=======
+      --replace-fail "poetry-core>=1.1.0,<=2.1.3" "poetry-core>=1.1.0,<=2.3.0"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   build-system = with python3Packages; [
@@ -135,7 +151,11 @@ python3Packages.buildPythonApplication rec {
     mock
     parameterized
   ])
+<<<<<<< HEAD
   ++ lib.filter (pkg: !pkg.meta.broken) (lib.concatAttrValues optional-dependencies);
+=======
+  ++ lib.filter (pkg: !pkg.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

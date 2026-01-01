@@ -46,11 +46,19 @@ buildPythonPackage rec {
     inherit sage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Read metadata from Python packages";
     homepage = "https://importlib-metadata.readthedocs.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Read metadata from Python packages";
+    homepage = "https://importlib-metadata.readthedocs.io/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fab
     ];
   };

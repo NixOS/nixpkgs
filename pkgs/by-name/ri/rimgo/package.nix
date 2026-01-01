@@ -30,11 +30,20 @@ buildGoModule rec {
     "-X codeberg.org/rimgo/rimgo/pages.VersionInfo=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Alternative frontend for Imgur";
     homepage = "https://codeberg.org/rimgo/rimgo";
     license = lib.licenses.agpl3Only;
     mainProgram = "rimgo";
     maintainers = with lib.maintainers; [ quantenzitrone ];
+=======
+  meta = with lib; {
+    description = "Alternative frontend for Imgur";
+    homepage = "https://codeberg.org/rimgo/rimgo";
+    license = licenses.agpl3Only;
+    mainProgram = "rimgo";
+    maintainers = with maintainers; [ quantenzitrone ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

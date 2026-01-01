@@ -50,10 +50,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "resampy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Efficient signal resampling";
     homepage = "https://github.com/bmcfee/resampy";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Efficient signal resampling";
+    homepage = "https://github.com/bmcfee/resampy";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

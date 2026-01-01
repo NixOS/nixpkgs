@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sphinx ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sloria/sphinx-issues";
     description = "Sphinx extension for linking to your project's issue tracker";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sloria/sphinx-issues";
+    description = "Sphinx extension for linking to your project's issue tracker";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kaction ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

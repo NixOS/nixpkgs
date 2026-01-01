@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
     cp coq2html $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "HTML documentation generator for Coq source files";
     longDescription = ''
       coq2html is an HTML documentation generator for Coq source files. It is
@@ -34,12 +38,21 @@ stdenv.mkDerivation rec {
       "Proof" keyword.
     '';
     homepage = "https://github.com/xavierleroy/coq2html";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       jwiegley
       siraben
     ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      jwiegley
+      siraben
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "coq2html";
   };
 }

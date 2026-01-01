@@ -14,6 +14,7 @@
   DarwinTools, # For building on Darwin
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation {
   pname = "plan9port";
   version = "0-unstable-2025-11-10";
@@ -23,6 +24,17 @@ stdenv.mkDerivation {
     repo = "plan9port";
     rev = "f39a2407b6e6ace6af68e466bfa2f362b9a9dd36";
     hash = "sha256-YvrwUC+aMqp/Kvvfd7HGvYkbP8Dm/Z5/SVH4gG9BdRA=";
+=======
+stdenv.mkDerivation rec {
+  pname = "plan9port";
+  version = "2025-01-29";
+
+  src = fetchFromGitHub {
+    owner = "9fans";
+    repo = pname;
+    rev = "a5d6857a3b912b43c88ef298c28d13d4623f9ef0";
+    sha256 = "0c23z56zygrsyr96ml7907mpfgx80vnsy99nqr3nmfw1a045mjgv";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -125,15 +137,24 @@ stdenv.mkDerivation {
     ./test
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://9fans.github.io/plan9port/";
     description = "Plan 9 from User Space";
     longDescription = ''
       Plan 9 from User Space (aka plan9port) is a port of many Plan 9 programs
       from their native Plan 9 environment to Unix-like operating systems.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bbarker
       ftrvxmtrx
       kovirobi
@@ -141,7 +162,11 @@ stdenv.mkDerivation {
       ylh
     ];
     mainProgram = "9";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 # TODO: investigate the mouse chording support patch

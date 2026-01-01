@@ -50,12 +50,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''Open-source modernization of the 1993 classic "Master of Orion", written in Java'';
     homepage = "https://www.remnantsoftheprecursors.com/";
 
     # See LICENSE file in source repo for more details.
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # All java files created by Ray Fowler:
       gpl3Only
 
@@ -91,7 +99,11 @@ stdenv.mkDerivation {
       cc-by-nc-nd-40
     ];
 
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ jtrees ];
+=======
+    maintainers = with maintainers; [ jtrees ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

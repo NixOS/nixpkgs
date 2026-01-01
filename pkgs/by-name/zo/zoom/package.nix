@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.logicalshift.co.uk/unix/zoom/";
     description = "Player for Z-Code, TADS and HUGO stories or games";
     longDescription = ''
@@ -44,8 +48,13 @@ stdenv.mkDerivation rec {
       released many interactive fiction stories before their ambitions to enter
       the database market finally brought them low.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zoom";
   };
 }

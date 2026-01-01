@@ -8,6 +8,10 @@
   pillow,
   prettytable,
   pytestCheckHook,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   requests,
   setuptools,
   simplejson,
@@ -18,6 +22,11 @@ buildPythonPackage rec {
   version = "2.0.9";
   pyproject = true;
 
+<<<<<<< HEAD
+=======
+  disabled = pythonOlder "3.8";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "pyecharts";
     repo = "pyecharts";
@@ -43,7 +52,11 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "pyecharts" ];
 
@@ -57,7 +70,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python Echarts Plotting Library";
     homepage = "https://github.com/pyecharts/pyecharts";
+<<<<<<< HEAD
     changelog = "https://github.com/pyecharts/pyecharts/releases/tag/${src.tag}";
+=======
+    changelog = "https://github.com/pyecharts/pyecharts/releases/tag/v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

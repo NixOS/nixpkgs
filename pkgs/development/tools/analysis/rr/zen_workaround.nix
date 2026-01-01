@@ -48,6 +48,7 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Kernel module supporting the rr debugger on (some) AMD Zen-based CPUs";
     homepage = "https://github.com/rr-debugger/rr/wiki/Zen#kernel-module";
@@ -55,5 +56,14 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.vcunat ];
     platforms = [ "x86_64-linux" ];
     broken = lib.versionOlder kernel.version "4.19"; # 4.14 breaks and 4.19 works
+=======
+  meta = with lib; {
+    description = "Kernel module supporting the rr debugger on (some) AMD Zen-based CPUs";
+    homepage = "https://github.com/rr-debugger/rr/wiki/Zen#kernel-module";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.vcunat ];
+    platforms = [ "x86_64-linux" ];
+    broken = versionOlder kernel.version "4.19"; # 4.14 breaks and 4.19 works
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

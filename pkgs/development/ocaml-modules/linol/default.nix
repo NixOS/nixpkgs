@@ -6,6 +6,10 @@
   ppx_yojson_conv_lib,
   trace,
   uutf,
+<<<<<<< HEAD
+=======
+  yojson,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildDunePackage (finalAttrs: {
@@ -26,6 +30,10 @@ buildDunePackage (finalAttrs: {
     ppx_yojson_conv_lib
     trace
     uutf
+<<<<<<< HEAD
+=======
+    yojson
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {

@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/mrtg  --set LANG C
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Multi Router Traffic Grapher";
     homepage = "https://oss.oetiker.ch/mrtg/";
@@ -58,5 +59,16 @@ stdenv.mkDerivation rec {
       usovalx
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Multi Router Traffic Grapher";
+    homepage = "https://oss.oetiker.ch/mrtg/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      robberer
+      usovalx
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

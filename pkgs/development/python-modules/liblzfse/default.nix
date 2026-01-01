@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "liblzfse" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for LZFSE";
     homepage = "https://github.com/ydkhatri/pyliblzfse";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python bindings for LZFSE";
+    homepage = "https://github.com/ydkhatri/pyliblzfse";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

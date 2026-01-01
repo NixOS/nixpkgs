@@ -46,12 +46,21 @@ buildPythonPackage rec {
   # No unitests available
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "RISC-V Architectural Test Framework";
     mainProgram = "riscof";
     homepage = "https://github.com/riscv-software-src/riscof";
     changelog = "https://github.com/riscv-software-src/riscof/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ genericnerdyusername ];
     license = lib.licenses.bsd3;
+=======
+    maintainers = with maintainers; [ genericnerdyusername ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

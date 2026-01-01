@@ -53,10 +53,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "angrcli" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python modules to allow easier interactive use of angr";
     homepage = "https://github.com/fmagin/angr-cli";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python modules to allow easier interactive use of angr";
+    homepage = "https://github.com/fmagin/angr-cli";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

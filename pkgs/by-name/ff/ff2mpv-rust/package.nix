@@ -52,11 +52,19 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Native messaging host for ff2mpv written in Rust";
     homepage = "https://github.com/ryze312/ff2mpv-rust";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ryze ];
+=======
+  meta = with lib; {
+    description = "Native messaging host for ff2mpv written in Rust";
+    homepage = "https://github.com/ryze312/ff2mpv-rust";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ryze ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ff2mpv-rust";
   };
 }

@@ -61,11 +61,20 @@ buildPythonPackage rec {
     "skrl.utils.model_instantiators"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Reinforcement learning library using PyTorch focusing on readability and simplicity";
     changelog = "https://github.com/Toni-SM/skrl/releases/tag/${version}";
     homepage = "https://skrl.readthedocs.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Reinforcement learning library using PyTorch focusing on readability and simplicity";
+    changelog = "https://github.com/Toni-SM/skrl/releases/tag/${version}";
+    homepage = "https://skrl.readthedocs.io";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

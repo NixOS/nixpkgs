@@ -34,11 +34,19 @@ stdenv.mkDerivation rec {
     cp -r ../bin $out
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "High-performance read alignment, quantification and mutation discovery";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jbedo ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "High-performance read alignment, quantification and mutation discovery";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ jbedo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"

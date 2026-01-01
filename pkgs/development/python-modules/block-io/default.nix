@@ -40,10 +40,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "block_io" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Integrate Bitcoin, Dogecoin and Litecoin in your Python applications using block.io";
     homepage = "https://github.com/BlockIo/block_io-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    description = "Integrate Bitcoin, Dogecoin and Litecoin in your Python applications using block.io";
+    homepage = "https://github.com/BlockIo/block_io-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

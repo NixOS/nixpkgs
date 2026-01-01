@@ -57,12 +57,21 @@ stdenv.mkDerivation rec {
     }''
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical wireless scanning for Linux";
     homepage = "https://sourceforge.net/projects/linssid/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Graphical wireless scanning for Linux";
+    homepage = "https://sourceforge.net/projects/linssid/";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "linssid";
   };
 }

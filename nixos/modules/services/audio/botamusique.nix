@@ -11,6 +11,11 @@ let
   configFile = format.generate "botamusique.ini" cfg.settings;
 in
 {
+<<<<<<< HEAD
+=======
+  meta.maintainers = with lib.maintainers; [ hexa ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   options.services.botamusique = {
     enable = lib.mkEnableOption "botamusique, a bot to play audio streams on mumble";
 

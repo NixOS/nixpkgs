@@ -32,11 +32,19 @@ stdenv.mkDerivation rec {
   ];
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "GPL reimplementation of libdjb";
     homepage = "https://www.fefe.de/libowfat/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GPL reimplementation of libdjb";
+    homepage = "https://www.fefe.de/libowfat/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # build tool "json" is built for the host platform
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };

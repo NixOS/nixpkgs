@@ -34,10 +34,18 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest integration for aiomisc";
     homepage = "https://github.com/aiokitchen/aiomisc-pytest";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Pytest integration for aiomisc";
+    homepage = "https://github.com/aiokitchen/aiomisc-pytest";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

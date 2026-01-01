@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thriftpy2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for Apache Thrift";
     homepage = "https://github.com/Thriftpy/thriftpy2";
     changelog = "https://github.com/Thriftpy/thriftpy2/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for Apache Thrift";
+    homepage = "https://github.com/Thriftpy/thriftpy2";
+    changelog = "https://github.com/Thriftpy/thriftpy2/blob/${src.tag}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -61,10 +61,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pre-built GNU toolchain from ARM Cortex-M & Cortex-R processors";
     homepage = "https://developer.arm.com/open-source/gnu-toolchain/gnu-rm";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Pre-built GNU toolchain from ARM Cortex-M & Cortex-R processors";
+    homepage = "https://developer.arm.com/open-source/gnu-toolchain/gnu-rm";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd2
       gpl2
       gpl3
@@ -72,7 +79,11 @@ stdenv.mkDerivation rec {
       lgpl3
       mit
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       prusnak
       prtzl
     ];
@@ -81,6 +92,10 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

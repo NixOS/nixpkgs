@@ -27,12 +27,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://rzip.samba.org/";
     description = "Compression program";
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://rzip.samba.org/";
+    description = "Compression program";
+    maintainers = [ ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rzip";
   };
 }

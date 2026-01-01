@@ -35,11 +35,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "editor" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open the default text editor";
     homepage = "https://github.com/rec/editor";
     changelog = "https://github.com/rec/editor/blob/${src.rev}/CHANGELOG";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Open the default text editor";
+    homepage = "https://github.com/rec/editor";
+    changelog = "https://github.com/rec/editor/blob/${src.rev}/CHANGELOG";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

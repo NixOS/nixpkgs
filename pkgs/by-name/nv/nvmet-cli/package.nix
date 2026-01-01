@@ -21,11 +21,20 @@ python3Packages.buildPythonApplication rec {
   # This package requires the `nvmet` kernel module to be loaded for tests.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "NVMe target CLI";
     mainProgram = "nvmetcli";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ hoverbear ];
+=======
+  meta = with lib; {
+    description = "NVMe target CLI";
+    mainProgram = "nvmetcli";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ hoverbear ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -46,11 +46,19 @@ buildPythonPackage rec {
     "test_emd_samples_3"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance";
     homepage = "https://github.com/wmayner/pyemd";
     changelog = "https://github.com/wmayner/pyemd/releases/tag/${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance";
+    homepage = "https://github.com/wmayner/pyemd";
+    changelog = "https://github.com/wmayner/pyemd/releases/tag/${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

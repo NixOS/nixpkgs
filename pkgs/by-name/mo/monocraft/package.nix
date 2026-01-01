@@ -36,11 +36,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Programming font based on the typeface used in Minecraft";
     homepage = "https://github.com/IdreesInc/Monocraft";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zhaofengli ];
+=======
+  meta = with lib; {
+    description = "Programming font based on the typeface used in Minecraft";
+    homepage = "https://github.com/IdreesInc/Monocraft";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ zhaofengli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

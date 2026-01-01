@@ -152,6 +152,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform Text Expander written in Rust";
     mainProgram = "espanso";
@@ -162,6 +163,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       n8henrie
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Cross-platform Text Expander written in Rust";
+    mainProgram = "espanso";
+    homepage = "https://espanso.org";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      kimat
+      n8henrie
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.
     '';

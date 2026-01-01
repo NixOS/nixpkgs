@@ -26,6 +26,7 @@ buildPythonApplication rec {
     grep -q 'address=/example.org/' dnsmasq.conf
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/zopieux/nxdomain";
     description = "Domain (ad) block list creator";
@@ -33,5 +34,14 @@ buildPythonApplication rec {
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ zopieux ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/zopieux/nxdomain";
+    description = "Domain (ad) block list creator";
+    mainProgram = "nxdomain";
+    platforms = platforms.all;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ zopieux ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

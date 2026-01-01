@@ -30,7 +30,11 @@
 
 buildPythonPackage rec {
   pname = "orjson";
+<<<<<<< HEAD
   version = "3.11.4";
+=======
+  version = "3.11.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +43,11 @@ buildPythonPackage rec {
     owner = "ijl";
     repo = "orjson";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-LK3Up6bAWZkou791nrA9iHlgfDLbk196iTn3CBfeyYc=";
+=======
+    hash = "sha256-oTrmDYmUHXMKxgxzBIStw7nnWXcyH9ir0ohnbX4bdjU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -49,7 +57,11 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
+<<<<<<< HEAD
     hash = "sha256-TdZtbb9zR0T+0eauEgRVrDKN2eyCNfEQCJziPlKPWpI=";
+=======
+    hash = "sha256-y6FmK1RR1DAswVoTlnl19CmoYXAco1dY7lpV/KTypzE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -83,6 +95,7 @@ buildPythonPackage rec {
       ;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
@@ -93,5 +106,17 @@ buildPythonPackage rec {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ misuzu ];
+=======
+  meta = with lib; {
+    description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
+    homepage = "https://github.com/ijl/orjson";
+    changelog = "https://github.com/ijl/orjson/blob/${version}/CHANGELOG.md";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ misuzu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

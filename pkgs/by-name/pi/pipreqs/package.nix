@@ -26,11 +26,19 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pipreqs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generate requirements.txt file for any project based on imports";
     homepage = "https://github.com/bndr/pipreqs";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ psyanticy ];
+=======
+  meta = with lib; {
+    description = "Generate requirements.txt file for any project based on imports";
+    homepage = "https://github.com/bndr/pipreqs";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ psyanticy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pipreqs";
   };
 }

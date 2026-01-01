@@ -28,11 +28,19 @@ buildPythonPackage rec {
     pytest -k 'not cli_with_lang'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modules to convert numbers to words. 42 --> forty-two";
     mainProgram = "num2words";
     homepage = "https://github.com/savoirfairelinux/num2words";
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    description = "Modules to convert numbers to words. 42 --> forty-two";
+    mainProgram = "num2words";
+    homepage = "https://github.com/savoirfairelinux/num2words";
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
 
     longDescription = "num2words is a library that converts numbers like 42 to words like forty-two. It supports multiple languages (see the list below for full list of languages) and can even generate ordinal numbers like forty-second";

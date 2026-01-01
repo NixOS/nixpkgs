@@ -9,14 +9,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
+<<<<<<< HEAD
   version = "0.14.7";
+=======
+  version = "0.14.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-f8UUWQtn+lG0mzO7i6LWDoNwGBLFbIbGdqAptNgoek4=";
+=======
+    hash = "sha256-Awixn456RGMNfyhPN1rEzyptzUW6AEkxBKgIk5c8kIc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [
@@ -61,6 +69,10 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = nix-update-script { };

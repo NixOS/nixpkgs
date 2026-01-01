@@ -14,7 +14,10 @@
   libjxl,
   wrapGAppsHook3,
   wrapQtAppsHook,
+<<<<<<< HEAD
   geoclue2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   glib-networking,
   webkitgtk_4_1,
   withWebkit ? true,
@@ -54,10 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix"
     "LD_LIBRARY_PATH"
     ":"
+<<<<<<< HEAD
     (lib.makeLibraryPath [
       geoclue2
       webkitgtk_4_1
     ])
+=======
+    (lib.makeLibraryPath [ webkitgtk_4_1 ])
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   dontUnpack = true;

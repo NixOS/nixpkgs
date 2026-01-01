@@ -24,7 +24,11 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
+<<<<<<< HEAD
   version = "4.0.32";
+=======
+  version = "4.0.30";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   format = "other";
 
@@ -32,7 +36,11 @@ python3Packages.buildPythonApplication rec {
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
+<<<<<<< HEAD
         hash = "sha256-0sJyCRDV76HUy78RBO27AgkXGroL217GNwHp8HMSKx8=";
+=======
+        hash = "sha256-SJnDTW6oQUd+UjWgJz74Po+ibk3JfotFU7CIt4J/nDA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         url = "https://www.davisr.me/projects/rcu/";
       };
     in

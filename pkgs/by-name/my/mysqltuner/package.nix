@@ -32,11 +32,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Make recommendations for increased performance and stability of MariaDB/MySQL";
     homepage = "https://github.com/major/MySQLTuner-perl";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Make recommendations for increased performance and stability of MariaDB/MySQL";
+    homepage = "https://github.com/major/MySQLTuner-perl";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       peterhoeg
       shamilton
     ];

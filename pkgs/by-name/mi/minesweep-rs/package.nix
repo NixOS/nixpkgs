@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-HO0eO6Ip508AIALS50exP2btLd3jUhM+giHQpMdsAVA=";
 
+<<<<<<< HEAD
   meta = {
     description = "Sweep some mines for fun, and probably not for profit";
     homepage = "https://github.com/cpcloud/minesweep-rs";
@@ -24,5 +25,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "minesweep";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Sweep some mines for fun, and probably not for profit";
+    homepage = "https://github.com/cpcloud/minesweep-rs";
+    license = licenses.asl20;
+    mainProgram = "minesweep";
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

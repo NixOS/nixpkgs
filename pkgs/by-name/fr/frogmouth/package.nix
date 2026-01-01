@@ -34,12 +34,20 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "frogmouth" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Markdown browser for your terminal";
     mainProgram = "frogmouth";
     homepage = "https://github.com/Textualize/frogmouth";
     changelog = "https://github.com/Textualize/frogmouth/blob/${src.rev}/ChangeLog.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

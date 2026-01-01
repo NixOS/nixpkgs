@@ -3,6 +3,10 @@
   stdenv,
   fetchpatch,
   perlPackages,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   texlive,
 }:
 
@@ -68,12 +72,26 @@ perlPackages.buildPerlModule {
     TestDifferences
     PerlIOutf8_strict
   ];
+<<<<<<< HEAD
 
   meta = {
     description = "Backend for BibLaTeX";
     license = biberSource.meta.license;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.ttuegel ];
+=======
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/biber
+  '';
+
+  meta = with lib; {
+    description = "Backend for BibLaTeX";
+    license = biberSource.meta.license;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.ttuegel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "biber";
   };
 }

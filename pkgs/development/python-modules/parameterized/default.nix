@@ -52,11 +52,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "parameterized" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parameterized testing with any Python test framework";
     homepage = "https://github.com/wolever/parameterized";
     changelog = "https://github.com/wolever/parameterized/blob/v${version}/CHANGELOG.txt";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Parameterized testing with any Python test framework";
+    homepage = "https://github.com/wolever/parameterized";
+    changelog = "https://github.com/wolever/parameterized/blob/v${version}/CHANGELOG.txt";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

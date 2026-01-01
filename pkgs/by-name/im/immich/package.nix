@@ -2,8 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm_10,
   python3,
   nodejs,
@@ -115,12 +118,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
+<<<<<<< HEAD
   version = "2.4.1";
+=======
+  version = "2.3.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-AOtKRK2vRQKoQAzU4P3h4tQebpWPF3zIWLcToKaU0Lc=";
   };
 
@@ -129,6 +137,16 @@ stdenv.mkDerivation (finalAttrs: {
     inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-1UhyEHSGNWSNvzDJUSojIoIJA/Gz8KMAGMsL2XZfS5s=";
+=======
+    hash = "sha256-K/E5bQraTlvNx1Cd0bKyY6ZhesafGccqVZ9Mu6Q0pZ0=";
+  };
+
+  pnpmDeps = pnpm.fetchDeps {
+    pname = "immich";
+    inherit (finalAttrs) version src;
+    fetcherVersion = 2;
+    hash = "sha256-i0JHKjsQcdDUrDLK0hJGOvVRh/aOyvms/k+6WEPbyh8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -141,8 +159,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pkg-config
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm_10
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python3
     makeWrapper
     node-gyp # for building node_modules/sharp from source
@@ -241,8 +264,13 @@ stdenv.mkDerivation (finalAttrs: {
         binaryen
         extism-js
         nodejs
+<<<<<<< HEAD
         pnpmConfigHook
         pnpm
+=======
+        pnpm
+        pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
 
       buildPhase = ''
@@ -270,8 +298,13 @@ stdenv.mkDerivation (finalAttrs: {
 
       nativeBuildInputs = [
         nodejs
+<<<<<<< HEAD
         pnpmConfigHook
         pnpm
+=======
+        pnpm
+        pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
 
       buildPhase = ''

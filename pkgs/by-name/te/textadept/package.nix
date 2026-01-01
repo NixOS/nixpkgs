@@ -10,14 +10,22 @@
   ncurses,
 }:
 stdenv.mkDerivation (finalAttrs: {
+<<<<<<< HEAD
   version = "12.9";
+=======
+  version = "12.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "textadept";
 
   src = fetchFromGitHub {
     owner = "orbitalquark";
     repo = "textadept";
     tag = "textadept_${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-vpBmDcnaHdpYZIfcy482G4NGor+64Dh1tzryb8JJ+c8=";
+=======
+    hash = "sha256-ba5YSZaWGGEFFAbHNNXv2/a4dWrG/o5mTySCmlPauWs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals withQt [ libsForQt5.wrapQtAppsHook ];

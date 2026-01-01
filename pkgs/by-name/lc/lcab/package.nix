@@ -22,12 +22,21 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Create cabinet (.cab) archives";
     homepage = "http://ohnopub.net/~ohnobinki/lcab";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Create cabinet (.cab) archives";
+    homepage = "http://ohnopub.net/~ohnobinki/lcab";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lcab";
   };
 })

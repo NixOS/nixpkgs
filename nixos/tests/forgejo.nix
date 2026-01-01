@@ -31,7 +31,15 @@ let
 
     {
       name = "forgejo-${type}";
+<<<<<<< HEAD
       meta.maintainers = lib.teams.forgejo.members;
+=======
+      meta.maintainers = with lib.maintainers; [
+        bendlas
+        emilylange
+        tebriel
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       nodes = {
         server =

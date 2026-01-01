@@ -418,11 +418,14 @@ stdenv.mkDerivation {
       url = "https://github.com/ceph/ceph/commit/9b38df488d7101b02afa834ea518fd52076d582a.patch?full_index=1";
       hash = "sha256-VcbJhCGTUdNISBd6P96Mm5M3fFVmZ8r7pMl+srQmnIQ=";
     })
+<<<<<<< HEAD
     (fetchpatch2 {
       name = "ceph-19.2.2-gcc15.patch";
       url = "https://github.com/ceph/ceph/commit/830925f0dd196f920893b1947ae74171a202e825.patch";
       hash = "sha256-bs+noyjiyAjwqfgSHDxdZJnZ/kptOOcz75KMqAaROpg=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [

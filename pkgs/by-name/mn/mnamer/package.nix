@@ -6,14 +6,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mnamer";
+<<<<<<< HEAD
   version = "2.6.0";
+=======
+  version = "2.5.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jkwill87";
     repo = "mnamer";
     tag = version;
+<<<<<<< HEAD
     sha256 = "sha256-lu1DWbR7LkaRddeAAHBWM61cnEZG4KVZdQWWRsbghb8=";
+=======
+    sha256 = "sha256-qQu5V1GOsbrR00HOrot6TTAkc3KRasBPDEU7ZojUBio=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python3Packages; [
@@ -46,11 +54,20 @@ python3Packages.buildPythonApplication rec {
     "test_utils.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jkwill87/mnamer";
     description = "Intelligent and highly configurable media organization utility";
     mainProgram = "mnamer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urlordjames ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jkwill87/mnamer";
+    description = "Intelligent and highly configurable media organization utility";
+    mainProgram = "mnamer";
+    license = licenses.mit;
+    maintainers = with maintainers; [ urlordjames ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

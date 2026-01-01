@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multiaddr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Composable and future-proof network addresses";
     homepage = "https://github.com/multiformats/py-multiaddr";
@@ -50,5 +51,15 @@ buildPythonPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    description = "Composable and future-proof network addresses";
+    homepage = "https://github.com/multiformats/py-multiaddr";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

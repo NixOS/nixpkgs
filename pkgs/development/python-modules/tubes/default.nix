@@ -32,10 +32,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "tubes" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Data-processing and flow-control engine for event-driven programs";
     homepage = "https://github.com/twisted/tubes";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ exarkun ];
+=======
+  meta = with lib; {
+    description = "Data-processing and flow-control engine for event-driven programs";
+    homepage = "https://github.com/twisted/tubes";
+    license = licenses.mit;
+    maintainers = with maintainers; [ exarkun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

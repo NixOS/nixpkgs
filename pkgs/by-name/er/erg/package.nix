@@ -56,12 +56,20 @@ rustPlatform.buildRustPackage rec {
       --set-default ERG_PATH $out/share/erg
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Statically typed language that can deeply improve the Python ecosystem";
     mainProgram = "erg";
     homepage = "https://github.com/erg-lang/erg";
     changelog = "https://github.com/erg-lang/erg/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       mit
     ];

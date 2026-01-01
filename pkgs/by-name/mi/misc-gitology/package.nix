@@ -36,11 +36,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Assortment of scripts around Git";
     homepage = "https://github.com/da-x/misc-gitology";
     license = [ lib.licenses.bsd2 ];
     maintainers = [ lib.maintainers._9999years ];
+=======
+  meta = with lib; {
+    description = "Assortment of scripts around Git";
+    homepage = "https://github.com/da-x/misc-gitology";
+    license = [ licenses.bsd2 ];
+    maintainers = [ maintainers._9999years ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru.updateScript = nix-update-script { };

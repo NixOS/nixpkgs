@@ -41,11 +41,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pass extension to check against the Have I been pwned API to see if your passwords are publicly leaked or not";
     homepage = "https://github.com/etu/pass-checkup";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ etu ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Pass extension to check against the Have I been pwned API to see if your passwords are publicly leaked or not";
+    homepage = "https://github.com/etu/pass-checkup";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ etu ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

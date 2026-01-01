@@ -97,12 +97,21 @@ let
           nixosTests."varnish${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version)}";
       };
 
+<<<<<<< HEAD
       meta = {
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = lib.licenses.bsd2;
         teams = [ lib.teams.flyingcircus ];
         platforms = lib.platforms.unix;
+=======
+      meta = with lib; {
+        description = "Web application accelerator also known as a caching HTTP reverse proxy";
+        homepage = "https://www.varnish-cache.org";
+        license = licenses.bsd2;
+        teams = [ lib.teams.flyingcircus ];
+        platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in

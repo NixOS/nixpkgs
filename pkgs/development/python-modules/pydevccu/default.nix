@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pydevccu";
+<<<<<<< HEAD
   version = "0.1.20";
+=======
+  version = "0.1.18";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "SukramJ";
     repo = "pydevccu";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-DqXekG5WyXuEwn4lmsTBzRxlGBHGWFXOh3Mg/u9O7X8=";
+=======
+    hash = "sha256-+IUPj27+eU2e215LkF+Qqv5vtRqASPP7dEBTvfT/KEo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

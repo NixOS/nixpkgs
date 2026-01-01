@@ -14,16 +14,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi";
+<<<<<<< HEAD
   version = "0.62.2";
+=======
+  version = "0.59.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-HNXfcZuj+yLWatwdSOP0WDkX4y9pcVwrNjsaZdD3ZNo=";
   };
 
   cargoHash = "sha256-wmr1dOqV8IAhqmG4SjeCra+CEpajwZJWUlTNYVVgHVo=";
+=======
+    hash = "sha256-aDwuMRceMxRCh9w89Q2ktpNWwmStg3KzggwhZUAAauk=";
+  };
+
+  cargoHash = "sha256-BbPX+ZKMfLtKWBnrGBRfrl6d40rBQaWJLBg0Vv5UnZE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config
@@ -58,6 +69,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -68,6 +83,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://pixi.sh/latest/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      edmundmiller
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       xiaoxiangmoe
     ];
     mainProgram = "pixi";

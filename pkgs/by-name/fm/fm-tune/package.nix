@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
     soapysdr
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Find initial calibration offset for SDR devices";
     longDescription = ''
       fm_tune finds the initial offset for calibrating an SDR device. This is
@@ -34,9 +38,15 @@ stdenv.mkDerivation rec {
       cannot correct for very large errors.
     '';
     homepage = "https://github.com/viraptor/fm_tune";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ viraptor ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ viraptor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fm_tune";
   };
 }

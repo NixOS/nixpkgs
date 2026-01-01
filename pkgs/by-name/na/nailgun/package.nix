@@ -69,6 +69,10 @@ symlinkJoin rec {
   pname = "nailgun";
   inherit client server version;
 
+<<<<<<< HEAD
+=======
+  name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   paths = [
     client
     server

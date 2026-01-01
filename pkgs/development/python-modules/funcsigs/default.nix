@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "funcsigs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
     homepage = "https://github.com/aliles/funcsigs";
     maintainers = [ ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
+    homepage = "https://github.com/aliles/funcsigs";
+    maintainers = [ ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

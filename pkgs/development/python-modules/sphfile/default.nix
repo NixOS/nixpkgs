@@ -19,11 +19,20 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Numpy-based NIST SPH audio-file reader";
     homepage = "https://github.com/mcfletch/sphfile";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Numpy-based NIST SPH audio-file reader";
+    homepage = "https://github.com/mcfletch/sphfile";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

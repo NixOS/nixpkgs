@@ -30,12 +30,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "add_trailing_comma" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool (and pre-commit hook) to automatically add trailing commas to calls and literals";
     homepage = "https://github.com/asottile/add-trailing-comma";
     changelog = "https://github.com/asottile/add-trailing-comma/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Tool (and pre-commit hook) to automatically add trailing commas to calls and literals";
+    homepage = "https://github.com/asottile/add-trailing-comma";
+    changelog = "https://github.com/asottile/add-trailing-comma/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "add-trailing-comma";
   };
 }

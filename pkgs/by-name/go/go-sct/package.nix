@@ -35,12 +35,21 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Color temperature setting library and CLI that operates in a similar way to f.lux and Redshift";
     homepage = "https://github.com/d4l3k/go-sct";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Color temperature setting library and CLI that operates in a similar way to f.lux and Redshift";
+    homepage = "https://github.com/d4l3k/go-sct";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sct";
   };
 }

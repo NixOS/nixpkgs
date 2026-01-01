@@ -224,6 +224,7 @@ in
         ];
       };
 
+<<<<<<< HEAD
     server-null-pam =
       { pkgs, ... }:
       {
@@ -241,6 +242,8 @@ in
         ];
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     server-sftp =
       { pkgs, ... }:
       {
@@ -267,6 +270,7 @@ in
         };
       };
 
+<<<<<<< HEAD
     server-no-sshd-with-key =
       { pkgs, ... }:
       {
@@ -276,6 +280,8 @@ in
         ];
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     client =
       { ... }:
       {
@@ -296,18 +302,24 @@ in
     server_match_rule.wait_for_unit("sshd", timeout=30)
     server_no_openssl.wait_for_unit("sshd", timeout=30)
     server_no_pam.wait_for_unit("sshd", timeout=30)
+<<<<<<< HEAD
     server_null_pam.wait_for_unit("sshd", timeout=30)
     server_null_pam.fail("journalctl -u sshd.service | grep 'Unsupported option UsePAM'")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     server_sftp.wait_for_unit("sshd", timeout=30)
 
     server_lazy.wait_for_unit("sshd.socket", timeout=30)
     server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
     server_lazy_socket.wait_for_unit("sshd.socket", timeout=30)
 
+<<<<<<< HEAD
     # sshd-keygen is a oneshot unit, so just wait for multi-user.target, which
     # pulls it in.
     server_no_sshd_with_key.wait_for_unit("multi-user.target", timeout=30)
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     with subtest("manual-authkey"):
         client.succeed(
             '${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f /root/.ssh/id_ed25519 -N ""'
@@ -410,6 +422,7 @@ in
             timeout=30
         )
 
+<<<<<<< HEAD
     with subtest("null-pam"):
         client.succeed(
             "cat ${snakeOilPrivateKey} > privkey.snakeoil"
@@ -420,6 +433,8 @@ in
             timeout=30
         )
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     with subtest("sftp"):
         server_sftp.succeed(
           "mkdir -p /srv/sftp/uploads"
@@ -450,6 +465,7 @@ in
 
         server_sftp.wait_for_file("/srv/sftp/uploads/test-file")
 
+<<<<<<< HEAD
     with subtest("keygen without sshd"):
         client.fail(
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@server-no-sshd-with-key true",
@@ -463,6 +479,8 @@ in
         # that should have sshd running, just to prove it's a useful test.
         server.succeed("pgrep sshd")
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # None of the per-connection units should have failed.
     server_lazy.fail("systemctl is-failed 'sshd@*.service'")
   '';

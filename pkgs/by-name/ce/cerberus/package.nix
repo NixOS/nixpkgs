@@ -10,15 +10,26 @@
   testers,
   cerberus,
 }:
+<<<<<<< HEAD
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "cerberus";
   version = "0-unstable-2025-12-15";
+=======
+ocamlPackages.buildDunePackage rec {
+  pname = "cerberus";
+  version = "0-unstable-2025-11-24";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "rems-project";
     repo = "cerberus";
+<<<<<<< HEAD
     rev = "50621977ba282ac527e9259f7e9334d2c5bef41c";
     hash = "sha256-CAZeLG1M9oBzl/5EsIYwyV3St5fdwmfkPApACbsIYAc=";
+=======
+    rev = "3946c7e757f338061c8e29079605424360d41cb3";
+    hash = "sha256-aYWoGugqIBS2jpRkepO54wjitMQoCVeFf3cMpCUyZVU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -35,7 +46,11 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   # our version since git is impure
   postPatch = ''
     substituteInPlace tools/gen_version.ml \
+<<<<<<< HEAD
       --replace-fail '"unknown"' '"${finalAttrs.version}"'
+=======
+      --replace-fail '"unknown"' '"${version}"'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   minimalOCamlVersion = "4.12";
@@ -136,4 +151,8 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -41,10 +41,18 @@ buildPythonPackage rec {
   # Wants to run redis-server, hardcoded FHS paths, too much trouble.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Asyncio (PEP 3156) Redis client library";
     homepage = "https://github.com/aio-libs-abandoned/aioredis-py";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmai ];
+=======
+  meta = with lib; {
+    description = "Asyncio (PEP 3156) Redis client library";
+    homepage = "https://github.com/aio-libs-abandoned/aioredis-py";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

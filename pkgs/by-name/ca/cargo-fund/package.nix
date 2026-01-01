@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
     curl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Discover funding links for your project's dependencies";
     mainProgram = "cargo-fund";
@@ -44,5 +45,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ johntitor ];
+=======
+  meta = with lib; {
+    description = "Discover funding links for your project's dependencies";
+    mainProgram = "cargo-fund";
+    homepage = "https://github.com/acfoltzer/cargo-fund";
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with maintainers; [ johntitor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,14 +43,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "serverlessrepo" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/awslabs/aws-serverlessrepo-python";
     description = "Helpers for working with the AWS Serverless Application Repository";
     longDescription = ''
       A Python library with convenience helpers for working with the
       AWS Serverless Application Repository.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dhkl ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dhkl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -40,11 +40,20 @@ buildPythonPackage rec {
     "tests/test_live_server.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of pytest fixtures to test Flask applications";
     homepage = "https://pytest-flask.readthedocs.io/";
     changelog = "https://github.com/pytest-dev/pytest-flask/blob/${version}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vanschelven ];
+=======
+  meta = with lib; {
+    description = "Set of pytest fixtures to test Flask applications";
+    homepage = "https://pytest-flask.readthedocs.io/";
+    changelog = "https://github.com/pytest-dev/pytest-flask/blob/${version}/docs/changelog.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vanschelven ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

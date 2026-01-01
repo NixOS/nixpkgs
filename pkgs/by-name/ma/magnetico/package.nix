@@ -36,11 +36,20 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) magnetico; };
 
+<<<<<<< HEAD
   meta = {
     description = "Autonomous (self-hosted) BitTorrent DHT search engine suite";
     homepage = "https://maxwell.eurofusion.eu/git/rnhmjoj/magnetico";
     license = lib.licenses.agpl3Only;
     badPlatforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ rnhmjoj ];
+=======
+  meta = with lib; {
+    description = "Autonomous (self-hosted) BitTorrent DHT search engine suite";
+    homepage = "https://maxwell.eurofusion.eu/git/rnhmjoj/magnetico";
+    license = licenses.agpl3Only;
+    badPlatforms = platforms.darwin;
+    maintainers = with maintainers; [ rnhmjoj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -49,11 +49,19 @@ stdenv.mkDerivation rec {
     "-Wno-error=missing-noreturn"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/doctest/doctest";
     description = "Fastest feature-rich C++11/14/17/20 single-header testing framework";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/doctest/doctest";
+    description = "Fastest feature-rich C++11/14/17/20 single-header testing framework";
+    platforms = platforms.all;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

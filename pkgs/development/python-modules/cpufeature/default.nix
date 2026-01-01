@@ -34,11 +34,19 @@ buildPythonPackage rec {
     cd cpufeature
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for detection of CPU features";
     homepage = "https://github.com/robbmcleod/cpufeature";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for detection of CPU features";
+    homepage = "https://github.com/robbmcleod/cpufeature";
+    license = licenses.cc0;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "x86_64-windows"

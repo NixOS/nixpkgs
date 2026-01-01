@@ -57,12 +57,21 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ interface for GStreamer";
     homepage = "https://gstreamer.freedesktop.org/bindings/cplusplus.html";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    description = "C++ interface for GStreamer";
+    homepage = "https://gstreamer.freedesktop.org/bindings/cplusplus.html";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

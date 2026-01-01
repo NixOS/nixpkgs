@@ -53,11 +53,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${src.tag}";
     description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0";
     homepage = "https://github.com/python-openapi/openapi-schema-validator";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${src.tag}";
+    description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0";
+    homepage = "https://github.com/python-openapi/openapi-schema-validator";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

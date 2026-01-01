@@ -18,11 +18,20 @@ buildPecl rec {
 
   buildInputs = [ libuv ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interface to libuv for php";
     license = lib.licenses.php301;
     homepage = "https://github.com/amphp/ext-uv";
     teams = [ lib.teams.php ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Interface to libuv for php";
+    license = licenses.php301;
+    homepage = "https://github.com/amphp/ext-uv";
+    teams = [ teams.php ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,11 +45,20 @@ stdenv.mkDerivation rec {
     gtk-update-icon-cache "$out"/share/icons/Lounge-aux;
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and clean GTK theme with vintage scrollbars, inspired by Absolute, based on Adwaita";
     homepage = "https://github.com/monday15/lounge-gtk-theme";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Simple and clean GTK theme with vintage scrollbars, inspired by Absolute, based on Adwaita";
+    homepage = "https://github.com/monday15/lounge-gtk-theme";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Official monitoring plugins for Nagios/Icinga/Sensu and others";
     homepage = "https://www.monitoring-plugins.org";
@@ -102,5 +103,16 @@ stdenv.mkDerivation rec {
       relrod
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Official monitoring plugins for Nagios/Icinga/Sensu and others";
+    homepage = "https://www.monitoring-plugins.org";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      thoughtpolice
+      relrod
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

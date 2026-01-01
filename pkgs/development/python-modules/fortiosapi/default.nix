@@ -39,10 +39,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fortiosapi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to work with Fortigate/Fortios devices";
     homepage = "https://github.com/fortinet-solutions-cse/fortiosapi";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to work with Fortigate/Fortios devices";
+    homepage = "https://github.com/fortinet-solutions-cse/fortiosapi";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

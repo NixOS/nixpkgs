@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mongomock" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fake pymongo stub for testing simple MongoDB-dependent code";
     homepage = "https://github.com/mongomock/mongomock";
     changelog = "https://github.com/mongomock/mongomock/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Fake pymongo stub for testing simple MongoDB-dependent code";
+    homepage = "https://github.com/mongomock/mongomock";
+    changelog = "https://github.com/mongomock/mongomock/blob/${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

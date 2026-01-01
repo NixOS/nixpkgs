@@ -38,9 +38,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jaraco.itertools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for working with iterables";
     homepage = "https://github.com/jaraco/jaraco.itertools";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tools for working with iterables";
+    homepage = "https://github.com/jaraco/jaraco.itertools";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -34,12 +34,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytz" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://launchpad.net/pytz/+announcements";
     description = "World timezone definitions, modern and historical";
     homepage = "https://pythonhosted.org/pytz";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    changelog = "https://launchpad.net/pytz/+announcements";
+    description = "World timezone definitions, modern and historical";
+    homepage = "https://pythonhosted.org/pytz";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dotlambda
       jherland
     ];

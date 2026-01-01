@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nslookup" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to do DNS lookups";
     homepage = "https://github.com/wesinator/pynslookup";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to do DNS lookups";
+    homepage = "https://github.com/wesinator/pynslookup";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

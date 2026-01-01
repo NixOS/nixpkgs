@@ -100,6 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://genome.ucsc.edu";
     changelog = "https://github.com/ucscGenomeBrowser/kent/releases/tag/v${finalAttrs.version}_base";
     license = lib.licenses.unfree;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ scalavision ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 })

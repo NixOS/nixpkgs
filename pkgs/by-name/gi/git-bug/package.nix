@@ -2,7 +2,10 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+<<<<<<< HEAD
   gitMinimal,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   installShellFiles,
 }:
 
@@ -21,6 +24,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     gitMinimal
   ];
@@ -39,6 +43,9 @@ buildGoModule rec {
     [
       "-skip=^${lib.concatStringsSep "$|^" integrationTests}$"
     ];
+=======
+  doCheck = false;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   excludedPackages = [
     "doc"
@@ -60,11 +67,19 @@ buildGoModule rec {
     installManPage doc/man/*
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed bug tracker embedded in Git";
     homepage = "https://github.com/git-bug/git-bug";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Distributed bug tracker embedded in Git";
+    homepage = "https://github.com/git-bug/git-bug";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       royneary
       DeeUnderscore
       sudoforge

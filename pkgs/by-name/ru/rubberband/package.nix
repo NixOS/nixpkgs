@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dtests=disabled" ];
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "High quality software library for audio time-stretching and pitch-shifting";
     homepage = "https://breakfastquay.com/rubberband/";
@@ -51,5 +52,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "High quality software library for audio time-stretching and pitch-shifting";
+    homepage = "https://breakfastquay.com/rubberband/";
+    # commercial license available as well, see homepage. You'll get some more optimized routines
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

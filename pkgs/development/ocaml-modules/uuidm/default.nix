@@ -39,11 +39,19 @@ stdenv.mkDerivation {
 
   inherit (topkg) buildPhase installPhase;
 
+<<<<<<< HEAD
   meta = {
     description = "OCaml module implementing 128 bits universally unique identifiers version 3, 5 (name based with MD5, SHA-1 hashing) and 4 (random based) according to RFC 4122";
     homepage = "https://erratique.ch/software/uuidm";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.maurer ];
+=======
+  meta = with lib; {
+    description = "OCaml module implementing 128 bits universally unique identifiers version 3, 5 (name based with MD5, SHA-1 hashing) and 4 (random based) according to RFC 4122";
+    homepage = "https://erratique.ch/software/uuidm";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.maurer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "uuidtrip";
     inherit (ocaml.meta) platforms;
     broken = !(lib.versionAtLeast ocaml.version "4.08");

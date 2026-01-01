@@ -142,6 +142,10 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/share/vim
     ln -s $vim $out/share/vim-plugins
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
   '';
 
@@ -151,6 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) allTerminfo;

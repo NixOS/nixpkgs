@@ -64,7 +64,11 @@ stdenv.mkDerivation {
     rm $out/bin/ekam-bootstrap
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''Build system ("make" in reverse)'';
     longDescription = ''
       Ekam ("make" spelled backwards) is a build system which automatically
@@ -72,8 +76,14 @@ stdenv.mkDerivation {
       source code. No separate "makefile" is needed.
     '';
     homepage = "https://github.com/capnproto/ekam";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.garrison ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.garrison ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

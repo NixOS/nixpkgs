@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "ROCm Application for Reporting System Info";
     homepage = "https://github.com/ROCm/rocminfo";
@@ -52,5 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "ROCm Application for Reporting System Info";
+    homepage = "https://github.com/ROCm/rocminfo";
+    license = licenses.ncsa;
+    mainProgram = "rocminfo";
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

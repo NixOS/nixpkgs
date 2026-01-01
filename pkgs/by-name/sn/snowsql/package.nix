@@ -44,12 +44,21 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/lib64/snowflake/snowsql \
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line client for the Snowflake database";
     homepage = "https://www.snowflake.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ andehen ];
+=======
+  meta = with lib; {
+    description = "Command line client for the Snowflake database";
+    homepage = "https://www.snowflake.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ andehen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "snowsql";
   };

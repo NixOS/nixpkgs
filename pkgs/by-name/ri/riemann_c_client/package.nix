@@ -55,11 +55,20 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://git.madhouse-project.org/algernon/riemann-c-client";
     description = "C client library for the Riemann monitoring system";
     mainProgram = "riemann-client";
     license = lib.licenses.eupl12;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://git.madhouse-project.org/algernon/riemann-c-client";
+    description = "C client library for the Riemann monitoring system";
+    mainProgram = "riemann-client";
+    license = licenses.eupl12;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyls_spyder" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Spyder extensions for the python-language-server";
     homepage = "https://github.com/spyder-ide/pyls-spyder";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Spyder extensions for the python-language-server";
+    homepage = "https://github.com/spyder-ide/pyls-spyder";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

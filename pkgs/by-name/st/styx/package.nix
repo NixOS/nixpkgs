@@ -75,13 +75,22 @@ stdenv.mkDerivation rec {
     cp -r themes/* $themes
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Nix based static site generator";
     maintainers = [ ];
     homepage = "https://styx-static.github.io/styx-site/";
     downloadPage = "https://github.com/styx-static/styx/";
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+=======
+    platforms = platforms.all;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "styx";
   };
 }

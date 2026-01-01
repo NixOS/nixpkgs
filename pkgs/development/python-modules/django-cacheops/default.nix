@@ -59,11 +59,20 @@ buildPythonPackage rec {
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
+<<<<<<< HEAD
   meta = {
     description = "Slick ORM cache with automatic granular event-driven invalidation for Django";
     homepage = "https://github.com/Suor/django-cacheops";
     changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Slick ORM cache with automatic granular event-driven invalidation for Django";
+    homepage = "https://github.com/Suor/django-cacheops";
+    changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

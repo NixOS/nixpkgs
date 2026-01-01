@@ -47,10 +47,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbt.adapters.redshift" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin enabling dbt to work with Amazon Redshift";
     homepage = "https://github.com/dbt-labs/dbt-redshift";
     changelog = "https://github.com/dbt-labs/dbt-redshift/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Plugin enabling dbt to work with Amazon Redshift";
+    homepage = "https://github.com/dbt-labs/dbt-redshift";
+    changelog = "https://github.com/dbt-labs/dbt-redshift/blob/${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ tjni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

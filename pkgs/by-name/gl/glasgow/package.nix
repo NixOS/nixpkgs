@@ -10,7 +10,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-22";
+=======
+  version = "0-unstable-2025-07-28";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Similar to `pdm show`, but without the commit counter
   pdmVersion =
     let
@@ -18,17 +22,27 @@ python3.pkgs.buildPythonApplication rec {
       rev = lib.substring 0 7 src.rev;
     in
     "${tag}.1.dev0+g${rev}";
+<<<<<<< HEAD
   # The latest commit ID touching the `firmware` directory, before a "deploy firmware" commit.
   # Differs from rev!
   firmwareGitRev = "8b5afc70";
+=======
+  # the latest commit ID touching the `firmware` directory, can differ from rev!
+  firmwareGitRev = "4fe35360";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
+<<<<<<< HEAD
     rev = "ccee116d8b59f25ed0874d152f6b9f9974b185f1";
     hash = "sha256-2fF0lPfRtpci76q4fEhWAwLBXP0kfIP3dH5z8u/+yd8=";
+=======
+    rev = "18442e9684cdda4bb2cbd2be9c31b3c6dffc625a";
+    hash = "sha256-b0kpgCHMk5Ylj4hY29sHRzY/zI1JXReHioHxHSO4h5E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -100,7 +114,11 @@ python3.pkgs.buildPythonApplication rec {
   makeWrapperArgs = [
     "--set"
     "YOSYS"
+<<<<<<< HEAD
     (lib.getExe yosys)
+=======
+    "${yosys}/bin/yosys"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "--set"
     "ICEPACK"
     "${icestorm}/bin/icepack"
@@ -109,11 +127,19 @@ python3.pkgs.buildPythonApplication rec {
     "${nextpnr}/bin/nextpnr-ice40"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Software for Glasgow, a digital interface multitool";
+    homepage = "https://github.com/GlasgowEmbedded/Glasgow";
+    license = licenses.bsd0;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       flokli
       thoughtpolice
     ];

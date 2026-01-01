@@ -67,11 +67,19 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals postgresSupport [ libpq ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://wammu.eu/gammu/";
     description = "Command line utility and library to control mobile phones";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://wammu.eu/gammu/";
+    description = "Command line utility and library to control mobile phones";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

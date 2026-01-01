@@ -19,11 +19,19 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [ requests ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sdushantha/fileinfo";
     description = "File extension metadata lookup tool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ h7x4 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sdushantha/fileinfo";
+    description = "File extension metadata lookup tool";
+    license = licenses.mit;
+    maintainers = with maintainers; [ h7x4 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fileinfo";
   };
 }

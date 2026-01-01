@@ -39,10 +39,18 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convenience command line tool for fullstop. audit reporting";
     homepage = "https://github.com/zalando-stups/stups-fullstop-cli";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.mschuwalow ];
+=======
+  meta = with lib; {
+    description = "Convenience command line tool for fullstop. audit reporting";
+    homepage = "https://github.com/zalando-stups/stups-fullstop-cli";
+    license = licenses.asl20;
+    maintainers = [ maintainers.mschuwalow ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

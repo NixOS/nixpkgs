@@ -64,10 +64,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seventeentrack" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to track package info from 17track.com";
     homepage = "https://github.com/McSwindler/seventeentrack";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library to track package info from 17track.com";
+    homepage = "https://github.com/McSwindler/seventeentrack";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

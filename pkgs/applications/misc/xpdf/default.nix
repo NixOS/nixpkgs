@@ -71,7 +71,11 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.xpdfreader.com";
     description = "Viewer for Portable Document Format (PDF) files";
     longDescription = ''
@@ -87,12 +91,21 @@ stdenv.mkDerivation rec {
         pdffonts:  lists fonts used in PDF files
         pdfdetach: extracts attached files from PDF files
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl2Only
       gpl3Only
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+    ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     knownVulnerabilities = [
       "CVE-2023-26930"
     ];

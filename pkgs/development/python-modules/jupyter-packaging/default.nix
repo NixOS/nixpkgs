@@ -66,9 +66,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_packaging" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jupyter Packaging Utilities";
     homepage = "https://github.com/jupyter/jupyter-packaging";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Jupyter Packaging Utilities";
+    homepage = "https://github.com/jupyter/jupyter-packaging";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

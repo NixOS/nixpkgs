@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ ncurses ];
 
+<<<<<<< HEAD
   meta = {
     description = "Space Invaders clone based on ncurses";
     mainProgram = "ninvaders";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ _1000101 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Space Invaders clone based on ncurses";
+    mainProgram = "ninvaders";
+    homepage = "https://ninvaders.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ _1000101 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

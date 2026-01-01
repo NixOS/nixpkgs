@@ -28,10 +28,18 @@ buildPythonPackage rec {
     "test_full_env"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for running child processes";
     homepage = "https://github.com/oconnor663/duct.py";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zmitchell ];
+=======
+  meta = with lib; {
+    description = "Python library for running child processes";
+    homepage = "https://github.com/oconnor663/duct.py";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zmitchell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

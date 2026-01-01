@@ -30,13 +30,20 @@
   yq,
   callPackage,
   addDriverRunpath,
+<<<<<<< HEAD
   perl,
   openssl,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
+<<<<<<< HEAD
     version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.4/.github/workflows/bridge.yml#L10
+=======
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.1/.github/workflows/bridge.yml#L10
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -66,19 +73,30 @@ let
 in
 flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
+<<<<<<< HEAD
   version = "1.4.4";
+=======
+  version = "1.4.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-o7jsVWiCkHaKFpAu27r/Lr1Q9g7uR/OYJdwsiQeDJUA=";
+=======
+    hash = "sha256-TCy1AyqBHqrIlip2ZqdzIaYHjIYddThI+YmbcQHaDqQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;
   env.VCPKG_ROOT = "/homeless-shelter"; # idk man, makes the build go since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
@@ -95,7 +113,11 @@ flutter329.buildFlutterApplication rec {
       src
       patches
       ;
+<<<<<<< HEAD
     hash = "sha256-gd2vS+p+1QtOWZcRWJWahFGo5rFG+soqxx3vJYSYJUo=";
+=======
+    hash = "sha256-AOKsTPuq1VD6MR4z1K9l2Clbl8d/7IijTsnMRgBXvyw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dontCargoBuild = true;
@@ -119,7 +141,10 @@ flutter329.buildFlutterApplication rec {
     rustPlatform.bindgenHook
     ffigen
     yq
+<<<<<<< HEAD
     perl
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -139,7 +164,10 @@ flutter329.buildFlutterApplication rec {
     libyuv
     pam
     xdotool
+<<<<<<< HEAD
     openssl
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   prePatch = ''
@@ -166,8 +194,11 @@ flutter329.buildFlutterApplication rec {
         --replace-fail "libayatana-appindicator3.so.1" "${lib.getLib libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
       # Disable static linking of ffmpeg since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
       sed -i 's/static=//g' $cargoDepsCopy/hwcodec-*/build.rs
+<<<<<<< HEAD
       sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
       sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fi
 
     substituteInPlace ../Cargo.toml --replace-fail ", \"staticlib\", \"rlib\"" ""

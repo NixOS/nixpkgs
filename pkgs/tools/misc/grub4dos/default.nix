@@ -43,12 +43,21 @@ stdenv.mkDerivation {
   # make[2]: *** No rule to make target 'pre_stage2_fullsize', needed by 'all-am'.  Stop.
   enableParallelBuilding = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "http://grub4dos.chenall.net/";
+    description = "GRUB for DOS is the dos extension of GRUB";
+    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Needs a port to modern binutils:
     #   https://github.com/chenall/grub4dos/issues/160
     broken = true;

@@ -25,12 +25,21 @@ buildGoModule rec {
     "-X main.BuildVersionLabel=nixpkgs"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/SR-G/sleep-on-lan";
     description = "Multi-platform process allowing to sleep on LAN a Linux or Windows computer, through wake-on-lan (reversed) magic packets or through HTTP REST requests";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ devusb ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/SR-G/sleep-on-lan";
+    description = "Multi-platform process allowing to sleep on LAN a Linux or Windows computer, through wake-on-lan (reversed) magic packets or through HTTP REST requests";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ devusb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sleep-on-lan";
   };
 }

@@ -137,11 +137,20 @@ mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   inherit buildInputs;
 
+<<<<<<< HEAD
   meta = {
     description = "Ultrastar karaoke song manager";
     mainProgram = "UltraStar-Manager";
     homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Manager";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ Profpatsch ];
+=======
+  meta = with lib; {
+    description = "Ultrastar karaoke song manager";
+    mainProgram = "UltraStar-Manager";
+    homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Manager";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ Profpatsch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

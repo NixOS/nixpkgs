@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiowebostv" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with LG webOS based TV devices";
     homepage = "https://github.com/home-assistant-libs/aiowebostv";
     changelog = "https://github.com/home-assistant-libs/aiowebostv/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with LG webOS based TV devices";
+    homepage = "https://github.com/home-assistant-libs/aiowebostv";
+    changelog = "https://github.com/home-assistant-libs/aiowebostv/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

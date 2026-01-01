@@ -3,7 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   writeScript,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   writeShellScriptBin,
   gradio,
 
@@ -14,10 +17,15 @@
 
   # web assets
   zip,
+<<<<<<< HEAD
   nodejs_24,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+  nodejs,
+  pnpm_9,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # dependencies
   setuptools,
@@ -75,6 +83,7 @@
   vega-datasets,
   writableTmpDirAsHomeHook,
 }:
+<<<<<<< HEAD
 let
   nodejs = nodejs_24;
   pnpm = pnpm_10.override { inherit nodejs; };
@@ -82,12 +91,19 @@ in
 buildPythonPackage rec {
   pname = "gradio";
   version = "6.2.0";
+=======
+
+buildPythonPackage rec {
+  pname = "gradio";
+  version = "5.49.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
+<<<<<<< HEAD
     hash = "sha256-lD0tMqkbuLMLAkdjT52ZXx9I+Cs3OVI0oQmN+VPEBts=";
   };
 
@@ -100,13 +116,26 @@ buildPythonPackage rec {
       ;
     fetcherVersion = 3;
     hash = "sha256-Lk8B2nQsKHs7JP3tjZufghXI7VL7GYfC30e/gpSSd4M=";
+=======
+    hash = "sha256-tfjyu2yl+2ndPZWrsSrVf8qv2eqpU5ZJHVqM9saJVt4=";
+  };
+
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-XnCx34nbX+essVfXJlxvYB9/lnolAkF81Jp6dAOqr8E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [
     "aiofiles"
     "gradio-client"
     "markupsafe"
+<<<<<<< HEAD
     "pydantic" # Requests >=2.11.10,<=2.12.4. Staging has it, master doesn't.
+=======
+    "pillow"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pythonRemoveDeps = [
@@ -117,9 +146,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     zip
     nodejs
+<<<<<<< HEAD
     pnpm
     pnpmConfigHook
     writableTmpDirAsHomeHook
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   build-system = [
@@ -189,6 +222,10 @@ buildPythonPackage rec {
 
     # mock calls to `shutil.which(...)`
     (writeShellScriptBin "npm" "false")
+<<<<<<< HEAD
+=======
+    writableTmpDirAsHomeHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ optional-dependencies.oauth
   ++ pydantic.optional-dependencies.email;
@@ -260,6 +297,7 @@ buildPythonPackage rec {
     # Flaky test (AssertionError when comparing to a fixed array)
     # https://github.com/gradio-app/gradio/issues/11620
     "test_auto_datatype"
+<<<<<<< HEAD
 
     # Failed: DID NOT RAISE <class 'ValueError'>
     # (because it raises our NixNetworkAccessDeniedError)
@@ -296,12 +334,33 @@ buildPythonPackage rec {
     "test_component_returned"
     "test_css_and_css_paths_parameters"
     "test_custom_css"
+=======
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'
+    "test_component_example_values"
+    "test_component_functions"
+    "test_public_request_pass"
+
+    # Failed: DID NOT RAISE <class 'ValueError'>
+    # test.conftest.NixNetworkAccessDeniedError
+    "test_private_request_fail"
+    "test_theme_builder_launches"
+
+    # flaky on darwin (depend on port availability)
+    "test_all_status_messages"
+    "test_async_generators"
+    "test_async_generators_interface"
+    "test_async_iterator_update_with_new_component"
+    "test_concurrency_limits"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_default_concurrency_limits"
     "test_default_flagging_callback"
     "test_end_to_end"
     "test_end_to_end_cache_examples"
     "test_event_data"
     "test_every_does_not_block_queue"
+<<<<<<< HEAD
     "test_example_caching"
     "test_example_caching_async"
     "test_example_caching_relaunch"
@@ -309,6 +368,10 @@ buildPythonPackage rec {
     "test_example_caching_with_additional_inputs_already_rendered"
     "test_example_caching_with_streaming"
     "test_example_caching_with_streaming_async"
+=======
+    "test_example_caching_relaunch"
+    "test_example_caching_relaunch"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_exit_called_at_launch"
     "test_file_component_uploads"
     "test_files_saved_as_file_paths"
@@ -317,25 +380,35 @@ buildPythonPackage rec {
     "test_info_and_warning_alerts"
     "test_info_isolation"
     "test_launch_analytics_does_not_error_with_invalid_blocks"
+<<<<<<< HEAD
     "test_mcp_streamable_http_client"
     "test_mcp_streamable_http_client_with_progress_callback"
     "test_multiple_file_flagging"
     "test_multiple_messages"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_no_empty_audio_files"
     "test_no_empty_image_files"
     "test_no_empty_video_files"
     "test_non_streaming_api"
     "test_non_streaming_api_async"
+<<<<<<< HEAD
     "test_no_postprocessing"
     "test_no_preprocessing"
     "test_pil_images_hashed"
     "test_post_process_file_blocked"
+=======
+    "test_pil_images_hashed"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_progress_bar"
     "test_progress_bar_track_tqdm"
     "test_queue_when_using_auth"
     "test_restart_after_close"
     "test_set_share_in_colab"
+<<<<<<< HEAD
     "test_setting_cache_dir_env_variable"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_show_error"
     "test_simple_csv_flagging_callback"
     "test_single_request"
@@ -350,7 +423,10 @@ buildPythonPackage rec {
     "test_sync_generators"
     "test_time_to_live_and_delete_callback_for_state"
     "test_updates_stored_up_to_capacity"
+<<<<<<< HEAD
     "test_use_default_theme_as_fallback"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_varying_output_forms_with_generators"
   ];
 
@@ -376,10 +452,14 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-x" # abort on first failure
+<<<<<<< HEAD
     # "-Wignore" # uncomment for debugging help
     # Requires writable media assets in /nix/store
     "--deselect"
     "test/components/test_video.py::TestVideo::test_component_functions"
+=======
+    #"-Wignore" # uncomment for debugging help
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # check the binary works outside the build env
@@ -391,6 +471,7 @@ buildPythonPackage rec {
 
   # Cyclic dependencies are fun!
   # This is gradio without gradio-client and gradio-pdf
+<<<<<<< HEAD
   passthru = {
     sans-reverse-dependencies =
       (gradio.override {
@@ -437,6 +518,29 @@ buildPythonPackage rec {
       nix-update --version="$tag"
     '';
   };
+=======
+  passthru.sans-reverse-dependencies =
+    (gradio.override (old: {
+      gradio-client = null;
+      gradio-pdf = null;
+    })).overridePythonAttrs
+      (old: {
+        pname = old.pname + "-sans-reverse-dependencies";
+        pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
+        doInstallCheck = false;
+        doCheck = false;
+        preCheck = "";
+        postInstall = ''
+          shopt -s globstar
+          for f in $out/**/*.py; do
+            cp $f "$f"i
+          done
+          shopt -u globstar
+        '';
+        pythonImportsCheck = null;
+        dontCheckRuntimeDeps = true;
+      });
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     homepage = "https://www.gradio.app/";

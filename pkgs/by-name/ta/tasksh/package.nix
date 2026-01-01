@@ -23,12 +23,21 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "REPL for taskwarrior";
     homepage = "http://tasktools.org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "REPL for taskwarrior";
+    homepage = "http://tasktools.org";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthiasbeyer ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tasksh";
   };
 }

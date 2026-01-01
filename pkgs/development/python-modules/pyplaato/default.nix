@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyplaato" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API client for fetching Plaato data";
     homepage = "https://github.com/JohNan/pyplaato";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API client for fetching Plaato data";
+    homepage = "https://github.com/JohNan/pyplaato";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

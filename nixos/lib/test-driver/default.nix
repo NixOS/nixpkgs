@@ -1,5 +1,6 @@
 {
   lib,
+<<<<<<< HEAD
 
   buildPythonApplication,
   colorama,
@@ -27,12 +28,31 @@
 }:
 
 buildPythonApplication {
+=======
+  python3Packages,
+  enableOCR ? false,
+  qemu_pkg ? qemu_test,
+  coreutils,
+  imagemagick_light,
+  netpbm,
+  qemu_test,
+  socat,
+  ruff,
+  tesseract4,
+  vde2,
+  extraPythonPackages ? (_: [ ]),
+  nixosTests,
+}:
+
+python3Packages.buildPythonApplication {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "nixos-test-driver";
   version = "1.1";
   pyproject = true;
 
   src = ./src;
 
+<<<<<<< HEAD
   build-system = [
     setuptools
   ];
@@ -45,6 +65,22 @@ buildPythonApplication {
     remote-pdb
   ]
   ++ extraPythonPackages python.pkgs;
+=======
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      colorama
+      junit-xml
+      ptpython
+      ipython
+      remote-pdb
+    ]
+    ++ extraPythonPackages python3Packages;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   propagatedBuildInputs = [
     coreutils
@@ -64,7 +100,11 @@ buildPythonApplication {
 
   doCheck = true;
 
+<<<<<<< HEAD
   nativeCheckInputs = [
+=======
+  nativeCheckInputs = with python3Packages; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mypy
     ruff
   ];

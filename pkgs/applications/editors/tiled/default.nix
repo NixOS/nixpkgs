@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Free, easy to use and flexible tile map editor";
     homepage = "https://www.mapeditor.org/";
@@ -95,5 +96,19 @@ stdenv.mkDerivation rec {
       ryan4yin
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Free, easy to use and flexible tile map editor";
+    homepage = "https://www.mapeditor.org/";
+    license = with licenses; [
+      bsd2 # libtiled and tmxviewer
+      gpl2Plus # all the rest
+    ];
+    maintainers = with maintainers; [
+      dywedir
+      ryan4yin
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

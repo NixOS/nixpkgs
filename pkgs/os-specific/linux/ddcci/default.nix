@@ -47,12 +47,21 @@ stdenv.mkDerivation rec {
     "INCLUDEDIR=$(out)/include"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Kernel module driver for DDC/CI monitors";
     homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kiike ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Kernel module driver for DDC/CI monitors";
+    homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kiike ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = kernel.kernelOlder "5.1";
   };
 }

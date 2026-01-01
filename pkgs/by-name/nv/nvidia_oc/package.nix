@@ -29,6 +29,11 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Simple command line tool to overclock Nvidia GPUs using the NVML library on Linux";
     homepage = "https://github.com/Dreaming-Codes/nvidia_oc";

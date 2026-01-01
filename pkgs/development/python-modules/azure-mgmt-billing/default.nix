@@ -37,11 +37,20 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "This is the Microsoft Azure Billing Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/billing/azure-mgmt-billing";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-billing_${version}/sdk/billing/azure-mgmt-billing/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
+=======
+  meta = with lib; {
+    description = "This is the Microsoft Azure Billing Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/billing/azure-mgmt-billing";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-billing_${version}/sdk/billing/azure-mgmt-billing/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maxwilson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

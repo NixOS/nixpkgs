@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
       --replace /var/spool /var/lib
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Uptime record daemon";
     longDescription = ''
       An uptime record daemon keeping track of the highest uptimes a computer
@@ -33,11 +37,19 @@ stdenv.mkDerivation rec {
       which can also easily be used to show your records on a web page.
     '';
     homepage = "https://github.com/rpodgorny/uptimed/";
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Only
       lgpl21Plus
     ];
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

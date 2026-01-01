@@ -65,11 +65,19 @@ buildGoModule rec {
     tests = { inherit (nixosTests) wg-access-server; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "All-in-one WireGuard VPN solution with a web ui for connecting devices";
     homepage = "https://github.com/freifunkMUC/wg-access-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xanderio ];
+=======
+  meta = with lib; {
+    description = "All-in-one WireGuard VPN solution with a web ui for connecting devices";
+    homepage = "https://github.com/freifunkMUC/wg-access-server";
+    license = licenses.mit;
+    maintainers = with maintainers; [ xanderio ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wg-access-server";
   };
 }

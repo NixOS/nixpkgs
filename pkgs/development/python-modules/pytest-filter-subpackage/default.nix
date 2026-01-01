@@ -36,11 +36,19 @@ buildPythonPackage rec {
   # missing some files
   disabledTests = [ "with_rst" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Meta-package containing dependencies for testing";
     homepage = "https://github.com/astropy/pytest-filter-subpackage";
     changelog = "https://github.com/astropy/pytest-filter-subpackage/blob/v${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Meta-package containing dependencies for testing";
+    homepage = "https://github.com/astropy/pytest-filter-subpackage";
+    changelog = "https://github.com/astropy/pytest-filter-subpackage/blob/v${version}/CHANGES.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

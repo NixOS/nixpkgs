@@ -39,12 +39,21 @@ stdenv.mkDerivation rec {
     vulkan-headers
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Print displays and modes enumerated with the Vulkan function vkGetPhysicalDeviceDisplayPropertiesKHR";
     homepage = "https://github.com/ChristophHaag/vkdisplayinfo";
     platforms = lib.platforms.linux;
     license = lib.licenses.boost;
     maintainers = [ lib.maintainers.LunNova ];
+=======
+  meta = with lib; {
+    description = "Print displays and modes enumerated with the Vulkan function vkGetPhysicalDeviceDisplayPropertiesKHR";
+    homepage = "https://github.com/ChristophHaag/vkdisplayinfo";
+    platforms = platforms.linux;
+    license = licenses.boost;
+    maintainers = [ maintainers.LunNova ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vkdisplayinfo";
   };
 }

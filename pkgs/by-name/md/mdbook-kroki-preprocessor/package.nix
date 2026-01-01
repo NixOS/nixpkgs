@@ -27,12 +27,21 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Render Kroki diagrams from files or code blocks in mdbook";
     mainProgram = "mdbook-kroki-preprocessor";
     homepage = "https://github.com/joelcourtney/mdbook-kroki-preprocessor";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Render Kroki diagrams from files or code blocks in mdbook";
+    mainProgram = "mdbook-kroki-preprocessor";
+    homepage = "https://github.com/joelcourtney/mdbook-kroki-preprocessor";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
   };

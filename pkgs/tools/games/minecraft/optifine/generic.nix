@@ -32,7 +32,11 @@ runCommand "optifine-${mcVersion}"
       supportedFeatures = [ "commit" ];
     };
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       homepage = "https://optifine.net/";
       description = "Minecraft ${mcVersion} optimization mod";
       longDescription = ''
@@ -40,10 +44,17 @@ runCommand "optifine-${mcVersion}"
         It allows Minecraft to run faster and look better with full support for HD textures and many configuration options.
         This is for version ${mcVersion} of Minecraft.
       '';
+<<<<<<< HEAD
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       license = lib.licenses.unfree;
       maintainers = [ ];
       platforms = lib.platforms.unix;
+=======
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
+      license = licenses.unfree;
+      maintainers = [ ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "optifine";
     };
   }

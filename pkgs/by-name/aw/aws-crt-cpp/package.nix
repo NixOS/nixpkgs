@@ -72,11 +72,20 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ wrapper around the aws-c-* libraries";
     homepage = "https://github.com/awslabs/aws-crt-cpp";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ r-burns ];
+=======
+  meta = with lib; {
+    description = "C++ wrapper around the aws-c-* libraries";
+    homepage = "https://github.com/awslabs/aws-crt-cpp";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ r-burns ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

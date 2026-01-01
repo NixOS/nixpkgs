@@ -51,11 +51,20 @@ stdenv.mkDerivation rec {
     command = "tracebox -V";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.tracebox.org/";
     description = "Middlebox detection tool";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ ck3d ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://www.tracebox.org/";
+    description = "Middlebox detection tool";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ck3d ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

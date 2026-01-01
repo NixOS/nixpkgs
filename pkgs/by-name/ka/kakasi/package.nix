@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Kanji Kana Simple Inverter";
     longDescription = ''
       KAKASI is the language processing filter to convert Kanji
@@ -22,8 +26,13 @@ stdenv.mkDerivation rec {
       helpful to read Japanese documents.
     '';
     homepage = "http://kakasi.namazu.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   src = fetchurl {

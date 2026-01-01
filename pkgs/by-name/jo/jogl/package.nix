@@ -118,11 +118,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Java libraries for 3D Graphics, Multimedia and Processing";
     homepage = "https://jogamp.org/";
     changelog = "https://jogamp.org/deployment/jogamp-current/archive/ChangeLogs/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Java libraries for 3D Graphics, Multimedia and Processing";
+    homepage = "https://jogamp.org/";
+    changelog = "https://jogamp.org/deployment/jogamp-current/archive/ChangeLogs/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

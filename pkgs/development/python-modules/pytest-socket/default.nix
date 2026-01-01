@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_socket" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest Plugin to disable socket calls during tests";
     homepage = "https://github.com/miketheman/pytest-socket";
     changelog = "https://github.com/miketheman/pytest-socket/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pytest Plugin to disable socket calls during tests";
+    homepage = "https://github.com/miketheman/pytest-socket";
+    changelog = "https://github.com/miketheman/pytest-socket/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

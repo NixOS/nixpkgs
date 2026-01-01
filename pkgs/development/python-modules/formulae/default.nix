@@ -48,11 +48,20 @@ buildPythonPackage rec {
     "formulae.matrices"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://bambinos.github.io/formulae";
     description = "Formulas for mixed-effects models in Python";
     changelog = "https://github.com/bambinos/formulae/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    homepage = "https://bambinos.github.io/formulae";
+    description = "Formulas for mixed-effects models in Python";
+    changelog = "https://github.com/bambinos/formulae/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,6 +27,7 @@ buildGoModule rec {
     install -Dm444 -t "$out/lib/systemd/system/" systemd/glider@.service
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/nadoo/glider";
     description = "Forward proxy with multiple protocols support";
@@ -34,5 +35,14 @@ buildGoModule rec {
     mainProgram = "glider";
     maintainers = with lib.maintainers; [ oluceps ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/nadoo/glider";
+    description = "Forward proxy with multiple protocols support";
+    license = licenses.gpl3Only;
+    mainProgram = "glider";
+    maintainers = with maintainers; [ oluceps ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -105,12 +105,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Odin 2 Synthesizer Plugin";
     homepage = "https://thewavewarden.com/odin2";
     license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ magnetophon ];
+=======
+  meta = with lib; {
+    description = "Odin 2 Synthesizer Plugin";
+    homepage = "https://thewavewarden.com/odin2";
+    license = licenses.gpl3;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ magnetophon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "Odin2";
   };
 })

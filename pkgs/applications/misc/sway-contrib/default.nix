@@ -26,10 +26,17 @@ let
     hash = "sha256-/gWL0hA8hDjpK5YJxuZqmvo0zuVRQkhAkgHlI4JzNP8=";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/OctopusET/sway-contrib";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/OctopusET/sway-contrib";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 {

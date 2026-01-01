@@ -2,14 +2,18 @@
   lib,
   stdenv,
   nodejs,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
   callPackage,
   nixosTests,
+<<<<<<< HEAD
   authelia-web ? callPackage ./web.nix {
     inherit
       nodejs
@@ -19,6 +23,9 @@
       fetchFromGitHub
       ;
   },
+=======
+  authelia-web ? callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; },
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -99,7 +106,11 @@ buildGoModule rec {
     tests = { inherit (nixosTests) authelia; };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.authelia.com/";
     changelog = "https://github.com/authelia/authelia/releases/tag/v${version}";
     description = "Single Sign-On Multi-Factor portal for web apps";
@@ -111,8 +122,13 @@ buildGoModule rec {
       should either be allowed or redirected to Authelia's portal for
       authentication.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jk
       dit7ya
       nicomem

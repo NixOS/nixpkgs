@@ -231,6 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/8028d88e6876ca5977de13c58b54e243229efe98/debian/patches/16-no-update.patch";
         hash = "sha256-AGtFsRjwd8Yw296eqX3NC2TUptAhpFTRaOMutiheQ6Y=";
       })
+<<<<<<< HEAD
       # NAT network shouldn't fully saturate one CPU
       # https://github.com/VirtualBox/virtualbox/issues/356
       (fetchpatch {
@@ -239,6 +240,8 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-7u3kSszv77leZdMs911TzAchU5mBqmNpgvuZDQaY9To=";
         hunks = [ "2-" ];
       })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ]
     ++ [ ./extra_symbols.patch ]
     # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
@@ -427,6 +430,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      sander
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       friedrichaltheide
       blitz
     ];

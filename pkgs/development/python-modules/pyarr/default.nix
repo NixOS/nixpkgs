@@ -57,11 +57,20 @@ buildPythonPackage rec {
     "test_upd"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for Servarr API's (Sonarr, Radarr, Readarr, Lidarr)";
     homepage = "https://github.com/totaldebug/pyarr";
     changelog = "https://github.com/totaldebug/pyarr/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Python client for Servarr API's (Sonarr, Radarr, Readarr, Lidarr)";
+    homepage = "https://github.com/totaldebug/pyarr";
+    changelog = "https://github.com/totaldebug/pyarr/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

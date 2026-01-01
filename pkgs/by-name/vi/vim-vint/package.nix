@@ -51,6 +51,10 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     pytest-cov-stub
   ]);
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Fast and Highly Extensible Vim script Language Lint implemented by Python";

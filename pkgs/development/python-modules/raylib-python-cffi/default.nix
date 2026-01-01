@@ -17,14 +17,22 @@
 
 buildPythonPackage rec {
   pname = "raylib-python-cffi";
+<<<<<<< HEAD
   version = "5.5.0.4";
+=======
+  version = "5.5.0.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "electronstudio";
     repo = "raylib-python-cffi";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MKyTpGnup4QmRui2OVBpnyn9KENATWcwYcikOmYX4c8=";
+=======
+    hash = "sha256-VsdUOk26xXEwha7kGYHy4Cgwrr3yOiSlJg4nYn+ZYYs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

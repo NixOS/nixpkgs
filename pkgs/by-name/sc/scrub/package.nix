@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
+<<<<<<< HEAD
   meta = {
     description = "Disk overwrite utility";
     homepage = "https://github.com/chaos/scrub";
@@ -33,6 +34,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ j0hax ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Disk overwrite utility";
+    homepage = "https://github.com/chaos/scrub";
+    changelog = "https://raw.githubusercontent.com/chaos/scrub/master/NEWS";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ j0hax ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "scrub";
   };
 }

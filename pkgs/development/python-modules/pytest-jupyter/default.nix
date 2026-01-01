@@ -60,7 +60,11 @@ let
       pytest-timeout
       pytestCheckHook
     ]
+<<<<<<< HEAD
     ++ lib.concatAttrValues optional-dependencies;
+=======
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     passthru.tests = {
       check = self.overridePythonAttrs (_: {
@@ -68,11 +72,19 @@ let
       });
     };
 
+<<<<<<< HEAD
     meta = {
       changelog = "https://github.com/jupyter-server/pytest-jupyter/releases/tag/v${version}";
       description = "Pytest plugin for testing Jupyter core libraries and extensions";
       homepage = "https://github.com/jupyter-server/pytest-jupyter";
       license = lib.licenses.bsd3;
+=======
+    meta = with lib; {
+      changelog = "https://github.com/jupyter-server/pytest-jupyter/releases/tag/v${version}";
+      description = "Pytest plugin for testing Jupyter core libraries and extensions";
+      homepage = "https://github.com/jupyter-server/pytest-jupyter";
+      license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maintainers = [ ];
     };
   };

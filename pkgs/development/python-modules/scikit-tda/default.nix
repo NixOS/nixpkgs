@@ -55,10 +55,17 @@ buildPythonPackage rec {
   # tests will be included in next release
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Topological Data Analysis for humans";
     homepage = "https://github.com/scikit-tda/scikit-tda";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Topological Data Analysis for humans";
+    homepage = "https://github.com/scikit-tda/scikit-tda";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

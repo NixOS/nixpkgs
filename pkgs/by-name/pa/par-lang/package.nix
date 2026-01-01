@@ -16,13 +16,22 @@
 
 rustPlatform.buildRustPackage {
   pname = "par-lang";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-04";
+=======
+  version = "0-unstable-2025-11-20";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "faiface";
     repo = "par-lang";
+<<<<<<< HEAD
     rev = "9056718048a5c8d1ff32c60f9fc5db5af36a0259";
     hash = "sha256-uerYlhUqwpt3BbYiN6+CubhZAcMRXTFKqKSqyqh5WYY=";
+=======
+    rev = "1f6671068d93defdd14a7ff86b9fc167b6949906";
+    hash = "sha256-skBH5m/cJ7CZJqfDtKxk8AqaP/dwGCmEb9CDtmMUzlU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoHash = "sha256-sW+gAIp/DjlTo44QDXpP6COrCK/CcDlx3no284MEQJo=";

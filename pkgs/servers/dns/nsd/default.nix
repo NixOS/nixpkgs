@@ -80,10 +80,19 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) nsd;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.nlnetlabs.nl";
     description = "Authoritative only, high performance, simple and open source name server";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.nlnetlabs.nl";
+    description = "Authoritative only, high performance, simple and open source name server";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.hrdinka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

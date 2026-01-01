@@ -32,10 +32,18 @@ buildDunePackage rec {
     logs
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Virtual network interface and software switch for Mirage";
     homepage = "https://github.com/mirage/${pname}";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Virtual network interface and software switch for Mirage";
+    homepage = "https://github.com/mirage/${pname}";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Analyze GHC .dump-timings files";
     mainProgram = "time-ghc-modules";
@@ -60,5 +61,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.thomasjm ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Analyze GHC .dump-timings files";
+    mainProgram = "time-ghc-modules";
+    homepage = "https://github.com/codedownio/time-ghc-modules";
+    license = licenses.mit;
+    maintainers = [ maintainers.thomasjm ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

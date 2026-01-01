@@ -37,11 +37,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Django-compressor filter to compile SASS files using libsass";
     homepage = "https://github.com/torchbox/django-libsass";
     changelog = "https://github.com/torchbox/django-libsass/blob/${src.rev}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Django-compressor filter to compile SASS files using libsass";
+    homepage = "https://github.com/torchbox/django-libsass";
+    changelog = "https://github.com/torchbox/django-libsass/blob/${src.rev}/CHANGELOG.txt";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

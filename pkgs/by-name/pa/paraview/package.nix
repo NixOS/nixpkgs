@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XlasevXpJbPP0/q4JHCTPLq8fo/ah+FK9k+ZXWBk6wY=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     # When building paraview with external vtk, we can not infer resource_dir
     # from the path of vtk's libraries. Thus hardcoding the resource_dir.
@@ -43,6 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
       ThirdParty/QtTesting/vtkqttesting/{pqAbstractItemViewEventTranslator,pqBasicWidgetEventTranslator}.cxx \
       --replace-fail "mouseEvent->buttons()" "static_cast<int>(mouseEvent->buttons())" \
       --replace-fail "mouseEvent->modifiers()" "static_cast<int>(mouseEvent->modifiers())"
+=======
+  # When building paraview with external vtk, we can not infer resource_dir
+  # from the path of vtk's libraries. Thus hardcoding the resource_dir.
+  # See https://gitlab.kitware.com/paraview/paraview/-/issues/23043.
+  postPatch = ''
+    substituteInPlace Remoting/Core/vtkPVFileInformation.cxx \
+      --replace-fail "return resource_dir;" "return \"$out/share/paraview\";"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   nativeBuildInputs = [

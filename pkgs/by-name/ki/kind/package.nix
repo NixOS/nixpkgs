@@ -11,13 +11,21 @@
 
 buildGoModule rec {
   pname = "kind";
+<<<<<<< HEAD
   version = "0.31.0";
+=======
+  version = "0.30.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "kubernetes-sigs";
     repo = "kind";
+<<<<<<< HEAD
     hash = "sha256-3icwtfwlSkYOEw9bzEhKJC7OtE1lnBjZSYp+cC/2XNc=";
+=======
+    hash = "sha256-TssyKO5v3xqSDjS3DYIlO7iOx/zzS3E9O88V9R7S5Ac=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -52,6 +60,7 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage = "https://github.com/kubernetes-sigs/kind";
@@ -60,6 +69,16 @@ buildGoModule rec {
       rawkode
     ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
+    homepage = "https://github.com/kubernetes-sigs/kind";
+    maintainers = with maintainers; [
+      offline
+      rawkode
+    ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kind";
   };
 }

@@ -61,6 +61,7 @@ stdenv.mkDerivation {
   ];
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
     description = "GTKv2 client for the Crossfire free MMORPG";
     mainProgram = "crossfire-client-gtk2";
@@ -68,5 +69,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ToxicFrog ];
+=======
+  meta = with lib; {
+    description = "GTKv2 client for the Crossfire free MMORPG";
+    mainProgram = "crossfire-client-gtk2";
+    homepage = "http://crossfire.real-time.com/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ToxicFrog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

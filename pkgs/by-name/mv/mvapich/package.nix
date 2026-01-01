@@ -113,11 +113,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "MPI-3.1 implementation optimized for Infiband transport";
     homepage = "https://mvapich.cse.ohio-state.edu";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "MPI-3.1 implementation optimized for Infiband transport";
+    homepage = "https://mvapich.cse.ohio-state.edu";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.markuskowa ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

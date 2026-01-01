@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "otpauth" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implements one time password of HOTP/TOTP";
     homepage = "https://otp.authlib.org/";
     changelog = "https://github.com/authlib/otpauth/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Implements one time password of HOTP/TOTP";
+    homepage = "https://otp.authlib.org/";
+    changelog = "https://github.com/authlib/otpauth/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

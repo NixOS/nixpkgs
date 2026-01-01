@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_mailman" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/waynerv/flask-mailman/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://github.com/waynerv/flask-mailman";
     description = "Flask extension providing simple email sending capabilities";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/waynerv/flask-mailman/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/waynerv/flask-mailman";
+    description = "Flask extension providing simple email sending capabilities";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

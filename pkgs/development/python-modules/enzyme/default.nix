@@ -20,9 +20,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Diaoul/enzyme";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Diaoul/enzyme";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python video metadata parser";
   };
 }

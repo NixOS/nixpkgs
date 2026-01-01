@@ -42,12 +42,21 @@ stdenv.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for controlling network drivers and hardware";
     homepage = "https://www.kernel.org/pub/software/network/ethtool/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Utility for controlling network drivers and hardware";
+    homepage = "https://www.kernel.org/pub/software/network/ethtool/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ethtool";
   };
 }

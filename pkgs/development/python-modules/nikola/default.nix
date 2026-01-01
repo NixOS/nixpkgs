@@ -111,12 +111,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nikola" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Static website and blog generator";
     homepage = "https://getnikola.com/";
     changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Static website and blog generator";
+    homepage = "https://getnikola.com/";
+    changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nikola";
   };
 }

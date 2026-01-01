@@ -31,11 +31,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smpplib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "SMPP library for Python";
     homepage = "https://github.com/python-smpplib/python-smpplib";
     changelog = "https://github.com/python-smpplib/python-smpplib/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "SMPP library for Python";
+    homepage = "https://github.com/python-smpplib/python-smpplib";
+    changelog = "https://github.com/python-smpplib/python-smpplib/releases/tag/${version}";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

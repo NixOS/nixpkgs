@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "niaclass" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Framework for solving classification tasks using Nature-inspired algorithms";
     homepage = "https://github.com/firefly-cpp/NiaClass";
     changelog = "https://github.com/firefly-cpp/NiaClass/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ firefly-cpp ];
+=======
+  meta = with lib; {
+    description = "Framework for solving classification tasks using Nature-inspired algorithms";
+    homepage = "https://github.com/firefly-cpp/NiaClass";
+    changelog = "https://github.com/firefly-cpp/NiaClass/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ firefly-cpp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

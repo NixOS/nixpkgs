@@ -102,11 +102,22 @@ let
 
       passthru.tests = { inherit (nixosTests) deluge; };
 
+<<<<<<< HEAD
       meta = {
         description = "Torrent client";
         homepage = "https://deluge-torrent.org";
         license = lib.licenses.gpl3Plus;
         platforms = lib.platforms.all;
+=======
+      meta = with lib; {
+        description = "Torrent client";
+        homepage = "https://deluge-torrent.org";
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [
+          ebzzry
+        ];
+        platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 

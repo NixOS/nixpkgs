@@ -48,11 +48,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "viv_utils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for working with vivisect";
     homepage = "https://github.com/williballenthin/viv-utils";
     changelog = "https://github.com/williballenthin/viv-utils/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Utilities for working with vivisect";
+    homepage = "https://github.com/williballenthin/viv-utils";
+    changelog = "https://github.com/williballenthin/viv-utils/releases/tag/${src.tag}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -38,11 +38,20 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
 
     dontFixup = true;
 
+<<<<<<< HEAD
     meta = {
       description = "FairyWren Icon Set";
       homepage = "https://gitlab.com/aiyahm/FairyWren-Icons";
       maintainers = with lib.maintainers; [ d3vil0p3r ];
       platforms = lib.platforms.all;
       license = with lib.licenses; [ gpl3Plus ];
+=======
+    meta = with lib; {
+      description = "FairyWren Icon Set";
+      homepage = "https://gitlab.com/aiyahm/FairyWren-Icons";
+      maintainers = with maintainers; [ d3vil0p3r ];
+      platforms = platforms.all;
+      license = with licenses; [ gpl3Plus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }

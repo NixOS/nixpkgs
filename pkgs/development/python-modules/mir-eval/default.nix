@@ -39,7 +39,11 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mpl
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     pushd tests
@@ -51,10 +55,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mir_eval" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Common metrics for common audio/music processing tasks";
     homepage = "https://github.com/craffel/mir_eval";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ carlthome ];
+=======
+  meta = with lib; {
+    description = "Common metrics for common audio/music processing tasks";
+    homepage = "https://github.com/craffel/mir_eval";
+    license = licenses.mit;
+    maintainers = with maintainers; [ carlthome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

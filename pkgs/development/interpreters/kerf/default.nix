@@ -81,7 +81,11 @@ stdenv.mkDerivation rec {
 
   installPhase = "install -D kerf $out/bin/kerf";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Columnar tick database and time-series language";
     mainProgram = "kerf";
     longDescription = ''
@@ -90,10 +94,17 @@ stdenv.mkDerivation rec {
       used for local analytics, timeseries, logfile processing,
       and more.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [ bsd2 ];
     homepage = "https://github.com/kevinlawler/kerf1";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+    license = with licenses; [ bsd2 ];
+    homepage = "https://github.com/kevinlawler/kerf1";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # aarch64-linux seems hopeless, with over 2,000 warnings
     # generated?

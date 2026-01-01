@@ -21,13 +21,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
+<<<<<<< HEAD
   version = "6.6.1";
+=======
+  version = "6.4.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-desktop";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-vBRaUXsPAPOpMEs2pl6AaaKIMeeXB0UdCb1hzYd43KY=";
+=======
+    hash = "sha256-kNxVdPtCQtz4TSyCc6uKHmAGWm2nlWnLwC3Cm0E42Jc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -67,7 +75,11 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon/share/cinnamon
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/linuxmint/cinnamon-desktop";
     description = "Library and data for various Cinnamon modules";
 
@@ -80,10 +92,18 @@ stdenv.mkDerivation rec {
     '';
 
     license = [
+<<<<<<< HEAD
       lib.licenses.gpl2
       lib.licenses.lgpl2
     ];
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+      licenses.gpl2
+      licenses.lgpl2
+    ];
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

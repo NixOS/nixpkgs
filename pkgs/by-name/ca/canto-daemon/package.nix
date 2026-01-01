@@ -24,7 +24,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "canto_next" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Daemon for the canto Atom/RSS feed reader";
     longDescription = ''
       Canto is an Atom/RSS feed reader for the console that is meant to be
@@ -35,8 +39,14 @@ python3Packages.buildPythonApplication rec {
       and extensibility using the excellent Python programming language.
     '';
     homepage = "https://codezen.org/canto-ng/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ devhell ];
+=======
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ devhell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

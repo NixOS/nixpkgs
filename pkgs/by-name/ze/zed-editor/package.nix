@@ -77,11 +77,14 @@ let
         ])
         ++ additionalPkgs pkgs;
 
+<<<<<<< HEAD
       extraBwrapArgs = [
         "--bind-try /etc/nixos/ /etc/nixos/"
         "--ro-bind-try /etc/xdg/ /etc/xdg/"
       ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # symlink shared assets, including icons and desktop entries
       extraInstallCommands = ''
         ln -s "${zed-editor}/share" "$out/"
@@ -106,7 +109,11 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
+<<<<<<< HEAD
   version = "0.217.3";
+=======
+  version = "0.214.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -119,7 +126,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-flUkt39vttnF1HjzxLQ4pizFqxHxlIkaV+mb/GtxphU=";
+=======
+    hash = "sha256-QEhvp0/ywD6bZff0VZ1mrs2oB3UGHaZl707kWBaZJOk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -139,7 +150,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
+<<<<<<< HEAD
   cargoHash = "sha256-ZUHz93ImWj3S5kRaWsiLz4Xc0sdaWzy+4CxCW5cvEf0=";
+=======
+  cargoHash = "sha256-y5hFHYoG1tM+O/64cDhjLbbQxiL0pTgSPRxVVuo0Bs4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     cmake
@@ -311,13 +326,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
+<<<<<<< HEAD
         "^v(?!.*(?:-pre|0\\.999999\\.0|0\\.9999-temporary)$)(.+)$"
+=======
+        "^v(?!.*(?:-pre|0\.999999\.0|0\.9999-temporary)$)(.+)$"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         # use github releases instead of git tags
         # zed sometimes moves git tags, making them unreliable

@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Osmocom Abis interface library";
     homepage = "https://github.com/osmocom/libosmo-abis";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Osmocom Abis interface library";
+    homepage = "https://github.com/osmocom/libosmo-abis";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       markuskowa
     ];
   };

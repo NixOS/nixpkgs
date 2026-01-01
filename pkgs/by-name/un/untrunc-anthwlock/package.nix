@@ -2,9 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   ffmpeg_6,
   libui,
   pkg-config,
+=======
+  ffmpeg,
+  libui,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   unstableGitUpdater,
   wrapGAppsHook3,
 }:
@@ -20,6 +25,7 @@ stdenv.mkDerivation {
     hash = "sha256-4GIPj8so7POEwxKZzFBoJTu76XKbGHYmXC/ILeo0dVE=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
@@ -41,6 +47,15 @@ stdenv.mkDerivation {
       --replace "-lui -lpthread" "\$(shell pkg-config --libs libui) -lpthread"
   '';
 
+=======
+  nativeBuildInputs = [ wrapGAppsHook3 ];
+
+  buildInputs = [
+    ffmpeg
+    libui
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPhase = ''
     runHook preBuild
     make IS_RELEASE=1 untrunc
@@ -61,6 +76,7 @@ stdenv.mkDerivation {
     hardcodeZeroVersion = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Restore a truncated mp4/mov (improved version of ponchio/untrunc)";
     homepage = "https://github.com/anthwlock/untrunc";
@@ -68,5 +84,13 @@ stdenv.mkDerivation {
     mainProgram = "untrunc";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Restore a truncated mp4/mov (improved version of ponchio/untrunc)";
+    homepage = "https://github.com/anthwlock/untrunc";
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

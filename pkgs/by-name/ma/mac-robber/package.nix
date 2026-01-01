@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Digital investigation tool that collects data from allocated files in a mounted file system";
     mainProgram = "mac-robber";
@@ -40,5 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Digital investigation tool that collects data from allocated files in a mounted file system";
+    mainProgram = "mac-robber";
+    homepage = "https://www.sleuthkit.org/mac-robber/";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

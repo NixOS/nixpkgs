@@ -9,16 +9,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xleak";
+<<<<<<< HEAD
   version = "0.2.5";
+=======
+  version = "0.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "bgreenwell";
     repo = "xleak";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-5amFyNI1cfTu9b5PV7/n4XIXZbFoSnaTyZo7oPpDQL4=";
   };
 
   cargoHash = "sha256-FkSpMwkrnibOWAPbrE9Pycxc4To5jFHbma8YKGgXWSU=";
+=======
+    hash = "sha256-n9AFNGr5kRbQr2P/6QFT0KkuiE6KPun1FZjwrq2iQZs=";
+  };
+
+  cargoHash = "sha256-wWN8FSaIndp9piqRHMMYyWp7iynhWQeUfzT8FDYQUyA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

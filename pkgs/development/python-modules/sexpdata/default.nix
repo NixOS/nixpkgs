@@ -24,11 +24,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sexpdata" ];
 
+<<<<<<< HEAD
   meta = {
     description = "S-expression parser for Python";
     homepage = "https://github.com/jd-boyd/sexpdata";
     changelog = "https://github.com/jd-boyd/sexpdata/releases/tag/v${version}";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "S-expression parser for Python";
+    homepage = "https://github.com/jd-boyd/sexpdata";
+    changelog = "https://github.com/jd-boyd/sexpdata/releases/tag/v${version}";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

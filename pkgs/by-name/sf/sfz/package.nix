@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
   # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple static file serving command-line tool written in Rust";
     homepage = "https://github.com/weihanglo/sfz";
@@ -28,6 +29,16 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Simple static file serving command-line tool written in Rust";
+    homepage = "https://github.com/weihanglo/sfz";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sfz";
   };
 }

@@ -26,10 +26,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bravia_tv" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dcnielsen90/python-bravia-tv";
     description = "Python library for Sony Bravia TV remote control";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dcnielsen90/python-bravia-tv";
+    description = "Python library for Sony Bravia TV remote control";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

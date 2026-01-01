@@ -21,12 +21,21 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for creating better commits following the conventional commits specification";
     homepage = "https://github.com/Everduin94/better-commits";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ilarvne ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "CLI for creating better commits following the conventional commits specification";
+    homepage = "https://github.com/Everduin94/better-commits";
+    license = licenses.mit;
+    maintainers = [ maintainers.ilarvne ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "better-commits";
   };
 }

@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thttp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight wrapper around urllib";
     homepage = "https://github.com/sesh/thttp";
     changelog = "https://github.com/sesh/thttp/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Lightweight wrapper around urllib";
+    homepage = "https://github.com/sesh/thttp";
+    changelog = "https://github.com/sesh/thttp/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

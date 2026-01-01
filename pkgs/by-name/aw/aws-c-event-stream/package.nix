@@ -43,11 +43,20 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C99 implementation of the vnd.amazon.eventstream content-type";
     homepage = "https://github.com/awslabs/aws-c-event-stream";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "C99 implementation of the vnd.amazon.eventstream content-type";
+    homepage = "https://github.com/awslabs/aws-c-event-stream";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -4,7 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+<<<<<<< HEAD
   pythonAtLeast,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # buildInputs
   openssl,
@@ -15,12 +18,17 @@
 
   # dependencies
   deprecation,
+<<<<<<< HEAD
   lance-namespace,
   numpy,
+=======
+  overrides,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   packaging,
   pyarrow,
   pydantic,
   tqdm,
+<<<<<<< HEAD
   pythonOlder,
   overrides,
 
@@ -29,34 +37,56 @@
   boto3,
   datafusion,
   duckdb,
+=======
+
+  # tests
+  aiohttp,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pandas,
   polars,
   pylance,
   pytest-asyncio,
+<<<<<<< HEAD
   pytest-mock,
   pytestCheckHook,
   tantivy,
 
+=======
+  pytestCheckHook,
+  duckdb,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "lancedb";
+<<<<<<< HEAD
   version = "0.26.0";
+=======
+  version = "0.21.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${version}";
+<<<<<<< HEAD
     hash = "sha256-urOHHuPFce7Ms1EqjM4n72zx0APVrIQ1bLIkmrp/Dec=";
+=======
+    hash = "sha256-ZPVkMlZz6lSF4ZCIX6fGcfCvni3kXCLPLXZqZw7icpE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
+<<<<<<< HEAD
     hash = "sha256-03p1mDsE//YafUGImB9xMqqUzKlBD9LCiV1RGP2L5lw=";
+=======
+    hash = "sha256-Q3ejJsddHLGGbw3peLRtjPqBrS6fNi0C3K2UWpcM/4k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -71,33 +101,54 @@ buildPythonPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   dependencies = [
     deprecation
     lance-namespace
     numpy
+=======
+  pythonRelaxDeps = [
+    # pylance is pinned to a specific release
+    "pylance"
+  ];
+
+  dependencies = [
+    deprecation
+    overrides
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     packaging
     pyarrow
     pydantic
     tqdm
+<<<<<<< HEAD
   ]
   ++ lib.optionals (pythonOlder "3.12") [
     overrides
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pythonImportsCheck = [ "lancedb" ];
 
   nativeCheckInputs = [
     aiohttp
+<<<<<<< HEAD
     boto3
     datafusion
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     duckdb
     pandas
     polars
     pylance
     pytest-asyncio
+<<<<<<< HEAD
     pytest-mock
     pytestCheckHook
     tantivy
+=======
+    pytestCheckHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   preCheck = ''
@@ -106,6 +157,7 @@ buildPythonPackage rec {
 
   disabledTestMarks = [ "slow" ];
 
+<<<<<<< HEAD
   disabledTests =
     lib.optionals (pythonAtLeast "3.14") [
       # TypeError: Converting Pydantic type to Arrow Type: unsupported type
@@ -122,6 +174,20 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # touch the network
     "test_namespace_integration.py"
+=======
+  disabledTests = [
+    # require tantivy which is not packaged in nixpkgs
+    "test_basic"
+    "test_fts_native"
+
+    # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
+    # https://github.com/lancedb/lancedb/issues/1539
+    "test_polars"
+  ];
+
+  disabledTestPaths = [
+    # touch the network
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_s3.py"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

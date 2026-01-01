@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sr.ht/~emersion/libscfg";
     description = "Simple configuration file format";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ michaeladler ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://sr.ht/~emersion/libscfg";
+    description = "Simple configuration file format";
+    license = licenses.mit;
+    maintainers = with maintainers; [ michaeladler ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

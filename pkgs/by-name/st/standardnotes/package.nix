@@ -78,20 +78,33 @@ stdenv.mkDerivation {
 
   passthru.updateScript = callPackage ./update.nix { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple and private notes app";
     longDescription = ''
       Standard Notes is a private notes app that features unmatched simplicity,
       end-to-end encryption, powerful extensions, and open-source applications.
     '';
     homepage = "https://standardnotes.org";
+<<<<<<< HEAD
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mgregoire
       chuangzhu
       squalus
     ];
+<<<<<<< HEAD
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+=======
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = builtins.attrNames srcjson.deb;
     mainProgram = "standardnotes";
   };

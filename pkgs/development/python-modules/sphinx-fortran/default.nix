@@ -35,10 +35,18 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fortran domain and autodoc extensions to Sphinx";
     homepage = "http://sphinx-fortran.readthedocs.org/";
     license = lib.licenses.cecill21;
     maintainers = with lib.maintainers; [ loicreynier ];
+=======
+  meta = with lib; {
+    description = "Fortran domain and autodoc extensions to Sphinx";
+    homepage = "http://sphinx-fortran.readthedocs.org/";
+    license = licenses.cecill21;
+    maintainers = with maintainers; [ loicreynier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

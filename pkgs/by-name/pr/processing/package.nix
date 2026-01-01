@@ -17,7 +17,11 @@
 }:
 let
   jdk = jdk17;
+<<<<<<< HEAD
   buildNumber = "1310";
+=======
+  buildNumber = "1295";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -62,16 +66,29 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "processing";
+<<<<<<< HEAD
   version = "4.4.10";
+=======
+  version = "4.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-u2wQl/VGCNJPd+k3DX2eW7gkA/RARMTSNGcoQuS/Oh8=";
   };
 
   patches = [ ./fix-ant-build.patch ];
+=======
+    sha256 = "sha256-jUkWnkP8up5vpaXfgFJ/jQjN1KfeX5EuYXSb+W6NEms=";
+  };
+
+  # Processing did not update the todo.txt file before tagging this release, so
+  # the "revision-check" Ant target fails.
+  patches = [ ./disable-revision-check.patch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     ant
@@ -96,8 +113,13 @@ stdenv.mkDerivation rec {
 
     echo "tarring jdk"
     tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
+<<<<<<< HEAD
     mkdir -p app/lib core/library
     cp ${ant.home}/lib/{ant.jar,ant-launcher.jar} app/lib/
+=======
+    cp ${ant.home}/lib/{ant.jar,ant-launcher.jar} app/lib/
+    mkdir -p core/library
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ln -s ${jogl}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
@@ -127,6 +149,7 @@ stdenv.mkDerivation rec {
     cp -dpr build/linux/work $out/share/${pname}
     rmdir $out/share/${pname}/java
     ln -s ${jdk} $out/share/${pname}/java
+<<<<<<< HEAD
     runHook postInstall
   '';
 
@@ -150,5 +173,28 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ evan-goode ];
+=======
+    makeWrapper $out/share/${pname}/processing $out/bin/processing \
+      ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+    makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
+      ''${gappsWrapperArgs[@]} \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
+    description = "Language and IDE for electronic arts";
+    homepage = "https://processing.org";
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ evan-goode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

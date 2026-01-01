@@ -37,14 +37,22 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "KnobKraft-orm";
 
+<<<<<<< HEAD
   version = "2.7.2";
+=======
+  version = "2.7.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "christofmuc";
     repo = "knobkraft-orm";
     tag = finalAttrs.version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-1mPeiey0hbJmg5k9R06wnDIGDDxbOfRixQ0zoFa4zYA=";
+=======
+    hash = "sha256-dOgPq4r2IvKDPhhV/LWRfGeeFckN5ZUeee/T6QNfCtw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

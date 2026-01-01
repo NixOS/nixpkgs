@@ -33,11 +33,19 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal based file explorer";
     homepage = "https://github.com/dmcg310/Rust-Traverse";
     changelog = "https://github.com/dmcg310/Rust-Traverse/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Terminal based file explorer";
+    homepage = "https://github.com/dmcg310/Rust-Traverse";
+    changelog = "https://github.com/dmcg310/Rust-Traverse/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "rt";
   };

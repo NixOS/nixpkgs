@@ -125,7 +125,11 @@ stdenv.mkDerivation (
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "2D graphics library with support for multiple output devices";
       mainProgram = "cairo-trace";
       longDescription = ''
@@ -139,7 +143,11 @@ stdenv.mkDerivation (
         when available (e.g., through the X Render Extension).
       '';
       homepage = "http://cairographics.org/";
+<<<<<<< HEAD
       license = with lib.licenses; [
+=======
+      license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         lgpl2Plus
         mpl10
       ];
@@ -149,7 +157,11 @@ stdenv.mkDerivation (
         "cairo-svg"
       ]
       ++ lib.optional gobjectSupport "cairo-gobject";
+<<<<<<< HEAD
       platforms = lib.platforms.all;
+=======
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
 )

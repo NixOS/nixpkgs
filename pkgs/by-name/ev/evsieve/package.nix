@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # unit tests create uinput devices
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for mapping events from Linux event devices";
     mainProgram = "evsieve";
@@ -29,5 +30,14 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tsowell ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Utility for mapping events from Linux event devices";
+    mainProgram = "evsieve";
+    homepage = "https://github.com/KarsMulder/evsieve";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ tsowell ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

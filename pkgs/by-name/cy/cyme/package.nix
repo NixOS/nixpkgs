@@ -52,6 +52,7 @@ rustPlatform.buildRustPackage rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+<<<<<<< HEAD
 
   passthru.updateScript = nix-update-script { };
 
@@ -62,6 +63,19 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ h7x4 ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
+=======
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = with lib; {
+    homepage = "https://github.com/tuna-f1sh/cyme";
+    changelog = "https://github.com/tuna-f1sh/cyme/releases/tag/${src.rev}";
+    description = "Modern cross-platform lsusb";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ h7x4 ];
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cyme";
   };
 }

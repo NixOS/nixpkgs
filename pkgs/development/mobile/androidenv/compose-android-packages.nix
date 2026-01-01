@@ -14,7 +14,11 @@ let
   # Coerces a string to an int.
   coerceInt = val: if lib.isInt val then val else lib.toIntBase10 val;
 
+<<<<<<< HEAD
   coerceIntVersion = v: coerceInt (lib.versions.major (toString v));
+=======
+  coerceIntVersion = v: coerceInt (lib.versions.major v);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Parses a single version, substituting "latest" with the latest version.
   parseVersion =
@@ -24,9 +28,13 @@ let
   # Parses a list of versions, substituting "latest" with the latest version.
   parseVersions =
     repo: key: versions:
+<<<<<<< HEAD
     lib.sort (a: b: lib.strings.compareVersions (toString a) (toString b) > 0) (
       lib.unique (map (parseVersion repo key) versions)
     );
+=======
+    lib.unique (map (parseVersion repo key) versions);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 {
   repoJson ? ./repo.json,
@@ -100,6 +108,7 @@ in
   numLatestPlatformVersions ? 1,
   platformVersions ?
     if minPlatformVersion != null && maxPlatformVersion != null then
+<<<<<<< HEAD
       # Range between min and max, inclusive.
       let
         minPlatformVersion' = parseVersion repo "platforms" minPlatformVersion;
@@ -121,6 +130,16 @@ in
     else
       # Use numLatestPlatformVersions with a lower cutoff of minPlatformVersion (defaulting to 1)
       # to determine how many of the latest *major* versions we should pick.
+=======
+      let
+        minPlatformVersionInt = coerceIntVersion (parseVersion repo "platforms" minPlatformVersion);
+        maxPlatformVersionInt = coerceIntVersion (parseVersion repo "platforms" maxPlatformVersion);
+      in
+      lib.range (lib.min minPlatformVersionInt maxPlatformVersionInt) (
+        lib.max minPlatformVersionInt maxPlatformVersionInt
+      )
+    else
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       let
         minPlatformVersionInt =
           if minPlatformVersion == null then
@@ -131,10 +150,15 @@ in
         firstPlatformVersionInt = lib.max minPlatformVersionInt (
           latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
         );
+<<<<<<< HEAD
         range = lib.range firstPlatformVersionInt latestPlatformVersionInt;
       in
       # Ditto, see above.
       if lib.length range == 1 then lib.singleton repo.latest.platforms else range,
+=======
+      in
+      lib.range firstPlatformVersionInt latestPlatformVersionInt,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   includeSources ? false,
   includeSystemImages ? false,
   systemImageTypes ? [
@@ -161,7 +185,11 @@ in
 
 let
   # Resolve all the platform versions.
+<<<<<<< HEAD
   platformVersions' = parseVersions repo "platforms" platformVersions;
+=======
+  platformVersions' = map coerceInt (parseVersions repo "platforms" platformVersions);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Determine the Android os identifier from Nix's system identifier
   os =
@@ -301,6 +329,7 @@ let
     lib.hasAttrByPath [ package (toString version) ] packages;
 
   # Displays a nice error message that includes the available options if a version doesn't exist.
+<<<<<<< HEAD
   # Note that allPackages can be a list of package sets, or a single package set. Pass a list if
   # you want to prioritize elements to the left (e.g. for passing a platform major version).
   checkVersion =
@@ -323,6 +352,19 @@ let
       ''
     else
       packageSet.${package}.${toString version};
+=======
+  checkVersion =
+    packages: package: version:
+    if hasVersion packages package version then
+      packages.${package}.${toString version}
+    else
+      throw ''
+        The version ${toString version} is missing in package ${package}.
+        The only available versions are ${
+          builtins.concatStringsSep ", " (builtins.attrNames packages.${package})
+        }.
+      '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Returns true if we should link the specified plugins.
   shouldLink =
@@ -536,7 +578,10 @@ lib.recurseIntoAttrs rec {
     '';
   };
 
+<<<<<<< HEAD
   # This is a list of the chosen API levels, as integers.
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   platformVersions = platformVersions';
 
   platforms = map (
@@ -575,7 +620,11 @@ lib.recurseIntoAttrs rec {
                 ) abiVersions
               );
 
+<<<<<<< HEAD
           instructions = lib.listToAttrs (
+=======
+          instructions = builtins.listToAttrs (
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             map (package: {
               name = package.name;
               value = lib.optionalString (lib.hasPrefix "google_apis" type) ''

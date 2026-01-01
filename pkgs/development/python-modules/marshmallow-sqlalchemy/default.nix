@@ -39,11 +39,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SQLAlchemy integration with marshmallow";
     homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
     changelog = "https://github.com/marshmallow-code/marshmallow-sqlalchemy/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "SQLAlchemy integration with marshmallow";
+    homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
+    changelog = "https://github.com/marshmallow-code/marshmallow-sqlalchemy/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

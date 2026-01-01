@@ -41,12 +41,21 @@ buildGoModule rec {
     libqalculate
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wayland-native application runner";
     homepage = "https://github.com/abenz1267/walker";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ donovanglover ];
+=======
+  meta = with lib; {
+    description = "Wayland-native application runner";
+    homepage = "https://github.com/abenz1267/walker";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ donovanglover ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "walker";
   };
 }

@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stestr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parallel Python test runner built around subunit";
     mainProgram = "stestr";
     homepage = "https://github.com/mtreinish/stestr";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Parallel Python test runner built around subunit";
+    mainProgram = "stestr";
+    homepage = "https://github.com/mtreinish/stestr";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

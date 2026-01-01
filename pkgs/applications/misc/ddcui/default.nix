@@ -33,6 +33,7 @@ mkDerivation rec {
     ddcutil
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical user interface for ddcutil - control monitor settings";
     mainProgram = "ddcui";
@@ -40,5 +41,14 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ nh2 ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Graphical user interface for ddcutil - control monitor settings";
+    mainProgram = "ddcui";
+    homepage = "https://www.ddcutil.com/ddcui_main/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ nh2 ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

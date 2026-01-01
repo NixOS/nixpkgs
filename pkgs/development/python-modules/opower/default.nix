@@ -53,11 +53,20 @@ buildPythonPackage rec {
     "test_invalid_auth"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for getting historical and forecasted usage/cost from utilities that use opower.com";
     homepage = "https://github.com/tronikos/opower";
     changelog = "https://github.com/tronikos/opower/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for getting historical and forecasted usage/cost from utilities that use opower.com";
+    homepage = "https://github.com/tronikos/opower";
+    changelog = "https://github.com/tronikos/opower/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

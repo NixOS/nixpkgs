@@ -23,11 +23,19 @@ python3.pkgs.buildPythonApplication {
 
   build-system = with python3.pkgs; [ setuptools ];
 
+<<<<<<< HEAD
   meta = {
     description = "ASCII Header Generator for Network Protocols";
     homepage = "https://github.com/luismartingarcia/protocol";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ teto ];
+=======
+  meta = with lib; {
+    description = "ASCII Header Generator for Network Protocols";
+    homepage = "https://github.com/luismartingarcia/protocol";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ teto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "protocol";
   };
 }

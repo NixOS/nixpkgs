@@ -35,11 +35,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple mock filesystem for use in unit tests";
     homepage = "https://github.com/mockfs/mockfs";
     changelog = "https://github.com/mockfs/mockfs/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple mock filesystem for use in unit tests";
+    homepage = "https://github.com/mockfs/mockfs";
+    changelog = "https://github.com/mockfs/mockfs/blob/${src.rev}/CHANGES.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -35,12 +35,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "youtokentome" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Unsupervised text tokenizer";
     mainProgram = "yttm";
     homepage = "https://github.com/VKCOM/YouTokenToMe";
     changelog = "https://github.com/VKCOM/YouTokenToMe/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

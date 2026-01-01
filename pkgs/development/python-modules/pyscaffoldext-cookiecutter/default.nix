@@ -54,10 +54,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.cookiecutter" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Integration of Cookiecutter project templates into PyScaffold (see: https://github.com/cookiecutter/cookiecutter";
     homepage = "https://pypi.org/project/pyscaffoldext-cookiecutter/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
+=======
+  meta = with lib; {
+    description = "Integration of Cookiecutter project templates into PyScaffold (see: https://github.com/cookiecutter/cookiecutter";
+    homepage = "https://pypi.org/project/pyscaffoldext-cookiecutter/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

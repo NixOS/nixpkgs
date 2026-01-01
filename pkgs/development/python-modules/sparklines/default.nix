@@ -35,6 +35,7 @@ buildPythonPackage rec {
       --replace-fail "/tmp/" "$TMPDIR/"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "This Python package implements Edward Tufte's concept of sparklines, but limited to text only";
     mainProgram = "sparklines";
@@ -43,5 +44,15 @@ buildPythonPackage rec {
       rhoriguchi
     ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "This Python package implements Edward Tufte's concept of sparklines, but limited to text only";
+    mainProgram = "sparklines";
+    homepage = "https://github.com/deeplook/sparklines";
+    maintainers = with maintainers; [
+      rhoriguchi
+    ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

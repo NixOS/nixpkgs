@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-J880DW CUPS wrapper driver";
@@ -53,5 +54,14 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj880dw_us_eu_as&os=128";
     maintainers = with lib.maintainers; [ _6543 ];
+=======
+  meta = with lib; {
+    homepage = "http://www.brother.com/";
+    description = "Brother MFC-J880DW CUPS wrapper driver";
+    license = with licenses; gpl2;
+    platforms = with platforms; linux;
+    downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj880dw_us_eu_as&os=128";
+    maintainers = with maintainers; [ _6543 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

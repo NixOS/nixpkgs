@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s --relative "$autoload_target" autoload
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://kakoune.org/";
     description = "Vim inspired text editor";
@@ -49,5 +50,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "kak";
     maintainers = with lib.maintainers; [ philiptaron ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://kakoune.org/";
+    description = "Vim inspired text editor";
+    license = licenses.publicDomain;
+    mainProgram = "kak";
+    maintainers = with maintainers; [ philiptaron ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

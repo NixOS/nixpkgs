@@ -20,11 +20,19 @@ stdenv.mkDerivation {
     install -Dm755 u9fs -t "$out/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Serve 9P from Unix";
     homepage = "http://p9f.org/magic/man2html?man=u9fs&sect=4";
     license = lib.licenses.dtoa;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Serve 9P from Unix";
+    homepage = "http://p9f.org/magic/man2html?man=u9fs&sect=4";
+    license = licenses.dtoa;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "u9fs";
   };
 }

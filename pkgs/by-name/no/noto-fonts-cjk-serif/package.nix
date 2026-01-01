@@ -36,7 +36,11 @@ stdenvNoCC.mkDerivation rec {
     rev-prefix = "Serif";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Beautiful and free fonts for CJK languages";
     homepage = "https://www.google.com/get/noto/help/cjk/";
     longDescription = ''
@@ -51,9 +55,15 @@ stdenvNoCC.mkDerivation rec {
       Japanese kana, vertical forms, and variant characters (itaiji); it
       supports Korean hangeul — both contemporary and archaic.
     '';
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mathnerd314
       emily
       leana8959

@@ -16,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "niquests";
+<<<<<<< HEAD
   version = "3.16.1";
+=======
+  version = "3.15.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "niquests";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-SfHjzkVgoxLhqzFmR1PiPUHHrHgyHlFUfF0VPv6Ed3Y=";
+=======
+    hash = "sha256-QRVefE/85k6fT0zhAzX4wFB79ANf7LUshWsbi+fpSgk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];

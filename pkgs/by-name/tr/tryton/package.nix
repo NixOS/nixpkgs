@@ -69,7 +69,11 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Client of the Tryton application platform";
     mainProgram = "tryton";
     longDescription = ''
@@ -81,8 +85,13 @@ python3Packages.buildPythonApplication rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       johbo
       udono
     ];

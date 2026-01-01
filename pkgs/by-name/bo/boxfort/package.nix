@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convenient & cross-platform sandboxing C library";
     homepage = "https://github.com/Snaipe/BoxFort";
@@ -45,5 +46,16 @@ stdenv.mkDerivation rec {
       Yumasi
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Convenient & cross-platform sandboxing C library";
+    homepage = "https://github.com/Snaipe/BoxFort";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      thesola10
+      Yumasi
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

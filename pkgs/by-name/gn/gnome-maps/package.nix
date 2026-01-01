@@ -30,11 +30,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
+<<<<<<< HEAD
   version = "49.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
     hash = "sha256-v8jpNxGOWWNnC8Pvkcdmn6wV7b1r9rIU+K2IFxkovd8=";
+=======
+  version = "49.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
+    hash = "sha256-dd4/kCjDInLTbgnbqhG/3myFz3USCGVdO6RIJo08PzA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -114,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript { packageName = "gnome-maps"; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://apps.gnome.org/Maps/";
     description = "Map application for GNOME 3";
@@ -121,5 +130,14 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://apps.gnome.org/Maps/";
+    description = "Map application for GNOME 3";
+    mainProgram = "gnome-maps";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

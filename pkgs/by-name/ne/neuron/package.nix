@@ -100,7 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dmpx0Wud0IhdFvvTJuW/w1Uq6vFYaNal9n27LAqV1Qc=";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simulation environment for empirically-based simulations of neurons and networks of neurons";
     longDescription = ''
       NEURON is a simulation environment for developing and exercising models of
@@ -109,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       potential close to the membrane), and where cell membrane properties are complex,
       involving many ion-specific channels, ion accumulation, and second messengers
     '';
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.bsd3;
     homepage = "http://www.neuron.yale.edu/neuron";
@@ -117,5 +122,15 @@ stdenv.mkDerivation (finalAttrs: {
       davidcromp
     ];
     platforms = lib.platforms.all;
+=======
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    license = licenses.bsd3;
+    homepage = "http://www.neuron.yale.edu/neuron";
+    maintainers = with maintainers; [
+      adev
+      davidcromp
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

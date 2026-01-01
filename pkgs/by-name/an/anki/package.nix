@@ -288,7 +288,11 @@ python3Packages.buildPythonApplication rec {
     tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Spaced repetition flashcard program";
     mainProgram = "anki";
     longDescription = ''
@@ -304,9 +308,15 @@ python3Packages.buildPythonApplication rec {
       or even practicing guitar chords!
     '';
     homepage = "https://apps.ankiweb.net";
+<<<<<<< HEAD
     license = lib.licenses.agpl3Plus;
     inherit (mesa.meta) platforms;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.agpl3Plus;
+    inherit (mesa.meta) platforms;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       euank
       junestepp
       oxij

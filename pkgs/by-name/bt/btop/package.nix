@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "btop";
+<<<<<<< HEAD
   version = "1.4.6";
+=======
+  version = "1.4.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = "btop";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-h472rcXzpBkPYAEy9JaVlanaavaz0WcdkhmwsVdDRdo=";
+=======
+    hash = "sha256-ZLT+Hc1rvBFyhey+imbgGzSH/QaVxIh/jvDKVSmDrA0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -53,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

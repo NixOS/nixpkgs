@@ -24,6 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   nativeBuildInputs = [
@@ -38,11 +42,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <(COMPLETE=zsh $out/bin/tms)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fastest way to manage projects as tmux sessions";
     homepage = "https://github.com/jrmoulton/tmux-sessionizer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fastest way to manage projects as tmux sessions";
+    homepage = "https://github.com/jrmoulton/tmux-sessionizer";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       vinnymeller
       mrcjkb
     ];

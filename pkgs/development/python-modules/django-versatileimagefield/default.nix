@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "versatileimagefield" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Replaces django's ImageField with a more flexible interface";
     homepage = "https://github.com/respondcreate/django-versatileimagefield/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmai ];
+=======
+  meta = with lib; {
+    description = "Replaces django's ImageField with a more flexible interface";
+    homepage = "https://github.com/respondcreate/django-versatileimagefield/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

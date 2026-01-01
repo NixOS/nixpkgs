@@ -36,24 +36,38 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/lib/lv2/
     mkdir -p $out/lib/vst/
+<<<<<<< HEAD
     mkdir -p $out/lib/vst3/
     mkdir -p $out/lib/clap/
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cd bin
     for bin in DragonflyEarlyReflections DragonflyPlateReverb DragonflyHallReverb DragonflyRoomReverb; do
       cp -a $bin        $out/bin/
       cp -a $bin-vst.so $out/lib/vst/
+<<<<<<< HEAD
       cp -a $bin.vst3   $out/lib/vst3/
       cp -a $bin.clap   $out/lib/clap/
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cp -a $bin.lv2/   $out/lib/lv2/ ;
     done
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/michaelwillis/dragonfly-reverb";
     description = "Hall-style reverb based on freeverb3 algorithms";
     maintainers = [ lib.maintainers.magnetophon ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/michaelwillis/dragonfly-reverb";
+    description = "Hall-style reverb based on freeverb3 algorithms";
+    maintainers = [ maintainers.magnetophon ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

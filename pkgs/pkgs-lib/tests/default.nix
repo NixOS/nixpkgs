@@ -51,6 +51,7 @@ let
 in
 
 # It has to be a link farm for inclusion in the hydra unstable jobset.
+<<<<<<< HEAD
 {
   formats-tests = pkgs.linkFarm "pkgs-lib-formats-tests" (
     mapAttrsToList (k: v: {
@@ -59,4 +60,12 @@ in
     }) (flatten "" structured)
   );
 }
+=======
+pkgs.linkFarm "pkgs-lib-formats-tests" (
+  mapAttrsToList (k: v: {
+    name = k;
+    path = v;
+  }) (flatten "" structured)
+)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 // structured

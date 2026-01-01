@@ -25,11 +25,20 @@ buildGoModule rec {
 
   subPackages = [ "cmd/pulumictl" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Swiss Army Knife for Pulumi Development";
     mainProgram = "pulumictl";
     homepage = "https://github.com/pulumi/pulumictl";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ vincentbernat ];
+=======
+  meta = with lib; {
+    description = "Swiss Army Knife for Pulumi Development";
+    mainProgram = "pulumictl";
+    homepage = "https://github.com/pulumi/pulumictl";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ vincentbernat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,11 +23,20 @@ buildPythonPackage rec {
     mock
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for representing and manipulating file sizes with different prefix";
     mainProgram = "bitmath";
     homepage = "https://github.com/tbielawa/bitmath";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ twey ];
+=======
+  meta = with lib; {
+    description = "Module for representing and manipulating file sizes with different prefix";
+    mainProgram = "bitmath";
+    homepage = "https://github.com/tbielawa/bitmath";
+    license = licenses.mit;
+    maintainers = with maintainers; [ twey ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -177,7 +177,11 @@ stdenv.mkDerivation rec {
       fixupPhase
     '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
     maintainers = [ ];
@@ -186,6 +190,10 @@ stdenv.mkDerivation rec {
       "i686-linux"
       "x86_64-linux"
     ];
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
+=======
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

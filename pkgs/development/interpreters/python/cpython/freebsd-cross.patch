@@ -1,6 +1,10 @@
 --- a/configure.ac	2024-06-07 09:17:50.608162031 -0700
 +++ b/configure.ac	2024-06-07 09:45:59.844518241 -0700
+<<<<<<< HEAD
 @@ -339,6 +339,9 @@
+=======
+@@ -554,6 +554,9 @@
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  	*-*-wasi)
  	    ac_sys_system=WASI
  	    ;;
@@ -10,7 +14,11 @@
  	*)
  		# for now, limit cross builds to known configurations
  		MACHDEP="unknown"
+<<<<<<< HEAD
 @@ -780,6 +783,9 @@
+=======
+@@ -614,6 +617,9 @@
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  	wasm32-*-* | wasm64-*-*)
  		_host_cpu=$host_cpu
  		;;

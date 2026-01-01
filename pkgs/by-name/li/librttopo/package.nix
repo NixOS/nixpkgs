@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "RT Topology Library";
     homepage = "https://git.osgeo.org/gitea/rttopo/librttopo";
@@ -44,5 +45,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dotlambda ];
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "RT Topology Library";
+    homepage = "https://git.osgeo.org/gitea/rttopo/librttopo";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dotlambda ];
+    teams = [ teams.geospatial ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

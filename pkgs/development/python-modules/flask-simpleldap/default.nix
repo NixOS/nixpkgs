@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_simpleldap" ];
 
+<<<<<<< HEAD
   meta = {
     description = "LDAP authentication extension for Flask";
     homepage = "https://github.com/alexferl/flask-simpleldap";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kip93 ];
+=======
+  meta = with lib; {
+    description = "LDAP authentication extension for Flask";
+    homepage = "https://github.com/alexferl/flask-simpleldap";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kip93 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

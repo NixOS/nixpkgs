@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "insegel" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/autophagy/insegel";
     description = "Monochrome 2 column Sphinx theme";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ autophagy ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/autophagy/insegel";
+    description = "Monochrome 2 column Sphinx theme";
+    license = licenses.mit;
+    maintainers = with maintainers; [ autophagy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

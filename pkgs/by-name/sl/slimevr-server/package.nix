@@ -96,7 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       gale-username
+<<<<<<< HEAD
       loucass003
+=======
+      imurx
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = with lib.platforms; darwin ++ linux;
     mainProgram = "slimevr-server";

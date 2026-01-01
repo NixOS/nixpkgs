@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
     description = "Tiny image viewer with libvips";
     license = lib.licenses.mit;
     mainProgram = "vipsdisp";
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 }

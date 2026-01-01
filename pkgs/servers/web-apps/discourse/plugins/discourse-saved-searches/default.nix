@@ -12,10 +12,17 @@ mkDiscoursePlugin {
     rev = "e9afd599d95fa79ba8a37316290c1a059e995e04";
     sha256 = "sha256-UtXDY3IxxM+JFOGZlN9mgiwrDImOAzJJuHNlhIdnotM=";
   };
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/discourse/discourse-saved-searches";
     maintainers = with lib.maintainers; [ dpausp ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/discourse/discourse-saved-searches";
+    maintainers = with maintainers; [ dpausp ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Allow users to save searches and be notified of new results";
   };
 }

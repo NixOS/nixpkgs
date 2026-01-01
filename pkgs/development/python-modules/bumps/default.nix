@@ -61,12 +61,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bumps" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Data fitting with bayesian uncertainty analysis";
     mainProgram = "bumps";
     homepage = "https://bumps.readthedocs.io/";
     changelog = "https://github.com/bumps/bumps/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ rprospero ];
+=======
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ rprospero ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

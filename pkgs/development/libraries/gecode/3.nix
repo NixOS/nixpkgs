@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
 
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.mit;
     homepage = "https://www.gecode.org";
     description = "Toolkit for developing constraint-based systems";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.manveru ];
+=======
+  meta = with lib; {
+    license = licenses.mit;
+    homepage = "https://www.gecode.org";
+    description = "Toolkit for developing constraint-based systems";
+    platforms = platforms.all;
+    maintainers = [ maintainers.manveru ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

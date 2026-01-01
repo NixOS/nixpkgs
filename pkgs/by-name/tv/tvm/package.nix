@@ -19,11 +19,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://tvm.apache.org/";
     description = "End to End Deep Learning Compiler Stack for CPUs, GPUs and accelerators";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ adelbertc ];
+=======
+  meta = with lib; {
+    homepage = "https://tvm.apache.org/";
+    description = "End to End Deep Learning Compiler Stack for CPUs, GPUs and accelerators";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ adelbertc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

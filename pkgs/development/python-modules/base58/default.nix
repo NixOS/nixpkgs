@@ -35,12 +35,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "base58" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Base58 and Base58Check implementation";
     homepage = "https://github.com/keis/base58";
     changelog = "https://github.com/keis/base58/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    description = "Base58 and Base58Check implementation";
+    homepage = "https://github.com/keis/base58";
+    changelog = "https://github.com/keis/base58/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "base58";
   };
 }

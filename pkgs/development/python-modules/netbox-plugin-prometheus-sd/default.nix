@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netbox_prometheus_sd" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Netbox plugin to provide Netbox entires to Prometheus HTTP service discovery";
     homepage = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd";
     changelog = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xanderio ];
+=======
+  meta = with lib; {
+    description = "Netbox plugin to provide Netbox entires to Prometheus HTTP service discovery";
+    homepage = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd";
+    changelog = "https://github.com/FlxPeters/netbox-plugin-prometheus-sd/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ xanderio ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

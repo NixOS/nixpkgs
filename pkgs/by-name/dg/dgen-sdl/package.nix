@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-reserved-user-defined-literal";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://dgen.sourceforge.net/";
     description = "Sega Genesis/Mega Drive emulator";
     longDescription = ''
@@ -67,9 +71,15 @@ stdenv.mkDerivation rec {
       - hqx and scale2x upscaling filters
       - VGM dumping
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+=======
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 # TODO: implement configure options

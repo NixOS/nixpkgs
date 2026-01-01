@@ -32,7 +32,11 @@ mkDerivation rec {
     pcsclite
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Signing and authentication operations with smart cards for the Web eID browser extension";
     mainProgram = "web-eid";
     longDescription = ''
@@ -43,8 +47,14 @@ mkDerivation rec {
       mode.
     '';
     homepage = "https://github.com/web-eid/web-eid-app";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.flokli ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    maintainers = [ maintainers.flokli ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

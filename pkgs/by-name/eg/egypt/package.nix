@@ -19,7 +19,11 @@ perlPackages.buildPerlPackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for making call graphs of C programmes";
     mainProgram = "egypt";
     longDescription = ''
@@ -31,10 +35,18 @@ perlPackages.buildPerlPackage rec {
       together.
     '';
     homepage = "http://www.gson.org/egypt/";
+<<<<<<< HEAD
     license = with lib.licenses; [
       artistic1
       gpl1Plus
     ];
     platforms = lib.platforms.unix;
+=======
+    license = with licenses; [
+      artistic1
+      gpl1Plus
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -34,11 +34,19 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/*.png $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Peer-to-Peer Chat";
     homepage = "https://keet.io";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ extends ];
+=======
+  meta = with lib; {
+    description = "Peer-to-Peer Chat";
+    homepage = "https://keet.io";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ extends ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

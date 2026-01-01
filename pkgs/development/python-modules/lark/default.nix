@@ -33,11 +33,19 @@ buildPythonPackage rec {
   # Js2py is needed for tests but it's unmaintained and insecure
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
     homepage = "https://lark-parser.readthedocs.io/";
     changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
+    homepage = "https://lark-parser.readthedocs.io/";
+    changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

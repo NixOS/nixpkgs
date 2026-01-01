@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication {
     termcolor
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/joaorb64/joycond-cemuhook";
     description = "Support for cemuhook's UDP protocol for joycond devices";
@@ -40,5 +41,14 @@ python3Packages.buildPythonApplication {
     maintainers = [ lib.maintainers.noodlez1232 ];
     mainProgram = "joycond-cemuhook";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/joaorb64/joycond-cemuhook";
+    description = "Support for cemuhook's UDP protocol for joycond devices";
+    license = licenses.mit;
+    maintainers = [ maintainers.noodlez1232 ];
+    mainProgram = "joycond-cemuhook";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,7 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prompt_toolkit" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library for building powerful interactive command lines";
     longDescription = ''
       prompt_toolkit could be a replacement for readline, but it can be
@@ -49,7 +53,11 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
     changelog = "https://github.com/prompt-toolkit/python-prompt-toolkit/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ sarahec ];
   };
 }

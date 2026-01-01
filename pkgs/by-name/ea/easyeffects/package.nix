@@ -14,7 +14,12 @@
   ladspaH,
   libbs2b,
   libebur128,
+<<<<<<< HEAD
   libmysofa,
+=======
+  libportal-qt6,
+  libsamplerate,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libsigcxx30,
   libsndfile,
   lilv,
@@ -35,16 +40,27 @@
   webrtc-audio-processing,
   zam-plugins,
   zita-convolver,
+<<<<<<< HEAD
   wrapGAppsNoGuiHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
   inherit (qt6)
     qtbase
     qtgraphs
+<<<<<<< HEAD
     wrapQtAppsHook
     ;
   inherit (kdePackages)
+=======
+    qtwebengine
+    wrapQtAppsHook
+    ;
+  inherit (kdePackages)
+    appstream-qt
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     breeze
     breeze-icons
     extra-cmake-modules
@@ -59,13 +75,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
+<<<<<<< HEAD
   version = "8.0.9";
+=======
+  version = "8.0.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-cFMbeJeEIDP7uiNi+rRKErgHtjP/PbPKASo+M2qogZQ=";
+=======
+    hash = "sha256-LBF8P512XeawlSgOz6AV03Q3ZGTwn+Gnqwh0xU0WEz4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./qmlmodule-fix.patch ];
@@ -76,6 +100,7 @@ stdenv.mkDerivation rec {
     intltool
     ninja
     pkg-config
+<<<<<<< HEAD
     wrapGAppsNoGuiHook
     wrapQtAppsHook
   ];
@@ -83,6 +108,13 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildInputs = [
+=======
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    appstream-qt
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     breeze
     breeze-icons
     deepfilternet
@@ -99,7 +131,12 @@ stdenv.mkDerivation rec {
     qqc2-desktop-style
     libbs2b
     libebur128
+<<<<<<< HEAD
     libmysofa
+=======
+    libportal-qt6
+    libsamplerate
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libsigcxx30
     libsndfile
     lilv
@@ -108,6 +145,10 @@ stdenv.mkDerivation rec {
     pipewire
     qtbase
     qtgraphs
+<<<<<<< HEAD
+=======
+    qtwebengine
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rnnoise
     rubberband
     soundtouch
@@ -133,7 +174,10 @@ stdenv.mkDerivation rec {
     in
     ''
       qtWrapperArgs+=(
+<<<<<<< HEAD
         "''${gappsWrapperArgs[@]}"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
         --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
       )
@@ -148,7 +192,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audio effects for PipeWire applications";
     homepage = "https://github.com/wwmm/easyeffects";
+<<<<<<< HEAD
     changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/src/contents/docs/community/CHANGELOG.md";
+=======
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       getchoo

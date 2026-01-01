@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   kernel,
   kernelModuleMakeFlags,
   bluez,
@@ -21,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-evmjQrQPHe8F+6w12bnUv6P4QKGkm63cmP1HEv6equw=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Remove deprecated ida_simple_xx() usage
     (fetchpatch {
@@ -30,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setSourceRoot = ''
     export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
   '';
@@ -54,11 +60,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced Linux driver for Xbox One wireless controllers";
     homepage = "https://atar-axis.github.io/xpadneo";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Advanced Linux driver for Xbox One wireless controllers";
+    homepage = "https://atar-axis.github.io/xpadneo";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

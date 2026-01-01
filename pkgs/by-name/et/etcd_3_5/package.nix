@@ -8,11 +8,19 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "3.5.26";
   etcdSrcHash = "sha256-bEWswJM7r6Kxy9im/TkXkEQN5tEIvQK6Azd7LbIVwYA=";
   etcdServerVendorHash = "sha256-pwVAy8wQXBGE0MqE3v7OLukwcKIQhEW3BjwPdSMtAYM=";
   etcdUtlVendorHash = "sha256-dIxu7MUG5Yk3+DkCgfsGEmpyEklqvyz7wpWylHTDIkQ=";
   etcdCtlVendorHash = "sha256-NJ1jc/0J5+GUxu1r1g9t6pnlHjx3CnmBe5NR+qWK7Dc=";
+=======
+  version = "3.5.25";
+  etcdSrcHash = "sha256-7fCvlp/EG1SofsLC8il/twjg0rEaB/lhz6dnUxgLXik=";
+  etcdServerVendorHash = "sha256-R78j1BTuY3ORQiMnm2kWJGnK4jJi7am4x0udW4jjcCE=";
+  etcdUtlVendorHash = "sha256-J+/QgRAU1uk9LXdW8b6AhitFlxx/QU7IkJ+5Jez9MkM=";
+  etcdCtlVendorHash = "sha256-IiggECH1iFkb51MTeFSFnVbVVDUR1KgsQcbxz9IR4c4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -25,6 +33,7 @@ let
     CGO_ENABLED = 0;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = lib.licenses.asl20;
@@ -33,6 +42,16 @@ let
       dtomvan
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Distributed reliable key-value store for the most critical data of a distributed system";
+    license = licenses.asl20;
+    homepage = "https://etcd.io/";
+    maintainers = with maintainers; [
+      dtomvan
+    ];
+    platforms = platforms.darwin ++ platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   etcdserver = buildGo124Module {

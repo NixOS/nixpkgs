@@ -116,10 +116,17 @@ stdenv.mkDerivation rec {
     (python3.pythonOnBuildForHost.withPackages (
       pp: with pp; [
         dbus-python
+<<<<<<< HEAD
         (python-dbusmock.override {
           # Avoid dependency cycle.
           doCheck = false;
         })
+=======
+        (python-dbusmock.overridePythonAttrs (attrs: {
+          # Avoid dependency cycle.
+          doCheck = false;
+        }))
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ]
     ))
   ];
@@ -188,15 +195,27 @@ stdenv.mkDerivation rec {
     ! test -e "$DESTDIR"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/polkit-org/polkit";
     description = "Toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/polkit-org/polkit";
+    description = "Toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # mandatory libpolkit-gobject shared library
       lib.systems.inspect.platformPatterns.isStatic
     ];
+<<<<<<< HEAD
     teams = [ lib.teams.freedesktop ];
+=======
+    teams = [ teams.freedesktop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

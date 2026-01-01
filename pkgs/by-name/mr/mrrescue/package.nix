@@ -68,12 +68,21 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Arcade-style fire fighting game";
     mainProgram = "mrrescue";
     maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.zlib;
+=======
+  meta = with lib; {
+    description = "Arcade-style fire fighting game";
+    mainProgram = "mrrescue";
+    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.zlib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "http://tangramgames.dk/games/mrrescue";
   };
 

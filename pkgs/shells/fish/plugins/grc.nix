@@ -19,10 +19,18 @@ buildFishPlugin {
     cp conf.d/executables $out/share/fish/vendor_conf.d/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Grc Colourizer for some commands on Fish shell";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Grc Colourizer for some commands on Fish shell";
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

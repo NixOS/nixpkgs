@@ -40,12 +40,21 @@ let
     hash = "sha256-ofyDtP7KgTKX/O1O4g3OcDwgihDveAiJ5s5GQtSqf28=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
     homepage = "https://marlam.de/msmtp/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
+    homepage = "https://marlam.de/msmtp/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "msmtp";
   };
 

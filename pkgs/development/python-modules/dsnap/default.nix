@@ -56,7 +56,11 @@ buildPythonPackage rec {
     mypy-boto3-ebs
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # https://github.com/RhinoSecurityLabs/dsnap/issues/26
   # ImportError: cannot import name 'mock_iam' from 'moto'
@@ -64,12 +68,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dsnap" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for downloading and mounting EBS snapshots using the EBS Direct API's";
     homepage = "https://github.com/RhinoSecurityLabs/dsnap";
     changelog = "https://github.com/RhinoSecurityLabs/dsnap/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Utility for downloading and mounting EBS snapshots using the EBS Direct API's";
+    homepage = "https://github.com/RhinoSecurityLabs/dsnap";
+    changelog = "https://github.com/RhinoSecurityLabs/dsnap/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dsnap";
   };
 }

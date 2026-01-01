@@ -26,12 +26,15 @@ in
         description = "Whether to enable the TLP power management daemon.";
       };
 
+<<<<<<< HEAD
       pd = {
         enable = lib.mkEnableOption "the power-rofiles-daemon like DBus interface for TLP";
 
         package = lib.mkPackageOption pkgs "tlp-pd" { };
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       settings = lib.mkOption {
         type =
           with lib.types;
@@ -86,6 +89,7 @@ in
           Set `services.tlp.settings.SATA_LINKPWR_ON_AC` and `services.tlp.settings.SATA_LINKPWR_ON_BAT` instead.
         '';
       }
+<<<<<<< HEAD
       {
         assertion = cfg.pd.enable -> !config.services.power-profiles-daemon.enable;
         message = ''
@@ -103,6 +107,8 @@ in
           because they are using the same dbus interface and have the same functionality.
         '';
       }
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     environment.etc = {
@@ -113,10 +119,14 @@ in
         "${cfg.package}/lib/NetworkManager/dispatcher.d/99tlp-rdw-nm";
     };
 
+<<<<<<< HEAD
     environment.systemPackages = [
       cfg.package
     ]
     ++ lib.optionals cfg.pd.enable [ cfg.pd.package ];
+=======
+    environment.systemPackages = [ cfg.package ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     services.tlp.settings =
       let
@@ -138,11 +148,15 @@ in
       # use native tlp instead because it can also differentiate between AC/BAT
       services.cpufreq.enable = false;
 
+<<<<<<< HEAD
       packages = [
         cfg.package
       ]
       ++ lib.optionals cfg.pd.enable [ cfg.pd.package ];
 
+=======
+      packages = [ cfg.package ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # XXX: These must always be disabled/masked according to [1].
       #
       # [1]: https://github.com/linrunner/TLP/blob/a9ada09e0821f275ce5f93dc80a4d81a7ff62ae4/tlp-stat.in#L319

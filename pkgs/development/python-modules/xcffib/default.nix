@@ -45,6 +45,7 @@ buildPythonPackage rec {
   # Tests use xvfb
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Drop in replacement for xpyb, an XCB python binding";
     homepage = "https://github.com/tych0/xcffib";
@@ -52,5 +53,14 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ kamilchm ];
+=======
+  meta = with lib; {
+    description = "Drop in replacement for xpyb, an XCB python binding";
+    homepage = "https://github.com/tych0/xcffib";
+    changelog = "https://github.com/tych0/xcffib/releases/tag/v${version}";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
+    maintainers = with maintainers; [ kamilchm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

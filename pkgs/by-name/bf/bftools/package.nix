@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bundle of scripts for using Bio-Formats on the command line with bioformats_package.jar already included";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
@@ -44,5 +45,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     homepage = "https://www.openmicroscopy.org/bio-formats/";
     maintainers = [ lib.maintainers.tbenst ];
+=======
+  meta = with lib; {
+    description = "Bundle of scripts for using Bio-Formats on the command line with bioformats_package.jar already included";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    homepage = "https://www.openmicroscopy.org/bio-formats/";
+    maintainers = [ maintainers.tbenst ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

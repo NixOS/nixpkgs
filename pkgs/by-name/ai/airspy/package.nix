@@ -33,11 +33,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/airspy/airspyone_host/commit/f467acd587617640741ecbfade819d10ecd032c2.patch";
       hash = "sha256-qfJrxM1hq7NScxN++d9IH+fwFfXf/YwZZUDDOVbwIJk=";
     })
+<<<<<<< HEAD
 
     (fetchpatch {
       url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/9abb6b5fd1a02a7310226d03337f288be71f1d43/community/airspyone-host/gcc-15.patch";
       hash = "sha256-TFtDLT94kXZswnm8K9+U1YV+T+0fbj6oB6rbRdEpSOQ=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''
@@ -57,11 +60,20 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/airspy/airspyone_host";
     description = "Host tools and driver library for the AirSpy SDR";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ markuskowa ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/airspy/airspyone_host";
+    description = "Host tools and driver library for the AirSpy SDR";
+    license = licenses.bsd3;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -15,9 +15,15 @@ buildPecl {
     echo "#define HAVE_MBSTRING 1" >> config.h
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mailparse is an extension for parsing and working with email messages";
     license = lib.licenses.php301;
+=======
+  meta = with lib; {
+    description = "Mailparse is an extension for parsing and working with email messages";
+    license = licenses.php301;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://pecl.php.net/package/mailparse";
     teams = [ lib.teams.php ];
   };

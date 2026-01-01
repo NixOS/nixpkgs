@@ -50,7 +50,11 @@ buildPythonPackage rec {
     responses
     writableTmpDirAsHomeHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # Tests are failing for various reasons (missing git repo, missing test data, etc.)
@@ -67,10 +71,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "detect_secrets" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to detect secrets in the code";
     homepage = "https://github.com/bridgecrewio/detect-secrets";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to detect secrets in the code";
+    homepage = "https://github.com/bridgecrewio/detect-secrets";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

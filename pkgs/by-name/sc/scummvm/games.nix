@@ -61,7 +61,11 @@ let
     in
     stdenv.mkDerivation (
       {
+<<<<<<< HEAD
         inherit pname version;
+=======
+        name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         nativeBuildInputs = [ unzip ];
 
@@ -88,10 +92,17 @@ let
           runHook postInstall
         '';
 
+<<<<<<< HEAD
         meta = {
           homepage = "https://www.scummvm.org";
           license = lib.licenses.free; # refer to the readme for exact wording
           maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+        meta = with lib; {
+          homepage = "https://www.scummvm.org";
+          license = licenses.free; # refer to the readme for exact wording
+          maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           inherit description;
           inherit (scummvm.meta) platforms;
         };

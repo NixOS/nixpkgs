@@ -37,10 +37,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_credssp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HTTPS CredSSP authentication with the requests library";
     homepage = "https://github.com/jborean93/requests-credssp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "HTTPS CredSSP authentication with the requests library";
+    homepage = "https://github.com/jborean93/requests-credssp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

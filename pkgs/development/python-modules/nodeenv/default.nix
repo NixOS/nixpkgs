@@ -47,12 +47,20 @@ buildPythonPackage rec {
     "test_smoke"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Node.js virtual environment builder";
     mainProgram = "nodeenv";
     homepage = "https://github.com/ekalinin/nodeenv";
     changelog = "https://github.com/ekalinin/nodeenv/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

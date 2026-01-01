@@ -22,11 +22,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of injectable files, designed to be used in a pentest when SQL injection flaws are found and are in multiple languages for different environments";
     homepage = "https://github.com/junk13/laudanum";
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Collection of injectable files, designed to be used in a pentest when SQL injection flaws are found and are in multiple languages for different environments";
+    homepage = "https://github.com/junk13/laudanum";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

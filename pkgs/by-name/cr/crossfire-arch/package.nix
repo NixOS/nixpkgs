@@ -23,6 +23,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Archetype data for the Crossfire free MMORPG";
     homepage = "http://crossfire.real-time.com/";
@@ -30,5 +31,14 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     hydraPlatforms = [ ];
     maintainers = with lib.maintainers; [ ToxicFrog ];
+=======
+  meta = with lib; {
+    description = "Archetype data for the Crossfire free MMORPG";
+    homepage = "http://crossfire.real-time.com/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    hydraPlatforms = [ ];
+    maintainers = with maintainers; [ ToxicFrog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

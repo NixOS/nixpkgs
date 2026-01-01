@@ -79,7 +79,11 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "introspection" withIntrospection)
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Wrapper library of libvirt for glib-based applications";
     longDescription = ''
       libvirt-glib wraps libvirt to provide a high-level object-oriented API better
@@ -90,7 +94,12 @@ stdenv.mkDerivation rec {
       - libvirt-gobject - GObjects for managing libvirt objects
     '';
     homepage = "https://libvirt.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

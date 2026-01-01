@@ -66,10 +66,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";
     homepage = "https://birdfont.org";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";
+    homepage = "https://birdfont.org";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ dtzWill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

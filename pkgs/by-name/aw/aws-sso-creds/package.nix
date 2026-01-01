@@ -24,11 +24,19 @@ buildGoModule rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jaxxstorm/aws-sso-creds";
     description = "Get AWS SSO temporary creds from an SSO profile";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lafrenierejm ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jaxxstorm/aws-sso-creds";
+    description = "Get AWS SSO temporary creds from an SSO profile";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lafrenierejm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aws-sso-creds";
   };
 }

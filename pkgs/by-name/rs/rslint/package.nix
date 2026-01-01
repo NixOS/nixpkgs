@@ -29,10 +29,17 @@ rustPlatform.buildRustPackage rec {
     ./fix-rustc-1.89-compatibility.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast, customizable, and easy to use JavaScript and TypeScript linter";
     homepage = "https://rslint.org";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Fast, customizable, and easy to use JavaScript and TypeScript linter";
+    homepage = "https://rslint.org";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

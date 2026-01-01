@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rowan" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for working with quaternions";
     homepage = "https://github.com/glotzerlab/rowan";
     changelog = "https://github.com/glotzerlab/rowan/blob/${src.rev}/ChangeLog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "Python package for working with quaternions";
+    homepage = "https://github.com/glotzerlab/rowan";
+    changelog = "https://github.com/glotzerlab/rowan/blob/${src.rev}/ChangeLog.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -4,7 +4,11 @@
   callPackage,
 }:
 let
+<<<<<<< HEAD
   version = "5.6.250";
+=======
+  version = "5.5.245";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "gdevelop";
   meta = {
     description = "Graphical Game Development Studio";

@@ -57,10 +57,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyzbar" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read one-dimensional barcodes and QR codes from Python using the zbar library";
     homepage = "https://github.com/NaturalHistoryMuseum/pyzbar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Read one-dimensional barcodes and QR codes from Python using the zbar library";
+    homepage = "https://github.com/NaturalHistoryMuseum/pyzbar";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -82,11 +82,19 @@ stdenv.mkDerivation {
 
   passthru.tests.static = pkgsStatic.gpm;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.nico.schottelius.org/software/gpm/";
     description = "Daemon that provides mouse support on the Linux console";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.cygwin;
+=======
+  meta = with lib; {
+    homepage = "https://www.nico.schottelius.org/software/gpm/";
+    description = "Daemon that provides mouse support on the Linux console";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux ++ platforms.cygwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

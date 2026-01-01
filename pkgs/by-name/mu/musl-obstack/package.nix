@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/void-linux/musl-obstack";
     description = "Extraction of the obstack functions and macros from GNU libiberty for use with musl-libc";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.pjjw ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/void-linux/musl-obstack";
+    description = "Extraction of the obstack functions and macros from GNU libiberty for use with musl-libc";
+    platforms = platforms.unix;
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.pjjw ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

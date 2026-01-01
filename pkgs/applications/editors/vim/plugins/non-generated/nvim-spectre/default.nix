@@ -5,7 +5,10 @@
   rustPlatform,
   vimPlugins,
   vimUtils,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 let
   version = "0-unstable-2025-05-13";
@@ -31,8 +34,11 @@ let
       # Flaky test (https://github.com/nvim-pack/nvim-spectre/issues/244)
       "--skip=tests::test_replace_simple"
     ];
+<<<<<<< HEAD
 
     env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 vimUtils.buildVimPlugin {

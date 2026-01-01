@@ -8,7 +8,11 @@ packageDir="$nixpkgs/pkgs/by-name/pa/parallel-launcher"
 
 getLatestVersion() {
   curl -s "https://gitlab.com/api/v4/projects/parallel-launcher%2F$1/repository/tags" \
+<<<<<<< HEAD
   | jq -r '.[0].name' \
+=======
+  | jq -r '.[0] | select(.) | .name' \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   | sed 's|v||' \
   | sed 's|-|.|'
 }

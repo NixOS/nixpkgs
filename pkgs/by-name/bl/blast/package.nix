@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
   # Many tests require either network access or locally available databases
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = ''Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences'';
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
@@ -126,5 +127,16 @@ stdenv.mkDerivation rec {
     # See https://github.com/NixOS/nixpkgs/pull/61430
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ luispedro ];
+=======
+  meta = with lib; {
+    description = ''Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences'';
+    homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
+    license = licenses.publicDomain;
+
+    # Version 2.10.0 fails on Darwin
+    # See https://github.com/NixOS/nixpkgs/pull/61430
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ luispedro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

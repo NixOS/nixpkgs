@@ -19,13 +19,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "raze";
+<<<<<<< HEAD
   version = "1.11.0-unstable-2025-11-19";
+=======
+  version = "1.11.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "Raze";
+<<<<<<< HEAD
     rev = "76fe82f5eb318fdeb30ba9fb27093a9a10bc3821";
     hash = "sha256-QCxszreIExqWVVJL8GFNzfayeSwaelhGpimqn3spEJY=";
+=======
+    tag = finalAttrs.version;
+    hash = "sha256-P8iwCkLch8054PwnGmgqTPWA8O2yyMruDeUDJGxDI2Q=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     leaveDotGit = true;
     postFetch = ''
       cd $out

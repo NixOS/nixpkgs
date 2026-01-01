@@ -23,7 +23,11 @@ let
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
+<<<<<<< HEAD
   version = "0.109.1";
+=======
+  version = "0.108.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 rustPlatform.buildRustPackage {
   pname = "nushell";
@@ -33,10 +37,17 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-XNDEfmvmUNS90PU4e/EWFyJeg428R8nFPJHpF3tgRWo=";
   };
 
   cargoHash = "sha256-UX0WmvrzrWlrTnvMqaWAxoSie7RzQSC4thEb26LAz+A=";
+=======
+    hash = "sha256-8OMTscMObV+IOSgOoTSzJvZTz6q/l2AjrOb9y3p2tZY=";
+  };
+
+  cargoHash = "sha256-M2wkhhaS3bVhwaa3O0CUK5hL757qFObr7EDtBFXXwxg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config
@@ -95,11 +106,20 @@ rustPlatform.buildRustPackage {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Modern shell written in Rust";
+    homepage = "https://www.nushell.sh/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       johntitor
       joaquintrinanes
       ryan4yin

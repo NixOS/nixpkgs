@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seatconnect" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to communicate with Seat Connect";
     homepage = "https://github.com/farfar/seatconnect";
     changelog = "https://github.com/Farfar/seatconnect/releases/tag/${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to communicate with Seat Connect";
+    homepage = "https://github.com/farfar/seatconnect";
+    changelog = "https://github.com/Farfar/seatconnect/releases/tag/${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

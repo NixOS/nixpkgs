@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Improve your security and privacy by blocking ads, tracking and malware domains";
     mainProgram = "hblock";
@@ -50,5 +51,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alanpearce ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Improve your security and privacy by blocking ads, tracking and malware domains";
+    mainProgram = "hblock";
+    homepage = "https://github.com/hectorm/hblock";
+    license = licenses.mit;
+    maintainers = with maintainers; [ alanpearce ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

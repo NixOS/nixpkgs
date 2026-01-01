@@ -55,10 +55,18 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytest ];
 
+<<<<<<< HEAD
   meta = {
     description = "High-quality implementations of reinforcement learning algorithms";
     homepage = "https://github.com/openai/baselines";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ timokau ];
+=======
+  meta = with lib; {
+    description = "High-quality implementations of reinforcement learning algorithms";
+    homepage = "https://github.com/openai/baselines";
+    license = licenses.mit;
+    maintainers = with maintainers; [ timokau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

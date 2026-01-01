@@ -5,6 +5,11 @@
   ...
 }:
 
+<<<<<<< HEAD
+=======
+with lib;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 let
   cfg = config.services.chrony;
   chronyPkg = cfg.package;
@@ -15,6 +20,7 @@ let
   rtcFile = "${stateDir}/chrony.rtc";
 
   configFile = pkgs.writeText "chrony.conf" ''
+<<<<<<< HEAD
     ${lib.concatMapStringsSep "\n" (
       server: "server " + server + " " + cfg.serverOption + lib.optionalString (cfg.enableNTS) " nts"
     ) cfg.servers}
@@ -30,6 +36,23 @@ let
 
     ${lib.optionalString (cfg.enableRTCTrimming) "rtcautotrim ${builtins.toString cfg.autotrimThreshold}"}
     ${lib.optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
+=======
+    ${concatMapStringsSep "\n" (
+      server: "server " + server + " " + cfg.serverOption + optionalString (cfg.enableNTS) " nts"
+    ) cfg.servers}
+
+    ${optionalString (
+      cfg.initstepslew.enabled && (cfg.servers != [ ])
+    ) "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.servers}"}
+
+    driftfile ${driftFile}
+    keyfile ${keyFile}
+    ${optionalString (cfg.enableRTCTrimming) "rtcfile ${rtcFile}"}
+    ${optionalString (cfg.enableNTS) "ntsdumpdir ${stateDir}"}
+
+    ${optionalString (cfg.enableRTCTrimming) "rtcautotrim ${builtins.toString cfg.autotrimThreshold}"}
+    ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     ${cfg.extraConfig}
   '';
@@ -41,14 +64,23 @@ let
     "-f"
     "${configFile}"
   ]
+<<<<<<< HEAD
   ++ lib.optional cfg.enableMemoryLocking "-m"
+=======
+  ++ optional cfg.enableMemoryLocking "-m"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ cfg.extraFlags;
 in
 {
   options = {
     services.chrony = {
+<<<<<<< HEAD
       enable = lib.mkOption {
         type = lib.types.bool;
+=======
+      enable = mkOption {
+        type = types.bool;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         default = false;
         description = ''
           Whether to synchronise your machine's time using chrony.
@@ -56,20 +88,35 @@ in
         '';
       };
 
+<<<<<<< HEAD
       package = lib.mkPackageOption pkgs "chrony" { };
 
       servers = lib.mkOption {
         default = config.networking.timeServers;
         defaultText = lib.literalExpression "config.networking.timeServers";
         type = lib.types.listOf lib.types.str;
+=======
+      package = mkPackageOption pkgs "chrony" { };
+
+      servers = mkOption {
+        default = config.networking.timeServers;
+        defaultText = literalExpression "config.networking.timeServers";
+        type = types.listOf types.str;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = ''
           The set of NTP servers from which to synchronise.
         '';
       };
 
+<<<<<<< HEAD
       serverOption = lib.mkOption {
         default = "iburst";
         type = lib.types.enum [
+=======
+      serverOption = mkOption {
+        default = "iburst";
+        type = types.enum [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           "iburst"
           "offline"
         ];
@@ -84,8 +131,13 @@ in
         '';
       };
 
+<<<<<<< HEAD
       enableMemoryLocking = lib.mkOption {
         type = lib.types.bool;
+=======
+      enableMemoryLocking = mkOption {
+        type = types.bool;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         default =
           config.environment.memoryAllocator.provider != "graphene-hardened"
           && config.environment.memoryAllocator.provider != "graphene-hardened-light";
@@ -95,8 +147,13 @@ in
         '';
       };
 
+<<<<<<< HEAD
       enableRTCTrimming = lib.mkOption {
         type = lib.types.bool;
+=======
+      enableRTCTrimming = mkOption {
+        type = types.bool;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         default = true;
         description = ''
           Enable tracking of the RTC offset to the system clock and automatic trimming.
@@ -111,8 +168,13 @@ in
         '';
       };
 
+<<<<<<< HEAD
       autotrimThreshold = lib.mkOption {
         type = lib.types.ints.positive;
+=======
+      autotrimThreshold = mkOption {
+        type = types.ints.positive;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         default = 30;
         example = 10;
         description = ''
@@ -122,8 +184,13 @@ in
         '';
       };
 
+<<<<<<< HEAD
       enableNTS = lib.mkOption {
         type = lib.types.bool;
+=======
+      enableNTS = mkOption {
+        type = types.bool;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         default = false;
         description = ''
           Whether to enable Network Time Security authentication.
@@ -132,8 +199,13 @@ in
       };
 
       initstepslew = {
+<<<<<<< HEAD
         enabled = lib.mkOption {
           type = lib.types.bool;
+=======
+        enabled = mkOption {
+          type = types.bool;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           default = true;
           description = ''
             Allow chronyd to make a rapid measurement of the system clock error
@@ -142,8 +214,13 @@ in
           '';
         };
 
+<<<<<<< HEAD
         threshold = lib.mkOption {
           type = lib.types.either lib.types.float lib.types.int;
+=======
+        threshold = mkOption {
+          type = types.either types.float types.int;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           default = 1000; # by default, same threshold as 'ntpd -g' (1000s)
           description = ''
             The threshold of system clock error (in seconds) above which the
@@ -153,14 +230,24 @@ in
         };
       };
 
+<<<<<<< HEAD
       directory = lib.mkOption {
         type = lib.types.str;
+=======
+      directory = mkOption {
+        type = types.str;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         default = "/var/lib/chrony";
         description = "Directory where chrony state is stored.";
       };
 
+<<<<<<< HEAD
       extraConfig = lib.mkOption {
         type = lib.types.lines;
+=======
+      extraConfig = mkOption {
+        type = types.lines;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         default = "";
         description = ''
           Extra configuration directives that should be added to
@@ -168,10 +255,17 @@ in
         '';
       };
 
+<<<<<<< HEAD
       extraFlags = lib.mkOption {
         default = [ ];
         example = [ "-s" ];
         type = lib.types.listOf lib.types.str;
+=======
+      extraFlags = mkOption {
+        default = [ ];
+        example = [ "-s" ];
+        type = types.listOf types.str;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = "Extra flags passed to the chronyd command.";
       };
     };
@@ -182,7 +276,11 @@ in
     vifino
   ];
 
+<<<<<<< HEAD
   config = lib.mkIf cfg.enable {
+=======
+  config = mkIf cfg.enable {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     environment.systemPackages = [ chronyPkg ];
 
     users.groups.chrony.gid = config.ids.gids.chrony;
@@ -194,7 +292,11 @@ in
       home = stateDir;
     };
 
+<<<<<<< HEAD
     services.timesyncd.enable = lib.mkForce false;
+=======
+    services.timesyncd.enable = mkForce false;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # If chrony controls and tracks the RTC, writing it externally causes clock error.
     systemd.services.save-hwclock = lib.mkIf cfg.enableRTCTrimming {
@@ -231,9 +333,13 @@ in
 
       path = [ chronyPkg ];
 
+<<<<<<< HEAD
       unitConfig = lib.mkIf (!lib.elem "-x" cfg.extraFlags && !cfg.enableRTCTrimming) {
         ConditionCapability = "CAP_SYS_TIME";
       };
+=======
+      unitConfig.ConditionCapability = "CAP_SYS_TIME";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       serviceConfig = {
         Type = "notify";
         ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";

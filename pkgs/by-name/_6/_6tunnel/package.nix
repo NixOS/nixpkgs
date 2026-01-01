@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wojtekka/6tunnel";
     changelog = "https://github.com/wojtekka/6tunnel/blob/${version}/ChangeLog";
     license = lib.licenses.gpl2Only;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 }

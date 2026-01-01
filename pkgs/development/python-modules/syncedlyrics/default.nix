@@ -40,12 +40,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "syncedlyrics" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to get LRC format (synchronized) lyrics";
     homepage = "https://github.com/rtcq/syncedlyrics";
     changelog = "https://github.com/rtcq/syncedlyrics/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to get LRC format (synchronized) lyrics";
+    homepage = "https://github.com/rtcq/syncedlyrics";
+    changelog = "https://github.com/rtcq/syncedlyrics/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "syncedlyrics";
   };
 }

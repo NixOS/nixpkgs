@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit dataDir; };
 
+<<<<<<< HEAD
   meta = {
     description = "API for GeoIP/Geolocation databases";
     maintainers = with lib.maintainers; [
@@ -49,6 +50,16 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "API for GeoIP/Geolocation databases";
+    maintainers = with maintainers; [
+      thoughtpolice
+      raskin
+    ];
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.maxmind.com";
   };
 }

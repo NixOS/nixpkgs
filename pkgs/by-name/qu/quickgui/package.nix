@@ -52,12 +52,21 @@ flutter332.buildFlutterApplication rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Elegant virtual machine manager for the desktop";
     homepage = "https://github.com/quickemu-project/quickgui";
     changelog = "https://github.com/quickemu-project/quickgui/releases/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Elegant virtual machine manager for the desktop";
+    homepage = "https://github.com/quickemu-project/quickgui";
+    changelog = "https://github.com/quickemu-project/quickgui/releases/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       flexiondotorg
       heyimnova
     ];

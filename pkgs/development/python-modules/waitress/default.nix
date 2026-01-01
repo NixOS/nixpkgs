@@ -36,11 +36,19 @@ buildPythonPackage rec {
   # Tests use sockets
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Pylons/waitress";
     description = "Waitress WSGI server";
     mainProgram = "waitress-serve";
     license = lib.licenses.zpl21;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Pylons/waitress";
+    description = "Waitress WSGI server";
+    mainProgram = "waitress-serve";
+    license = licenses.zpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

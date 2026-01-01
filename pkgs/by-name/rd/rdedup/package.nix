@@ -31,11 +31,20 @@ rustPlatform.buildRustPackage rec {
     xz
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Data deduplication with compression and public key encryption";
     mainProgram = "rdedup";
     homepage = "https://github.com/dpc/rdedup";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ dywedir ];
+=======
+  meta = with lib; {
+    description = "Data deduplication with compression and public key encryption";
+    mainProgram = "rdedup";
+    homepage = "https://github.com/dpc/rdedup";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ dywedir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

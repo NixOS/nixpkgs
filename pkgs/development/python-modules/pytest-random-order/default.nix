@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "random_order" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jbasko/pytest-random-order";
     description = "Randomise the order of tests with some control over the randomness";
     changelog = "https://github.com/jbasko/pytest-random-order/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jbasko/pytest-random-order";
+    description = "Randomise the order of tests with some control over the randomness";
+    changelog = "https://github.com/jbasko/pytest-random-order/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

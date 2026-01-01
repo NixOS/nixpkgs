@@ -120,12 +120,21 @@ stdenv.mkDerivation rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "LightDM Greeter for Pantheon";
     homepage = "https://github.com/elementary/greeter";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "LightDM Greeter for Pantheon";
+    homepage = "https://github.com/elementary/greeter";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "io.elementary.greeter";
   };
 }

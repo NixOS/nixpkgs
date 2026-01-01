@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "module-hardware-facter": [
     "index.html#module-hardware-facter"
   ],
@@ -23,6 +24,8 @@
   "module-hardware-facter-usage": [
     "index.html#module-hardware-facter-usage"
   ],
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "module-security-tpm2": [
     "index.html#module-security-tpm2"
   ],
@@ -62,12 +65,15 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
+<<<<<<< HEAD
   "module-services-tandoor-recipes-migrating-media-option-1": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-1"
   ],
   "module-services-tandoor-recipes-migrating-media-option-2": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-2"
   ],
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
@@ -704,6 +710,18 @@
   "module-services-plausible-basic-usage": [
     "index.html#module-services-plausible-basic-usage"
   ],
+<<<<<<< HEAD
+=======
+  "module-services-pingvin-share": [
+    "index.html#module-services-pingvin-share"
+  ],
+  "module-services-pingvin-share-basic-usage": [
+    "index.html#module-services-pingvin-share-basic-usage"
+  ],
+  "module-services-pingvin-share-reverse-proxy-configuration": [
+    "index.html#module-services-pingvin-share-reverse-proxy-configuration"
+  ],
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "module-services-pict-rs": [
     "index.html#module-services-pict-rs"
   ],
@@ -743,6 +761,7 @@
   "module-services-nextcloud-maintainer-info": [
     "index.html#module-services-nextcloud-maintainer-info"
   ],
+<<<<<<< HEAD
   "module-services-nextcloud-spreed-signaling": [
     "index.html#module-services-nextcloud-spreed-signaling"
   ],
@@ -752,6 +771,8 @@
   "module-services-nextcloud-spreed-signaling-nats": [
     "index.html#module-services-nextcloud-spreed-signaling-nats"
   ],
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "module-services-matomo": [
     "index.html#module-services-matomo"
   ],
@@ -1128,12 +1149,15 @@
   "module-services-samba-configuring-file-share": [
     "index.html#module-services-samba-configuring-file-share"
   ],
+<<<<<<< HEAD
   "module-services-tandoor-recipes": [
     "index.html#module-services-tandoor-recipes"
   ],
   "module-services-tandoor-recipes-migrating-media": [
     "index.html#module-services-tandoor-recipes-migrating-media"
   ],
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "module-services-litestream": [
     "index.html#module-services-litestream"
   ],
@@ -1230,12 +1254,15 @@
   "module-services-gitlab-maintenance-rake": [
     "index.html#module-services-gitlab-maintenance-rake"
   ],
+<<<<<<< HEAD
   "module-services-gitlab-runner": [
     "index.html#module-services-gitlab-runner"
   ],
   "ex-gitlab-runner-podman": [
     "index.html#ex-gitlab-runner-podman"
   ],
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "module-forgejo": [
     "index.html#module-forgejo"
   ],
@@ -1489,9 +1516,12 @@
   "module-services-postgres-upstream-deviation": [
     "index.html#module-services-postgres-upstream-deviation"
   ],
+<<<<<<< HEAD
   "module-services-postgresql-target-vs-service": [
     "index.html#module-services-postgresql-target-vs-service"
   ],
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   "module-services-foundationdb": [
     "index.html#module-services-foundationdb"
   ],

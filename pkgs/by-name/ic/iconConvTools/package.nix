@@ -28,9 +28,16 @@ stdenv.mkDerivation {
   dontPatchELF = true;
   dontStrip = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for icon conversion specific to nix package manager";
     maintainers = with lib.maintainers; [ jraygauthier ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Tools for icon conversion specific to nix package manager";
+    maintainers = with maintainers; [ jraygauthier ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

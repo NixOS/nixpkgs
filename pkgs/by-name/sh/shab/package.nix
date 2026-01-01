@@ -46,12 +46,21 @@ let
       inherit render renderText;
     };
 
+<<<<<<< HEAD
     meta = {
       description = "Bash templating language";
       mainProgram = "shab";
       homepage = "https://github.com/zimbatm/shab";
       license = lib.licenses.unlicense;
       maintainers = with lib.maintainers; [ zimbatm ];
+=======
+    meta = with lib; {
+      description = "Bash templating language";
+      mainProgram = "shab";
+      homepage = "https://github.com/zimbatm/shab";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ zimbatm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = bash.meta.platforms;
     };
   };

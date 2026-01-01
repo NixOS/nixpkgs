@@ -38,11 +38,20 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_CXX_FLAGS='-std=c++11'";
 
+<<<<<<< HEAD
   meta = {
     description = "Platform library for libcec and Kodi addons";
     homepage = "https://github.com/Pulse-Eight/platform";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    description = "Platform library for libcec and Kodi addons";
+    homepage = "https://github.com/Pulse-Eight/platform";
+    license = lib.licenses.gpl2Plus;
+    platforms = platforms.all;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

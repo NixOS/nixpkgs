@@ -15,14 +15,22 @@
 
 buildPythonPackage rec {
   pname = "pydo";
+<<<<<<< HEAD
   version = "0.23.0";
+=======
+  version = "0.21.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "pydo";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-wmrth6n6vlYLMMiNYm6p5sS2keEFsnGm9sGjShSsLaA=";
+=======
+    hash = "sha256-pCvJ8UY5hvmlUAQ3oMdnDVhK0x/5iFBpaw3/W9RV8Z0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ poetry-core ];

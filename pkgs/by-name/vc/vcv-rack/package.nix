@@ -348,22 +348,38 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags "-s $out/Applications/'VCV Rack ${lib.versions.major finalAttrs.version} Free.app'/Contents/Resources"
     '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Open-source virtual modular synthesizer";
     homepage = "https://vcvrack.com/";
     # The source is GPL3+ licensed, some of the art is CC-BY-NC 4.0 or under a
     # no-derivatives clause
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Plus
       cc-by-nc-40
       unfreeRedistributable
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nathyong
       jpotier
       ddelabru
     ];
     mainProgram = "Rack";
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

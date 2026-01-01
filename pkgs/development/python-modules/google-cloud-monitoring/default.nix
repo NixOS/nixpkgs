@@ -57,11 +57,19 @@ buildPythonPackage rec {
     "google.cloud.monitoring_v3"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stackdriver Monitoring API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-monitoring";
     changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-monitoring-v${version}/packages/google-cloud-monitoring";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Stackdriver Monitoring API client library";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-monitoring";
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-monitoring-v${version}/packages/google-cloud-monitoring";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

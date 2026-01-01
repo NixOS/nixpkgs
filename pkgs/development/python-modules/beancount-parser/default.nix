@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beancount_parser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Standalone Lark based Beancount syntax parser";
     homepage = "https://github.com/LaunchPlatform/beancount-parser/";
     changelog = "https://github.com/LaunchPlatform/beancount-parser/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Standalone Lark based Beancount syntax parser";
+    homepage = "https://github.com/LaunchPlatform/beancount-parser/";
+    changelog = "https://github.com/LaunchPlatform/beancount-parser/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

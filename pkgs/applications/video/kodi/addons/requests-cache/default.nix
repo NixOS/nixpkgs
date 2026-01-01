@@ -27,10 +27,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/reclosedev/requests-cache";
     description = "Persistent cache for requests library";
     license = lib.licenses.bsd2;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/reclosedev/requests-cache";
+    description = "Persistent cache for requests library";
+    license = licenses.bsd2;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

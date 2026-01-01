@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gekko" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for machine learning and optimization";
     homepage = "https://github.com/BYU-PRISM/GEKKO";
     changelog = "https://github.com/BYU-PRISM/GEKKO/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ BatteredBunny ];
+=======
+  meta = with lib; {
+    description = "Module for machine learning and optimization";
+    homepage = "https://github.com/BYU-PRISM/GEKKO";
+    changelog = "https://github.com/BYU-PRISM/GEKKO/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ BatteredBunny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "jQuery, bundled up so apps can depend upon it";
     homepage = "https://bitbucket.org/tim_heap/django-jquery";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "jQuery, bundled up so apps can depend upon it";
+    homepage = "https://bitbucket.org/tim_heap/django-jquery";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

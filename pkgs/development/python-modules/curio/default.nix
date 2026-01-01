@@ -50,11 +50,20 @@ buildPythonPackage rec {
   # curio does not package new releaseas any more
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Library for performing concurrent I/O with coroutines in Python";
     homepage = "https://github.com/dabeaz/curio";
     changelog = "https://github.com/dabeaz/curio/raw/${version}/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.pbsds ];
+=======
+  meta = with lib; {
+    description = "Library for performing concurrent I/O with coroutines in Python";
+    homepage = "https://github.com/dabeaz/curio";
+    changelog = "https://github.com/dabeaz/curio/raw/${version}/CHANGES";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

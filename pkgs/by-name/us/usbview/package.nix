@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "USB viewer for Linux";
     license = lib.licenses.gpl2Only;
@@ -38,6 +39,17 @@ stdenv.mkDerivation rec {
       h7x4
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "USB viewer for Linux";
+    license = licenses.gpl2Only;
+    homepage = "http://www.kroah.com/linux-usb/";
+    maintainers = with maintainers; [
+      shamilton
+      h7x4
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "usbview";
   };
 }

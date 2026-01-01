@@ -48,12 +48,21 @@ stdenv.mkDerivation {
     providedSessions = [ "wmderland" ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Modern and minimal X11 tiling window manager";
     homepage = "https://github.com/aesophor/wmderland";
     license = lib.licenses.mit;
     platforms = libX11.meta.platforms;
     maintainers = with lib.maintainers; [ takagiy ];
+=======
+  meta = with lib; {
+    description = "Modern and minimal X11 tiling window manager";
+    homepage = "https://github.com/aesophor/wmderland";
+    license = licenses.mit;
+    platforms = libX11.meta.platforms;
+    maintainers = with maintainers; [ takagiy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wmderland";
   };
 }

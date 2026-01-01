@@ -33,15 +33,26 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Distributed stream processing framework";
     mainProgram = "flink";
     homepage = "https://flink.apache.org";
     downloadPage = "https://flink.apache.org/downloads.html";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mbode
       autophagy
     ];

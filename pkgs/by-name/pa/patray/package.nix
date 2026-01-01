@@ -37,10 +37,17 @@ python312.pkgs.buildPythonApplication rec {
     wrapQtApp $out/bin/patray --prefix QT_PLUGIN_PATH : ${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Yet another tray pulseaudio frontend";
     homepage = "https://github.com/pohmelie/patray";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Yet another tray pulseaudio frontend";
+    homepage = "https://github.com/pohmelie/patray";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "patray";
   };

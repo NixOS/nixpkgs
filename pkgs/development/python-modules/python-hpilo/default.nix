@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hpilo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to access the HP iLO XML interface";
     homepage = "https://seveas.github.io/python-hpilo/";
@@ -33,6 +34,17 @@ buildPythonPackage rec {
       gpl3Plus
     ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to access the HP iLO XML interface";
+    homepage = "https://seveas.github.io/python-hpilo/";
+    changelog = "https://github.com/seveas/python-hpilo/blob/${version}/CHANGES";
+    license = with licenses; [
+      asl20
+      gpl3Plus
+    ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hpilo_cli";
   };
 }

@@ -17,10 +17,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-566hk79oXApJm5p+gEgikV08n19hH1Tk36DvgPuQKLI=";
 
+<<<<<<< HEAD
   meta = {
     description = "Super simple HTTP server that replies a fixed body with a fixed response code";
     homepage = "https://github.com/svenstaro/dummyhttp";
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    description = "Super simple HTTP server that replies a fixed body with a fixed response code";
+    homepage = "https://github.com/svenstaro/dummyhttp";
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "dummyhttp";
   };

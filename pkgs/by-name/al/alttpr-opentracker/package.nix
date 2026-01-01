@@ -65,16 +65,27 @@ buildDotnetModule rec {
     "libintl.so.8"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tracking application for A Link to the Past Randomizer";
     homepage = "https://github.com/trippsc2/OpenTracker";
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    description = "Tracking application for A Link to the Past Randomizer";
+    homepage = "https://github.com/trippsc2/OpenTracker";
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fromSource
       # deps
       binaryBytecode
       binaryNativeCode
     ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "OpenTracker";
     platforms = [ "x86_64-linux" ];

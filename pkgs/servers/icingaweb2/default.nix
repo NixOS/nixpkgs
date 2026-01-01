@@ -30,16 +30,27 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) icingaweb2; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Webinterface for Icinga 2";
     longDescription = ''
       A lightweight and extensible web interface to keep an eye on your environment.
       Analyse problems and act on them.
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.helsinki-systems ];
     mainProgram = "icingacli";
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    teams = [ teams.helsinki-systems ];
+    mainProgram = "icingacli";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

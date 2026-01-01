@@ -10,23 +10,41 @@
   openjpeg,
   onetbb,
   blend2d,
+<<<<<<< HEAD
   nix-update-script,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdf4qt";
+<<<<<<< HEAD
   version = "1.5.2.0";
+=======
+  version = "1.5.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "JakubMelka";
     repo = "PDF4QT";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-pY1PM3H9vANxogRzQvuIohIi9d8TL093kMAl49trTho=";
   };
 
   patches = [
     # https://github.com/JakubMelka/PDF4QT/pull/322
     ./migrated_to_blend2d_0.21.x.patch
+=======
+    hash = "sha256-Ysrz/uCSTFK5wGNdTXhpq6QVf7Ju1xWisNVUtBtdEjc=";
+  };
+
+  patches = [
+    # lcms2 cmake module only appears when built with vcpkg.
+    # We directly search for the corresponding libraries and
+    # header files instead.
+    ./find_lcms2_path.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [
@@ -49,9 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     blend2d
   ];
 
+<<<<<<< HEAD
   # `blend2d.h` moved to `blend2d/blend2d.h` in blend2d >= 0.21.2
   NIX_CFLAGS_COMPILE = "-I${blend2d.dev}/include/blend2d";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmakeFlags = [
     (lib.cmakeBool "PDF4QT_INSTALL_TO_USR" false)
   ];
@@ -62,8 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(''${gappsWrapperArgs[@]})
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Open source PDF editor";
     longDescription = ''

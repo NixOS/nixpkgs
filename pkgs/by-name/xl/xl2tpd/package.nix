@@ -25,11 +25,19 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = src.meta.homepage;
     description = "Layer 2 Tunnelling Protocol Daemon (RFC 2661)";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = src.meta.homepage;
+    description = "Layer 2 Tunnelling Protocol Daemon (RFC 2661)";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -14,7 +14,10 @@
   installShellFiles,
   nixosTests,
   nix-update-script,
+<<<<<<< HEAD
   versionCheckHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -22,14 +25,22 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
+<<<<<<< HEAD
   version = "1.4.3";
+=======
+  version = "1.4.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-v42Mv2wz34w2VYu2mPT/K7VtGSYsUDr+NUM99AzpSB0=";
+=======
+    hash = "sha256-KoOulgOkMgnkN3I0Gw9z0YKZvqvPJ0A9sIAxRLOlchU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -100,7 +111,10 @@ python.pkgs.buildPythonApplication rec {
     pytest-benchmark
     pytest-xdist
     pytestCheckHook
+<<<<<<< HEAD
     versionCheckHook
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pytestFlags = [
@@ -144,6 +158,11 @@ python.pkgs.buildPythonApplication rec {
     "man"
   ];
 
+<<<<<<< HEAD
+=======
+  disabled = python.pythonOlder "3.9";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru.updateScript = nix-update-script {
     # Only match tags formatted as x.y.z (e.g., 1.2.3)
     extraArgs = [
@@ -152,6 +171,7 @@ python.pkgs.buildPythonApplication rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
@@ -161,6 +181,18 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "borg";
     maintainers = with lib.maintainers; [
       dotlambda
+=======
+  meta = with lib; {
+    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
+    description = "Deduplicating archiver with compression and encryption";
+    homepage = "https://www.borgbackup.org";
+    license = licenses.bsd3;
+    platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
+    mainProgram = "borg";
+    maintainers = with maintainers; [
+      dotlambda
+      globin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

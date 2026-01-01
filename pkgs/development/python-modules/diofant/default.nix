@@ -80,11 +80,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diofant" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://diofant.readthedocs.io/en/latest/release/notes-${src.tag}.html";
     description = "Python CAS library";
     homepage = "https://github.com/diofant/diofant";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ suhr ];
+=======
+  meta = with lib; {
+    changelog = "https://diofant.readthedocs.io/en/latest/release/notes-${src.tag}.html";
+    description = "Python CAS library";
+    homepage = "https://github.com/diofant/diofant";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ suhr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

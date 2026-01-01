@@ -41,12 +41,21 @@ buildPythonPackage rec {
     "fritzconnection/tests/test_functional.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to communicate with the AVM Fritz!Box";
     homepage = "https://github.com/kbr/fritzconnection";
     changelog = "https://fritzconnection.readthedocs.io/en/${version}/sources/version_history.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python module to communicate with the AVM Fritz!Box";
+    homepage = "https://github.com/kbr/fritzconnection";
+    changelog = "https://fritzconnection.readthedocs.io/en/${version}/sources/version_history.html";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dotlambda
       valodim
     ];

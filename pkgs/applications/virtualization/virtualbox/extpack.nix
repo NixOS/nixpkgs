@@ -19,11 +19,20 @@ fetchurl rec {
     assert (builtins.stringLength value) == 64;
     value;
 
+<<<<<<< HEAD
   meta = {
     description = "Oracle Extension pack for VirtualBox";
     license = lib.licenses.virtualbox-puel;
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Oracle Extension pack for VirtualBox";
+    license = licenses.virtualbox-puel;
+    homepage = "https://www.virtualbox.org/";
+    maintainers = with maintainers; [
+      sander
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       friedrichaltheide
     ];
     platforms = [ "x86_64-linux" ];

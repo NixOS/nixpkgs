@@ -47,12 +47,21 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/properties-cpp";
     description = "Very simple convenience library for handling properties and signals in C++11";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/ubports/development/core/lib-cpp/properties-cpp";
+    description = "Very simple convenience library for handling properties and signals in C++11";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ edwtjo ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "properties-cpp"
     ];

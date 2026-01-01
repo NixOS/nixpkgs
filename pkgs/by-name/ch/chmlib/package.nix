@@ -27,10 +27,18 @@ stdenv.mkDerivation {
     "--enable-devel"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.jedrea.com/chmlib";
     license = lib.licenses.lgpl2;
     description = "Library for dealing with Microsoft ITSS/CHM format files";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://www.jedrea.com/chmlib";
+    license = licenses.lgpl2;
+    description = "Library for dealing with Microsoft ITSS/CHM format files";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -14,8 +14,14 @@ let
   };
 in
 
+<<<<<<< HEAD
 lib.recurseIntoAttrs rec {
   client = callPackage ./client.nix { inherit src version; };
   server = callPackage ./server.nix { inherit src version; };
   inherit (server) tests;
+=======
+lib.recurseIntoAttrs {
+  client = callPackage ./client.nix { inherit src version; };
+  server = callPackage ./server.nix { inherit src version; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

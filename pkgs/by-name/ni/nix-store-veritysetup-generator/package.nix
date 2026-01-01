@@ -39,10 +39,17 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) nix-store-veritysetup;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Systemd unit generator for a verity protected Nix Store";
     homepage = "https://github.com/nikstur/nix-store-veritysetup-generator";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Systemd unit generator for a verity protected Nix Store";
+    homepage = "https://github.com/nikstur/nix-store-veritysetup-generator";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "nix-store-veritysetup-generator";
   };

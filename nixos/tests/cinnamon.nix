@@ -100,7 +100,11 @@
 
       with subtest("Open virtual keyboard"):
           machine.succeed("${su "dbus-send --print-reply --dest=org.Cinnamon /org/Cinnamon org.Cinnamon.ToggleKeyboard"}")
+<<<<<<< HEAD
           machine.wait_for_text('(Esc|123)')
+=======
+          machine.wait_for_text('(Ctrl|Alt)')
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           machine.sleep(2)
           machine.screenshot("cinnamon_virtual_keyboard")
 

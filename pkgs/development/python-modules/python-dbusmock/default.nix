@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   runCommand,
 
   # build-system
@@ -13,7 +16,10 @@
   dbus-python,
 
   # checks
+<<<<<<< HEAD
   doCheck ? true,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dbus,
   gobject-introspection,
   pygobject3,
@@ -42,6 +48,7 @@ buildPythonPackage rec {
     hash = "sha256-9YnMOQUuwAcrL0ZaQr7iGly9esZaSRIFThQRNUtSndo=";
   };
 
+<<<<<<< HEAD
   patches = lib.optionals doCheck [
     (fetchpatch {
       name = "networkmanager-1.54.2.patch";
@@ -50,6 +57,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     setuptools
     setuptools-scm
@@ -57,8 +66,11 @@ buildPythonPackage rec {
 
   dependencies = [ dbus-python ];
 
+<<<<<<< HEAD
   inherit doCheck;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeCheckInputs = [
     dbus
     gobject-introspection
@@ -77,6 +89,7 @@ buildPythonPackage rec {
     "test_session_service_activation"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${src.tag}";
     description = "Mock D-Bus objects for tests";
@@ -84,5 +97,14 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ callahad ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/martinpitt/python-dbusmock/releases/tag/${src.tag}";
+    description = "Mock D-Bus objects for tests";
+    homepage = "https://github.com/martinpitt/python-dbusmock";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ callahad ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -57,6 +57,7 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://chromium.googlesource.com/libyuv/libyuv";
     description = "Open source project that includes YUV scaling and conversion functionality";
@@ -64,5 +65,14 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ leixb ];
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://chromium.googlesource.com/libyuv/libyuv";
+    description = "Open source project that includes YUV scaling and conversion functionality";
+    mainProgram = "yuvconvert";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ leixb ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

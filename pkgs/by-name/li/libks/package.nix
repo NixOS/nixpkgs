@@ -68,12 +68,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Foundational support for signalwire C products";
     homepage = "https://github.com/signalwire/libks";
     maintainers = with lib.maintainers; [ misuzu ];
     teams = [ lib.teams.ngi ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+=======
+    platforms = platforms.unix;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

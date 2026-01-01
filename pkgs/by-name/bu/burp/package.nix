@@ -58,11 +58,20 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "localstatedir=/tmp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "BackUp and Restore Program";
     homepage = "https://burp.grke.org";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ arjan-s ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "BackUp and Restore Program";
+    homepage = "https://burp.grke.org";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ arjan-s ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

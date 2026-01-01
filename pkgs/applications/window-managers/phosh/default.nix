@@ -49,8 +49,13 @@ let
     group = "World";
     owner = "Phosh";
     repo = "libcall-ui";
+<<<<<<< HEAD
     tag = "v0.1.5";
     hash = "sha256-4lSTwSRZditK51N/4s3tmIOgffe5+WyKxVq2IGqWRn4=";
+=======
+    tag = "v0.1.4";
+    hash = "sha256-6fiqdvagcMnvaZ9UxC05haBwObcsqwgJL/V03LuSMF8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Derived from subprojects/gvc.wrap
@@ -64,7 +69,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
+<<<<<<< HEAD
   version = "0.51.0";
+=======
+  version = "0.50.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -72,7 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phosh";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-bM1eKa5/aBjAHOFYyqjs6pLmr3R/WoK3590yGiLVNM4=";
+=======
+    hash = "sha256-AvnMiLapHKSObz6x/fkLxqreksBkwLbcG6myj5xMuwc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -156,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
@@ -166,6 +180,19 @@ stdenv.mkDerivation (finalAttrs: {
       armelclo
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Pure Wayland shell prototype for GNOME on mobile devices";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      masipcat
+      zhaofengli
+      armelclo
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "phosh-session";
   };
 })

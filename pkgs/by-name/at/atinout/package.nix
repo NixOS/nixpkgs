@@ -29,12 +29,21 @@ stdenv.mkDerivation {
     make PREFIX=$out install
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://atinout.sourceforge.net";
     description = "Tool for talking to modems";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ bendlas ];
+=======
+  meta = with lib; {
+    homepage = "https://atinout.sourceforge.net";
+    description = "Tool for talking to modems";
+    platforms = platforms.unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ bendlas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "atinout";
   };
 }

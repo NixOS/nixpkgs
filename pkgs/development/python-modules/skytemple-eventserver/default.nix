@@ -19,10 +19,18 @@ buildPythonPackage rec {
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "skytemple_eventserver" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/SkyTemple/skytemple-eventserver";
     description = "Websocket server that emits SkyTemple UI events";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/SkyTemple/skytemple-eventserver";
+    description = "Websocket server that emits SkyTemple UI events";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ marius851000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

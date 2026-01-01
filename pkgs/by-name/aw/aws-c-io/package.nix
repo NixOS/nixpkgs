@@ -37,11 +37,20 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "AWS SDK for C module for IO and TLS";
     homepage = "https://github.com/awslabs/aws-c-io";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "AWS SDK for C module for IO and TLS";
+    homepage = "https://github.com/awslabs/aws-c-io";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

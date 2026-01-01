@@ -37,10 +37,18 @@ bundlerEnv rec {
     version = "ronin ${version}";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Free and Open Source Ruby toolkit for security research and development";
     homepage = "https://ronin-rb.dev";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ Ch1keen ];
+=======
+  meta = with lib; {
+    description = "Free and Open Source Ruby toolkit for security research and development";
+    homepage = "https://ronin-rb.dev";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ Ch1keen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

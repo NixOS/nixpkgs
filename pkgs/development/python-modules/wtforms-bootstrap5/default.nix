@@ -29,11 +29,20 @@ buildPythonPackage rec {
     lxml
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple library for rendering WTForms in HTML as Bootstrap 5 form controls";
     homepage = "https://github.com/LaunchPlatform/wtforms-bootstrap5";
     changelog = "https://github.com/LaunchPlatform/wtforms-bootstrap5/releases/tag/${version}";
     license = lib.licenses.mit;
     teams = [ lib.teams.wdz ];
+=======
+  meta = with lib; {
+    description = "Simple library for rendering WTForms in HTML as Bootstrap 5 form controls";
+    homepage = "https://github.com/LaunchPlatform/wtforms-bootstrap5";
+    changelog = "https://github.com/LaunchPlatform/wtforms-bootstrap5/releases/tag/${version}";
+    license = licenses.mit;
+    teams = [ teams.wdz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

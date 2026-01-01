@@ -24,7 +24,11 @@ let
       cp $src $out/lib/dotnet/keepass/
     '';
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Enables KeePass to copy individual characters by index";
       longDescription = ''
         Character Copy is a lightweight KeePass plugin that integrates into KeePass' entry menu and
@@ -38,8 +42,13 @@ let
         "x86_64-linux"
       ];
       # licensing info was found in source files https://github.com/SketchingDev/Character-Copy/search?q=license
+<<<<<<< HEAD
       license = lib.licenses.gpl2;
       maintainers = with lib.maintainers; [ nazarewk ];
+=======
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ nazarewk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

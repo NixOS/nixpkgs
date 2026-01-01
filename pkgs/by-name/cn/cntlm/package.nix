@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/man/; cp doc/cntlm.1 $out/man/;
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "NTLM/NTLMv2 authenticating HTTP proxy";
     homepage = "https://cntlm.sourceforge.net/";
@@ -36,6 +37,17 @@ stdenv.mkDerivation rec {
       lib.maintainers.carlosdagos
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "NTLM/NTLMv2 authenticating HTTP proxy";
+    homepage = "https://cntlm.sourceforge.net/";
+    license = licenses.gpl2Only;
+    maintainers = [
+      maintainers.qknight
+      maintainers.carlosdagos
+    ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cntlm";
   };
 }

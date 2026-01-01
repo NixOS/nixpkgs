@@ -73,10 +73,18 @@ stdenvNoCC.mkDerivation {
     cp LICENSE "$out/share/licenses/undistract-me"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Notifies you when long-running terminal commands complete";
     homepage = "https://github.com/jml/undistract-me";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kira-bruneau ];
+=======
+  meta = with lib; {
+    description = "Notifies you when long-running terminal commands complete";
+    homepage = "https://github.com/jml/undistract-me";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kira-bruneau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

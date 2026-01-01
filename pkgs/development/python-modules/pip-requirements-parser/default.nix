@@ -42,11 +42,20 @@ buildPythonPackage rec {
     "test_legacy_version_is_deprecated"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to parse pip requirements";
     homepage = "https://github.com/nexB/pip-requirements-parser";
     changelog = "https://github.com/nexB/pip-requirements-parser/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to parse pip requirements";
+    homepage = "https://github.com/nexB/pip-requirements-parser";
+    changelog = "https://github.com/nexB/pip-requirements-parser/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

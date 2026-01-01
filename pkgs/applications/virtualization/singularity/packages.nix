@@ -9,19 +9,31 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
+<<<<<<< HEAD
         version = "1.4.5";
+=======
+        version = "1.4.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           tag = "v${version}";
+<<<<<<< HEAD
           hash = "sha256-J8q/dUW5OPbMXpeZfRP3C2nseimH+HBhkSLoIAE6NlI=";
+=======
+          hash = "sha256-d3XcN+Jc9KHzVCHOatgpId/DeY/HhVkI9eF+48rzxO4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
+<<<<<<< HEAD
         vendorHash = "sha256-47Ri7Jdy31rIp+lon6kkpa5e7pgPevU8ajsIa/RVScY=";
+=======
+        vendorHash = "sha256-l8c85M9IdLNhZ40FkC+zH+0wHKcYHcXFbhMklCLULzs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         extraDescription = " (previously known as Singularity)";
         extraMeta.homepage = "https://apptainer.org";
@@ -46,19 +58,31 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
+<<<<<<< HEAD
         version = "4.3.6";
+=======
+        version = "4.3.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
           tag = "v${version}";
+<<<<<<< HEAD
           hash = "sha256-qIpKogLQAz5WVPYsUwldR4KZvrlEFuIO1Lxp9Dcs52U=";
+=======
+          hash = "sha256-+KW9XaYXNzOpUier8FJ4lbKx7uJ8jNKHkt2QX2Kiehs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
+<<<<<<< HEAD
         vendorHash = "sha256-cFeX4zqTegK5oaT+P/4/EoS3161GPMvsZt2Jq2kmI7U=";
+=======
+        vendorHash = "sha256-JCRUhY00Zj6rlmyDW+RKoGNKhmxesgHn9XdO8h2DAj4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         extraConfigureFlags = [
           # Do not build squashfuse from the Git submodule sources, use Nixpkgs provided version

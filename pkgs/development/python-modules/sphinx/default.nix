@@ -37,7 +37,10 @@
   pytestCheckHook,
   pytest-xdist,
   typing-extensions,
+<<<<<<< HEAD
   writableTmpDirAsHomeHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # reverse dependencies to test
   breathe,
@@ -98,6 +101,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
     typing-extensions
+<<<<<<< HEAD
     writableTmpDirAsHomeHook
   ];
 
@@ -111,6 +115,13 @@ buildPythonPackage rec {
     "tests/test_util/test_util_inspect.py"
     "tests/test_util/test_util_typing.py"
   ];
+=======
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # requires network access
@@ -133,6 +144,11 @@ buildPythonPackage rec {
     "test_document_toc_only"
     # Assertion error
     "test_gettext_literalblock_additional"
+<<<<<<< HEAD
+=======
+    # requires cython_0, but fails miserably on 3.11
+    "test_cython"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Could not fetch remote image: http://localhost:7777/sphinx.png
     "test_copy_images"
     # ModuleNotFoundError: No module named 'fish_licence.halibut'
@@ -145,20 +161,36 @@ buildPythonPackage rec {
     "test_load_mappings_cache_update"
     "test_load_mappings_cache_revert_update"
   ]
+<<<<<<< HEAD
   ++ lib.optionals (pythonAtLeast "3.14") [
     "test_autodoc_special_members"
     "test_is_invalid_builtin_class"
     "test_autosummary_generate_content_for_module_imported_members"
+=======
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/sphinx-doc/sphinx/issues/12430
+    "test_autodoc_type_aliases"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous
     "test_autosummary_generate_content_for_module"
     "test_autosummary_generate_content_for_module_skipped"
+<<<<<<< HEAD
     # Struct vs struct.Struct
     "test_restify"
     "test_stringify_annotation"
     "test_stringify_type_union_operator"
+=======
+    # internals are asserted which are sightly different in PyPy
+    "test_autodoc_inherited_members_None"
+    "test_automethod_for_builtin"
+    "test_builtin_function"
+    "test_isattributedescriptor"
+    "test_methoddescriptor"
+    "test_partialfunction"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   passthru.tests = {
@@ -198,5 +230,9 @@ buildPythonPackage rec {
     homepage = "https://www.sphinx-doc.org";
     changelog = "https://www.sphinx-doc.org/en/master/changes.html";
     license = lib.licenses.bsd3;
+<<<<<<< HEAD
+=======
+    teams = [ lib.teams.sphinx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

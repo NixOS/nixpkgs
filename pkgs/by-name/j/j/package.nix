@@ -76,7 +76,11 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://jsoftware.com/";
     changelog = "https://code.jsoftware.com/wiki/System/ReleaseNotes";
     description = "J programming language, an ASCII-based APL successor";
@@ -86,13 +90,22 @@ stdenv.mkDerivation rec {
       of data. It is a powerful tool for developing algorithms and exploring
       problems that are not already well understood.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raskin
       synthetica
     ];
     broken = stdenv.hostPlatform.isDarwin;
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jconsole";
   };
 }

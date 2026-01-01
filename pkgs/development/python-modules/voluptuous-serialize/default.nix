@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert Voluptuous schemas to dictionaries so they can be serialized";
     homepage = "https://github.com/home-assistant-libs/voluptuous-serialize";
     changelog = "https://github.com/home-assistant-libs/voluptuous-serialize/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Convert Voluptuous schemas to dictionaries so they can be serialized";
+    homepage = "https://github.com/home-assistant-libs/voluptuous-serialize";
+    changelog = "https://github.com/home-assistant-libs/voluptuous-serialize/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

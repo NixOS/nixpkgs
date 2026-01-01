@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dvc_gdrive" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Google Drive plugin for DVC";
     homepage = "https://github.com/iterative/dvc-gdrive";
     changelog = "https://github.com/iterative/dvc-gdrive/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Google Drive plugin for DVC";
+    homepage = "https://github.com/iterative/dvc-gdrive";
+    changelog = "https://github.com/iterative/dvc-gdrive/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

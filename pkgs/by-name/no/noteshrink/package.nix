@@ -26,11 +26,19 @@ buildPythonApplication rec {
     pillow
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert scans of handwritten notes to beautiful, compact PDFs";
     homepage = "https://mzucker.github.io/2016/09/20/noteshrink.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rnhmjoj ];
+=======
+  meta = with lib; {
+    description = "Convert scans of handwritten notes to beautiful, compact PDFs";
+    homepage = "https://mzucker.github.io/2016/09/20/noteshrink.html";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rnhmjoj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "noteshrink";
   };
 }

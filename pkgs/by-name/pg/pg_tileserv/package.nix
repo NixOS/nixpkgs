@@ -45,11 +45,20 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Very thin PostGIS-only tile server in Go";
     mainProgram = "pg_tileserv";
     homepage = "https://github.com/CrunchyData/pg_tileserv";
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];
+=======
+  meta = with lib; {
+    description = "Very thin PostGIS-only tile server in Go";
+    mainProgram = "pg_tileserv";
+    homepage = "https://github.com/CrunchyData/pg_tileserv";
+    license = licenses.asl20;
+    teams = [ teams.geospatial ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

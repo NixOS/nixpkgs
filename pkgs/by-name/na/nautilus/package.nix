@@ -127,12 +127,21 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "File manager for GNOME";
     homepage = "https://apps.gnome.org/Nautilus/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "File manager for GNOME";
+    homepage = "https://apps.gnome.org/Nautilus/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nautilus";
   };
 })

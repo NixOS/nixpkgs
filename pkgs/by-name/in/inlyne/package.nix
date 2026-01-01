@@ -71,11 +71,19 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GPU powered browserless markdown viewer";
     homepage = "https://github.com/Inlyne-Project/inlyne";
     changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "GPU powered browserless markdown viewer";
+    homepage = "https://github.com/Inlyne-Project/inlyne";
+    changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "inlyne";
   };

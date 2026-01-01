@@ -27,10 +27,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pubnubsubhandler" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PubNub subscription between PubNub and Home Assistant";
     homepage = "https://github.com/w1ll1am23/pubnubsub-handler";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "PubNub subscription between PubNub and Home Assistant";
+    homepage = "https://github.com/w1ll1am23/pubnubsub-handler";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

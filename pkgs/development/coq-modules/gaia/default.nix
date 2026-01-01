@@ -49,9 +49,16 @@ mkCoqDerivation {
     stdlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of books from Bourbaki's Elements of Mathematics in Coq";
     maintainers = with lib.maintainers; [ Zimmi48 ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Implementation of books from Bourbaki's Elements of Mathematics in Coq";
+    maintainers = with maintainers; [ Zimmi48 ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

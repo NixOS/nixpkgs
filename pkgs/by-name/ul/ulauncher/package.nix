@@ -142,6 +142,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
@@ -149,6 +150,15 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "ulauncher";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fast application launcher for Linux, written in Python, using GTK";
+    homepage = "https://ulauncher.io/";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    mainProgram = "ulauncher";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aaronjanse
     ];
   };

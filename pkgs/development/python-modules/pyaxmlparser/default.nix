@@ -28,12 +28,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python3 Parser for Android XML file and get Application Name without using Androguard";
     mainProgram = "apkinfo";
     homepage = "https://github.com/appknox/pyaxmlparser";
     # Files from Androguard are licensed ASL 2.0
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       asl20
     ];

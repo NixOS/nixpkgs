@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       --replace "'rU'" "'r'"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for audio labelling";
     homepage = "https://aubio.org/";
@@ -53,5 +54,16 @@ stdenv.mkDerivation rec {
       fpletz
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library for audio labelling";
+    homepage = "https://aubio.org/";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      marcweber
+      fpletz
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

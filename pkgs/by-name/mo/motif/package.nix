@@ -122,6 +122,7 @@ stdenv.mkDerivation rec {
     "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ];
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = toString (
     [
       "-std=gnu17"
@@ -131,6 +132,14 @@ stdenv.mkDerivation rec {
       "-Wno-error=incompatible-function-pointer-types"
     ]
   );
+=======
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-function-pointer-types"
+    ];
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   enableParallelBuilding = true;
 
@@ -140,12 +149,21 @@ stdenv.mkDerivation rec {
     cp config/util/makestrs tools/wml/{wml,wmluiltok,.libs/wmldbcreate} "$out/lib/internals"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://motif.ics.com";
     description = "Unix standard widget-toolkit and window-manager";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [ lgpl21Plus ];
     maintainers = with lib.maintainers; [ qyliss ];
+=======
+  meta = with lib; {
+    homepage = "https://motif.ics.com";
+    description = "Unix standard widget-toolkit and window-manager";
+    platforms = platforms.unix;
+    license = with licenses; [ lgpl21Plus ];
+    maintainers = with maintainers; [ qyliss ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = demoSupport && stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16";
   };
 }

@@ -28,11 +28,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utilize mouse side navigation buttons";
     homepage = "https://sensible-side-buttons.archagon.net";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ yamashitax ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Utilize mouse side navigation buttons";
+    homepage = "https://sensible-side-buttons.archagon.net";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ yamashitax ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

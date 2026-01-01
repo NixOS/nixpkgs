@@ -58,7 +58,11 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "mkosi";
+<<<<<<< HEAD
   version = "26";
+=======
+  version = "25.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "pyproject";
 
   outputs = [
@@ -69,8 +73,13 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
+<<<<<<< HEAD
     tag = "v${version}";
     hash = "sha256-6DVIyFsEV2VkQ/kesn6cN+iH9MW+mmAZw5i0R5C4xaU=";
+=======
+    rev = "21850673a7f75125d516268ce379dae776dd816a";
+    hash = "sha256-3dhr9lFJpI8aN8HILaMvGuuTbmTVUqdaLAGxSpqciTs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -120,6 +129,7 @@ python3Packages.buildPythonApplication rec {
     mv mkosi/resources/man/mkosi.1 $out/share/man/man1/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Build legacy-free OS images";
     homepage = "https://github.com/systemd/mkosi";
@@ -131,5 +141,18 @@ python3Packages.buildPythonApplication rec {
       msanft
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Build legacy-free OS images";
+    homepage = "https://github.com/systemd/mkosi";
+    changelog = "https://github.com/systemd/mkosi/releases/tag/v${version}";
+    license = licenses.lgpl21Only;
+    mainProgram = "mkosi";
+    maintainers = with maintainers; [
+      malt3
+      msanft
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

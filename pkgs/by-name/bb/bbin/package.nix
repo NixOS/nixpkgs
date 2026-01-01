@@ -44,6 +44,7 @@ stdenvNoCC.mkDerivation rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/babashka/bbin";
     description = "Install any Babashka script or project with one command";
@@ -51,5 +52,14 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.mit;
     inherit (babashka-unwrapped.meta) platforms;
     maintainers = with lib.maintainers; [ sohalt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/babashka/bbin";
+    description = "Install any Babashka script or project with one command";
+    mainProgram = "bbin";
+    license = licenses.mit;
+    inherit (babashka-unwrapped.meta) platforms;
+    maintainers = with maintainers; [ sohalt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

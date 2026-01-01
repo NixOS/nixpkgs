@@ -41,10 +41,17 @@ buildPythonPackage rec {
     trial -j$NIX_BUILD_CORES ldaptor
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pure-Python Twisted library for LDAP";
     homepage = "https://github.com/twisted/ldaptor";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pure-Python Twisted library for LDAP";
+    homepage = "https://github.com/twisted/ldaptor";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

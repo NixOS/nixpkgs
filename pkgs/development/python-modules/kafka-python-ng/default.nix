@@ -45,7 +45,11 @@ buildPythonPackage rec {
     pytestCheckHook
     xxhash
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     changelog = "https://github.com/wbarnha/kafka-python-ng/releases/tag/v${version}";

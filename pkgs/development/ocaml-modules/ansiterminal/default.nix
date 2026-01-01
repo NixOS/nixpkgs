@@ -19,7 +19,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Module allowing to use the colors and cursor movements on ANSI terminals";
     longDescription = ''
       ANSITerminal is a module allowing to use the colors and cursor
@@ -27,7 +31,12 @@ buildDunePackage rec {
       this part is currently work in progress).
     '';
     homepage = "https://github.com/Chris00/ANSITerminal";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.jirkamarsik ];
+=======
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.jirkamarsik ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

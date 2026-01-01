@@ -74,6 +74,7 @@ buildDotnetModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "WheelWizard, Retro Rewind Launcher";
     homepage = "https://github.com/TeamWheelWizard/WheelWizard";
@@ -81,5 +82,14 @@ buildDotnetModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "WheelWizard";
     maintainers = with lib.maintainers; [ DerHalbGrieche ];
+=======
+  meta = with lib; {
+    description = "WheelWizard, Retro Rewind Launcher";
+    homepage = "https://github.com/TeamWheelWizard/WheelWizard";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    mainProgram = "WheelWizard";
+    maintainers = with maintainers; [ DerHalbGrieche ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

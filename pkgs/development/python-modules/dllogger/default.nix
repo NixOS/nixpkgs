@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dllogger" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Logging tool for deep learning";
     homepage = "https://github.com/NVIDIA/dllogger";
     changelog = "https://github.com/NVIDIA/dllogger/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Logging tool for deep learning";
+    homepage = "https://github.com/NVIDIA/dllogger";
+    changelog = "https://github.com/NVIDIA/dllogger/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

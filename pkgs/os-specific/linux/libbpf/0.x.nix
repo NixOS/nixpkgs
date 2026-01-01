@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   # outputs = [ "out" "dev" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Upstream mirror of libbpf";
     homepage = "https://github.com/libbpf/libbpf";
@@ -59,11 +60,25 @@ stdenv.mkDerivation rec {
       bsd2
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Upstream mirror of libbpf";
+    homepage = "https://github.com/libbpf/libbpf";
+    license = with licenses; [
+      lgpl21 # or
+      bsd2
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       vcunat
       saschagrunert
       martinetd
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

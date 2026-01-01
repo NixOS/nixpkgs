@@ -61,11 +61,20 @@ stdenv.mkDerivation rec {
     rm $out/share/games/fortunes/men-women*
   '';
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "fortune";
     description = "Program that displays a pseudorandom message from a database of quotations";
     license = lib.licenses.bsdOriginal;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ vonfry ];
+=======
+  meta = with lib; {
+    mainProgram = "fortune";
+    description = "Program that displays a pseudorandom message from a database of quotations";
+    license = licenses.bsdOriginal;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ vonfry ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

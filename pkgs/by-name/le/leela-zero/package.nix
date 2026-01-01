@@ -38,6 +38,7 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Go engine modeled after AlphaGo Zero";
     homepage = "https://github.com/gcp/leela-zero";
@@ -47,5 +48,16 @@ stdenv.mkDerivation {
       lib.maintainers.omnipotententity
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Go engine modeled after AlphaGo Zero";
+    homepage = "https://github.com/gcp/leela-zero";
+    license = licenses.gpl3Plus;
+    maintainers = [
+      maintainers.averelld
+      maintainers.omnipotententity
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

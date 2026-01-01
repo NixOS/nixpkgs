@@ -34,11 +34,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
+<<<<<<< HEAD
   version = "3.12.8.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-q8V7EQMWXdaRU1eW99vbp2hiF8fQael07Q89gA/oh5Y=";
+=======
+  version = "3.12.8.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-JzYvwRylxYHzFoIjDJUCDlofzd9M/+vnVVeCjGF021s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;
@@ -85,6 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs data/gschemas/make-enums.py \
       gthumb/make-gthumb-h.py \
       po/make-potfiles-in.py \
+<<<<<<< HEAD
+=======
+      postinstall.py \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gthumb/make-authors-tab.py
   '';
 
@@ -99,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gthumb";
     description = "Image browser and viewer for GNOME";
@@ -106,6 +119,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gthumb";
+    description = "Image browser and viewer for GNOME";
+    mainProgram = "gthumb";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bobby285271
       mimame
     ];

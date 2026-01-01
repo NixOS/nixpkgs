@@ -46,7 +46,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTestPaths = [
     # Test requires internet connection to mermaid.ink
@@ -60,11 +64,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "canals" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Component orchestration engine";
     homepage = "https://github.com/deepset-ai/canals";
     changelog = "https://github.com/deepset-ai/canals/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Component orchestration engine";
+    homepage = "https://github.com/deepset-ai/canals";
+    changelog = "https://github.com/deepset-ai/canals/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

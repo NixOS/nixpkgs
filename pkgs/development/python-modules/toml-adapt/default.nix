@@ -34,12 +34,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "toml_adapt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple Command-line interface for manipulating toml files";
     homepage = "https://github.com/firefly-cpp/toml-adapt";
     changelog = "https://github.com/firefly-cpp/toml-adapt/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ firefly-cpp ];
+=======
+  meta = with lib; {
+    description = "Simple Command-line interface for manipulating toml files";
+    homepage = "https://github.com/firefly-cpp/toml-adapt";
+    changelog = "https://github.com/firefly-cpp/toml-adapt/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ firefly-cpp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "toml-adapt";
   };
 }

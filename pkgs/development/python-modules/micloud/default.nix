@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "micloud" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Xiaomi cloud connect library";
     mainProgram = "micloud";
     homepage = "https://github.com/Squachen/micloud";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Xiaomi cloud connect library";
+    mainProgram = "micloud";
+    homepage = "https://github.com/Squachen/micloud";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

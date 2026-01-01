@@ -61,11 +61,20 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/xuzhen/dockbarx";
     description = "Lightweight taskbar/panel replacement which works as a stand-alone dock";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/xuzhen/dockbarx";
+    description = "Lightweight taskbar/panel replacement which works as a stand-alone dock";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

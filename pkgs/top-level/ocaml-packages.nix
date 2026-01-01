@@ -422,12 +422,16 @@ let
 
         dolmen_loop = callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
+<<<<<<< HEAD
         dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix {
           lsp = lsp.override {
             jsonrpc = jsonrpc.override { yojson = yojson_2; };
             ppx_yojson_conv_lib = ppx_yojson_conv_lib.override { yojson = yojson_2; };
           };
         };
+=======
+        dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         dolmen_model = callPackage ../development/ocaml-modules/dolmen/model.nix { };
 
@@ -469,6 +473,13 @@ let
 
         dum = callPackage ../development/ocaml-modules/dum { };
 
+<<<<<<< HEAD
+=======
+        dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
+
+        dune_3 = callPackage ../development/tools/ocaml/dune/3.nix { };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
 
         dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };
@@ -575,10 +586,13 @@ let
 
         extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
 
+<<<<<<< HEAD
         extunix = callPackage ../development/ocaml-modules/extunix/default.nix { };
 
         ezgzip = callPackage ../development/ocaml-modules/ezgzip { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
         ezjsonm-encoding = callPackage ../development/ocaml-modules/ezjsonm-encoding { };
@@ -654,12 +668,15 @@ let
 
         fpath = callPackage ../development/ocaml-modules/fpath { };
 
+<<<<<<< HEAD
         frama-c = callPackage ../development/ocaml-modules/frama-c {
           framac = pkgs.framac.override { ocamlPackages = self; };
         };
 
         frama-c-lannotate = callPackage ../development/ocaml-modules/frama-c-lannotate { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         frei0r = callPackage ../development/ocaml-modules/frei0r {
           inherit (pkgs) frei0r;
         };
@@ -1073,11 +1090,15 @@ let
 
         linksem = callPackage ../development/ocaml-modules/linksem { };
 
+<<<<<<< HEAD
         linol = callPackage ../development/ocaml-modules/linol {
           ppx_yojson_conv_lib = ppx_yojson_conv_lib.override {
             yojson = yojson_2;
           };
         };
+=======
+        linol = callPackage ../development/ocaml-modules/linol { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         linol-eio = callPackage ../development/ocaml-modules/linol/eio.nix { };
 
@@ -1093,8 +1114,11 @@ let
 
         logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
 
+<<<<<<< HEAD
         lreplay = callPackage ../development/ocaml-modules/lreplay { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         lru = callPackage ../development/ocaml-modules/lru { };
 
         lsp = callPackage ../development/ocaml-modules/ocaml-lsp/lsp.nix { };
@@ -1153,8 +1177,11 @@ let
           inherit (pkgs) mariadb;
         };
 
+<<<<<<< HEAD
         markdown = callPackage ../development/ocaml-modules/markdown { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         markup = callPackage ../development/ocaml-modules/markup { };
 
         mccs = callPackage ../development/ocaml-modules/mccs { };
@@ -1329,11 +1356,15 @@ let
           inherit (pkgs.llvmPackages_19) clang libclang libllvm;
         };
 
+<<<<<<< HEAD
         morbig = callPackage ../development/ocaml-modules/morbig {
           ppx_deriving_yojson = ppx_deriving_yojson.override {
             yojson = yojson_2;
           };
         };
+=======
+        morbig = callPackage ../development/ocaml-modules/morbig { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         mparser = callPackage ../development/ocaml-modules/mparser { };
 
@@ -1417,6 +1448,11 @@ let
 
         ocaml-lua = callPackage ../development/ocaml-modules/ocaml-lua { };
 
+<<<<<<< HEAD
+=======
+        ocaml_lwt = lwt;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ocaml-migrate-parsetree = ocaml-migrate-parsetree-1-8;
 
         ocaml-migrate-parsetree-1-8 =
@@ -1738,10 +1774,13 @@ let
 
         ppx_deriving_rpc = callPackage ../development/ocaml-modules/ppx_deriving_rpc { };
 
+<<<<<<< HEAD
         ppx_deriving_variant_string =
           callPackage ../development/ocaml-modules/ppx_deriving_variant_string
             { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ppx_deriving_yaml = callPackage ../development/ocaml-modules/ppx_deriving_yaml {
           mdx = mdx.override { inherit logs; };
         };
@@ -1792,8 +1831,11 @@ let
 
         prometheus = callPackage ../development/ocaml-modules/prometheus { };
 
+<<<<<<< HEAD
         prometheus-app = callPackage ../development/ocaml-modules/prometheus/app.nix { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         progress = callPackage ../development/ocaml-modules/progress { };
 
         promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
@@ -2217,11 +2259,14 @@ let
 
         yojson = callPackage ../development/ocaml-modules/yojson { };
 
+<<<<<<< HEAD
         yojson_2 = yojson.overrideAttrs (_: {
           version = "2.2.2";
           __intentionallyOverridingVersion = true;
         });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         yuscii = callPackage ../development/ocaml-modules/yuscii { };
 
         yuujinchou = callPackage ../development/ocaml-modules/yuujinchou { };
@@ -2281,11 +2326,16 @@ let
       // lib.optionalAttrs config.allowAliases {
         biocaml = throw "biocaml has been removed"; # 2025-06-04
         chacha = throw "chacha has been removed because it has been marked as broken since at least November 2024. It is now vendored inside mirage-crypto, consider using that instead."; # Added 2025-10-11
+<<<<<<< HEAD
         dune_2 = pkgs.dune_2; # Added 2025-12-08
         dune_3 = pkgs.dune_3; # Added 2025-12-08
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
         ocaml_lwt = throw "ocamlPackages.ocaml_lwt has been renamed to ocamlPackages.lwt"; # Added 2025-12-05
+=======
+        gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
     )).overrideScope
       liftJaneStreet;

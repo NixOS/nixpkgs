@@ -37,11 +37,20 @@ buildPythonPackage rec {
   # nixpkgs-update: no auto update
   passthru.skipBulkUpdate = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to talk to Atag One";
     homepage = "https://github.com/MatsNl/pyatag";
     changelog = "https://github.com/MatsNl/pyatag/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python module to talk to Atag One";
+    homepage = "https://github.com/MatsNl/pyatag";
+    changelog = "https://github.com/MatsNl/pyatag/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

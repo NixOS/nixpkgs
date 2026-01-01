@@ -91,6 +91,7 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms";
     homepage = "https://www.yourkit.com";
@@ -100,5 +101,16 @@ stdenvNoCC.mkDerivation {
     platforms = lib.attrNames arches;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ herberteuler ];
+=======
+  meta = with lib; {
+    description = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms";
+    homepage = "https://www.yourkit.com";
+    changelog = "https://www.yourkit.com/changes/";
+    license = licenses.unfree;
+    mainProgram = "yourkit-java-profiler";
+    platforms = attrNames arches;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ herberteuler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

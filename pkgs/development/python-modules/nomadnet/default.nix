@@ -38,12 +38,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nomadnet" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Off-grid, resilient mesh communication";
     homepage = "https://github.com/markqvist/NomadNet";
     changelog = "https://github.com/markqvist/NomadNet/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Off-grid, resilient mesh communication";
+    homepage = "https://github.com/markqvist/NomadNet";
+    changelog = "https://github.com/markqvist/NomadNet/releases/tag/${version}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nomadnet";
   };
 }

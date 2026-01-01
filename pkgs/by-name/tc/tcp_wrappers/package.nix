@@ -1,6 +1,9 @@
 {
   fetchurl,
+<<<<<<< HEAD
   fetchFromGitLab,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   lib,
   stdenv,
   libnsl,
@@ -8,13 +11,18 @@
 
 let
   vanillaVersion = "7.6.q";
+<<<<<<< HEAD
   patchLevel = "36";
+=======
+  patchLevel = "33";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 stdenv.mkDerivation rec {
   pname = "tcp-wrappers";
   version = "${vanillaVersion}-${patchLevel}";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "http://ftp.porcupine.org/pub/security/tcp_wrappers_7.6.tar.gz";
     hash = "sha256-lUPXre33im3gsiHMu9GVLgi1E4cX9K3oFAObtImkMV0=";
   };
@@ -33,6 +41,23 @@ stdenv.mkDerivation rec {
 
     substituteInPlace Makefile --replace-fail STRINGS STRINGDEFS
     substituteInPlace debian/patches/13_shlib_weaksym --replace-fail STRINGS STRINGDEFS
+=======
+    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${vanillaVersion}.orig.tar.gz";
+    sha256 = "0p9ilj4v96q32klavx0phw9va21fjp8vpk11nbh6v2ppxnnxfhwm";
+  };
+
+  debian = fetchurl {
+    url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${version}.debian.tar.xz";
+    hash = "sha256-Lykjyu4hKDS/DqQ8JAFhKDffHrbJ9W1gjBKNpdaNRew=";
+  };
+
+  prePatch = ''
+    tar -xaf $debian
+    patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
+
+    substituteInPlace Makefile --replace STRINGS STRINGDEFS
+    substituteInPlace debian/patches/13_shlib_weaksym --replace STRINGS STRINGDEFS
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   # Fix __BEGIN_DECLS usage (even if it wasn't non-standard, this doesn't include sys/cdefs.h)

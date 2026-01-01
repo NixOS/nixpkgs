@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typing_validation" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple library for runtime type-checking";
     homepage = "https://github.com/hashberg-io/typing-validation";
     changelog = "https://github.com/hashberg-io/typing-validation/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
+=======
+  meta = with lib; {
+    description = "Simple library for runtime type-checking";
+    homepage = "https://github.com/hashberg-io/typing-validation";
+    changelog = "https://github.com/hashberg-io/typing-validation/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vizid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

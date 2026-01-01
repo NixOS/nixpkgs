@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "tencentcloud-sdk-python";
+<<<<<<< HEAD
   version = "3.1.24";
+=======
+  version = "3.1.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TencentCloud";
     repo = "tencentcloud-sdk-python";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-jRuQOcmBBbzpQHapezXmHwCfGJXv6zkXrdpW+W8biaQ=";
+=======
+    hash = "sha256-tNNIHO89Yda8mjqdOxhA/QI8D6veOM1xVO/LoSVEB70=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -35,11 +43,20 @@ buildPythonPackage rec {
     "test_sts_credential_with_set_endpoint"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tencent Cloud API 3.0 SDK for Python";
     homepage = "https://github.com/TencentCloud/tencentcloud-sdk-python";
     changelog = "https://github.com/TencentCloud/tencentcloud-sdk-python/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tencent Cloud API 3.0 SDK for Python";
+    homepage = "https://github.com/TencentCloud/tencentcloud-sdk-python";
+    changelog = "https://github.com/TencentCloud/tencentcloud-sdk-python/blob/${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

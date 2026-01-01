@@ -18,11 +18,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_serve" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Spawns a simple HTTP server to preview your sphinx documents";
     mainProgram = "sphinx-serve";
     homepage = "https://github.com/tlatsas/sphinx-serve";
     maintainers = with lib.maintainers; [ FlorianFranzen ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Spawns a simple HTTP server to preview your sphinx documents";
+    mainProgram = "sphinx-serve";
+    homepage = "https://github.com/tlatsas/sphinx-serve";
+    maintainers = with maintainers; [ FlorianFranzen ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

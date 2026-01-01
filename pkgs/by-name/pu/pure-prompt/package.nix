@@ -23,12 +23,21 @@ stdenv.mkDerivation rec {
     cp async.zsh "$OUTDIR/async"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pretty, minimal and fast ZSH prompt";
     homepage = "https://github.com/sindresorhus/pure";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Pretty, minimal and fast ZSH prompt";
+    homepage = "https://github.com/sindresorhus/pure";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       euxane
       pablovsky
     ];

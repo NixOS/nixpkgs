@@ -24,11 +24,19 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small Gotify daemon to send messages as desktop notifications";
     homepage = "https://github.com/desbma/gotify-desktop";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Small Gotify daemon to send messages as desktop notifications";
+    homepage = "https://github.com/desbma/gotify-desktop";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       genofire
     ];
     broken = stdenv.hostPlatform.isDarwin;

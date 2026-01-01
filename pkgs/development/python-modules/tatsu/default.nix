@@ -34,7 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tatsu" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Generates Python parsers from grammars in a variation of EBNF";
     longDescription = ''
       TatSu (the successor to Grako) is a tool that takes grammars in a
@@ -43,7 +47,11 @@ buildPythonPackage rec {
     '';
     homepage = "https://tatsu.readthedocs.io/";
     changelog = "https://github.com/neogeny/TatSu/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
+=======
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

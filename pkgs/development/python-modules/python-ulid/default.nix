@@ -43,12 +43,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ulid" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "ULID implementation for Python";
     mainProgram = "ulid";
     homepage = "https://github.com/mdomke/python-ulid";
     changelog = "https://github.com/mdomke/python-ulid/blob/${src.tag}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -8,6 +8,12 @@
         services.haproxy = {
           enable = true;
           config = ''
+<<<<<<< HEAD
+=======
+            global
+              limited-quic
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             defaults
               mode http
               timeout connect 10s

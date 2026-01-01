@@ -43,11 +43,20 @@ stdenv.mkDerivation rec {
     cp -r aether.lv2 $out/lib/lv2
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://dougal-s.github.io/Aether/";
     description = "Algorithmic reverb LV2 based on Cloudseed";
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://dougal-s.github.io/Aether/";
+    description = "Algorithmic reverb LV2 based on Cloudseed";
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for refactoring imports in python-like syntax";
     homepage = "https://github.com/asottile/classify-imports";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Utilities for refactoring imports in python-like syntax";
+    homepage = "https://github.com/asottile/classify-imports";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

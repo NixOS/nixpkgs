@@ -5,7 +5,10 @@
   fetchPypi,
   rustPlatform,
   libiconv,
+<<<<<<< HEAD
   cffi,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   numpy,
   scipy,
   nix-update-script,
@@ -13,17 +16,29 @@
 
 buildPythonPackage rec {
   pname = "clarabel";
+<<<<<<< HEAD
   version = "0.11.1";
+=======
+  version = "0.10.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-58QcR/Dlmuq5mu//nlivSodT7lJpu+7L1VJvxvQblZg=";
+=======
+    hash = "sha256-qKIQUFj9fbVHGL5TxIcVpQkQUAsQ/wuPU4BDTmnBChA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
+<<<<<<< HEAD
     hash = "sha256-Cmxbz1zPA/J7EeJhGfD4Zt+QvyJK6BOZ+YQAsf8H+is=";
+=======
+    hash = "sha256-Ohbeavkayl6vMyYX9kVVLRddvVB9gWOxfzdWAOg+gac=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -33,8 +48,12 @@ buildPythonPackage rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
+<<<<<<< HEAD
   dependencies = [
     cffi
+=======
+  propagatedBuildInputs = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     numpy
     scipy
   ];

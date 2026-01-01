@@ -26,11 +26,19 @@ buildGoModule rec {
     mv -v $out/bin/promql-cli $out/bin/promql
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool to query a Prometheus server with PromQL and visualize the output";
     homepage = "https://github.com/nalbury/promql-cli";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ arikgrahl ];
+=======
+  meta = with lib; {
+    description = "Command-line tool to query a Prometheus server with PromQL and visualize the output";
+    homepage = "https://github.com/nalbury/promql-cli";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ arikgrahl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "promql";
   };
 }

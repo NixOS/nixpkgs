@@ -35,10 +35,17 @@ buildGoModule rec {
       --zsh <($out/bin/zitadel-tools completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Helper tools for zitadel";
     homepage = "https://github.com/zitadel/zitadel-tools";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Helper tools for zitadel";
+    homepage = "https://github.com/zitadel/zitadel-tools";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "zitadel-tools";
   };

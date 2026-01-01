@@ -156,8 +156,12 @@ clangStdenv.mkDerivation rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
+<<<<<<< HEAD
     rm $out/bin/* || true
     ln -s $out/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD $out/bin/openscad-unstable
+=======
+    rmdir $out/bin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   nativeCheckInputs = [
@@ -168,6 +172,7 @@ clangStdenv.mkDerivation rec {
 
   dontUseNinjaCheck = true;
 
+<<<<<<< HEAD
   # These tests consistently fail when building on aarch64-linux
   disabledTests = [
     "export-svg_spec-paths-arcs01"
@@ -176,6 +181,9 @@ clangStdenv.mkDerivation rec {
   ];
 
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "3D parametric model compiler (unstable)";
     longDescription = ''
       OpenSCAD is a software for creating solid 3D CAD objects. It is free

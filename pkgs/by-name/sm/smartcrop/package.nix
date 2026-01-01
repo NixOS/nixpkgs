@@ -22,10 +22,17 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Find good image crops for arbitrary crop sizes";
     homepage = "https://github.com/muesli/smartcrop";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Find good image crops for arbitrary crop sizes";
+    homepage = "https://github.com/muesli/smartcrop";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "smartcrop";
   };

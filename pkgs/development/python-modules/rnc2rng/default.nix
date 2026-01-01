@@ -20,11 +20,20 @@ buildPythonPackage rec {
 
   checkPhase = "${python.interpreter} test.py";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/djc/rnc2rng";
     description = "Compact to regular syntax conversion library for RELAX NG schemata";
     mainProgram = "rnc2rng";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/djc/rnc2rng";
+    description = "Compact to regular syntax conversion library for RELAX NG schemata";
+    mainProgram = "rnc2rng";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,11 +45,20 @@ buildPythonPackage rec {
     "test_level_0_timestamps"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Emacs org-mode parser in Python";
     homepage = "https://github.com/karlicoss/orgparse";
     changelog = "https://github.com/karlicoss/orgparse/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ twitchy0 ];
+=======
+  meta = with lib; {
+    description = "Emacs org-mode parser in Python";
+    homepage = "https://github.com/karlicoss/orgparse";
+    changelog = "https://github.com/karlicoss/orgparse/releases/tag/${src.tag}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ twitchy0 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

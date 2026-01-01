@@ -48,10 +48,18 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion { package = router; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Configurable, high-performance routing runtime for Apollo Federation";
     homepage = "https://www.apollographql.com/docs/router/";
     license = lib.licenses.elastic20;
     maintainers = [ lib.maintainers.bbigras ];
+=======
+  meta = with lib; {
+    description = "Configurable, high-performance routing runtime for Apollo Federation";
+    homepage = "https://www.apollographql.com/docs/router/";
+    license = licenses.elastic20;
+    maintainers = [ maintainers.bbigras ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "telepath" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for exchanging data between Python and JavaScript";
     homepage = "https://github.com/wagtail/telepath";
     changelog = "https://github.com/wagtail/telepath/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
+=======
+  meta = with lib; {
+    description = "Library for exchanging data between Python and JavaScript";
+    homepage = "https://github.com/wagtail/telepath";
+    changelog = "https://github.com/wagtail/telepath/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sephi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

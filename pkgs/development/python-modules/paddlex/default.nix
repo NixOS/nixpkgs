@@ -19,8 +19,11 @@
   ujson,
   distutils,
   huggingface-hub,
+<<<<<<< HEAD
   modelscope,
   aistudio-sdk,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
 }:
 
@@ -53,18 +56,34 @@ let
 in
 buildPythonPackage rec {
   pname = "paddlex";
+<<<<<<< HEAD
   version = "3.3.10";
+=======
+  version = "3.3.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-zP9MogxeKbnWtbMM6Kz6ItmSdqTZN5U6d1GkskFJhsI=";
+=======
+    hash = "sha256-rxVfkvi/uOetMbR3pHN+apjqtvgTq5rwLc0gkhI6OvU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
 
+<<<<<<< HEAD
+=======
+  pythonRemoveDeps = [
+    # unpackaged
+    "aistudio-sdk"
+    "modelscope"
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonRelaxDeps = [
     "numpy"
     "pandas"
@@ -88,8 +107,11 @@ buildPythonPackage rec {
     ujson
     gputil
     huggingface-hub
+<<<<<<< HEAD
     modelscope
     aistudio-sdk
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   passthru.updateScript = nix-update-script { };

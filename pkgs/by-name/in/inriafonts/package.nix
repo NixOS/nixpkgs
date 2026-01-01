@@ -24,7 +24,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://black-foundry.com/work/inria";
     description = "Inria Sans and Inria Serif";
     longDescription = ''
@@ -37,7 +41,12 @@ stdenvNoCC.mkDerivation rec {
       Sans-serif part and a more rational axis and drawing for the
       serif. Both members comes in 3 weights with matching italics.
     '';
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

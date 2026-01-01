@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vacuum_map_parser_base" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-base";
     description = "Common code for vacuum map parsers";
     changelog = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-base/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [ jamiemagee ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-base";
+    description = "Common code for vacuum map parsers";
+    changelog = "https://github.com/PiotrMachowski/Python-package-vacuum-map-parser-base/releases/tag/${src.tag}";
+    maintainers = with maintainers; [ jamiemagee ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

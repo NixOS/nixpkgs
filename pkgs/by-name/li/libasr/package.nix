@@ -20,11 +20,20 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/OpenSMTPD/libasr";
     description = "Free, simple and portable asynchronous resolver library";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.koral ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/OpenSMTPD/libasr";
+    description = "Free, simple and portable asynchronous resolver library";
+    license = licenses.isc;
+    maintainers = [ maintainers.koral ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

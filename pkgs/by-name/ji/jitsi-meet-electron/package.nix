@@ -120,6 +120,7 @@ buildNpmPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/jitsi/jitsi-meet-electron/releases/tag/${src.rev}";
     description = "Jitsi Meet desktop application powered by Electron";
@@ -128,6 +129,16 @@ buildNpmPackage rec {
     mainProgram = "jitsi-meet-electron";
     maintainers = [ lib.maintainers.tomasajt ];
     teams = [ lib.teams.jitsi ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/jitsi/jitsi-meet-electron/releases/tag/${src.rev}";
+    description = "Jitsi Meet desktop application powered by Electron";
+    homepage = "https://github.com/jitsi/jitsi-meet-electron";
+    license = licenses.asl20;
+    mainProgram = "jitsi-meet-electron";
+    maintainers = [ maintainers.tomasajt ];
+    teams = [ teams.jitsi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (electron.meta) platforms;
   };
 }

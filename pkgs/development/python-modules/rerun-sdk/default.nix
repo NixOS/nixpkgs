@@ -20,9 +20,12 @@
 
   # tests
   datafusion,
+<<<<<<< HEAD
   inline-snapshot,
   polars,
   pytest-snapshot,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytestCheckHook,
   tomli,
   torch,
@@ -72,9 +75,12 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     datafusion
+<<<<<<< HEAD
     inline-snapshot
     polars
     pytest-snapshot
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pytestCheckHook
     tomli
     torch
@@ -83,6 +89,7 @@ buildPythonPackage {
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
+<<<<<<< HEAD
   disabledTests = [
     # ConnectionError: Connection: connecting to server: transport error
     "test_isolated_streams"
@@ -95,12 +102,15 @@ buildPythonPackage {
     "test_schema_recording"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
 
     # ValueError: Failed to start Rerun server: Error loading RRD: couldn't decode "/build/source/tests/assets/rrd/dataset/file4.rrd"
     "rerun_py/tests/e2e_redap_tests"
+<<<<<<< HEAD
 
     # ConnectionError: Connection: connecting to server: transport error
     "rerun_py/tests/api_sandbox/"
@@ -108,6 +118,10 @@ buildPythonPackage {
 
   __darwinAllowLocalNetworking = true;
 
+=======
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Python bindings for `rerun` (an interactive visualization tool for stream data)";
     inherit (rerun.meta)

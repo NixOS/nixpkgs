@@ -1,7 +1,15 @@
 {
+<<<<<<< HEAD
   "branch": "main",
   "commit_hash": "ea444c35bb23b6e34505ab6753e069de7801cc25",
   "commit_message": "version: bump to 0.53.0",
   "date": "2025-12-29",
   "tag": "v0.53.0"
+=======
+  "branch": "v0.52.1-b",
+  "commit_hash": "967c3c7404d4fa00234e29c70df3e263386d2597",
+  "commit_message": "version: bump to 0.52.1",
+  "date": "2025-11-09",
+  "tag": "v0.52.1"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

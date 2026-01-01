@@ -40,10 +40,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Beautiful, idiomatic protocol buffers in Python";
     homepage = "https://github.com/googleapis/proto-plus-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ruuda ];
+=======
+  meta = with lib; {
+    description = "Beautiful, idiomatic protocol buffers in Python";
+    homepage = "https://github.com/googleapis/proto-plus-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ruuda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

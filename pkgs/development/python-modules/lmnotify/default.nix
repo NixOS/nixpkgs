@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lmnotify" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for sending notifications to LaMetric Time";
     homepage = "https://github.com/keans/lmnotify";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rhoriguchi ];
+=======
+  meta = with lib; {
+    description = "Python package for sending notifications to LaMetric Time";
+    homepage = "https://github.com/keans/lmnotify";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rhoriguchi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -56,15 +56,25 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/help2man
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Generate man pages from `--help' output";
     mainProgram = "help2man";
     longDescription = ''
       help2man produces simple manual pages from the ‘--help’ and ‘--version’ output of other commands.
     '';
     homepage = "https://www.gnu.org/software/help2man/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

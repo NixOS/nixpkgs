@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bt_proximity" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bluetooth Proximity Detection using Python";
     homepage = "https://github.com/FrederikBolding/bluetooth-proximity";
     maintainers = with lib.maintainers; [ peterhoeg ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Bluetooth Proximity Detection using Python";
+    homepage = "https://github.com/FrederikBolding/bluetooth-proximity";
+    maintainers = with maintainers; [ peterhoeg ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,11 +30,19 @@ stdenv.mkDerivation {
     lib.optionals stdenv.cc.isGNU [ "-Wno-error=format-truncation" ]
     ++ lib.optionals stdenv.isDarwin [ "-Wno-error=vla-cxx-extension" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rockchip-linux/rkdeveloptool";
     description = "Tool from Rockchip to communicate with Rockusb devices";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.lopsided98 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rockchip-linux/rkdeveloptool";
+    description = "Tool from Rockchip to communicate with Rockusb devices";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.lopsided98 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rkdeveloptool";
   };
 }

@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) plotinus; };
 
+<<<<<<< HEAD
   meta = {
     description = "Searchable command palette in every modern GTK application";
     homepage = "https://github.com/p-e-w/plotinus";
@@ -54,5 +55,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     # No COPYING file, but headers in the source code
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Searchable command palette in every modern GTK application";
+    homepage = "https://github.com/p-e-w/plotinus";
+    maintainers = with maintainers; [ samdroid-apps ];
+    platforms = platforms.linux;
+    # No COPYING file, but headers in the source code
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

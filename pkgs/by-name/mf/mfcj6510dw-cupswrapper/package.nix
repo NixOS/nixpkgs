@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.brother.com/";
     description = "Brother MFC-J6510DW CUPS wrapper driver";
@@ -69,5 +70,14 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128";
     maintainers = with lib.maintainers; [ ramkromberg ];
+=======
+  meta = with lib; {
+    homepage = "http://www.brother.com/";
+    description = "Brother MFC-J6510DW CUPS wrapper driver";
+    license = with licenses; gpl2Plus;
+    platforms = with platforms; linux;
+    downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128";
+    maintainers = with maintainers; [ ramkromberg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

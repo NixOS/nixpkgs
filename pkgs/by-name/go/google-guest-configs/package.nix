@@ -68,11 +68,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/GoogleCloudPlatform/guest-configs";
     description = "Linux Guest Environment for Google Compute Engine";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/GoogleCloudPlatform/guest-configs";
+    description = "Linux Guest Environment for Google Compute Engine";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

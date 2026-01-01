@@ -96,12 +96,21 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library for testing DBus interactions using Qt";
     homepage = "https://gitlab.com/ubports/development/core/libqtdbustest";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.lomiri ];
+=======
+  meta = with lib; {
+    description = "Library for testing DBus interactions using Qt";
+    homepage = "https://gitlab.com/ubports/development/core/libqtdbustest";
+    license = licenses.lgpl3Only;
+    platforms = platforms.unix;
+    teams = [ teams.lomiri ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qdbus-simple-test-runner";
     pkgConfigModules = [
       "libqtdbustest-1"

@@ -9,6 +9,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
+<<<<<<< HEAD
   version = "0.22.0";
 
   src = fetchCrate {
@@ -17,6 +18,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-f8nrW1l7UA8sixwqXBD1jCJi9qyKC5tNl/dWwCt41Lk=";
+=======
+  version = "0.21.2";
+
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-bRBQpZ0YoKDh959a1a7+qEs2vh+dbP8vYcwbkNZQ5cQ=";
+  };
+
+  cargoHash = "sha256-MIwKgQM3LoNV9vcs8FfxTzqXhIhLkYd91dMEgPH++zk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config

@@ -33,10 +33,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cachelib" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pallets/cachelib";
     description = "Collection of cache libraries in the same API interface";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pallets/cachelib";
+    description = "Collection of cache libraries in the same API interface";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

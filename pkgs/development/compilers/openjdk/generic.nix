@@ -412,6 +412,7 @@ stdenv.mkDerivation (finalAttrs: {
       if atLeast17 then
         "-Wno-error"
       else if atLeast11 then
+<<<<<<< HEAD
         lib.concatStringsSep " " (
           # Workaround for
           # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
@@ -422,6 +423,12 @@ stdenv.mkDerivation (finalAttrs: {
             "-std=gnu17"
           ]
         )
+=======
+        # Workaround for
+        # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
+        # when building jtreg
+        "-Wformat"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       else
         lib.concatStringsSep " " (
           [
@@ -442,10 +449,13 @@ stdenv.mkDerivation (finalAttrs: {
             "-Wno-error=int-conversion"
             "-Wno-error=incompatible-pointer-types"
           ]
+<<<<<<< HEAD
           ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "8") [
             # Fix build with gcc15
             "-std=gnu17"
           ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         );
 
     NIX_LDFLAGS = lib.concatStringsSep " " (
@@ -616,6 +626,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openjdk.java.net/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      edwtjo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       infinidoge
     ];
     teams = [ lib.teams.java ];

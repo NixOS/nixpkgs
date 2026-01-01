@@ -27,6 +27,7 @@ let
     polkit
     polkit_gnome
   ];
+<<<<<<< HEAD
   meta = {
     description = "Passwordless MFA identities for workforces, customers, and developers";
     homepage = "https://www.beyondidentity.com";
@@ -34,6 +35,15 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Passwordless MFA identities for workforces, customers, and developers";
+    homepage = "https://www.beyondidentity.com";
+    downloadPage = "https://app.byndid.com/downloads";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       klden
       hornwall
     ];

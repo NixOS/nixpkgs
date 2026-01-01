@@ -73,11 +73,20 @@ stdenv.mkDerivation rec {
     "-DHIP_ROOT_DIR=${rocmPackages.clr}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sparse 3D FFT library with MPI, OpenMP, CUDA and ROCm support";
     homepage = "https://github.com/eth-cscs/SpFFT";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.sheepforce ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Sparse 3D FFT library with MPI, OpenMP, CUDA and ROCm support";
+    homepage = "https://github.com/eth-cscs/SpFFT";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.sheepforce ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

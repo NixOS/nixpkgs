@@ -50,7 +50,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Filesystem visualization utility";
     longDescription = ''
       XCruiser, formerly known as XCruise, is a filesystem visualization utility.
@@ -58,8 +62,13 @@ stdenv.mkDerivation rec {
       tree and allows you to "cruise" within a visualized filesystem.
     '';
     homepage = "https://xcruiser.sourceforge.net/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux;
+=======
+    license = licenses.gpl2;
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xcruiser";
   };
 }

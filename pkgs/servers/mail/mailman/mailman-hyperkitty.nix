@@ -43,10 +43,18 @@ buildPythonPackage rec {
 
   passthru.tests = { inherit (nixosTests) mailman; };
 
+<<<<<<< HEAD
   meta = {
     description = "Mailman archiver plugin for HyperKitty";
     homepage = "https://gitlab.com/mailman/mailman-hyperkitty";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ qyliss ];
+=======
+  meta = with lib; {
+    description = "Mailman archiver plugin for HyperKitty";
+    homepage = "https://gitlab.com/mailman/mailman-hyperkitty";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ qyliss ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

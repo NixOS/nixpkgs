@@ -60,7 +60,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Android's repo management tool";
     longDescription = ''
       Repo is a Python script based on Git that helps manage many Git
@@ -69,9 +73,15 @@ stdenv.mkDerivation rec {
       to make it easier to work with Git.
     '';
     homepage = "https://android.googlesource.com/tools/repo";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ otavio ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ otavio ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "repo";
   };
 }

@@ -32,16 +32,29 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://psydk.org/pngoptimizer";
     description = "PNG optimizer and converter";
     # https://github.com/hadrien-psydk/pngoptimizer#license-information
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://psydk.org/pngoptimizer";
+    description = "PNG optimizer and converter";
+    # https://github.com/hadrien-psydk/pngoptimizer#license-information
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Only
       lgpl21Only
       zlib
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ smitop ];
     platforms = with lib.platforms; linux;
+=======
+    maintainers = with maintainers; [ smitop ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

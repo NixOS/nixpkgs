@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
     description = "GNU barcode generator";
     maintainers = with lib.maintainers; [ raskin ];
@@ -32,5 +33,14 @@ stdenv.mkDerivation rec {
     downloadPage = "https://ftp.gnu.org/gnu/barcode/";
     homepage = "https://www.gnu.org/software/barcode/";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "GNU barcode generator";
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+    downloadPage = "https://ftp.gnu.org/gnu/barcode/";
+    homepage = "https://www.gnu.org/software/barcode/";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

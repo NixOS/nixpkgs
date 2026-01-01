@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP client library based on APR";
     homepage = "https://serf.apache.org/";
@@ -67,5 +68,16 @@ stdenv.mkDerivation rec {
       raskin
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "HTTP client library based on APR";
+    homepage = "https://serf.apache.org/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      orivej
+      raskin
+    ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

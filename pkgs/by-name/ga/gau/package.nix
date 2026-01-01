@@ -22,15 +22,24 @@ buildGoModule rec {
     "-s"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool to fetch known URLs";
     longDescription = ''
       getallurls (gau) fetches known URLs from various sources for any
       given domain.
     '';
     homepage = "https://github.com/lc/gau";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gau";
   };
 }

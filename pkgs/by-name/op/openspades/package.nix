@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK = "-lopenal";
 
+<<<<<<< HEAD
   meta = {
     description = "Compatible client of Ace of Spades 0.75";
     mainProgram = "openspades";
@@ -102,6 +103,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Compatible client of Ace of Spades 0.75";
+    mainProgram = "openspades";
+    homepage = "https://github.com/yvt/openspades/";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       azahi
     ];
     # never built on aarch64-linux since first introduction in nixpkgs

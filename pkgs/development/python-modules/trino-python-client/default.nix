@@ -56,7 +56,11 @@ buildPythonPackage rec {
     pytestCheckHook
     testcontainers
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "trino" ];
 
@@ -76,12 +80,21 @@ buildPythonPackage rec {
     "test_multithreaded_oauth2_authentication_flow"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/trinodb/trino-python-client/blob/${src.tag}/CHANGES.md";
     description = "Client for the Trino distributed SQL Engine";
     homepage = "https://github.com/trinodb/trino-python-client";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    changelog = "https://github.com/trinodb/trino-python-client/blob/${src.tag}/CHANGES.md";
+    description = "Client for the Trino distributed SQL Engine";
+    homepage = "https://github.com/trinodb/trino-python-client";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cpcloud
       flokli
     ];

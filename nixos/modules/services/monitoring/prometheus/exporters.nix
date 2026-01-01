@@ -571,6 +571,19 @@ in
         services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
       })
     ]
+<<<<<<< HEAD
+=======
+    ++ [
+      (mkIf config.services.prometheus.exporters.deluge.enable {
+        system.activationScripts = {
+          deluge-exported.text = ''
+            mkdir -p /etc/deluge-exporter
+            echo "DELUGE_PASSWORD=$(cat ${config.services.prometheus.exporters.deluge.delugePasswordFile})" > /etc/deluge-exporter/password
+          '';
+        };
+      })
+    ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ (mapAttrsToList (
       name: conf:
       mkExporterConf {

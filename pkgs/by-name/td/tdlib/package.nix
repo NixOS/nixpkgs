@@ -38,7 +38,11 @@ in
 
 stdenv.mkDerivation {
   pname = if tde2eOnly then "tde2e" else "tdlib";
+<<<<<<< HEAD
   version = "1.8.59";
+=======
+  version = "1.8.57";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -47,8 +51,13 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
+<<<<<<< HEAD
     rev = "89e7366783e13d63085878ba407da83107ccd401";
     hash = "sha256-7w/PDv58o2U23gOLqFV9TFfCejud4xcjdflX3gkRDUE=";
+=======
+    rev = "6f4ee8703898f7829c442c74c5170beada171962";
+    hash = "sha256-G0wy//IkI/hVDeMRdZey1sagShu0bEM9/m9z/t1K/Co=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -94,6 +103,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = lib.getExe updateScript;
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";
@@ -102,6 +112,16 @@ stdenv.mkDerivation {
     maintainers = [
       lib.maintainers.vyorkin
       lib.maintainers.vonfry
+=======
+  meta = with lib; {
+    description = "Cross-platform library for building Telegram clients";
+    homepage = "https://core.telegram.org/tdlib/";
+    license = [ licenses.boost ];
+    platforms = platforms.unix;
+    maintainers = [
+      maintainers.vyorkin
+      maintainers.vonfry
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

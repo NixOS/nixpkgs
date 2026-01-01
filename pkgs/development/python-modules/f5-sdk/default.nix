@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "f5" ];
 
+<<<<<<< HEAD
   meta = {
     description = "F5 Networks Python SDK";
     homepage = "https://github.com/F5Networks/f5-common-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "F5 Networks Python SDK";
+    homepage = "https://github.com/F5Networks/f5-common-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

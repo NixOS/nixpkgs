@@ -34,10 +34,18 @@ stdenv.mkDerivation rec {
     cp -p source/nedit source/nc $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/projects/nedit";
     description = "Fast, compact Motif/X11 plain text editor";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/nedit";
+    description = "Fast, compact Motif/X11 plain text editor";
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

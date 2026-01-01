@@ -117,7 +117,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src/resources/lg-logo.png $out/share/pixmaps
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "KVM Frame Relay (KVMFR) implementation";
     longDescription = ''
       Looking Glass is an open source application that allows the use of a KVM
@@ -127,9 +131,15 @@ stdenv.mkDerivation (finalAttrs: {
       for legacy programs that require high performance graphics.
     '';
     homepage = "https://looking-glass.io/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     mainProgram = "looking-glass-client";
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl2Plus;
+    mainProgram = "looking-glass-client";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       alexbakker
       babbaj
       j-brn

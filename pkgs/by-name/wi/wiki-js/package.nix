@@ -40,10 +40,17 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://js.wiki/";
     description = "Modern and powerful wiki app built on Node.js";
     license = lib.licenses.agpl3Only;
+=======
+  meta = with lib; {
+    homepage = "https://js.wiki/";
+    description = "Modern and powerful wiki app built on Node.js";
+    license = licenses.agpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

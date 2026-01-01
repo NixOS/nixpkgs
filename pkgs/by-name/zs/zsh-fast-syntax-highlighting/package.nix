@@ -26,10 +26,18 @@ stdenvNoCC.mkDerivation rec {
     cp -r -- {,_,-,.}fast-* *chroma themes "$plugindir"/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Syntax-highlighting for Zshell";
     homepage = "https://github.com/zdharma-continuum/fast-syntax-highlighting";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Syntax-highlighting for Zshell";
+    homepage = "https://github.com/zdharma-continuum/fast-syntax-highlighting";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

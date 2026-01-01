@@ -22,11 +22,20 @@ buildDunePackage rec {
   buildInputs = [ cmdliner ];
   propagatedBuildInputs = [ findlib ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.typerex.org/ocp-indent.html";
     description = "Customizable tool to indent OCaml code";
     mainProgram = "ocp-indent";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.jirkamarsik ];
+=======
+  meta = with lib; {
+    homepage = "https://www.typerex.org/ocp-indent.html";
+    description = "Customizable tool to indent OCaml code";
+    mainProgram = "ocp-indent";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.jirkamarsik ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

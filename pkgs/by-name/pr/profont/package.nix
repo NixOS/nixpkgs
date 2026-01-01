@@ -41,12 +41,21 @@ stdenv.mkDerivation {
     mkfontdir "$out/share/fonts/misc"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://tobiasjung.name/profont/";
     description = "Monospaced font created to be a most readable font for programming";
     maintainers = with lib.maintainers; [ myrl ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://tobiasjung.name/profont/";
+    description = "Monospaced font created to be a most readable font for programming";
+    maintainers = with maintainers; [ myrl ];
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

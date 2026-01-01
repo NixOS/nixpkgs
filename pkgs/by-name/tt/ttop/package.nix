@@ -28,6 +28,7 @@ buildNimPackage (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Top-like system monitoring tool";
     homepage = "https://github.com/inv2004/ttop";
@@ -35,6 +36,15 @@ buildNimPackage (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Top-like system monitoring tool";
+    homepage = "https://github.com/inv2004/ttop";
+    changelog = "https://github.com/inv2004/ttop/releases/tag/${finalAttrs.src.rev}";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sikmir
     ];
     mainProgram = "ttop";

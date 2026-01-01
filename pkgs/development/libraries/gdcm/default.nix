@@ -20,13 +20,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if enablePython then "python-gdcm" else "gdcm";
+<<<<<<< HEAD
   version = "3.2.2";
+=======
+  version = "3.2.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-iUJrXcVHdCmL5atm6in4KvgPXbYmAYFxM6TGoZeY9EE=";
+=======
+    hash = "sha256-V1UPfRlNIDZa/N9wQ6wu8uCFH6bw8Y6jomy7BB4SNEA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [

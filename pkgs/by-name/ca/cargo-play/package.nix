@@ -2,18 +2,28 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+<<<<<<< HEAD
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+=======
+}:
+
+rustPlatform.buildRustPackage rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "cargo-play";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "fanzeyi";
     repo = "cargo-play";
+<<<<<<< HEAD
     tag = finalAttrs.version;
+=======
+    tag = version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "sha256-Z5zcLQYfQeGybsnt2U+4Z+peRHxNPbDriPMKWhJ+PeA=";
   };
 
@@ -25,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=infer_override"
   ];
 
+<<<<<<< HEAD
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -40,3 +51,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })
+=======
+  meta = with lib; {
+    description = "Run your rust code without setting up cargo";
+    mainProgram = "cargo-play";
+    homepage = "https://github.com/fanzeyi/cargo-play";
+    license = licenses.mit;
+    maintainers = [ ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

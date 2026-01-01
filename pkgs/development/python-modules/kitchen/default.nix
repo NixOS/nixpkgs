@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kitchen" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Kitchen contains a cornucopia of useful code";
     homepage = "https://github.com/fedora-infra/kitchen";
     changelog = "https://github.com/fedora-infra/kitchen/blob/${version}/NEWS.rst";
     license = lib.licenses.lgpl2Only;
+=======
+  meta = with lib; {
+    description = "Kitchen contains a cornucopia of useful code";
+    homepage = "https://github.com/fedora-infra/kitchen";
+    changelog = "https://github.com/fedora-infra/kitchen/blob/${version}/NEWS.rst";
+    license = licenses.lgpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -37,11 +37,20 @@ buildPythonPackage rec {
     defusedxml
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/jdillard/sphinx-sitemap/releases/tag/${src.tag}";
     description = "Sitemap generator for Sphinx";
     homepage = "https://github.com/jdillard/sphinx-sitemap";
     maintainers = with lib.maintainers; [ alejandrosame ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/jdillard/sphinx-sitemap/releases/tag/${src.tag}";
+    description = "Sitemap generator for Sphinx";
+    homepage = "https://github.com/jdillard/sphinx-sitemap";
+    maintainers = with maintainers; [ alejandrosame ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

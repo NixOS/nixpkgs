@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dirtyjson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "JSON decoder for Python that can extract data from the muck";
     homepage = "https://github.com/codecobblers/dirtyjson";
@@ -33,5 +34,15 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "JSON decoder for Python that can extract data from the muck";
+    homepage = "https://github.com/codecobblers/dirtyjson";
+    license = with licenses; [
+      afl21 # and
+      mit
+    ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

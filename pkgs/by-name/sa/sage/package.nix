@@ -10,7 +10,11 @@
 # is always preferred, see `sage-src.nix` for that.
 
 let
+<<<<<<< HEAD
   inherit (pkgs) symlinkJoin callPackage mathjax;
+=======
+  inherit (pkgs) symlinkJoin callPackage nodePackages;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   python3 = pkgs.python3 // {
     pkgs = pkgs.python3.pkgs.overrideScope (
@@ -66,7 +70,11 @@ let
     inherit singular maxima;
     inherit three;
     cysignals = python3.pkgs.cysignals;
+<<<<<<< HEAD
     mathjax = mathjax;
+=======
+    mathjax = nodePackages.mathjax;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # The shell file that gets sourced on every sage start. Will also source

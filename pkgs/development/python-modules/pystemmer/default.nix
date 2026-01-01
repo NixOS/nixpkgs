@@ -40,10 +40,16 @@ buildPythonPackage rec {
     export PYSTEMMER_SYSTEM_LIBSTEMMER="${lib.getDev libstemmer}/include"
   '';
 
+<<<<<<< HEAD
   env = {
     NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev libstemmer}/include" ];
     NIX_CFLAGS_LINK = toString [ "-L${libstemmer}/lib" ];
   };
+=======
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev libstemmer}/include" ];
+
+  NIX_CFLAGS_LINK = [ "-L${libstemmer}/lib" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "Stemmer" ];
 
@@ -53,6 +59,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   __structuredAttrs = true;
 
   meta = {
@@ -64,5 +71,16 @@ buildPythonPackage rec {
       mit
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Snowball stemming algorithms, for information retrieval";
+    downloadPage = "https://github.com/snowballstem/pystemmer";
+    homepage = "http://snowball.tartarus.org/";
+    license = with licenses; [
+      bsd3
+      mit
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

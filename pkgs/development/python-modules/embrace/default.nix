@@ -37,10 +37,18 @@ buildPythonPackage rec {
   # should remain usable. (https://todo.sr.ht/~olly/embrace-sql/4)
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Embrace SQL keeps your SQL queries in SQL files";
     homepage = "https://pypi.org/project/embrace/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ euxane ];
+=======
+  meta = with lib; {
+    description = "Embrace SQL keeps your SQL queries in SQL files";
+    homepage = "https://pypi.org/project/embrace/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ euxane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

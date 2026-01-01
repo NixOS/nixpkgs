@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrympro" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with Read Your Meter Pro";
     homepage = "https://github.com/OnFreund/pyrympro";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with Read Your Meter Pro";
+    homepage = "https://github.com/OnFreund/pyrympro";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -49,12 +49,21 @@ stdenv.mkDerivation rec {
     installManPage 'debian/i2pd.1'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://i2pd.website";
     description = "Minimal I2P router written in C++";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://i2pd.website";
+    description = "Minimal I2P router written in C++";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ edwtjo ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "i2pd";
   };
 }

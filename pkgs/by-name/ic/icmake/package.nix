@@ -42,11 +42,20 @@ stdenv.mkDerivation rec {
      --prefix PATH : ${ncurses}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Program maintenance (make) utility using a C-like grammar";
     homepage = "https://fbb-git.gitlab.io/icmake/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Program maintenance (make) utility using a C-like grammar";
+    homepage = "https://fbb-git.gitlab.io/icmake/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

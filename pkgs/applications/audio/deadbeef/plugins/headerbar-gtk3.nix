@@ -42,11 +42,20 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
+<<<<<<< HEAD
   meta = {
     description = "Plug-in that adds GTK 3 header bar to the DeaDBeeF music player";
     homepage = "https://github.com/saivert/ddb_misc_headerbar_GTK3";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.jtojnar ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Plug-in that adds GTK 3 header bar to the DeaDBeeF music player";
+    homepage = "https://github.com/saivert/ddb_misc_headerbar_GTK3";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.jtojnar ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

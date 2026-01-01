@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     "-DNNG_ENABLE_TLS=ON"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://nng.nanomsg.org/";
     description = "Nanomsg next generation";
@@ -43,5 +44,14 @@ stdenv.mkDerivation rec {
     mainProgram = "nngcat";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nviets ];
+=======
+  meta = with lib; {
+    homepage = "https://nng.nanomsg.org/";
+    description = "Nanomsg next generation";
+    license = licenses.mit;
+    mainProgram = "nngcat";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ nviets ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

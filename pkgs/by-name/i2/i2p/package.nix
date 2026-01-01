@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
@@ -105,6 +106,17 @@ stdenv.mkDerivation (finalAttrs: {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Applications and router for I2P, anonymity over the Internet";
+    homepage = "https://geti2p.net";
+    changelog = "https://github.com/i2p/i2p.i2p/releases/tag/i2p-${finalAttrs.version}";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+    ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       boost
       bsd2
@@ -124,7 +136,11 @@ stdenv.mkDerivation (finalAttrs: {
       "i686-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ linsui ];
+=======
+    maintainers = with maintainers; [ linsui ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "i2prouter-plain";
   };
 })

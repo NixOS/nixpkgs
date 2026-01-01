@@ -36,7 +36,11 @@ stdenv.mkDerivation (attrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Package manager for the .NET platform";
     mainProgram = "nuget";
     homepage = "https://www.mono-project.com/";
@@ -49,9 +53,15 @@ stdenv.mkDerivation (attrs: {
       packages functionality built-in.
     '';
     # https://learn.microsoft.com/en-us/nuget/resources/nuget-faq#what-is-the-license-for-nuget-exe-
+<<<<<<< HEAD
     license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     maintainers = [ lib.maintainers.mdarocha ];
+=======
+    license = licenses.mit;
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    maintainers = [ maintainers.mdarocha ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (mono.meta) platforms;
   };
 })

@@ -61,7 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Unicode font for Base Multilingual Plane";
     homepage = "https://unifoundry.com/unifont/";
 
@@ -70,7 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       fontException
     ];
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.rycee ];
     platforms = lib.platforms.all;
+=======
+    maintainers = [ maintainers.rycee ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

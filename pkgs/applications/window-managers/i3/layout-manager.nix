@@ -51,12 +51,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/klaxalk/i3-layout-manager";
     description = "Saving, loading and managing layouts for i3wm";
     mainProgram = "layout_manager";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/klaxalk/i3-layout-manager";
+    description = "Saving, loading and managing layouts for i3wm";
+    mainProgram = "layout_manager";
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

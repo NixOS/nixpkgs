@@ -17,14 +17,22 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "0.30.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-PQ8TL/eMYNX0gXvWhq/Rop2bv1oCoO7o3dxlCK9tbGE=";
+=======
+    hash = "sha256-BfqxL35prq+pvD21w0BOJx/ls8og+LjtGdOAZlHYGVE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

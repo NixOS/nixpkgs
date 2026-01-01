@@ -36,11 +36,19 @@ python3.pkgs.buildPythonApplication rec {
     "nextinspace"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Print upcoming space-related events in your terminal";
     mainProgram = "nextinspace";
     homepage = "https://github.com/The-Kid-Gid/nextinspace";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Print upcoming space-related events in your terminal";
+    mainProgram = "nextinspace";
+    homepage = "https://github.com/The-Kid-Gid/nextinspace";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

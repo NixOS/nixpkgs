@@ -50,10 +50,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "siosocks" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python socks 4/5 client/server library/framework";
     homepage = "https://github.com/pohmelie/siosocks";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python socks 4/5 client/server library/framework";
+    homepage = "https://github.com/pohmelie/siosocks";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

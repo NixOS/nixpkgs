@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
   # tests require rust nightly
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Sass compiler written purely in Rust";
     homepage = "https://github.com/connorskees/grass";
@@ -25,6 +26,15 @@ rustPlatform.buildRustPackage rec {
       lib.replaceStrings [ "." ] [ "" ] version
     }";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Sass compiler written purely in Rust";
+    homepage = "https://github.com/connorskees/grass";
+    changelog = "https://github.com/connorskees/grass/blob/master/CHANGELOG.md#${
+      replaceStrings [ "." ] [ "" ] version
+    }";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "grass";
   };

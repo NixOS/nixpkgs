@@ -32,11 +32,19 @@ python3.pkgs.buildPythonApplication rec {
     "wireviz.wv_cli"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easily document cables and wiring harnesses";
     homepage = "https://pypi.org/project/wireviz/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pinpox ];
+=======
+  meta = with lib; {
+    description = "Easily document cables and wiring harnesses";
+    homepage = "https://pypi.org/project/wireviz/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ pinpox ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wireviz";
   };
 }

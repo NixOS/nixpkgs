@@ -27,12 +27,20 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "1.1.6";
+=======
+  version = "1.1.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-NykxvahVazEGNqL5AgrccQ+bq2b0fv4M6Qv/gArCUww=";
+=======
+    hash = "sha256-Ha8Q8yLhT9kKAXU4qvLANNfMHrHMQY3tR0RdcU6haNQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -87,12 +95,21 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = "https://netfilter.org/projects/nftables/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ izorkin ];
+=======
+  meta = with lib; {
+    description = "Project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
+    homepage = "https://netfilter.org/projects/nftables/";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ izorkin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nft";
   };
 }

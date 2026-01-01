@@ -24,10 +24,17 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/verigak/progress/";
     description = "Easy to use progress bars";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/verigak/progress/";
+    description = "Easy to use progress bars";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

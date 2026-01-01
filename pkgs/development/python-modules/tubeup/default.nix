@@ -36,12 +36,20 @@ buildPythonPackage rec {
   # Tests failing upstream
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Youtube (and other video site) to Internet Archive Uploader";
     mainProgram = "tubeup";
     homepage = "https://github.com/bibanon/tubeup";
     changelog = "https://github.com/bibanon/tubeup/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
+=======
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

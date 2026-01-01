@@ -41,6 +41,7 @@ stdenv.mkDerivation {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Curses based fullscreen BOINC manager";
     homepage = "https://github.com/suleman1971/boinctui";
@@ -48,6 +49,15 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ christoph-heiss ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Curses based fullscreen BOINC manager";
+    homepage = "https://github.com/suleman1971/boinctui";
+    changelog = "https://github.com/suleman1971/boinctui/blob/master/changelog";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ christoph-heiss ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "boinctui";
   };
 }

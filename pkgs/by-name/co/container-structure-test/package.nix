@@ -8,13 +8,21 @@
   container-structure-test,
 }:
 buildGoModule rec {
+<<<<<<< HEAD
   version = "1.22.1";
+=======
+  version = "1.22.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "container-structure-test";
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "container-structure-test";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-iNJH5mrDRlwS4qry0OyT/MRlGjHbKjWZbppkbTX6ksI=";
+=======
+    sha256 = "sha256-I5HFGUzDJdqqJbZ05lAfDTFOghLgiwadINBbABwtpXA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   vendorHash = "sha256-pBq76HJ+nluOMOs9nqBKp1mr1LuX2NERXo48g8ezE9k=";
 

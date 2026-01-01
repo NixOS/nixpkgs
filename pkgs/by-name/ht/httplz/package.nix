@@ -49,6 +49,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/thecoshman/http";
     changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       --chdir "$out/share"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "2d dogfighting game";
     mainProgram = "airstrike";
@@ -42,5 +43,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "2d dogfighting game";
+    mainProgram = "airstrike";
+    homepage = "https://icculus.org/airstrike/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

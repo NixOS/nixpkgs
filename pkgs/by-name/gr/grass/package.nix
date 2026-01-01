@@ -158,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     grass = callPackage ./tests.nix { grass = finalAttrs.finalPackage; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     homepage = "https://grass.osgeo.org/";
@@ -165,6 +166,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ mpickering ];
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
+    homepage = "https://grass.osgeo.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ mpickering ];
+    teams = [ teams.geospatial ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "grass";
   };
 })

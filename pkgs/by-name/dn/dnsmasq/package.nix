@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
     pihole-ftl-dnsmasq = nixosTests.pihole-ftl.dnsmasq;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Integrated DNS, DHCP and TFTP server for small networks";
     homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
@@ -117,6 +118,17 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       fpletz
+=======
+  meta = with lib; {
+    description = "Integrated DNS, DHCP and TFTP server for small networks";
+    homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
+    license = licenses.gpl2Only;
+    mainProgram = "dnsmasq";
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [
+      fpletz
+      globin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

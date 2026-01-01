@@ -48,10 +48,18 @@ buildKodiAddon rec {
     websocket
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://jellyfin.org/";
     description = "Whole new way to manage and view your media library";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://jellyfin.org/";
+    description = "Whole new way to manage and view your media library";
+    license = licenses.gpl3Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

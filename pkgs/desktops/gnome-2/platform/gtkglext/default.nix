@@ -55,7 +55,11 @@ stdenv.mkDerivation {
     NOCONFIGURE=1 ./autogen.sh
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://projects.gnome.org/gtkglext/";
     description = "GtkGLExt, an OpenGL extension to GTK";
     longDescription = ''
@@ -65,7 +69,12 @@ stdenv.mkDerivation {
       Löf's GtkGLArea, GtkGLExt provides a GtkWidget API that enables
       OpenGL drawing for standard and custom GTK widgets.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

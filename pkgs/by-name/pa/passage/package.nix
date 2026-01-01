@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     "WITH_ALLCOMP=yes"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage = "https://github.com/FiloSottile/passage";
@@ -76,6 +77,17 @@ stdenv.mkDerivation (finalAttrs: {
       ma27
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Stores, retrieves, generates, and synchronizes passwords securely";
+    homepage = "https://github.com/FiloSottile/passage";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      kaction
+      ma27
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "passage";
 
     longDescription = ''

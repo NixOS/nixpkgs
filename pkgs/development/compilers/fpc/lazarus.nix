@@ -145,11 +145,20 @@ stdenv.mkDerivation rec {
         }"
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical IDE for the FreePascal language";
     homepage = "https://www.lazarus.freepascal.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Graphical IDE for the FreePascal language";
+    homepage = "https://www.lazarus.freepascal.org";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

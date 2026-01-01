@@ -37,10 +37,18 @@ buildPythonPackage rec {
     "pyrfc3339"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/kurtraschke/pyRFC3339/blob/${src.tag}/CHANGES.rst";
     description = "Generate and parse RFC 3339 timestamps";
     homepage = "https://github.com/kurtraschke/pyRFC3339";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/kurtraschke/pyRFC3339/blob/${src.tag}/CHANGES.rst";
+    description = "Generate and parse RFC 3339 timestamps";
+    homepage = "https://github.com/kurtraschke/pyRFC3339";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

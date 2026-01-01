@@ -32,10 +32,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "indexed_gzip" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to seek within compressed gzip files";
     homepage = "https://github.com/pauldmccarthy/indexed_gzip";
     license = lib.licenses.zlib;
+=======
+  meta = with lib; {
+    description = "Python library to seek within compressed gzip files";
+    homepage = "https://github.com/pauldmccarthy/indexed_gzip";
+    license = licenses.zlib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };
 }

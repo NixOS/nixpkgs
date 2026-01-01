@@ -350,12 +350,21 @@ stdenv.mkDerivation rec {
       --set JAVA "${jre}/bin/java"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Time series database with millisecond precision";
     homepage = "http://opentsdb.net";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    description = "Time series database with millisecond precision";
+    homepage = "http://opentsdb.net";
+    license = licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fromSource
       binaryBytecode # maven dependencies
     ];

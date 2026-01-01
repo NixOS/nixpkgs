@@ -44,10 +44,18 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/chrony_exporter";
+<<<<<<< HEAD
 
   meta = {
     changelog = "https://github.com/superq/chrony_exporter/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/SuperQ/chrony_exporter";
+=======
+  versionCheckProgramArg = "--version";
+
+  meta = {
+    changelog = "https://github.com/superq/chrony_exporter/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/superq/chrony";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Prometheus exporter for the chrony NTP service";
     license = lib.licenses.asl20;
     mainProgram = "chrony_exporter";

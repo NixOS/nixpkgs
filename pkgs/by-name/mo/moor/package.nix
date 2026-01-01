@@ -10,16 +10,27 @@
 
 buildGoModule (finalAttrs: {
   pname = "moor";
+<<<<<<< HEAD
   version = "2.10.1";
+=======
+  version = "2.9.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "walles";
     repo = "moor";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-xnm1ZKceij5V2AgfB1ZAabDvB+l+Ha6F2WuHAzcA1mo=";
   };
 
   vendorHash = "sha256-MQPR4AW+Y+1l7akLxaWI5NAmKmhZdRKTzrueNEqHZoQ=";
+=======
+    hash = "sha256-+gNM/yqoEZ0JUieRsdGCpO5MG+Jtaxwi114PQEhaMiY=";
+  };
+
+  vendorHash = "sha256-KTAckjrOZVwl6UBFmbqqMjUyYJDQxySxWiV46QNTfuY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -49,8 +60,13 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.bsd2WithViews;
     mainProgram = "moor";
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
       getchoo
       zowoq
+=======
+      foo-dogsquared
+      getchoo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 })

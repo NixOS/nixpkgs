@@ -81,14 +81,22 @@ let
   ];
 in
 mkDerivation rec {
+<<<<<<< HEAD
   version = "3.40.13";
+=======
+  version = "3.40.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
+<<<<<<< HEAD
     hash = "sha256-2VPgD7ycj26cTpl16BSEukNEuUXtP25HwG2fRWBXNrU=";
+=======
+    hash = "sha256-QsAiE3HC71lGsdUKW9QZ5gCLCRsOCCM2IR3MKJlJ0vk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {
@@ -199,11 +207,21 @@ mkDerivation rec {
   # >9k objects, >3h build time on a normal build slot
   requiredSystemFeatures = [ "big-parallel" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.geospatial ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Free and Open Source Geographic Information System";
+    homepage = "https://www.qgis.org";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lsix ];
+    teams = [ teams.geospatial ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

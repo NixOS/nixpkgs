@@ -461,8 +461,13 @@ let
         ];
       };
 
+<<<<<<< HEAD
       nsb-cga = super.nsb-cga.overrideLispAttrs (old: {
         lispLibs = old.lispLibs ++ [ self.sb-cga ];
+=======
+      nsb-cga = super.nsb-cga.overrideLispAttrs (oa: {
+        lispLibs = oa.lispLibs ++ [ self.sb-cga ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       });
 
       qlot-cli = build-asdf-system rec {
@@ -525,7 +530,11 @@ let
         meta.mainProgram = "qlot";
       };
 
+<<<<<<< HEAD
       fset = super.fset.overrideLispAttrs (old: {
+=======
+      fset = super.fset.overrideLispAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         systems = [
           "fset"
           "fset/test"
@@ -539,7 +548,11 @@ let
 
       thih-coalton = self.coalton;
       quil-coalton = self.coalton;
+<<<<<<< HEAD
       coalton = super.coalton.overrideLispAttrs (old: {
+=======
+      coalton = super.coalton.overrideLispAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         systems = [
           "coalton"
           "thih-coalton"
@@ -548,7 +561,11 @@ let
           "quil-coalton/tests"
           "coalton/tests"
         ];
+<<<<<<< HEAD
         lispLibs = old.lispLibs ++ [ self.fiasco ];
+=======
+        lispLibs = oa.lispLibs ++ [ self.fiasco ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         nativeLibs = [ pkgs.mpfr ];
         meta = {
           description = "Statically typed functional programming language that supercharges Common Lisp";

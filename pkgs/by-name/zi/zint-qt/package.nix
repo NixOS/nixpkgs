@@ -68,7 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/frontend_qt/images/scalable/zint-qt.svg
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Barcode generating tool and library";
     longDescription = ''
       The Zint project aims to provide a complete cross-platform open source
@@ -78,9 +82,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.zint.org.uk";
     changelog = "https://github.com/zint/zint/blob/${finalAttrs.src.rev}/ChangeLog";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.azahi ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.azahi ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zint${lib.optionalString withGUI "-qt"}";
   };
 })

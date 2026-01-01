@@ -14,16 +14,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rattler-build";
+<<<<<<< HEAD
   version = "0.55.0";
+=======
+  version = "0.51.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "rattler-build";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-SofCRYAhSOwoNwnFF8eapXRxjwz/x2DNrcOXdiwvkng=";
   };
 
   cargoHash = "sha256-pe8r2bYVlP/3l4Ye1FLieiH0Cf5otNN2KCag5fntHUg=";
+=======
+    hash = "sha256-d+OE4jPWgTqPKXx77Z0cUs2WiHS+l7IRJR90qWdG6Fk=";
+  };
+
+  cargoHash = "sha256-G7rIk7gohIQHkhD+JU0N4ABRna37M9B/T9d2eo+jWaI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   doCheck = false; # test requires network access
 
@@ -54,6 +65,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script { };
 

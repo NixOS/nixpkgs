@@ -74,10 +74,18 @@ stdenv.mkDerivation rec {
     "${if withDoc then "--enable-gtk-doc" else "--disable-gtk-doc"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library providing high-level API for X Keyboard Extension known as XKB";
     homepage = "http://freedesktop.org/wiki/Software/LibXklavier";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library providing high-level API for X Keyboard Extension known as XKB";
+    homepage = "http://freedesktop.org/wiki/Software/LibXklavier";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

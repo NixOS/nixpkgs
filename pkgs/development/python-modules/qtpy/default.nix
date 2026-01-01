@@ -44,10 +44,18 @@ buildPythonPackage rec {
     "qtpy/tests/test_uic.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Abstraction layer for PyQt5/PyQt6/PySide2/PySide6";
     mainProgram = "qtpy";
     homepage = "https://github.com/spyder-ide/qtpy";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Abstraction layer for PyQt5/PyQt6/PySide2/PySide6";
+    mainProgram = "qtpy";
+    homepage = "https://github.com/spyder-ide/qtpy";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

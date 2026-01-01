@@ -48,16 +48,28 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
+<<<<<<< HEAD
   meta = {
     description = "Ubuntu community theme 'yaru' - default Ubuntu theme since 18.10";
     homepage = "https://github.com/ubuntu/yaru";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Ubuntu community theme 'yaru' - default Ubuntu theme since 18.10";
+    homepage = "https://github.com/ubuntu/yaru";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cc-by-sa-40
       gpl3Plus
       lgpl21Only
       lgpl3Only
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ moni ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

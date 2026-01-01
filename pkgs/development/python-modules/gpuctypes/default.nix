@@ -109,11 +109,19 @@ buildPythonPackage rec {
   # If neither rocmSupport or cudaSupport is enabled, no tests are selected
   dontUsePytestCheck = !(rocmSupport || cudaSupport) && (!testOpenclRuntime);
 
+<<<<<<< HEAD
   meta = {
     description = "Ctypes wrappers for HIP, CUDA, and OpenCL";
     homepage = "https://github.com/tinygrad/gpuctypes";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Ctypes wrappers for HIP, CUDA, and OpenCL";
+    homepage = "https://github.com/tinygrad/gpuctypes";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       GaetanLepage
       matthewcroughan
       wozeparrot

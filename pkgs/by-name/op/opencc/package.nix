@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   python3,
   opencc,
@@ -21,6 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
   };
 
+<<<<<<< HEAD
   patches = [
     # fix build with gcc15 by adding cstdint include
     (fetchpatch {
@@ -33,6 +37,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     python3
@@ -54,9 +60,15 @@ stdenv.mkDerivation rec {
     updateScript = gitUpdater { rev-prefix = "ver."; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/BYVoid/OpenCC";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/BYVoid/OpenCC";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Project for conversion between Traditional and Simplified Chinese";
     longDescription = ''
       Open Chinese Convert (OpenCC) is an opensource project for conversion between
@@ -64,7 +76,12 @@ stdenv.mkDerivation rec {
       phrase-level conversion, variant conversion and regional idioms among Mainland China,
       Taiwan and Hong kong.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ sifmelcara ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+    maintainers = with maintainers; [ sifmelcara ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

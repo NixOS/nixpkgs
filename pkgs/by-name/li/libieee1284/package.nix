@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Parallel port communication library";
     mainProgram = "libieee1284_test";
@@ -60,5 +61,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    description = "Parallel port communication library";
+    mainProgram = "libieee1284_test";
+    homepage = "http://cyberelk.net/tim/software/libieee1284/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

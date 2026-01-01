@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tomlkit" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sdispater/tomlkit";
     changelog = "https://github.com/sdispater/tomlkit/blob/${version}/CHANGELOG.md";
     description = "Style-preserving TOML library for Python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sdispater/tomlkit";
+    changelog = "https://github.com/sdispater/tomlkit/blob/${version}/CHANGELOG.md";
+    description = "Style-preserving TOML library for Python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jakewaksbaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -19,10 +19,13 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ poetry-core ];
 
+<<<<<<< HEAD
   pythonRelaxDeps = [
     "ebooklib"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dependencies = with python3Packages; [
     ebooklib
     beautifulsoup4

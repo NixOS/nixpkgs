@@ -75,11 +75,20 @@ buildPythonPackage rec {
     "test_attributes"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with Melnor RainCloud Smart Garden Watering Irrigation Timer";
     homepage = "https://github.com/vanstinator/raincloudy";
     changelog = "https://github.com/vanstinator/raincloudy/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with Melnor RainCloud Smart Garden Watering Irrigation Timer";
+    homepage = "https://github.com/vanstinator/raincloudy";
+    changelog = "https://github.com/vanstinator/raincloudy/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

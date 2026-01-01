@@ -43,10 +43,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yaspin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Yet Another Terminal Spinner";
     homepage = "https://github.com/pavdmyt/yaspin";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
+=======
+  meta = with lib; {
+    description = "Yet Another Terminal Spinner";
+    homepage = "https://github.com/pavdmyt/yaspin";
+    license = licenses.mit;
+    maintainers = with maintainers; [ samuela ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

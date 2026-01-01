@@ -19,11 +19,20 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "screwdriver.cd local mode";
     mainProgram = "sd-local";
     homepage = "https://github.com/screwdriver-cd/sd-local";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ midchildan ];
+=======
+  meta = with lib; {
+    description = "screwdriver.cd local mode";
+    mainProgram = "sd-local";
+    homepage = "https://github.com/screwdriver-cd/sd-local";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ midchildan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

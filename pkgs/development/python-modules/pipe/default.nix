@@ -32,11 +32,20 @@ buildPythonPackage rec {
     "test_netcat"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to use infix notation";
     homepage = "https://github.com/JulienPalard/Pipe";
     changelog = "https://github.com/JulienPalard/Pipe/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to use infix notation";
+    homepage = "https://github.com/JulienPalard/Pipe";
+    changelog = "https://github.com/JulienPalard/Pipe/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -74,10 +74,18 @@ python.pkgs.buildPythonApplication rec {
     "gdtoolkit.parser"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";
     homepage = "https://github.com/Scony/godot-gdscript-toolkit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ squarepear ];
+=======
+  meta = with lib; {
+    description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";
+    homepage = "https://github.com/Scony/godot-gdscript-toolkit";
+    license = licenses.mit;
+    maintainers = with maintainers; [ squarepear ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

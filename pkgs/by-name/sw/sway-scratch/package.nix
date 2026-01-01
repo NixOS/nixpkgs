@@ -20,11 +20,19 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Automatically starting named scratchpads for sway";
     homepage = "https://github.com/aokellermann/sway-scratch";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ LilleAila ];
+=======
+  meta = with lib; {
+    description = "Automatically starting named scratchpads for sway";
+    homepage = "https://github.com/aokellermann/sway-scratch";
+    license = licenses.mit;
+    maintainers = with maintainers; [ LilleAila ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sway-scratch";
     platforms = lib.platforms.linux;
   };

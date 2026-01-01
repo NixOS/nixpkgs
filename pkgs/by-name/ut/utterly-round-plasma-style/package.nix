@@ -31,11 +31,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Rounded desktop theme and window borders for Plasma 5 that follows any color scheme";
     homepage = "https://himdek.com/Utterly-Round-Plasma-Style/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Rounded desktop theme and window borders for Plasma 5 that follows any color scheme";
+    homepage = "https://himdek.com/Utterly-Round-Plasma-Style/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

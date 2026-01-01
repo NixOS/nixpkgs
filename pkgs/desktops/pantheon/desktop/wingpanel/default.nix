@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
   wayland-scanner,
   wrapGAppsHook3,
@@ -24,17 +28,36 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
+<<<<<<< HEAD
   version = "8.0.4";
+=======
+  version = "8.0.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "wingpanel";
+<<<<<<< HEAD
     tag = version;
     hash = "sha256-+m1TydQtbXuA7uS6hZVC8z6JgOUxDh/QXL/4tROHhwk=";
+=======
+    rev = version;
+    sha256 = "sha256-3UNtqfDqgclRE8Pe9N8rOt6i2FG6lKNfJAv5Q2OYXUU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
     ./indicators.patch
+<<<<<<< HEAD
+=======
+
+    # Fix build with gala 8.3.0
+    # https://github.com/elementary/wingpanel/pull/642
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel/commit/4476df2573797310e254695a66c099b32afe9736.patch";
+      hash = "sha256-99zzXbaeW/ijqPXN7tQexMPWsUW4pX7e0tcxASBVbvI=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   depsBuildBuild = [
@@ -80,16 +103,26 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.
     '';
     homepage = "https://github.com/elementary/wingpanel";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "io.elementary.wingpanel";
   };
 }

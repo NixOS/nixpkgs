@@ -41,10 +41,18 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "gcsa" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pythonic wrapper for the Google Calendar API";
     homepage = "https://github.com/kuzmoyev/google-calendar-simple-api";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Pythonic wrapper for the Google Calendar API";
+    homepage = "https://github.com/kuzmoyev/google-calendar-simple-api";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

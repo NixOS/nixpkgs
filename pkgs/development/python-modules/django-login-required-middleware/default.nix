@@ -32,10 +32,18 @@ buildPythonPackage rec {
     ${python.interpreter} -m django test --settings tests.settings
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Requires login to all requests through middleware in Django";
     homepage = "https://github.com/CleitonDeLima/django-login-required-middleware";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Requires login to all requests through middleware in Django";
+    homepage = "https://github.com/CleitonDeLima/django-login-required-middleware";
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyasn1" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python ASN.1 encoder and decoder";
     homepage = "https://github.com/pysnmp/pyasn1";
     changelog = "https://github.com/pysnmp/pyasn1/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python ASN.1 encoder and decoder";
+    homepage = "https://github.com/pysnmp/pyasn1";
+    changelog = "https://github.com/pysnmp/pyasn1/releases/tag/v${version}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,7 +30,11 @@ stdenv.mkDerivation {
     xorg.libX11
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple joystick tester based on Gtk+";
     longDescription = ''
       It provides you with a list of attached joysticks, a way to display which
@@ -38,9 +42,15 @@ stdenv.mkDerivation {
       to calibrate your joystick.
     '';
     homepage = "https://github.com/Grumbel/jstest-gtk";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wucke13 ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wucke13 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jstest-gtk";
   };
 }

@@ -26,7 +26,10 @@ let
     "middleclass"
     "mini-test"
     "neorg"
+<<<<<<< HEAD
     "neorg-interim-ls"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "neotest"
     "nui-nvim"
     "nvim-cmp"

@@ -128,8 +128,13 @@ else
       )
     '';
 
+<<<<<<< HEAD
     meta = {
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "LD_PRELOAD library to intercept and rewrite the paths in glibc calls";
       longDescription = ''
         libredirect is an LD_PRELOAD library to intercept and rewrite the paths in

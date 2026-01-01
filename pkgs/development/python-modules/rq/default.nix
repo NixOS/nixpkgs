@@ -9,7 +9,10 @@
 
   # dependencies
   click,
+<<<<<<< HEAD
   croniter,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   redis,
 
   # tests
@@ -22,21 +25,32 @@
 
 buildPythonPackage rec {
   pname = "rq";
+<<<<<<< HEAD
   version = "2.6.1";
+=======
+  version = "2.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-4+zP3pOiZ+r/dt9F2NyxgJsyGPIHgj9XokuPxlWyS1g=";
+=======
+    hash = "sha256-CtxirZg6WNQpTMoXQRvB8i/KB3r58WlKh+wjBvyVMMs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     click
+<<<<<<< HEAD
     croniter
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     redis
   ];
 
@@ -47,6 +61,10 @@ buildPythonPackage rec {
     redisTestHook
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   __darwinAllowLocalNetworking = true;
 

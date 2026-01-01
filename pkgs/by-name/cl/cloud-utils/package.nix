@@ -79,10 +79,18 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Useful set of utilities for interacting with a cloud";
     homepage = "https://github.com/canonical/cloud-utils";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Useful set of utilities for interacting with a cloud";
+    homepage = "https://github.com/canonical/cloud-utils";
+    platforms = platforms.unix;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

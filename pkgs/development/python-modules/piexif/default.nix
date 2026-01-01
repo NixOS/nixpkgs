@@ -30,10 +30,18 @@ buildPythonPackage rec {
   # Pillow needed for unit tests
   nativeCheckInputs = [ pillow ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simplify Exif manipulations with Python";
     homepage = "https://github.com/hMatoba/Piexif";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Simplify Exif manipulations with Python";
+    homepage = "https://github.com/hMatoba/Piexif";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

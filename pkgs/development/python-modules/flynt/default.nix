@@ -37,12 +37,21 @@ buildPythonPackage rec {
     "test_mixed_quote_types_unsafe"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to automatically convert old string literal formatting to f-strings";
     homepage = "https://github.com/ikamensh/flynt";
     changelog = "https://github.com/ikamensh/flynt/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "Tool to automatically convert old string literal formatting to f-strings";
+    homepage = "https://github.com/ikamensh/flynt";
+    changelog = "https://github.com/ikamensh/flynt/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "flynt";
   };
 }

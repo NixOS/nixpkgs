@@ -60,11 +60,20 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libusb1;
 
+<<<<<<< HEAD
   meta = {
     description = "TI MSP430 FET debug driver";
     homepage = "https://www.ti.com/tool/MSPDS";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ aerialx ];
+=======
+  meta = with lib; {
+    description = "TI MSP430 FET debug driver";
+    homepage = "https://www.ti.com/tool/MSPDS";
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ aerialx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

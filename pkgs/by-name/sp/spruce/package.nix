@@ -17,11 +17,20 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     description = "BOSH template merge tool";
     mainProgram = "spruce";
     homepage = "https://github.com/geofffranks/spruce";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ risson ];
+=======
+  meta = with lib; {
+    description = "BOSH template merge tool";
+    mainProgram = "spruce";
+    homepage = "https://github.com/geofffranks/spruce";
+    license = licenses.mit;
+    maintainers = with maintainers; [ risson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

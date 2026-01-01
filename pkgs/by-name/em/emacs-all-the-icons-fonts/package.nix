@@ -21,7 +21,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Icon fonts for emacs all-the-icons";
     longDescription = ''
       The emacs package all-the-icons provides icons to improve
@@ -35,8 +39,14 @@ stdenvNoCC.mkDerivation rec {
       SIL OFL license, and Apache license v2.0. See the GitHub page
       for further information.
     */
+<<<<<<< HEAD
     license = lib.licenses.free;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ rlupton20 ];
+=======
+    license = licenses.free;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ rlupton20 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

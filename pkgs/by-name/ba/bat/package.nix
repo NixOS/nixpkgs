@@ -7,21 +7,37 @@
   installShellFiles,
   makeWrapper,
   zlib,
+<<<<<<< HEAD
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bat";
   version = "0.26.1";
+=======
+}:
+
+rustPlatform.buildRustPackage rec {
+  pname = "bat";
+  version = "0.26.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "bat";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-IbTvFT37BFo0tKOiApDL9sT+/nMD33MO3TXuho+lF2c=";
   };
 
   cargoHash = "sha256-WRLCs1hrwFT3tya9CzKUuh5g+6fYqKDtv3yvDx8Wws8=";
+=======
+    rev = "v${version}";
+    hash = "sha256-JWpdAO+OCqoWa6KVR8sxvHHy1SdR4BmRO0oU0ZAOWl0=";
+  };
+
+  cargoHash = "sha256-wb86yWWnRHs1vG8+oyhs6bUD4x7AdWvIvPPNBcLs4Hs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config
@@ -63,9 +79,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=file_with_invalid_utf8_filename"
   ];
 
+<<<<<<< HEAD
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
@@ -82,7 +101,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
+<<<<<<< HEAD
     changelog = "https://github.com/sharkdp/bat/raw/v${finalAttrs.version}/CHANGELOG.md";
+=======
+    changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -95,4 +118,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       sigmasquadron
     ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

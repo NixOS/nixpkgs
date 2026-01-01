@@ -41,6 +41,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "BWK awk modified for biological data";
     mainProgram = "bioawk";
@@ -48,5 +49,14 @@ stdenv.mkDerivation {
     license = lib.licenses.hpnd;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "BWK awk modified for biological data";
+    mainProgram = "bioawk";
+    homepage = "https://github.com/lh3/bioawk";
+    license = licenses.hpnd;
+    maintainers = with maintainers; [ natsukium ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Run pytest on markdown code fence blocks";
     homepage = "https://github.com/modal-com/pytest-markdown-docs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    description = "Run pytest on markdown code fence blocks";
+    homepage = "https://github.com/modal-com/pytest-markdown-docs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

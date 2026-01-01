@@ -99,16 +99,27 @@ let
         runHook postInstall
       '';
 
+<<<<<<< HEAD
       meta = {
         homepage = "https://www.modartt.com/pianoteq";
         description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
         license = lib.licenses.unfree;
+=======
+      meta = with lib; {
+        homepage = "https://www.modartt.com/pianoteq";
+        description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
+        license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         inherit mainProgram;
         platforms = [
           "x86_64-linux"
           "aarch64-linux"
         ];
+<<<<<<< HEAD
         maintainers = with lib.maintainers; [
+=======
+        maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           mausch
           ners
         ];

@@ -28,15 +28,27 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "userpath" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Cross-platform tool for adding locations to the user PATH";
     mainProgram = "userpath";
     homepage = "https://github.com/ofek/userpath";
     changelog = "https://github.com/ofek/userpath/releases/tag/v${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [ yshym ];
+=======
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ yshym ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

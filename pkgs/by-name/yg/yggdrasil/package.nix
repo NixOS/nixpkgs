@@ -34,12 +34,20 @@ buildGoModule rec {
 
   passthru.tests.basic = nixosTests.yggdrasil;
 
+<<<<<<< HEAD
   meta = {
     description = "Experiment in scalable routing as an encrypted IPv6 overlay network";
     homepage = "https://yggdrasil-network.github.io/";
     license = lib.licenses.lgpl3;
     mainProgram = "yggdrasil";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Experiment in scalable routing as an encrypted IPv6 overlay network";
+    homepage = "https://yggdrasil-network.github.io/";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gazally
       lassulus
       peigongdsd

@@ -44,9 +44,16 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://httpretty.readthedocs.org/";
     description = "HTTP client request mocking tool";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://httpretty.readthedocs.org/";
+    description = "HTTP client request mocking tool";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

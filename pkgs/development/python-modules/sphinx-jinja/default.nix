@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_jinja" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension to include jinja templates in documentation";
     homepage = "https://github.com/tardyp/sphinx-jinja";
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Sphinx extension to include jinja templates in documentation";
+    homepage = "https://github.com/tardyp/sphinx-jinja";
+    maintainers = [ ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

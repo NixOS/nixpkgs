@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pngnq.sourceforge.net/";
     description = "PNG quantizer";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://pngnq.sourceforge.net/";
+    description = "PNG quantizer";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

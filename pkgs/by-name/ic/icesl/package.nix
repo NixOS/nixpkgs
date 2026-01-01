@@ -73,15 +73,27 @@ stdenv.mkDerivation rec {
     makeWrapper $out/oldbin/IceSL-slicer $out/bin/icesl --prefix PATH : ${dialog}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GPU-accelerated procedural modeler and slicer for 3D printing";
     homepage = "https://icesl.loria.fr/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.inria-icesl;
+=======
+  meta = with lib; {
+    description = "GPU-accelerated procedural modeler and slicer for 3D printing";
+    homepage = "https://icesl.loria.fr/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.inria-icesl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ mgttlinger ];
+=======
+    maintainers = with maintainers; [ mgttlinger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

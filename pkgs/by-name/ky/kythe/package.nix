@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
     ln -s $out/tools $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Pluggable, (mostly) language-agnostic ecosystem for building tools that work with code";
     longDescription = ''
       The Kythe project was founded to provide and support tools and standards
@@ -51,9 +55,16 @@ stdenv.mkDerivation rec {
         analyses, editors, code-review applications, and more — to share
         information with each other smoothly.  '';
     homepage = "https://kythe.io/";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.mpickering ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.mpickering ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,11 +23,20 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "LV2 arpeggiator";
     homepage = "https://github.com/moddevices/mod-arpeggiator-lv2";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "LV2 arpeggiator";
+    homepage = "https://github.com/moddevices/mod-arpeggiator-lv2";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

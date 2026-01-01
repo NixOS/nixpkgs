@@ -100,13 +100,22 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Declarative continuous deployment for Kubernetes";
     mainProgram = "argocd";
     downloadPage = "https://github.com/argoproj/argo-cd";
     homepage = "https://argo-cd.readthedocs.io/en/stable/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       shahrukh330
       qjoly
       FKouhai

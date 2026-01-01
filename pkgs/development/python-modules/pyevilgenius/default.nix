@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyevilgenius" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python SDK to interact with Evil Genius Labs devices";
     homepage = "https://github.com/home-assistant-libs/pyevilgenius";
     changelog = "https://github.com/home-assistant-libs/pyevilgenius/releases/tag/${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python SDK to interact with Evil Genius Labs devices";
+    homepage = "https://github.com/home-assistant-libs/pyevilgenius";
+    changelog = "https://github.com/home-assistant-libs/pyevilgenius/releases/tag/${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

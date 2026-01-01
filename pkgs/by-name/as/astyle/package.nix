@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
   doInstallCheck = !asLibrary;
 
   meta = {
@@ -39,5 +40,17 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ carlossless ];
     platforms = lib.platforms.unix;
+=======
+  versionCheckProgramArg = "--version";
+  doInstallCheck = !asLibrary;
+
+  meta = with lib; {
+    description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";
+    mainProgram = "astyle";
+    homepage = "https://astyle.sourceforge.net/";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ carlossless ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

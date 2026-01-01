@@ -93,11 +93,19 @@ stdenv.mkDerivation {
     chmod +x $out/lib/*
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://bash-my-aws.org";
     description = "CLI commands for AWS";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomberek ];
+=======
+  meta = with lib; {
+    homepage = "https://bash-my-aws.org";
+    description = "CLI commands for AWS";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomberek ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bma";
   };
 }

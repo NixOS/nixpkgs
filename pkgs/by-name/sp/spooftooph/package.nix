@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/projects/spooftooph";
     description = "Automate spoofing or clone Bluetooth device Name, Class, and Address";
@@ -33,5 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ d3vil0p3r ];
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/spooftooph";
+    description = "Automate spoofing or clone Bluetooth device Name, Class, and Address";
+    mainProgram = "spooftooph";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ d3vil0p3r ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

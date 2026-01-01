@@ -56,11 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "Pyro4" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed object middleware for Python (RPC)";
     homepage = "https://github.com/irmen/Pyro4";
     changelog = "https://github.com/irmen/Pyro4/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Distributed object middleware for Python (RPC)";
+    homepage = "https://github.com/irmen/Pyro4";
+    changelog = "https://github.com/irmen/Pyro4/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

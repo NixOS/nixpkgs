@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fnvhash" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/znerol/py-fnvhash/releases/tag/${src.tag}";
     description = "Python FNV hash implementation";
     homepage = "https://github.com/znerol/py-fnvhash";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/znerol/py-fnvhash/releases/tag/${src.tag}";
+    description = "Python FNV hash implementation";
+    homepage = "https://github.com/znerol/py-fnvhash";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

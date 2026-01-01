@@ -33,10 +33,18 @@ buildPythonPackage rec {
   # tests require quantiphy import
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "QuantiPhy support for RKM codes";
     homepage = "https://github.com/kenkundert/rkm_codes/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "QuantiPhy support for RKM codes";
+    homepage = "https://github.com/kenkundert/rkm_codes/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

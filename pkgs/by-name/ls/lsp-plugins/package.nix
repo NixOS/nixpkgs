@@ -39,7 +39,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lsp-plugins";
+<<<<<<< HEAD
   version = "1.2.26";
+=======
+  version = "1.2.25";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -49,7 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${finalAttrs.version}/lsp-plugins-src-${finalAttrs.version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-RIMqmSJkF90u+nSICZCj3nGrAx1mfUXsPQb3lXicCfM=";
+=======
+    hash = "sha256-qCm3DfRF7LR6wk5TtC/r1GIA2ZI7YrrZTKNHjLDjJnM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # By default, GStreamer plugins are installed right alongside GStreamer itself
@@ -178,10 +186,13 @@ stdenv.mkDerivation (finalAttrs: {
       - Send
       - Surge Filter
       - Trigger
+<<<<<<< HEAD
 
       Matcher plugins:
       - Matcher
       - Sidechain Matcher
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '';
     homepage = "https://lsp-plug.in";
     changelog = "https://github.com/lsp-plugins/lsp-plugins/releases/tag/${finalAttrs.version}";

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool to control Elgato Key Light devices";
     homepage = "https://github.com/versality/keylight-cli";
@@ -34,5 +35,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ versality ];
     mainProgram = "keylight";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "CLI tool to control Elgato Key Light devices";
+    homepage = "https://github.com/versality/keylight-cli";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ versality ];
+    mainProgram = "keylight";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

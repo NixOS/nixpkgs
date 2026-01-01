@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/lxqt/qtermwidget";
@@ -52,5 +53,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    homepage = "https://github.com/lxqt/qtermwidget";
+    description = "Terminal emulator widget for Qt, used by QTerminal";
+    license = licenses.gpl2Plus;
+    platforms = with platforms; unix;
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

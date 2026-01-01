@@ -112,12 +112,21 @@ buildPythonPackage rec {
     "test_daemon_runner"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
     changelog = "https://github.com/httpie/httpie/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Command line HTTP client whose goal is to make CLI human-friendly";
+    homepage = "https://httpie.org/";
+    changelog = "https://github.com/httpie/httpie/blob/${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       antono
       relrod
     ];

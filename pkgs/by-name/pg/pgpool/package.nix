@@ -45,14 +45,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.pgpool.net/mediawiki/index.php/Main_Page";
     description = "Middleware that works between PostgreSQL servers and PostgreSQL clients";
     changelog = "https://www.pgpool.net/docs/latest/en/html/release-${
       builtins.replaceStrings [ "." ] [ "-" ] version
     }.html";
+<<<<<<< HEAD
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.free;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

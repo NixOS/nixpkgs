@@ -29,11 +29,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mockito" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Spying framework";
     homepage = "https://github.com/kaste/mockito-python";
     changelog = "https://github.com/kaste/mockito-python/blob/${version}/CHANGES.txt";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Spying framework";
+    homepage = "https://github.com/kaste/mockito-python";
+    changelog = "https://github.com/kaste/mockito-python/blob/${version}/CHANGES.txt";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

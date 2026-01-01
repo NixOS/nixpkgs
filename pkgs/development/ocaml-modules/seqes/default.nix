@@ -24,10 +24,18 @@ buildDunePackage rec {
     alcotest
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Variations of the Seq module with monads folded into the type";
     homepage = "https://gitlab.com/nomadic-labs/seqes";
     license = lib.licenses.lgpl2; # Same as OCaml
     maintainers = [ lib.maintainers.ulrikstrid ];
+=======
+  meta = with lib; {
+    description = "Variations of the Seq module with monads folded into the type";
+    homepage = "https://gitlab.com/nomadic-labs/seqes";
+    license = licenses.lgpl2; # Same as OCaml
+    maintainers = [ maintainers.ulrikstrid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

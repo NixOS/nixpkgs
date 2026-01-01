@@ -42,12 +42,21 @@ stdenv.mkDerivation rec {
     libXScrnSaver
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "KDE media player";
     homepage = "https://apps.kde.org/kaffeine/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.pasqui23 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "KDE media player";
+    homepage = "https://apps.kde.org/kaffeine/";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.pasqui23 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kaffeine";
   };
 }

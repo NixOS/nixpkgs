@@ -12,6 +12,7 @@ index aa028ab575..99f1dc4567 100644
 -#else
 -__CRT_UUID_DECL(ID3D10StateBlock, 0x0803425a,0x57f5,0x4dd6,0x94,0x65,0xa8,0x75,0x70,0x83,0x4a,0x08);
 -#endif
+<<<<<<< HEAD
 diff --git a/src/d3d9/d3d9_include.h b/src/d3d9/d3d9_include.h
 index 21dadb942d..ae06b15371 100644
 --- a/src/d3d9/d3d9_include.h
@@ -28,3 +29,5 @@ index 21dadb942d..ae06b15371 100644
  #ifndef __WINE__
  extern "C" WINUSERAPI WINBOOL WINAPI SetProcessDPIAware(VOID);
  #endif
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

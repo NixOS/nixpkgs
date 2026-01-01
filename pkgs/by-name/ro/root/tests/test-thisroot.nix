@@ -9,9 +9,15 @@
 }:
 runCommand "test-thisroot"
   {
+<<<<<<< HEAD
     meta = {
       description = "Test for root thisroot.* sourcing";
       maintainers = lib.unique ((with lib.maintainers; [ ShamrockLee ]) ++ root.meta.maintainers);
+=======
+    meta = with lib; {
+      description = "Test for root thisroot.* sourcing";
+      maintainers = unique ((with maintainers; [ ShamrockLee ]) ++ root.meta.maintainers);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

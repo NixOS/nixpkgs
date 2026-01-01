@@ -59,7 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyinsteon" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library to support Insteon home automation projects";
     longDescription = ''
       This is a Python package to interface with an Insteon Modem. It has been
@@ -68,8 +72,13 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
     changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "insteon_tools";
   };
 }

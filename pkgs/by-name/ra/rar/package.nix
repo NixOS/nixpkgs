@@ -65,6 +65,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
@@ -73,5 +74,15 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ thiagokokada ];
     platforms = lib.attrNames srcs;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "Utility for RAR archives";
+    homepage = "https://www.rarlab.com/";
+    license = licenses.unfree;
+    mainProgram = "rar";
+    maintainers = with maintainers; [ thiagokokada ];
+    platforms = lib.attrNames srcs;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

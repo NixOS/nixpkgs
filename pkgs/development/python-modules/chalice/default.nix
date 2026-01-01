@@ -1,5 +1,6 @@
 {
   lib,
+<<<<<<< HEAD
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
@@ -21,6 +22,27 @@
   pytestCheckHook,
   requests,
   websocket-client,
+=======
+  attrs,
+  botocore,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  hypothesis,
+  inquirer,
+  jmespath,
+  mypy-extensions,
+  pip,
+  pytestCheckHook,
+  pyyaml,
+  requests,
+  setuptools,
+  six,
+  typing-extensions,
+  watchdog,
+  websocket-client,
+  wheel,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
@@ -28,8 +50,11 @@ buildPythonPackage rec {
   version = "1.32.0";
   pyproject = true;
 
+<<<<<<< HEAD
   disabled = pythonAtLeast "3.14";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "aws";
     repo = "chalice";
@@ -46,8 +71,14 @@ buildPythonPackage rec {
     jmespath
     pip
     pyyaml
+<<<<<<< HEAD
     # setuptools
     six
+=======
+    setuptools
+    six
+    wheel
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [
@@ -82,18 +113,29 @@ buildPythonPackage rec {
     "test_setup_tar_gz_hyphens_in_name"
     "test_both_tar_gz"
     "test_both_tar_bz2"
+<<<<<<< HEAD
     # AssertionError
     "test_no_error_message_printed_on_empty_reqs_file"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pythonImportsCheck = [ "chalice" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python Serverless Microframework for AWS";
     mainProgram = "chalice";
     homepage = "https://github.com/aws/chalice";
     changelog = "https://github.com/aws/chalice/blob/${src.tag}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

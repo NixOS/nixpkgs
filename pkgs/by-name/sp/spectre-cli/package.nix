@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     mv spectre $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Stateless cryptographic identity algorithm";
     homepage = "https://spectre.app";
@@ -71,5 +72,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ emmabastas ];
     mainProgram = "spectre";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Stateless cryptographic identity algorithm";
+    homepage = "https://spectre.app";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ emmabastas ];
+    mainProgram = "spectre";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

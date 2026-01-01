@@ -62,6 +62,7 @@ buildPythonPackage rec {
   # e3-core is tested with tox; it's hard to test without internet.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/AdaCore/e3-core/releases/tag/${src.tag}";
     homepage = "https://github.com/AdaCore/e3-core/";
@@ -72,5 +73,17 @@ buildPythonPackage rec {
     # See the comment regarding distro and psutil. Other platforms are supported
     # upstream, but not by this package.
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${src.tag}";
+    homepage = "https://github.com/AdaCore/e3-core/";
+    description = "Core framework for developing portable automated build systems";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ atalii ];
+    mainProgram = "e3";
+    # See the comment regarding distro and psutil. Other platforms are supported
+    # upstream, but not by this package.
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

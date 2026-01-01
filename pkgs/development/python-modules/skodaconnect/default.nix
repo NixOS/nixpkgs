@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skodaconnect" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to communicate with Skoda Connect";
     homepage = "https://github.com/lendy007/skodaconnect";
     changelog = "https://github.com/lendy007/skodaconnect/releases/tag/${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to communicate with Skoda Connect";
+    homepage = "https://github.com/lendy007/skodaconnect";
+    changelog = "https://github.com/lendy007/skodaconnect/releases/tag/${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

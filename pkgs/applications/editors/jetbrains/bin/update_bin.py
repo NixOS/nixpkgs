@@ -13,7 +13,10 @@ from packaging import version
 
 updates_url = "https://www.jetbrains.com/updates/updates.xml"
 current_path = pathlib.Path(__file__).parent
+<<<<<<< HEAD
 ides_file_path = current_path.joinpath("..").joinpath("ides.json").resolve()
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 versions_file_path = current_path.joinpath("versions.json").resolve()
 fromVersions = {}
 toVersions = {}
@@ -73,8 +76,13 @@ def get_url(template, version_or_build_number, version_number):
     return None
 
 
+<<<<<<< HEAD
 def update_product(name, ide, version_info):
     update_channel = ide["updateChannel"]
+=======
+def update_product(name, product):
+    update_channel = product["update-channel"]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     logging.info("Updating %s", name)
     channel = channels.get(update_channel)
     if channel is None:
@@ -94,6 +102,7 @@ def update_product(name, ide, version_info):
             else:
                 version_or_build_number = new_build_number
             version_number = new_version.split(' ')[0]
+<<<<<<< HEAD
             download_url = get_url(version_info["url-template"], version_or_build_number, version_number)
             if not download_url:
                 raise Exception(f"No valid url for {name} version {version_or_build_number}")
@@ -105,6 +114,19 @@ def update_product(name, ide, version_info):
                 version_info["version"] = new_version
                 version_info["build_number"] = new_build_number
                 version_info["sha256"] = download_sha256(download_url)
+=======
+            download_url = get_url(product["url-template"], version_or_build_number, version_number)
+            if not download_url:
+                raise Exception(f"No valid url for {name} version {version_or_build_number}")
+            product["url"] = download_url
+            if "sha256" not in product or product.get("build_number") != new_build_number:
+                fromVersions[name] = product["version"]
+                toVersions[name] = new_version
+                logging.info("Found a newer version %s with build number %s.", new_version, new_build_number)
+                product["version"] = new_version
+                product["build_number"] = new_build_number
+                product["sha256"] = download_sha256(download_url)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             else:
                 logging.info("Already at the latest version %s with build number %s.", new_version, new_build_number)
         except Exception as e:
@@ -113,19 +135,30 @@ def update_product(name, ide, version_info):
             logging.warning("It may be out-of-date. Fix the error and rerun.")
 
 
+<<<<<<< HEAD
 def update_products(versioned_products, ides):
     for name, version_info in versioned_products.items():
         update_product(name, ides[name], version_info)
+=======
+def update_products(products):
+    for name, product in products.items():
+        update_product(name, product)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 
 with open(versions_file_path, "r") as versions_file:
     versions = json.load(versions_file)
 
+<<<<<<< HEAD
 with open(ides_file_path, "r") as ides_file:
     ides = json.load(ides_file)
 
 for versioned_products in versions.values():
     update_products(versioned_products, ides)
+=======
+for products in versions.values():
+    update_products(products)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 with open(versions_file_path, "w") as versions_file:
     json.dump(versions, versions_file, indent=2)
@@ -149,3 +182,10 @@ for name in toVersions.keys():
 # Commit the result
 logging.info("#### Committing changes... ####")
 subprocess.run(['git', 'commit', f'-m{commitMessage}', '--', f'{versions_file_path}'], check=True)
+<<<<<<< HEAD
+=======
+
+logging.info("#### Updating plugins ####")
+plugin_script = current_path.joinpath("../plugins/update_plugins.py").resolve()
+subprocess.call(plugin_script)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

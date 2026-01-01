@@ -76,17 +76,29 @@ stdenv.mkDerivation {
     install -m 644 README.en "$out"/share/licenses/libbulletml
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "C++ library to handle BulletML easily";
     longDescription = ''
       BulletML is the Bullet Markup Language. BulletML can describe the barrage
       of bullets in shooting games.
     '';
     homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/index_e.html";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fgaz ];
     # See https://github.com/NixOS/nixpkgs/pull/35482
     # for some attempts in getting it to build on darwin
     platforms = lib.platforms.linux;
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fgaz ];
+    # See https://github.com/NixOS/nixpkgs/pull/35482
+    # for some attempts in getting it to build on darwin
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

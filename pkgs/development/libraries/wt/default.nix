@@ -66,12 +66,21 @@ let
       ]
       ++ lib.optional (libmysqlclient != null) "-DMYSQL_PREFIX=${libmysqlclient}";
 
+<<<<<<< HEAD
       meta = {
         homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
         platforms = lib.platforms.linux;
         license = lib.licenses.gpl2;
         maintainers = with lib.maintainers; [ juliendehos ];
+=======
+      meta = with lib; {
+        homepage = "https://www.webtoolkit.eu/wt";
+        description = "C++ library for developing web applications";
+        platforms = platforms.linux;
+        license = licenses.gpl2;
+        maintainers = with maintainers; [ juliendehos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in

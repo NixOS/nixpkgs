@@ -46,10 +46,18 @@ buildDunePackage rec {
     mirage-vnetif
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Address Resolution Protocol purely in OCaml";
     homepage = "https://github.com/mirage/arp";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Address Resolution Protocol purely in OCaml";
+    homepage = "https://github.com/mirage/arp";
+    license = licenses.isc;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

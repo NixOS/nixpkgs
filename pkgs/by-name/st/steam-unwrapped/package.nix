@@ -52,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://store.steampowered.com/";
     license = lib.licenses.unfreeRedistributable;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ jagajaga ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     teams = with lib.teams; [ steam ];
     mainProgram = "steam";
   };

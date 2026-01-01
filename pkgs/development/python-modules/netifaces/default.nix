@@ -22,10 +22,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netifaces" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Portable access to network interfaces from Python";
     homepage = "https://github.com/al45tair/netifaces";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Portable access to network interfaces from Python";
+    homepage = "https://github.com/al45tair/netifaces";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

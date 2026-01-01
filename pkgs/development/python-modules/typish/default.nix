@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typish" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for checking types of objects";
     homepage = "https://github.com/ramonhagenaars/typish";
     changelog = "https://github.com/ramonhagenaars/typish/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fmoda3 ];
+=======
+  meta = with lib; {
+    description = "Python module for checking types of objects";
+    homepage = "https://github.com/ramonhagenaars/typish";
+    changelog = "https://github.com/ramonhagenaars/typish/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fmoda3 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

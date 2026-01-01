@@ -33,10 +33,18 @@ stdenv.mkDerivation {
       --replace "/etc" "@out@/etc"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/accounts-sso/signond";
     description = "Signon Daemon for Qt";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/accounts-sso/signond";
+    description = "Signon Daemon for Qt";
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

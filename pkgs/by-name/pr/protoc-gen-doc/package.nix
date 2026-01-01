@@ -17,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-K0rZBERSKob5ubZW28QpbcPhgFKOOASkd9UyC9f8gyQ=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Documentation generator plugin for Google Protocol Buffers";
     mainProgram = "protoc-gen-doc";
     longDescription = ''
@@ -29,7 +33,12 @@ buildGoModule rec {
       context.
     '';
     homepage = "https://github.com/pseudomuto/protoc-gen-doc";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kalbasit ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ kalbasit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

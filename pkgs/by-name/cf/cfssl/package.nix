@@ -39,11 +39,19 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) cfssl; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://cfssl.org/";
     description = "Cloudflare's PKI and TLS toolkit";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mbrgm ];
+=======
+  meta = with lib; {
+    homepage = "https://cfssl.org/";
+    description = "Cloudflare's PKI and TLS toolkit";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ mbrgm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cfssl";
   };
 }

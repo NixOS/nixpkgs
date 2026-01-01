@@ -38,11 +38,20 @@ buildPythonPackage rec {
   # Remove impossible dependency constraint
   postPatch = "sed -i -e 's|hidapi==|hidapi>=|' setup.py";
 
+<<<<<<< HEAD
   meta = {
     description = "KeepKey Python client";
     mainProgram = "keepkeyctl";
     homepage = "https://github.com/keepkey/python-keepkey";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ np ];
+=======
+  meta = with lib; {
+    description = "KeepKey Python client";
+    mainProgram = "keepkeyctl";
+    homepage = "https://github.com/keepkey/python-keepkey";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ np ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

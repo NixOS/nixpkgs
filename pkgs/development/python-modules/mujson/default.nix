@@ -25,10 +25,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "mujson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Use the fastest JSON functions available at import time";
     homepage = "https://github.com/mattgiles/mujson";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artturin ];
+=======
+  meta = with lib; {
+    description = "Use the fastest JSON functions available at import time";
+    homepage = "https://github.com/mattgiles/mujson";
+    license = licenses.mit;
+    maintainers = with maintainers; [ artturin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -97,10 +97,18 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests = { inherit (nixosTests) fail2ban; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.fail2ban.org/";
     description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
+=======
+  meta = with lib; {
+    homepage = "https://www.fail2ban.org/";
+    description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lovek323 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

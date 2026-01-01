@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "LDAP-like embedded database";
@@ -101,5 +102,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     pkgConfigModules = [ "ldb" ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "LDAP-like embedded database";
+    homepage = "https://ldb.samba.org/";
+    license = licenses.lgpl3Plus;
+    pkgConfigModules = [ "ldb" ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

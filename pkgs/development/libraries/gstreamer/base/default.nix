@@ -191,17 +191,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Base GStreamer plug-ins and helper libraries";
     homepage = "https://gstreamer.freedesktop.org";
     license = lib.licenses.lgpl2Plus;
+=======
+  meta = with lib; {
+    description = "Base GStreamer plug-ins and helper libraries";
+    homepage = "https://gstreamer.freedesktop.org";
+    license = licenses.lgpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "gstreamer-audio-1.0"
       "gstreamer-base-1.0"
       "gstreamer-net-1.0"
       "gstreamer-video-1.0"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

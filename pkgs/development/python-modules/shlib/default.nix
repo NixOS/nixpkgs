@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shlib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Shell library";
     homepage = "https://github.com/KenKundert/shlib";
     changelog = "https://github.com/KenKundert/shlib/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpetrucciani ];
+=======
+  meta = with lib; {
+    description = "Shell library";
+    homepage = "https://github.com/KenKundert/shlib";
+    changelog = "https://github.com/KenKundert/shlib/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpetrucciani ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

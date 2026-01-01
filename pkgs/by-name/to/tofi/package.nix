@@ -45,12 +45,21 @@ stdenv.mkDerivation rec {
     libxkbcommon
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tiny dynamic menu for Wayland";
     homepage = "https://github.com/philj56/tofi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fbergroth ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tiny dynamic menu for Wayland";
+    homepage = "https://github.com/philj56/tofi";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fbergroth ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tofi";
   };
 }

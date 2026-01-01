@@ -47,11 +47,20 @@ stdenv.mkDerivation (finalAttrs: {
     ctest -j1 --output-on-failure
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/BIC-MNI/libminc";
     description = "Medical imaging library based on HDF5";
     maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.free;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/BIC-MNI/libminc";
+    description = "Medical imaging library based on HDF5";
+    maintainers = with maintainers; [ bcdarwin ];
+    platforms = platforms.unix;
+    license = licenses.free;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

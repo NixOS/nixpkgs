@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://rsms.me/inter/";
     description = "Typeface specially designed for user interfaces";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ demize ];
+=======
+  meta = with lib; {
+    homepage = "https://rsms.me/inter/";
+    description = "Typeface specially designed for user interfaces";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ demize ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

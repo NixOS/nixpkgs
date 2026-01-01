@@ -28,11 +28,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "junit2htmlreport" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generate HTML reports from Junit results";
     homepage = "https://gitlab.com/inorton/junit2html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ otavio ];
+=======
+  meta = with lib; {
+    description = "Generate HTML reports from Junit results";
+    homepage = "https://gitlab.com/inorton/junit2html";
+    license = licenses.mit;
+    maintainers = with maintainers; [ otavio ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "junit2html";
   };
 }

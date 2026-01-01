@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_WITH_QT6=true"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs, securefs, fscrypt and encfs";
     homepage = "https://github.com/mhogomchungu/sirikali";
@@ -76,5 +77,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "sirikali";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs, securefs, fscrypt and encfs";
+    homepage = "https://github.com/mhogomchungu/sirikali";
+    changelog = "https://github.com/mhogomchungu/sirikali/blob/${src.rev}/changelog";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ linuxissuper ];
+    mainProgram = "sirikali";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

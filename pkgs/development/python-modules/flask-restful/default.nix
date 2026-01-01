@@ -66,14 +66,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_restful" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Framework for creating REST APIs";
     homepage = "https://flask-restful.readthedocs.io";
     longDescription = ''
       Flask-RESTful provides the building blocks for creating a great
       REST API.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

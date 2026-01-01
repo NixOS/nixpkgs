@@ -21,6 +21,10 @@
   python3,
   pam,
   cairo,
+<<<<<<< HEAD
+=======
+  xapp,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   xdotool,
   xorg,
   iso-flags-png-320x240,
@@ -28,13 +32,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
+<<<<<<< HEAD
   version = "6.6.1";
+=======
+  version = "6.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-screensaver";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-NK33cIrcTicLs59eJ550FghjuWS93yD642ObAS55Dtk=";
+=======
+    hash = "sha256-CK4WP5IafNII81e8HxUNN3Vp36Ln78Xvv5lIMvL+nbk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -74,6 +86,10 @@ stdenv.mkDerivation rec {
         pycairo
       ]
     ))
+<<<<<<< HEAD
+=======
+    xapp
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     xdotool
     pam
     cairo
@@ -103,6 +119,7 @@ stdenv.mkDerivation rec {
     mv $out/libexec/cinnamon-screensaver/{.libcscreensaver.so-wrapped,libcscreensaver.so}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
     description = "Cinnamon screen locker and screensaver program";
@@ -112,5 +129,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/cinnamon-screensaver";
+    description = "Cinnamon screen locker and screensaver program";
+    license = [
+      licenses.gpl2
+      licenses.lgpl2
+    ];
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

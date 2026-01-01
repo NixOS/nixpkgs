@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "heatzypy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with Heatzy devices";
     homepage = "https://github.com/Cyr-ius/heatzypy";
     changelog = "https://github.com/cyr-ius/heatzypy/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with Heatzy devices";
+    homepage = "https://github.com/Cyr-ius/heatzypy";
+    changelog = "https://github.com/cyr-ius/heatzypy/releases/tag/${version}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

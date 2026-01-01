@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bougyman/wifish";
     description = "Simple wifi shell script for linux";
@@ -53,5 +54,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.wtfpl;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bougyman/wifish";
+    description = "Simple wifi shell script for linux";
+    mainProgram = "wifish";
+    license = licenses.wtfpl;
+    maintainers = [ ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

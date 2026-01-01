@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
     jack2
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for storing/restoring JACK and/or ALSA connections to/from cml files";
     longDescription = ''
       Aj-snapshot is a small program that can be used to make snapshots of the connections made between JACK and/or ALSA clients.
@@ -36,9 +40,15 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://aj-snapshot.sourceforge.net/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.mrVanDalo ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2;
+    maintainers = [ maintainers.mrVanDalo ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aj-snapshot";
   };
 }

@@ -43,12 +43,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://shibboleth.net/products/opensaml-cpp.html";
     description = "Low-level library written in C++ that provides support for producing and consuming SAML messages";
     mainProgram = "samlsign";
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://shibboleth.net/products/opensaml-cpp.html";
+    description = "Low-level library written in C++ that provides support for producing and consuming SAML messages";
+    mainProgram = "samlsign";
+    platforms = platforms.unix;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

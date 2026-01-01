@@ -63,7 +63,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals pythonBindings [ "--with-python-binding" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Runtime library to control radio transceivers and receivers";
     longDescription = ''
       Hamlib provides a standardized programming interface that applications
@@ -73,12 +77,21 @@ stdenv.mkDerivation rec {
       which lets one control a radio transceiver or receiver, either from
       command line interface or in a text-oriented interactive interface.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       lgpl2Plus
     ];
     homepage = "https://hamlib.sourceforge.net";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ relrod ];
     platforms = with lib.platforms; unix;
+=======
+    maintainers = with maintainers; [ relrod ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -109,7 +109,11 @@ buildPythonPackage rec {
     pytestCheckHook
     numpy
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # Code quality mismathch 9 vs 10
@@ -141,7 +145,11 @@ buildPythonPackage rec {
       ;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://python-pillow.github.io/";
     changelog = "https://pillow.readthedocs.io/en/stable/releasenotes/${version}.html";
     description = "Friendly PIL fork (Python Imaging Library)";
@@ -151,8 +159,13 @@ buildPythonPackage rec {
       supports many file formats, and provides powerful image
       processing and graphics capabilities.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit-cmu;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+    license = licenses.mit-cmu;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

@@ -44,14 +44,22 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guitarix";
+<<<<<<< HEAD
   version = "0.47.0";
+=======
+  version = "0.46.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "guitarix";
     rev = "V${finalAttrs.version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-YQqcpdehfC9UE1OowC1/YUw2eWgbLWMbAJ3V5tVmtiU=";
+=======
+    hash = "sha256-AftC6fQEDzG/3C/83YbK/++bRgP7vPD0E2X6KEWpowc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${finalAttrs.src.name}/trunk";
@@ -106,7 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Virtual guitar amplifier for Linux running with JACK";
     mainProgram = "guitarix";
     longDescription = ''
@@ -132,11 +144,19 @@ stdenv.mkDerivation (finalAttrs: {
       crazy sounds never heard before.
     '';
     homepage = "https://github.com/brummer10/guitarix";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       lord-valen
       anderscs
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      lord-valen
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

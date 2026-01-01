@@ -60,10 +60,18 @@ stdenv.mkDerivation rec {
     # Pending upstream compatibility with GCC 13
     lib.optional (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "13") "-Wno-changes-meaning";
 
+<<<<<<< HEAD
   meta = {
     description = "Simple application to extract, merge, rotate and reorder pages of PDF documents";
     homepage = "https://junrrein.github.io/pdfslicer/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Simple application to extract, merge, rotate and reorder pages of PDF documents";
+    homepage = "https://junrrein.github.io/pdfslicer/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

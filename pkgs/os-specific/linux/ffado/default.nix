@@ -121,6 +121,7 @@ stdenv.mkDerivation rec {
     wrapQtApp "$bin/bin/ffado-mixer"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.ffado.org";
     description = "FireWire audio drivers";
@@ -129,5 +130,15 @@ stdenv.mkDerivation rec {
       michojel
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://www.ffado.org";
+    description = "FireWire audio drivers";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+      michojel
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

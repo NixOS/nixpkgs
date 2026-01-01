@@ -38,10 +38,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jellyfin_apiclient_python" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API client for Jellyfin";
     homepage = "https://github.com/jellyfin/jellyfin-apiclient-python";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jojosch ];
+=======
+  meta = with lib; {
+    description = "Python API client for Jellyfin";
+    homepage = "https://github.com/jellyfin/jellyfin-apiclient-python";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ jojosch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

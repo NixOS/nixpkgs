@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional libnotifySupport libnotify;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Last.fm and Libre.fm standalone scrobbler for the cmus music player";
     longDescription = ''
       Features:
@@ -55,8 +59,13 @@ stdenv.mkDerivation rec {
       CharlesHD
       mudri
     ];
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cmusfm";
   };
 }

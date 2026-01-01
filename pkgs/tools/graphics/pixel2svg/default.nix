@@ -21,11 +21,19 @@ buildPythonPackage rec {
     svgwrite
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://florian-berger.de/en/software/pixel2svg/";
     description = "Converts pixel art to SVG - pixel by pixel";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ annaaurora ];
+=======
+  meta = with lib; {
+    homepage = "https://florian-berger.de/en/software/pixel2svg/";
+    description = "Converts pixel art to SVG - pixel by pixel";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ annaaurora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pixel2svg.py";
   };
 }

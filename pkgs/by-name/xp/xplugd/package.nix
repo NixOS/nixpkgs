@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/troglobit/xplugd";
     description = "UNIX daemon that executes a script on X input and RandR changes";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ akho ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/troglobit/xplugd";
+    description = "UNIX daemon that executes a script on X input and RandR changes";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ akho ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xplugd";
   };
 }

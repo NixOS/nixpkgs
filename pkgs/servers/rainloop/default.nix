@@ -65,6 +65,7 @@ let
         chmod 700 $out/data
       '';
 
+<<<<<<< HEAD
       meta = {
         description = "Simple, modern & fast web-based email client";
         homepage = "https://www.rainloop.net";
@@ -72,6 +73,15 @@ let
         license = with lib.licenses; if edition == "" then unfree else agpl3Only;
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [ das_j ];
+=======
+      meta = with lib; {
+        description = "Simple, modern & fast web-based email client";
+        homepage = "https://www.rainloop.net";
+        downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";
+        license = with licenses; if edition == "" then unfree else agpl3Only;
+        platforms = platforms.all;
+        maintainers = with maintainers; [ das_j ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in

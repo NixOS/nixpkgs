@@ -89,12 +89,21 @@ stdenv.mkDerivation (
     passthru.tests = { inherit (nixosTests) breitbandmessung; };
     passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
     meta = {
       description = "Broadband internet speed test app from the german Bundesnetzagentur";
       homepage = "https://www.breitbandmessung.de";
       license = lib.licenses.unfree;
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       maintainers = with lib.maintainers; [ b4dm4n ];
+=======
+    meta = with lib; {
+      description = "Broadband internet speed test app from the german Bundesnetzagentur";
+      homepage = "https://www.breitbandmessung.de";
+      license = licenses.unfree;
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      maintainers = with maintainers; [ b4dm4n ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = [
         "x86_64-linux"
         "x86_64-darwin"

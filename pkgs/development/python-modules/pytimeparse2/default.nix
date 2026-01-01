@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytimeparse2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytimeparse based project with the aim of optimizing functionality and providing stable support";
     homepage = "https://github.com/onegreyonewhite/pytimeparse2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Pytimeparse based project with the aim of optimizing functionality and providing stable support";
+    homepage = "https://github.com/onegreyonewhite/pytimeparse2";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Virtual camera driver for Linux";
     homepage = "https://github.com/webcamoid/akvcam";
     maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Virtual camera driver for Linux";
+    homepage = "https://github.com/webcamoid/akvcam";
+    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

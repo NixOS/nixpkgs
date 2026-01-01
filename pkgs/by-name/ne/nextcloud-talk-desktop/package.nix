@@ -21,17 +21,25 @@
   libglvnd,
   systemd,
   patchelf,
+<<<<<<< HEAD
+=======
+  nix-update-script,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   undmg,
   makeWrapper,
 }:
 let
   pname = "nextcloud-talk-desktop";
+<<<<<<< HEAD
   version = "2.0.5"; # Ensure both hashes (Linux and Darwin) are updated!
 
   hashes = {
     linux = "sha256-aKNrIbv6kaLoLmTZVgwncqzF4o/5C/hFXef3QqM7oBk=";
     darwin = "sha256-Nli2z8eyAq5W3ALwHiH6+Ightk3Jf0gaWtwabOJS4gw=";
   };
+=======
+  version = "2.0.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Only x86_64-linux is supported with Darwin support being universal
   sources = {
@@ -39,11 +47,16 @@ let
     # See https://github.com/nextcloud/talk-desktop?tab=readme-ov-file#%EF%B8%8F-prerequisites
     linux = fetchzip {
       url = "https://github.com/nextcloud-releases/talk-desktop/releases/download/v${version}/Nextcloud.Talk-linux-x64.zip";
+<<<<<<< HEAD
       hash = hashes.linux;
+=======
+      hash = "sha256-QKbg5vHLuxLpngrHom/odWw9RK43jhZsEg7Df5c7db0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       stripRoot = false;
     };
     darwin = fetchurl {
       url = "https://github.com/nextcloud-releases/talk-desktop/releases/download/v${version}/Nextcloud.Talk-macos-universal.dmg";
+<<<<<<< HEAD
       hash = hashes.darwin;
     };
   };
@@ -53,6 +66,12 @@ let
     updateScript = ./update.py;
   };
 
+=======
+      hash = "sha256-FgiUb2MNEqmbK4BphHQ7M2IeN7Vg1NQ9FR9UO4AfvNs=";
+    };
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Nextcloud Talk Desktop Client";
     homepage = "https://github.com/nextcloud/talk-desktop";
@@ -64,7 +83,11 @@ let
   };
 
   linux = stdenv.mkDerivation (finalAttrs: {
+<<<<<<< HEAD
     inherit pname version passthru;
+=======
+    inherit pname version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = sources.linux;
 
@@ -136,17 +159,30 @@ let
     '';
 
     postFixup = ''
+<<<<<<< HEAD
       ${lib.getExe patchelf} --add-needed libGL.so.1 --add-needed libEGL.so.1 \
         "$out/opt/Nextcloud Talk-linux-x64/Nextcloud Talk"
     '';
 
+=======
+      patchelf --add-needed libGL.so.1 --add-needed libEGL.so.1 \
+        "$out/opt/Nextcloud Talk-linux-x64/Nextcloud Talk"
+    '';
+
+    passthru.updateScript = nix-update-script { };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     meta = meta // {
       platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
     };
   });
 
   darwin = stdenv.mkDerivation (finalAttrs: {
+<<<<<<< HEAD
     inherit pname version passthru;
+=======
+    inherit pname version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = sources.darwin;
 

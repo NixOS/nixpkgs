@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amazon-ec2-net-utils";
+<<<<<<< HEAD
   version = "2.7.1";
+=======
+  version = "2.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-net-utils";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-9dhTQLmWIOm0q51l/BgkxTFcUjub7w9Yk+QdvuZi/3k=";
+=======
+    hash = "sha256-PtnRgNmVrIGndLjYjXWWx85z4oxjn637iZqXd6OSiQg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;
@@ -47,18 +55,30 @@ stdenv.mkDerivation (finalAttrs: {
 
     for file in bin/*.sh; do
       install -D -m 755 "$file" $out/bin/$(basename --suffix ".sh" "$file")
+<<<<<<< HEAD
     done
 
     # setup-policy-routes uses AMAZON_EC2_NET_UTILS_LIBDIR placeholder
     substituteInPlace $out/bin/setup-policy-routes \
       --replace-fail AMAZON_EC2_NET_UTILS_LIBDIR $out/share/amazon-ec2-net-utils \
+=======
+      substituteInPlace $out/bin/$(basename --suffix ".sh" "$file") \
+        --replace-fail AMAZON_EC2_NET_UTILS_LIBDIR $out/share/amazon-ec2-net-utils
+    done
+
+    substituteInPlace $out/bin/setup-policy-routes \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       --replace-fail /lib/systemd ${systemd}/lib/systemd
 
     wrapProgram $out/bin/setup-policy-routes \
       --prefix PATH : ${
         lib.makeBinPath [
           coreutils
+<<<<<<< HEAD
           # bin/setup-policy-routes.sh sources lib/lib.sh which needs these.
+=======
+          # bin/setup-policy-roots.sh sources lib/lib.sh which needs these.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           #
           # lib/lib.sh isn't executable so we can't use it with wrapProgram.
           curl
@@ -70,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }
 
+<<<<<<< HEAD
     # set-hostname-imds uses LIBDIR_OVERRIDE environment variable
     wrapProgram $out/bin/set-hostname-imds \
       --set LIBDIR_OVERRIDE $out/share/amazon-ec2-net-utils \
@@ -81,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     for file in lib/*.sh; do
       install -D -m 644 -t $out/share/amazon-ec2-net-utils "$file"
     done
@@ -109,9 +132,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/lib/systemd/system/refresh-policy-routes@.service \
       --replace-fail /usr/bin/setup-policy-routes $out/bin/setup-policy-routes
 
+<<<<<<< HEAD
     substituteInPlace $out/lib/systemd/system/set-hostname-imds.service \
       --replace-fail /usr/bin/set-hostname-imds $out/bin/set-hostname-imds
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     installManPage doc/*.8
 
     runHook postInstall

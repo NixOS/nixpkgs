@@ -29,11 +29,20 @@ buildNpmPackage {
 
   dontBuild = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Downloads and adapts Google fonts to working offline";
     mainProgram = "get-google-fonts";
     homepage = "https://github.com/MrMaxie/get-google-fonts";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Downloads and adapts Google fonts to working offline";
+    mainProgram = "get-google-fonts";
+    homepage = "https://github.com/MrMaxie/get-google-fonts";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

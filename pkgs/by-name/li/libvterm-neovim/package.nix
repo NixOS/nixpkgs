@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "VT220/xterm/ECMA-48 terminal emulator library";
     homepage = "http://www.leonerd.org.uk/code/libvterm/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rvolosatovs ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "VT220/xterm/ECMA-48 terminal emulator library";
+    homepage = "http://www.leonerd.org.uk/code/libvterm/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rvolosatovs ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

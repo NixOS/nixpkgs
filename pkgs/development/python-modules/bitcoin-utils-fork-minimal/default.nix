@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bitcoinutils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bitcoin utility functions";
     homepage = "https://github.com/doersf/python-bitcoin-utils";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Bitcoin utility functions";
+    homepage = "https://github.com/doersf/python-bitcoin-utils";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

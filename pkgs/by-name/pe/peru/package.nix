@@ -30,11 +30,19 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "peru" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/buildinspace/peru";
     description = "Tool for including other people's code in your projects";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/buildinspace/peru";
+    description = "Tool for including other people's code in your projects";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "peru";
   };
 

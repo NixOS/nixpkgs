@@ -22,14 +22,22 @@
 
 buildPythonPackage rec {
   pname = "apprise";
+<<<<<<< HEAD
   version = "1.9.6";
+=======
+  version = "1.9.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-Qga+nLVpSj0I3Y4Dk7u5s2ISrDp3acJjNiAFXnXGyu8=";
+=======
+    hash = "sha256-jzvjGLtCnCAXRw4zkoouMTy/dgD8dLgYR4KjcGDbNmo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ installShellFiles ];

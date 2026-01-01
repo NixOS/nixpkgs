@@ -108,12 +108,21 @@ let
         ''}
       '';
 
+<<<<<<< HEAD
     meta = {
       description = "Tcl scripting language";
       homepage = "https://www.tcl.tk/";
       license = lib.licenses.tcltk;
       platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [ agbrooks ];
+=======
+    meta = with lib; {
+      description = "Tcl scripting language";
+      homepage = "https://www.tcl.tk/";
+      license = licenses.tcltk;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ agbrooks ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     passthru = rec {

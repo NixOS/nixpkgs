@@ -29,11 +29,19 @@ gccStdenv.mkDerivation rec {
       --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "FUSE for access Playstation 2 IOP IOPRP images and BIOS dumps";
     homepage = "https://github.com/mlafeldt/romdirfs";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "FUSE for access Playstation 2 IOP IOPRP images and BIOS dumps";
+    homepage = "https://github.com/mlafeldt/romdirfs";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "romdirfs";
   };

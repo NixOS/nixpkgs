@@ -76,7 +76,11 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # Failed: External connections not allowed during tests.
@@ -91,10 +95,18 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${version}";
     description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${version}";
+    description = "Python SOAP client";
+    homepage = "http://docs.python-zeep.org";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

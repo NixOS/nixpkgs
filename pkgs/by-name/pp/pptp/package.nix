@@ -39,11 +39,20 @@ stdenv.mkDerivation rec {
     perl # in shebang of pptpsetup
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "PPTP client for Linux";
     homepage = "https://pptpclient.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "PPTP client for Linux";
+    homepage = "https://pptpclient.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

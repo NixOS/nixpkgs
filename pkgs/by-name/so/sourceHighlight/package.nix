@@ -80,16 +80,26 @@ stdenv.mkDerivation rec {
   # them in parallel by make will eventually break one or more tests.
   enableParallelChecking = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Source code renderer with syntax highlighting";
     longDescription = ''
       GNU Source-highlight, given a source file, produces a document
       with syntax highlighting.
     '';
     homepage = "https://www.gnu.org/software/src-highlite/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {

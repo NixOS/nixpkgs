@@ -102,6 +102,10 @@ stdenv.mkDerivation rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Successor of GNU Wget, a file and recursive website downloader";

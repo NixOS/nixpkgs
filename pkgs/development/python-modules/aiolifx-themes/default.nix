@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiolifx_themes" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Color themes for LIFX lights running on aiolifx";
     homepage = "https://github.com/Djelibeybi/aiolifx-themes";
     changelog = "https://github.com/Djelibeybi/aiolifx-themes/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lukegb ];
+=======
+  meta = with lib; {
+    description = "Color themes for LIFX lights running on aiolifx";
+    homepage = "https://github.com/Djelibeybi/aiolifx-themes";
+    changelog = "https://github.com/Djelibeybi/aiolifx-themes/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lukegb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

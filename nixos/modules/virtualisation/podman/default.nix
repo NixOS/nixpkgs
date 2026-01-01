@@ -24,6 +24,7 @@ let
         inherit (cfg.package) meta;
         preferLocalBuild = true;
       }
+<<<<<<< HEAD
       (
         ''
           mkdir -p $out/bin
@@ -43,6 +44,25 @@ let
             --fish <($out/bin/docker completion fish)
         ''
       );
+=======
+      ''
+        mkdir -p $out/bin
+        ln -s ${cfg.package}/bin/podman $out/bin/docker
+
+        mkdir -p $man/share/man/man1
+        for f in ${cfg.package.man}/share/man/man1/*; do
+          basename=$(basename $f | sed s/podman/docker/g)
+          ln -s $f $man/share/man/man1/$basename
+        done
+      ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export HOME=$(mktemp -d) # work around `docker <cmd>`
+      installShellCompletion --cmd docker \
+        --bash <($out/bin/docker completion bash) \
+        --zsh <($out/bin/docker completion zsh) \
+        --fish <($out/bin/docker completion fish)
+    '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 in
 {

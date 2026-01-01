@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     mv seturgent $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     platforms = lib.platforms.linux;
     description = "Set an application's urgency hint (or not)";
@@ -33,5 +34,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ yarr ];
     homepage = "https://codemadness.org/seturgent-set-urgency-hints-for-x-applications.html";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    platforms = platforms.linux;
+    description = "Set an application's urgency hint (or not)";
+    mainProgram = "seturgent";
+    maintainers = with maintainers; [ yarr ];
+    homepage = "https://codemadness.org/seturgent-set-urgency-hints-for-x-applications.html";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

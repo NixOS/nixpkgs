@@ -3,7 +3,10 @@
   rel,
   buildKodiBinaryAddon,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 buildKodiBinaryAddon rec {
   pname = "pvr-hts";
@@ -17,6 +20,7 @@ buildKodiBinaryAddon rec {
     sha256 = "sha256-opxNgin+Sz/Nb9IGZ+OFrCzbDc4FXl2LaNKUu5LAgFM=";
   };
 
+<<<<<<< HEAD
   patches = [
     # fix gcc-15 compat. See https://github.com/kodi-pvr/pvr.hts/pull/693
     (fetchpatch2 {
@@ -31,5 +35,13 @@ buildKodiBinaryAddon rec {
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/kodi-pvr/pvr.hts";
+    description = "Kodi's Tvheadend HTSP client addon";
+    platforms = platforms.all;
+    license = licenses.gpl2Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

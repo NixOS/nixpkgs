@@ -37,11 +37,20 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed compiler with a central scheduler to share build load";
     inherit (src.meta) homepage;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ emantor ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "Distributed compiler with a central scheduler to share build load";
+    inherit (src.meta) homepage;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ emantor ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

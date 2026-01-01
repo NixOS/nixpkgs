@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Video and audio player along the lines of mplayer";
     mainProgram = "rage";
@@ -49,5 +50,18 @@ stdenv.mkDerivation rec {
       ftrvxmtrx
     ];
     teams = [ lib.teams.enlightenment ];
+=======
+  meta = with lib; {
+    description = "Video and audio player along the lines of mplayer";
+    mainProgram = "rage";
+    homepage = "https://enlightenment.org/";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      matejc
+      ftrvxmtrx
+    ];
+    teams = [ teams.enlightenment ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

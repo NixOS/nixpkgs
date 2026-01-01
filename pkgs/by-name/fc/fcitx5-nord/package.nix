@@ -24,11 +24,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fcitx5 theme based on Nord color";
     homepage = "https://github.com/tonyfettes/fcitx5-nord";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Cryolitia ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Fcitx5 theme based on Nord color";
+    homepage = "https://github.com/tonyfettes/fcitx5-nord";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Cryolitia ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

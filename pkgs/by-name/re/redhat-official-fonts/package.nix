@@ -26,11 +26,19 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/RedHatOfficial/RedHatFont";
     description = "Red Hat's Open Source Fonts - Red Hat Display and Red Hat Text";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/RedHatOfficial/RedHatFont";
+    description = "Red Hat's Open Source Fonts - Red Hat Display and Red Hat Text";
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

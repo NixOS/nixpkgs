@@ -84,12 +84,21 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace strip '${stdenv.cc.targetPrefix}strip'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Compiler for Miranda -- a pure, non-strict, polymorphic, higher order functional programming language";
     homepage = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Compiler for Miranda -- a pure, non-strict, polymorphic, higher order functional programming language";
+    homepage = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mira";
   };
 }

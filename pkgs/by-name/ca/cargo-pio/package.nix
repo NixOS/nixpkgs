@@ -18,14 +18,22 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "cargo-pio";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Build Rust embedded projects with PlatformIO";
     homepage = "https://github.com/esp-rs/embuild/tree/master/cargo-pio";
     license = with lib.licenses; [
       asl20
       mit
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ dannixon ];
+=======
+    maintainers = with maintainers; [ dannixon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cargo-pio";
   };
 }

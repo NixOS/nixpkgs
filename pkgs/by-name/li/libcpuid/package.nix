@@ -18,14 +18,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://libcpuid.sourceforge.net/";
     description = "Small C library for x86 CPU detection and feature extraction";
     mainProgram = "cpuid_tool";
     changelog = "https://raw.githubusercontent.com/anrieff/libcpuid/master/ChangeLog";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = [
     ];
     platforms = lib.platforms.x86;
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+      orivej
+    ];
+    platforms = platforms.x86;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

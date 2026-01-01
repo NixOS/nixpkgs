@@ -78,7 +78,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Gtk Analog Wave viewer";
     mainProgram = "gaw";
     longDescription = ''
@@ -88,8 +92,14 @@ stdenv.mkDerivation rec {
       direct tcp/ip connection or directly from the sound card.
     '';
     homepage = "https://www.rvq.fr/linux/gaw.php";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fbeffa ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fbeffa ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

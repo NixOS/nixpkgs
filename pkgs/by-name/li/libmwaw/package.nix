@@ -31,10 +31,18 @@ stdenv.mkDerivation rec {
   ];
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Import library for some old mac text documents";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Import library for some old mac text documents";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

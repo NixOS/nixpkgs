@@ -518,4 +518,9 @@ in
       group = config.services.nginx.group;
     };
   };
+<<<<<<< HEAD
+=======
+
+  meta.maintainers = with maintainers; [ melling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

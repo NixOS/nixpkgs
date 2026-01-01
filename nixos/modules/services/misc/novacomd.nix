@@ -30,5 +30,9 @@ in
     };
   };
 
+<<<<<<< HEAD
   meta.maintainers = [ ];
+=======
+  meta.maintainers = with lib.maintainers; [ dtzWill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

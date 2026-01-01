@@ -67,12 +67,21 @@ stdenv.mkDerivation rec {
     $out/bin/kooha --help
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Elegantly record your screen";
     homepage = "https://github.com/SeaDve/Kooha";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ austinbutler ];
+=======
+  meta = with lib; {
+    description = "Elegantly record your screen";
+    homepage = "https://github.com/SeaDve/Kooha";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ austinbutler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kooha";
   };
 }

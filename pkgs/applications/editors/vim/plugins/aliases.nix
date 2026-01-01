@@ -56,7 +56,10 @@ mapAliases (
     command_T = command-t; # backwards compat, added 2014-10-18
     commentary = vim-commentary;
     committia = committia-vim;
+<<<<<<< HEAD
     completion-treesitter = throw "completion-treesitter has been archived since 2024-01"; # Added 2025-12-18
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     concealedyank = concealedyank-vim;
     context-filetype = context_filetype-vim;
     Cosco = cosco-vim;
@@ -105,13 +108,19 @@ mapAliases (
     neomru = neomru-vim;
     neosnippet = neosnippet-vim;
     neuron-nvim = throw "neuron.nvim has been removed: archived repository 2023-02-19"; # Added 2025-09-10
+<<<<<<< HEAD
     nvim-gps = throw "nvim-gps has been archived since 2022. Use nvim-navic instead."; # Added 2025-12-18
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nvim-ts-rainbow = throw "nvim-ts-rainbow has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
     nvim-ts-rainbow2 = throw "nvim-ts-rainbow2 has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
     open-browser = open-browser-vim;
     pathogen = vim-pathogen;
     peskcolor-vim = throw "peskcolor-vim has been removed: abandoned by upstream"; # Added 2024-08-23
+<<<<<<< HEAD
     playground = throw "playground has been archived"; # Added 2025-12-18
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     polyglot = vim-polyglot;
     prettyprint = vim-prettyprint;
     pure-lua = lib.warnOnInstantiate "Please replace 'pure-lua' with 'moonlight-nvim' as this name was an error" moonlight-nvim; # Added 2025-11-17
@@ -140,7 +149,10 @@ mapAliases (
     Supertab = supertab;
     surround = vim-surround;
     Syntastic = syntastic;
+<<<<<<< HEAD
     syntax-tree-surfer = throw "syntax-tree-surfer has been archived"; # Added 2025-12-18
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     SyntaxRange = vim-SyntaxRange;
     table-mode = vim-table-mode;
     tabpagebuffer = tabpagebuffer-vim;

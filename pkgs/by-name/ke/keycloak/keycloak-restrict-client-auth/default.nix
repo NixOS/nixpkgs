@@ -23,10 +23,18 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sventorben/keycloak-restrict-client-auth";
     description = "Keycloak authenticator to restrict authorization on clients";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ leona ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sventorben/keycloak-restrict-client-auth";
+    description = "Keycloak authenticator to restrict authorization on clients";
+    license = licenses.mit;
+    maintainers = with maintainers; [ leona ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

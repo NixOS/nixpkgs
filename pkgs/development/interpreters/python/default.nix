@@ -20,10 +20,17 @@
         sourceVersion = {
           major = "3";
           minor = "13";
+<<<<<<< HEAD
           patch = "11";
           suffix = "";
         };
         hash = "sha256-Fu3nu3zb+oldEbBkL6DlI/KR5khxlNU89tOzOMOhfqI=";
+=======
+          patch = "9";
+          suffix = "";
+        };
+        hash = "sha256-7V7zTNo2z6Lzo0DwfKx+eBT5HH88QR9tNWIyOoZsXGY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 
@@ -91,10 +98,17 @@
       sourceVersion = {
         major = "3";
         minor = "14";
+<<<<<<< HEAD
         patch = "2";
         suffix = "";
       };
       hash = "sha256-zlQ6uFS8JWthtx6bJ/gx/9G/1gpHnWOfi+f5dXz1c+k=";
+=======
+        patch = "0";
+        suffix = "";
+      };
+      hash = "sha256-Ipna5ULTlc44g6ygDTyRAwfNaOCy9zNgmMjnt+7p8+k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit passthruFun;
     };
 
@@ -104,9 +118,15 @@
         major = "3";
         minor = "15";
         patch = "0";
+<<<<<<< HEAD
         suffix = "a3";
       };
       hash = "sha256-arAs2sJFBXeYd7sdkYlDLWfpDd8qm4t7Nz6tVKwHtgc=";
+=======
+        suffix = "a2";
+      };
+      hash = "sha256-2KCi9Kfz1wkM8ZXoGBTv6V9wVUlVVX9A4UnYaUpmJ1E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit passthruFun;
     };
 

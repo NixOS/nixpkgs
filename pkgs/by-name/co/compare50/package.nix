@@ -49,6 +49,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "compare50" ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeCheckInputs = [ versionCheckHook ];
 
   # repo does not use pytest

@@ -1,7 +1,11 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchurl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fixDarwinDylibNames,
   llvmPackages,
   withOpenMP ? true,
@@ -9,6 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsvm";
+<<<<<<< HEAD
   version = "333";
 
   src = fetchFromGitHub {
@@ -16,6 +21,13 @@ stdenv.mkDerivation rec {
     repo = "libsvm";
     tag = "v${version}";
     hash = "sha256-eM7O/skOcxkKV4utlC7G9FvMO+d2yZm5D0BoIUhAPXo=";
+=======
+  version = "3.33";
+
+  src = fetchurl {
+    url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
+    sha256 = "sha256-1doSzMPQ7thFP732+sfZ8AUvPopfB6IXTk7wqdg9zfg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = lib.optionals withOpenMP [ ./openmp.patch ];
@@ -60,11 +72,20 @@ stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for support vector machines";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for support vector machines";
+    homepage = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/";
+    license = licenses.bsd3;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

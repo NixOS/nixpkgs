@@ -45,11 +45,20 @@ stdenv.mkDerivation rec {
     ./build-aux/autogen.sh
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/kjn/lbzip2"; # Formerly http://lbzip2.org/
     description = "Parallel bzip2 compression utility";
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/kjn/lbzip2"; # Formerly http://lbzip2.org/
+    description = "Parallel bzip2 compression utility";
+    license = licenses.gpl3;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

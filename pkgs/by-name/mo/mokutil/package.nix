@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lcp/mokutil";
     description = "Utility to manipulate machines owner keys";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lcp/mokutil";
+    description = "Utility to manipulate machines owner keys";
+    mainProgram = "mokutil";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ nickcao ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

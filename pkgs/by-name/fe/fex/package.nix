@@ -95,13 +95,21 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
+<<<<<<< HEAD
   version = "2512";
+=======
+  version = "2511";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-G61FdzNctTp8jarTcnBXd+MQpMxnPqd33hblvi9UXNo=";
+=======
+    hash = "sha256-CulENHssPkCXI+oyVKwf3GN5bjxUok2+AHsoOQ+Mchc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     leaveDotGit = true;
     postFetch = ''
@@ -192,6 +200,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "USE_LINKER" "lld")
     (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
+<<<<<<< HEAD
+=======
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (lib.cmakeBool "BUILD_THUNKS" true)
     (lib.cmakeBool "BUILD_FEXCONFIG" withQt)
     (lib.cmakeFeature "X86_32_TOOLCHAIN_FILE" "${toolchain32}")
@@ -201,6 +213,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   # Running the tests isn't supported on non-4K pagesize systems, but the build
   # itself doesn't require 4K pagesize. So, to avoid breaking the build, enable
   # checkPhase by default (so that the check inputs are included) and then
@@ -216,6 +229,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       cmakeFlagsArray+=("${lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck}")
     fi
   '';
+=======
+  # Unsupported on non-4K page size kernels (e.g. Apple Silicon)
+  doCheck = true;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeCheckInputs = [ nasm ];
   checkInputs = [ catch2_3 ];

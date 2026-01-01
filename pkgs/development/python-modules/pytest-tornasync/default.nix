@@ -37,10 +37,17 @@ buildPythonPackage {
     pytest test
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "py.test plugin for testing Python 3.5+ Tornado code";
     homepage = "https://github.com/eukaryote/pytest-tornasync";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "py.test plugin for testing Python 3.5+ Tornado code";
+    homepage = "https://github.com/eukaryote/pytest-tornasync";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

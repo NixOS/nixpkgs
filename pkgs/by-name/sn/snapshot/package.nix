@@ -27,11 +27,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
+<<<<<<< HEAD
   version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
     hash = "sha256-NVj2+ODTiylQtrrZue7COCSb7f7c5w+1iijK1pRebOk=";
+=======
+  version = "49.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
+    hash = "sha256-X5YZPSkZxzVXRdJqGwHyPDyzCpPHQtWD7EKSfEpFrhg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -98,12 +106,21 @@ stdenv.mkDerivation (finalAttrs: {
     packageName = "snapshot";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/snapshot";
     description = "Take pictures and videos on your computer, tablet, or phone";
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/snapshot";
+    description = "Take pictures and videos on your computer, tablet, or phone";
+    teams = [ teams.gnome ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "snapshot";
   };
 })

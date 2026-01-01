@@ -99,7 +99,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://theunarchiver.com";
     description = "Archive unpacker program";
     longDescription = ''
@@ -109,9 +113,16 @@ stdenv.mkDerivation rec {
       Compact Pro, Packit, cpio, compress (.Z), ARJ, ARC, PAK, ACE, ZOO, LZH,
       ADF, DMS, LZX, PowerPacker, LBR, Squeeze, Crunch, and other old formats.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "unar";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "unar";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

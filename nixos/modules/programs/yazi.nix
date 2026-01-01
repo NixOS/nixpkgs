@@ -14,7 +14,10 @@ let
     "yazi"
     "theme"
     "keymap"
+<<<<<<< HEAD
     "vfs"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 in
 {

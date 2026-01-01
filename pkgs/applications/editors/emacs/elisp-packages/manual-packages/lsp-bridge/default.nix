@@ -4,7 +4,10 @@
   melpaBuild,
   fetchFromGitHub,
   replaceVars,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   acm,
   markdown-mode,
   basedpyright,
@@ -33,13 +36,22 @@ let
 in
 melpaBuild {
   pname = "lsp-bridge";
+<<<<<<< HEAD
   version = "0-unstable-2025-11-13";
+=======
+  version = "0-unstable-2025-06-28";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
+<<<<<<< HEAD
     rev = "426794a45b57d923129dfa1e4ca07c34aa72e69c";
     hash = "sha256-9nNg0yCtEBFNWP7TFGo1SsmtnnufoROyaeIJK0tjoEQ=";
+=======
+    rev = "3b37a04bd1b6bbcdc2b0ad7a5c388ad027eb7a25";
+    hash = "sha256-0pjRihJapljd/9nR7G+FC+gCqD82YGITPK2mcJcI7ZI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -48,6 +60,7 @@ melpaBuild {
     (replaceVars ./hardcode-dependencies.patch {
       python = python.interpreter;
     })
+<<<<<<< HEAD
 
     # Revert using quelpa repo to get check inputs
     (fetchpatch {
@@ -55,6 +68,8 @@ melpaBuild {
       revert = true;
       hash = "sha256-NK6hooWn78Hk26tcQbIwUiiJuQ/hhlbLK+pgiZT//fI=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   packageRequires = [

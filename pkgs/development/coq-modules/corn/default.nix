@@ -59,11 +59,19 @@
     math-classes
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://c-corn.github.io/";
     license = lib.licenses.gpl2;
     description = "Coq library for constructive analysis";
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    homepage = "http://c-corn.github.io/";
+    license = licenses.gpl2;
+    description = "Coq library for constructive analysis";
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }).overrideAttrs
   (o: {

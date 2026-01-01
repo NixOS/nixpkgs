@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C/G telnet client for C64 BBS's";
     homepage = "https://github.com/MagerValp/CGTerm";
@@ -32,5 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "cg-term";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C/G telnet client for C64 BBS's";
+    homepage = "https://github.com/MagerValp/CGTerm";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ matthewcroughan ];
+    mainProgram = "cg-term";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

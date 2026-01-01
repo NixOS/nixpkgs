@@ -31,12 +31,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Assemble PIO programs for Raspberry Pi Pico";
     homepage = "https://github.com/raspberrypi/pico-sdk";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Assemble PIO programs for Raspberry Pi Pico";
+    homepage = "https://github.com/raspberrypi/pico-sdk";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pioasm";
   };
 })

@@ -17,25 +17,39 @@
 
   # optional-dependencies
   crc32c,
+<<<<<<< HEAD
   pyzstd,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # tests
   msgpack,
   pytestCheckHook,
   importlib-metadata,
+<<<<<<< HEAD
   zstd,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
+<<<<<<< HEAD
   version = "0.16.3";
+=======
+  version = "0.16.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-U9cFhl+q8KeSfJc683d1MgAcj7tlPeEZwehEYIYU15k=";
+=======
+    hash = "sha256-xH8g1lZFRWjGtGl84CCB5ru1EvGYc4xqVvr+gCnJf7E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -53,7 +67,10 @@ buildPythonPackage rec {
   optional-dependencies = {
     crc32c = [ crc32c ];
     msgpack = [ msgpack ];
+<<<<<<< HEAD
     pyzstd = [ pyzstd ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # zfpy = [ zfpy ];
   };
 
@@ -64,9 +81,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     importlib-metadata
+<<<<<<< HEAD
     zstd
   ]
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # https://github.com/NixOS/nixpkgs/issues/255262
   preCheck = "pushd $out";

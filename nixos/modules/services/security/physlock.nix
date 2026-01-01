@@ -121,7 +121,10 @@ in
           wantedBy =
             lib.optional cfg.lockOn.suspend "suspend.target"
             ++ lib.optional cfg.lockOn.hibernate "hibernate.target"
+<<<<<<< HEAD
             ++ lib.optional (cfg.lockOn.hibernate || cfg.lockOn.suspend) "suspend-then-hibernate.target"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             ++ cfg.lockOn.extraTargets;
           before =
             lib.optional cfg.lockOn.suspend "systemd-suspend.service"

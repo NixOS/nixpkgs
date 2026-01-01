@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "setuptools_trial" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Setuptools plugin that makes unit tests execute with trial instead of pyunit";
     homepage = "https://github.com/rutsky/setuptools-trial";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ryansydnor ];
+=======
+  meta = with lib; {
+    description = "Setuptools plugin that makes unit tests execute with trial instead of pyunit";
+    homepage = "https://github.com/rutsky/setuptools-trial";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ryansydnor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

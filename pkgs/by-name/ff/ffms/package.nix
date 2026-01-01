@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libffms2${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/vapoursynth/libffms2${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/FFMS/ffms2";
     description = "FFmpeg based source library for easy frame accurate access";
@@ -49,5 +50,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/FFMS/ffms2";
+    description = "FFmpeg based source library for easy frame accurate access";
+    mainProgram = "ffmsindex";
+    license = licenses.mit;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -64,10 +64,18 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/google/leveldb";
     description = "Fast and lightweight key/value database library by Google";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/google/leveldb";
+    description = "Fast and lightweight key/value database library by Google";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

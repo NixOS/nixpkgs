@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyecobee" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for talking to Ecobee thermostats";
     homepage = "https://github.com/nkgilley/python-ecobee-api";
     changelog = "https://github.com/nkgilley/python-ecobee-api/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python API for talking to Ecobee thermostats";
+    homepage = "https://github.com/nkgilley/python-ecobee-api";
+    changelog = "https://github.com/nkgilley/python-ecobee-api/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

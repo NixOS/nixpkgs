@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pkg_about" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python metadata sharing at runtime";
     homepage = "https://github.com/karpierz/pkg_about/";
     changelog = "https://github.com/karpierz/pkg_about/blob/${version}/CHANGES.rst";
     license = lib.licenses.zlib;
     teams = [ lib.teams.ororatech ];
+=======
+  meta = with lib; {
+    description = "Python metadata sharing at runtime";
+    homepage = "https://github.com/karpierz/pkg_about/";
+    changelog = "https://github.com/karpierz/pkg_about/blob/${version}/CHANGES.rst";
+    license = licenses.zlib;
+    teams = [ teams.ororatech ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

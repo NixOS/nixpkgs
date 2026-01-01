@@ -162,11 +162,19 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
     homepage = "https://www.ponylang.io";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
+    homepage = "https://www.ponylang.org";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kamilchm
       redvers
       numinit

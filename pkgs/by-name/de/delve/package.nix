@@ -7,13 +7,21 @@
 
 buildGoModule rec {
   pname = "delve";
+<<<<<<< HEAD
   version = "1.26.0";
+=======
+  version = "1.25.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-tFd8g866nRSNUVNz+6SM6YLl4ys3AUP3c8eT1kWbjKY=";
+=======
+    hash = "sha256-CtOaaYxqa4GwfDQ1yuUwRQPy948Xyha046TLTaq526w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -44,11 +52,19 @@ buildGoModule rec {
     ln $out/bin/dlv $out/bin/dlv-dap
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Debugger for the Go programming language";
     homepage = "https://github.com/go-delve/delve";
     maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Debugger for the Go programming language";
+    homepage = "https://github.com/go-delve/delve";
+    maintainers = with maintainers; [ vdemeester ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dlv";
   };
 }

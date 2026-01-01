@@ -15,14 +15,22 @@
 
 buildPythonPackage rec {
   pname = "aioamazondevices";
+<<<<<<< HEAD
   version = "11.0.2";
+=======
+  version = "8.0.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aioamazondevices";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-nxKWnNLmraPtMA+WZO4FOWbcbZr/HS6dhACKcFUq7D0=";
+=======
+    hash = "sha256-q8wmBBXZSu69BAZ1wY4/tlW/usiWwlwVCnAEOOZs5TE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ poetry-core ];

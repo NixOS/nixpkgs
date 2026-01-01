@@ -12,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-menus";
+<<<<<<< HEAD
   version = "6.6.0";
+=======
+  version = "6.4.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-menus";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-vjgWPFNmRkJWynimvBuxCxLK5C7tQxqJ5Y4dkZXSDSA=";
+=======
+    hash = "sha256-ug1RSP2TBrypi0aGhF05k39koY3rGgJi0LuWyuuICd0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -33,6 +41,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/cinnamon-menus";
     description = "Menu system for the Cinnamon project";
@@ -42,5 +51,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/cinnamon-menus";
+    description = "Menu system for the Cinnamon project";
+    license = [
+      licenses.gpl2
+      licenses.lgpl2
+    ];
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

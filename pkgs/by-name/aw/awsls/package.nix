@@ -31,11 +31,19 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "List command for AWS resources";
     homepage = "https://github.com/jckuester/awsls";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.markus1189 ];
+=======
+  meta = with lib; {
+    description = "List command for AWS resources";
+    homepage = "https://github.com/jckuester/awsls";
+    license = licenses.mit;
+    maintainers = [ maintainers.markus1189 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "awsls";
   };
 }

@@ -23,10 +23,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pymitv" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client the Mi Tv 3";
     homepage = "https://github.com/simse/pymitv";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client the Mi Tv 3";
+    homepage = "https://github.com/simse/pymitv";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

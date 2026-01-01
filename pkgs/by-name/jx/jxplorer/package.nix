@@ -48,12 +48,20 @@ stdenv.mkDerivation rec {
       --set JAVA_HOME ${jdk8}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Java Ldap Browser";
     homepage = "https://sourceforge.net/projects/jxplorer/";
     license = lib.licenses.asl11;
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jxplorer";
   };
 }

@@ -63,10 +63,17 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://horms.net/projects/kexec/kexec-tools";
     description = "Tools related to the kexec Linux feature";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://horms.net/projects/kexec/kexec-tools";
+    description = "Tools related to the kexec Linux feature";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       "microblaze-linux"
       "microblazeel-linux"
@@ -76,7 +83,11 @@ stdenv.mkDerivation rec {
       "sparc64-linux"
       "powerpc-linux"
     ];
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
+=======
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kexec";
   };
 }

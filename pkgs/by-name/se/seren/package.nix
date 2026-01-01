@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-adI365McrJkvTexvnWjMzpHcJkLY3S/uWfE8u4yuqho=";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple ncurses VoIP program based on the Opus codec";
     mainProgram = "seren";
     longDescription = ''
@@ -38,11 +42,20 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://holdenc.altervista.org/seren/";
     changelog = "http://holdenc.altervista.org/seren/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       matthewcroughan
       nixinator
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      matthewcroughan
+      nixinator
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

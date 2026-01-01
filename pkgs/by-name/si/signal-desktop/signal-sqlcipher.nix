@@ -3,8 +3,11 @@
   lib,
   fetchFromGitHub,
   pnpm,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   rustPlatform,
   cargo,
@@ -22,9 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-70kObW6jYzaquMrj20VMTQg/rDWqIu8o2/m7S3mUZB8=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm; # may be different than top-level pnpm
+=======
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-regaYG+SDvIgdnHQVR1GG1A1FSBXpzFfLuyTEdMt1kQ=";
   };
@@ -39,8 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rustPlatform.cargoSetupHook
     cargo
     dump_syms

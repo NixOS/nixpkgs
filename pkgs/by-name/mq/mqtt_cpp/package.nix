@@ -20,11 +20,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ boost ];
 
+<<<<<<< HEAD
   meta = {
     description = "MQTT client/server for C++14 based on Boost.Asio";
     homepage = "https://github.com/redboltz/mqtt_cpp";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ spalf ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "MQTT client/server for C++14 based on Boost.Asio";
+    homepage = "https://github.com/redboltz/mqtt_cpp";
+    license = licenses.boost;
+    maintainers = with maintainers; [ spalf ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

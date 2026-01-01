@@ -6,16 +6,27 @@
   libkrb5,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "libtirpc";
   version = "1.3.7";
 
   src = fetchurl {
     url = "http://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=refs/tags/libtirpc-${
+<<<<<<< HEAD
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     };sf=tgz";
     hash = "sha256-VGftEr3xzCp8O3oqCjIZozlq599gxN5IsHBRaG37GP4=";
     name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+=======
+      lib.replaceStrings [ "." ] [ "-" ] version
+    };sf=tgz";
+    hash = "sha256-VGftEr3xzCp8O3oqCjIZozlq599gxN5IsHBRaG37GP4=";
+    name = "${pname}-${version}.tar.gz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -23,8 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+<<<<<<< HEAD
   env.KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
 
+=======
+  KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
   strictDeps = true;
@@ -45,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   __structuredAttrs = true;
 
   meta = {
@@ -52,6 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Transport-independent Sun RPC implementation (TI-RPC)";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/libtirpc/";
+    description = "Transport-independent Sun RPC implementation (TI-RPC)";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     longDescription = ''
       Currently, NFS commands use the SunRPC routines provided by the
@@ -67,4 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
       been ported to replace the SunRPC of the glibc.
     '';
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

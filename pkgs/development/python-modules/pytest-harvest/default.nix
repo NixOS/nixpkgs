@@ -61,11 +61,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_harvest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Store data created during your `pytest` tests execution, and retrieve it at the end of the session, e.g. for applicative benchmarking purposes";
     homepage = "https://github.com/smarie/python-pytest-harvest";
     changelog = "https://github.com/smarie/python-pytest-harvest/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Store data created during your `pytest` tests execution, and retrieve it at the end of the session, e.g. for applicative benchmarking purposes";
+    homepage = "https://github.com/smarie/python-pytest-harvest";
+    changelog = "https://github.com/smarie/python-pytest-harvest/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

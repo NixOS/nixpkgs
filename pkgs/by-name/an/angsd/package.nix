@@ -48,10 +48,18 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Program for analysing NGS data";
     homepage = "http://www.popgen.dk/angsd";
     maintainers = [ lib.maintainers.bzizou ];
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "Program for analysing NGS data";
+    homepage = "http://www.popgen.dk/angsd";
+    maintainers = [ maintainers.bzizou ];
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

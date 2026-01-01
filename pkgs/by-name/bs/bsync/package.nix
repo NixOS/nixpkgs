@@ -47,12 +47,21 @@ stdenv.mkDerivation {
     runHook postFixup
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dooblem/bsync";
     description = "Bidirectional Synchronization using Rsync";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dietmarw ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dooblem/bsync";
+    description = "Bidirectional Synchronization using Rsync";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dietmarw ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bsync";
   };
 }

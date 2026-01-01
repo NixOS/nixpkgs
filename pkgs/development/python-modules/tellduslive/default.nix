@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tellduslive" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to communicate with Telldus Live";
     homepage = "https://github.com/molobrakos/tellduslive";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to communicate with Telldus Live";
+    homepage = "https://github.com/molobrakos/tellduslive";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tellduslive";
   };
 }

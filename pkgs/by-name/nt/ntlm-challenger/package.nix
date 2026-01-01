@@ -29,11 +29,20 @@ python3.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Parse NTLM challenge messages over HTTP and SMB";
     mainProgram = "ntlm_challenger";
     homepage = "https://github.com/nopfor/ntlm_challenger";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.crem ];
+=======
+  meta = with lib; {
+    description = "Parse NTLM challenge messages over HTTP and SMB";
+    mainProgram = "ntlm_challenger";
+    homepage = "https://github.com/nopfor/ntlm_challenger";
+    license = licenses.mit;
+    maintainers = [ maintainers.crem ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

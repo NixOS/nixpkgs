@@ -30,10 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
     guile
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "S-expression based json reader/writer for Guile";
     homepage = "https://gitlab.com/dustyweb/guile-sjson";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "S-expression based json reader/writer for Guile";
+    homepage = "https://gitlab.com/dustyweb/guile-sjson";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 })

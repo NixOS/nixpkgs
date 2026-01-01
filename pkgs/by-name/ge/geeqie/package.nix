@@ -162,7 +162,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lightweight GTK based image viewer";
     mainProgram = "geeqie";
 
@@ -176,6 +180,7 @@ stdenv.mkDerivation rec {
       initially based on GQview.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
 
     homepage = "https://www.geeqie.org/";
@@ -185,5 +190,16 @@ stdenv.mkDerivation rec {
       markus1189
     ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+
+    homepage = "https://www.geeqie.org/";
+
+    maintainers = with maintainers; [
+      pSub
+      markus1189
+    ];
+    platforms = platforms.gnu ++ platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

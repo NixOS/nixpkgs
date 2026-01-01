@@ -24,11 +24,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lazy_loader" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Populate library namespace without incurring immediate import costs";
     homepage = "https://github.com/scientific-python/lazy_loader";
     changelog = "https://github.com/scientific-python/lazy_loader/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Populate library namespace without incurring immediate import costs";
+    homepage = "https://github.com/scientific-python/lazy_loader";
+    changelog = "https://github.com/scientific-python/lazy_loader/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

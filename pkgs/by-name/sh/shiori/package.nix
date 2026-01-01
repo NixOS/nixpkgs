@@ -37,12 +37,21 @@ buildGoModule rec {
 
   passthru.tests.smoke-test = nixosTests.shiori;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple bookmark manager built with Go";
     mainProgram = "shiori";
     homepage = "https://github.com/go-shiori/shiori";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Simple bookmark manager built with Go";
+    mainProgram = "shiori";
+    homepage = "https://github.com/go-shiori/shiori";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       minijackson
       CaptainJawZ
     ];

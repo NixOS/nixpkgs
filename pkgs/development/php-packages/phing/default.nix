@@ -17,7 +17,11 @@
       hash = "sha256-gY6ocmkd7eJIMaBrewfxYL7gTr+1qNHTkuAp+w9ApUU=";
     };
 
+<<<<<<< HEAD
     vendorHash = "sha256-yfGfMAQGlXnCoww4rtynknL7qDjcQFEM8p8FbsIqJZU=";
+=======
+    vendorHash = "sha256-zrHOw7Uyq8H7AyxrfCo5VthX1EeoSB44ynrRt38u3Sk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     nativeInstallCheckInputs = [
       versionCheckHook

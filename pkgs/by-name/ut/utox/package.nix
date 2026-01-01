@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeCheckInputs = [ check ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight Tox client";
     mainProgram = "utox";
@@ -76,5 +77,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Lightweight Tox client";
+    mainProgram = "utox";
+    homepage = "https://github.com/uTox/uTox";
+    license = licenses.gpl3;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

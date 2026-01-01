@@ -22,10 +22,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/python/typing/tree/master/typing_extensions";
     description = "Python typing extensions";
     license = lib.licenses.psfl;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/python/typing/tree/master/typing_extensions";
+    description = "Python typing extensions";
+    license = licenses.psfl;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

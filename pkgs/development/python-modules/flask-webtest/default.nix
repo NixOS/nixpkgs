@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_webtest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for testing Flask applications with WebTest";
     homepage = "https://github.com/level12/flask-webtest";
     changelog = "https://github.com/level12/flask-webtest/blob/${src.rev}/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Utilities for testing Flask applications with WebTest";
+    homepage = "https://github.com/level12/flask-webtest";
+    changelog = "https://github.com/level12/flask-webtest/blob/${src.rev}/changelog.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -5,6 +5,10 @@
   cargo,
   rustPlatform,
   rustc,
+<<<<<<< HEAD
+=======
+  pyinstaller,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # dependencies
   msgpack,
@@ -47,6 +51,13 @@ buildPythonPackage rec {
     msgpack
   ];
 
+<<<<<<< HEAD
+=======
+  nativeBuildInputs = [
+    pyinstaller
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeCheckInputs = [
     pytestCheckHook
     pydantic

@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-xxZQz94sr7aSNhmvFWdRtVnS0yk2KQIkAHjwZeJPBwY=";
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to scan memory for secrets";
     homepage = "https://github.com/liamg/dismember";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to scan memory for secrets";
+    homepage = "https://github.com/liamg/dismember";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dismember";
   };
 }

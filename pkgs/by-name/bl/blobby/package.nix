@@ -52,11 +52,19 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/blobby"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Volleyball game";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ raskin ];
+=======
+  meta = with lib; {
+    description = "Volleyball game";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://blobbyvolley.de/";
     downloadPage = "https://sourceforge.net/projects/blobby/files/Blobby%20Volley%202%20%28Linux%29/";
     mainProgram = "blobby";

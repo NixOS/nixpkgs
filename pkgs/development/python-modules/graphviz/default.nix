@@ -3,7 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   replaceVars,
   graphviz-nox,
   xdg-utils,
@@ -34,6 +37,7 @@ buildPythonPackage rec {
       graphviz = graphviz-nox;
       xdgutils = xdg-utils;
     })
+<<<<<<< HEAD
     (fetchpatch {
       # python314 compat; https://github.com/xflr6/graphviz/pull/238
       url = "https://github.com/xflr6/graphviz/commit/7e0fae6d28792a628a25cadd4ec1582c7351a7a3.patch";
@@ -43,6 +47,12 @@ buildPythonPackage rec {
 
   # Fontconfig error: Cannot load default config file
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
+=======
+  ];
+
+  # Fontconfig error: Cannot load default config file
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   build-system = [ setuptools ];
 

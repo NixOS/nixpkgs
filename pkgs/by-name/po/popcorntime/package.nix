@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
       ''${gappsWrapperArgs[@]}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/popcorn-official/popcorn-desktop";
     description = "Application that streams movies and TV shows from torrents";
@@ -101,6 +102,15 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/popcorn-official/popcorn-desktop";
+    description = "Application that streams movies and TV shows from torrents";
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "popcorntime";
   };
 }

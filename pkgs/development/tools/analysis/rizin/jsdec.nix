@@ -48,15 +48,27 @@ stdenv.mkDerivation (finalAttrs: {
     rizin
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple decompiler for Rizin";
     homepage = finalAttrs.src.meta.homepage;
     changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Simple decompiler for Rizin";
+    homepage = finalAttrs.src.meta.homepage;
+    changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.src.rev}";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       bsd3
       mit
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ chayleaf ];
+=======
+    maintainers = with maintainers; [ chayleaf ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

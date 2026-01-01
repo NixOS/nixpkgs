@@ -30,12 +30,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal init system for Linux containers";
     homepage = "https://github.com/Yelp/dumb-init";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Minimal init system for Linux containers";
+    homepage = "https://github.com/Yelp/dumb-init";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dumb-init";
   };
 }

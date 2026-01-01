@@ -53,8 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TZNN5pQhH/10DfntCfGHL1kuAceLMYbxwa4RFq7OmrQ=";
   };
 
+<<<<<<< HEAD
   separateDebugInfo = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   patches = [
     ./load-configuration-from-etc.patch
 

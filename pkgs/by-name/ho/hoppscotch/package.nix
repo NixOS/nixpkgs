@@ -8,13 +8,18 @@
 
 let
   pname = "hoppscotch";
+<<<<<<< HEAD
   version = "25.12.0-0";
+=======
+  version = "25.9.1-0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src =
     fetchurl
       {
         aarch64-darwin = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
+<<<<<<< HEAD
           hash = "sha256-IdCwbekURJ0N5taw7NyINL8Rlb1i/jEfwQ0Sv6Kz2FM=";
         };
         x86_64-darwin = {
@@ -24,6 +29,17 @@ let
         x86_64-linux = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
           hash = "sha256-BVYuFHHrJHp5AX6ASG8QLBzEoynq2ugA0aWJp5bVpmc=";
+=======
+          hash = "sha256-mV/k+9NgHp9fyc8i0trewobvk3Fcu4JnRofHGV7dp70=";
+        };
+        x86_64-darwin = {
+          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_x64.dmg";
+          hash = "sha256-5UMZw3n7lINJSWf0SKmux7s8ISKGn+GppXbK1gcbeVs=";
+        };
+        x86_64-linux = {
+          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
+          hash = "sha256-aW83wSbIV31sakiZxOaUd2QjxOwK2tcnaEMF9jrvrHg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

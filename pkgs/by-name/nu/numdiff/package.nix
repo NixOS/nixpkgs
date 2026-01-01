@@ -16,15 +16,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libintl ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       A little program that can be used to compare putatively similar files
       line by line and field by field, ignoring small numeric differences
       or/and different numeric formats
     '';
     homepage = "https://www.nongnu.org/numdiff/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

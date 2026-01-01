@@ -30,10 +30,17 @@ mkDerivation rec {
     sha256 = "FxN/QlLB3sZ6Vn/9VIKNUntX/B4+crQZ7t760pwFqY8=";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://herqq.org";
     description = "Software library for building UPnP devices and control points";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://herqq.org";
+    description = "Software library for building UPnP devices and control points";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

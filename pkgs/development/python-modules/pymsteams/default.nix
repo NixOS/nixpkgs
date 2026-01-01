@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymsteams" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to interact with Microsoft Teams";
     homepage = "https://github.com/rveachkc/pymsteams";
     changelog = "https://github.com/rveachkc/pymsteams/releases/tag/${version}";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to interact with Microsoft Teams";
+    homepage = "https://github.com/rveachkc/pymsteams";
+    changelog = "https://github.com/rveachkc/pymsteams/releases/tag/${version}";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

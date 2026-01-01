@@ -56,10 +56,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rio_tiler" ];
 
+<<<<<<< HEAD
   meta = {
     description = "User friendly Rasterio plugin to read raster datasets";
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "User friendly Rasterio plugin to read raster datasets";
+    homepage = "https://cogeotiff.github.io/rio-tiler/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     teams = [ lib.teams.geospatial ];
     # Tests broken with gdal 3.10
     # https://github.com/cogeotiff/rio-tiler/issues/769

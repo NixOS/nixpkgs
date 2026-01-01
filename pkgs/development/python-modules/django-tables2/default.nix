@@ -53,6 +53,7 @@ buildPythonPackage rec {
     pytest-django
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   meta = {
@@ -61,5 +62,15 @@ buildPythonPackage rec {
     homepage = "https://github.com/jieter/django-tables2";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  meta = with lib; {
+    changelog = "https://github.com/jieter/django-tables2/blob/v${version}/CHANGELOG.md";
+    description = "Django app for creating HTML tables";
+    homepage = "https://github.com/jieter/django-tables2";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

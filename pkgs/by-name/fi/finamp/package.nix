@@ -1,7 +1,11 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   flutter338,
+=======
+  flutter335,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mpv-unwrapped,
   patchelf,
   fetchFromGitHub,
@@ -9,16 +13,26 @@
   makeDesktopItem,
 }:
 let
+<<<<<<< HEAD
   version = "0.9.21-beta";
 in
 flutter338.buildFlutterApplication {
+=======
+  version = "0.9.20-beta";
+in
+flutter335.buildFlutterApplication {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-Mb9oC9SJnZovcqjOJzh0bpWxZhbkfQWzFG9moghCmrw=";
+=======
+    hash = "sha256-YuqYuUse6xugvc2hckZBc9kx+ryBmRQhoZzjwkpoNfo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -37,8 +51,11 @@ flutter338.buildFlutterApplication {
     split_view = "sha256-unTJQDXUUPVDudlk0ReOPNYrsyEpbd/UMg1tHZsmg+k=";
     flutter_user_certificates_android = "sha256-HL1Qd0D3CLYJysWLX2jqWt1FJRGm/BE8EjVFPztOIPo=";
     smtc_windows = "sha256-ESR6qw8ciJvo1YG3wNK7Uy/N0zzl6OX6q40Dmgsvx6A=";
+<<<<<<< HEAD
     just_audio = "sha256-I+HTDx3IpaQw3VBVO7KGzl0vDcFrNZhN5455i7TNxxs=";
     just_audio_media_kit = "sha256-dSlZETFqNQs7jxNN+8MWQzval31zA7zCs+7WiPPPZMw=";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postFixup = ''

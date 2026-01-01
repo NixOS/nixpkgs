@@ -81,12 +81,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "whispers" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to identify hardcoded secrets in static structured text";
     homepage = "https://github.com/adeptex/whispers";
     changelog = "https://github.com/adeptex/whispers/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to identify hardcoded secrets in static structured text";
+    homepage = "https://github.com/adeptex/whispers";
+    changelog = "https://github.com/adeptex/whispers/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "whispers";
   };
 }

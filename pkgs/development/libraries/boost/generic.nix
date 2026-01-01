@@ -125,16 +125,24 @@ let
             else
               toString stdenv.hostPlatform.parsed.kernel.execFormat.name
           }"
+<<<<<<< HEAD
           "target-os=${
             if stdenv.hostPlatform.isCygwin then "cygwin" else toString stdenv.hostPlatform.parsed.kernel.name
           }"
+=======
+          "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           # adapted from table in boost manual
           # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
           "abi=${
             if stdenv.hostPlatform.parsed.cpu.family == "arm" then
               "aapcs"
+<<<<<<< HEAD
             else if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin) then
+=======
+            else if stdenv.hostPlatform.isWindows then
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               "ms"
             else if stdenv.hostPlatform.isMips32 then
               "o32"
@@ -218,6 +226,7 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionAtLeast version "1.81" && lib.versionOlder version "1.88" && stdenv.cc.isClang
     ) ./fix-clang-target.patch
+<<<<<<< HEAD
     ++
       lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87")
         # Backport fix for NumPy 2 support.
@@ -232,6 +241,19 @@ stdenv.mkDerivation {
         )
 
     ++ lib.optionals (version == "1.87.0") [
+=======
+    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
+      # Backport fix for NumPy 2 support.
+      (fetchpatch {
+        name = "boost-numpy-2-compatibility.patch";
+        url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
+        stripLen = 1;
+        extraPrefix = "libs/python/";
+        hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
+      })
+    ]
+    ++ lib.optional (version == "1.87.0") [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # Fix operator<< for shared_ptr and intrusive_ptr
       # https://github.com/boostorg/smart_ptr/issues/115
       (fetchpatch {
@@ -248,11 +270,19 @@ stdenv.mkDerivation {
       })
     ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://boost.org/";
     description = "Collection of C++ libraries";
     license = lib.licenses.boost;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+=======
+  meta = with lib; {
+    homepage = "http://boost.org/";
+    description = "Collection of C++ libraries";
+    license = licenses.boost;
+    platforms = platforms.unix ++ platforms.windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # boost-context lacks support for the N32 ABI on mips64.  The build
     # will succeed, but packages depending on boost-context will fail with
     # a very cryptic error message.
@@ -407,6 +437,9 @@ stdenv.mkDerivation {
     "dev"
   ];
   setOutputFlags = false;
+<<<<<<< HEAD
 
   __structuredAttrs = true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

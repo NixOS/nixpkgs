@@ -28,10 +28,18 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/53599#discussion_r245855665
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sdispater/cachy";
     description = "Cachy provides a simple yet effective caching library";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sdispater/cachy";
+    description = "Cachy provides a simple yet effective caching library";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jakewaksbaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

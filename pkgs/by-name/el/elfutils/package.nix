@@ -57,8 +57,11 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/elfutils/musl-strndupa.patch?id=2e3d4976eeffb4704cf83e2cc3306293b7c7b2e9";
       sha256 = "sha256-7daehJj1t0wPtQzTv+/Rpuqqs5Ng/EYnZzrcf2o/Lb0=";
     })
+<<<<<<< HEAD
     # https://patchwork.sourceware.org/project/elfutils/patch/20251205145241.1165646-1-arnout@bzzt.net/
     ./test-run-sysroot-reliability.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 
@@ -141,19 +144,34 @@ stdenv.mkDerivation rec {
     rev-prefix = "elfutils-";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceware.org/elfutils/";
     description = "Set of utilities to handle ELF objects";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://sourceware.org/elfutils/";
+    description = "Set of utilities to handle ELF objects";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # licenses are GPL2 or LGPL3+ for libraries, GPL3+ for bins,
     # but since this package isn't split that way, all three are listed.
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Only
       lgpl3Plus
       gpl3Plus
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ r-burns ];
+=======
+    maintainers = with maintainers; [ r-burns ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

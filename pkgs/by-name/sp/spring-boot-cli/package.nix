@@ -12,11 +12,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spring-boot-cli";
+<<<<<<< HEAD
   version = "4.0.1";
 
   src = fetchzip {
     url = "mirror://maven/org/springframework/boot/spring-boot-cli/${finalAttrs.version}/spring-boot-cli-${finalAttrs.version}-bin.zip";
     hash = "sha256-cXpk6WbjAHv8DfEdYpdNPNf01UPBojmtLFSUKBkWj44=";
+=======
+  version = "3.5.6";
+
+  src = fetchzip {
+    url = "mirror://maven/org/springframework/boot/spring-boot-cli/${finalAttrs.version}/spring-boot-cli-${finalAttrs.version}-bin.zip";
+    hash = "sha256-ujG9miirmOfWKB5o4ju0jtYoWu9k0bYRYohFnEpOVRA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -50,7 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       CLI which makes it easy to create spring-based applications
     '';
@@ -67,10 +79,18 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://spring.io/projects/spring-boot";
     changelog = "https://github.com/spring-projects/spring-boot/releases/tag/v${finalAttrs.version}";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     mainProgram = "spring";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moaxcp ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    mainProgram = "spring";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ moaxcp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

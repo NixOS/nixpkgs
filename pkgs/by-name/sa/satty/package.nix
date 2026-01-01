@@ -55,11 +55,19 @@ rustPlatform.buildRustPackage rec {
 
   desktopItems = [ "satty.desktop" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Screenshot annotation tool inspired by Swappy and Flameshot";
     homepage = "https://github.com/gabm/Satty";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Screenshot annotation tool inspired by Swappy and Flameshot";
+    homepage = "https://github.com/gabm/Satty";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pinpox
       donovanglover
     ];

@@ -17,10 +17,18 @@ buildPythonPackage rec {
   # json files that tests look for don't exist in the pypi dist
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/vi3k6i5/flashtext";
     description = "Python package to replace keywords in sentences or extract keywords from sentences";
     maintainers = with lib.maintainers; [ aanderse ];
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/vi3k6i5/flashtext";
+    description = "Python package to replace keywords in sentences or extract keywords from sentences";
+    maintainers = with maintainers; [ aanderse ];
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

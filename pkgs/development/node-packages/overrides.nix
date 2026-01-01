@@ -76,10 +76,41 @@ final: prev: {
       '';
   };
 
+<<<<<<< HEAD
+=======
+  pulp = prev.pulp.override {
+    # tries to install purescript
+    npmFlags = toString [ "--ignore-scripts" ];
+
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/pulp" --suffix PATH : ${
+        lib.makeBinPath [
+          pkgs.purescript
+        ]
+      }
+    '';
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rush = prev."@microsoft/rush".override {
     name = "rush";
   };
 
+<<<<<<< HEAD
+=======
+  vega-cli = prev.vega-cli.override {
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      node-pre-gyp
+      pixman
+      cairo
+      pango
+      libjpeg
+    ];
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [
       pkgs.pkg-config

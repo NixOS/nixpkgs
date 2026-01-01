@@ -73,11 +73,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "novaclient" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for OpenStack Compute API";
     mainProgram = "nova";
     homepage = "https://github.com/openstack/python-novaclient";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Client library for OpenStack Compute API";
+    mainProgram = "nova";
+    homepage = "https://github.com/openstack/python-novaclient";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -38,11 +38,20 @@ mkDerivation {
   ];
   buildInputs = [ gtk2 ];
 
+<<<<<<< HEAD
   meta = {
     description = "Additional style plugins for Qt5, including BB10, GTK, Cleanlooks, Motif, Plastique";
     homepage = "http://blog.qt.io/blog/2012/10/30/cleaning-up-styles-in-qt5-and-adding-fusion/";
     license = lib.licenses.lgpl21;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Additional style plugins for Qt5, including BB10, GTK, Cleanlooks, Motif, Plastique";
+    homepage = "http://blog.qt.io/blog/2012/10/30/cleaning-up-styles-in-qt5-and-adding-fusion/";
+    license = licenses.lgpl21;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

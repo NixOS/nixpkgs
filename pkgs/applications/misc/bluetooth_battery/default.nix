@@ -25,6 +25,7 @@ buildPythonApplication rec {
     cp $src/bluetooth_battery.py $out/bin/bluetooth_battery
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fetch the battery charge level of some Bluetooth headsets";
     mainProgram = "bluetooth_battery";
@@ -32,5 +33,14 @@ buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ cheriimoya ];
+=======
+  meta = with lib; {
+    description = "Fetch the battery charge level of some Bluetooth headsets";
+    mainProgram = "bluetooth_battery";
+    homepage = "https://github.com/TheWeirdDev/Bluetooth_Headset_Battery_Level";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ cheriimoya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

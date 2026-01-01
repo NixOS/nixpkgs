@@ -10,7 +10,11 @@
   fetchzip,
   replaceVars,
   runCommand,
+<<<<<<< HEAD
   which,
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ant,
   cacert,
   cmake,
@@ -87,13 +91,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "RStudio";
+<<<<<<< HEAD
   version = "2025.09.2+418";
+=======
+  version = "2025.09.1+401";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-UFhvNLamKZQ9IBjEtDvSPOUILqGphDDOVb7ZZ8dnfVU=";
+=======
+    hash = "sha256-FVK/1trMVFEv17HbUpaISC9gyE2HBKtdZWjxbgdXALc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # sources fetched into _deps via cmake's FetchContent
@@ -217,6 +229,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     # fix hardcoded paths to /usr/bin/which
     substituteInPlace \
     src/node/desktop/src/main/detect-r.ts \
@@ -225,6 +238,8 @@ stdenv.mkDerivation rec {
     src/cpp/core/system/PosixSystemTests.cpp \
     --replace-fail "/usr/bin/which" "${lib.getExe which}"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # fix .desktop Exec field
     substituteInPlace src/node/desktop/resources/freedesktop/rstudio.desktop.in \
       --replace-fail "\''${CMAKE_INSTALL_PREFIX}/rstudio" "rstudio"
@@ -252,7 +267,11 @@ stdenv.mkDerivation rec {
     name = "rstudio-${version}-npm-deps";
     inherit src;
     postPatch = "cd ${npmRoot}";
+<<<<<<< HEAD
     hash = "sha256-/5GgRusDRyBMr5581ypTMzhqkvjpzYBaniFos524bEw=";
+=======
+    hash = "sha256-HfJsm/UauA5Vdi22WfTJGiI9K979Sw7RYApYdZU0AUs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   preConfigure = ''
@@ -369,6 +388,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       ciil
+<<<<<<< HEAD
+=======
+      cfhammill
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tomasajt
     ];
     mainProgram = "rstudio" + lib.optionalString server "-server";

@@ -22,11 +22,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Text font for musical scores";
     homepage = "https://github.com/MuseScoreFonts/Edwin";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moni ];
+=======
+  meta = with lib; {
+    description = "Text font for musical scores";
+    homepage = "https://github.com/MuseScoreFonts/Edwin";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

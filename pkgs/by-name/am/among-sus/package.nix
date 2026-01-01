@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     install -Dm755 among-sus $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://git.sr.ht/~martijnbraam/among-sus";
     description = "Among us, but it's a text adventure";
@@ -32,5 +33,14 @@ stdenv.mkDerivation {
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.eyjhb ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~martijnbraam/among-sus";
+    description = "Among us, but it's a text adventure";
+    mainProgram = "among-sus";
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.eyjhb ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

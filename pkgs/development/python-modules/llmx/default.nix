@@ -64,11 +64,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llmx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for LLM Text Generation";
     homepage = "https://github.com/victordibia/llmx";
     mainProgram = "llmx";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
+=======
+  meta = with lib; {
+    description = "Library for LLM Text Generation";
+    homepage = "https://github.com/victordibia/llmx";
+    mainProgram = "llmx";
+    license = licenses.mit;
+    maintainers = with maintainers; [ moraxyc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

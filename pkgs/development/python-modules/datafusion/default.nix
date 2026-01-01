@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -23,7 +26,11 @@
 
 buildPythonPackage rec {
   pname = "datafusion";
+<<<<<<< HEAD
   version = "50.1.0";
+=======
+  version = "50.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,12 +40,20 @@ buildPythonPackage rec {
     tag = version;
     # Fetch arrow-testing and parquet-testing (tests assets)
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-+r3msFc9yu3aJBDRI66A/AIctCbLxfZB3Ur/raDV3x8=";
+=======
+    hash = "sha256-to1GJQqI4aJOW8pGhWvU44ePrRo0cgeNwEGRJlb9grM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src version;
+<<<<<<< HEAD
     hash = "sha256-XJ2x/EtMZu/fdS6XB/IydMfHmlaxEWJ3XJPY73WoGqs=";
+=======
+    hash = "sha256-ZACp7bBLYKmuZVAWEa2YxoCbQqwALv2bWf+zz6jbV9w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -74,10 +89,13 @@ buildPythonPackage rec {
   disabledTests = [
     # Exception: DataFusion error (requires internet access)
     "test_register_http_csv"
+<<<<<<< HEAD
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky: Failed: Query was not interrupted; got error: None
     "test_collect_interrupted"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {

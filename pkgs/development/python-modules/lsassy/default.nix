@@ -41,12 +41,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lsassy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to extract data from Local Security Authority Subsystem Service (LSASS)";
     homepage = "https://github.com/Hackndo/lsassy";
     changelog = "https://github.com/Hackndo/lsassy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to extract data from Local Security Authority Subsystem Service (LSASS)";
+    homepage = "https://github.com/Hackndo/lsassy";
+    changelog = "https://github.com/Hackndo/lsassy/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lsassy";
   };
 }

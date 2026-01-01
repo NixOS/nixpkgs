@@ -36,11 +36,19 @@ stdenv.mkDerivation rec {
     install -vD bin/freebayes bin/bamleftalign scripts/* -t $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bayesian haplotype-based polymorphism discovery and genotyping";
     license = lib.licenses.mit;
     homepage = "https://github.com/ekg/freebayes";
     maintainers = with lib.maintainers; [ jdagilliland ];
+=======
+  meta = with lib; {
+    description = "Bayesian haplotype-based polymorphism discovery and genotyping";
+    license = licenses.mit;
+    homepage = "https://github.com/ekg/freebayes";
+    maintainers = with maintainers; [ jdagilliland ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

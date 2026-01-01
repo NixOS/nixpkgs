@@ -27,11 +27,19 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/cauwugo --bpaf-complete-style-zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Alternative cargo frontend that implements dynamic shell completion for usual cargo commands";
     mainProgram = "cauwugo";
     homepage = "https://github.com/pacak/bpaf/tree/master/bpaf_cauwugo";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Alternative cargo frontend that implements dynamic shell completion for usual cargo commands";
+    mainProgram = "cauwugo";
+    homepage = "https://github.com/pacak/bpaf/tree/master/bpaf_cauwugo";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit # or
       asl20
     ];

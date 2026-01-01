@@ -81,6 +81,11 @@ let
           };
         };
         settings.formatter.yamlfmt.excludes = [
+<<<<<<< HEAD
+=======
+          # Breaks helm templating
+          "nixos/tests/k3s/k3s-test-chart/templates/*"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           # Aligns comments with whitespace
           "pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml"
           # TODO: Fix formatting for auto-generated file

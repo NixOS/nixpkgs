@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "neo4j" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Neo4j Bolt Driver for Python";
     homepage = "https://github.com/neo4j/neo4j-python-driver";
     changelog = "https://github.com/neo4j/neo4j-python-driver/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Neo4j Bolt Driver for Python";
+    homepage = "https://github.com/neo4j/neo4j-python-driver";
+    changelog = "https://github.com/neo4j/neo4j-python-driver/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

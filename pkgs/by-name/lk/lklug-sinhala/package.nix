@@ -22,11 +22,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Unicode Sinhala font by Lanka Linux User Group";
     homepage = "http://www.lug.lk/fonts/lklug";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ serge ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Unicode Sinhala font by Lanka Linux User Group";
+    homepage = "http://www.lug.lk/fonts/lklug";
+    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ serge ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

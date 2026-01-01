@@ -144,7 +144,11 @@ builder rec {
     siteDir = "share/guile/site/${effectiveVersion}";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
     longDescription = ''
@@ -156,9 +160,15 @@ builder rec {
       linking, a foreign function call interface, and powerful string
       processing.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ ludo ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ ludo ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 

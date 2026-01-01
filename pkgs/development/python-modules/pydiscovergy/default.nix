@@ -53,11 +53,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydiscovergy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for interacting with the Discovergy API";
     homepage = "https://github.com/jpbede/pydiscovergy";
     changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for interacting with the Discovergy API";
+    homepage = "https://github.com/jpbede/pydiscovergy";
+    changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

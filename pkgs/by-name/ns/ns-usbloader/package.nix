@@ -106,11 +106,19 @@ maven.buildMavenPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = pkgDescription;
     homepage = "https://github.com/developersu/ns-usbloader";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ soupglasses ];
+=======
+  meta = with lib; {
+    description = pkgDescription;
+    homepage = "https://github.com/developersu/ns-usbloader";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ soupglasses ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

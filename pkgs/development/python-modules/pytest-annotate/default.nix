@@ -30,10 +30,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_annotate" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generate PyAnnotate annotations from your pytest tests";
     homepage = "https://github.com/kensho-technologies/pytest-annotate";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Generate PyAnnotate annotations from your pytest tests";
+    homepage = "https://github.com/kensho-technologies/pytest-annotate";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

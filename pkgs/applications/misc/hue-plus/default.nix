@@ -37,13 +37,22 @@ python3Packages.buildPythonApplication {
     "\${qtWrapperArgs[@]}"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/kusti8/hue-plus";
     description = "Windows and Linux driver in Python for the NZXT Hue+";
     longDescription = ''
       A cross-platform driver in Python for the NZXT Hue+. Supports all functionality except FPS, CPU, and GPU lighting.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ garaiza-93 ];
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ garaiza-93 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,11 +27,19 @@ buildGoModule rec {
     echo com > /tmp/.tlds
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pull out bits of URLs provided on stdin";
     mainProgram = "unfurl";
     homepage = "https://github.com/tomnomnom/unfurl";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pull out bits of URLs provided on stdin";
+    mainProgram = "unfurl";
+    homepage = "https://github.com/tomnomnom/unfurl";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -133,6 +133,7 @@ stdenv.mkDerivation rec {
     dbus-launch = "${dbus.lib}/bin/dbus-launch";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple interprocess messaging system";
     homepage = "https://www.freedesktop.org/wiki/Software/dbus/";
@@ -140,5 +141,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus; # most is also under AFL-2.1
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple interprocess messaging system";
+    homepage = "https://www.freedesktop.org/wiki/Software/dbus/";
+    changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${version}/NEWS";
+    license = licenses.gpl2Plus; # most is also under AFL-2.1
+    teams = [ teams.freedesktop ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,10 +17,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-c9aooU60zN58/m8q4G/f8VOjq7oXUTqxqSUMp47YOcA=";
 
+<<<<<<< HEAD
   meta = {
     description = "Directly run UEFI applications in qemu";
     homepage = "https://github.com/Richard-W/uefi-run";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Directly run UEFI applications in qemu";
+    homepage = "https://github.com/Richard-W/uefi-run";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "uefi-run";
   };

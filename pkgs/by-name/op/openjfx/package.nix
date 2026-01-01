@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   featureVersion ? "21",
+=======
+  featureVersion ? "17",
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   lib,
   stdenv,

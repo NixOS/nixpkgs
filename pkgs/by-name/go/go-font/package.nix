@@ -25,12 +25,21 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://blog.golang.org/go-fonts";
     description = "Go font family";
     changelog = "https://go.googlesource.com/image/+log/refs/heads/master/font/gofont";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://blog.golang.org/go-fonts";
+    description = "Go font family";
+    changelog = "https://go.googlesource.com/image/+log/refs/heads/master/font/gofont";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 }

@@ -44,11 +44,19 @@ rustPlatform.buildRustPackage {
     installShellCompletion finalfrontier.{bash,fish,zsh}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for training word and subword embeddings";
     mainProgram = "finalfrontier";
     homepage = "https://github.com/finalfusion/finalfrontier/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Utility for training word and subword embeddings";
+    mainProgram = "finalfrontier";
+    homepage = "https://github.com/finalfusion/finalfrontier/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;

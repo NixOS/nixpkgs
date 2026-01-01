@@ -10,7 +10,11 @@
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   version = "1.23";
+=======
+  version = "1.22";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "python-rapidjson";
   pyproject = true;
 
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "python-rapidjson";
     repo = "python-rapidjson";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-BlEmEvwGAm3Ix2YwJSwrxgqqANqmgiWRiRWP91JITio=";
+=======
+    hash = "sha256-q+qIuFD3TboevD88iaBQxwOoOdb6I+yyCsNXIqMcR3g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [

@@ -215,6 +215,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
@@ -223,6 +224,16 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bazelbuild/bazel/";
+    description = "Build tool that builds code quickly and reliably";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+    ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     teams = [ lib.teams.bazel ];
     mainProgram = "bazel";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

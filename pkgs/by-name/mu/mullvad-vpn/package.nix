@@ -147,6 +147,10 @@ stdenv.mkDerivation {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = ./update.sh;
@@ -161,6 +165,10 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ymarkus
     ];
   };

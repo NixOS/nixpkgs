@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "unitest.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pythonic library to parse Linux /proc/mdstat file";
     homepage = "https://github.com/nicolargo/pymdstat";
     maintainers = with lib.maintainers; [ rhoriguchi ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pythonic library to parse Linux /proc/mdstat file";
+    homepage = "https://github.com/nicolargo/pymdstat";
+    maintainers = with maintainers; [ rhoriguchi ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

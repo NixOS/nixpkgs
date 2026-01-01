@@ -12,6 +12,10 @@
   kahip,
   adios2,
   python3Packages,
+<<<<<<< HEAD
+=======
+  darwinMinVersionHook,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   catch2_3,
   withParmetis ? false,
 }:
@@ -25,16 +29,30 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
+<<<<<<< HEAD
   version = "0.10.0.post5";
+=======
+  version = "0.10.0.post3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "dolfinx";
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "dolfinx";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-CK7YEtJtrx/Mto72RHT4Qjg5StO28Et+FeCYxk5T+8s=";
   };
 
+=======
+    hash = "sha256-YsFya92lz9Twc1PsSLGj6tJNvKb+MQfpmN/qOFxbe34=";
+  };
+
+  preConfigure = ''
+    cd cpp
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -44,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     dolfinxPackages.kahip
     dolfinxPackages.scotch
   ]
+<<<<<<< HEAD
+=======
+  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optional withParmetis dolfinxPackages.parmetis;
 
   propagatedBuildInputs = [
@@ -58,8 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.fenics-ffcx
   ];
 
+<<<<<<< HEAD
   cmakeDir = "../cpp";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmakeFlags = [
     (lib.cmakeBool "DOLFINX_ENABLE_ADIOS2" true)
     (lib.cmakeBool "DOLFINX_ENABLE_PETSC" true)
@@ -77,7 +102,13 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-unittests";
       inherit (finalAttrs) version src;
 
+<<<<<<< HEAD
       cmakeDir = "../cpp/test";
+=======
+      preConfigure = ''
+        cd cpp/test
+      '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       nativeBuildInputs = [
         cmake

@@ -59,12 +59,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "C++ library for exact, high-performance linear algebra";
     mainProgram = "linbox-config";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C++ library for exact, high-performance linear algebra";
+    mainProgram = "linbox-config";
+    license = licenses.lgpl21Plus;
+    teams = [ teams.sage ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://linalg.org/";
   };
 }

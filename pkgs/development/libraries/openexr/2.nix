@@ -70,11 +70,19 @@ stdenv.mkDerivation rec {
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1281
   doCheck = !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isi686;
 
+<<<<<<< HEAD
   meta = {
     description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "High dynamic-range (HDR) image file format";
+    homepage = "https://www.openexr.com/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     insecure = true;
   };
 }

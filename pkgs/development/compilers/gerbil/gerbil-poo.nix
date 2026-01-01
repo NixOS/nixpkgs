@@ -23,11 +23,20 @@
     sha256 = "1pxv1j6hwcgjj67bb7vvlnyl3123r43ifldm6alm76v2mfp2vs81";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Gerbil POO: Prototype Object Orientation for Gerbil Scheme";
     homepage = "https://github.com/fare/gerbil-poo";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "Gerbil POO: Prototype Object Orientation for Gerbil Scheme";
+    homepage = "https://github.com/fare/gerbil-poo";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

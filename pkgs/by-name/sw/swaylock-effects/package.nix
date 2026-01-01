@@ -54,15 +54,25 @@ stdenv.mkDerivation rec {
     "-Dman-pages=enabled"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Screen locker for Wayland";
     longDescription = ''
       Swaylock, with fancy effects
     '';
     mainProgram = "swaylock";
     inherit (src.meta) homepage;
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ gnxlxnxx ];
+=======
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ gnxlxnxx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

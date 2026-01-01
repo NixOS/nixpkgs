@@ -10,7 +10,11 @@ let
     buildArgs = ''${toString ../../release.nix} -A manualHTML.${builtins.currentSystem}'';
     open = "/${outputPath}/${indexPath}";
   };
+<<<<<<< HEAD
   nixos-render-docs-redirects = pkgs.writeShellScriptBin "redirects" ''${pkgs.lib.getExe pkgs.nixos-render-docs-redirects} --file '${toString ./redirects.json}' "$@"'';
+=======
+  nixos-render-docs-redirects = pkgs.writeShellScriptBin "redirects" "${pkgs.lib.getExe pkgs.nixos-render-docs-redirects} --file ${toString ./redirects.json} $@";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 pkgs.mkShellNoCC {
   packages = [

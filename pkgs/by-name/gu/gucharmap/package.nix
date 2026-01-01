@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GNOME Character Map, based on the Unicode Character Database";
     mainProgram = "gucharmap";
@@ -118,5 +119,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GNOME Character Map, based on the Unicode Character Database";
+    mainProgram = "gucharmap";
+    homepage = "https://gitlab.gnome.org/GNOME/gucharmap";
+    license = licenses.gpl3Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

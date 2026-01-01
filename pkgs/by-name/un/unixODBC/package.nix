@@ -21,10 +21,18 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "ODBC driver manager for Unix";
     homepage = "https://www.unixodbc.org/";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "ODBC driver manager for Unix";
+    homepage = "https://www.unixodbc.org/";
+    license = licenses.lgpl2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

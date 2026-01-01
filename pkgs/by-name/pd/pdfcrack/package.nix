@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin pdfcrack
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pdfcrack.sourceforge.net/";
     description = "Small command line driven tool for recovering passwords and content from PDF files";
@@ -24,5 +25,14 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ gpl2Plus ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ qoelet ];
+=======
+  meta = with lib; {
+    homepage = "https://pdfcrack.sourceforge.net/";
+    description = "Small command line driven tool for recovering passwords and content from PDF files";
+    mainProgram = "pdfcrack";
+    license = with licenses; [ gpl2Plus ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ qoelet ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

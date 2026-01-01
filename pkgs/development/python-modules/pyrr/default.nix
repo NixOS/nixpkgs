@@ -23,10 +23,18 @@ buildPythonPackage {
     numpy
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "3D mathematical functions using NumPy";
     homepage = "https://github.com/adamlwgriffiths/Pyrr/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ c0deaddict ];
+=======
+  meta = with lib; {
+    description = "3D mathematical functions using NumPy";
+    homepage = "https://github.com/adamlwgriffiths/Pyrr/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ c0deaddict ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

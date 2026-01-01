@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tbats" ];
 
+<<<<<<< HEAD
   meta = {
     description = "BATS and TBATS forecasting methods";
     homepage = "https://github.com/intive-DataScience/tbats";
     changelog = "https://github.com/intive-DataScience/tbats/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "BATS and TBATS forecasting methods";
+    homepage = "https://github.com/intive-DataScience/tbats";
+    changelog = "https://github.com/intive-DataScience/tbats/releases/tag/${src.rev}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

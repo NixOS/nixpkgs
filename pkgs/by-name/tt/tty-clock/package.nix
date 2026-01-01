@@ -34,6 +34,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/xorg62/tty-clock";
@@ -41,6 +42,15 @@ stdenv.mkDerivation {
     description = "Digital clock in ncurses";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.koral ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    homepage = "https://github.com/xorg62/tty-clock";
+    license = licenses.bsd3;
+    description = "Digital clock in ncurses";
+    platforms = platforms.all;
+    maintainers = [ maintainers.koral ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tty-clock";
   };
 }

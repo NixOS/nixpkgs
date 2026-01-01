@@ -23,10 +23,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rcssmin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CSS minifier written in pure python";
     homepage = "http://opensource.perlig.de/rcssmin/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "CSS minifier written in pure python";
+    homepage = "http://opensource.perlig.de/rcssmin/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

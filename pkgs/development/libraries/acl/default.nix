@@ -35,10 +35,18 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (attr.meta) platforms badPlatforms;
     homepage = "https://savannah.nongnu.org/projects/acl";
     description = "Library and tools for manipulating access control lists";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    inherit (attr.meta) platforms badPlatforms;
+    homepage = "https://savannah.nongnu.org/projects/acl";
+    description = "Library and tools for manipulating access control lists";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

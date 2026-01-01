@@ -53,12 +53,21 @@ stdenv.mkDerivation rec {
       --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.URI ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical disk usage analyzer";
     homepage = "https://github.com/shundhammer/qdirstat";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ donovanglover ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Graphical disk usage analyzer";
+    homepage = "https://github.com/shundhammer/qdirstat";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ donovanglover ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qdirstat";
   };
 }

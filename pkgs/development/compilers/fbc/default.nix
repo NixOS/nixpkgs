@@ -127,7 +127,11 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.freebasic.net/";
     description = "Multi-platform BASIC Compiler";
     mainProgram = "fbc";
@@ -137,8 +141,14 @@ stdenv.mkDerivation rec {
       such as pointers, object orientation, unsigned data types, inline assembly,
       and many others.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus; # runtime & graphics libraries are LGPLv2+ w/ static linking exception
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = with lib.platforms; windows ++ linux;
+=======
+    license = licenses.gpl2Plus; # runtime & graphics libraries are LGPLv2+ w/ static linking exception
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = with platforms; windows ++ linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

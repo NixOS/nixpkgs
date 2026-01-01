@@ -69,12 +69,21 @@ stdenv.mkDerivation rec {
      --suffix PERL5LIB : $out --suffix INC : $out
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.linode.com/longview";
     description = "Collects all of your system-level metrics and sends them to Linode";
     mainProgram = "longview";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.rvl ];
+=======
+  meta = with lib; {
+    homepage = "https://www.linode.com/longview";
+    description = "Collects all of your system-level metrics and sends them to Linode";
+    mainProgram = "longview";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.rvl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit version;
     platforms = [
       "x86_64-linux"

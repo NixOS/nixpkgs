@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dateutil-stubs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Typing stubs for python-dateutil";
     homepage = "https://github.com/python/typeshed";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ milibopp ];
+=======
+  meta = with lib; {
+    description = "Typing stubs for python-dateutil";
+    homepage = "https://github.com/python/typeshed";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ milibopp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

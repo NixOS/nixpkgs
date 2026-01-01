@@ -36,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.tayga = nixosTests.tayga;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Userland stateless NAT64 daemon";
     longDescription = ''
       TAYGA is an out-of-kernel stateless NAT64 implementation
@@ -46,9 +50,15 @@ stdenv.mkDerivation (finalAttrs: {
       for networks where dedicated NAT64 hardware would be overkill.
     '';
     homepage = "https://github.com/apalrd/tayga";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ _0x4A6F ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tayga";
   };
 })

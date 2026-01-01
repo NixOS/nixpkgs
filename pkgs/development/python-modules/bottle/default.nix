@@ -42,12 +42,21 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://bottlepy.org/";
     description = "Fast and simple micro-framework for small web-applications";
     mainProgram = "bottle.py";
     downloadPage = "https://github.com/bottlepy/bottle";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koral ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ koral ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

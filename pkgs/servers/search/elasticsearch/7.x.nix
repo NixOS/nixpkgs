@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     enableUnfree = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
     sourceProvenance = with lib.sourceTypes; [
@@ -92,6 +93,17 @@ stdenv.mkDerivation rec {
     license = lib.licenses.elastic20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Open Source, Distributed, RESTful Search Engine";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    license = licenses.elastic20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       apeschar
       basvandijk
     ];

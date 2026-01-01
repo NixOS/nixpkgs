@@ -2,34 +2,56 @@
   fetchFromGitHub,
   lib,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenvNoCC,
   nodejs,
   nix-update-script,
 }:
+<<<<<<< HEAD
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sketchybar-app-font";
   version = "2.0.49";
+=======
+
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "sketchybar-app-font";
+  version = "2.0.48";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "kvndrsslr";
     repo = "sketchybar-app-font";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Dsp7cv9+g8PDunDnTGnWF4z88SmlJYErfWWylU9mAag=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_9;
+=======
+    hash = "sha256-l7TD5i/o3iqoZCPdmtuzQvm0CvqWQEKptWrj+udYs5k=";
+  };
+
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-NGAgueJ+cuK/csjdf94KNklu+Xf91BHoWKVgEctX6eA=";
   };
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildPhase = ''

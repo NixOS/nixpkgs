@@ -31,10 +31,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library that keeps OAuth 2.0 service access tokens in memory for your usage";
     homepage = "https://github.com/zalando-stups/python-tokens";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.mschuwalow ];
+=======
+  meta = with lib; {
+    description = "Python library that keeps OAuth 2.0 service access tokens in memory for your usage";
+    homepage = "https://github.com/zalando-stups/python-tokens";
+    license = licenses.asl20;
+    maintainers = [ maintainers.mschuwalow ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

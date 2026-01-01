@@ -7,9 +7,13 @@
   setuptools-scm,
 
   # dependencies
+<<<<<<< HEAD
   unicode-segmentation-rs,
   urllib3,
   tomlkit,
+=======
+  cwcwidth,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   lxml,
 
   # tests
@@ -30,7 +34,11 @@
 
 buildPythonPackage rec {
   pname = "translate-toolkit";
+<<<<<<< HEAD
   version = "3.17.5";
+=======
+  version = "3.16.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pyproject = true;
 
@@ -38,12 +46,17 @@ buildPythonPackage rec {
     owner = "translate";
     repo = "translate";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-I0HpVL/bH78oFGDWkXyRvZejXzjDHXFfdPu/+iMgAQw=";
+=======
+    hash = "sha256-AEMqnTnnbqNsVQY0eE2ATn2NbV9jVPtfCo3Lve7MEmg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
+<<<<<<< HEAD
     unicode-segmentation-rs
     urllib3
     lxml
@@ -53,6 +66,12 @@ buildPythonPackage rec {
     toml = [ tomlkit ];
   };
 
+=======
+    cwcwidth
+    lxml
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeCheckInputs = [
     aeidon
     charset-normalizer
@@ -66,7 +85,10 @@ buildPythonPackage rec {
     pytestCheckHook
     ruamel-yaml
     syrupy
+<<<<<<< HEAD
     tomlkit
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     vobject
   ];
 

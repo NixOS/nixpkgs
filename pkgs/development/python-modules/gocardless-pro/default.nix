@@ -35,11 +35,19 @@ buildPythonPackage rec {
     responses
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for the GoCardless Pro API";
     homepage = "https://github.com/gocardless/gocardless-pro-python";
     changelog = "https://github.com/gocardless/gocardless-pro-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Client library for the GoCardless Pro API";
+    homepage = "https://github.com/gocardless/gocardless-pro-python";
+    changelog = "https://github.com/gocardless/gocardless-pro-python/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

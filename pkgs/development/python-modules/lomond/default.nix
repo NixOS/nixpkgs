@@ -54,10 +54,18 @@ buildPythonPackage rec {
     "tests/test_integration.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Websocket Client Library";
     homepage = "https://github.com/wildfoundry/dataplicity-lomond";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  meta = with lib; {
+    description = "Websocket Client Library";
+    homepage = "https://github.com/wildfoundry/dataplicity-lomond";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

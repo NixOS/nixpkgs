@@ -67,7 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "http://gillesdegottex.github.io/fmit/";
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 })

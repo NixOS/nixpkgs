@@ -31,11 +31,19 @@ buildPythonPackage rec {
   # The tests are not included in the Pypi sources
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Visual profiler for Python";
     homepage = "https://github.com/nvdv/vprof";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    description = "Visual profiler for Python";
+    homepage = "https://github.com/nvdv/vprof";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vprof";
   };
 }

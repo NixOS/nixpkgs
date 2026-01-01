@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meshlabxml" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/3DLIRIOUS/MeshLabXML";
     description = "Create and run MeshLab XML scripts with Python";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ nh2 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/3DLIRIOUS/MeshLabXML";
+    description = "Create and run MeshLab XML scripts with Python";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ nh2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

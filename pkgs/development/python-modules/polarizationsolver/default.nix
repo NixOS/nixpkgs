@@ -36,10 +36,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "polarizationsolver" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multipole moment solver for quantum chemistry and polarisable embedding";
     homepage = "https://gitlab.com/reinholdt/polarizationsolver";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Multipole moment solver for quantum chemistry and polarisable embedding";
+    homepage = "https://gitlab.com/reinholdt/polarizationsolver";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

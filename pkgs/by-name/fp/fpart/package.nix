@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
         -i "$out/bin/fpsync"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Split file trees into bags (called \"partitions\")";
     longDescription = ''
       Fpart is a tool that helps you sort file trees and pack them into bags
@@ -46,8 +50,14 @@ stdenv.mkDerivation rec {
       Used this way, fpart can be seen as a powerful data migration tool.
     '';
     homepage = "http://contribs.martymac.org/";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

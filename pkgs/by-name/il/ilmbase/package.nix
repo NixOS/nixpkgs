@@ -33,11 +33,19 @@ stdenv.mkDerivation {
     cd IlmBase
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library for 2D/3D vectors and matrices and other mathematical objects, functions and data types for computer graphics";
     homepage = "https://www.openexr.com/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Library for 2D/3D vectors and matrices and other mathematical objects, functions and data types for computer graphics";
+    homepage = "https://www.openexr.com/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     insecure = true;
   };
 }

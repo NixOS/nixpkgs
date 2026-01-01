@@ -68,9 +68,16 @@ stdenv.mkDerivation rec {
     networkManagerPlugin = "VPN/nm-vpnc-service.name";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "NetworkManager's VPNC plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "NetworkManager's VPNC plugin";
+    inherit (networkmanager.meta) maintainers teams platforms;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

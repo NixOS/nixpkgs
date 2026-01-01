@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${coreutils}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/petervanderdoes/gitflow";
     description = "Extend git with the Gitflow branching model";
     mainProgram = "git-flow";
@@ -42,8 +46,14 @@ stdenv.mkDerivation rec {
       particularly suited to be utilised to follow Vincent Driessen's
       branching model.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ offline ];
+=======
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

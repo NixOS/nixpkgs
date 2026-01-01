@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "panacotta" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for controlling Panasonic Blu-Ray players";
     homepage = "https://github.com/u1f35c/python-panacotta";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API for controlling Panasonic Blu-Ray players";
+    homepage = "https://github.com/u1f35c/python-panacotta";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

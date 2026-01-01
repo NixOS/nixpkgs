@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
       --replace-fail "CMAKE_POLICY(SET CMP0045 OLD)" ""
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Washington-University/CiftiLib";
     description = "Library for reading and writing CIFTI files";
@@ -52,5 +53,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Washington-University/CiftiLib";
+    description = "Library for reading and writing CIFTI files";
+    maintainers = with maintainers; [ bcdarwin ];
+    platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

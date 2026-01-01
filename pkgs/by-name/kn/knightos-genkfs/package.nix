@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://knightos.org/";
     description = "Utility to write a KFS filesystem into a ROM file";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://knightos.org/";
+    description = "Utility to write a KFS filesystem into a ROM file";
+    mainProgram = "genkfs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

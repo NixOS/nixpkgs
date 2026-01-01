@@ -26,14 +26,22 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "2.81.0";
+=======
+  version = "2.80.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
+<<<<<<< HEAD
     hash = "sha256-Z8luIR1G9rLlt9GSOsCIAU87JZ9uolv2kHaDz6xlKYU=";
+=======
+    hash = "sha256-PIsOBltX2WBFCV4kdHkGPefBe/FGF9GQ5otXznE87aA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # put packages that needs to be overridden in the py package scope

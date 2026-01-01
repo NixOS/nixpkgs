@@ -88,11 +88,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "FloPoCo arithmetic core generator";
     homepage = "https://flopoco.org/";
     license = lib.licenses.unfree;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    description = "FloPoCo arithmetic core generator";
+    homepage = "https://flopoco.org/";
+    license = licenses.unfree;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-P3yTmECj0K0mjWUiWlQCwuQVbnbVR1xFV5cE8Uo3U90=";
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool to inspect Parquet files";
     mainProgram = "pqrs";
@@ -26,5 +27,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = [ lib.maintainers.manojkarthick ];
+=======
+  meta = with lib; {
+    description = "CLI tool to inspect Parquet files";
+    mainProgram = "pqrs";
+    homepage = "https://github.com/manojkarthick/pqrs";
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = [ maintainers.manojkarthick ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

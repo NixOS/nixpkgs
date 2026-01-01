@@ -32,11 +32,20 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "ephemeral_port_reserve" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Find an unused port, reliably";
     mainProgram = "ephemeral-port-reserve";
     homepage = "https://github.com/Yelp/ephemeral-port-reserve/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Find an unused port, reliably";
+    mainProgram = "ephemeral-port-reserve";
+    homepage = "https://github.com/Yelp/ephemeral-port-reserve/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

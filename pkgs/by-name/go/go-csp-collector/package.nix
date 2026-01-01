@@ -9,13 +9,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-csp-collector";
+<<<<<<< HEAD
   version = "0.0.17-unstable-2025-11-24";
+=======
+  version = "0.0.16-unstable-2025-10-10";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = "go-csp-collector";
+<<<<<<< HEAD
     rev = "c997e31172ed2d785fc960296b826a9587bd5de9";
     hash = "sha256-ZfE8xa+og14dlUmvYfatecSdrhmuMbFFNTw5RZ3ZHXU=";
+=======
+    rev = "a0cf22ac6d1f5c8972bf53671ba174767d2adcd5";
+    hash = "sha256-xFvO8ZuJQ5luCDOTPHtVeb1+3VvIKSwjt2TqkxBIY58=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-SrQahSHO5ZIkcLR3BR5CR5BTStW1pH1Ij1Eql0b3tuU=";

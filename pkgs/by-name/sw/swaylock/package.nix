@@ -55,7 +55,11 @@ stdenv.mkDerivation rec {
     "-Dman-pages=enabled"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Screen locker for Wayland";
     longDescription = ''
       swaylock is a screen locking utility for Wayland compositors.
@@ -64,8 +68,14 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     mainProgram = "swaylock";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wineee ];
+=======
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wineee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

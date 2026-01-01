@@ -38,12 +38,21 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     isIbusEngine = true;
     description = "Vietnamese IME for IBus";
     homepage = "https://github.com/BambooEngine/ibus-bamboo";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    isIbusEngine = true;
+    description = "Vietnamese IME for IBus";
+    homepage = "https://github.com/BambooEngine/ibus-bamboo";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

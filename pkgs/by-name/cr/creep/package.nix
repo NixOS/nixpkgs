@@ -32,11 +32,19 @@ stdenv.mkDerivation rec {
     mkfontdir "$out/share/fonts/misc"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pretty sweet 4px wide pixel font";
     homepage = "https://github.com/romeovs/creep";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Pretty sweet 4px wide pixel font";
+    homepage = "https://github.com/romeovs/creep";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

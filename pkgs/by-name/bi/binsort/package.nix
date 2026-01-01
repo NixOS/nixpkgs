@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Sort files by binary similarity";
     mainProgram = "binsort";
@@ -33,5 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ numinit ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Sort files by binary similarity";
+    mainProgram = "binsort";
+    homepage = "http://neoscientists.org/~tmueller/binsort/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ numinit ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

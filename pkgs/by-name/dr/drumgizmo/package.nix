@@ -56,11 +56,20 @@ stdenv.mkDerivation rec {
     zita-resampler
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "LV2 sample based drum plugin";
     homepage = "https://www.drumgizmo.org";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nico202 ];
+=======
+  meta = with lib; {
+    description = "LV2 sample based drum plugin";
+    homepage = "https://www.drumgizmo.org";
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.nico202 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

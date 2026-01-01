@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Run web apps on your desktop";
     mainProgram = "re.sonny.Tangram";
@@ -94,6 +95,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Run web apps on your desktop";
+    mainProgram = "re.sonny.Tangram";
+    homepage = "https://github.com/sonnyp/Tangram";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       austinbutler
       chuangzhu
     ];

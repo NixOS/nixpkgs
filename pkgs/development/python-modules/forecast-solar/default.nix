@@ -63,11 +63,20 @@ buildPythonPackage rec {
     "test_status_429"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/home-assistant-libs/forecast_solar/releases/tag/v${version}";
     description = "Asynchronous Python client for getting forecast solar information";
     homepage = "https://github.com/home-assistant-libs/forecast_solar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/home-assistant-libs/forecast_solar/releases/tag/v${version}";
+    description = "Asynchronous Python client for getting forecast solar information";
+    homepage = "https://github.com/home-assistant-libs/forecast_solar";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

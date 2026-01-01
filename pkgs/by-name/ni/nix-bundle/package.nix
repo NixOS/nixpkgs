@@ -41,7 +41,11 @@ stdenv.mkDerivation rec {
     ln -s $out/share/nix-bundle/nix-run.sh $out/bin/nix-run
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/matthewbauer/nix-bundle";
     description = "Create bundles from Nixpkgs attributes";
     longDescription = ''
@@ -55,8 +59,14 @@ stdenv.mkDerivation rec {
       - Distro agnostic
       - No installation
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

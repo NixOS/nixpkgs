@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "status" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP Status for Humans";
     homepage = "https://github.com/avinassh/status/";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "HTTP Status for Humans";
+    homepage = "https://github.com/avinassh/status/";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

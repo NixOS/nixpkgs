@@ -54,11 +54,20 @@ mkDerivation rec {
     "-DMETAINFO_ITS=${appstream}/share/gettext/its/metainfo.its"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Computer opponent for the board game Blokus";
     homepage = "https://pentobi.sourceforge.io";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Computer opponent for the board game Blokus";
+    homepage = "https://pentobi.sourceforge.io";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

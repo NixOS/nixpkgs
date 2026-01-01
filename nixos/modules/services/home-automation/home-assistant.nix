@@ -406,6 +406,7 @@ in
             http = {
               # https://www.home-assistant.io/integrations/http/
               server_host = mkOption {
+<<<<<<< HEAD
                 type = types.nullOr (types.either types.str (types.listOf types.str));
                 default = null;
                 example = [
@@ -415,6 +416,16 @@ in
                 description = ''
                   Only listen to incoming requests on specific IP/host.
                   The option is unset by default, meaning that Home Assistant listens on all available addresses.
+=======
+                type = types.either types.str (types.listOf types.str);
+                default = [
+                  "0.0.0.0"
+                  "::"
+                ];
+                example = "::1";
+                description = ''
+                  Only listen to incoming requests on specific IP/host. The default listed assumes support for IPv4 and IPv6.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 '';
               };
 

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/graph-algorithms/edge-addition-planarity-suite";
     description = "Library for implementing graph algorithms";
@@ -31,5 +32,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/graph-algorithms/edge-addition-planarity-suite";
+    description = "Library for implementing graph algorithms";
+    mainProgram = "planarity";
+    license = licenses.bsd3;
+    teams = [ teams.sage ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -65,12 +65,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modular ComputerCraft emulator";
     homepage = "https://github.com/CCEmuX/CCEmuX";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Modular ComputerCraft emulator";
+    homepage = "https://github.com/CCEmuX/CCEmuX";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       viluon
     ];
     mainProgram = "ccemux";

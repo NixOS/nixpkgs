@@ -35,11 +35,19 @@ buildGoModule rec {
     install -Dm644 mpd-mpris.desktop $out/etc/xdg/autostart/mpd-mpris.desktop
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the MPRIS protocol for MPD";
     homepage = "https://github.com/natsukagami/mpd-mpris";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "Implementation of the MPRIS protocol for MPD";
+    homepage = "https://github.com/natsukagami/mpd-mpris";
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mpd-mpris";
   };
 }

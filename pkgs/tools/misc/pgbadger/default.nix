@@ -7,6 +7,11 @@
   nix-update-script,
   pgbadger,
   PodMarkdown,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   testers,
   TextCSV_XS,
   which,
@@ -27,6 +32,16 @@ buildPerlPackage rec {
     patchShebangs ./pgbadger
   '';
 
+<<<<<<< HEAD
+=======
+  # pgbadger has too many `-Idir` flags on its shebang line on Darwin,
+  # causing the build to fail when trying to generate the documentation.
+  # Rewrite the -I flags in `use lib` form.
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang ./pgbadger
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   outputs = [ "out" ];
 
   PERL_MM_OPT = "INSTALL_BASE=${placeholder "out"}";
@@ -37,6 +52,11 @@ buildPerlPackage rec {
     TextCSV_XS
   ];
 
+<<<<<<< HEAD
+=======
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ shortenPerlShebang ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeCheckInputs = [
     bzip2
     which

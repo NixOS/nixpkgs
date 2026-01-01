@@ -63,10 +63,18 @@ buildNpmPackage {
 
   disallowedReferences = [ nodejs ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hunspell binding for NodeJS that exposes as much of Hunspell as possible and also adds new features";
     homepage = "https://github.com/Wulf/nodehun";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.thomasjm ];
+=======
+  meta = with lib; {
+    description = "Hunspell binding for NodeJS that exposes as much of Hunspell as possible and also adds new features";
+    homepage = "https://github.com/Wulf/nodehun";
+    license = licenses.mit;
+    maintainers = [ maintainers.thomasjm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

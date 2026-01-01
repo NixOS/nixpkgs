@@ -44,6 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
     trio-asyncio
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pytest_aio" ];
@@ -54,5 +55,17 @@ buildPythonPackage rec {
     changelog = "https://github.com/klen/pytest-aio/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "pytest_aio" ];
+
+  meta = with lib; {
+    description = "Pytest plugin for aiohttp support";
+    homepage = "https://github.com/klen/pytest-aio";
+    changelog = "https://github.com/klen/pytest-aio/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -16,11 +16,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "docx2txt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure python-based utility to extract text and images from docx files";
     mainProgram = "docx2txt";
     homepage = "https://github.com/ankushshah89/python-docx2txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ilkecan ];
+=======
+  meta = with lib; {
+    description = "Pure python-based utility to extract text and images from docx files";
+    mainProgram = "docx2txt";
+    homepage = "https://github.com/ankushshah89/python-docx2txt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ilkecan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

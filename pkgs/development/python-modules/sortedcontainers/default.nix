@@ -30,10 +30,17 @@ let
       });
     };
 
+<<<<<<< HEAD
     meta = {
       description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
       homepage = "https://grantjenks.com/docs/sortedcontainers/";
       license = lib.licenses.asl20;
+=======
+    meta = with lib; {
+      description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
+      homepage = "https://grantjenks.com/docs/sortedcontainers/";
+      license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maintainers = [ ];
     };
   };

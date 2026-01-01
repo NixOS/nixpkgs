@@ -41,15 +41,27 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install-dist" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Backlight and Keyboard LED control tool";
     homepage = "https://gitlab.com/cameronnemo/brillo";
     mainProgram = "brillo";
     license = [
+<<<<<<< HEAD
       lib.licenses.gpl3Only
       lib.licenses.bsd0
     ];
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.alexarice ];
+=======
+      licenses.gpl3Only
+      licenses.bsd0
+    ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.alexarice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

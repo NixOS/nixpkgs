@@ -24,10 +24,15 @@
   libxkbcommon,
   libsciter,
   xdotool,
+<<<<<<< HEAD
   openssl,
   pam,
   pango,
   perl,
+=======
+  pam,
+  pango,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   zlib,
   zstd,
   stdenv,
@@ -38,17 +43,28 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdesk";
+<<<<<<< HEAD
   version = "1.4.4";
+=======
+  version = "1.4.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-o7jsVWiCkHaKFpAu27r/Lr1Q9g7uR/OYJdwsiQeDJUA=";
   };
 
   cargoHash = "sha256-gd2vS+p+1QtOWZcRWJWahFGo5rFG+soqxx3vJYSYJUo=";
+=======
+    hash = "sha256-TCy1AyqBHqrIlip2ZqdzIaYHjIYddThI+YmbcQHaDqQ=";
+  };
+
+  cargoHash = "sha256-AOKsTPuq1VD6MR4z1K9l2Clbl8d/7IijTsnMRgBXvyw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   patches = [
     ./make-build-reproducible.patch
@@ -69,7 +85,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
+<<<<<<< HEAD
     perl
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkg-config
     rustPlatform.bindgenHook
     wrapGAppsHook3
@@ -99,7 +118,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libopus
     libaom
     libxkbcommon
+<<<<<<< HEAD
     openssl
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pam
     pango
     zlib

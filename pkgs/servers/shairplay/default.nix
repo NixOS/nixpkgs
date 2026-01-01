@@ -38,12 +38,21 @@ stdenv.mkDerivation rec {
       $out/bin/shairplay
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Apple AirPlay and RAOP protocol server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Apple AirPlay and RAOP protocol server";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "shairplay";
   };
 }

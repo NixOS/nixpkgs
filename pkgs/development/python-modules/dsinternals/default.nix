@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/*.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with Windows Active Directory";
     homepage = "https://github.com/p0dalirius/pydsinternals";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with Windows Active Directory";
+    homepage = "https://github.com/p0dalirius/pydsinternals";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

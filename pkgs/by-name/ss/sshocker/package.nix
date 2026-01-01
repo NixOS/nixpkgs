@@ -28,6 +28,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Tool for SSH, reverse sshfs and port forwarder";
     homepage = "https://github.com/lima-vm/sshocker";

@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keystone" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight multi-platform, multi-architecture assembler framework";
     homepage = "https://www.keystone-engine.org";
     maintainers = with lib.maintainers; [ dump_stack ];
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Lightweight multi-platform, multi-architecture assembler framework";
+    homepage = "https://www.keystone-engine.org";
+    maintainers = with maintainers; [ dump_stack ];
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

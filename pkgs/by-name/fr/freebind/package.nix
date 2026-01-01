@@ -31,11 +31,19 @@ stdenv.mkDerivation {
     mkdir -p $out/bin $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "IPv4 and IPv6 address rate limiting evasion tool";
     homepage = "https://github.com/blechschmidt/freebind";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "IPv4 and IPv6 address rate limiting evasion tool";
+    homepage = "https://github.com/blechschmidt/freebind";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

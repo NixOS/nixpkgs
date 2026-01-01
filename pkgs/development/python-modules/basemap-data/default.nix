@@ -16,6 +16,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mpl_toolkits.basemap_data" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://matplotlib.org/basemap/";
     description = "Data assets for matplotlib basemap";
@@ -24,5 +25,15 @@ buildPythonPackage rec {
       lgpl3Plus
     ];
     teams = [ lib.teams.geospatial ];
+=======
+  meta = with lib; {
+    homepage = "https://matplotlib.org/basemap/";
+    description = "Data assets for matplotlib basemap";
+    license = with licenses; [
+      mit
+      lgpl3Plus
+    ];
+    teams = [ teams.geospatial ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

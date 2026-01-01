@@ -52,11 +52,19 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "foolscap" ];
 
   meta = {
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "foolscap" ];
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''
       "Foolscap" is the name for the next-generation RPC protocol, intended to
@@ -64,7 +72,11 @@ buildPythonPackage rec {
       implement a distributed object-capabilities model in Python.
     '';
     homepage = "https://github.com/warner/foolscap";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

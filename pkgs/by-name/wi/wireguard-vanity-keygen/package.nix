@@ -23,16 +23,28 @@ buildGoModule rec {
     "-X main.appVersion=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog =
       let
         versionWithoutDots = lib.concatStrings (lib.splitString "." version);
+=======
+  meta = with lib; {
+    changelog =
+      let
+        versionWithoutDots = concatStrings (splitString "." version);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       in
       "https://github.com/axllent/wireguard-vanity-keygen/blob/develop/CHANGELOG.md#${versionWithoutDots}";
     description = "WireGuard vanity key generator";
     homepage = "https://github.com/axllent/wireguard-vanity-keygen";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arikgrahl ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ arikgrahl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wireguard-vanity-keygen";
   };
 }

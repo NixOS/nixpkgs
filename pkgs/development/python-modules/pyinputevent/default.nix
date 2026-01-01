@@ -16,10 +16,18 @@ buildPythonPackage {
     sha256 = "0rkis0xp8f9jc00x7jb9kbvhdla24z1vl30djqa6wy6fx0cr6sib";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ntzrmtthihu777/pyinputevent";
     description = "Python interface to the Input Subsystem's input_event and uinput";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ntzrmtthihu777/pyinputevent";
+    description = "Python interface to the Input Subsystem's input_event and uinput";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

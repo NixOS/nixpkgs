@@ -27,11 +27,20 @@ buildGoModule rec {
     install -D -m755 -t $out/share/man/man1/ cshatag.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to detect silent data corruption";
     mainProgram = "cshatag";
     homepage = "https://github.com/rfjakob/cshatag";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool to detect silent data corruption";
+    mainProgram = "cshatag";
+    homepage = "https://github.com/rfjakob/cshatag";
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

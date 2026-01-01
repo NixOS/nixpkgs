@@ -57,15 +57,25 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       Libao is Xiph.org's cross-platform audio library that allows
       programs to output audio using a simple API on a wide variety of
       platforms.
     '';
     homepage = "https://xiph.org/ao/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+=======
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

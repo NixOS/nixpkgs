@@ -46,11 +46,20 @@ stdenv.mkDerivation rec {
     "-std=c++14"
   ];
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Extremely lightweight but extensible database access library written in C";
     mainProgram = "odbx-sql";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Extremely lightweight but extensible database access library written in C";
+    mainProgram = "odbx-sql";
+    license = licenses.lgpl21;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

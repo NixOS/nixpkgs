@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "powerlinemem" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Segment for Powerline showing the current memory usage in percent or absolute values";
     homepage = "https://github.com/mKaloer/powerline_mem_segment";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thomasjm ];
+=======
+  meta = with lib; {
+    description = "Segment for Powerline showing the current memory usage in percent or absolute values";
+    homepage = "https://github.com/mKaloer/powerline_mem_segment";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ thomasjm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

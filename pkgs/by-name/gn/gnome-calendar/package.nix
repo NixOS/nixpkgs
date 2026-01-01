@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://apps.gnome.org/Calendar/";
     description = "Simple and beautiful calendar application for GNOME";
@@ -65,5 +66,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://apps.gnome.org/Calendar/";
+    description = "Simple and beautiful calendar application for GNOME";
+    mainProgram = "gnome-calendar";
+    teams = [ teams.gnome ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

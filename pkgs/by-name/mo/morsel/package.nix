@@ -17,11 +17,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3rwYD49yq3apKOGBSWvTm5m98ImbtTKqRb2cSgjWmFA=";
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tool to translate morse code input to text in real time";
     mainProgram = "morsel";
     homepage = "https://github.com/SamLee514/morsel";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
+=======
+  meta = with lib; {
+    description = "Command line tool to translate morse code input to text in real time";
+    mainProgram = "morsel";
+    homepage = "https://github.com/SamLee514/morsel";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

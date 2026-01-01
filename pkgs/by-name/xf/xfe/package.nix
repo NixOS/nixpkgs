@@ -47,7 +47,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "MS-Explorer like file manager for X";
     longDescription = ''
       X File Explorer (Xfe) is an MS-Explorer like file manager for X.
@@ -55,8 +59,14 @@ stdenv.mkDerivation rec {
       Xfe aims to be the filemanager of choice for all the Unix addicts!
     '';
     homepage = "https://sourceforge.net/projects/xfe/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

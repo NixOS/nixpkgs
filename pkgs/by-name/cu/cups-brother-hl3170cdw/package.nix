@@ -52,7 +52,11 @@ stdenv.mkDerivation rec {
       --replace-fail "exec[300]" "exec[400]"
   '';
 
+<<<<<<< HEAD
   makeFlags = [ "--directory=brcupsconfig" ];
+=======
+  makeFlags = [ "-C brcupsconfig" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   installPhase = ''
     runHook preInstall
@@ -146,6 +150,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.brother.com/";
     description = "Brother ${model} printer driver";
@@ -154,6 +159,16 @@ stdenv.mkDerivation rec {
       fromSource
     ];
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://www.brother.com/";
+    description = "Brother ${model} printer driver";
+    sourceProvenance = with sourceTypes; [
+      binaryNativeCode
+      fromSource
+    ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       unfree
       gpl2Plus
     ];
@@ -162,6 +177,10 @@ stdenv.mkDerivation rec {
       "i686-linux"
     ];
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=${model}_all&os=128";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ luna_1024 ];
+=======
+    maintainers = with maintainers; [ luna_1024 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

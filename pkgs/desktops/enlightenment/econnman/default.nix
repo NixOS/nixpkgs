@@ -42,16 +42,29 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "User interface for the connman network connection manager";
     mainProgram = "econnman-bin";
     homepage = "https://enlightenment.org/";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "User interface for the connman network connection manager";
+    mainProgram = "econnman-bin";
+    homepage = "https://enlightenment.org/";
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [
       matejc
       ftrvxmtrx
     ];
+<<<<<<< HEAD
     teams = [ lib.teams.enlightenment ];
+=======
+    teams = [ teams.enlightenment ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

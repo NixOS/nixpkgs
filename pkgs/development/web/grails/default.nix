@@ -51,7 +51,11 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Full stack, web application framework for the JVM";
     mainProgram = "grails";
     longDescription = ''
@@ -61,9 +65,16 @@ stdenv.mkDerivation rec {
       experience.
     '';
     homepage = "https://grails.org/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

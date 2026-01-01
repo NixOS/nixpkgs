@@ -55,16 +55,26 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Extension to GTK used by elementary OS";
     longDescription = ''
       Granite is a companion library for GTK and GLib. Among other things, it provides complex widgets and convenience functions
       designed for use in apps built for elementary OS.
     '';
     homepage = "https://github.com/elementary/granite";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "granite-demo";
   };
 }

@@ -150,14 +150,24 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automated text and program generation tool";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Automated text and program generation tool";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Plus
       lgpl3Plus
     ];
     homepage = "https://www.gnu.org/software/autogen/";
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -45,10 +45,17 @@ buildPythonPackage {
         "from looseversion import LooseVersion"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for the custom Selenium ChromeDriver that passes all bot mitigation systems";
     homepage = "https://github.com/ultrafunkamsterdam/undetected-chromedriver";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Python library for the custom Selenium ChromeDriver that passes all bot mitigation systems";
+    homepage = "https://github.com/ultrafunkamsterdam/undetected-chromedriver";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

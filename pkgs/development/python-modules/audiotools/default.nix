@@ -54,10 +54,17 @@ buildPythonPackage {
     hash = "sha256-iRakeV4Sg4oU0JtiA0O3jnmLJt99d89Hg6v9onUaSnw=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities and Python modules for handling audio";
     homepage = "https://audiotools.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Utilities and Python modules for handling audio";
+    homepage = "https://audiotools.sourceforge.net/";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

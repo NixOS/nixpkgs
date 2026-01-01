@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "android_backup" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unpack and repack android backups";
     homepage = "https://github.com/bluec0re/android-backup-tools";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Unpack and repack android backups";
+    homepage = "https://github.com/bluec0re/android-backup-tools";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -150,10 +150,18 @@ stdenv.mkDerivation (finalAttrs: {
         touch $out
       '';
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-API shader test framework";
     homepage = "https://github.com/google/amber";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Flakebi ];
+=======
+  meta = with lib; {
+    description = "Multi-API shader test framework";
+    homepage = "https://github.com/google/amber";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ Flakebi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

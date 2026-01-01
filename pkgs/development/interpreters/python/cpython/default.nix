@@ -208,6 +208,7 @@ let
   nativeBuildInputs = [
     nukeReferences
   ]
+<<<<<<< HEAD
   ++
     optionals
       (
@@ -218,6 +219,12 @@ let
         autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
         autoreconfHook
       ]
+=======
+  ++ optionals (!stdenv.hostPlatform.isDarwin && !withMinimalDeps) [
+    autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
+    autoreconfHook
+  ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++
     optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps)
       [
@@ -405,10 +412,13 @@ stdenv.mkDerivation (finalAttrs: {
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
   ]
+<<<<<<< HEAD
   ++ optionals (version == "3.13.10" || version == "3.14.1") [
     # https://github.com/python/cpython/issues/142218
     ./${lib.versions.majorMinor version}/gh-142218.patch
   ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ optionals (stdenv.hostPlatform.isMinGW) (
     let
       # https://src.fedoraproject.org/rpms/mingw-python3
@@ -828,12 +838,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.python.org";
     changelog =
       let
         majorMinor = lib.versions.majorMinor version;
         dashedVersion = lib.replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
+=======
+  meta = with lib; {
+    homepage = "https://www.python.org";
+    changelog =
+      let
+        majorMinor = versions.majorMinor version;
+        dashedVersion = replaceStrings [ "." "a" "b" ] [ "-" "-alpha-" "-beta-" ] version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       in
       if sourceVersion.suffix == "" then
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
@@ -849,10 +868,16 @@ stdenv.mkDerivation (finalAttrs: {
       hierarchical packages; exception-based error handling; and very
       high level dynamic data types.
     '';
+<<<<<<< HEAD
     license = lib.licenses.psfl;
     pkgConfigModules = [ "python3" ];
     platforms =
       lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows ++ lib.platforms.freebsd;
+=======
+    license = licenses.psfl;
+    pkgConfigModules = [ "python3" ];
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.windows ++ platforms.freebsd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = executable;
     teams = [ lib.teams.python ];
     # static build on x86_64-darwin/aarch64-darwin breaks with:

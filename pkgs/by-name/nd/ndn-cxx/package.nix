@@ -51,7 +51,11 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://named-data.net/";
     description = "Named Data Networking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
@@ -67,9 +71,15 @@ stdenv.mkDerivation rec {
       traversing fewer network hops, eliminating redundant requests,
       and consuming less resources overall.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sjmackenzie
       bertof
     ];

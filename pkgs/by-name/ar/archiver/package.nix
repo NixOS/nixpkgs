@@ -27,12 +27,21 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Easily create & extract archives, and compress & decompress files of various formats";
     homepage = "https://github.com/mholt/archiver";
     mainProgram = "arc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kalbasit ];
+=======
+  meta = with lib; {
+    description = "Easily create & extract archives, and compress & decompress files of various formats";
+    homepage = "https://github.com/mholt/archiver";
+    mainProgram = "arc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kalbasit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     knownVulnerabilities = [
       "CVE-2024-0406"
       "Package is unmaintained upstream"

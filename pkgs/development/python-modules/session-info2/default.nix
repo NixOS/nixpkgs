@@ -17,14 +17,22 @@
 
 buildPythonPackage rec {
   pname = "session-info2";
+<<<<<<< HEAD
   version = "0.3";
+=======
+  version = "0.2.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "session-info2";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Li7Ik7AnWiG742x01m49iEYuOBg0FFx8amv/7KTe9gE=";
+=======
+    hash = "sha256-fw5FG22MzxPibC9GrWZsRLnhMcuo/eBPNRggvkkz8ms=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

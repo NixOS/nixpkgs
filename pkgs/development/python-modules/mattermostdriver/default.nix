@@ -29,10 +29,18 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python Mattermost Driver";
     homepage = "https://github.com/Vaelor/python-mattermost-driver";
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Python Mattermost Driver";
+    homepage = "https://github.com/Vaelor/python-mattermost-driver";
+    license = licenses.mit;
+    maintainers = with maintainers; [ globin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

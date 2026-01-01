@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-9YCt9crLuYjd+TUXJyx/EAYIMWM5TD+ZyzLeu0RMxVc=";
 
+<<<<<<< HEAD
   meta = {
     description = "Fast static site generator";
     homepage = "https://github.com/piranha/gostatic";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ urandom ];
+=======
+  meta = with lib; {
+    description = "Fast static site generator";
+    homepage = "https://github.com/piranha/gostatic";
+    license = licenses.isc;
+    maintainers = with maintainers; [ urandom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gostatic";
   };
 }

@@ -52,7 +52,11 @@ buildGoModule rec {
 
   doCheck = false; # no test
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Data-provider-agnostic (GTFS) public transportation app";
     longDescription = ''
       Transito is a data-provider-agnostic public transportation app
@@ -69,10 +73,17 @@ buildGoModule rec {
     '';
     homepage = "https://git.sr.ht/~mil/transito";
     changelog = "https://git.sr.ht/~mil/transito/refs/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
     mainProgram = "transito";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.McSinyx ];
+    mainProgram = "transito";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.isDarwin;
   };
 }

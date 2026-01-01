@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "os_service_types" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for consuming OpenStack service-types-authority data";
     homepage = "https://github.com/openstack/os-service-types";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Python library for consuming OpenStack service-types-authority data";
+    homepage = "https://github.com/openstack/os-service-types";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

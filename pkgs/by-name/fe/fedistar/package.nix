@@ -5,8 +5,11 @@
   nix-update-script,
 
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
 
   rustPlatform,
@@ -18,6 +21,12 @@
   openssl,
 }:
 
+<<<<<<< HEAD
+=======
+let
+  pnpm = pnpm_10;
+in
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fedistar";
   version = "1.11.3";
@@ -34,9 +43,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ZJgyrFDtzAH3XqDdnJ27Yn+WsTMrZR2+lnkZ6bw6hzg=";
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
+=======
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-xXVsjAXmrsOp+mXrYAxSKz4vX5JApLZ+Rh6hrYlnJDI=";
   };
@@ -44,8 +58,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cargo-tauri.hook
 
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm.configHook
+    pnpm
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
 
     pkg-config

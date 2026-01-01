@@ -66,10 +66,18 @@ buildPythonPackage rec {
   # pytest tests not enabled due to nvidia GPU dependency
   pythonImportsCheck = [ "mamba_ssm" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Linear-Time Sequence Modeling with Selective State Spaces";
     homepage = "https://github.com/state-spaces/mamba";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Linear-Time Sequence Modeling with Selective State Spaces";
+    homepage = "https://github.com/state-spaces/mamba";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cfhammill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # The package requires CUDA or ROCm, the ROCm build hasn't
     # been completed or tested, so broken if not using cuda.
     broken = !cudaSupport;

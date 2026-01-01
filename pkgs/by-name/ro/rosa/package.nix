@@ -58,10 +58,18 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for the Red Hat OpenShift Service on AWS";
     license = lib.licenses.asl20;
     homepage = "https://github.com/openshift/rosa";
     maintainers = with lib.maintainers; [ jfchevrette ];
+=======
+  meta = with lib; {
+    description = "CLI for the Red Hat OpenShift Service on AWS";
+    license = licenses.asl20;
+    homepage = "https://github.com/openshift/rosa";
+    maintainers = with maintainers; [ jfchevrette ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

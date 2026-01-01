@@ -32,10 +32,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tree_sitter_rust" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rust grammar for tree-sitter";
     homepage = "https://github.com/tree-sitter/tree-sitter-rust";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "Rust grammar for tree-sitter";
+    homepage = "https://github.com/tree-sitter/tree-sitter-rust";
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

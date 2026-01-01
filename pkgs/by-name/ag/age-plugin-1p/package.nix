@@ -22,6 +22,7 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Use SSH keys from 1Password with age";
     mainProgram = "age-plugin-1p";
@@ -29,5 +30,14 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ Enzime ];
+=======
+  meta = with lib; {
+    description = "Use SSH keys from 1Password with age";
+    mainProgram = "age-plugin-1p";
+    homepage = "https://github.com/Enzime/age-plugin-1p";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ Enzime ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

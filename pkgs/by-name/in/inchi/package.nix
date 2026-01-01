@@ -72,10 +72,18 @@ stdenv.mkDerivation rec {
     install -m 644 INCHI-1-DOC/*.pdf $doc/share
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.inchi-trust.org/";
     description = "IUPAC International Chemical Identifier library";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ rmcgibbo ];
+=======
+  meta = with lib; {
+    homepage = "https://www.inchi-trust.org/";
+    description = "IUPAC International Chemical Identifier library";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ rmcgibbo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

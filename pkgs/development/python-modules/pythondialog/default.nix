@@ -20,9 +20,16 @@ buildPythonPackage rec {
     substituteInPlace dialog.py --replace ":/bin:/usr/bin" ":$out/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to the UNIX dialog utility and mostly-compatible programs";
     homepage = "http://pythondialog.sourceforge.net/";
     license = lib.licenses.lgpl3;
+=======
+  meta = with lib; {
+    description = "Python interface to the UNIX dialog utility and mostly-compatible programs";
+    homepage = "http://pythondialog.sourceforge.net/";
+    license = licenses.lgpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

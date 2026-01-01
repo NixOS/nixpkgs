@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${m17n_lib}/lib")
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://mike-fabian.github.io/ibus-typing-booster/";
     license = lib.licenses.gpl3Plus;
@@ -58,6 +59,15 @@ stdenv.mkDerivation rec {
     mainProgram = "emoji-picker";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://mike-fabian.github.io/ibus-typing-booster/";
+    license = licenses.gpl3Plus;
+    description = "Completion input method for faster typing";
+    mainProgram = "emoji-picker";
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     isIbusEngine = true;
   };
 }

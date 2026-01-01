@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/projects/linuxconsole/";
     description = "Set of tools for joysticks and serial peripherals";
@@ -37,6 +38,16 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       pSub
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/linuxconsole/";
+    description = "Set of tools for joysticks and serial peripherals";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      pSub
+      ebzzry
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     longDescription = ''

@@ -32,6 +32,7 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Chatbot framework written in Go";
     homepage = "https://github.com/target/flottbot";
@@ -40,5 +41,15 @@ buildGoModule rec {
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     mainProgram = "flottbot";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Chatbot framework written in Go";
+    homepage = "https://github.com/target/flottbot";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bryanhonof ];
+    sourceProvenance = [ sourceTypes.fromSource ];
+    mainProgram = "flottbot";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

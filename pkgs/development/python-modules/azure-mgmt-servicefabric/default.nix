@@ -34,11 +34,20 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "This is the Microsoft Azure Service Fabric Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/servicefabric/azure-mgmt-servicefabric";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-servicefabric_${version}/sdk/servicefabric/azure-mgmt-servicefabric/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
+=======
+  meta = with lib; {
+    description = "This is the Microsoft Azure Service Fabric Management Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/servicefabric/azure-mgmt-servicefabric";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-servicefabric_${version}/sdk/servicefabric/azure-mgmt-servicefabric/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maxwilson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

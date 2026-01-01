@@ -55,11 +55,19 @@ in
 
     makeFlags = [ "DESTDIR=$(out)" ];
 
+<<<<<<< HEAD
     meta = {
       inherit (src.meta) homepage;
       description = "DVB Frontend Status Monitor plugin for VDR";
       maintainers = [ lib.maintainers.ck3d ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      inherit (src.meta) homepage;
+      description = "DVB Frontend Status Monitor plugin for VDR";
+      maintainers = [ maintainers.ck3d ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (vdr.meta) platforms;
     };
 
@@ -80,11 +88,19 @@ in
       sha256 = "sha256-ivHdzX90ozMXSvIc5OrKC5qHeK5W3TK8zyrN8mY3IhE=";
     };
 
+<<<<<<< HEAD
     meta = {
       inherit (src.meta) homepage;
       description = "VDR plugin to handle KODI clients";
       maintainers = [ lib.maintainers.ck3d ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      inherit (src.meta) homepage;
+      description = "VDR plugin to handle KODI clients";
+      maintainers = [ maintainers.ck3d ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (vdr.meta) platforms;
     };
 
@@ -120,11 +136,19 @@ in
 
     dontInstall = true;
 
+<<<<<<< HEAD
     meta = {
       inherit (src.meta) homepage;
       description = "VDR Text2Skin Plugin";
       maintainers = [ lib.maintainers.ck3d ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      inherit (src.meta) homepage;
+      description = "VDR Text2Skin Plugin";
+      maintainers = [ maintainers.ck3d ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (vdr.meta) platforms;
     };
   };
@@ -149,11 +173,19 @@ in
 
     installFlags = [ "DESTDIR=$(out)" ];
 
+<<<<<<< HEAD
     meta = {
       inherit (src.meta) homepage;
       description = "Plugin for VDR to access AVMs Fritz Box routers";
       maintainers = [ lib.maintainers.ck3d ];
       license = lib.licenses.gpl2;
+=======
+    meta = with lib; {
+      inherit (src.meta) homepage;
+      description = "Plugin for VDR to access AVMs Fritz Box routers";
+      maintainers = [ maintainers.ck3d ];
+      license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (vdr.meta) platforms;
     };
   };

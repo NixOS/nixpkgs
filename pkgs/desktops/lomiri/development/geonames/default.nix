@@ -109,14 +109,24 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Parse and query the geonames database dump";
     mainProgram = "geonames-demo";
     homepage = "https://gitlab.com/ubports/development/core/geonames";
     changelog = "https://gitlab.com/ubports/development/core/geonames/-/blob/${finalAttrs.version}/ChangeLog";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Only;
+    teams = [ teams.lomiri ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Cross requires hostPlatform emulation during build
     # https://gitlab.com/ubports/development/core/geonames/-/issues/1
     broken =

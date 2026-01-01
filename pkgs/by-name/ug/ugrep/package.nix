@@ -111,12 +111,21 @@ stdenv.mkDerivation (finalAttrs: {
       description = "Ultra fast grep with interactive query UI";
       homepage = "https://github.com/Genivia/ugrep";
       changelog = "https://github.com/Genivia/ugrep/releases/tag/v${finalAttrs.version}";
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [
         numkem
         mikaelfangel
       ];
       license = lib.licenses.bsd3;
       platforms = lib.platforms.all;
+=======
+      maintainers = with maintainers; [
+        numkem
+        mikaelfangel
+      ];
+      license = licenses.bsd3;
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "ug";
     }
     # Needed to ensure that the grep replacements take precedence over

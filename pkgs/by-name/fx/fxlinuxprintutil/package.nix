@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Optional configuration tool for fxlinuxprint";
     homepage = "https://onlinesupport.fujixerox.com";
@@ -83,5 +84,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Optional configuration tool for fxlinuxprint";
+    homepage = "https://onlinesupport.fujixerox.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

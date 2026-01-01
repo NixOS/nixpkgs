@@ -87,9 +87,16 @@ buildPythonPackage rec {
     ddt
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Network Automation and Programmability Abstraction Layer with Multivendor support";
     homepage = "https://github.com/napalm-automation/napalm";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Network Automation and Programmability Abstraction Layer with Multivendor support";
+    homepage = "https://github.com/napalm-automation/napalm";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

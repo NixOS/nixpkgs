@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Include a full table of contents in your Sphinx HTML sidebar";
     homepage = "https://sphinxcontrib-fulltoc.readthedocs.org/";
     changelog = "https://github.com/sphinx-contrib/fulltoc/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Include a full table of contents in your Sphinx HTML sidebar";
+    homepage = "https://sphinxcontrib-fulltoc.readthedocs.org/";
+    changelog = "https://github.com/sphinx-contrib/fulltoc/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

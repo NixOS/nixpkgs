@@ -24,12 +24,21 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extremely fast JavaScript bundler";
     homepage = "https://esbuild.github.io";
     changelog = "https://github.com/evanw/esbuild/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Extremely fast JavaScript bundler";
+    homepage = "https://esbuild.github.io";
+    changelog = "https://github.com/evanw/esbuild/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lucus16
       undefined-moe
       ivan

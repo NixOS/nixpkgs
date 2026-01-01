@@ -41,11 +41,19 @@ stdenv.mkDerivation rec {
     ./0001-proper-pthread-return-value.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Compute the perceptual hash of an image";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.imalsogreg ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Compute the perceptual hash of an image";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.imalsogreg ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.phash.org";
     downloadPage = "https://github.com/clearscene/pHash";
   };

@@ -11,7 +11,10 @@
   systemd,
   gitUpdater,
   lib,
+<<<<<<< HEAD
   nixosTests,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # needs running D-Bus and libvirt
 
+<<<<<<< HEAD
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";
@@ -68,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) libvirtd;
     };
+=======
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   meta = {

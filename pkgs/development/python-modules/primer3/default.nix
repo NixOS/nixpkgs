@@ -48,11 +48,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "primer3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Oligo analysis and primer design";
     homepage = "https://github.com/libnano/primer3-py";
     changelog = "https://github.com/libnano/primer3-py/blob/${src.tag}/CHANGES";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Oligo analysis and primer design";
+    homepage = "https://github.com/libnano/primer3-py";
+    changelog = "https://github.com/libnano/primer3-py/blob/${src.tag}/CHANGES";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

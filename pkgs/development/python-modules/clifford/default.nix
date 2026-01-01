@@ -63,6 +63,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clifford" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Numerical Geometric Algebra Module";
     homepage = "https://clifford.readthedocs.io";
@@ -72,5 +73,16 @@ buildPythonPackage rec {
     # Broken with numba >= 0.54
     # see https://github.com/pygae/clifford/issues/430
     broken = lib.versionAtLeast numba.version "0.58";
+=======
+  meta = with lib; {
+    description = "Numerical Geometric Algebra Module";
+    homepage = "https://clifford.readthedocs.io";
+    changelog = "https://github.com/pygae/clifford/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = [ ];
+    # Broken with numba >= 0.54
+    # see https://github.com/pygae/clifford/issues/430
+    broken = versionAtLeast numba.version "0.58";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

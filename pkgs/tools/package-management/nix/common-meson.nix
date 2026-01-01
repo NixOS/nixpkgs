@@ -174,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build tests
+<<<<<<< HEAD
   ''
   # The ability to chmod the root filesystem only exist in filesystem namespacing capable Nix interpreters.
   # At the time of writing, only Linux can do it.
@@ -185,6 +186,8 @@ stdenv.mkDerivation (finalAttrs: {
     # by the build system here.
     # https://github.com/NixOS/nix/issues/11295
     chmod 555 /
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   preConfigure =
@@ -272,7 +275,11 @@ stdenv.mkDerivation (finalAttrs: {
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.
   pos = builtins.unsafeGetAttrPos "version" args;
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''
       Nix is a powerful package manager for Linux and other Unix systems that
@@ -282,14 +289,24 @@ stdenv.mkDerivation (finalAttrs: {
       environments.
     '';
     homepage = "https://nixos.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     inherit maintainers teams;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.lgpl21Plus;
+    inherit maintainers teams;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Gets stuck in functional-tests in cross-trunk jobset and doesn't timeout
     # https://hydra.nixos.org/build/298175022
     # probably https://github.com/NixOS/nix/issues/13042
     broken = stdenv.hostPlatform.system == "i686-linux" && stdenv.buildPlatform != stdenv.hostPlatform;
+<<<<<<< HEAD
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
+=======
+    outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nix";
   };
 })

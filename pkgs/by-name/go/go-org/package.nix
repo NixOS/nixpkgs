@@ -21,11 +21,19 @@ buildGoModule rec {
     $out/bin/go-org > /dev/null
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Org-mode parser and static site generator in go";
     homepage = "https://niklasfasching.github.io/go-org";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bhankas ];
+=======
+  meta = with lib; {
+    description = "Org-mode parser and static site generator in go";
+    homepage = "https://niklasfasching.github.io/go-org";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhankas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "go-org";
   };
 }

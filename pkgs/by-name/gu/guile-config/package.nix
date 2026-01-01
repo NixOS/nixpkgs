@@ -34,11 +34,19 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Configuration management library for GNU Guile";
     homepage = "https://gitlab.com/a-sassmannshausen/guile-config";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Configuration management library for GNU Guile";
+    homepage = "https://gitlab.com/a-sassmannshausen/guile-config";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = guile.meta.platforms;
   };
 }

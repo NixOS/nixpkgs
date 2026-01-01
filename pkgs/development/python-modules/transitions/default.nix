@@ -68,11 +68,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "transitions" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pytransitions/transitions";
     description = "Lightweight, object-oriented finite state machine implementation in Python";
     changelog = "https://github.com/pytransitions/transitions/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pytransitions/transitions";
+    description = "Lightweight, object-oriented finite state machine implementation in Python";
+    changelog = "https://github.com/pytransitions/transitions/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

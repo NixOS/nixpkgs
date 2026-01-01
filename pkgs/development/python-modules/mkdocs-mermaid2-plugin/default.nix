@@ -41,11 +41,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mermaid2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "MkDocs plugin for including mermaid graphs in markdown sources";
     homepage = "https://github.com/fralau/mkdocs-mermaid2-plugin";
     changelog = "https://github.com/fralau/mkdocs-mermaid2-plugin/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "MkDocs plugin for including mermaid graphs in markdown sources";
+    homepage = "https://github.com/fralau/mkdocs-mermaid2-plugin";
+    changelog = "https://github.com/fralau/mkdocs-mermaid2-plugin/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

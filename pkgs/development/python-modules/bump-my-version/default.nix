@@ -31,14 +31,22 @@
 
 buildPythonPackage rec {
   pname = "bump-my-version";
+<<<<<<< HEAD
   version = "1.2.6";
+=======
+  version = "1.2.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "callowayproject";
     repo = "bump-my-version";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-/YaaVWddBAQlDvHqsDfYd5Dv+2VLkFrtuTfCGih4XBo=";
+=======
+    hash = "sha256-VICFz9scVPmoRDORcxq7V1ijipkg8w7uuMRRl0ReseI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -76,6 +84,11 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "bumpversion" ];

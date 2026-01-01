@@ -31,11 +31,19 @@ buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "gandi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line interface to the public Gandi.net API";
     mainProgram = "gandi";
     homepage = "https://cli.gandi.net/";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Command-line interface to the public Gandi.net API";
+    mainProgram = "gandi";
+    homepage = "https://cli.gandi.net/";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

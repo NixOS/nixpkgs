@@ -33,11 +33,20 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tinyalsa/tinyalsa";
     description = "Tiny library to interface with ALSA in the Linux kernel";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tinyalsa/tinyalsa";
+    description = "Tiny library to interface with ALSA in the Linux kernel";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

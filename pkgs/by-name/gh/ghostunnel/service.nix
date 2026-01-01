@@ -1,5 +1,9 @@
 # Non-module dependencies (`importApply`)
+<<<<<<< HEAD
 { }:
+=======
+{ writeScript, runtimeShell }:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 # Service module
 {
@@ -185,6 +189,7 @@ in
     # TODO assertions
 
     process = {
+<<<<<<< HEAD
       argv = [
         (getExe cfg.package)
         "server"
@@ -237,4 +242,64 @@ in
       };
     }
   );
+=======
+      argv =
+        # Use a shell if credentials need to be pulled from the environment.
+        optional
+          (builtins.any (v: v != null) [
+            cfg.keystore
+            cfg.cert
+            cfg.key
+            cfg.cacert
+          ])
+          (
+            writeScript "load-credentials" ''
+              #!${runtimeShell}
+              exec $@ ${
+                concatStringsSep " " (
+                  optional (cfg.keystore != null) "--keystore=$CREDENTIALS_DIRECTORY/keystore"
+                  ++ optional (cfg.cert != null) "--cert=$CREDENTIALS_DIRECTORY/cert"
+                  ++ optional (cfg.key != null) "--key=$CREDENTIALS_DIRECTORY/key"
+                  ++ optional (cfg.cacert != null) "--cacert=$CREDENTIALS_DIRECTORY/cacert"
+                )
+              }
+            ''
+          )
+        ++ [
+          (getExe cfg.package)
+          "server"
+          "--listen"
+          cfg.listen
+          "--target"
+          cfg.target
+        ]
+        ++ optional cfg.allowAll "--allow-all"
+        ++ map (v: "--allow-cn=${v}") cfg.allowCN
+        ++ map (v: "--allow-ou=${v}") cfg.allowOU
+        ++ map (v: "--allow-dns=${v}") cfg.allowDNS
+        ++ map (v: "--allow-uri=${v}") cfg.allowURI
+        ++ optional cfg.disableAuthentication "--disable-authentication"
+        ++ optional cfg.unsafeTarget "--unsafe-target"
+        ++ cfg.extraArguments;
+    };
+  }
+  // lib.optionalAttrs (options ? systemd) {
+    # refine the service
+    systemd.service = {
+      after = [ "network.target" ];
+      wants = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Restart = "always";
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        DynamicUser = true;
+        LoadCredential =
+          optional (cfg.keystore != null) "keystore:${cfg.keystore}"
+          ++ optional (cfg.cert != null) "cert:${cfg.cert}"
+          ++ optional (cfg.key != null) "key:${cfg.key}"
+          ++ optional (cfg.cacert != null) "cacert:${cfg.cacert}";
+      };
+    };
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

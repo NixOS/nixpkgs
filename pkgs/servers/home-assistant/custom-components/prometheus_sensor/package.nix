@@ -16,11 +16,20 @@ buildHomeAssistantComponent rec {
     hash = "sha256-d13KJXgRPWrR2ilpEgZbVS/a6/y7DBRdEiGLpBaBsPc=";
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/mweinelt/ha-prometheus-sensor/blob/${version}/CHANGELOG.md";
     description = "Import prometheus query results into Home Assistant";
     homepage = "https://github.com/mweinelt/ha-prometheus-sensor";
     maintainers = with lib.maintainers; [ hexa ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/mweinelt/ha-prometheus-sensor/blob/${version}/CHANGELOG.md";
+    description = "Import prometheus query results into Home Assistant";
+    homepage = "https://github.com/mweinelt/ha-prometheus-sensor";
+    maintainers = with maintainers; [ hexa ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

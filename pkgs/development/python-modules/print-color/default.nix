@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "print_color" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to print color messages in the terminal";
     homepage = "https://github.com/xy3/print-color";
@@ -36,5 +37,16 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to print color messages in the terminal";
+    homepage = "https://github.com/xy3/print-color";
+    changelog = "https://github.com/xy3/print-color/releases/tag/v${version}";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -200,6 +200,12 @@ rec {
             )
           ))
         }
+<<<<<<< HEAD
+=======
+      ''
+      + lib.optionalString (partialSolution.interpreter != "none") ''
+        ${partialSolution.interpreter} -n $out
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       '';
     };
   writeScriptBin =
@@ -217,6 +223,12 @@ rec {
             }
           )
         )}
+<<<<<<< HEAD
+=======
+      ''
+      + lib.optionalString (partialSolution.interpreter != "none") ''
+        ${partialSolution.interpreter} -n $out/bin/${name}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       '';
     };
   mkDerivation =
@@ -226,7 +238,10 @@ rec {
       version,
       passthru ? { },
       solutions,
+<<<<<<< HEAD
       postResholve ? "",
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ...
     }@attrs:
     let
@@ -281,8 +296,11 @@ rec {
         # LOGLEVEL="INFO";
         preFixup = phraseSolutions solutions unresholved;
 
+<<<<<<< HEAD
         postFixup = postResholve;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         # don't break the metadata...
         meta = unresholved.meta;
       }

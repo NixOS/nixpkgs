@@ -53,11 +53,20 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/hubicfuse $out/sbin/mount.hubicfuse
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/TurboGit/hubicfuse";
     description = "FUSE-based filesystem to access hubic cloud storage";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jpierre03 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/TurboGit/hubicfuse";
+    description = "FUSE-based filesystem to access hubic cloud storage";
+    platforms = platforms.unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.jpierre03 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

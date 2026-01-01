@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-oVl+40QunvKZIbhsOgqNTsvWduCXP/QJ0amT8ECSsMU=";
 
+<<<<<<< HEAD
   meta = {
     description = "ELF visualizer, generates HTML files from ELF binaries";
     homepage = "https://github.com/ruslashev/elfcat";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ moni ];
+=======
+  meta = with lib; {
+    description = "ELF visualizer, generates HTML files from ELF binaries";
+    homepage = "https://github.com/ruslashev/elfcat";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "elfcat";
   };
 }

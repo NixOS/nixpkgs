@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ckcc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Communicate with your Coldcard using Python";
     mainProgram = "ckcc";
     homepage = "https://github.com/Coldcard/ckcc-protocol";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hkjn ];
+=======
+  meta = with lib; {
+    description = "Communicate with your Coldcard using Python";
+    mainProgram = "ckcc";
+    homepage = "https://github.com/Coldcard/ckcc-protocol";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hkjn ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

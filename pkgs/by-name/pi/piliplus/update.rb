@@ -64,14 +64,21 @@ nix_filename = package_attr('meta.position')[/([^:]+):\d+/, 1] or abort "Failed 
 nix_dir = File.dirname nix_filename
 src_info_path = File.join nix_dir, 'src-info.json'
 json_write src_info_path, {
+<<<<<<< HEAD
+=======
+  version: new_version,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rev: new_rev,
   revCount: git_count,
   commitDate: date,
   hash: new_hash
 }
 log "Updated #{src_info_path}"
+<<<<<<< HEAD
 File.write nix_filename, File.read(nix_filename).sub(old_version, new_version)
 log "Updated #{nix_filename}"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 pubspec_lock_path = File.join nix_dir, 'pubspec.lock.json'
 old_pubspec_lock = JSON.load_file pubspec_lock_path rescue abort "Failed to read #{pubspec_lock_path}"

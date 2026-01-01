@@ -54,10 +54,13 @@ stdenv.mkDerivation {
     })
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace-fail 'cmake_minimum_required(VERSION 2.8)' 'cmake_minimum_required(VERSION 3.10)'
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     pkg-config

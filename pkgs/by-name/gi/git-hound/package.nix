@@ -29,7 +29,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-8teIa083oMXm0SjzMP+mGOVAel1Hbsp3TSMhdvqVbQs=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Reconnaissance tool for GitHub code search";
     longDescription = ''
       GitHound pinpoints exposed API keys and other sensitive information
@@ -37,8 +41,13 @@ buildGoModule rec {
       and a unique result scoring system.
     '';
     homepage = "https://github.com/tillson/git-hound";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-hound";
   };
 }

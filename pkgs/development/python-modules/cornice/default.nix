@@ -40,10 +40,17 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "cornice" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mozilla-services/cornice";
     description = "Build Web Services with Pyramid";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mozilla-services/cornice";
+    description = "Build Web Services with Pyramid";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

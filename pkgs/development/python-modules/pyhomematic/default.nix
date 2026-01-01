@@ -22,11 +22,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhomematic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python 3 Interface to interact with Homematic devices";
     homepage = "https://github.com/danielperna84/pyhomematic";
     changelog = "https://github.com/danielperna84/pyhomematic/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python 3 Interface to interact with Homematic devices";
+    homepage = "https://github.com/danielperna84/pyhomematic";
+    changelog = "https://github.com/danielperna84/pyhomematic/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

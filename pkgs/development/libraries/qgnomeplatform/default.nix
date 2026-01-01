@@ -77,11 +77,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "QPlatformTheme for a better Qt application inclusion in GNOME";
     homepage = "https://github.com/FedoraQt/QGnomePlatform";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "QPlatformTheme for a better Qt application inclusion in GNOME";
+    homepage = "https://github.com/FedoraQt/QGnomePlatform";
+    license = licenses.lgpl21Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

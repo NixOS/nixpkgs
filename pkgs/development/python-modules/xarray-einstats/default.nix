@@ -39,7 +39,11 @@ buildPythonPackage rec {
     numba = [ numba ];
   };
 
+<<<<<<< HEAD
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+=======
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "xarray_einstats" ];
 
@@ -48,10 +52,18 @@ buildPythonPackage rec {
     "test_pinv"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stats, linear algebra and einops for xarray";
     homepage = "https://github.com/arviz-devs/xarray-einstats";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Stats, linear algebra and einops for xarray";
+    homepage = "https://github.com/arviz-devs/xarray-einstats";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

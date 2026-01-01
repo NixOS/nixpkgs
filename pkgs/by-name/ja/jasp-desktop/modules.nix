@@ -627,7 +627,10 @@ in
         pwr
         jaspBase
         jaspGraphs
+<<<<<<< HEAD
         viridis
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     };
     jaspPredictiveAnalytics = buildJaspModule {

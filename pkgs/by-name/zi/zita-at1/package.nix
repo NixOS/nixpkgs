@@ -44,12 +44,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Autotuner Jack application to correct the pitch of vocal tracks";
     homepage = "https://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Autotuner Jack application to correct the pitch of vocal tracks";
+    homepage = "https://kokkinizita.linuxaudio.org/linuxaudio/index.html";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zita-at1";
   };
 }

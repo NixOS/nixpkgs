@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Monospace bitmap screen fonts for X11";
     homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
@@ -75,6 +76,16 @@ stdenv.mkDerivation rec {
       mit
     ];
     maintainers = with lib.maintainers; [ rnhmjoj ];
+=======
+  meta = with lib; {
+    description = "Monospace bitmap screen fonts for X11";
+    homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
+    license = with licenses; [
+      free
+      mit
+    ];
+    maintainers = with maintainers; [ rnhmjoj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

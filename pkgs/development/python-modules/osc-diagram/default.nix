@@ -28,11 +28,20 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "osc_diagram" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Build Outscale cloud diagrams";
     mainProgram = "osc-diagram";
     homepage = "https://github.com/outscale-mgo/osc-diagram";
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ nicolas-goudry ];
+=======
+  meta = with lib; {
+    description = "Build Outscale cloud diagrams";
+    mainProgram = "osc-diagram";
+    homepage = "https://github.com/outscale-mgo/osc-diagram";
+    license = licenses.free;
+    maintainers = with maintainers; [ nicolas-goudry ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

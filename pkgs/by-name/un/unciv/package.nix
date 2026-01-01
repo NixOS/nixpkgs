@@ -69,13 +69,23 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Open-source Android/Desktop remake of Civ V";
     mainProgram = "unciv";
     homepage = "https://github.com/yairm210/Unciv";
     maintainers = [ ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.mpl20;
     platforms = lib.platforms.all;
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.mpl20;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

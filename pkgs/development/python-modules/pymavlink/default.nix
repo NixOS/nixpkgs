@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymavlink" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python MAVLink interface and utilities";
     homepage = "https://github.com/ArduPilot/pymavlink";
@@ -45,5 +46,16 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ lopsided98 ];
+=======
+  meta = with lib; {
+    description = "Python MAVLink interface and utilities";
+    homepage = "https://github.com/ArduPilot/pymavlink";
+    changelog = "https://github.com/ArduPilot/pymavlink/releases/tag/${version}";
+    license = with licenses; [
+      lgpl3Plus
+      mit
+    ];
+    maintainers = with maintainers; [ lopsided98 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,10 +33,17 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test_principal.py" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://packages.python.org/Flask-Principal/";
     description = "Identity management for flask";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "http://packages.python.org/Flask-Principal/";
+    description = "Identity management for flask";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

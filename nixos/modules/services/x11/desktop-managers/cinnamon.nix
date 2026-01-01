@@ -109,7 +109,10 @@ in
 
       # Default services
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
+<<<<<<< HEAD
       services.hardware.bolt.enable = mkDefault (notExcluded pkgs.bolt);
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hardware.bluetooth.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
@@ -174,7 +177,10 @@ in
             cinnamon-translations
 
             # utils needed by some scripts
+<<<<<<< HEAD
             inxi
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             killall
 
             # session requirements

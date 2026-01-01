@@ -23,12 +23,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+x4pOtszvdzI/zR55ezcxlS52GrWQTuBn7vbnqDTVac=";
 
+<<<<<<< HEAD
   meta = {
     description = "Plain text Zettelkasten based on mdBook";
     homepage = "https://github.com/mdzk-rs/mdzk/";
     changelog = "https://github.com/mdzk-rs/mdzk/blob/main/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Plain text Zettelkasten based on mdBook";
+    homepage = "https://github.com/mdzk-rs/mdzk/";
+    changelog = "https://github.com/mdzk-rs/mdzk/blob/main/CHANGELOG.md";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ratsclub
     ];
     mainProgram = "mdzk";

@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "DAB/DAB+ decoding library";
     homepage = "https://github.com/JvanKatwijk/dab-cmdline";
@@ -43,5 +44,16 @@ stdenv.mkDerivation (finalAttrs: {
       alexwinter
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "DAB/DAB+ decoding library";
+    homepage = "https://github.com/JvanKatwijk/dab-cmdline";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      aciceri
+      alexwinter
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

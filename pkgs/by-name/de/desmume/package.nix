@@ -86,7 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwifi=true"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.github.com/TASVideos/desmume/";
     description = "Open-source Nintendo DS emulator";
     longDescription = ''
@@ -96,8 +100,14 @@ stdenv.mkDerivation (finalAttrs: {
       demo nds roms. DeSmuME is also able to emulate nearly all of the
       commercial nds rom titles which other DS Emulators aren't.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

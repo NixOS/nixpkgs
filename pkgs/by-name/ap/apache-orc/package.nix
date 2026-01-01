@@ -3,16 +3,25 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+<<<<<<< HEAD
   cmake,
   gtest,
   lz4,
   protobuf,
+=======
+  fetchpatch,
+  cmake,
+  gtest,
+  lz4,
+  protobuf_30,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   snappy,
   zlib,
   zstd,
 }:
 
 let
+<<<<<<< HEAD
   orc-format =
     let
       version = "1.1.1";
@@ -28,12 +37,27 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-orc";
   version = "2.2.1";
+=======
+  orc-format = fetchurl {
+    name = "orc-format-1.1.0.tar.gz";
+    url = "https://www.apache.org/dyn/closer.lua/orc/orc-format-1.1.0/orc-format-1.1.0.tar.gz?action=download";
+    hash = "sha256-1KesdsVEKr9xGeLLhOcbZ34HWv9TUYqoZgVeLq0EUNc=";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "apache-orc";
+  version = "2.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "orc";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-H7nowl2pq31RIAmTUz15x48Wc99MljFJboc4F7Ln/zk=";
+=======
+    hash = "sha256-hNKzqNOagBJOWQRebkVHIuvqfpk9Mi30bu4z7dGbsxk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -43,7 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtest
     lz4
+<<<<<<< HEAD
     protobuf
+=======
+    protobuf_30
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     snappy
     zlib
     zstd
@@ -67,7 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     GTEST_HOME = gtest.dev;
     LZ4_ROOT = lz4;
     ORC_FORMAT_URL = orc-format;
+<<<<<<< HEAD
     PROTOBUF_HOME = protobuf;
+=======
+    PROTOBUF_HOME = protobuf_30;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     SNAPPY_ROOT = snappy.dev;
     ZLIB_ROOT = zlib.dev;
     ZSTD_ROOT = zstd.dev;

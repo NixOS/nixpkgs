@@ -62,13 +62,23 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Qt based source measure unit GUI for sigrok";
     mainProgram = "smuview";
     longDescription = "SmuView is a GUI for sigrok that supports power supplies, electronic loads and all sorts of measurement devices like multimeters, LCR meters and so on";
     homepage = "https://github.com/knarfS/smuview";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ vifino ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vifino ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

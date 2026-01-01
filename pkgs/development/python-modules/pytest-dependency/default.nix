@@ -25,11 +25,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_dependency" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/RKrahl/pytest-dependency";
     changelog = "https://github.com/RKrahl/pytest-dependency/blob/${version}/CHANGES.rst";
     description = "Manage dependencies of tests";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/RKrahl/pytest-dependency";
+    changelog = "https://github.com/RKrahl/pytest-dependency/blob/${version}/CHANGES.rst";
+    description = "Manage dependencies of tests";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

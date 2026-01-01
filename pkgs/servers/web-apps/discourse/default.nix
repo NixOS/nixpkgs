@@ -40,8 +40,11 @@
   rustc,
   cargo,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   svgo,
   nodejs,
   jq,
@@ -53,13 +56,21 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "3.5.3";
+=======
+  version = "3.5.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-2lx6vFxio2CkMWa0vmzUGTljz1WC9OzpNgSxKjYPn8g=";
+=======
+    sha256 = "sha256-8Uzb0cjC3PUrh6Nlu6OJ09GKD+8KZq/IUba2NXLm1JI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   ruby = ruby_3_3;
@@ -301,10 +312,16 @@ let
     pname = "discourse-assets";
     inherit version src;
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
       pname = "discourse-assets";
       inherit version src;
       pnpm = pnpm_9;
+=======
+    pnpmDeps = pnpm_9.fetchDeps {
+      pname = "discourse-assets";
+      inherit version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 1;
       hash = "sha256-npRKX5Lr2QrPD8OFBysDl30exP+FTnjMxFeR/Gv0Z0I=";
     };
@@ -319,8 +336,12 @@ let
       jq
       moreutils
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_9
+=======
+      pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     outputs = [
@@ -533,11 +554,19 @@ let
           ;
       };
     };
+<<<<<<< HEAD
     meta = {
       homepage = "https://www.discourse.org/";
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ talyz ];
       license = lib.licenses.gpl2Plus;
+=======
+    meta = with lib; {
+      homepage = "https://www.discourse.org/";
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ talyz ];
+      license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Open source discussion platform";
     };
   };

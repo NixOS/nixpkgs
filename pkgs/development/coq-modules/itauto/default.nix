@@ -4,7 +4,10 @@
   mkCoqDerivation,
   coq,
   stdlib,
+<<<<<<< HEAD
   dune,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   version ? null,
 }:
 
@@ -46,10 +49,17 @@
 
   propagatedBuildInputs = [ stdlib ];
 
+<<<<<<< HEAD
   meta = {
     description = "Reflexive SAT solver parameterised by a leaf tactic and Nelson-Oppen support";
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Reflexive SAT solver parameterised by a leaf tactic and Nelson-Oppen support";
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }).overrideAttrs
   (
@@ -61,7 +71,11 @@
       nativeBuildInputs = with coq.ocamlPackages; [
         ocaml
         findlib
+<<<<<<< HEAD
         dune
+=======
+        dune_3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     }
   )

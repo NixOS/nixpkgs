@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     install -Dm644 files/wlr-layout-ui.desktop $out/share/applications/wlr-layout-ui.desktop
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple GUI to setup the screens layout on wlroots based systems";
     homepage = "https://github.com/fdev31/wlr-layout-ui/";
@@ -37,5 +38,14 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     mainProgram = "wlrlui";
     platforms = lib.subtractLists lib.platforms.darwin lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple GUI to setup the screens layout on wlroots based systems";
+    homepage = "https://github.com/fdev31/wlr-layout-ui/";
+    maintainers = with maintainers; [ bnlrnz ];
+    license = licenses.mit;
+    mainProgram = "wlrlui";
+    platforms = subtractLists platforms.darwin platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

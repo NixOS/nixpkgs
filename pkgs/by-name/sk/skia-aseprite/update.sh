@@ -1,6 +1,10 @@
 #!/usr/bin/env nix-shell
 #!nix-shell --pure -i bash
+<<<<<<< HEAD
 #!nix-shell -p cacert curl git jq nix-prefetch-git nix
+=======
+#!nix-shell -p cacert curl git jq nix-prefetch-git
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 # shellcheck shell=bash
 # vim: set tabstop=2 shiftwidth=2 expandtab:
 set -euo pipefail
@@ -12,17 +16,28 @@ shopt -s inherit_errexit
 }
 
 pkgpath=$(git rev-parse --show-toplevel)/pkgs/by-name/sk/skia-aseprite
+<<<<<<< HEAD
 depfilter=$(tr ' ' '|' <<<"$*")
+=======
+depfilter=$(tr ' ' '|' <<< "$*")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 depfile=$pkgpath/deps.nix
 pkgfile=$pkgpath/package.nix
 
 update_deps() {
   local deps third_party_deps name url rev hash prefetch
 
+<<<<<<< HEAD
   version=$(sed -n 's|.*version = "\(.*\)".*|\1|p' <"$pkgfile")
   deps=$(curl -fsS https://raw.githubusercontent.com/aseprite/skia/$version/DEPS)
   third_party_deps=$(sed -n 's|[ ",]||g; s|:| |; s|@| |; s|^third_party/externals/||p' <<<"$deps")
   filtered=$(grep -E -- "$depfilter" <<<"$third_party_deps")
+=======
+  version=$(sed -n 's|.*version = "\(.*\)".*|\1|p' < "$pkgfile")
+  deps=$(curl -fsS https://raw.githubusercontent.com/aseprite/skia/$version/DEPS)
+  third_party_deps=$(sed -n 's|[ ",]||g; s|:| |; s|@| |; s|^third_party/externals/||p' <<< "$deps")
+  filtered=$(grep -E -- "$depfilter" <<< "$third_party_deps")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   if [[ -z $filtered ]]; then
     printf >&2 '%s: error: filter "%s" matched nothing' "$0" "$depfilter"
     return 1
@@ -32,13 +47,20 @@ update_deps() {
   while read -r name url rev; do
     printf >&2 'Fetching %s@%s\n' "$name" "$rev"
     prefetch=$(nix-prefetch-git --quiet --rev "$rev" "$url")
+<<<<<<< HEAD
     hash=$(jq -r '.hash' <<<"$prefetch")
 
     cat <<EOF
+=======
+    hash=$(jq -r '.hash' <<< "$prefetch")
+
+    cat << EOF
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   $name = fetchgit {
     url = "$url";
     rev = "$rev";
     hash = "$hash";
+<<<<<<< HEAD
 EOF
     # Avoid accidentally pulling in submodules during fetch.
     if [[ $name == angle2 ]]; then
@@ -46,6 +68,11 @@ EOF
     fi
     echo "  };"
     # `read` could exit with a non-zero code without a newline at the end
+=======
+  };
+EOF
+  # `read` could exit with a non-zero code without a newline at the end
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   done < <(printf '%s\n' "$filtered")
   printf '}\n'
 }
@@ -57,8 +84,13 @@ update_version() {
       --header 'Accept: application/vnd.github+json' \
       --location --show-error --silent \
       ${GITHUB_TOKEN:+ --user \":$GITHUB_TOKEN\"} \
+<<<<<<< HEAD
       https://api.github.com/repos/aseprite/skia/releases/latest |
       jq -r .tag_name
+=======
+      https://api.github.com/repos/aseprite/skia/releases/latest \
+      | jq -r .tag_name
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   )
   newhash=$(nix-prefetch-git --quiet --rev "$newver" https://github.com/aseprite/skia.git | jq -r '.hash')
   sed \
@@ -69,7 +101,13 @@ update_version() {
 
 temp=$(mktemp)
 trap 'ret=$?; rm -rf -- "$temp"; exit $ret' EXIT
+<<<<<<< HEAD
 update_version >"$temp"
 cp "$temp" "$pkgfile"
 update_deps >"$temp"
+=======
+update_version > "$temp"
+cp "$temp" "$pkgfile"
+update_deps > "$temp"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 cp "$temp" "$depfile"

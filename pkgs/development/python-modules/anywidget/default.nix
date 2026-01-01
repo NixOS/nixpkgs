@@ -73,11 +73,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anywidget" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Custom jupyter widgets made easy";
     homepage = "https://github.com/manzt/anywidget";
     changelog = "https://github.com/manzt/anywidget/releases/tag/anywidget%40${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Custom jupyter widgets made easy";
+    homepage = "https://github.com/manzt/anywidget";
+    changelog = "https://github.com/manzt/anywidget/releases/tag/anywidget%40${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

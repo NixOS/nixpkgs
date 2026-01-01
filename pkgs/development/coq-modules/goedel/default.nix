@@ -31,10 +31,18 @@ mkCoqDerivation {
     pocklington
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Gödel-Rosser 1st incompleteness theorem in Coq";
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Gödel-Rosser 1st incompleteness theorem in Coq";
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

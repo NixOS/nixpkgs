@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     gitolite = nixosTests.gitolite;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Finely-grained git repository hosting";
     homepage = "https://gitolite.com/gitolite/index.html";
@@ -72,6 +73,17 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.thoughtpolice
       lib.maintainers.lassulus
       lib.maintainers.tomberek
+=======
+  meta = with lib; {
+    description = "Finely-grained git repository hosting";
+    homepage = "https://gitolite.com/gitolite/index.html";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [
+      maintainers.thoughtpolice
+      maintainers.lassulus
+      maintainers.tomberek
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 })

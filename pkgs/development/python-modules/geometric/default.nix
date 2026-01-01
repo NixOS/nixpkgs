@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Geometry optimization code for molecular structures";
     mainProgram = "geometric-optimize";
     homepage = "https://github.com/leeping/geomeTRIC";
     license = [ lib.licenses.bsd3 ];
     maintainers = [ lib.maintainers.markuskowa ];
+=======
+  meta = with lib; {
+    description = "Geometry optimization code for molecular structures";
+    mainProgram = "geometric-optimize";
+    homepage = "https://github.com/leeping/geomeTRIC";
+    license = [ licenses.bsd3 ];
+    maintainers = [ maintainers.markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

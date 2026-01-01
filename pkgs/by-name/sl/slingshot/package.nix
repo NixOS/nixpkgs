@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Xf5lSwnD6ChpHaM7RQ/eti40iRZrNPpBsUn2QRzxecg=";
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight command line tool to quickly navigate across folders";
     homepage = "https://github.com/caio-ishikawa/slingshot";
     changelog = "https://github.com/caio-ishikawa/slingshot/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Lightweight command line tool to quickly navigate across folders";
+    homepage = "https://github.com/caio-ishikawa/slingshot";
+    changelog = "https://github.com/caio-ishikawa/slingshot/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "slingshot";
   };

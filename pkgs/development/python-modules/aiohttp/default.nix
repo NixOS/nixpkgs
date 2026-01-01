@@ -103,10 +103,15 @@ buildPythonPackage rec {
 
   optional-dependencies.speedups = [
     aiodns
+<<<<<<< HEAD
     (if isPyPy then brotlicffi else brotli)
   ]
   ++ lib.optionals (pythonOlder "3.14") [
     backports-zstd
+=======
+    backports-zstd
+    (if isPyPy then brotlicffi else brotli)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [
@@ -166,11 +171,20 @@ buildPythonPackage rec {
     export TMPDIR="/tmp"
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = lib.licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
+    description = "Asynchronous HTTP Client/Server for Python and asyncio";
+    license = licenses.asl20;
+    homepage = "https://github.com/aio-libs/aiohttp";
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -49,12 +49,21 @@ buildPythonPackage rec {
     export PYTHONPATH=".:$PYTHONPATH"
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${src.rev}/ChangeLog.txt";
     description = "MQTT version 5.0/3.1.1 client class";
     homepage = "https://eclipse.org/paho";
     license = lib.licenses.epl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${src.rev}/ChangeLog.txt";
+    description = "MQTT version 5.0/3.1.1 client class";
+    homepage = "https://eclipse.org/paho";
+    license = licenses.epl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mog
       dotlambda
     ];

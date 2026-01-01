@@ -82,6 +82,7 @@ let
     })
   ];
 
+<<<<<<< HEAD
   # Fix build with GCC 15
   # https://bugs.winehq.org/show_bug.cgi?id=58191
   patches-add-truncf-to-the-import-library = [
@@ -92,6 +93,8 @@ let
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit (pkgs) writeShellScript;
 in
 rec {
@@ -124,8 +127,12 @@ rec {
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
     ]
+<<<<<<< HEAD
     ++ patches-binutils-2_44-fix-wine-older-than-10_2
     ++ patches-add-truncf-to-the-import-library;
+=======
+    ++ patches-binutils-2_44-fix-wine-older-than-10_2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     updateScript = writeShellScript "update-wine-stable" ''
       ${updateScriptPreamble}
@@ -144,9 +151,15 @@ rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
+<<<<<<< HEAD
     version = "10.19";
     url = "https://dl.winehq.org/wine/source/10.x/wine-${version}.tar.xz";
     hash = "sha256-fOxYMjxvKq7nrKk1Fzecu/75biwsWAxo/4XdAAy73UY=";
+=======
+    version = "10.18";
+    url = "https://dl.winehq.org/wine/source/10.x/wine-${version}.tar.xz";
+    hash = "sha256-Uftyc9ZdCd6gMsSl4hl7EnJLJ8o2DhpiKyNz0e5QrXs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
@@ -156,7 +169,11 @@ rec {
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {
       inherit version;
+<<<<<<< HEAD
       hash = "sha256-GmHeqHZPnFZkntMOJJzRDUN9H+G1qXdacy/Al6T5eZU=";
+=======
+      hash = "sha256-vhIjeEbWLpcKtkBd/KeAeaLKOUZt7LAkH6GTebs3ROM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       domain = "gitlab.winehq.org";
       owner = "wine";
       repo = "wine-staging";
@@ -215,8 +232,12 @@ rec {
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
     ]
+<<<<<<< HEAD
     ++ patches-binutils-2_44-fix-wine-older-than-10_2
     ++ patches-add-truncf-to-the-import-library;
+=======
+    ++ patches-binutils-2_44-fix-wine-older-than-10_2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {

@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     chmod --reference=$out/bin/$wrapped $out/bin/ccls
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C/c++ language server powered by clang";
     mainProgram = "ccls";
@@ -52,6 +53,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "C/c++ language server powered by clang";
+    mainProgram = "ccls";
+    homepage = "https://github.com/MaskRay/ccls";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mic92
       tobim
     ];

@@ -18,10 +18,18 @@ buildPythonPackage rec {
     python ipaddr_test.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "IP address manipulation library";
     homepage = "https://github.com/google/ipaddr-py";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.astro ];
+=======
+  meta = with lib; {
+    description = "IP address manipulation library";
+    homepage = "https://github.com/google/ipaddr-py";
+    license = licenses.asl20;
+    maintainers = [ maintainers.astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

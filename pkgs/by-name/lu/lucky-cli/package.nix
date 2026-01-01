@@ -38,6 +38,7 @@ crystal.buildCrystalPackage rec {
       --prefix PATH : ${lib.makeBinPath [ crystal ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Crystal library for creating and running tasks. Also generates Lucky projects";
     homepage = "https://luckyframework.org/";
@@ -45,6 +46,15 @@ crystal.buildCrystalPackage rec {
     maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "lucky";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Crystal library for creating and running tasks. Also generates Lucky projects";
+    homepage = "https://luckyframework.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "lucky";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionOlder crystal.version "1.6.0";
   };
 }

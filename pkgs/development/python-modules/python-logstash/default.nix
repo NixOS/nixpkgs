@@ -17,9 +17,17 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python logging handler for Logstash";
     homepage = "https://github.com/vklochan/python-logstash";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python logging handler for Logstash";
+    homepage = "https://github.com/vklochan/python-logstash";
+    maintainers = with maintainers; [ peterromfeldhk ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

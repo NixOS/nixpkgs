@@ -33,10 +33,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylibmc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Quick and small memcached client for Python";
     homepage = "http://sendapatch.se/projects/pylibmc/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Quick and small memcached client for Python";
+    homepage = "http://sendapatch.se/projects/pylibmc/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -27,12 +27,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "VSCode extension for Nautilus: 'Open in Code'";
     homepage = "https://github.com/harry-cpp/code-nautilus";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ berrij ];
+=======
+  meta = with lib; {
+    description = "VSCode extension for Nautilus: 'Open in Code'";
+    homepage = "https://github.com/harry-cpp/code-nautilus";
+    license = licenses.unlicense;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ berrij ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

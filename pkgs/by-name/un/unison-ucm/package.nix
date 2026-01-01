@@ -14,12 +14,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "0.5.50";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src =
     {
       aarch64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-arm64.tar.gz";
+<<<<<<< HEAD
         hash = "sha256-yEV6wQge9LJ9tp2So85Q7DN/8LmmSJ9vgU1lYezdp5o=";
       };
       x86_64-darwin = fetchurl {
@@ -33,6 +38,21 @@ stdenv.mkDerivation (finalAttrs: {
       x86_64-linux = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-x64.tar.gz";
         hash = "sha256-ovx+ZBR3ZDDb/HJ464lmhro6kd4OK8jbCSbYJgwubhU=";
+=======
+        hash = "sha256-h0rA7pCHm9DtD7/ZO4XsCscvKh/wq9vWwcM2KeloSqc=";
+      };
+      x86_64-darwin = fetchurl {
+        url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-x64.tar.gz";
+        hash = "sha256-FQXzmLvX4Ac4RtObLVRjeMNW2CYowh8Eq87mH2S9+WA=";
+      };
+      aarch64-linux = fetchurl {
+        url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-arm64.tar.gz";
+        hash = "sha256-Cb25GhImYPhfT/VbY4gFFU1PUEj87z1qi0dlkvFiT/8=";
+      };
+      x86_64-linux = fetchurl {
+        url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-x64.tar.gz";
+        hash = "sha256-XutiYr0x4PT4SVADun8ymJpPgX8a4aEqVhD2EqikRkU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
@@ -69,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set UCM_WEB_UI "$out/ui"
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = ./update.sh;
 
   meta = {
@@ -83,6 +104,20 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.ceedubs
       lib.maintainers.sellout
       lib.maintainers.virusdave
+=======
+  meta = with lib; {
+    description = "Modern, statically-typed purely functional language";
+    homepage = "https://unisonweb.org/";
+    license = with licenses; [
+      mit
+      bsd3
+    ];
+    mainProgram = "ucm";
+    maintainers = with maintainers; [
+      ceedubs
+      sellout
+      virusdave
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = [
       "x86_64-darwin"
@@ -90,6 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -27,6 +27,7 @@ buildGoModule rec {
     mv $out/bin/alpaca $out/bin/alpaca-proxy
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP forward proxy with PAC and NTLM authentication support";
     homepage = "https://github.com/samuong/alpaca";
@@ -34,6 +35,15 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ _1nv0k32 ];
+=======
+  meta = with lib; {
+    description = "HTTP forward proxy with PAC and NTLM authentication support";
+    homepage = "https://github.com/samuong/alpaca";
+    changelog = "https://github.com/samuong/alpaca/releases/tag/v${src.rev}";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ _1nv0k32 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "alpaca-proxy";
   };
 }

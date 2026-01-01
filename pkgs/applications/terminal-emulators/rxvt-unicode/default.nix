@@ -162,6 +162,7 @@ stdenv.mkDerivation {
 
   passthru.tests.test = nixosTests.terminal-emulators.urxvt;
 
+<<<<<<< HEAD
   meta = {
     inherit description;
     homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
@@ -169,6 +170,15 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    inherit description;
+    homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
+    downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";
+    maintainers = with maintainers; [ rnhmjoj ];
+    platforms = platforms.unix;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "urxvt";
   };
 }

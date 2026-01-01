@@ -18,23 +18,38 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+<<<<<<< HEAD
     # Fix build with cmake4
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (fetchpatch {
       url = "https://github.com/zaphoyd/websocketpp/commit/deb0a334471362608958ce59a6b0bcd3e5b73c24.patch?full_index=1";
       hash = "sha256-bFCHwtRuCFz9vr4trmmBLziPSlEx6SNjsTcBv9zV8go=";
     })
+<<<<<<< HEAD
     # Fix build with boost187/newer asio
     # https://github.com/zaphoyd/websocketpp/pull/1164
     ./websocketpp-0.8.2-boost-1.87-compat.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.zaphoyd.com/websocketpp/";
     description = "C++/Boost Asio based websocket client/server library";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ revol-xut ];
+=======
+  meta = with lib; {
+    homepage = "https://www.zaphoyd.com/websocketpp/";
+    description = "C++/Boost Asio based websocket client/server library";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ revol-xut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

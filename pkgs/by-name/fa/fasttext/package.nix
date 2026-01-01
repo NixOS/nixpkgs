@@ -28,12 +28,21 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for text classification and representation learning";
     mainProgram = "fasttext";
     homepage = "https://fasttext.cc/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for text classification and representation learning";
+    mainProgram = "fasttext";
+    homepage = "https://fasttext.cc/";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

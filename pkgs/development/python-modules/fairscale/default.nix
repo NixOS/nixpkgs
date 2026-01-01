@@ -61,16 +61,28 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fairscale" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "PyTorch extensions for high performance and large scale training";
     mainProgram = "wgit";
     homepage = "https://github.com/facebookresearch/fairscale";
     changelog = "https://github.com/facebookresearch/fairscale/releases/tag/v${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       asl20
       bsd3
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

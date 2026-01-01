@@ -12,9 +12,13 @@
   libsoup_3,
   json-glib,
   libsecret,
+<<<<<<< HEAD
   libglycin,
   glib-networking,
   glycin-loaders,
+=======
+  glib-networking,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Per the upstream request. Key owned by Aleksana
   lastfmKey ? "b5027c5178ca2abfcc31bd04397c3c0e",
@@ -23,14 +27,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "turntable";
+<<<<<<< HEAD
   version = "0.4.0";
+=======
+  version = "0.3.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "GeopJr";
     repo = "Turntable";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Rvkzh2Cila6ZhQZyX5zzUrWane6nLAjrwnKk0LPWKuE=";
+=======
+    hash = "sha256-fBduW49eNOEzRVBb72zcB5arTjTiRUy8jE3sSMjPITE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -47,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     json-glib
     libsecret
+<<<<<<< HEAD
     libglycin
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     glib-networking
   ];
 
@@ -58,12 +73,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Scrobbles your music to multiple services with playback controls for MPRIS players";
     longDescription = ''

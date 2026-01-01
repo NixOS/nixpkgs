@@ -57,6 +57,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://awslimitchecker.readthedocs.org";
     changelog = "https://github.com/jantman/awslimitchecker/blob/${version}/CHANGES.rst";
     license = lib.licenses.agpl3Plus;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ zakame ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "awslimitchecker";
   };
 }

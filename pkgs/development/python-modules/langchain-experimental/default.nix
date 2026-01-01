@@ -20,14 +20,22 @@
 
 buildPythonPackage rec {
   pname = "langchain-experimental";
+<<<<<<< HEAD
   version = "0.4.1";
+=======
+  version = "0.4.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-experimental";
     tag = "libs/experimental/v${version}";
+<<<<<<< HEAD
     hash = "sha256-3hz63DCoym2V4b6Wzi0eH+B8mvGu7pqRNj3Ltk04UTk=";
+=======
+    hash = "sha256-A5qCTOCmKt/a1DTKVOC/WwuLCqOYI5pGhAGo/Y4C/FY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/libs/experimental";

@@ -45,7 +45,11 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "mashumaro" ];
 
@@ -54,5 +58,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Fatal1ty/mashumaro";
     changelog = "https://github.com/Fatal1ty/mashumaro/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ tjni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "quantile_forest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Quantile Regression Forests compatible with scikit-learn";
     homepage = "https://github.com/zillow/quantile-forest";
     changelog = "https://github.com/zillow/quantile-forest/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ vizid ];
+=======
+  meta = with lib; {
+    description = "Quantile Regression Forests compatible with scikit-learn";
+    homepage = "https://github.com/zillow/quantile-forest";
+    changelog = "https://github.com/zillow/quantile-forest/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ vizid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

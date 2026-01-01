@@ -1,7 +1,11 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchurl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meson,
   ninja,
   wrapGAppsHook3,
@@ -32,6 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
+<<<<<<< HEAD
   version = "0.5.14";
 
   src = fetchFromGitHub {
@@ -39,6 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "zathura";
     tag = finalAttrs.version;
     hash = "sha256-Ejd39gUWA9YEoPpaaxo+9JkoezAjXYpXTB+FGdXt03U=";
+=======
+  version = "0.5.13";
+
+  src = fetchurl {
+    url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
+    hash = "sha256-YwIXO81G+JflIJyIOltRrR2rSUbC84YcujdKO4DY88E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -109,6 +121,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Core component for zathura PDF viewer";
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ globin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

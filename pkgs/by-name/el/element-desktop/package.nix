@@ -171,12 +171,21 @@ stdenv.mkDerivation (
       inherit keytar;
     };
 
+<<<<<<< HEAD
     meta = {
       description = "Feature-rich client for Matrix.org";
       homepage = "https://element.io/";
       changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
       license = lib.licenses.asl20;
       teams = [ lib.teams.matrix ];
+=======
+    meta = with lib; {
+      description = "Feature-rich client for Matrix.org";
+      homepage = "https://element.io/";
+      changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
+      license = licenses.asl20;
+      teams = [ teams.matrix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = electron.meta.platforms ++ lib.platforms.darwin;
       mainProgram = "element-desktop";
     };

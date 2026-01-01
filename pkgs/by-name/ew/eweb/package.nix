@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
     cp etangle.w etangle.html $out/share/doc/${pname}-${version}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://eweb.sourceforge.net/";
     description = "Asciidoc-based literate programming tool, written in Python";
     mainProgram = "etangle.py";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://eweb.sourceforge.net/";
+    description = "Asciidoc-based literate programming tool, written in Python";
+    mainProgram = "etangle.py";
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

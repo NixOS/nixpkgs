@@ -37,10 +37,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "NX compression library";
     homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "NX compression library";
+    homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

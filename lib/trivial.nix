@@ -18,6 +18,7 @@ let
     ;
 in
 {
+<<<<<<< HEAD
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
     pathExists
@@ -35,6 +36,8 @@ in
     bitOr
     bitXor
     ;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ## Simple (higher order) functions
 
@@ -197,7 +200,11 @@ in
 
     : 2\. Function argument
   */
+<<<<<<< HEAD
   "or" = x: y: x || y;
+=======
+  or = x: y: x || y;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   /**
     boolean “and”
@@ -280,11 +287,15 @@ in
   /**
     Merge two attribute sets shallowly, right side trumps left
 
+<<<<<<< HEAD
     # Type
 
     ```
     mergeAttrs :: attrs -> attrs -> attrs
     ```
+=======
+    mergeAttrs :: attrs -> attrs -> attrs
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -405,6 +416,27 @@ in
   */
   mapNullable = f: a: if a == null then a else f a;
 
+<<<<<<< HEAD
+=======
+  # Pull in some builtins not included elsewhere.
+  inherit (builtins)
+    pathExists
+    readFile
+    isBool
+    isInt
+    isFloat
+    add
+    sub
+    lessThan
+    seq
+    deepSeq
+    genericClosure
+    bitAnd
+    bitOr
+    bitXor
+    ;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ## nixpkgs version strings
 
   /**
@@ -916,7 +948,11 @@ in
   throwIfNot = cond: msg: if cond then x: x else throw msg;
 
   /**
+<<<<<<< HEAD
     Like `throwIfNot`, but negated (throw if the first argument is `true`).
+=======
+    Like throwIfNot, but negated (throw if the first argument is `true`).
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -991,6 +1027,7 @@ in
     The metadata should match the format given by
     builtins.functionArgs, i.e. a set from expected argument to a bool
     representing whether that argument has a default or not.
+<<<<<<< HEAD
 
     This function is necessary because you can't dynamically create a
     function of the `{ a, b ? foo, ... }:` format, but some facilities
@@ -1001,6 +1038,13 @@ in
     ```
     setFunctionArgs : (a -> b) -> Map String Bool -> (a -> b)
     ```
+=======
+    setFunctionArgs : (a → b) → Map String Bool → (a → b)
+
+    This function is necessary because you can't dynamically create a
+    function of the { a, b ? foo, ... }: format, but some facilities
+    like callPackage expect to be able to query expected arguments.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -1020,6 +1064,7 @@ in
 
   /**
     Extract the expected function arguments from a function.
+<<<<<<< HEAD
     This works both with nix-native `{ a, b ? foo, ... }:` style
     functions and functions with args set with `setFunctionArgs`. It
     has the same return type and semantics as `builtins.functionArgs`.
@@ -1029,6 +1074,12 @@ in
     ```
     functionArgs : (a -> b) -> Map String Bool
     ```
+=======
+    This works both with nix-native { a, b ? foo, ... }: style
+    functions and functions with args set with 'setFunctionArgs'. It
+    has the same return type and semantics as builtins.functionArgs.
+    setFunctionArgs : (a → b) → Map String Bool.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -1138,12 +1189,20 @@ in
     # Type
 
     ```
+<<<<<<< HEAD
     fromHexString :: String -> Int
     ```
 
     # Examples
     :::{.example}
     ## `lib.trivial.fromHexString` usage examples
+=======
+    fromHexString :: String -> [ String ]
+    ```
+
+    # Examples
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ```nix
     fromHexString "FF"
     => 255
@@ -1151,7 +1210,10 @@ in
     fromHexString "0x7fffffffffffffff"
     => 9223372036854775807
     ```
+<<<<<<< HEAD
     :::
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   */
   fromHexString =
     str:
@@ -1172,6 +1234,7 @@ in
 
   /**
     Convert the given positive integer to a string of its hexadecimal
+<<<<<<< HEAD
     representation.
 
     # Examples
@@ -1179,13 +1242,20 @@ in
     ## `lib.trivial.toHexString` usage example
 
     ```nix
+=======
+    representation. For example:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     toHexString 0 => "0"
 
     toHexString 16 => "10"
 
     toHexString 250 => "FA"
+<<<<<<< HEAD
     ```
     :::
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   */
   toHexString =
     let
@@ -1202,8 +1272,19 @@ in
     i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /**
+<<<<<<< HEAD
     `toBaseDigits base i` converts the positive integer `i` to a list of its
     digits in the given base.
+=======
+    `toBaseDigits base i` converts the positive integer i to a list of its
+    digits in the given base. For example:
+
+    toBaseDigits 10 123 => [ 1 2 3 ]
+
+    toBaseDigits 2 6 => [ 1 1 0 ]
+
+    toBaseDigits 16 250 => [ 15 10 ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -1214,6 +1295,7 @@ in
     `i`
 
     : 2\. Function argument
+<<<<<<< HEAD
 
     # Examples
     :::{.example}
@@ -1227,6 +1309,8 @@ in
     toBaseDigits 16 250 => [ 15 10 ]
     ```
     :::
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   */
   toBaseDigits =
     base: i:

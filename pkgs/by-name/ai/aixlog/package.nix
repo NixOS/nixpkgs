@@ -27,11 +27,19 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Header-only C++ logging library";
     homepage = "https://github.com/badaix/aixlog";
     changelog = "https://github.com/badaix/aixlog/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Header-only C++ logging library";
+    homepage = "https://github.com/badaix/aixlog";
+    changelog = "https://github.com/badaix/aixlog/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

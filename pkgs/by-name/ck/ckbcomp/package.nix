@@ -32,12 +32,21 @@ stdenv.mkDerivation rec {
     install -Dm0444 -t $out/share/man/man1 man/ckbcomp.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Compiles a XKB keyboard description to a keymap suitable for loadkeys";
     homepage = "https://salsa.debian.org/installer-team/console-setup";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dezgeg ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Compiles a XKB keyboard description to a keymap suitable for loadkeys";
+    homepage = "https://salsa.debian.org/installer-team/console-setup";
+    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dezgeg ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ckbcomp";
   };
 }

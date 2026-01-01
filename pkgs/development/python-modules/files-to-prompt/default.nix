@@ -31,6 +31,11 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_binary_file_warning" ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     mainProgram = "files-to-prompt";
     description = "Concatenate a directory full of files into a single prompt for use with LLMs";

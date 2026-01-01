@@ -8,7 +8,15 @@
   setuptools,
 
   # dependencies
+<<<<<<< HEAD
   huggingface-hub,
+=======
+  accelerate,
+  datasets,
+  huggingface-hub,
+  optimum,
+  pillow,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   scikit-learn,
   scipy,
   torch,
@@ -16,6 +24,7 @@
   transformers,
   typing-extensions,
 
+<<<<<<< HEAD
   # optional-dependencies
   # image
   pillow,
@@ -25,6 +34,8 @@
   # onnx
   optimum-onnx,
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # tests
   pytestCheckHook,
   pytest-cov-stub,
@@ -32,20 +43,32 @@
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
+<<<<<<< HEAD
   version = "5.2.0";
+=======
+  version = "5.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "sentence-transformers";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-WD5uTfAbDYYeSXlgznSs4XyN1fAILxILmmSHmLosmV4=";
+=======
+    hash = "sha256-FNJ4mWBcgy3J8ZJtHt+uBgNmvMnqphj+sLMmBvgdB1k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     huggingface-hub
+<<<<<<< HEAD
+=======
+    pillow
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     scikit-learn
     scipy
     torch
@@ -55,15 +78,23 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+<<<<<<< HEAD
     image = [
       pillow
     ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     train = [
       accelerate
       datasets
     ];
+<<<<<<< HEAD
     onnx = [ optimum-onnx ] ++ optimum-onnx.optional-dependencies.onnxruntime;
     # onnx-gpu = [ optimum-onnx ] ++ optimum-onnx.optional-dependencies.onnxruntime-gpu;
+=======
+    onnx = [ optimum ] ++ optimum.optional-dependencies.onnxruntime;
+    # onnx-gpu = [ optimum ] ++ optimum.optional-dependencies.onnxruntime-gpu;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # openvino = [ optimum-intel ] ++ optimum-intel.optional-dependencies.openvino;
   };
 
@@ -71,7 +102,11 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "sentence_transformers" ];
 

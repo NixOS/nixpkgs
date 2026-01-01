@@ -2,6 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
   attrs,
   docopt,
@@ -18,14 +22,26 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
+<<<<<<< HEAD
   version = "1.12.1";
   pyproject = true;
 
+=======
+  version = "1.10.13";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "psd-tools";
     repo = "psd-tools";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-FmxxLa9KasDE5hl/Hi6fRMnmUKawpm04fHJf7yXJmSI=";
+=======
+    hash = "sha256-hGalK3iGIp0LaH97E3UTuog8zyJ83zgoqn5NC0krdP8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

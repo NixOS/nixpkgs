@@ -38,6 +38,7 @@ buildPythonPackage rec {
     ./static-libs.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source software for robot simulation, integrated with OpenAI Gym";
     downloadPage = "https://github.com/bulletphysics/bullet3";
@@ -45,5 +46,14 @@ buildPythonPackage rec {
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ timokau ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open-source software for robot simulation, integrated with OpenAI Gym";
+    downloadPage = "https://github.com/bulletphysics/bullet3";
+    homepage = "https://pybullet.org/";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ timokau ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

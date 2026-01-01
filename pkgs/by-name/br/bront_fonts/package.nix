@@ -19,6 +19,7 @@ stdenvNoCC.mkDerivation {
     install -m444 -Dt $out/share/fonts/truetype *Bront.ttf
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bront Fonts";
     longDescription = "Ubuntu Mono Bront and DejaVu Sans Mono Bront fonts.";
@@ -29,5 +30,17 @@ stdenvNoCC.mkDerivation {
     ];
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.grburst ];
+=======
+  meta = with lib; {
+    description = "Bront Fonts";
+    longDescription = "Ubuntu Mono Bront and DejaVu Sans Mono Bront fonts.";
+    homepage = "https://github.com/chrismwendt/bront";
+    license = with licenses; [
+      bitstreamVera
+      ufl
+    ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.grburst ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

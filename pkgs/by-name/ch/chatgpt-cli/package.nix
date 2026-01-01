@@ -18,11 +18,20 @@ buildGoModule rec {
 
   subPackages = [ "cmd/chatgpt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive CLI for ChatGPT";
     homepage = "https://github.com/j178/chatgpt";
     license = lib.licenses.mit;
     mainProgram = "chatgpt";
     maintainers = with lib.maintainers; [ Ruixi-rebirth ];
+=======
+  meta = with lib; {
+    description = "Interactive CLI for ChatGPT";
+    homepage = "https://github.com/j178/chatgpt";
+    license = licenses.mit;
+    mainProgram = "chatgpt";
+    maintainers = with maintainers; [ Ruixi-rebirth ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

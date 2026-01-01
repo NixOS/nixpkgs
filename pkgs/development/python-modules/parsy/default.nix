@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "parsy" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/python-parsy/parsy";
     description = "Easy-to-use parser combinators, for parsing in pure Python";
     changelog = "https://github.com/python-parsy/parsy/blob/v${version}/docs/history.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ milibopp ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/python-parsy/parsy";
+    description = "Easy-to-use parser combinators, for parsing in pure Python";
+    changelog = "https://github.com/python-parsy/parsy/blob/v${version}/docs/history.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ milibopp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

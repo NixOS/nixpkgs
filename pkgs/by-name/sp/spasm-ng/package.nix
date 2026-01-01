@@ -47,6 +47,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/spasm --add-flags "-I $out/include"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/alberthdev/spasm-ng";
     description = "Z80 assembler with extra features to support development for TI calculators";
@@ -54,5 +55,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/alberthdev/spasm-ng";
+    description = "Z80 assembler with extra features to support development for TI calculators";
+    mainProgram = "spasm";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

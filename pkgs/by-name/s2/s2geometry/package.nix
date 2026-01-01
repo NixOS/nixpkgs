@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   abseil-cpp_202407,
+=======
+  abseil-cpp,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   fetchFromGitHub,
   stdenv,
@@ -38,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     (abseil-cpp_202407.override { inherit cxxStandard; })
   ];
 
@@ -48,5 +53,17 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.Thra11 ];
     platforms = lib.platforms.unix;
+=======
+    (abseil-cpp.override { inherit cxxStandard; })
+  ];
+
+  meta = with lib; {
+    changelog = "https://github.com/google/s2geometry/releases/tag/v${finalAttrs.version}";
+    description = "Computational geometry and spatial indexing on the sphere";
+    homepage = "http://s2geometry.io/";
+    license = licenses.asl20;
+    maintainers = [ maintainers.Thra11 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

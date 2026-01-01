@@ -29,11 +29,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-network-displays";
+<<<<<<< HEAD
   version = "0.98.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-network-displays/${lib.versions.majorMinor finalAttrs.version}/gnome-network-displays-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-3M42vuzgtTFFQJBswGn4KP5XtSWuv0LlhREFiHxiu2c=";
+=======
+  version = "0.97.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-network-displays/${lib.versions.majorMinor finalAttrs.version}/gnome-network-displays-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-zexoyPmzJrqu5UU3Sowrk8qRnkj0uKQkYcsOsjmNqyc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -84,12 +92,21 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ./build-aux/meson/postinstall.py
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-network-displays";
     description = "Miracast implementation for GNOME";
     maintainers = with lib.maintainers; [ doronbehar ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-network-displays";
+    description = "Miracast implementation for GNOME";
+    maintainers = with maintainers; [ doronbehar ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gnome-network-displays";
   };
 })

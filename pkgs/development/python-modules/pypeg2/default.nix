@@ -23,9 +23,16 @@ buildPythonPackage rec {
   #https://bitbucket.org/fdik/pypeg/issues/36/test-failures-on-py35
   doCheck = !isPy3k;
 
+<<<<<<< HEAD
   meta = {
     description = "PEG parser interpreter in Python";
     homepage = "http://fdik.org/pyPEG";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "PEG parser interpreter in Python";
+    homepage = "http://fdik.org/pyPEG";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -3,7 +3,10 @@
   cairo,
   cmake,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libuv,
   libXdmcp,
   libpthreadstubs,
@@ -89,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     i3
   ];
 
+<<<<<<< HEAD
   patches = [
     # FIXME: remove after version update
     (fetchpatch {
@@ -99,6 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./remove-hardcoded-etc.diff
   ];
+=======
+  patches = [ ./remove-hardcoded-etc.diff ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Replace hardcoded /etc when copying and reading the default config.
   postPatch = ''
@@ -114,7 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${i3}/bin"
   '');
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://polybar.github.io/";
     changelog = "https://github.com/polybar/polybar/releases/tag/${finalAttrs.version}";
     description = "Fast and easy-to-use tool for creating status bars";
@@ -123,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
       status bars for their desktop environment, without the need of
       having a black belt in shell scripting.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       afldcr
@@ -130,5 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "polybar";
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      afldcr
+      Br1ght0ne
+      moni
+    ];
+    mainProgram = "polybar";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

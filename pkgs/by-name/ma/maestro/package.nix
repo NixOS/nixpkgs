@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     update-source-version "maestro" "$NEW_VERSION" --print-changes
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mobile UI Automation tool";
     homepage = "https://maestro.mobile.dev/";
@@ -52,6 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     changelog = "https://github.com/mobile-dev-inc/maestro/blob/main/CHANGELOG.md";
     maintainers = with lib.maintainers; [ SubhrajyotiSen ];
+=======
+  meta = with lib; {
+    description = "Mobile UI Automation tool";
+    homepage = "https://maestro.mobile.dev/";
+    license = licenses.asl20;
+    platforms = lib.platforms.all;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    changelog = "https://github.com/mobile-dev-inc/maestro/blob/main/CHANGELOG.md";
+    maintainers = with maintainers; [ SubhrajyotiSen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "maestro";
   };
 })

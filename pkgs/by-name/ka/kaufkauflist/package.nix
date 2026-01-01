@@ -50,11 +50,19 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://codeberg.org/annaaurora/kaufkauflist";
     description = "To-do list for shopping or other use cases";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ annaaurora ];
+=======
+  meta = with lib; {
+    homepage = "https://codeberg.org/annaaurora/kaufkauflist";
+    description = "To-do list for shopping or other use cases";
+    license = licenses.mit;
+    maintainers = with maintainers; [ annaaurora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kaufdbclean";
   };
 }

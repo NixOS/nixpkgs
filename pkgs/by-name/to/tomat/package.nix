@@ -2,19 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+<<<<<<< HEAD
   installShellFiles,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pkg-config,
   alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tomat";
+<<<<<<< HEAD
   version = "2.5.0";
+=======
+  version = "2.4.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "jolars";
     repo = "tomat";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-i6gakWbY6N1FB1lAfONuDsoXv5PcaXqnbmfuSBp/DC0=";
   };
 
@@ -23,6 +31,15 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+=======
+    hash = "sha256-xIIkyPcW/gIOS28efGR8ausBdnIj0/OkWLEM0MMTJLI=";
+  };
+
+  cargoHash = "sha256-Ij91tU31fPUapxwCjpP0ASw96OGs/D/RzmDA1pKmrgQ=";
+
+  nativeBuildInputs = [
+    pkg-config
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -36,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=integration::"
   ];
 
+<<<<<<< HEAD
   postInstall = ''
     installShellCompletion --cmd tomat \
       --bash target/completions/tomat.bash \
@@ -45,6 +63,8 @@ rustPlatform.buildRustPackage rec {
     installManPage target/man/*
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Pomodoro timer for status bars";
     homepage = "https://github.com/jolars/tomat";

@@ -37,11 +37,19 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Steam protocol plugin for BitlBee";
 
     homepage = "https://github.com/jgeboski/bitlbee-steam";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Steam protocol plugin for BitlBee";
+
+    homepage = "https://github.com/jgeboski/bitlbee-steam";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 }

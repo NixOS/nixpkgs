@@ -43,7 +43,11 @@ buildGoModule rec {
       --zsh <($out/bin/kustomize completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Customization of kubernetes YAML configurations";
     mainProgram = "kustomize";
     longDescription = ''
@@ -52,10 +56,18 @@ buildGoModule rec {
       as is.
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       carlosdagos
       vdemeester
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      carlosdagos
+      vdemeester
+      periklis
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zaninime
       Chili-Man
       saschagrunert

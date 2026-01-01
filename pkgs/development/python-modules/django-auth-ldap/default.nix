@@ -50,6 +50,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_auth_ldap" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/django-auth-ldap/django-auth-ldap/releases/tag/${src.tag}";
     description = "Django authentication backend that authenticates against an LDAP service";
@@ -57,5 +58,14 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mmai ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/django-auth-ldap/django-auth-ldap/releases/tag/${src.tag}";
+    description = "Django authentication backend that authenticates against an LDAP service";
+    homepage = "https://github.com/django-auth-ldap/django-auth-ldap";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ mmai ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

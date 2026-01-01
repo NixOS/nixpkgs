@@ -48,7 +48,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "construct" ];
 
@@ -57,11 +61,20 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_multiprocessing" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful declarative parser (and builder) for binary data";
     homepage = "https://construct.readthedocs.org/";
     changelog = "https://github.com/construct/construct/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Powerful declarative parser (and builder) for binary data";
+    homepage = "https://construct.readthedocs.org/";
+    changelog = "https://github.com/construct/construct/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

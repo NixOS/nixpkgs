@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cctools,
   disablePosixThreads ? false,
 }:
@@ -16,6 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5OtsB0u6sWisR7lHwZX/jO+dUaIRzdGMqcnvNNJ6Nz4=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with GCC 15
     (fetchpatch {
@@ -24,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin cctools;
 
   configureFlags =

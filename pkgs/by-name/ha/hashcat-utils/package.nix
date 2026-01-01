@@ -24,10 +24,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Small utilities that are useful in advanced password cracking";
     homepage = "https://github.com/hashcat/hashcat-utils";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Small utilities that are useful in advanced password cracking";
+    homepage = "https://github.com/hashcat/hashcat-utils";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fadenb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

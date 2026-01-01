@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
+<<<<<<< HEAD
   version = "5.0.0";
+=======
+  version = "4.0.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "cole";
     repo = "aiosmtplib";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ICG7yVH2UcvQAsVGbxu7LibWUj/NEPV/f5iDc25XuzU=";
+=======
+    hash = "sha256-LpD2bSgpClUpNguZaRy11WEwQviiCjqMJlRl6CRp50o=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];
@@ -37,11 +45,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosmtplib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module which provides a SMTP client";
     homepage = "https://github.com/cole/aiosmtplib";
     changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module which provides a SMTP client";
+    homepage = "https://github.com/cole/aiosmtplib";
+    changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -15,10 +15,19 @@ stdenv.mkDerivation rec {
   };
   preInstall = "export DESTDIR=$out/bin";
   meta =
+<<<<<<< HEAD
 
     src.meta // {
       description = "Dead simple LAN file transfers from the command line";
       license = with lib.licenses; [ mit ];
       platforms = lib.platforms.unix;
+=======
+    with lib;
+    src.meta
+    // {
+      description = "Dead simple LAN file transfers from the command line";
+      license = with licenses; [ mit ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 }

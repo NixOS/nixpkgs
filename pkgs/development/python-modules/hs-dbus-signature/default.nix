@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hs_dbus_signature" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hypothesis Strategy for Generating Arbitrary DBus Signatures";
     homepage = "https://github.com/stratis-storage/hs-dbus-signature";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Hypothesis Strategy for Generating Arbitrary DBus Signatures";
+    homepage = "https://github.com/stratis-storage/hs-dbus-signature";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

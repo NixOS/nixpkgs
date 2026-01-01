@@ -31,11 +31,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wheel_filename" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parse wheel filenames";
     homepage = "https://github.com/jwodder/wheel-filename";
     changelog = "https://github.com/wheelodex/wheel-filename/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Parse wheel filenames";
+    homepage = "https://github.com/jwodder/wheel-filename";
+    changelog = "https://github.com/wheelodex/wheel-filename/releases/tag/${src.tag}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ ayazhafiz ];
     mainProgram = "wheel-filename";
   };

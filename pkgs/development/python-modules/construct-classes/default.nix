@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "construct_classes" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parse your binary data into dataclasses";
     homepage = "https://github.com/matejcik/construct-classes";
     changelog = "https://github.com/matejcik/construct-classes/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Parse your binary data into dataclasses";
+    homepage = "https://github.com/matejcik/construct-classes";
+    changelog = "https://github.com/matejcik/construct-classes/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

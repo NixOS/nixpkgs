@@ -35,11 +35,19 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "usb1/testUSB1.py" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/vpelletier/python-libusb1";
     description = "Python ctype-based wrapper around libusb1";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/vpelletier/python-libusb1";
+    description = "Python ctype-based wrapper around libusb1";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       prusnak
       rnhmjoj
     ];

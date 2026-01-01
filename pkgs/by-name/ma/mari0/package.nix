@@ -49,11 +49,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Crossover between Super Mario Bros. and Portal";
     mainProgram = "mari0";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Crossover between Super Mario Bros. and Portal";
+    mainProgram = "mari0";
+    platforms = platforms.linux;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "https://stabyourself.net/mari0/";
   };
 

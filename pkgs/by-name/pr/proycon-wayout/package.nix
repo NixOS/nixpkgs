@@ -50,12 +50,21 @@ stdenv.mkDerivation rec {
     pango
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Takes text from standard input and outputs it to a desktop-widget on Wayland desktops";
     homepage = "https://git.sr.ht/~proycon/wayout";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wentam ];
+=======
+  meta = with lib; {
+    description = "Takes text from standard input and outputs it to a desktop-widget on Wayland desktops";
+    homepage = "https://git.sr.ht/~proycon/wayout";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wentam ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "proycon-wayout";
   };
 }

@@ -1,6 +1,10 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
+=======
+  auditwheel,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   gitMinimal,
   greenlet,
@@ -21,7 +25,11 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
+<<<<<<< HEAD
   version = "1.56.0";
+=======
+  version = "1.54.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -29,7 +37,11 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-46+UxHimmmyQMTe+G2ootSbVX9pAzdfdyTO2qrWd9l8=";
+=======
+    hash = "sha256-xyuofDL0hWL8Gn4sYNLKte8q/4bMo+3aSbYaf5iWiBk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -66,7 +78,12 @@ buildPythonPackage rec {
     gitMinimal
     setuptools-scm
     setuptools
+<<<<<<< HEAD
   ];
+=======
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonRelaxDeps = [
     "greenlet"
@@ -102,12 +119,21 @@ buildPythonPackage rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python version of the Playwright testing and automation library";
     mainProgram = "playwright";
     homepage = "https://github.com/microsoft/playwright-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python version of the Playwright testing and automation library";
+    mainProgram = "playwright";
+    homepage = "https://github.com/microsoft/playwright-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       techknowlogick
       yrd
     ];

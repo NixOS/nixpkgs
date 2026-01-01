@@ -19,12 +19,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/animetosho/par2cmdline-turbo";
     description = "par2cmdline × ParPar: speed focused par2cmdline fork";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.proglottis ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/animetosho/par2cmdline-turbo";
+    description = "par2cmdline × ParPar: speed focused par2cmdline fork";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.proglottis ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "par2";
   };
 }

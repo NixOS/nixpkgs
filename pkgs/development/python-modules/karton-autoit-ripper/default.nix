@@ -44,12 +44,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "karton.autoit_ripper" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "AutoIt script ripper for Karton framework";
     mainProgram = "karton-autoit-ripper";
     homepage = "https://github.com/CERT-Polska/karton-autoit-ripper";
     changelog = "https://github.com/CERT-Polska/karton-autoit-ripper/releases/tag/v${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

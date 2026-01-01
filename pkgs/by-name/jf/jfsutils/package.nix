@@ -52,10 +52,18 @@ stdenv.mkDerivation rec {
     cp ./libfs/libfs.a $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "IBM JFS utilities";
     homepage = "https://jfs.sourceforge.net";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "IBM JFS utilities";
+    homepage = "https://jfs.sourceforge.net";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

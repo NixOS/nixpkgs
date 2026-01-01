@@ -72,6 +72,7 @@ buildPythonPackage rec {
   #   "gradient"
   # ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command line interface for Gradient";
     mainProgram = "gradient";
@@ -79,5 +80,14 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "Command line interface for Gradient";
+    mainProgram = "gradient";
+    homepage = "https://github.com/Paperspace/gradient-cli";
+    license = licenses.isc;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

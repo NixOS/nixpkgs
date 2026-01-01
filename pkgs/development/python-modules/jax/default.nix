@@ -41,7 +41,11 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
+<<<<<<< HEAD
   version = "0.8.2";
+=======
+  version = "0.8.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -49,7 +53,11 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${version}";
+<<<<<<< HEAD
     hash = "sha256-WKdFEhOxJPLjOXOChZbLRGcw0GFeg/TT/FT6M72C6bo=";
+=======
+    hash = "sha256-e1XqcecIl8TGOZmA1FuWg8uwVUvgSdp8uYltXm9cJpQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -187,7 +195,10 @@ buildPythonPackage rec {
   meta = {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
     homepage = "https://github.com/google/jax";
+<<<<<<< HEAD
     changelog = "https://docs.jax.dev/en/latest/changelog.html";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -eu -o pipefail
+<<<<<<< HEAD
 
 [[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
 
@@ -10,3 +11,17 @@ export NODE_PATH="@KARAKEEP_LIB_PATH@"/apps/workers
 cd "$NODE_PATH"
 
 exec @NODEJS@/bin/node "$NODE_PATH"/dist/index.js
+=======
+KARAKEEP_LIB_PATH=
+RELEASE=
+NODEJS=
+NODE_ENV=production
+NODE_PATH="$KARAKEEP_LIB_PATH/apps/workers"
+
+[[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
+
+cd "$KARAKEEP_LIB_PATH/apps/workers"
+
+export RELEASE NODE_ENV NODE_PATH
+exec "$NODEJS/bin/node" "$KARAKEEP_LIB_PATH/apps/workers/dist/index.js"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

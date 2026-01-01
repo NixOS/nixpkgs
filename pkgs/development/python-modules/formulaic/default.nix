@@ -63,11 +63,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "formulaic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "High-performance implementation of Wilkinson formulas";
     homepage = "https://matthewwardrop.github.io/formulaic/";
     changelog = "https://github.com/matthewwardrop/formulaic/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ swflint ];
+=======
+  meta = with lib; {
+    description = "High-performance implementation of Wilkinson formulas";
+    homepage = "https://matthewwardrop.github.io/formulaic/";
+    changelog = "https://github.com/matthewwardrop/formulaic/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ swflint ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

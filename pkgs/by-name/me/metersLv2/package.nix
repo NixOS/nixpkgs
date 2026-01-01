@@ -57,11 +57,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of audio level meters with GUI in LV2 plugin format";
     mainProgram = "x42-meter";
     homepage = "https://x42.github.io/meters.lv2/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Collection of audio level meters with GUI in LV2 plugin format";
+    mainProgram = "x42-meter";
+    homepage = "https://x42.github.io/meters.lv2/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

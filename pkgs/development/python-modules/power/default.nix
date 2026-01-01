@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # Tests can't work because there is no power information available.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform system power status information";
     homepage = "https://github.com/Kentzo/Power";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Cross-platform system power status information";
+    homepage = "https://github.com/Kentzo/Power";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,12 +23,21 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple monitoring of system events";
     mainProgram = "eventstat";
     homepage = "https://github.com/ColinIanKing/eventstat";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Simple monitoring of system events";
+    mainProgram = "eventstat";
+    homepage = "https://github.com/ColinIanKing/eventstat";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

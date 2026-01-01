@@ -64,9 +64,16 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ mathcomp-ssreflect ];
 
+<<<<<<< HEAD
   meta = {
     description = "Libraries demonstrating design patterns for programming and proving with canonical structures in Coq";
     maintainers = with lib.maintainers; [ cohencyril ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Libraries demonstrating design patterns for programming and proving with canonical structures in Coq";
+    maintainers = with lib.maintainers; [ cohencyril ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

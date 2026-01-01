@@ -4,6 +4,7 @@
   flutter329,
   lib,
   tor,
+<<<<<<< HEAD
   _experimental-update-script-combinators,
   nix-update-script,
   runCommand,
@@ -27,6 +28,28 @@ flutter329.buildFlutterApplication {
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = lib.importJSON ./git-hashes.json;
+=======
+}:
+let
+  runtimeBinDependencies = [
+    tor
+  ];
+in
+flutter329.buildFlutterApplication rec {
+  pname = "cwtch-ui";
+  version = "1.16.1";
+  # This Gitea instance has archive downloads disabled, so: fetchgit
+  src = fetchgit {
+    url = "https://git.openprivacy.ca/cwtch.im/cwtch-ui";
+    rev = "v${version}";
+    hash = "sha256-VKR02cRcjEapiIo+bQqeJOenmv0Rmzg6qfkI1LtWF10=";
+  };
+
+  pubspecLock = lib.importJSON ./pubspec.json;
+  gitHashes = {
+    flutter_gherkin = "sha256-Y8tR84kkczQPBwh7cGhPFAAqrMZKRfGp/02huPaaQZg=";
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   flutterBuildFlags = [
     "--dart-define"
@@ -38,7 +61,11 @@ flutter329.buildFlutterApplication {
   # These things are added to LD_LIBRARY_PATH, but not PATH
   runtimeDependencies = [ cwtch ];
 
+<<<<<<< HEAD
   extraWrapProgramArgs = "--prefix PATH : ${lib.makeBinPath [ tor ]}";
+=======
+  extraWrapProgramArgs = "--prefix PATH : ${lib.makeBinPath runtimeBinDependencies}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     mkdir -p $out/share/applications
@@ -46,6 +73,7 @@ flutter329.buildFlutterApplication {
       --replace-fail PREFIX "$out"
   '';
 
+<<<<<<< HEAD
   passthru = {
     pubspecSource =
       runCommand "pubspec.lock.json"
@@ -77,6 +105,8 @@ flutter329.buildFlutterApplication {
     ];
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Messaging app built on the cwtch decentralized, privacy-preserving, multi-party messaging protocol";
     homepage = "https://cwtch.im/";

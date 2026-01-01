@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyclipper" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cython wrapper for clipper library";
     homepage = "https://github.com/fonttools/pyclipper";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthuszagh ];
+=======
+  meta = with lib; {
+    description = "Cython wrapper for clipper library";
+    homepage = "https://github.com/fonttools/pyclipper";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthuszagh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

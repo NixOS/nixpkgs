@@ -125,6 +125,11 @@ python3Packages.buildPythonApplication rec {
       versionCheckHook
     ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   checkPhase = ''
     runHook preCheck
 

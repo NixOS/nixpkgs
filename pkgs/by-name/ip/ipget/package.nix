@@ -32,11 +32,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Retrieve files over IPFS and save them locally";
     homepage = "https://ipfs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    description = "Retrieve files over IPFS and save them locally";
+    homepage = "https://ipfs.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ipget";
   };
 }

@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
     rm -r $out/nix
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modern Fortran JSON API";
     homepage = "https://github.com/jacobwilliams/json-fortran";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Modern Fortran JSON API";
+    homepage = "https://github.com/jacobwilliams/json-fortran";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -40,10 +40,18 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "URLs with authentication tokens for automatic login";
     homepage = "https://github.com/aaugustin/django-sesame";
     changelog = "https://github.com/aaugustin/django-sesame/blob/${version}/docs/changelog.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "URLs with authentication tokens for automatic login";
+    homepage = "https://github.com/aaugustin/django-sesame";
+    changelog = "https://github.com/aaugustin/django-sesame/blob/${version}/docs/changelog.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,14 +33,22 @@
 
 buildPythonPackage rec {
   pname = "rembg";
+<<<<<<< HEAD
   version = "2.0.69";
+=======
+  version = "2.0.67";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielgatis";
     repo = "rembg";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-9Ncs1DHPG3ouU5yFyeH0M2ZCQ9yHqJhVjkDO8fNSqIg=";
+=======
+    hash = "sha256-QHx1qa1tErneLC1H6df6mTbKTWPh3BzJUqeE65D2c4E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -84,6 +92,10 @@ buildPythonPackage rec {
 
   # not running python tests, as they require network access
   nativeCheckInputs = lib.optionals withCli [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "rembg" ];
 
@@ -94,5 +106,9 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "rembg";
+<<<<<<< HEAD
+=======
+    platforms = [ "x86_64-linux" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

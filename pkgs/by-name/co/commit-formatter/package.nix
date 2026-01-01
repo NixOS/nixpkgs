@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rqIBDzZghz+fj96im+SNwnLV9jCRjRmh3Wd48z07XH0=";
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool to help you write git commit";
     homepage = "https://github.com/Eliot00/commit-formatter";
@@ -25,6 +26,16 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ elliot ];
+=======
+  meta = with lib; {
+    description = "CLI tool to help you write git commit";
+    homepage = "https://github.com/Eliot00/commit-formatter";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [ elliot ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-cf";
   };
 }

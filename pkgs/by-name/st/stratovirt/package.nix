@@ -43,11 +43,19 @@ rustPlatform.buildRustPackage rec {
     libseccomp
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitee.com/openeuler/stratovirt";
     description = "Virtual Machine Manager from Huawei";
     license = lib.licenses.mulan-psl2;
     maintainers = with lib.maintainers; [ astro ];
+=======
+  meta = with lib; {
+    homepage = "https://gitee.com/openeuler/stratovirt";
+    description = "Virtual Machine Manager from Huawei";
+    license = licenses.mulan-psl2;
+    maintainers = with maintainers; [ astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

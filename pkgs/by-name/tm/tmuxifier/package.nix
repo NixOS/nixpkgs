@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful session, window & pane management for Tmux";
     homepage = "https://github.com/jimeh/tmuxifier";
@@ -57,5 +58,14 @@ stdenv.mkDerivation rec {
     mainProgram = "tmuxifier";
     maintainers = with lib.maintainers; [ wigust ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Powerful session, window & pane management for Tmux";
+    homepage = "https://github.com/jimeh/tmuxifier";
+    license = licenses.mit;
+    mainProgram = "tmuxifier";
+    maintainers = with maintainers; [ wigust ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

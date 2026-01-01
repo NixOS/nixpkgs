@@ -82,9 +82,16 @@ pythonPackages.buildPythonPackage {
 
   pythonImportsCheck = [ "PyQt${qtVersion}.Qsci" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python binding to QScintilla, Qt based text editing control";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "Python binding to QScintilla, Qt based text editing control";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ lsix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/";
   };
 }

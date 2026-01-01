@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
     podofo
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Application to split, merge, rotate and mix PDF files";
     mainProgram = "pdfmixtool";
     homepage = "https://gitlab.com/scarpetta/pdfmixtool";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Application to split, merge, rotate and mix PDF files";
+    mainProgram = "pdfmixtool";
+    homepage = "https://gitlab.com/scarpetta/pdfmixtool";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

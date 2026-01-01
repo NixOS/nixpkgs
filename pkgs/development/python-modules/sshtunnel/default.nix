@@ -39,11 +39,19 @@ buildPythonPackage rec {
     "test_read_private_key_file"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure python SSH tunnels";
     mainProgram = "sshtunnel";
     homepage = "https://github.com/pahaz/sshtunnel";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pure python SSH tunnels";
+    mainProgram = "sshtunnel";
+    homepage = "https://github.com/pahaz/sshtunnel";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

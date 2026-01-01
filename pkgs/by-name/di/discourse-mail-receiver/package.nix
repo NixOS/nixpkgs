@@ -38,11 +38,19 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/discourse-smtp-fast-rejection --set RUBYLIB $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.discourse.org/";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ talyz ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://www.discourse.org/";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ talyz ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Helper program which receives incoming mail for Discourse";
   };
 

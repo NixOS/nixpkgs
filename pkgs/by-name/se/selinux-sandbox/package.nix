@@ -77,11 +77,19 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "SELinux sandbox utility";
     license = lib.licenses.gpl2Only;
     homepage = "https://selinuxproject.org";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "SELinux sandbox utility";
+    license = licenses.gpl2Only;
+    homepage = "https://selinuxproject.org";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ RossComputerGuy ];
   };
 }

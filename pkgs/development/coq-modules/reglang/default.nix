@@ -45,10 +45,18 @@ mkCoqDerivation {
     stdlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Regular Language Representations in Coq";
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.cecill-b;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Regular Language Representations in Coq";
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.cecill-b;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -55,11 +55,19 @@ buildPythonPackage rec {
     "test_set_telephony_credits"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interacting with the Duo Auth, Admin, and Accounts APIs";
     homepage = "https://github.com/duosecurity/duo_client_python";
     changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python library for interacting with the Duo Auth, Admin, and Accounts APIs";
+    homepage = "https://github.com/duosecurity/duo_client_python";
+    changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

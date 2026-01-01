@@ -41,7 +41,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ick --suffix PATH ':' ${stdenv.cc}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Original esoteric programming language";
     longDescription = ''
       INTERCAL, an abbreviation for "Compiler Language With No
@@ -53,9 +57,15 @@ stdenv.mkDerivation rec {
       from its use of an assignment statement.
     '';
     homepage = "http://www.catb.org/~esr/intercal/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 # TODO: investigate if LD_LIBRARY_PATH needs to be set

@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   PKGVER = version;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/emersion/python-emailthreads";
     description = "Python library to parse and format email threads";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eadwu ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/emersion/python-emailthreads";
+    description = "Python library to parse and format email threads";
+    license = licenses.mit;
+    maintainers = with maintainers; [ eadwu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

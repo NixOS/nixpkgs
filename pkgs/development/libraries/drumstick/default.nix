@@ -72,11 +72,20 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "USE_QT5" (!isQt6))
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "MIDI libraries for Qt/C++";
     homepage = "https://drumstick.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "MIDI libraries for Qt/C++";
+    homepage = "https://drumstick.sourceforge.io/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

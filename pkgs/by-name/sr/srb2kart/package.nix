@@ -88,12 +88,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Classic styled kart racer";
     homepage = "https://mb.srb2.org/threads/srb2kart.25868/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ donovanglover ];
+=======
+  meta = with lib; {
+    description = "Classic styled kart racer";
+    homepage = "https://mb.srb2.org/threads/srb2kart.25868/";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ donovanglover ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "srb2kart";
   };
 })

@@ -28,12 +28,21 @@ stdenv.mkDerivation rec {
     substituteInPlace Prototypes.h --replace 'tail' "$(type -P tail)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Console text editor for Unix that you already know how to use";
     homepage = "https://hisham.hm/dit/";
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ davidak ];
+=======
+  meta = with lib; {
+    description = "Console text editor for Unix that you already know how to use";
+    homepage = "https://hisham.hm/dit/";
+    license = licenses.gpl2;
+    platforms = with platforms; linux;
+    maintainers = with maintainers; [ davidak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dit";
   };
 }

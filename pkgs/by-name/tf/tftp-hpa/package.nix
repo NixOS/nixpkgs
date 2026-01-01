@@ -30,11 +30,19 @@ stdenv.mkDerivation {
     automake
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "TFTP tools - a lot of fixes on top of BSD TFTP";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "TFTP tools - a lot of fixes on top of BSD TFTP";
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.kernel.org/pub/software/network/tftp/";
   };
 

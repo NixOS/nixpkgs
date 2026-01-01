@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for tuning your TimescaleDB for better performance";
     mainProgram = "timescaledb-tune";
     homepage = "https://github.com/timescale/timescaledb-tune";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Tool for tuning your TimescaleDB for better performance";
+    mainProgram = "timescaledb-tune";
+    homepage = "https://github.com/timescale/timescaledb-tune";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

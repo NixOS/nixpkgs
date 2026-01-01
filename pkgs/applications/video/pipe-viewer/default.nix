@@ -104,12 +104,21 @@ buildPerlModule rec {
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/trizen/pipe-viewer";
     description = "CLI+GUI YouTube Client";
     license = lib.licenses.artistic2;
     maintainers = with lib.maintainers; [ julm ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/trizen/pipe-viewer";
+    description = "CLI+GUI YouTube Client";
+    license = licenses.artistic2;
+    maintainers = with maintainers; [ julm ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pipe-viewer";
   };
 }

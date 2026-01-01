@@ -147,19 +147,32 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
   meta =
+<<<<<<< HEAD
 
     {
       description = "High-performance JIT compiler for Lua 5.1";
       homepage = "https://luajit.org/";
       license = lib.licenses.mit;
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    with lib;
+    {
+      description = "High-performance JIT compiler for Lua 5.1";
+      homepage = "https://luajit.org/";
+      license = licenses.mit;
+      platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       badPlatforms = [
         "loongarch64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/1278
         "riscv64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/628
         "powerpc64le-linux" # `#error "No support for PPC64"`
       ];
       mainProgram = "lua";
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [
+=======
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         thoughtpolice
         smironov
         vcunat

@@ -24,11 +24,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fvs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "File Versioning System with hash comparison and data storage to create unlinked states that can be deleted";
     mainProgram = "fvs";
     homepage = "https://github.com/mirkobrombin/FVS";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "File Versioning System with hash comparison and data storage to create unlinked states that can be deleted";
+    mainProgram = "fvs";
+    homepage = "https://github.com/mirkobrombin/FVS";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

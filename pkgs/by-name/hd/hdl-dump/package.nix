@@ -21,12 +21,21 @@ stdenv.mkDerivation {
     install -Dm755 hdl_dump -t $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ps2homebrew/hdl-dump";
     description = "PlayStation 2 HDLoader image dump/install utility";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ makefu ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ps2homebrew/hdl-dump";
+    description = "PlayStation 2 HDLoader image dump/install utility";
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hdl_dump";
   };
 }

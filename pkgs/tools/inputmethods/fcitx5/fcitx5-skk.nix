@@ -48,11 +48,20 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Input method engine for Fcitx5, which uses libskk as its backend";
     homepage = "https://github.com/fcitx/fcitx5-skk";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ wattmto ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Input method engine for Fcitx5, which uses libskk as its backend";
+    homepage = "https://github.com/fcitx/fcitx5-skk";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ wattmto ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

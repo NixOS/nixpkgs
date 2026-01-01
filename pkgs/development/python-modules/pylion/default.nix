@@ -1,7 +1,11 @@
 {
   lib,
   buildPythonPackage,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchFromBitbucket,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   h5py,
   termcolor,
   pexpect,
@@ -15,7 +19,11 @@ buildPythonPackage {
   version = "0.5.3";
   format = "setuptools";
 
+<<<<<<< HEAD
   src = fetchFromGitHub {
+=======
+  src = fetchFromBitbucket {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     owner = "dtrypogeorgos";
     repo = "pylion";
     # Version is set in setup.cfg, but not in a git tag / bitbucket release
@@ -47,10 +55,18 @@ buildPythonPackage {
     cp -r examples $out/share/doc/$name/examples
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "LAMMPS wrapper for molecular dynamics simulations of trapped ions";
     homepage = "https://github.com/dtrypogeorgos/pylion";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
+=======
+  meta = with lib; {
+    description = "LAMMPS wrapper for molecular dynamics simulations of trapped ions";
+    homepage = "https://bitbucket.org/dtrypogeorgos/pylion";
+    license = licenses.mit;
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "django-pgactivity";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.7.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AmbitionEng";
     repo = "django-pgactivity";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-e+PodpFsGxx4SE6zQD2qVDAXx44xeIdsBO7YsdbSjiU=";
+=======
+    hash = "sha256-PDJJf0PI5aqFn1HODv6wRSgTCr9ajfpPSDCB8twrFcQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ poetry-core ];

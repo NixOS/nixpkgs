@@ -17,11 +17,20 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-+CD7+pYAoKRmkMZPpEru6lug9sBakrL0rLXs78e3tqk=";
 
+<<<<<<< HEAD
   meta = {
     description = "Generate manual pages from mdBooks";
     mainProgram = "mdbook-man";
     homepage = "https://github.com/vv9k/mdbook-man";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Generate manual pages from mdBooks";
+    mainProgram = "mdbook-man";
+    homepage = "https://github.com/vv9k/mdbook-man";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

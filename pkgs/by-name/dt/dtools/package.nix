@@ -39,11 +39,20 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkTarget = "test_rdmd";
 
+<<<<<<< HEAD
   meta = {
     description = "Ancillary tools for the D programming language";
     homepage = "https://github.com/dlang/tools";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ jtbx ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Ancillary tools for the D programming language";
+    homepage = "https://github.com/dlang/tools";
+    license = licenses.boost;
+    maintainers = with maintainers; [ jtbx ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

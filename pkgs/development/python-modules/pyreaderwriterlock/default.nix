@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "readerwriterlock" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/elarivie/pyReaderWriterLock/blob/master/CHANGELOG.md";
     description = "Implementation of the Readers-writers problem";
     homepage = "https://github.com/elarivie/pyReaderWriterLock";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MayNiklas ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/elarivie/pyReaderWriterLock/blob/master/CHANGELOG.md";
+    description = "Implementation of the Readers-writers problem";
+    homepage = "https://github.com/elarivie/pyReaderWriterLock";
+    license = licenses.mit;
+    maintainers = with maintainers; [ MayNiklas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

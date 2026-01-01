@@ -27,10 +27,18 @@ stdenv.mkDerivation rec {
                   "-Wl,-install_name,$out/lib/libvsqlitepp.3.dylib"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://vsqlite.virtuosic-bytes.com/";
     description = "C++ wrapper library for sqlite";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://vsqlite.virtuosic-bytes.com/";
+    description = "C++ wrapper library for sqlite";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

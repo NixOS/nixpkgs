@@ -37,6 +37,7 @@ mkDerivation rec {
 
   cmakeDir = "../src";
 
+<<<<<<< HEAD
   meta = {
     description = "Cool desktop panel for KDE Plasma 5";
     mainProgram = "ksmoothdock";
@@ -44,5 +45,14 @@ mkDerivation rec {
     homepage = "https://dangvd.github.io/ksmoothdock/";
     maintainers = with lib.maintainers; [ shamilton ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Cool desktop panel for KDE Plasma 5";
+    mainProgram = "ksmoothdock";
+    license = licenses.mit;
+    homepage = "https://dangvd.github.io/ksmoothdock/";
+    maintainers = with maintainers; [ shamilton ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

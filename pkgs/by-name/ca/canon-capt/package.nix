@@ -61,11 +61,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Community-driven driver for Canon CAPT-based printers";
     homepage = "https://github.com/mounaiban/captdriver";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ cryptoluks ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Community-driven driver for Canon CAPT-based printers";
+    homepage = "https://github.com/mounaiban/captdriver";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ cryptoluks ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

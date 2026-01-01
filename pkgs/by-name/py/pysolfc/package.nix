@@ -98,11 +98,19 @@ python3Packages.buildPythonApplication rec {
     ]
   );
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of more than 1000 solitaire card games";
     mainProgram = "pysol.py";
     homepage = "https://pysolfc.sourceforge.io";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Collection of more than 1000 solitaire card games";
+    mainProgram = "pysol.py";
+    homepage = "https://pysolfc.sourceforge.io";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

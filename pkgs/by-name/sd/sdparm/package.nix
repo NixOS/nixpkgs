@@ -13,10 +13,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xMnvr9vrZi4vlxJwfsSQkyvU0BC7ESmueplSZUburb4=";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://sg.danny.cz/sg/sdparm.html";
     description = "Utility to access SCSI device parameters";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    homepage = "http://sg.danny.cz/sg/sdparm.html";
+    description = "Utility to access SCSI device parameters";
+    license = licenses.bsd3;
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

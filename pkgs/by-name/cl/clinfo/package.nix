@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Print all known information about all available OpenCL platforms and devices in the system";
     homepage = "https://github.com/Oblomov/clinfo";
@@ -33,6 +34,17 @@ stdenv.mkDerivation rec {
       r-burns
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Print all known information about all available OpenCL platforms and devices in the system";
+    homepage = "https://github.com/Oblomov/clinfo";
+    license = licenses.cc0;
+    maintainers = with maintainers; [
+      athas
+      r-burns
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "clinfo";
   };
 }

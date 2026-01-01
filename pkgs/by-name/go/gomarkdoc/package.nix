@@ -34,11 +34,19 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Generate markdown documentation for Go (golang) code";
     homepage = "https://github.com/princjef/gomarkdoc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ brpaz ];
+=======
+  meta = with lib; {
+    description = "Generate markdown documentation for Go (golang) code";
+    homepage = "https://github.com/princjef/gomarkdoc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ brpaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gomarkdoc";
   };
 }

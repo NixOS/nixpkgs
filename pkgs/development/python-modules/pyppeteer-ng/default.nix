@@ -4,7 +4,10 @@
   aiohttp,
   appdirs,
   buildPythonPackage,
+<<<<<<< HEAD
   gitUpdater,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   certifi,
   diff-match-patch,
   fetchFromGitHub,
@@ -22,7 +25,11 @@
   pyee,
   pylint,
   pytest,
+<<<<<<< HEAD
   pytest-cov-stub,
+=======
+  pytest-cov,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -41,14 +48,26 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer-ng";
+<<<<<<< HEAD
   version = "2.0.0rc11";
   pyproject = true;
 
+=======
+  version = "2.0.0rc10";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "pyppeteer-ng";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-vhsqz/2wNLqjtwVdLyLyO+JX7g2sz5MEMoHOnsDl/KQ=";
+=======
+    hash = "sha256-NpxjKsh12pr/MCZ4gfoaa+3jTYyvQzHgSno1+rw2Wk0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -95,7 +114,11 @@ buildPythonPackage rec {
     pydocstyle
     pylint
     pytest
+<<<<<<< HEAD
     pytest-cov-stub
+=======
+    pytest-cov
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pytest-timeout
     pytest-xdist
     readme-renderer
@@ -148,14 +171,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyppeteer" ];
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater { };
 
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     mainProgram = "pyppeteer-install";
     homepage = "https://github.com/dgtlmoon/pyppeteer-ng";
     changelog = "https://github.com/dgtlmoon/pyppeteer-ng/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thanegill ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ thanegill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

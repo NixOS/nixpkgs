@@ -60,10 +60,18 @@ stdenv.mkDerivation rec {
     installer-simpleLabels = nixosTests.installer.simpleLabels;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.rodsbooks.com/gdisk/";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
+    license = licenses.gpl2Plus;
+    homepage = "https://www.rodsbooks.com/gdisk/";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

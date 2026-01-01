@@ -22,14 +22,22 @@
 
 buildPythonPackage rec {
   pname = "model-hosting-container-standards";
+<<<<<<< HEAD
   version = "0.1.12";
+=======
+  version = "0.1.9";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "model-hosting-container-standards";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-r1HdBe/JaOZVeLCOip5wsoifJRvkJpKPVWHrKPBSY1Y=";
+=======
+    hash = "sha256-iy7lPtMM2J/zC1TUB5Eydtesy4JsjWTjACNlDhfSPA8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/python";

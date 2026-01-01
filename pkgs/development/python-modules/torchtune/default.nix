@@ -85,9 +85,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+<<<<<<< HEAD
   # Exclude `regression` which depends on a specific llama model and `recipies` which are sample code
   enabledTestPaths = [ "tests/torchtune" ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabledTests = [
     # AssertionError (tensors are not equal)
     "test_stop_tokens"
@@ -114,6 +117,7 @@ buildPythonPackage rec {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Fatal Python error: Segmentation fault
     "test_forward_gqa"
+<<<<<<< HEAD
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # tests/torchtune/training/test_distributed.py
@@ -129,6 +133,8 @@ buildPythonPackage rec {
 
     # hangs
     "tests/torchtune/utils"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {
@@ -136,9 +142,13 @@ buildPythonPackage rec {
     homepage = "https://github.com/meta-pytorch/torchtune";
     changelog = "https://github.com/meta-pytorch/torchtune/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       GaetanLepage
       sarahec
     ];
+=======
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

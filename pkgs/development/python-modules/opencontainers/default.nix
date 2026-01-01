@@ -28,10 +28,17 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for oci specifications";
     homepage = "https://github.com/vsoch/oci-python";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "Python module for oci specifications";
+    homepage = "https://github.com/vsoch/oci-python";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

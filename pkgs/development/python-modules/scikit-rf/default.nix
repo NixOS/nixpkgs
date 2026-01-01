@@ -86,11 +86,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skrf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
     changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lugarun ];
+=======
+  meta = with lib; {
+    description = "Python library for RF/Microwave engineering";
+    homepage = "https://scikit-rf.org/";
+    changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lugarun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

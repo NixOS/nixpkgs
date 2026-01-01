@@ -23,10 +23,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "expiring_dict" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python dict with TTL support for auto-expiring caches";
     homepage = "https://github.com/dparker2/py-expiring-dict";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python dict with TTL support for auto-expiring caches";
+    homepage = "https://github.com/dparker2/py-expiring-dict";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

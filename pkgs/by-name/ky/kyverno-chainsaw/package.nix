@@ -11,16 +11,27 @@
 
 buildGoModule rec {
   pname = "kyverno-chainsaw";
+<<<<<<< HEAD
   version = "0.2.14";
+=======
+  version = "0.2.13";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-HcBRipJGSHPms2qL63vIVVmiq+k1mL8dJo5kW7W6ykE=";
   };
 
   vendorHash = "sha256-lG+odKD1TGQ7GTh/y9ogREtY59T8fvN/6FyKsdgsU0M=";
+=======
+    hash = "sha256-DbwqcHBmKAzq3xzUVGOdXjF8uaUWkEKRlz9m7tfyIdY=";
+  };
+
+  vendorHash = "sha256-e4hSfmnROnfLRNvmfN0VFoIR0zVaqBhd0/c4lIyScvY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "." ];
 

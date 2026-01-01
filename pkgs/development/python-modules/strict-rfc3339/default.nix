@@ -16,10 +16,18 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/danielrichman/strict-rfc3339";
     license = lib.licenses.gpl3;
     description = "Strict, simple, lightweight RFC3339 functions";
     maintainers = with lib.maintainers; [ vanschelven ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/danielrichman/strict-rfc3339";
+    license = licenses.gpl3;
+    description = "Strict, simple, lightweight RFC3339 functions";
+    maintainers = with maintainers; [ vanschelven ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

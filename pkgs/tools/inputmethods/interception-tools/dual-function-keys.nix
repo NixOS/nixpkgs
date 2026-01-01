@@ -37,12 +37,21 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/interception/linux/plugins/dual-function-keys";
     description = "Tap for one key, hold for another";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ svend ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/interception/linux/plugins/dual-function-keys";
+    description = "Tap for one key, hold for another";
+    license = licenses.mit;
+    maintainers = with maintainers; [ svend ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dual-function-keys";
   };
 }

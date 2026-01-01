@@ -33,6 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "upcloud_api" ];
@@ -43,5 +44,17 @@ buildPythonPackage rec {
     homepage = "https://github.com/UpCloudLtd/upcloud-python-api";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "upcloud_api" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/UpCloudLtd/upcloud-python-api/blob/${src.tag}/CHANGELOG.md";
+    description = "UpCloud API Client";
+    homepage = "https://github.com/UpCloudLtd/upcloud-python-api";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

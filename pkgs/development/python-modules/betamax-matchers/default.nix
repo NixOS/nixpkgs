@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "betamax_matchers" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Group of experimental matchers for Betamax";
     homepage = "https://github.com/sigmavirus24/betamax_matchers";
     changelog = "https://github.com/betamaxpy/betamax_matchers/blob/${version}/HISTORY.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "Group of experimental matchers for Betamax";
+    homepage = "https://github.com/sigmavirus24/betamax_matchers";
+    changelog = "https://github.com/betamaxpy/betamax_matchers/blob/${version}/HISTORY.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

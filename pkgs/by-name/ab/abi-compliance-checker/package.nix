@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     description = "Tool for checking backward API/ABI compatibility of a C/C++ library";
     mainProgram = "abi-compliance-checker";
     license = lib.licenses.lgpl21;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 }

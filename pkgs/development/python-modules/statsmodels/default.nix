@@ -56,10 +56,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "statsmodels" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
     changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Statistical computations and models for use with SciPy";
+    homepage = "https://www.github.com/statsmodels/statsmodels";
+    changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

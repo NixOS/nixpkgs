@@ -41,11 +41,20 @@ stdenv.mkDerivation rec {
     "--disable-hardware-specific-code"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Routines for fast arithmetic in GF(2)[x]";
     homepage = "https://gitlab.inria.fr/gf2x/gf2x/";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Routines for fast arithmetic in GF(2)[x]";
+    homepage = "https://gitlab.inria.fr/gf2x/gf2x/";
+    license = licenses.gpl2Plus;
+    teams = [ teams.sage ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

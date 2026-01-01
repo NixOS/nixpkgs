@@ -21,11 +21,19 @@ stdenv.mkDerivation rec {
     "LINK:=$(CC)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Efficient hex editor";
     homepage = "http://www.chiark.greenend.org.uk/~sgtatham/tweak";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Efficient hex editor";
+    homepage = "http://www.chiark.greenend.org.uk/~sgtatham/tweak";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tweak";
   };
 }

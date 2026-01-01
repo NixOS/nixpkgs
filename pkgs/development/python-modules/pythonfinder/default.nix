@@ -39,16 +39,29 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pythonfinder" ];
 
   meta = {
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "pythonfinder" ];
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Cross platform search tool for finding Python";
     mainProgram = "pyfinder";
     homepage = "https://github.com/sarugaku/pythonfinder";
     changelog = "https://github.com/sarugaku/pythonfinder/blob/${src.tag}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

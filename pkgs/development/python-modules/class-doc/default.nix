@@ -37,10 +37,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "class_doc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extract attributes docstrings defined in various ways";
     homepage = "https://github.com/danields761/class-doc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Extract attributes docstrings defined in various ways";
+    homepage = "https://github.com/danields761/class-doc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

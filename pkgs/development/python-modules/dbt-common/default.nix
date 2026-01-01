@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   writeScript,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   hatchling,
@@ -28,25 +31,44 @@
   pytest-xdist,
 }:
 
+<<<<<<< HEAD
 buildPythonPackage rec {
   pname = "dbt-common";
   version = "1.37.2-unstable-2025-12-15";
+=======
+buildPythonPackage {
+  pname = "dbt-common";
+  version = "1.28.0-unstable-2025-08-14";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-common";
+<<<<<<< HEAD
     rev = "88b14473573d0e4e8c3b02d6ee573d346c84b0db"; # They don't tag releases
     hash = "sha256-NnuYga3pHo0dIg6nr15DQINskF1bkKGfWXcUaEK38Kc=";
+=======
+    rev = "dd34e0a0565620863ff70c0b02421d84fcee8a02"; # They don't tag releases
+    hash = "sha256-hG6S+IIAR3Cu69oFapQUVoCdaiEQYeMQ/ekBuAXxPrI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "agate"
+<<<<<<< HEAD
     # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
     # https://pypi.org/project/isodate/0.7.2/
     "isodate"
+=======
+    "deepdiff"
+    # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
+    # https://pypi.org/project/isodate/0.7.2/
+    "isodate"
+    "protobuf"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   dependencies = [
@@ -79,6 +101,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbt_common" ];
 
+<<<<<<< HEAD
   passthru.updateScript = writeScript "update-dbt-common" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p git common-updater-scripts perl
@@ -100,6 +123,8 @@ buildPythonPackage rec {
       -i 'pkgs/development/python-modules/dbt-common/default.nix'
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Shared common utilities for dbt-core and adapter implementations use";
     homepage = "https://github.com/dbt-labs/dbt-common";

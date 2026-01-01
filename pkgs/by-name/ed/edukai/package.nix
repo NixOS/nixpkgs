@@ -9,6 +9,10 @@ stdenvNoCC.mkDerivation rec {
   version = "5.0";
 
   src = fetchzip {
+<<<<<<< HEAD
+=======
+    name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/edukai-${version}.zip";
     sha256 = "sha256-3+w9n6GJQg9+HfHYukC7tlm4GVs8vEOO23hrLw6qjTY=";
   };

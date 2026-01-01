@@ -4,7 +4,11 @@
   fetchFromGitHub,
 
   # build-system
+<<<<<<< HEAD
   hatchling,
+=======
+  pdm-backend,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # dependencies
   boto3,
@@ -24,14 +28,22 @@
 
 buildPythonPackage rec {
   pname = "langchain-aws";
+<<<<<<< HEAD
   version = "1.1.1";
+=======
+  version = "1.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${version}";
+<<<<<<< HEAD
     hash = "sha256-tFyVK7IjPy33Az16DhWO6wSL5hBAdyd+urhSvdb18Ww=";
+=======
+    hash = "sha256-Y4r9a7EiyOACcU41+1Lo89jguu1QmijWsNeoNqKF3cY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -41,7 +53,11 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/aws";
 
+<<<<<<< HEAD
   build-system = [ hatchling ];
+=======
+  build-system = [ pdm-backend ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dependencies = [
     boto3
@@ -67,11 +83,14 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
+<<<<<<< HEAD
   disabledTests = [
     # Fails when langchain-core gets ahead of this package
     "test_serdes"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonImportsCheck = [ "langchain_aws" ];
 
   passthru = {

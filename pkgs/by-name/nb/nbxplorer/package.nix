@@ -27,6 +27,7 @@ buildDotnetModule rec {
     mv $out/bin/{NBXplorer,nbxplorer} || :
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
     maintainers = with lib.maintainers; [
@@ -35,6 +36,16 @@ buildDotnetModule rec {
     ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
+    maintainers = with maintainers; [
+      kcalvinalvin
+      erikarvstedt
+    ];
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nbxplorer";
   };
 }

@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "advantage_air" ];
 
+<<<<<<< HEAD
   meta = {
     description = "API helper for Advantage Air's MyAir and e-zone API";
     homepage = "https://github.com/Bre77/advantage_air";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  meta = with lib; {
+    description = "API helper for Advantage Air's MyAir and e-zone API";
+    homepage = "https://github.com/Bre77/advantage_air";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -53,14 +53,23 @@ stdenv.mkDerivation rec {
     sha256 = "0j0wv3ijfrjkfngy7dswm4k1dchk3jak9chl5735dl8yrl8mq755";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Standard ML compiler and interpreter";
     longDescription = ''
       Poly/ML is a full implementation of Standard ML.
     '';
     homepage = "https://www.polyml.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21;
     platforms = with lib.platforms; (linux ++ darwin);
+=======
+    license = licenses.lgpl21;
+    platforms = with platforms; (linux ++ darwin);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # never built on aarch64-darwin since first introduction in nixpkgs
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;

@@ -82,5 +82,9 @@ buildPythonPackage rec {
     platforms = [
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ ferrine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

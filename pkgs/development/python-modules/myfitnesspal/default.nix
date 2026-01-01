@@ -76,5 +76,9 @@ buildPythonPackage rec {
     mainProgram = "myfitnesspal";
     homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
     license = lib.licenses.mit;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

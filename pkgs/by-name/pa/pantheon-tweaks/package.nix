@@ -56,16 +56,26 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Unofficial system customization app for Pantheon";
     longDescription = ''
       Unofficial system customization app for Pantheon
       that lets you easily and safely customise your desktop's appearance.
     '';
     homepage = "https://github.com/pantheon-tweaks/pantheon-tweaks";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pantheon-tweaks";
   };
 }

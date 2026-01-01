@@ -20,6 +20,7 @@ python3Packages.buildPythonPackage {
     setuptools
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Embed LaTeX formulas into HTML documents as SVG images";
     mainProgram = "gladtex";
@@ -27,5 +28,14 @@ python3Packages.buildPythonPackage {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pentane ];
+=======
+  meta = with lib; {
+    description = "Embed LaTeX formulas into HTML documents as SVG images";
+    mainProgram = "gladtex";
+    homepage = "https://humenda.github.io/GladTeX";
+    license = licenses.lgpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pentane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

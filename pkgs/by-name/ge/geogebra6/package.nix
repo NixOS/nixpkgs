@@ -14,7 +14,11 @@ let
   srcIcon = geogebra.srcIcon;
   desktopItem = geogebra.desktopItem;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
     longDescription = ''
       Dynamic mathematics software for all levels of education that brings
@@ -22,6 +26,7 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       voidless
       sikmir
@@ -32,6 +37,18 @@ let
       binaryNativeCode # some jars include native binaries
     ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+    maintainers = with maintainers; [
+      voidless
+      sikmir
+    ];
+    license = licenses.geogebra;
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode # some jars include native binaries
+    ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hydraPlatforms = [ ];
   };
 

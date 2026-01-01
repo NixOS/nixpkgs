@@ -61,12 +61,17 @@ stdenv.mkDerivation rec {
     ''}"
   ];
 
+<<<<<<< HEAD
   env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+=======
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/endlessm/eos-installer";
     description = "Installer UI which writes images to disk";
@@ -74,5 +79,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ qyliss ];
     mainProgram = "gnome-image-installer";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/endlessm/eos-installer";
+    description = "Installer UI which writes images to disk";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ qyliss ];
+    mainProgram = "gnome-image-installer";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

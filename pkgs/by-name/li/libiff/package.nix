@@ -19,7 +19,11 @@ stdenv.mkDerivation {
     autoreconfHook
     help2man
   ];
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Parser for the Interchange File Format (IFF)";
     longDescription = ''
       libiff is a portable, extensible parser library implemented in
@@ -27,8 +31,14 @@ stdenv.mkDerivation {
       (IFF).
     '';
     homepage = "https://github.com/svanderburg/libiff";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ _414owen ];
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+=======
+    maintainers = with maintainers; [ _414owen ];
+    platforms = platforms.all;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

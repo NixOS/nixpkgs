@@ -43,7 +43,11 @@ buildPythonPackage rec {
     pytestCheckHook
     vcrpy
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "tweepy" ];
 
@@ -68,11 +72,20 @@ buildPythonPackage rec {
     "testcursornext"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Twitter library for Python";
     homepage = "https://github.com/tweepy/tweepy";
     changelog = "https://github.com/tweepy/tweepy/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marius851000 ];
+=======
+  meta = with lib; {
+    description = "Twitter library for Python";
+    homepage = "https://github.com/tweepy/tweepy";
+    changelog = "https://github.com/tweepy/tweepy/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ marius851000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

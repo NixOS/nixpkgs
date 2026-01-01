@@ -26,11 +26,20 @@ rustPlatform.buildRustPackage rec {
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   checkInputs = [ cacert ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool that brings mailing list style code reviews to Github PRs";
     homepage = "https://github.com/danobi/prr";
     license = lib.licenses.gpl2Only;
     mainProgram = "prr";
     maintainers = with lib.maintainers; [ evalexpr ];
+=======
+  meta = with lib; {
+    description = "Tool that brings mailing list style code reviews to Github PRs";
+    homepage = "https://github.com/danobi/prr";
+    license = licenses.gpl2Only;
+    mainProgram = "prr";
+    maintainers = with maintainers; [ evalexpr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

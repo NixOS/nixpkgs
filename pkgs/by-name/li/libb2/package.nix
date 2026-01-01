@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "BLAKE2 family of cryptographic hash functions";
     homepage = "https://blake2.net/";
@@ -43,5 +44,17 @@ stdenv.mkDerivation (finalAttrs: {
       dotlambda
     ];
     license = lib.licenses.cc0;
+=======
+  meta = with lib; {
+    description = "BLAKE2 family of cryptographic hash functions";
+    homepage = "https://blake2.net/";
+    pkgConfigModules = [ "libb2" ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      dfoxfranke
+      dotlambda
+    ];
+    license = licenses.cc0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

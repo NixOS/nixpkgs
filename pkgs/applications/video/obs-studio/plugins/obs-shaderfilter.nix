@@ -35,11 +35,19 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "OBS Studio filter for applying an arbitrary shader to a source";
     homepage = "https://github.com/exeldro/obs-shaderfilter";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "OBS Studio filter for applying an arbitrary shader to a source";
+    homepage = "https://github.com/exeldro/obs-shaderfilter";
+    maintainers = with maintainers; [ flexiondotorg ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

@@ -19,11 +19,19 @@ stdenv.mkDerivation {
 
   CXXFLAGS = "-std=c++11";
 
+<<<<<<< HEAD
   meta = {
     description = "Forked version of log4cpp that has been created for the Shibboleth project";
     mainProgram = "log4shib-config";
     maintainers = [ ];
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    description = "Forked version of log4cpp that has been created for the Shibboleth project";
+    mainProgram = "log4shib-config";
+    maintainers = [ ];
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://log4cpp.sf.net";
   };
 }

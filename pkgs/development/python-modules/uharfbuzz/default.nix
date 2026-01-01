@@ -41,10 +41,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uharfbuzz" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Streamlined Cython bindings for the harfbuzz shaping engine";
     homepage = "https://github.com/harfbuzz/uharfbuzz";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Streamlined Cython bindings for the harfbuzz shaping engine";
+    homepage = "https://github.com/harfbuzz/uharfbuzz";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

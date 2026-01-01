@@ -39,11 +39,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/django-commons/django-prometheus/releases/tag/v${version}";
     description = "Django middlewares to monitor your application with Prometheus.io";
     homepage = "https://github.com/django-commons/django-prometheus";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/django-commons/django-prometheus/releases/tag/v${version}";
+    description = "Django middlewares to monitor your application with Prometheus.io";
+    homepage = "https://github.com/django-commons/django-prometheus";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

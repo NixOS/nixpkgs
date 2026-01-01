@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to communicate with the RFXtrx family of devices";
     homepage = "https://github.com/Danielhiversen/pyRFXtrx";
     changelog = "https://github.com/Danielhiversen/pyRFXtrx/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Library to communicate with the RFXtrx family of devices";
+    homepage = "https://github.com/Danielhiversen/pyRFXtrx";
+    changelog = "https://github.com/Danielhiversen/pyRFXtrx/releases/tag/${src.tag}";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

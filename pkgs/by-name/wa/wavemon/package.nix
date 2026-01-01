@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Ncurses-based monitoring application for wireless network devices";
     homepage = "https://github.com/uoaerg/wavemon";
@@ -36,6 +37,17 @@ stdenv.mkDerivation rec {
       fpletz
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Ncurses-based monitoring application for wireless network devices";
+    homepage = "https://github.com/uoaerg/wavemon";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      raskin
+      fpletz
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wavemon";
   };
 }

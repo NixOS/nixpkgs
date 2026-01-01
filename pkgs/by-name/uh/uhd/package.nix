@@ -222,7 +222,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "USRP Hardware Driver (for Software Defined Radio)";
     longDescription = ''
       The USRP Hardware Driver (UHD) software is the hardware driver for all
@@ -232,9 +236,15 @@ stdenv.mkDerivation (finalAttrs: {
       company, National Instruments.
     '';
     homepage = "https://uhd.ettus.com/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       fpletz
       tomberek

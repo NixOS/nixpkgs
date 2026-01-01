@@ -45,10 +45,18 @@ buildPythonApplication rec {
   # No tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "MAVLink proxy and command line ground station";
     homepage = "https://github.com/ArduPilot/MAVProxy";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ lopsided98 ];
+=======
+  meta = with lib; {
+    description = "MAVLink proxy and command line ground station";
+    homepage = "https://github.com/ArduPilot/MAVProxy";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ lopsided98 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

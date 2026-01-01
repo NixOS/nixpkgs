@@ -29,10 +29,17 @@ buildGoModule rec {
     package = dashing;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Dash Generator Script for Any HTML";
     homepage = "https://github.com/technosophos/dashing";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Dash Generator Script for Any HTML";
+    homepage = "https://github.com/technosophos/dashing";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "dashing";
   };

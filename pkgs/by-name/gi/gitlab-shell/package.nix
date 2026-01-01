@@ -42,11 +42,20 @@ buildGoModule rec {
   '';
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "SSH access and repository management app for GitLab";
     homepage = "http://www.gitlab.com/";
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gitlab ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "SSH access and repository management app for GitLab";
+    homepage = "http://www.gitlab.com/";
+    platforms = platforms.linux;
+    teams = [ teams.gitlab ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

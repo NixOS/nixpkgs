@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Temperature logging and reporting using Maxim's iButtons and 1-Wire protocol";
     longDescription = ''
       DigiTemp is a command line application used for reading 1-wire sensors like
@@ -50,8 +54,14 @@ stdenv.mkDerivation rec {
       repeatedly read the sensors and output to stdout and/or to a logfile.
     '';
     homepage = "https://www.digitemp.com";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

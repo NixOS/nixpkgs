@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   pname = "py-machineid";
+<<<<<<< HEAD
   version = "1.0.0";
   pyproject = true;
 
@@ -14,6 +15,14 @@ buildPythonPackage rec {
     pname = "py_machineid";
     inherit version;
     hash = "sha256-ipAqAProxtZDP0Y2l8IdxM6YxuVaLgU1wCczGaywBHo=";
+=======
+  version = "0.8.1";
+  pyproject = true;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-5QQWIhI1yHR1nhnLZOhJne8Sr8K9/9N3v9aPR395ncg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

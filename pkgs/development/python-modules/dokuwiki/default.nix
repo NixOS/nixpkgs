@@ -16,10 +16,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dokuwiki" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/fmenabe/python-dokuwiki";
     description = "Python module that aims to manage DokuWiki wikis by using the provided XML-RPC API";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ netali ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/fmenabe/python-dokuwiki";
+    description = "Python module that aims to manage DokuWiki wikis by using the provided XML-RPC API";
+    license = licenses.mit;
+    maintainers = with maintainers; [ netali ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

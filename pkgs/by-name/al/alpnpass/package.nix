@@ -17,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Inspect the plaintext payload inside of proxied TLS connections";
     longDescription = ''
       This tool will listen on a given port, strip SSL encryption,
@@ -29,8 +33,13 @@ buildGoModule rec {
       preserve the negotiated protocol all the way to the target.
     '';
     homepage = "https://github.com/VerSprite/alpnpass";
+<<<<<<< HEAD
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.raboof ];
+=======
+    license = licenses.unlicense;
+    maintainers = [ maintainers.raboof ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "alpnpass";
   };
 }

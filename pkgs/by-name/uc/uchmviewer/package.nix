@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uchmviewer";
+<<<<<<< HEAD
   version = "8.5";
+=======
+  version = "8.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "eBookProjects";
     repo = "uChmViewer";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-SHPX6fndfeOTyYsIaqXgmDqKkoNowDbqiCHuRsvUZyk=";
+=======
+    hash = "sha256-p3KIIg2B+sSlwJr1rNMP7JByxYXyYFsj+UyUiDbJge8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

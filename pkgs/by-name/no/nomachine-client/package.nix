@@ -93,17 +93,29 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontStrip = true;
 
+<<<<<<< HEAD
   meta = {
     description = "NoMachine remote desktop client (nxplayer)";
     homepage = "https://www.nomachine.com/";
     mainProgram = "nxplayer";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "NoMachine remote desktop client (nxplayer)";
+    homepage = "https://www.nomachine.com/";
+    mainProgram = "nxplayer";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = {
       fullName = "NoMachine 7 End-User License Agreement";
       url = "https://www.nomachine.com/licensing-7";
       free = false;
     };
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ talyz ];
+=======
+    maintainers = with maintainers; [ talyz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"

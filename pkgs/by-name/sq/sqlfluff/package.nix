@@ -1,11 +1,18 @@
 {
   lib,
   fetchFromGitHub,
+<<<<<<< HEAD
   python3Packages,
   versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
+=======
+  python3,
+}:
+
+python3.pkgs.buildPythonApplication rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "sqlfluff";
   version = "3.5.0";
   pyproject = true;
@@ -17,6 +24,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-fO4a1DCDM5RCeaPUHtPPGgTtZPRHOl9nuxbipDJZy7A=";
   };
 
+<<<<<<< HEAD
   build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
@@ -24,6 +32,12 @@ python3Packages.buildPythonApplication rec {
   ];
   dependencies =
     with python3Packages;
+=======
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies =
+    with python3.pkgs;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     [
       appdirs
       cached-property
@@ -48,12 +62,19 @@ python3Packages.buildPythonApplication rec {
       importlib_metadata
     ];
 
+<<<<<<< HEAD
   nativeCheckInputs = with python3Packages; [
     hypothesis
     pytestCheckHook
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
+=======
+  nativeCheckInputs = with python3.pkgs; [
+    hypothesis
+    pytestCheckHook
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTestPaths = [
     # Don't run the plugin related tests

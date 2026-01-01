@@ -27,11 +27,19 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 assets/fr.guillaume_gomez.ProcessViewer.metainfo.xml -t $out/share/metainfo
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Process viewer GUI in rust";
     homepage = "https://github.com/guillaumegomez/process-viewer";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Process viewer GUI in rust";
+    homepage = "https://github.com/guillaumegomez/process-viewer";
+    license = licenses.mit;
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "process_viewer";
   };
 }

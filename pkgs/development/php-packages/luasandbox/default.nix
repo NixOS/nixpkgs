@@ -8,13 +8,21 @@
 
 buildPecl rec {
   pname = "luasandbox";
+<<<<<<< HEAD
   version = "4.1.3";
+=======
+  version = "4.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "wikimedia";
     repo = "mediawiki-php-luasandbox";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-YQ7mxrAjtpYCThy0UPHlB0bkf86qpKqXxH4XV0hB+YU=";
+=======
+    hash = "sha256-HWObytoHBvxF9+QC62yJfi6MuHOOXFbSNkhuz5zWPCY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ pkg-config ];

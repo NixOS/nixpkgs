@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webpush" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for integrating and sending Web Push Notification in Django Application";
     homepage = "https://github.com/safwanrahman/django-webpush/";
     changelog = "https://github.com/safwanrahman/django-webpush/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ derdennisop ];
+=======
+  meta = with lib; {
+    description = "Module for integrating and sending Web Push Notification in Django Application";
+    homepage = "https://github.com/safwanrahman/django-webpush/";
+    changelog = "https://github.com/safwanrahman/django-webpush/releases/tag/${version}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ derdennisop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

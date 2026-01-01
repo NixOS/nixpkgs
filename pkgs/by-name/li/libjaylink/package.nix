@@ -42,11 +42,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.zapb.de/libjaylink/libjaylink";
     description = "Shared library written in C to access SEGGER J-Link and compatible devices";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ felixsinger ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.zapb.de/libjaylink/libjaylink";
+    description = "Shared library written in C to access SEGGER J-Link and compatible devices";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ felixsinger ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

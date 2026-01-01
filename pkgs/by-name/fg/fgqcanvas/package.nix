@@ -43,11 +43,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/p/flightgear/flightgear/ci/next/tree/utils/fgqcanvas/README.md";
     description = "Qt-based remote canvas application for FlightGear";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/p/flightgear/flightgear/ci/next/tree/utils/fgqcanvas/README.md";
+    description = "Qt-based remote canvas application for FlightGear";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "fgqcanvas";
   };

@@ -28,11 +28,20 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "imia" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Authentication library for Starlette and FastAPI";
     changelog = "https://github.com/alex-oleshkevich/imia/releases/tag/v${version}";
     homepage = "https://github.com/alex-oleshkevich/imia";
     license = lib.licenses.mit;
     teams = [ lib.teams.wdz ];
+=======
+  meta = with lib; {
+    description = "Authentication library for Starlette and FastAPI";
+    changelog = "https://github.com/alex-oleshkevich/imia/releases/tag/v${version}";
+    homepage = "https://github.com/alex-oleshkevich/imia";
+    license = licenses.mit;
+    teams = [ teams.wdz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

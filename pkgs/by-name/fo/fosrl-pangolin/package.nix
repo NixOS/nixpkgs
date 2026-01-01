@@ -29,22 +29,42 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
+<<<<<<< HEAD
   version = "1.13.1";
+=======
+  version = "1.10.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-rDysze915lmgbl/nz2NaPrFgNHAVOYRY4sVMnoYB3xE=";
   };
 
   npmDepsHash = "sha256-mSSzrkGZ0ZPYINRahzrbrO6oLDhmu8HWHfHzZKMroCg=";
+=======
+    hash = "sha256-o55S9Fr1gnyuXFAVgugrnFyJIv7nKMZ3Lc4+m/aVrII=";
+  };
+
+  npmDepsHash = "sha256-0vqH3nAB4HqfwS7Oy/qewzLyx48vS+rKiAwwbTkSOOc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
+<<<<<<< HEAD
+=======
+  prePatch = ''
+    cat > server/db/index.ts << EOF
+    export * from "./${db false}";
+    EOF
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
   # Based on pkgs.nextjs-ollama-llm-ui.
   postPatch = ''
@@ -59,6 +79,7 @@ buildNpmPackage (finalAttrs: {
     cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
   '';
 
+<<<<<<< HEAD
   preBuild = ''
     npm run set:oss
     npm run set:${db true}
@@ -73,6 +94,13 @@ buildNpmPackage (finalAttrs: {
 
     runHook postBuild
   '';
+=======
+  preBuild = "npx drizzle-kit generate --dialect ${db true} --schema ./server/db/${db false}/schema.ts --name migration --out init";
+
+  npmBuildScript = "build:${db false}";
+
+  postBuild = "npm run build:cli";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preInstall = "mkdir -p $out/{bin,share/pangolin}";
 
@@ -168,7 +196,10 @@ buildNpmPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       jackr
       sigmasquadron
+<<<<<<< HEAD
       water-sucks
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = lib.platforms.linux;
     mainProgram = "pangolin";

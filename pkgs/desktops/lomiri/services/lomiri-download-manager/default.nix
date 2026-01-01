@@ -28,13 +28,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-download-manager";
+<<<<<<< HEAD
   version = "0.3.0";
+=======
+  version = "0.2.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-download-manager";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-/rb1Fx0TbBuff2dWAgxpd72opTnLe0itcGwLJ53Wu9U=";
+=======
+    hash = "sha256-e4HyUi8GXImEtM5I7dH27cDceUn+VCFpb9xgbMpQBJU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [

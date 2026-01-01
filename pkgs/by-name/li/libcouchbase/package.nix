@@ -35,10 +35,18 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "C client library for Couchbase";
     homepage = "https://github.com/couchbase/libcouchbase";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C client library for Couchbase";
+    homepage = "https://github.com/couchbase/libcouchbase";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

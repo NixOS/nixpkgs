@@ -15,14 +15,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "smile";
+<<<<<<< HEAD
   version = "2.11.0";
+=======
+  version = "2.10.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = false; # Builds with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "smile";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-uggbeFcafCvIpT+qHsnULTZ9oyQkfT7phI5KW00HEXg=";
+=======
+    hash = "sha256-J+cCYt5ATR5xm/NsjYGkfQmHpTS5LDugj0XCphHanDc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

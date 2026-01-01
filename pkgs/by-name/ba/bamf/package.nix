@@ -97,16 +97,27 @@ stdenv.mkDerivation rec {
     ignoredVersions = ".ubuntu.*";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Application matching framework";
     longDescription = ''
       Removes the headache of applications matching
       into a simple DBus daemon and c wrapper library.
     '';
     homepage = "https://launchpad.net/bamf";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ davidak ];
     teams = [ lib.teams.pantheon ];
+=======
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ davidak ];
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

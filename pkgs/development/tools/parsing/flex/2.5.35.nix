@@ -42,12 +42,21 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 2 out of 46 tests
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     branch = "2.5.35";
     homepage = "https://flex.sourceforge.net/";
     description = "Fast lexical analyser generator";
     mainProgram = "flex";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

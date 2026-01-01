@@ -40,13 +40,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "86Box";
+<<<<<<< HEAD
   version = "5.3";
+=======
+  version = "5.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-n68Ghhsv15TzpOMH4dBTNxa6AYwqN5s2C5pyO9VVaco=";
+=======
+    hash = "sha256-JcKLtREGSNA0IOGM5kqFjAya155KeYV/nqynG4dVv4w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ ./darwin.patch ];
@@ -119,7 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "86Box";
       repo = "roms";
       tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
       hash = "sha256-7/xhhT29ijGNVlW7oJXdyJuhUwVs0b4dIUjc3lVtNEY=";
+=======
+      hash = "sha256-DmOxQ+E7bHF5St70YqPbIzMoADS8dtp2nDXvrhcAVw4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     updateScript = ./update.sh;
   };

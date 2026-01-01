@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dbus_python_client_gen" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for generating dbus-python client code";
     homepage = "https://github.com/stratis-storage/dbus-python-client-gen";
     changelog = "https://github.com/stratis-storage/dbus-python-client-gen/blob/v${version}/CHANGES.txt";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Python library for generating dbus-python client code";
+    homepage = "https://github.com/stratis-storage/dbus-python-client-gen";
+    changelog = "https://github.com/stratis-storage/dbus-python-client-gen/blob/v${version}/CHANGES.txt";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

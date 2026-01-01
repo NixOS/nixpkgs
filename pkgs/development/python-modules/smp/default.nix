@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "smp";
+<<<<<<< HEAD
   version = "4.0.2";
+=======
+  version = "4.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JPHutchins";
     repo = "smp";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-dATsVGG0b5SBZh7R7NT1deJFDRYi7BwtWzT7/QPjkJw=";
+=======
+    hash = "sha256-V6TGDG05sebn0IF3j0EbkozfO4X1DL3nnwrGOSh+Wuc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

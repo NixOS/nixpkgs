@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Vector search SQLite extension that runs anywhere";
     homepage = "https://github.com/asg017/sqlite-vec";
@@ -42,5 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.anmonteiro ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Vector search SQLite extension that runs anywhere";
+    homepage = "https://github.com/asg017/sqlite-vec";
+    changelog = "https://github.com/asg017/sqlite-vec/releases/tag/${finalAttrs.src.rev}";
+    license = licenses.mit;
+    maintainers = [ maintainers.anmonteiro ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -70,6 +70,10 @@ buildPythonPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/toggl";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     "integration"

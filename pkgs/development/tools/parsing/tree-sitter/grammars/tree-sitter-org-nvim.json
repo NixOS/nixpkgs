@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/milisims/tree-sitter-org",
+  "rev": "64cfbc213f5a83da17632c95382a5a0a2f3357c1",
+  "date": "2023-06-19T18:05:11-04:00",
+  "path": "/nix/store/9hdl3i24q6af6wxmkg89ww4rwkl45la7-tree-sitter-org",
+  "sha256": "1l62p4a3b22pa7b5mzmy497pk5b8w01hx6zinfwpbnzg2rjdwkgz",
+  "hash": "sha256-/03eZBbv23W5s/GbDgPgaJV5TyK+/lrWUVeINRS5wtA=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

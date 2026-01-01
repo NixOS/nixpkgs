@@ -50,10 +50,18 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'UnitTest++' ' '
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C++ Fix Engine Library";
     homepage = "http://www.quickfixengine.org";
     license = lib.licenses.free; # similar to BSD 4-clause
+=======
+  meta = with lib; {
+    description = "C++ Fix Engine Library";
+    homepage = "http://www.quickfixengine.org";
+    license = licenses.free; # similar to BSD 4-clause
+    maintainers = with maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isAarch64;
   };
 }

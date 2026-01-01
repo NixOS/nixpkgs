@@ -56,11 +56,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyatmo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple API to access Netatmo weather station data";
     homepage = "https://github.com/jabesq/pyatmo";
     changelog = "https://github.com/jabesq/pyatmo/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple API to access Netatmo weather station data";
+    homepage = "https://github.com/jabesq/pyatmo";
+    changelog = "https://github.com/jabesq/pyatmo/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

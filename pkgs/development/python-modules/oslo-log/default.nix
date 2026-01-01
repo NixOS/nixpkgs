@@ -25,14 +25,22 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
+<<<<<<< HEAD
   version = "8.0.0";
+=======
+  version = "7.2.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.log";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-XCQc0ByjnXU4/ArgJ6sGgm/EO2DevDdBgma85pjhdSc=";
+=======
+    hash = "sha256-DEKRkVaGJeHx/2k3pC/OxtJ0lzFj1IXtRFz1uJJPgR8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Manually set version because prb wants to get it from the git upstream repository (and we are

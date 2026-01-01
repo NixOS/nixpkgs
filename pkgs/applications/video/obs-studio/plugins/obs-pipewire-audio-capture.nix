@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_DATADIR=./share"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Audio device and application capture for OBS Studio using PipeWire";
     homepage = "https://github.com/dimtpap/obs-pipewire-audio-capture";
@@ -42,6 +43,16 @@ stdenv.mkDerivation rec {
       fazzi
     ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Audio device and application capture for OBS Studio using PipeWire";
+    homepage = "https://github.com/dimtpap/obs-pipewire-audio-capture";
+    maintainers = with maintainers; [
+      Elinvention
+      fazzi
+    ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

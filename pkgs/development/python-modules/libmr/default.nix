@@ -25,10 +25,18 @@ buildPythonPackage rec {
   # No tests in the pypi tarball
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "LibMR provides core MetaRecognition and Weibull fitting functionality";
     homepage = "https://github.com/Vastlab/libMR";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ psyanticy ];
+=======
+  meta = with lib; {
+    description = "LibMR provides core MetaRecognition and Weibull fitting functionality";
+    homepage = "https://github.com/Vastlab/libMR";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ psyanticy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

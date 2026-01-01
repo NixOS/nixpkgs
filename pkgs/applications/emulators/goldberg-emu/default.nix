@@ -42,7 +42,11 @@ stdenv.mkDerivation rec {
     ln -s $out/share/goldberg/tools/find_interfaces.sh $out/bin/find_interfaces
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://gitlab.com/Mr_Goldberg/goldberg_emulator";
     changelog = "https://gitlab.com/Mr_Goldberg/goldberg_emulator/-/releases";
@@ -52,8 +56,13 @@ stdenv.mkDerivation rec {
       use the steam multiplayer apis on a LAN without steam or an internet connection.
     '';
     mainProgram = "lobby_connect";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.lgpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -19,9 +19,16 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python 3 DNS library";
     homepage = "https://launchpad.net/py3dns";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    description = "Python 3 DNS library";
+    homepage = "https://launchpad.net/py3dns";
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

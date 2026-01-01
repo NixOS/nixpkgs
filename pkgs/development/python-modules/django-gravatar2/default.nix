@@ -22,9 +22,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_gravatar" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Essential Gravatar support for Django";
     homepage = "https://github.com/twaddington/django-gravatar";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Essential Gravatar support for Django";
+    homepage = "https://github.com/twaddington/django-gravatar";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

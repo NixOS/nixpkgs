@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "svg.path" ];
 
+<<<<<<< HEAD
   meta = {
     description = "SVG path objects and parser";
     homepage = "https://github.com/regebro/svg.path";
     changelog = "https://github.com/regebro/svg.path/blob/${version}/CHANGES.txt";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "SVG path objects and parser";
+    homepage = "https://github.com/regebro/svg.path";
+    changelog = "https://github.com/regebro/svg.path/blob/${version}/CHANGES.txt";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

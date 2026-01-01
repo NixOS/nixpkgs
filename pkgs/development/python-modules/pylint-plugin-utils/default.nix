@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylint_plugin_utils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities and helpers for writing Pylint plugins";
     homepage = "https://github.com/PyCQA/pylint-plugin-utils";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "Utilities and helpers for writing Pylint plugins";
+    homepage = "https://github.com/PyCQA/pylint-plugin-utils";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

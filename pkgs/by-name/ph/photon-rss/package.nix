@@ -22,6 +22,7 @@ buildGoModule {
 
   vendorHash = "sha256-n9XNqXIoqn+f0xKCenJWXUYXtQhtbNBar68onWH/WV4=";
 
+<<<<<<< HEAD
   meta = {
     description = "RSS/Atom reader with the focus on speed, usability and a bit of unix philosophy";
     mainProgram = "photon";
@@ -29,5 +30,14 @@ buildGoModule {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ kmein ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "RSS/Atom reader with the focus on speed, usability and a bit of unix philosophy";
+    mainProgram = "photon";
+    homepage = "https://sr.ht/~ghost08/photon";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ kmein ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

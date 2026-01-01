@@ -30,7 +30,11 @@ buildEnv {
     pushd "${aspell}/bin"
     for prg in *; do
       if [ -f "$prg" ]; then
+<<<<<<< HEAD
         makeWrapper "${aspell}/bin/$prg" "$out/bin/$prg" --set ASPELL_CONF "dict-dir $out/lib/aspell; data-dir $out/share/aspell"
+=======
+        makeWrapper "${aspell}/bin/$prg" "$out/bin/$prg" --set ASPELL_CONF "dict-dir $out/lib/aspell"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fi
     done
     popd

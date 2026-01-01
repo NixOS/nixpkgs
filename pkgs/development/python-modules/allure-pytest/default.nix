@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "allure_pytest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Allure integrations for Python test frameworks";
     homepage = "https://github.com/allure-framework/allure-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ evanjs ];
+=======
+  meta = with lib; {
+    description = "Allure integrations for Python test frameworks";
+    homepage = "https://github.com/allure-framework/allure-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ evanjs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

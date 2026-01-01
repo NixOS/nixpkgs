@@ -34,9 +34,13 @@ mkDerivation {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     substituteInPlace "$BSDSRCDIR/libexec/rc/Makefile" \
       --replace-fail /etc $out/etc \
       --replace-fail /libexec $out/libexec
+=======
+    substituteInPlace "$BSDSRCDIR/libexec/rc/Makefile" --replace-fail /etc $out/etc
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     substituteInPlace "$BSDSRCDIR/libexec/rc/rc.d/Makefile" \
       --replace-fail /etc $services/etc \
       --replace-fail /var $services/var

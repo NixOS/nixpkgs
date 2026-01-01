@@ -811,7 +811,11 @@ rec {
     meta.license = lib.licenses.gpl2Only;
   };
 
+<<<<<<< HEAD
   "or" = buildOfficialDict {
+=======
+  or = buildOfficialDict {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     language = "or";
     version = "0.03-1";
     fullName = "Oriya";

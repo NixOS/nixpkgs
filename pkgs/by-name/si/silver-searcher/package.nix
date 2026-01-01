@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     xz
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ggreer/the_silver_searcher/";
     description = "Code-searching tool similar to ack, but faster";
@@ -47,5 +48,14 @@ stdenv.mkDerivation rec {
     mainProgram = "ag";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ggreer/the_silver_searcher/";
+    description = "Code-searching tool similar to ack, but faster";
+    maintainers = with maintainers; [ madjar ];
+    mainProgram = "ag";
+    platforms = platforms.all;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

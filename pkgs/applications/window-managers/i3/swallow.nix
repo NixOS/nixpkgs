@@ -34,11 +34,19 @@ buildPythonApplication {
   # No tests available
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jamesofarrell/i3-swallow";
     description = "Swallow a terminal window in i3wm";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jamesofarrell/i3-swallow";
+    description = "Swallow a terminal window in i3wm";
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "swallow";
     maintainers = [ ];
   };

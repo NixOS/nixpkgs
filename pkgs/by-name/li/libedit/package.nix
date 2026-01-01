@@ -61,7 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
       similar to those found in GNU Readline.
     '';
     license = with lib.licenses; [ bsd3 ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ corngood ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 })

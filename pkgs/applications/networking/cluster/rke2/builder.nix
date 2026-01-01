@@ -22,7 +22,10 @@ lib:
   makeWrapper,
   fetchzip,
   fetchurl,
+<<<<<<< HEAD
   versionCheckHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Runtime dependencies
   procps,
@@ -43,6 +46,10 @@ lib:
 
   # Testing dependencies
   nixosTests,
+<<<<<<< HEAD
+=======
+  testers,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 buildGoModule (finalAttrs: {
   pname = "rke2";
@@ -129,19 +136,39 @@ buildGoModule (finalAttrs: {
     go tool nm $out/bin/.rke2-wrapped | grep '_Cfunc__goboringcrypto_' > /dev/null
     runHook postInstallCheck
   '';
+<<<<<<< HEAD
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     inherit updateScript;
     tests =
       let
+<<<<<<< HEAD
         versionedPackage =
           "rke2_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor rke2Version);
       in
       lib.mapAttrs (name: _: nixosTests.rke2.${name}.${versionedPackage}) (
         lib.filterAttrs (n: _: n != "all") nixosTests.rke2
       );
+=======
+        moduleTests =
+          let
+            package_version =
+              "rke2_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor rke2Version);
+          in
+          lib.mapAttrs (name: value: nixosTests.rke2.${name}.${package_version}) nixosTests.rke2;
+      in
+      {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          version = "v${finalAttrs.version}";
+        };
+      }
+      // moduleTests;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   }
   // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 

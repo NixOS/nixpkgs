@@ -27,11 +27,19 @@ stdenv.mkDerivation {
     cp ent $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pseudorandom Number Sequence Test Program";
     homepage = "https://www.fourmilab.ch/random/";
     platforms = lib.platforms.all;
     license = lib.licenses.publicDomain;
+=======
+  meta = with lib; {
+    description = "Pseudorandom Number Sequence Test Program";
+    homepage = "https://www.fourmilab.ch/random/";
+    platforms = platforms.all;
+    license = licenses.publicDomain;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ent";
   };
 }

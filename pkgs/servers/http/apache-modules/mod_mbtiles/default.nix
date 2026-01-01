@@ -32,11 +32,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/systemed/mod_mbtiles";
     description = "Serve tiles with Apache directly from an .mbtiles file";
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/systemed/mod_mbtiles";
+    description = "Serve tiles with Apache directly from an .mbtiles file";
+    license = licenses.free;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

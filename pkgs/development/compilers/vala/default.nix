@@ -110,6 +110,7 @@ let
         };
       };
 
+<<<<<<< HEAD
       meta = {
         description = "Compiler for GObject type system";
         homepage = "https://vala.dev";
@@ -120,6 +121,18 @@ let
           jtojnar
         ];
         teams = [ lib.teams.pantheon ];
+=======
+      meta = with lib; {
+        description = "Compiler for GObject type system";
+        homepage = "https://vala.dev";
+        license = licenses.lgpl21Plus;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [
+          antono
+          jtojnar
+        ];
+        teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     }
   );

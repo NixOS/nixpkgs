@@ -24,7 +24,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     fmt
+<<<<<<< HEAD
     (glaze.override { enableSSL = false; })
+=======
+    glaze
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   installPhase = ''
@@ -38,11 +42,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal Benchmarking as CLI and library";
     mainProgram = "tb";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ moni ];
+=======
+  meta = with lib; {
+    description = "Terminal Benchmarking as CLI and library";
+    mainProgram = "tb";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ moni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

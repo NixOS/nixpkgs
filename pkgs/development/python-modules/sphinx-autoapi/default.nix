@@ -21,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
+<<<<<<< HEAD
   version = "3.6.1";
+=======
+  version = "3.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +34,11 @@ buildPythonPackage rec {
     owner = "readthedocs";
     repo = "sphinx-autoapi";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-dafrvrTl4bVBBaAhTCIPVrSA1pdNlbT5Rou3T//fmKQ=";
+=======
+    hash = "sha256-pDfGNpDyrU4q48ZHKqfN8OrxKICfIhac2qMJDB1iE0I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ flit-core ];
@@ -57,7 +65,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autoapi" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
     changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/${src.tag}/CHANGELOG.rst";
     description = "Provides 'autodoc' style documentation";
@@ -66,7 +78,11 @@ buildPythonPackage rec {
       multiple programming languages without needing to load, run, or
       import the project being documented.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

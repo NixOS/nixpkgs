@@ -86,13 +86,22 @@ rustPlatform.buildRustPackage {
     mv $out/bin/app $out/bin/xplorer
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # webkitgtk_4_0 was removed
     broken = true;
     description = "Customizable, modern file manager";
     homepage = "https://xplorer.space";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xplorer";
   };
 }

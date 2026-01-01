@@ -20,7 +20,10 @@
   qtwebengine,
   readline,
   qtwebsockets,
+<<<<<<< HEAD
   qtwayland,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   useSCEL ? false,
   emacs,
   gitUpdater,
@@ -49,12 +52,15 @@ mkDerivation rec {
       url = "https://github.com/supercollider/supercollider/commit/7d1f3fbe54e122889489a2f60bbc6cd6bb3bce28.patch";
       hash = "sha256-gyE0B2qTbj0ppbLlYTMa2ooY3FHzzIrdrpWYr81Hy1Y=";
     })
+<<<<<<< HEAD
 
     # Fixes the build with GCC 15
     (fetchpatch {
       url = "https://github.com/supercollider/supercollider/commit/edfac5e24959b12286938a9402326e521c2d2b63.patch";
       hash = "sha256-8DNCO5VEX6V0Q29A/v5tFC7u835bwNHvcNlZzmS0ADg=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''
@@ -80,7 +86,10 @@ mkDerivation rec {
     libXt
     qtbase
     qtwebsockets
+<<<<<<< HEAD
     qtwayland
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     readline
   ]
   ++ lib.optional withWebengine qtwebengine
@@ -124,12 +133,21 @@ mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
     changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

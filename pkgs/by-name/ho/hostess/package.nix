@@ -19,10 +19,18 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     description = "Idempotent command-line utility for managing your /etc/hosts* file";
     mainProgram = "hostess";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ edlimerkaj ];
+=======
+  meta = with lib; {
+    description = "Idempotent command-line utility for managing your /etc/hosts* file";
+    mainProgram = "hostess";
+    license = licenses.mit;
+    maintainers = with maintainers; [ edlimerkaj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

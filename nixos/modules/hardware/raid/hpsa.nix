@@ -37,10 +37,17 @@ let
 
     dontStrip = true;
 
+<<<<<<< HEAD
     meta = {
       description = "HP Smart Array CLI";
       homepage = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/";
       license = lib.licenses.unfreeRedistributable;
+=======
+    meta = with lib; {
+      description = "HP Smart Array CLI";
+      homepage = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/";
+      license = licenses.unfreeRedistributable;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = [ "x86_64-linux" ];
       maintainers = [ ];
     };

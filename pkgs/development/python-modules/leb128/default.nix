@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "leb128" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/mohanson/leb128/releases/tag/v${version}";
     description = "Utility to encode and decode Little Endian Base 128";
     homepage = "https://github.com/mohanson/leb128";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urlordjames ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/mohanson/leb128/releases/tag/v${version}";
+    description = "Utility to encode and decode Little Endian Base 128";
+    homepage = "https://github.com/mohanson/leb128";
+    license = licenses.mit;
+    maintainers = with maintainers; [ urlordjames ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

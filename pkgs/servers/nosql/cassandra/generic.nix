@@ -130,6 +130,7 @@ stdenv.mkDerivation rec {
   };
 
   meta =
+<<<<<<< HEAD
 
     {
       homepage = "https://cassandra.apache.org/";
@@ -141,6 +142,19 @@ stdenv.mkDerivation rec {
         binaryNativeCode # bundled dependency libsigar
       ];
       maintainers = [ lib.maintainers.roberth ];
+=======
+    with lib;
+    {
+      homepage = "https://cassandra.apache.org/";
+      description = "Massively scalable open source NoSQL database";
+      platforms = platforms.unix;
+      license = licenses.asl20;
+      sourceProvenance = with sourceTypes; [
+        binaryBytecode
+        binaryNativeCode # bundled dependency libsigar
+      ];
+      maintainers = [ maintainers.roberth ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     // extraMeta;
 }

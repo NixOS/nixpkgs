@@ -64,6 +64,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     inherit firefox-unwrapped firefox-esr-unwrapped;
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-${finalAttrs.version}";
     description = "WASI libc implementation for WebAssembly";
@@ -74,6 +75,18 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
       wucke13
     ];
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    changelog = "https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-${finalAttrs.version}";
+    description = "WASI libc implementation for WebAssembly";
+    homepage = "https://wasi.dev";
+    platforms = platforms.wasi;
+    maintainers = with maintainers; [
+      rvolosatovs
+      wucke13
+    ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       llvm-exception
       mit

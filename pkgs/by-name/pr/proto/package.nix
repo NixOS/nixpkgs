@@ -6,17 +6,25 @@
   libiconv,
   makeBinaryWrapper,
   pkg-config,
+<<<<<<< HEAD
   perl,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "proto";
+<<<<<<< HEAD
   version = "0.53.0";
+=======
+  version = "0.50.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "proto";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-gRu/e4CMMKbmUDBbRbrHMpYZ+N1tGUKt758SP3Sp1uI=";
   };
 
@@ -25,11 +33,23 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
 
+=======
+    hash = "sha256-X448S7eGx60CgpZkV81bVuxAc6HuIRNeHJgKW4min/E=";
+  };
+
+  cargoHash = "sha256-PUNBq4VWufCeFdhI7zThEyDMA4UHpL95uVdv4uouxBQ=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
+<<<<<<< HEAD
     perl
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # Tests requires network access

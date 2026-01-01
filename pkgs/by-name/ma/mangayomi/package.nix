@@ -1,11 +1,18 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   flutter338,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
   alsa-lib,
+=======
+  flutter332,
+  rustPlatform,
+  fetchFromGitHub,
+  copyDesktopItems,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mpv-unwrapped,
   webkitgtk_4_1,
   makeDesktopItem,
@@ -14,13 +21,21 @@
 
 let
   pname = "mangayomi";
+<<<<<<< HEAD
   version = "0.6.85";
+=======
+  version = "0.6.35";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Zy4B0nl9R/LmXj/DUI4v98GbSUu8YWGOO0GCXpRHtBA=";
+=======
+    hash = "sha256-XSXFo0+rLTUJ0p3F5+CvKD85OmrShb2xrpQK0F6fo2U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   metaCommon = {
@@ -37,14 +52,22 @@ let
 
     sourceRoot = "${src.name}/rust";
 
+<<<<<<< HEAD
     cargoHash = "sha256-3q+fI0MHg+wSSkbEzqXxdoGkF0B/LhLMbB6VcX3xuwE=";
+=======
+    cargoHash = "sha256-DDHBLQWscORg4+0CX5c2wmrhm2t7wOpotZFB+85w+EA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
+<<<<<<< HEAD
 flutter338.buildFlutterApplication {
+=======
+flutter332.buildFlutterApplication {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -86,7 +109,11 @@ flutter338.buildFlutterApplication {
 
           buildAndTestSubdir = "rust";
 
+<<<<<<< HEAD
           cargoHash = "sha256-oJOM/Tb4QrezdtU8YTyr57JZp5FkDewgwXrBqwp6cp8=";
+=======
+          cargoHash = "sha256-vYVg5ZALQDrolDtbbXm/epE5MmSKpRJbSU15VDiKh4U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           passthru.libraryPath = "lib/libflutter_discord_rpc_fork.so";
         };
@@ -123,7 +150,10 @@ flutter338.buildFlutterApplication {
   nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
+<<<<<<< HEAD
     alsa-lib
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mpv-unwrapped
     webkitgtk_4_1
   ];

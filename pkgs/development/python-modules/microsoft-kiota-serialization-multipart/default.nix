@@ -45,11 +45,20 @@ buildPythonPackage rec {
     rev-prefix = "microsoft-kiota-serialization-multipart-v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Multipart serialization implementation for Kiota clients in Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/serialization/multipart";
     changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-multipart-${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Multipart serialization implementation for Kiota clients in Python";
+    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/serialization/multipart";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-multipart-${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

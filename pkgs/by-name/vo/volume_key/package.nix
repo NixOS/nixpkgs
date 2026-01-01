@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 1 out of 1 tests, needs `certutil`
 
+<<<<<<< HEAD
   meta = {
     description = "Library for manipulating storage volume encryption keys and storing them separately from volumes to handle forgotten passphrases, and the associated command-line tool";
     mainProgram = "volume_key";
@@ -81,5 +82,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library for manipulating storage volume encryption keys and storing them separately from volumes to handle forgotten passphrases, and the associated command-line tool";
+    mainProgram = "volume_key";
+    homepage = "https://pagure.io/volume_key/";
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

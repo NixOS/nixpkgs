@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ppk2_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Power Profiling Kit 2 unofficial Python API";
     homepage = "https://github.com/IRNAS/ppk2-api-python";
     changelog = "https://github.com/IRNAS/ppk2-api-python/releases/tag/v${version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Power Profiling Kit 2 unofficial Python API";
+    homepage = "https://github.com/IRNAS/ppk2-api-python";
+    changelog = "https://github.com/IRNAS/ppk2-api-python/releases/tag/v${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

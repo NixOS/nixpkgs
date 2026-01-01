@@ -93,11 +93,20 @@ buildPythonPackage {
 
   optional-dependencies = optional-dependencies;
 
+<<<<<<< HEAD
   meta = {
     description = "Unified toolkit for Deep Learning Based Document Image Analysis";
     homepage = "https://github.com/Layout-Parser/layout-parser";
     changelog = "https://github.com/Layout-Parser/layout-parser/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Unified toolkit for Deep Learning Based Document Image Analysis";
+    homepage = "https://github.com/Layout-Parser/layout-parser";
+    changelog = "https://github.com/Layout-Parser/layout-parser/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

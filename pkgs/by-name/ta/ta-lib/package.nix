@@ -22,13 +22,22 @@ stdenv.mkDerivation rec {
   ];
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Add technical analysis to your own financial market trading applications";
     mainProgram = "ta-lib-config";
     homepage = "https://ta-lib.org/";
     license = lib.licenses.bsd3;
 
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rafael ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rafael ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

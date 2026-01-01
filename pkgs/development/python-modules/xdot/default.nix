@@ -16,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "xdot";
+<<<<<<< HEAD
   version = "1.6";
+=======
+  version = "1.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jrfonseca";
     repo = "xdot.py";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-eOuD8q7qN2MAFklIy28lfR0nEMsKDqVO+HE3+M0k5T0=";
+=======
+    hash = "sha256-fkO1bINRkCCzVRrQg9+vIODbN+bpXq2OHBKkzzZUZNA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -60,10 +68,18 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive viewer for graphs written in Graphviz's dot";
     mainProgram = "xdot";
     homepage = "https://github.com/jrfonseca/xdot.py";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Interactive viewer for graphs written in Graphviz's dot";
+    mainProgram = "xdot";
+    homepage = "https://github.com/jrfonseca/xdot.py";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

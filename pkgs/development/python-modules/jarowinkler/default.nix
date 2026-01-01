@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jarowinkler" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for fast approximate string matching using Jaro and Jaro-Winkler similarity";
     homepage = "https://github.com/maxbachmann/JaroWinkler";
     changelog = "https://github.com/maxbachmann/JaroWinkler/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Library for fast approximate string matching using Jaro and Jaro-Winkler similarity";
+    homepage = "https://github.com/maxbachmann/JaroWinkler";
+    changelog = "https://github.com/maxbachmann/JaroWinkler/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

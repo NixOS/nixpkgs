@@ -1,4 +1,5 @@
 { pkgs, lib, ... }:
+<<<<<<< HEAD
 let
   token = "1234";
   dummyFile = pkgs.writeTextFile {
@@ -10,6 +11,8 @@ let
     text = "token=${token}";
   };
 in
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 {
   name = "frp";
   meta.maintainers = with lib.maintainers; [ zaldnoay ];
@@ -26,6 +29,7 @@ in
         networkConfig.Address = "10.0.0.1/24";
       };
 
+<<<<<<< HEAD
       services.frp.instances.server = {
         enable = true;
         role = "server";
@@ -38,6 +42,14 @@ in
           vhostHTTPPort = 80;
           auth.method = "token";
           auth.token = "{{ .Envs.token }}";
+=======
+      services.frp = {
+        enable = true;
+        role = "server";
+        settings = {
+          bindPort = 7000;
+          vhostHTTPPort = 80;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       };
     };
@@ -70,14 +82,21 @@ in
         enablePHP = true;
       };
 
+<<<<<<< HEAD
       services.frp.instances.client = {
+=======
+      services.frp = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         enable = true;
         role = "client";
         settings = {
           serverAddr = "10.0.0.1";
           serverPort = 7000;
+<<<<<<< HEAD
           auth.method = "token";
           auth.token = token;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           proxies = [
             {
               name = "web";
@@ -93,9 +112,15 @@ in
 
   testScript = ''
     start_all()
+<<<<<<< HEAD
     frps.wait_for_unit("frp-server.service")
     frps.wait_for_open_port(80)
     frpc.wait_for_unit("frp-client.service")
+=======
+    frps.wait_for_unit("frp.service")
+    frps.wait_for_open_port(80)
+    frpc.wait_for_unit("frp.service")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     response = frpc.succeed("curl -fvvv -s http://127.0.0.1/")
     assert "PHP Version ${pkgs.php84.version}" in response, "PHP version not detected"
     response = frpc.succeed("curl -fvvv -s http://10.0.0.1/")

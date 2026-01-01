@@ -1,7 +1,10 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   config,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -29,18 +32,28 @@
   wayland-scanner,
   enableX11 ? stdenv.hostPlatform.isLinux,
   xorg,
+<<<<<<< HEAD
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "ueberzugpp";
   version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
+=======
+    rev = "v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-BTOuOS0zCdYTTc47UHaGI6wqFEv6e71cD2XBZtnKGLU=";
   };
 
@@ -52,10 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableWayland [
     wayland-scanner
+<<<<<<< HEAD
   ]
   # Required by opencv when cudaSupport is enabled
   ++ lib.optionals cudaSupport [
     (lib.getBin cudaPackages.cuda_nvcc)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -86,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableX11 [
     xorg.libX11
     xorg.xcbutilimage
+<<<<<<< HEAD
   ]
   # Required by opencv when cudaSupport is enabled
   ++ lib.optionals cudaSupport [
@@ -110,3 +127,29 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
   };
 })
+=======
+  ];
+
+  cmakeFlags =
+    lib.optionals (!enableOpencv) [
+      "-DENABLE_OPENCV=OFF"
+    ]
+    ++ lib.optionals enableWayland [
+      "-DENABLE_WAYLAND=ON"
+    ]
+    ++ lib.optionals (!enableX11) [
+      "-DENABLE_X11=OFF"
+    ];
+
+  meta = with lib; {
+    description = "Drop in replacement for ueberzug written in C++";
+    homepage = "https://github.com/jstkdng/ueberzugpp";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      aleksana
+      wegank
+    ];
+    platforms = platforms.unix;
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

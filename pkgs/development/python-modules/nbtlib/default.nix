@@ -30,12 +30,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbtlib" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library to read and edit nbt data";
     mainProgram = "nbt";
     homepage = "https://github.com/vberlier/nbtlib";
     changelog = "https://github.com/vberlier/nbtlib/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gdd ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ gdd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -23,10 +23,17 @@ buildGoModule rec {
     "-X main.revision=${src.rev}"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/itchyny/mmv";
     description = "Rename multiple files using your $EDITOR";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/itchyny/mmv";
+    description = "Rename multiple files using your $EDITOR";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "mmv";
   };

@@ -16,10 +16,17 @@ buildPythonPackage rec {
 
   doCheck = false; # No tests
 
+<<<<<<< HEAD
   meta = {
     description = "Python port of YUI CSS Compressor";
     homepage = "https://pypi.python.org/pypi/csscompressor";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python port of YUI CSS Compressor";
+    homepage = "https://pypi.python.org/pypi/csscompressor";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

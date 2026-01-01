@@ -52,10 +52,18 @@ mkCoqDerivation {
     mathcomp-boot
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Relation algebra library for Coq";
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Relation algebra library for Coq";
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

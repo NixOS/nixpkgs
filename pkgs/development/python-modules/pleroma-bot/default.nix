@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pleroma_bot" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bot for mirroring one or multiple Twitter accounts in Pleroma/Mastodon";
     mainProgram = "pleroma-bot";
     homepage = "https://robertoszek.github.io/pleroma-bot/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ robertoszek ];
+=======
+  meta = with lib; {
+    description = "Bot for mirroring one or multiple Twitter accounts in Pleroma/Mastodon";
+    mainProgram = "pleroma-bot";
+    homepage = "https://robertoszek.github.io/pleroma-bot/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ robertoszek ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

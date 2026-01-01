@@ -43,12 +43,21 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "urlwatch" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for monitoring webpages for updates";
     homepage = "https://thp.io/2008/urlwatch/";
     changelog = "https://github.com/thp/urlwatch/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool for monitoring webpages for updates";
+    homepage = "https://thp.io/2008/urlwatch/";
+    changelog = "https://github.com/thp/urlwatch/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kmein
       tv
     ];

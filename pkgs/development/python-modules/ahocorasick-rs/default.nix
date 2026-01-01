@@ -46,12 +46,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ahocorasick_rs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast Aho-Corasick algorithm for Python";
     homepage = "https://github.com/G-Research/ahocorasick_rs/";
     changelog = "https://github.com/G-Research/ahocorasick_rs/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Fast Aho-Corasick algorithm for Python";
+    homepage = "https://github.com/G-Research/ahocorasick_rs/";
+    changelog = "https://github.com/G-Research/ahocorasick_rs/blob/${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

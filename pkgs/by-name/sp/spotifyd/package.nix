@@ -23,16 +23,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotifyd";
+<<<<<<< HEAD
   version = "0.4.2";
+=======
+  version = "0.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-+t6z2cenw0fU5onl5F5vtk7Hr24IzTCAee+Lcnd7aT4=";
   };
 
   cargoHash = "sha256-rv4FWyciv6vDKtD7moJppY3tOJb0B3ezE9HgCLNhIo8=";
+=======
+    hash = "sha256-IqJlqcau0AZAqQjlaEKzinqTdVUA48/m2Y3ioFP/4Zw=";
+  };
+
+  cargoHash = "sha256-wZ/JJZDo+Iz5vg4XawcZFvjOEqpD5I0jTfg1JyH3+MA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     cmake
@@ -79,6 +90,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       anderslundstedt
+<<<<<<< HEAD
+=======
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       getchoo
     ];
     platforms = lib.platforms.unix;

@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "benchmarks" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dict subclass that supports dot access notation";
     homepage = "https://github.com/rnag/dotwiz";
     changelog = "https://github.com/rnag/dotwiz/blob/v${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Dict subclass that supports dot access notation";
+    homepage = "https://github.com/rnag/dotwiz";
+    changelog = "https://github.com/rnag/dotwiz/blob/v${src.tag}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

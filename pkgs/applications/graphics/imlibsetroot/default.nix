@@ -37,12 +37,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Xinerama Aware Background Changer";
     homepage = "http://robotmonkeys.net/2010/03/30/imlibsetroot/";
     license = lib.licenses.mitAdvertising;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dwarfmaster ];
+=======
+  meta = with lib; {
+    description = "Xinerama Aware Background Changer";
+    homepage = "http://robotmonkeys.net/2010/03/30/imlibsetroot/";
+    license = licenses.mitAdvertising;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dwarfmaster ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "imlibsetroot";
   };
 }

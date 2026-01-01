@@ -63,7 +63,11 @@ stdenv.mkDerivation {
     cp -a README $out/doc/README.driver
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.openprinting.org/driver/epson-201207w";
     description = "Epson printer driver (L110, L210, L300, L350, L355, L550, L555)";
     longDescription = ''
@@ -86,11 +90,19 @@ stdenv.mkDerivation {
           drivers = [ pkgs.epson_201207w ];
         };
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
       lgpl21Plus
       epson
     ];
     maintainers = [ lib.maintainers.romildo ];
+=======
+    license = with licenses; [
+      lgpl21Plus
+      epson
+    ];
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 

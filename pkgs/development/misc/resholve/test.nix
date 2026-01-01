@@ -25,7 +25,10 @@
   rlwrap,
   gnutar,
   bc,
+<<<<<<< HEAD
   systemd,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # override testing
   esh,
   getconf,
@@ -34,6 +37,10 @@
   mount,
   ncurses,
   nixos-install-tools,
+<<<<<<< HEAD
+=======
+  nixos-rebuild,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   procps,
   ps,
   # known consumers
@@ -49,6 +56,10 @@
   nix-direnv,
   pdf2odt,
   pdfmm,
+<<<<<<< HEAD
+=======
+  rancid,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   s0ix-selftest-tool,
   unix-privesc-check,
   wgnord,
@@ -76,9 +87,12 @@ let
     gnutar
     bc
     msmtp
+<<<<<<< HEAD
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     systemd
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 in
 rec {
@@ -160,9 +174,12 @@ rec {
         inputs = [ ];
       };
     };
+<<<<<<< HEAD
     postResholve = ''
       echo "not a load-bearing test, just prove we exist"
     '';
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   # demonstrate that we could use resholve in larger build
   module3 = stdenv.mkDerivation {
@@ -224,8 +241,11 @@ rec {
     INTERP = "${bash}/bin/bash";
 
     checkPhase = ''
+<<<<<<< HEAD
       echo removing parse tests matching no${stdenv.buildPlatform.uname.system}
       rm tests/parse_*no${stdenv.buildPlatform.uname.system}.sh || true # ok if none exist
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       patchShebangs .
       mkdir empty_lore
       touch empty_lore/{execers,wrappers}
@@ -295,6 +315,10 @@ rec {
         ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [
           nixos-install-tools
+<<<<<<< HEAD
+=======
+          nixos-rebuild
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ];
         interpreter = "none";
         execer = [
@@ -321,6 +345,10 @@ rec {
         ''
         + lib.optionalString stdenv.hostPlatform.isLinux ''
           nixos-generate-config fake args
+<<<<<<< HEAD
+=======
+          nixos-rebuild fake args
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ''
       );
 
@@ -343,6 +371,10 @@ rec {
 // lib.optionalAttrs stdenv.hostPlatform.isLinux {
   inherit arch-install-scripts;
   inherit dgoss;
+<<<<<<< HEAD
+=======
+  inherit rancid;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit unix-privesc-check;
   inherit wgnord;
   inherit wsl-vpnkit;

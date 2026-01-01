@@ -50,10 +50,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_i18n" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Oslo i18n library";
     homepage = "https://github.com/openstack/oslo.i18n";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Oslo i18n library";
+    homepage = "https://github.com/openstack/oslo.i18n";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,10 +39,17 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "nbsmoke" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Basic notebook checks and linting";
     homepage = "https://github.com/pyviz/nbsmoke";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Basic notebook checks and linting";
+    homepage = "https://github.com/pyviz/nbsmoke";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

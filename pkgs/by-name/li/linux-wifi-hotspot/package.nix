@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${placeholder "out"}/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Feature-rich wifi hotspot creator for Linux which provides both GUI and command-line interface";
     homepage = "https://github.com/lakinduakash/linux-wifi-hotspot";
@@ -103,6 +104,17 @@ stdenv.mkDerivation (finalAttrs: {
       onny
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Feature-rich wifi hotspot creator for Linux which provides both GUI and command-line interface";
+    homepage = "https://github.com/lakinduakash/linux-wifi-hotspot";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+      johnrtitor
+      onny
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 })

@@ -44,13 +44,22 @@ let
 
       enableParallelBuilding = true;
 
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";
         mainProgram = "ragel";
         inherit broken license;
+<<<<<<< HEAD
         platforms = lib.platforms.unix;
         maintainers = with lib.maintainers; [ pSub ];
+=======
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 

@@ -43,11 +43,19 @@ stdenv.mkDerivation {
 
   passthru.tests.nixosTest = nixosTests.urn-timer;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/paoloose/urn";
     description = "Split tracker / timer for speedrunning with GTK+ frontend";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/paoloose/urn";
+    description = "Split tracker / timer for speedrunning with GTK+ frontend";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "urn-gtk";
   };
 }

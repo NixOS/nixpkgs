@@ -37,9 +37,16 @@ buildPythonPackage rec {
     testDir
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Backport of typing module to Python versions older than 3.5";
     homepage = "https://docs.python.org/3/library/typing.html";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    description = "Backport of typing module to Python versions older than 3.5";
+    homepage = "https://docs.python.org/3/library/typing.html";
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

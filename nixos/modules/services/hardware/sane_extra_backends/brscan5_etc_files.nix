@@ -73,11 +73,20 @@ stdenv.mkDerivation {
 
   dontInstall = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Brother brscan5 sane backend driver etc files";
     homepage = "https://www.brother.com";
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ mattchrist ];
+=======
+  meta = with lib; {
+    description = "Brother brscan5 sane backend driver etc files";
+    homepage = "https://www.brother.com";
+    platforms = platforms.linux;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ mattchrist ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

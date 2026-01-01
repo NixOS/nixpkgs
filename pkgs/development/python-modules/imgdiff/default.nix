@@ -28,12 +28,20 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Compare two images side-by-side";
     mainProgram = "imgdiff";
     homepage = "https://github.com/mgedmin/imgdiff";
     changelog = "https://github.com/mgedmin/imgdiff/blob/${src.rev}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -47,7 +47,11 @@
   vala,
   gi-docgen,
   perl,
+<<<<<<< HEAD
   appstream,
+=======
+  appstream-glib,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   desktop-file-utils,
   xorg,
   glib-networking,
@@ -79,7 +83,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
+<<<<<<< HEAD
   version = "3.0.6";
+=======
+  version = "3.0.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -90,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-JGwiU4PHLvnw3HcDt9cHCEu/F3vSkA6UzkZqYoYuKWs=";
   };
 
@@ -101,6 +110,12 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-pjOjyzZxxl+zRqThXBwCBfYHdGhgaMI/IMKaL3XGAMs=";
     })
 
+=======
+    hash = "sha256-jKouwnW/CTJldWVKwnavwIP4SR58ykXRnPKeaWrsqyU=";
+  };
+
+  patches = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # to remove compiler from the runtime closure, reference was retained via
     # gimp --version --verbose output
     (replaceVars ./remove-cc-reference.patch {
@@ -120,6 +135,16 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
     })
+<<<<<<< HEAD
+=======
+
+    # Fix a crash that occurs when trying to pick a color for text outline
+    # TODO: remove after GIMP 3.2 is released, per https://gitlab.gnome.org/GNOME/gimp/-/issues/14047#note_2491655
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/1685c86af5d6253151d0056a9677ba469ea10164.diff";
+      hash = "sha256-Rb3ANXWki21thByEIWkBgWEml4x9Qq2HAIB9ho1bygw=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [
@@ -148,7 +173,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     appstream # for library
+=======
+    appstream-glib # for library
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     babl
     cfitsio
     gegl
@@ -323,12 +352,21 @@ stdenv.mkDerivation (finalAttrs: {
     gtk = gtk3;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
     maintainers = with lib.maintainers; [ jtojnar ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GNU Image Manipulation Program";
+    homepage = "https://www.gimp.org/";
+    maintainers = with maintainers; [ jtojnar ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gimp";
   };
 })

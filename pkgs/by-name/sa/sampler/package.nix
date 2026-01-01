@@ -34,11 +34,19 @@ buildGoModule rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for shell commands execution, visualization and alerting";
     homepage = "https://sampler.dev";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ uvnikita ];
+=======
+  meta = with lib; {
+    description = "Tool for shell commands execution, visualization and alerting";
+    homepage = "https://sampler.dev";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ uvnikita ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sampler";
   };
 }

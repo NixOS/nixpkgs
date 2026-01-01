@@ -120,6 +120,10 @@ if test -z "$url"; then
     usage
 fi
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 init_remote(){
     local url=$1
     clean_git init --initial-branch=master
@@ -180,6 +184,7 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
+<<<<<<< HEAD
     local -a fetchTagsArgs=()
     # Avoid fetching all tags at clone time when not leaving .git,
     # but keep/restore the behaviour before
@@ -208,6 +213,11 @@ checkout_hash(){
             return 1
         fi
     fi
+=======
+    [[ -z "$deepClone" ]] && \
+    clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || \
+    clean_git fetch -t ${builder:+--progress} origin || return 1
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     local object_type=$(git cat-file -t "$hash")
     if [[ "$object_type" == "commit" || "$object_type" == "tag" ]]; then
@@ -277,12 +287,17 @@ clone(){
     )
 
     # Fetch all tags if requested
+<<<<<<< HEAD
     # The fetched tags are potentially non-reproducible, as tags are mutable parts of the Git tree.
     if [[ -n "$fetchTags" ]]; then
+=======
+    if test -n "$fetchTags"; then
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         echo "fetching all tags..." >&2
         clean_git fetch origin 'refs/tags/*:refs/tags/*' || echo "warning: failed to fetch some tags" >&2
     fi
 
+<<<<<<< HEAD
     # Name tag "$ref" to make `git describe` work reproducibly in `NIX_PREFETCH_GIT_CHECKOUT_HOOK`.
     # Name only when not leaving `.git` for compatibility purposes.
     if [[ "$ref" =~ ^refs/tags/ ]] && [[ -z "$leaveDotGit" ]]; then
@@ -290,6 +305,8 @@ clone(){
         clean_git update-ref "$ref" FETCH_HEAD
     fi
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Checkout linked sources.
     if test -n "$fetchSubmodules"; then
         init_submodules

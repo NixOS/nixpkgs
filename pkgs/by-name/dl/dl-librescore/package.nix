@@ -10,16 +10,27 @@
 
 buildNpmPackage rec {
   pname = "dl-librescore";
+<<<<<<< HEAD
   version = "0.35.34";
+=======
+  version = "0.35.32";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "LibreScore";
     repo = "dl-librescore";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-IuHX4wFhilSK09WWNopHtkAfd9Mm2oo5M2m4KcRkCBE=";
   };
 
   npmDepsHash = "sha256-DCjN9x6sjw66UIATxhRclJpz6v/1ZVUiGqlbZUDMpBY=";
+=======
+    hash = "sha256-qFAJlcyvH0lShaZKIAJkXqrY0DRaUvr8V9Ipch1A3kw=";
+  };
+
+  npmDepsHash = "sha256-JLB/+arhAzRj49m4kDCasDXEhVIBygSZ9kHI2npJf3s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   patches = [
     # https://github.com/LibreScore/dl-librescore/pull/144

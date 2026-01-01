@@ -53,11 +53,19 @@ stdenv.mkDerivation rec {
     cmake --install build_x86_64 --prefix "$out"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "OBS plugin to replace the background in portrait images and video";
     homepage = "https://github.com/royshil/obs-backgroundremoval";
     maintainers = with lib.maintainers; [ zahrun ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "OBS plugin to replace the background in portrait images and video";
+    homepage = "https://github.com/royshil/obs-backgroundremoval";
+    maintainers = with maintainers; [ zahrun ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tmpauthenticator" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple Jupyterhub authenticator that allows anyone to log in";
     homepage = "https://github.com/jupyterhub/tmpauthenticator";
     changelog = "https://github.com/jupyterhub/tmpauthenticator/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ chiroptical ];
+=======
+  meta = with lib; {
+    description = "Simple Jupyterhub authenticator that allows anyone to log in";
+    homepage = "https://github.com/jupyterhub/tmpauthenticator";
+    changelog = "https://github.com/jupyterhub/tmpauthenticator/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ chiroptical ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

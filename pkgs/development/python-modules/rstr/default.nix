@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to generate random strings";
     homepage = "https://github.com/leapfrogonline/rstr";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python library to generate random strings";
+    homepage = "https://github.com/leapfrogonline/rstr";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

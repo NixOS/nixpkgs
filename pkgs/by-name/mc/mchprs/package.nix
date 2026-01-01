@@ -32,11 +32,20 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "mchprs";
     description = "Multithreaded Minecraft server built for redstone";
     homepage = "https://github.com/MCHPR/MCHPRS";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gdd ];
+=======
+  meta = with lib; {
+    mainProgram = "mchprs";
+    description = "Multithreaded Minecraft server built for redstone";
+    homepage = "https://github.com/MCHPR/MCHPRS";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gdd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

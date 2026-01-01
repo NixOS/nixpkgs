@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=format";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "iSCSI client library and utilities";
     homepage = "https://github.com/sahlberg/libiscsi";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ misuzu ];
+=======
+  meta = with lib; {
+    description = "iSCSI client library and utilities";
+    homepage = "https://github.com/sahlberg/libiscsi";
+    license = licenses.lgpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ misuzu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,11 +17,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9nd8xm3jAFouRYKSFpx3vQQaI/2wQzTaaehXjqljIfw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal command line calendar, similar to cal";
     mainProgram = "rusti-cal";
     homepage = "https://github.com/arthurhenrique/rusti-cal";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.detegr ];
+=======
+  meta = with lib; {
+    description = "Minimal command line calendar, similar to cal";
+    mainProgram = "rusti-cal";
+    homepage = "https://github.com/arthurhenrique/rusti-cal";
+    license = [ licenses.mit ];
+    maintainers = [ maintainers.detegr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

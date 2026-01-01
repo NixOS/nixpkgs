@@ -30,12 +30,21 @@ buildPythonApplication {
 
   pythonImportsCheck = [ "cambrinary" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cambridge dictionary in a terminal";
     mainProgram = "cambrinary";
     homepage = "https://github.com/xueyuanl/cambrinary";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Cambridge dictionary in a terminal";
+    mainProgram = "cambrinary";
+    homepage = "https://github.com/xueyuanl/cambrinary";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -33,10 +33,17 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_notify" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/phijor/mopidy-notify";
     description = "Mopidy extension for showing desktop notifications on track change";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/phijor/mopidy-notify";
+    description = "Mopidy extension for showing desktop notifications on track change";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

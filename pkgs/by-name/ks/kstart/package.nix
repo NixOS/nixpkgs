@@ -55,13 +55,22 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     outputsToInstall = [
       "out"
       "man"
     ];
     description = "Modified version of kerberos tools that support automatic ticket refresh";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

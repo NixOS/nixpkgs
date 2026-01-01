@@ -40,11 +40,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ws4py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "WebSocket package for Python";
     homepage = "https://ws4py.readthedocs.org";
     changelog = "https://github.com/Lawouach/WebSocket-for-Python/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "WebSocket package for Python";
+    homepage = "https://ws4py.readthedocs.org";
+    changelog = "https://github.com/Lawouach/WebSocket-for-Python/blob/${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

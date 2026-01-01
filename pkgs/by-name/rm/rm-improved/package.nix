@@ -22,11 +22,19 @@ rustPlatform.buildRustPackage rec {
     ./Cargo.lock.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Replacement for rm with focus on safety, ergonomics and performance";
     homepage = "https://github.com/nivekuil/rip";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nils-degroot ];
+=======
+  meta = with lib; {
+    description = "Replacement for rm with focus on safety, ergonomics and performance";
+    homepage = "https://github.com/nivekuil/rip";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ nils-degroot ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rip";
   };
 }

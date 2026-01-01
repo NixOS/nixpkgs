@@ -15,14 +15,22 @@
 
 buildPythonPackage rec {
   pname = "pysmlight";
+<<<<<<< HEAD
   version = "0.2.13";
+=======
+  version = "0.2.11";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smlight-tech";
     repo = "pysmlight";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-59LrSNI9/F7mtlBNILOJIBzqPcX2ivWQR2Cf/otMlzM=";
+=======
+    hash = "sha256-+ApqlqrNGQJ52VJPaaWCddsQGMu7W2fLJLKxV69zJKI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

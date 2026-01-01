@@ -38,10 +38,17 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for reading vCard and vCalendar files";
     homepage = "https://github.com/py-vobject/vobject";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Module for reading vCard and vCalendar files";
+    homepage = "https://github.com/py-vobject/vobject";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

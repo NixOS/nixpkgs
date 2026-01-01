@@ -15,10 +15,17 @@ buildFishPlugin {
     hash = "sha256-QYq4sU41/iKvDUczWLYRGqDQpVASF/+6brJJ8IxypjE=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Ultra-pure, lag-free prompt with async Git status";
     homepage = "https://github.com/jorgebucaran/hydro";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Ultra-pure, lag-free prompt with async Git status";
+    homepage = "https://github.com/jorgebucaran/hydro";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

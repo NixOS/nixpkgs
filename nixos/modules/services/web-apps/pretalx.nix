@@ -12,7 +12,13 @@ let
 
   configFile = format.generate "pretalx.cfg" cfg.settings;
 
+<<<<<<< HEAD
   inherit (cfg) finalPackage;
+=======
+  finalPackage = cfg.package.override {
+    inherit (cfg) plugins;
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonEnv = finalPackage.python.buildEnv.override {
     extraLibs =
@@ -30,8 +36,13 @@ let
 in
 
 {
+<<<<<<< HEAD
   meta = {
     maintainers = with lib.maintainers; [ hexa ] ++ lib.teams.c3d2.members;
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   options.services.pretalx = {
@@ -39,6 +50,7 @@ in
 
     package = lib.mkPackageOption pkgs "pretalx" { };
 
+<<<<<<< HEAD
     finalPackage = lib.mkOption {
       type = lib.types.package;
       default = cfg.package.override {
@@ -55,6 +67,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     group = lib.mkOption {
       type = lib.types.str;
       default = "pretalx";
@@ -234,8 +248,13 @@ in
             };
             static = lib.mkOption {
               type = lib.types.path;
+<<<<<<< HEAD
               default = "${finalPackage.static}/";
               defaultText = "\${config.services.pretalx.finalPackage.static}/";
+=======
+              default = "${cfg.package.static}/";
+              defaultText = lib.literalExpression "\${config.services.pretalx.package}.static}/";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               readOnly = true;
               description = ''
                 Path to the directory that contains static files.
@@ -313,7 +332,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+<<<<<<< HEAD
     # https://docs.pretalx.org/administrator/installation/
+=======
+    # https://docs.pretalx.org/administrator/installation.html
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     environment.systemPackages = [
       (pkgs.writeScriptBin "pretalx-manage" ''
@@ -345,7 +368,11 @@ in
         recommendedTlsSettings = lib.mkDefault true;
         upstreams.pretalx.servers."unix:/run/pretalx/pretalx.sock" = { };
         virtualHosts.${cfg.nginx.domain} = {
+<<<<<<< HEAD
           # https://docs.pretalx.org/administrator/installation/#step-8-reverse-proxy
+=======
+          # https://docs.pretalx.org/administrator/installation.html#step-7-ssl
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           extraConfig = ''
             more_set_headers "Referrer-Policy: same-origin";
             more_set_headers "X-Content-Type-Options: nosniff";
@@ -456,7 +483,11 @@ in
           preStart =
             let
               versionString = lib.concatStringsSep "\n" (
+<<<<<<< HEAD
                 [ "pretalx-${finalPackage.version}" ]
+=======
+                [ "pretalx-${cfg.package.version}" ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 ++ map (plugin: "${plugin.pname}-${plugin.version}") cfg.plugins
               );
             in

@@ -26,10 +26,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vsts_cd_manager" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure API Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure API Management Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

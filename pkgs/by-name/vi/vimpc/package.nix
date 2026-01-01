@@ -50,12 +50,21 @@ stdenv.mkDerivation rec {
     cp doc/vimpcrc.example $out/etc
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Vi/vim inspired client for the Music Player Daemon (mpd)";
     homepage = "https://github.com/boysetsfrog/vimpc";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "Vi/vim inspired client for the Music Player Daemon (mpd)";
+    homepage = "https://github.com/boysetsfrog/vimpc";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vimpc";
   };
 }

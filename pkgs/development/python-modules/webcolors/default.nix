@@ -30,10 +30,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webcolors" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for working with color names/values defined by the HTML and CSS specifications";
     homepage = "https://github.com/ubernostrum/webcolors";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Library for working with color names/values defined by the HTML and CSS specifications";
+    homepage = "https://github.com/ubernostrum/webcolors";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -115,6 +115,10 @@ let
       # Note that at this point in evaluation, there is nothing whatsoever on the
       # fish_function_path. That means we don't have most fish builtins, e.g., `eval`.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # additional profiles are expected in order of precedence, which means the reverse of the
       # NIX_PROFILES variable (same as config.environment.profiles)
       set -l __nix_profile_paths (string split ' ' $NIX_PROFILES)[-1..1]
@@ -150,13 +154,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
+<<<<<<< HEAD
   version = "4.3.2";
+=======
+  version = "4.2.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-/B4U3giKGmU5B/L5HQLS1lU8f7hsfI4aCeOjWcQ1dpA=";
+=======
+    hash = "sha256-BUtHMx44efWTiS6heCUqONxngLwUCBOoDQqxoCj189U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   env = {
@@ -167,7 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
+<<<<<<< HEAD
     hash = "sha256-/udRRs/ieLfazVTwM47ElExN40QdAG/OqQXmYurgC1I=";
+=======
+    hash = "sha256-00Ch1EcX4cxMwvuDQLzTUIY7XkE3WX8bXBUA3yMRAMI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -220,6 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/checks/complete.fish \
       --replace-fail '/bin/ls' '${lib.getExe' coreutils "ls"}'
 
+<<<<<<< HEAD
     substituteInPlace tests/checks/output-buffering.fish \
       --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
@@ -231,6 +248,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'os.environ["__fish_terminal_color_theme"]' \
         'os.environ.get("__fish_terminal_color_theme", "default")'
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Several pexpect tests are flaky
     # See https://github.com/fish-shell/fish-shell/issues/8789
     rm tests/pexpects/exit_handlers.py
@@ -366,6 +385,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   # Ensure that we don't vendor libpcre2, but instead link against the one from nixpkgs

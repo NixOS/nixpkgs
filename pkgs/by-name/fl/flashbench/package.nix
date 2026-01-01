@@ -26,10 +26,18 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Testing tool for flash based memory devices";
     homepage = "https://github.com/bradfa/flashbench";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Testing tool for flash based memory devices";
+    homepage = "https://github.com/bradfa/flashbench";
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

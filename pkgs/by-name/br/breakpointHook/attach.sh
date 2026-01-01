@@ -73,7 +73,11 @@ pwd="$(readlink /proc/$pid/cwd)"
 # bash needs to be executed with --init-file /build/env-vars to include the bash native
 #   variables like ones declared via `declare -a`.
 # If another shell is chosen via `debugShell`, it will only have simple env vars avaialable.
+<<<<<<< HEAD
 exec nsenter --mount --ipc --uts --pid --user --setuid follow --setgid follow --net --target "$pid" "$bashInteractive" -c "
+=======
+exec nsenter --mount --ipc --uts --pid  --net --target "$pid" "$bashInteractive" -c "
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   set -eu -o pipefail
   source \"$buildDir/env-vars\"
   cd \"$pwd\"

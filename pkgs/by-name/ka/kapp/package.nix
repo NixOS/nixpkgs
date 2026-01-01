@@ -41,11 +41,19 @@ buildGoModule rec {
     package = kapp;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool that encourages Kubernetes users to manage bulk resources with an application abstraction for grouping";
     homepage = "https://carvel.dev/kapp/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ brodes ];
+=======
+  meta = with lib; {
+    description = "CLI tool that encourages Kubernetes users to manage bulk resources with an application abstraction for grouping";
+    homepage = "https://carvel.dev/kapp/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ brodes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kapp";
   };
 }

@@ -35,11 +35,19 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Excalidraw collaboration backend for Jitsi";
     homepage = "https://github.com/jitsi/excalidraw-backend";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ camillemndn ];
+=======
+  meta = with lib; {
+    description = "Excalidraw collaboration backend for Jitsi";
+    homepage = "https://github.com/jitsi/excalidraw-backend";
+    license = licenses.mit;
+    maintainers = with maintainers; [ camillemndn ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jitsi-excalidraw-backend";
   };
 }

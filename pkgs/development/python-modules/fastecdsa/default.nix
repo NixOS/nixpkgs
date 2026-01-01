@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastecdsa" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast elliptic curve digital signatures";
     homepage = "https://github.com/AntonKueltz/fastecdsa";
     changelog = "https://github.com/AntonKueltz/fastecdsa/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Fast elliptic curve digital signatures";
+    homepage = "https://github.com/AntonKueltz/fastecdsa";
+    changelog = "https://github.com/AntonKueltz/fastecdsa/blob/v${version}/CHANGELOG.md";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

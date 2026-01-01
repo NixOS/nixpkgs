@@ -26,10 +26,18 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of window manipulation tools";
     homepage = "https://github.com/wmutils/core";
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Set of window manipulation tools";
+    homepage = "https://github.com/wmutils/core";
+    license = licenses.isc;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

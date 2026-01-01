@@ -59,13 +59,22 @@ buildPythonPackage rec {
     $out/bin/trezorctl --version
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library for communicating with Trezor Hardware Wallet";
     mainProgram = "trezorctl";
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
     changelog = "https://github.com/trezor/trezor-firmware/blob/python/v${version}/python/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       np
       prusnak
       mmahut

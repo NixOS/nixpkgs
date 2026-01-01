@@ -51,11 +51,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Better way to clone, organize and manage multiple git repositories";
     homepage = "https://github.com/grdl/git-get";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sumnerevans ];
+=======
+  meta = with lib; {
+    description = "Better way to clone, organize and manage multiple git repositories";
+    homepage = "https://github.com/grdl/git-get";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sumnerevans ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-get";
   };
 }

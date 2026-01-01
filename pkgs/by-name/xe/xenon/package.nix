@@ -30,11 +30,19 @@ python3.pkgs.buildPythonApplication {
 
   pythonImportsCheck = [ "xenon" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Monitoring tool based on radon";
     homepage = "https://github.com/rubik/xenon";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jfvillablanca ];
+=======
+  meta = with lib; {
+    description = "Monitoring tool based on radon";
+    homepage = "https://github.com/rubik/xenon";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jfvillablanca ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xenon";
   };
 }

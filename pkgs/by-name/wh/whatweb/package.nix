@@ -91,7 +91,11 @@ stdenv.mkDerivation rec {
     withRchardet = withRchardet;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Next generation web scanner";
     longDescription = ''
       WhatWeb is a website fingerprinting tool that identifies web technologies such as CMSs, blogging platforms,
@@ -111,8 +115,14 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "whatweb";
     homepage = "https://github.com/urbanadventurer/whatweb";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Only;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1,5 +1,8 @@
 {
+<<<<<<< HEAD
   lib,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pkgs,
   buildPythonPackage,
   requests,
@@ -27,10 +30,18 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "dopy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Digital Ocean API python wrapper";
     homepage = "https://github.com/Wiredcraft/dopy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lihop ];
+=======
+  meta = with pkgs.lib; {
+    description = "Digital Ocean API python wrapper";
+    homepage = "https://github.com/Wiredcraft/dopy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lihop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

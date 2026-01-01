@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-framework CoreFoundation";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/joshkunz/ashuffle";
     description = "Automatic library-wide shuffle for mpd";
     maintainers = [ lib.maintainers.tcbravo ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/joshkunz/ashuffle";
+    description = "Automatic library-wide shuffle for mpd";
+    maintainers = [ maintainers.tcbravo ];
+    platforms = platforms.unix;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ashuffle";
   };
 }

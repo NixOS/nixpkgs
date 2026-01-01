@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yoyo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Database schema migration tool";
     homepage = "https://ollycope.com/software/yoyo";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Database schema migration tool";
+    homepage = "https://ollycope.com/software/yoyo";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

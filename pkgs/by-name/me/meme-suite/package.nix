@@ -22,11 +22,20 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Motif-based sequence analysis tools";
     homepage = "https://meme-suite.org/meme/meme-software/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ gschwartz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Motif-based sequence analysis tools";
+    homepage = "https://meme-suite.org/meme/meme-software/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ gschwartz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

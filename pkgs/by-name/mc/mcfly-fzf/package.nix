@@ -23,11 +23,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-xHYOhq/vDmjP7RfgRR15Isj7rg/nIV9tz9XznHBENig=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bnprks/mcfly-fzf";
     description = "Integrate Mcfly with fzf to combine a solid command history database with a widely-loved fuzzy search UI";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.simonhammes ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bnprks/mcfly-fzf";
+    description = "Integrate Mcfly with fzf to combine a solid command history database with a widely-loved fuzzy search UI";
+    license = licenses.mit;
+    maintainers = [ maintainers.simonhammes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mcfly-fzf";
   };
 }

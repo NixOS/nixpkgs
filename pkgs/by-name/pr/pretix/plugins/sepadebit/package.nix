@@ -61,10 +61,18 @@ buildPythonPackage rec {
     "test_call_mail_context"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin to receive payments via SEPA direct debit";
     homepage = "https://github.com/pretix/pretix-sepadebit";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bbenno ];
+=======
+  meta = with lib; {
+    description = "Plugin to receive payments via SEPA direct debit";
+    homepage = "https://github.com/pretix/pretix-sepadebit";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bbenno ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

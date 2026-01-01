@@ -72,11 +72,20 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://nuand.com/libbladeRF-doc";
     description = "Supporting library of the BladeRF SDR opensource hardware";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://nuand.com/libbladeRF-doc";
+    description = "Supporting library of the BladeRF SDR opensource hardware";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ markuskowa ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

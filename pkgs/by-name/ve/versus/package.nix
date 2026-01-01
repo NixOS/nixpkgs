@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-e116ZXofSnD7+5f8xdBjpMYdeUhGPVTLfaxnhhqTIrQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Benchmark multiple API endpoints against each other";
     homepage = "https://github.com/INFURA/versus";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmahut ];
+=======
+  meta = with lib; {
+    description = "Benchmark multiple API endpoints against each other";
+    homepage = "https://github.com/INFURA/versus";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "versus";
   };
 }

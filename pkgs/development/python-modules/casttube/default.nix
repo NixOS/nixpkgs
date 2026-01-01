@@ -20,10 +20,18 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Interact with the Youtube Chromecast api";
     homepage = "https://github.com/ur1katz/casttube";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fpletz ];
+=======
+  meta = with lib; {
+    description = "Interact with the Youtube Chromecast api";
+    homepage = "https://github.com/ur1katz/casttube";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fpletz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

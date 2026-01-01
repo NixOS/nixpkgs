@@ -20,10 +20,18 @@ rustPlatform.buildRustPackage rec {
     cp -r include $out
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of tools that support workflows for working with authentic data and identity management";
     homepage = "https://github.com/trinsic-id/okapi";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ tmarkovski ];
+=======
+  meta = with lib; {
+    description = "Collection of tools that support workflows for working with authentic data and identity management";
+    homepage = "https://github.com/trinsic-id/okapi";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ tmarkovski ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

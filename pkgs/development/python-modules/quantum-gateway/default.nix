@@ -42,10 +42,18 @@ buildPythonPackage rec {
     "TestGateway3100"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interacting with Verizon Fios Quantum gateway devices";
     homepage = "https://github.com/cisasteelersfan/quantum_gateway";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for interacting with Verizon Fios Quantum gateway devices";
+    homepage = "https://github.com/cisasteelersfan/quantum_gateway";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

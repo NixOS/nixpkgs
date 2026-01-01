@@ -24,9 +24,15 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "patatt" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://git.kernel.org/pub/scm/utils/patatt/patatt.git/about/";
     license = lib.licenses.mit0;
+=======
+  meta = with lib; {
+    homepage = "https://git.kernel.org/pub/scm/utils/patatt/patatt.git/about/";
+    license = licenses.mit0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Add cryptographic attestation to patches sent via email";
     mainProgram = "patatt";
     longDescription = ''
@@ -35,7 +41,11 @@ python3Packages.buildPythonApplication rec {
       DKIM email signature standard to include cryptographic
       signatures via the X-Developer-Signature email header.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       qyliss
       yoctocell
     ];

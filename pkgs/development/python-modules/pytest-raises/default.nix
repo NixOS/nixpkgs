@@ -35,10 +35,18 @@ buildPythonPackage rec {
     "test_pytest_mark_raises_parametrize"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of pytest.raises as a pytest.mark fixture";
     homepage = "https://github.com/Lemmons/pytest-raises";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Implementation of pytest.raises as a pytest.mark fixture";
+    homepage = "https://github.com/Lemmons/pytest-raises";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

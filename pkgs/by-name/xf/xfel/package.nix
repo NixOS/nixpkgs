@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfel";
+<<<<<<< HEAD
   version = "1.3.5";
+=======
+  version = "1.3.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "xboot";
     repo = "xfel";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-a9g5dywILcacxnNPlZMgC0ZnG2Qkophsb53ePXIbq+4=";
+=======
+    hash = "sha256-3eWVIPfUpa8ZJjce2F6eLdLttmoBI47VQ0IheSSgGmU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

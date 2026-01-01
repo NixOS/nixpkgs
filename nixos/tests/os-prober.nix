@@ -35,7 +35,10 @@ import ./make-test-python.nix (
           update-grub
       '';
     };
+<<<<<<< HEAD
     zfsSupport = false;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # a part of the configuration of the test vm
     simpleConfig = {
@@ -53,8 +56,11 @@ import ./make-test-python.nix (
       };
       # save some memory
       documentation.enable = false;
+<<<<<<< HEAD
       # this option is only there to enable more direct copy paste from the installer test
       boot.supportedFilesystems.zfs = zfsSupport;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     # /etc/nixos/configuration.nix for the vm
     configFile = pkgs.writeText "configuration.nix" ''
@@ -87,11 +93,14 @@ import ./make-test-python.nix (
           # The test cannot access the network, so any packages
           # nixos-rebuild needs must be included in the VM.
           system.extraDependencies = with pkgs; [
+<<<<<<< HEAD
             os-prober
 
             # list copied from installer test nixos/tests/installer.nix
             stdenv
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             bintools
             brotli
             brotli.dev
@@ -99,19 +108,38 @@ import ./make-test-python.nix (
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+<<<<<<< HEAD
             kbd.dev
             kmod.dev
+=======
+            grub2
+            nixos-artwork.wallpapers.simple-dark-gray-bootloader
+            perlPackages.FileCopyRecursive
+            perlPackages.XMLSAX
+            perlPackages.XMLSAXBase
+            kbd
+            kbd.dev
+            kmod.dev
+            libarchive
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             libarchive.dev
             libxml2.bin
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
+<<<<<<< HEAD
             nixos-rebuild-ng
             ntp
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             perlPackages.ConfigIniFiles
             perlPackages.FileSlurp
             perlPackages.JSON
             perlPackages.ListCompare
             perlPackages.XMLLibXML
+<<<<<<< HEAD
+=======
+            # make-options-doc/default.nix
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
@@ -119,16 +147,21 @@ import ./make-test-python.nix (
             texinfo
             unionfs-fuse
             xorg.lndir
+<<<<<<< HEAD
             shellcheck-minimal
 
             # Only the out output is included here, which is what is
             # required to build the NixOS udev rules
             # See the comment in services/hardware/udev.nix
             systemdMinimal.out
+=======
+            os-prober
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
             # add curl so that rather than seeing the test attempt to download
             # curl's tarball, we see what it's trying to download
             curl
+<<<<<<< HEAD
 
             (pkgs.grub2.override { inherit zfsSupport; })
             (pkgs.grub2_efi.override { inherit zfsSupport; })
@@ -136,6 +169,8 @@ import ./make-test-python.nix (
             pkgs.perlPackages.FileCopyRecursive
             pkgs.perlPackages.XMLSAX
             pkgs.perlPackages.XMLSAXBase
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ];
         }
       );

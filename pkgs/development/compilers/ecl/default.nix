@@ -59,8 +59,11 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+<<<<<<< HEAD
     # Fix build with gcc15
     "CFLAGS=-std=gnu17"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (if threadSupport then "--enable-threads" else "--disable-threads")
     "--with-gmp-incdir=${lib.getDev gmp}/include"
     "--with-gmp-libdir=${lib.getLib gmp}/lib"
@@ -90,6 +93,7 @@ stdenv.mkDerivation rec {
     }"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
@@ -97,6 +101,15 @@ stdenv.mkDerivation rec {
     mainProgram = "ecl";
     teams = [ lib.teams.lisp ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Lisp implementation aiming to be small, fast and easy to embed";
+    homepage = "https://common-lisp.net/project/ecl/";
+    license = licenses.mit;
+    mainProgram = "ecl";
+    teams = [ lib.teams.lisp ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };
 }

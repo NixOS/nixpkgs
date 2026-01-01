@@ -23,11 +23,19 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pomodoro timer in your terminal";
     homepage = "https://github.com/maaslalani/pom";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Pomodoro timer in your terminal";
+    homepage = "https://github.com/maaslalani/pom";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maaslalani
       redyf
     ];

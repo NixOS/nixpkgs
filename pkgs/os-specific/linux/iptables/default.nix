@@ -16,6 +16,7 @@
   bashNonInteractive,
   nftablesCompat ? true,
   gitUpdater,
+<<<<<<< HEAD
 
   # For tests
   vmTools,
@@ -36,6 +37,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
+=======
+}:
+
+stdenv.mkDerivation rec {
+  version = "1.8.11";
+  pname = "iptables";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   __structuredAttrs = true;
 
@@ -101,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.netfilter.org/iptables";
       rev-prefix = "v";
     };
+<<<<<<< HEAD
 
     # Tests are run in a VM because they require access to the kernel (to modify rule chains)
     tests.withCheck = vmTools.runInLinuxVM (
@@ -174,3 +183,17 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
   };
 })
+=======
+  };
+
+  meta = with lib; {
+    description = "Program to configure the Linux IP packet filtering ruleset";
+    homepage = "https://www.netfilter.org/projects/iptables/index.html";
+    platforms = platforms.linux;
+    mainProgram = "iptables";
+    maintainers = with maintainers; [ fpletz ];
+    license = licenses.gpl2Plus;
+    downloadPage = "https://www.netfilter.org/projects/iptables/files/";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

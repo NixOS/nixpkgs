@@ -6,13 +6,19 @@
   makeBinaryWrapper,
   nodejs_24,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versionCheckHook,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_24; };
+<<<<<<< HEAD
   pnpm' = pnpm_9.override { nodejs = nodejs_24; };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 buildNpmPackage' (finalAttrs: {
   pname = "claude-code-router";
@@ -31,9 +37,14 @@ buildNpmPackage' (finalAttrs: {
   '';
 
   npmDeps = null;
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname src;
     pnpm = pnpm';
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 2;
     hash = "sha256-BLPGTbDvvI40kuXfE/p3+s9hkE0reXr7OJA6UGXN4ys=";
   };
@@ -41,10 +52,17 @@ buildNpmPackage' (finalAttrs: {
   nativeBuildInputs = [
     esbuild
     makeBinaryWrapper
+<<<<<<< HEAD
     pnpm'
   ];
 
   npmConfigHook = pnpmConfigHook;
+=======
+    pnpm_9.configHook
+  ];
+
+  npmConfigHook = pnpm_9.configHook;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildPhase = ''
     runHook preBuild
@@ -80,18 +98,30 @@ buildNpmPackage' (finalAttrs: {
     sourceRoot = "${finalAttrs'.src.name}/ui";
 
     npmDeps = null;
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs') pname src sourceRoot;
       pnpm = pnpm';
+=======
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit (finalAttrs') pname src sourceRoot;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 2;
       hash = "sha256-ZjYLUec9EADQmKfju8hMbq0y4f1TDVwjbe3yw8Gh4Ac=";
     };
 
     nativeBuildInputs = [
+<<<<<<< HEAD
       pnpm'
     ];
 
     npmConfigHook = pnpmConfigHook;
+=======
+      pnpm_9.configHook
+    ];
+
+    npmConfigHook = pnpm_9.configHook;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     installPhase = ''
       runHook preInstall

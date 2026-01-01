@@ -48,7 +48,11 @@ in
           healthCheckTimeout = 60;
           models = {
             "some-model" = {
+<<<<<<< HEAD
               cmd = "''\${llama-server} --port ''\${PORT} -m /var/lib/llama-cpp/models/some-model.gguf -ngl 0 --no-webui";
+=======
+              cmd = "$\{llama-server\} --port ''\${PORT} -m /var/lib/llama-cpp/models/some-model.gguf -ngl 0 --no-webui";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               aliases = [
                 "the-best"
               ];

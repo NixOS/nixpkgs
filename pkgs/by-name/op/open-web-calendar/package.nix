@@ -76,7 +76,11 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Highly customizable web calendar that can be embedded into websites using ICal source links";
     homepage = "https://open-web-calendar.quelltext.eu";
     changelog =
@@ -84,13 +88,22 @@ python.pkgs.buildPythonApplication rec {
         v = builtins.replaceStrings [ "." ] [ "" ] version;
       in
       "https://open-web-calendar.quelltext.eu/changelog/#v${v}";
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Only
       cc-by-sa-40
       cc0
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "open-web-calendar";
   };
 }

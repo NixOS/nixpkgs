@@ -35,10 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Canvas widget for GTK based on the the Cairo 2D library";
     homepage = "https://gitlab.gnome.org/Archive/goocanvas";
     license = lib.licenses.lgpl2;
+=======
+  meta = with lib; {
+    description = "Canvas widget for GTK based on the the Cairo 2D library";
+    homepage = "https://gitlab.gnome.org/Archive/goocanvas";
+    license = licenses.lgpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 })

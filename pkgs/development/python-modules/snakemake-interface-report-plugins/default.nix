@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakemake_interface_report_plugins" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interface for Snakemake report plugins";
     homepage = "https://github.com/snakemake/snakemake-interface-report-plugins";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Interface for Snakemake report plugins";
+    homepage = "https://github.com/snakemake/snakemake-interface-report-plugins";
+    license = licenses.mit;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

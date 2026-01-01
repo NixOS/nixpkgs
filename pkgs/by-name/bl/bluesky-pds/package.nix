@@ -5,10 +5,15 @@
   srcOnly,
   python3,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
   nodejs_22,
+=======
+  fetchFromGitHub,
+  nodejs,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   vips,
   pkg-config,
   nixosTests,
@@ -18,9 +23,12 @@
 }:
 
 let
+<<<<<<< HEAD
   # build failure against better-sqlite3, so we use nodejs_22; upstream
   # bluesky-pds uses 20
   nodejs = nodejs_22;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
 in
@@ -43,8 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pythonEnv
     pkg-config
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     removeReferencesTo
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -54,14 +66,21 @@ stdenv.mkDerivation (finalAttrs: {
   # Required for `sharp` NPM dependency
   buildInputs = [ vips ];
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       ;
+<<<<<<< HEAD
     pnpm = pnpm_9;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 2;
     hash = "sha256-4qKWkINpUHzatiMa7ZNYp1NauU2641W0jHDjmRL9ipI=";
   };

@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Library to manipulate gettext files (po and mo files)";
     homepage = "https://bitbucket.org/izi/polib/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library to manipulate gettext files (po and mo files)";
+    homepage = "https://bitbucket.org/izi/polib/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

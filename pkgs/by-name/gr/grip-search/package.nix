@@ -46,11 +46,19 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required (VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast, indexed regexp search over large file trees";
     homepage = "https://github.com/sc0ty/grip";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Fast, indexed regexp search over large file trees";
+    homepage = "https://github.com/sc0ty/grip";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

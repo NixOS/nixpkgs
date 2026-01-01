@@ -26,11 +26,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://opendyslexic.org/";
     description = "Font created to increase readability for readers with dyslexia";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
+=======
+  meta = with lib; {
+    homepage = "https://opendyslexic.org/";
+    description = "Font created to increase readability for readers with dyslexia";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = [ maintainers.rycee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

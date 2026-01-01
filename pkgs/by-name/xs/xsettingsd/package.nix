@@ -31,12 +31,21 @@ stdenv.mkDerivation rec {
     mv $out/share/systemd $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Provides settings to X11 applications via the XSETTINGS specification";
     homepage = "https://github.com/derat/xsettingsd";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ romildo ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Provides settings to X11 applications via the XSETTINGS specification";
+    homepage = "https://github.com/derat/xsettingsd";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ romildo ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xsettingsd";
   };
 }

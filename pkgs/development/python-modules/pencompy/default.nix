@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pencompy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for interacting with Pencom relay boards";
     homepage = "https://github.com/dubnom/pencompy";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for interacting with Pencom relay boards";
+    homepage = "https://github.com/dubnom/pencompy";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

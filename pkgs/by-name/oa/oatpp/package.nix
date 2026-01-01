@@ -26,11 +26,20 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://oatpp.io/";
     description = "Light and powerful C++ web framework for highly scalable and resource-efficient web applications";
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://oatpp.io/";
+    description = "Light and powerful C++ web framework for highly scalable and resource-efficient web applications";
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

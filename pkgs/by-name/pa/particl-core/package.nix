@@ -64,7 +64,11 @@ stdenv.mkDerivation rec {
   preCheck = "patchShebangs test";
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
     longDescription = ''
@@ -72,8 +76,14 @@ stdenv.mkDerivation rec {
       RPC daemon and CLI client only.
     '';
     homepage = "https://particl.io/";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ demyanrogozhin ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ demyanrogozhin ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

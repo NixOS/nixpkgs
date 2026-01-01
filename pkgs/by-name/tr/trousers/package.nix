@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-DALLOW_NON_TSS_CONFIG_FILE" ];
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Trusted computing software stack";
     mainProgram = "tcsd";
@@ -36,5 +37,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ak ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Trusted computing software stack";
+    mainProgram = "tcsd";
+    homepage = "https://trousers.sourceforge.net/";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.ak ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

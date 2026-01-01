@@ -4,18 +4,29 @@
   buildGoModule,
   testers,
   boulder,
+<<<<<<< HEAD
   minica,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "boulder";
+<<<<<<< HEAD
   version = "0.20251118.0";
+=======
+  version = "2025-04-17";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
+<<<<<<< HEAD
     tag = "v${version}";
+=======
+    tag = "release-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -23,16 +34,23 @@ buildGoModule rec {
       find $out -name .git -print0 | xargs -0 rm -rf
       popd
     '';
+<<<<<<< HEAD
     hash = "sha256-JVkIu8Fh5F8WQXa45I0hnSedAaIQIOFidtWVpVHbAWA=";
+=======
+    hash = "sha256-FXk+JZJ1azpgN6IQ9aYmpUEO1CGs9/3sog1NjrfB4d8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = null;
 
+<<<<<<< HEAD
   postPatch = ''
     # We already built the application with custom settings. This fails, so we have to disable it.
     substituteInPlace test/certs/generate.sh --replace-fail 'make build' ""
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   subPackages = [ "cmd/boulder" ];
 
   ldflags = [
@@ -46,6 +64,7 @@ buildGoModule rec {
     ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildTime=$(date -u -d @0)\""
   '';
 
+<<<<<<< HEAD
   nativeCheckInputs = [ minica ];
 
   preCheck = ''
@@ -54,6 +73,11 @@ buildGoModule rec {
     # Generate integration test certificates, but skip webpki certificates that are hard to make without errors and are currently unneeded.
     mkdir test/certs/webpki
     bash test/certs/generate.sh
+=======
+  preCheck = ''
+    # Test all targets.
+    unset subPackages
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   # Tests that fail or require additional services.
@@ -69,7 +93,10 @@ buildGoModule rec {
     "TestAddPrecertificateIncomplete"
     "TestAddPrecertificateKeyHash"
     "TestAddPrecertificateNoOCSP"
+<<<<<<< HEAD
     "TestAddRateLimitOverride"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "TestAddRegistration"
     "TestAddReplacementOrder"
     "TestAddSerial"
@@ -122,7 +149,10 @@ buildGoModule rec {
     "TestEnforceJWSAuthType"
     "TestExactPublicSuffixCertLimit"
     "TestExtractJWK"
+<<<<<<< HEAD
     "TestExtractRequestTarget"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "TestFQDNSetExists"
     "TestFQDNSetTimestampsForWindow"
     "TestFQDNSets"
@@ -262,8 +292,11 @@ buildGoModule rec {
     "TestRecheckCAAFail"
     "TestRecheckCAAInternalServerError"
     "TestRecheckCAASuccess"
+<<<<<<< HEAD
     "TestRecheckInvalidIdentifierType"
     "TestRecheckSkipIPAddress"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "TestRedisSource_BatchSetAndGet"
     "TestRedisSource_Ping"
     "TestRegistrationsPerIPOverrideUsage"

@@ -26,12 +26,21 @@ let
   pname = "clojupyter";
   version = "0.3.3";
 
+<<<<<<< HEAD
   meta = {
     description = "Jupyter kernel for Clojure";
     homepage = "https://github.com/clojupyter/clojupyter";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ]; # deps from maven
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thomasjm ];
+=======
+  meta = with lib; {
+    description = "Jupyter kernel for Clojure";
+    homepage = "https://github.com/clojupyter/clojupyter";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ]; # deps from maven
+    license = licenses.mit;
+    maintainers = with maintainers; [ thomasjm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = jre.meta.platforms;
   };
 

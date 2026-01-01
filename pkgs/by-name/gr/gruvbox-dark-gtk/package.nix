@@ -21,11 +21,20 @@ stdenv.mkDerivation rec {
     cp -r * $out/share/themes/gruvbox-dark
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Gruvbox theme for GTK based desktop environments";
     homepage = "https://github.com/jmattheis/gruvbox-dark-gtk";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.nomisiv ];
+=======
+  meta = with lib; {
+    description = "Gruvbox theme for GTK based desktop environments";
+    homepage = "https://github.com/jmattheis/gruvbox-dark-gtk";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.nomisiv ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

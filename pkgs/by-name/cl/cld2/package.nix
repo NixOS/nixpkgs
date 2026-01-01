@@ -35,7 +35,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/CLD2Owners/cld2";
     description = "Compact Language Detector 2";
     longDescription = ''
@@ -52,8 +56,14 @@ stdenv.mkDerivation {
       designed to do well on very short text, lists of proper names, part
       numbers, etc.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ chvp ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ chvp ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

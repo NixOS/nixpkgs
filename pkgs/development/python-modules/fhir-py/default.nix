@@ -50,11 +50,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fhirpy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Async/sync API for FHIR resources";
     homepage = "https://github.com/beda-software/fhir-py";
     changelog = "https://github.com/beda-software/fhir-py/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Async/sync API for FHIR resources";
+    homepage = "https://github.com/beda-software/fhir-py";
+    changelog = "https://github.com/beda-software/fhir-py/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

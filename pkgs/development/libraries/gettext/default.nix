@@ -107,7 +107,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   enableParallelChecking = false; # fails sometimes
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Well integrated set of translation tools and documentation";
 
     longDescription = ''
@@ -131,9 +135,15 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/gettext/";
 
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ zimbatm ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+=======
+    maintainers = with maintainers; [ zimbatm ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 

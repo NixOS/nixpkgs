@@ -27,10 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bibtexparser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bibtex parser for Python";
     homepage = "https://github.com/sciunto-org/python-bibtexparser";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Bibtex parser for Python";
+    homepage = "https://github.com/sciunto-org/python-bibtexparser";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl3Only # or
       bsd3
     ];

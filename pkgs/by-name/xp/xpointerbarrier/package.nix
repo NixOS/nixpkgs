@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.uninformativ.de/git/xpointerbarrier/file/README.html";
     description = "Create X11 pointer barriers around your working area";
@@ -41,6 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
       xzfc
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.uninformativ.de/git/xpointerbarrier/file/README.html";
+    description = "Create X11 pointer barriers around your working area";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      xzfc
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xpointerbarrier";
   };
 })

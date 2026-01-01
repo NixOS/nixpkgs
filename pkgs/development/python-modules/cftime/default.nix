@@ -35,10 +35,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cftime" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Time-handling functionality from netcdf4-python";
     homepage = "https://github.com/Unidata/cftime";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Time-handling functionality from netcdf4-python";
+    homepage = "https://github.com/Unidata/cftime";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

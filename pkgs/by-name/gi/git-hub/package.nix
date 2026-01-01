@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
     rm -r $out/share/{doc,vim}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (src.meta) homepage;
     description = "Git command line interface to GitHub";
     longDescription = ''
@@ -46,8 +50,13 @@ stdenv.mkDerivation rec {
       tasks (like creating and listing pull request or issues) to be accessed
       directly through the Git command line.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-hub";
   };
 }

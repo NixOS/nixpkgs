@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/arnarg/tree-sitter-todotxt",
+  "rev": "3937c5cd105ec4127448651a21aef45f52d19609",
+  "date": "2024-01-15T09:45:57+01:00",
+  "path": "/nix/store/37nxnr79ylm1g1myx2zvhzrymy5z0pw4-tree-sitter-todotxt",
+  "sha256": "0551fdv77bdrxsc04gsi3zrc07si34r4gnhaqjg3h5fwbbkj3q1r",
+  "hash": "sha256-OeAh51rcFTiexAraRzIZUR/A8h9RPwKY7rmtc3ZzoRQ=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

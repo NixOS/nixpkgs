@@ -87,6 +87,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/paulp/sbt-extras";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      nequissimus
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       puffnfresh
     ];
     mainProgram = "sbt";

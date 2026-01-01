@@ -73,11 +73,20 @@ buildPythonPackage rec {
     "test_should_filepath_convert_string"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Integrate GraphQL into your Django project";
     homepage = "https://github.com/graphql-python/graphene-django";
     changelog = "https://github.com/graphql-python/graphene-django/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Integrate GraphQL into your Django project";
+    homepage = "https://github.com/graphql-python/graphene-django";
+    changelog = "https://github.com/graphql-python/graphene-django/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

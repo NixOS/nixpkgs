@@ -26,10 +26,18 @@ buildGoModule {
     runHook postBuild
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of small shell utilities that connect to a local Emacs server";
     homepage = "https://github.com/szermatt/emacsclient-commands";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ binarycat ];
+=======
+  meta = with lib; {
+    description = "Collection of small shell utilities that connect to a local Emacs server";
+    homepage = "https://github.com/szermatt/emacsclient-commands";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ binarycat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

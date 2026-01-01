@@ -91,6 +91,7 @@ resholve.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/kward/shunit2";
     description = "XUnit based unit test framework for Bourne based shell scripts";
@@ -100,6 +101,17 @@ resholve.mkDerivation rec {
     ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/kward/shunit2";
+    description = "XUnit based unit test framework for Bourne based shell scripts";
+    maintainers = with maintainers; [
+      abathur
+      utdemir
+    ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "shunit2";
   };
 }

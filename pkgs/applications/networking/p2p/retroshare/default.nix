@@ -93,11 +93,20 @@ mkDerivation rec {
     cp libbitdht/src/bitdht/bdboot.txt $out/share/retroshare
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Decentralized peer to peer chat application";
     homepage = "https://retroshare.cc/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ StijnDW ];
+=======
+  meta = with lib; {
+    description = "Decentralized peer to peer chat application";
+    homepage = "https://retroshare.cc/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ StijnDW ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

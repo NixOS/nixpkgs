@@ -50,11 +50,20 @@ stdenv.mkDerivation rec {
     "install-lib-so-link"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://rhash.sourceforge.net/";
     description = "Console utility and library for computing and verifying hash sums of files";
     license = lib.licenses.bsd0;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ andrewrk ];
+=======
+  meta = with lib; {
+    homepage = "https://rhash.sourceforge.net/";
+    description = "Console utility and library for computing and verifying hash sums of files";
+    license = licenses.bsd0;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ andrewrk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

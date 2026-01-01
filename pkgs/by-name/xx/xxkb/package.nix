@@ -63,12 +63,21 @@ stdenv.mkDerivation rec {
     "install.man"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Keyboard layout indicator and switcher";
     homepage = "http://xxkb.sourceforge.net/";
     license = lib.licenses.artistic2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Keyboard layout indicator and switcher";
+    homepage = "http://xxkb.sourceforge.net/";
+    license = licenses.artistic2;
+    maintainers = with maintainers; [ rasendubi ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xxkb";
   };
 }

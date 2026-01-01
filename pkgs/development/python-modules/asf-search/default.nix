@@ -56,11 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asf_search" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
     changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bzizou ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for the ASF SearchAPI";
+    homepage = "https://github.com/asfadmin/Discovery-asf_search";
+    changelog = "https://github.com/asfadmin/Discovery-asf_search/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bzizou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

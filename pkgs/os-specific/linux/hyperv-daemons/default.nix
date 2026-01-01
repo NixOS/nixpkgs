@@ -119,7 +119,11 @@ stdenv.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Integration Services for running NixOS under HyperV";
     mainProgram = "lsvmbus";
     longDescription = ''
@@ -130,7 +134,11 @@ stdenv.mkDerivation {
       we use that name here.
     '';
     homepage = "https://kernel.org";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = kernel.meta.platforms;
   };
 }

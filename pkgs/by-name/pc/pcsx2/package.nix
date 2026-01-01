@@ -160,6 +160,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
       _0david0mp
+<<<<<<< HEAD
+=======
+      hrdinka
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       govanify
       matteopacini
     ];

@@ -56,11 +56,20 @@ buildPythonPackage rec {
     "test_encrypt_cisco_type5"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
     changelog = "https://github.com/networktocode/netutils/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library that is a collection of objects for common network automation tasks";
+    homepage = "https://github.com/networktocode/netutils";
+    changelog = "https://github.com/networktocode/netutils/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

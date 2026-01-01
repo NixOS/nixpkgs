@@ -29,11 +29,19 @@ rustPlatform.buildRustPackage rec {
     alsa-lib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform music live coding in terminal";
     homepage = "https://github.com/glicol/glicol-cli";
     changelog = "https://github.com/glicol/glicol-cli/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Cross-platform music live coding in terminal";
+    homepage = "https://github.com/glicol/glicol-cli";
+    changelog = "https://github.com/glicol/glicol-cli/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "glicol-cli";
     # The last successful Darwin Hydra build was in 2023

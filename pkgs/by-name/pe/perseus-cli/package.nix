@@ -24,11 +24,19 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${lib.makeBinPath [ wasm-pack ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://framesurge.sh/perseus/en-US";
     description = "High-level web development framework for Rust with full support for server-side rendering and static generation";
     maintainers = with lib.maintainers; [ max-niederman ];
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    homepage = "https://framesurge.sh/perseus/en-US";
+    description = "High-level web development framework for Rust with full support for server-side rendering and static generation";
+    maintainers = with maintainers; [ max-niederman ];
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "perseus";
   };
 }

@@ -65,7 +65,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "IRC instant messaging gateway";
     mainProgram = "bitlbee";
 
@@ -81,6 +85,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.bitlbee.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
 
     maintainers = with lib.maintainers; [
@@ -88,5 +93,14 @@ stdenv.mkDerivation rec {
       pSub
     ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
+=======
+    license = licenses.gpl2Plus;
+
+    maintainers = with maintainers; [
+      lassulus
+      pSub
+    ];
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

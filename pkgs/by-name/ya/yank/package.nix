@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
   makeFlags = [ "YANKCMD=${xsel}/bin/xsel" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/mptre/yank";
     description = "Yank terminal output to clipboard";
     longDescription = ''
@@ -30,9 +34,15 @@ stdenv.mkDerivation rec {
       always treated as delimiters.
     '';
     downloadPage = "https://github.com/mptre/yank/releases";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dochang ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit;
+    maintainers = [ maintainers.dochang ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yank";
   };
 

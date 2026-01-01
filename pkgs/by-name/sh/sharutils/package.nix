@@ -3,7 +3,10 @@
   stdenv,
   fetchurl,
   fetchpatch,
+<<<<<<< HEAD
   autoreconfHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gettext,
   coreutils,
   updateAutotoolsGnuConfigScriptsHook,
@@ -22,7 +25,10 @@ stdenv.mkDerivation rec {
 
   # GNU Gettext is needed on non-GNU platforms.
   buildInputs = [
+<<<<<<< HEAD
     autoreconfHook
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     coreutils
     gettext
   ];
@@ -57,12 +63,15 @@ stdenv.mkDerivation rec {
       url = "https://lists.gnu.org/archive/html/bug-gnu-utils/2020-01/txt5Z_KZup0yN.txt";
       sha256 = "0an8vfy3qj6sss9w0i4j8ilf7g5mbc7y13l644jy5bcm9przcjbd";
     })
+<<<<<<< HEAD
 
     # various build fixes for >= gcc 15, sourced from
     # https://lists.gnu.org/archive/html/bug-gnu-utils/2025-03/msg00000.html
     ./gcc15-stdboolm4-backport.patch
     ./gcc15-getcwdm4-port.patch
     ./gcc15-c23-port.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch =
@@ -85,7 +94,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tools for remote synchronization and `shell archives'";
     longDescription = ''
       GNU shar makes so-called shell archives out of many files, preparing
@@ -104,8 +117,14 @@ stdenv.mkDerivation rec {
       concatenated shell archives.
     '';
     homepage = "https://www.gnu.org/software/sharutils/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

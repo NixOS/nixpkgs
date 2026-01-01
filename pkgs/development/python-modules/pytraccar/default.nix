@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytraccar" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to handle device information from Traccar";
     homepage = "https://github.com/ludeeus/pytraccar";
     changelog = "https://github.com/ludeeus/pytraccar/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library to handle device information from Traccar";
+    homepage = "https://github.com/ludeeus/pytraccar";
+    changelog = "https://github.com/ludeeus/pytraccar/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

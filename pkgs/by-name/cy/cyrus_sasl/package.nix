@@ -39,11 +39,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/cyrusimap/cyrus-sasl/compare/cb549ef71c5bb646fe583697ebdcaba93267a237...dfaa62392e7caecc6ecf0097b4d73738ec4fc0a8.patch";
       hash = "sha256-pc0cZqj1QoxDqgd/j/5q3vWONEPrTm4Pr6MzHlfjRCc=";
     })
+<<<<<<< HEAD
     # Fix build with gcc15
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/cyrus-sasl/raw/388b80c6a8f93667587b4ac2e7992d0aa1c431f9/f/cyrus-sasl-2.1.28-gcc15.patch";
       hash = "sha256-AfSQXFtVh0IHG8Uw9nWMWlkQnyaX3ZMsdZLd7hTru7Q=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   outputs = [
@@ -68,7 +71,11 @@ stdenv.mkDerivation rec {
     libxcrypt
   ]
   ++ lib.optional enableLdap openldap
+<<<<<<< HEAD
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform pam) pam;
+=======
+  ++ lib.optional stdenv.hostPlatform.isLinux pam;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -95,10 +102,18 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) parsedmarc postfix;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.cyrusimap.org/sasl";
     description = "Library for adding authentication support to connection-based protocols";
     platforms = lib.platforms.unix;
     license = lib.licenses.bsdOriginal;
+=======
+  meta = with lib; {
+    homepage = "https://www.cyrusimap.org/sasl";
+    description = "Library for adding authentication support to connection-based protocols";
+    platforms = platforms.unix;
+    license = licenses.bsdOriginal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,11 +22,20 @@ stdenv.mkDerivation rec {
     install -D -t $out/bin eschalot worgen
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tor hidden service name generator";
     homepage = src.meta.homepage;
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Tor hidden service name generator";
+    homepage = src.meta.homepage;
+    license = licenses.isc;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

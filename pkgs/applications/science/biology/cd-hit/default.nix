@@ -44,11 +44,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/plot_2d.pl --prefix PERL5LIB : $PERL5LIB
     wrapProgram $out/bin/clstr_list_sort.pl --prefix PERL5LIB : $PERL5LIB
   '';
+<<<<<<< HEAD
   meta = {
     description = "Clustering and comparing protein or nucleotide sequences";
     homepage = "http://weizhongli-lab.org/cd-hit/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Clustering and comparing protein or nucleotide sequences";
+    homepage = "http://weizhongli-lab.org/cd-hit/";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

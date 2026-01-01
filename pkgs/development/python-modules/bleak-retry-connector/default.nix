@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   dependencies = [
     bleak
+<<<<<<< HEAD
     dbus-fast
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     bluetooth-adapters
+=======
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    bluetooth-adapters
+    dbus-fast
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [
@@ -43,11 +50,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bleak_retry_connector" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Connector for Bleak Clients that handles transient connection failures";
     homepage = "https://github.com/bluetooth-devices/bleak-retry-connector";
     changelog = "https://github.com/Bluetooth-Devices/bleak-retry-connector/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Connector for Bleak Clients that handles transient connection failures";
+    homepage = "https://github.com/bluetooth-devices/bleak-retry-connector";
+    changelog = "https://github.com/Bluetooth-Devices/bleak-retry-connector/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

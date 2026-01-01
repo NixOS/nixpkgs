@@ -28,10 +28,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ pname ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unicode to 8-bit charset transliteration codec";
     homepage = "https://github.com/claudep/translitcodec";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ rycee ];
+=======
+  meta = with lib; {
+    description = "Unicode to 8-bit charset transliteration codec";
+    homepage = "https://github.com/claudep/translitcodec";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ rycee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -80,10 +80,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "accupy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Accurate sums and dot products for Python";
     homepage = "https://github.com/nschloe/accupy";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Accurate sums and dot products for Python";
+    homepage = "https://github.com/nschloe/accupy";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

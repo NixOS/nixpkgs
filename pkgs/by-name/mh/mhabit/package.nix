@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+<<<<<<< HEAD
   flutter332,
   sqlite,
   libsecret,
@@ -13,11 +14,25 @@
 
 let
   version = "1.22.6+133";
+=======
+  flutter329,
+  sqlite,
+  libsecret,
+}:
+
+let
+  flutter = flutter329;
+in
+flutter.buildFlutterApplication rec {
+  pname = "mhabit";
+  version = "1.21.1+120";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "FriesI23";
     repo = "mhabit";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-zdgD3TGSjRQc6PAeTh2EV42X5EEgiOh0yH0+Fqre+Qc=";
   };
 in
@@ -28,6 +43,13 @@ flutter332.buildFlutterApplication {
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = lib.importJSON ./git-hashes.json;
+=======
+    hash = "sha256-ym+xCv7fRwlms2oIvcthyuz53T0LCgigleg1qmLfZVU=";
+  };
+
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+  gitHashes.icon_font_generator = "sha256-QmChsa2qP+gZyZ2IrJMrY/zBP/J5QigidjIHahp3V0g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = [
     sqlite
@@ -42,6 +64,7 @@ flutter332.buildFlutterApplication {
     install -Dm644 assets/logo/icon.svg $out/share/icons/hicolor/scalable/io.github.friesi23.mhabit
   '';
 
+<<<<<<< HEAD
   passthru = {
     pubspecSource =
       runCommand "pubspec.lock.json"
@@ -73,6 +96,8 @@ flutter332.buildFlutterApplication {
     ];
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Track micro habits with easy-to-use charts and tools";
     longDescription = ''

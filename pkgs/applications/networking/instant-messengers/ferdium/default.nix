@@ -35,11 +35,19 @@ mkFranzDerivation rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "All your services in one place built by the community";
     homepage = "https://ferdium.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ magnouvean ];
+=======
+  meta = with lib; {
+    description = "All your services in one place built by the community";
+    homepage = "https://ferdium.org/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ magnouvean ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

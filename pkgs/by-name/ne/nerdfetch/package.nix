@@ -27,6 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "POSIX *nix (Linux, macOS, Android, *BSD, etc) fetch script using Nerdfonts";
     homepage = "https://github.com/ThatOneCalculator/NerdFetch";
@@ -35,5 +36,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "nerdfetch";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "POSIX *nix (Linux, macOS, Android, *BSD, etc) fetch script using Nerdfonts";
+    homepage = "https://github.com/ThatOneCalculator/NerdFetch";
+    changelog = "https://github.com/ThatOneCalculator/NerdFetch/releases/tag/${finalAttrs.version}";
+    maintainers = with maintainers; [ ByteSudoer ];
+    license = licenses.mit;
+    mainProgram = "nerdfetch";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

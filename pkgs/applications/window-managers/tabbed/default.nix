@@ -35,11 +35,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://tools.suckless.org/tabbed";
     description = "Simple generic tabbed fronted to xembed aware applications";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://tools.suckless.org/tabbed";
+    description = "Simple generic tabbed fronted to xembed aware applications";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Puts bad Linux applications in a box with only their files";
     homepage = "https://github.com/queer/boxxy";
@@ -40,6 +41,16 @@ rustPlatform.buildRustPackage rec {
       dit7ya
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Puts bad Linux applications in a box with only their files";
+    homepage = "https://github.com/queer/boxxy";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      dit7ya
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "boxxy";
   };

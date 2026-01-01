@@ -18,10 +18,18 @@ buildPecl {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre2 ];
 
+<<<<<<< HEAD
   meta = {
     description = "Imagick is a native php extension to create and modify images using the ImageMagick API";
     license = lib.licenses.php301;
     homepage = "https://pecl.php.net/package/imagick";
     teams = [ lib.teams.php ];
+=======
+  meta = with lib; {
+    description = "Imagick is a native php extension to create and modify images using the ImageMagick API";
+    license = licenses.php301;
+    homepage = "https://pecl.php.net/package/imagick";
+    teams = [ teams.php ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

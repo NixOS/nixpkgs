@@ -54,12 +54,21 @@ stdenv.mkDerivation rec {
       --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Posix script to find and watch youtube videos from the terminal";
     homepage = "https://github.com/pystardust/ytfzf";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Posix script to find and watch youtube videos from the terminal";
+    homepage = "https://github.com/pystardust/ytfzf";
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ytfzf";
   };
 }

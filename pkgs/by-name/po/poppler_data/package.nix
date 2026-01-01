@@ -21,11 +21,19 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://poppler.freedesktop.org/";
     description = "Encoding files for Poppler, a PDF rendering library";
     platforms = lib.platforms.all;
     license = lib.licenses.free; # more free licenses combined
+=======
+  meta = with lib; {
+    homepage = "https://poppler.freedesktop.org/";
+    description = "Encoding files for Poppler, a PDF rendering library";
+    platforms = platforms.all;
+    license = licenses.free; # more free licenses combined
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (poppler.meta) teams maintainers;
   };
 }

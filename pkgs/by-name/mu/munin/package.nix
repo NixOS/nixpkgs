@@ -164,7 +164,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) munin; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Networked resource monitoring tool";
     longDescription = ''
       Munin is a monitoring tool that surveys all your computers and remembers
@@ -173,8 +177,14 @@ stdenv.mkDerivation rec {
       to kill our performance?' problems.
     '';
     homepage = "https://munin-monitoring.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.bjornfor ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.bjornfor ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

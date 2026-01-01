@@ -44,11 +44,20 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tools for programming FPGAs, microcontrollers and PROMs via JTAG";
     homepage = "https://xc3sprog.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Command-line tools for programming FPGAs, microcontrollers and PROMs via JTAG";
+    homepage = "https://xc3sprog.sourceforge.net/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

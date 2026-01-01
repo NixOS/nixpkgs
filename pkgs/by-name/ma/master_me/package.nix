@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/trummerschlunk/master_me";
     description = "Automatic mastering plugin for live streaming, podcasts and internet radio";
@@ -47,6 +48,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # error: no type or protocol named 'NSPasteboardType'
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/trummerschlunk/master_me";
+    description = "Automatic mastering plugin for live streaming, podcasts and internet radio";
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin; # error: no type or protocol named 'NSPasteboardType'
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "master_me";
   };
 }

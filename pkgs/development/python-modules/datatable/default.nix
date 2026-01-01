@@ -80,10 +80,17 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "datatable" ];
 
+<<<<<<< HEAD
   meta = {
     description = "data.table for Python";
     homepage = "https://github.com/h2oai/datatable";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "data.table for Python";
+    homepage = "https://github.com/h2oai/datatable";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

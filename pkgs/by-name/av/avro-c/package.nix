@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lblasc ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C library which implements parts of the Avro Specification";
+    homepage = "https://avro.apache.org/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ lblasc ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

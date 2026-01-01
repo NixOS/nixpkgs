@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace-fail @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lxqt/pcmanfm-qt";
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
@@ -63,5 +64,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lxqt/pcmanfm-qt";
+    description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
+    mainProgram = "pcmanfm-qt";
+    license = licenses.gpl2Plus;
+    platforms = with platforms; unix;
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

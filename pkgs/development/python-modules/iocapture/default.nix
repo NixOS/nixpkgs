@@ -28,9 +28,16 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Capture stdout, stderr easily";
     homepage = "https://github.com/oinume/iocapture";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Capture stdout, stderr easily";
+    homepage = "https://github.com/oinume/iocapture";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

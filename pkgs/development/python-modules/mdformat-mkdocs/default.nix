@@ -14,23 +14,44 @@
   more-itertools,
   pytest-snapshot,
   pytestCheckHook,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
+<<<<<<< HEAD
   version = "4.4.2";
   pyproject = true;
 
+=======
+  version = "4.4.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-u3IHqllknX6ilReXRVyZoDfqid8Ioe+zvC3wPh04HXo=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [
+=======
+    hash = "sha256-J1gLi85tEFJcWupV2FzunJhROFdU3G12hRHxbLSX0kc=";
+  };
+
+  nativeBuildInputs = [ flit-core ];
+
+  propagatedBuildInputs = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mdformat
     mdformat-gfm
     mdit-py-plugins
@@ -63,11 +84,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_mkdocs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mdformat plugin for MkDocs";
     homepage = "https://github.com/KyleKing/mdformat-mkdocs";
     changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aldoborrero ];
+=======
+  meta = with lib; {
+    description = "Mdformat plugin for MkDocs";
+    homepage = "https://github.com/KyleKing/mdformat-mkdocs";
+    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aldoborrero ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

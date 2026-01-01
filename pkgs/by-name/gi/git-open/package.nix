@@ -43,12 +43,21 @@ stdenv.mkDerivation rec {
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/paulirish/git-open";
     description = "Open the GitHub page or website for a repository in your browser";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/paulirish/git-open";
+    description = "Open the GitHub page or website for a repository in your browser";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-open";
   };
 }

@@ -36,10 +36,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_gateway" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Client library for interacting with a dask-gateway server";
+    homepage = "https://gateway.dask.org/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -28,12 +28,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "find_libpython" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Finds the libpython associated with your environment, wherever it may be hiding";
     changelog = "https://github.com/ktbarrett/find_libpython/releases/tag/${src.tag}";
     homepage = "https://github.com/ktbarrett/find_libpython";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jleightcap ];
+=======
+  meta = with lib; {
+    description = "Finds the libpython associated with your environment, wherever it may be hiding";
+    changelog = "https://github.com/ktbarrett/find_libpython/releases/tag/${src.tag}";
+    homepage = "https://github.com/ktbarrett/find_libpython";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jleightcap ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "find_libpython";
   };
 }

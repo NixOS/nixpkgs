@@ -85,6 +85,7 @@ buildPythonApplication rec {
     rm $out/bin/bukuserver
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Private cmdline bookmark manager";
     mainProgram = "buku";
@@ -92,5 +93,14 @@ buildPythonApplication rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Private cmdline bookmark manager";
+    mainProgram = "buku";
+    homepage = "https://github.com/jarun/Buku";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

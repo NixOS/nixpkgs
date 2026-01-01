@@ -54,6 +54,7 @@ buildPythonPackage rec {
       url = "https://github.com/tpm2-software/tpm2-pytss/commit/afdee627d0639eb05711a2191f2f76e460793da9.patch?full_index=1";
       hash = "sha256-Y6drcBg4gnbSvnCGw69b42Q/QfLI3u56BGRUEkpdB0M=";
     })
+<<<<<<< HEAD
     # Fix build with gcc15 by using c99 for preprocessing
     # The first patch is needed to apply the second; it doesn't affect us
     (fetchpatch {
@@ -64,6 +65,8 @@ buildPythonPackage rec {
       url = "https://github.com/tpm2-software/tpm2-pytss/commit/61d00b4dcca131b3f03f674ceabf4260bdbd6a61.patch";
       hash = "sha256-0dwfyW0Fi5FkzYnaMOb2ua9O6eyCnMgJqT09tTT56vY=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals isCross [
     # pytss will regenerate files from headers of tpm2-tss.
@@ -112,12 +115,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tpm2_pytss" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";
     changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${version}/CHANGELOG.md";
     description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tpm2-software/tpm2-pytss";
+    changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${version}/CHANGELOG.md";
+    description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       baloo
       scottstephens
     ];

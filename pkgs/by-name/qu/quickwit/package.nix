@@ -139,6 +139,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=io::tests::test_controlled_writer_limited_sync"
   ];
 
+<<<<<<< HEAD
   meta = {
     # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
     broken = true;
@@ -147,5 +148,13 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Sub-second search & analytics engine on cloud storage";
+    homepage = "https://quickwit.io/";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ happysalada ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

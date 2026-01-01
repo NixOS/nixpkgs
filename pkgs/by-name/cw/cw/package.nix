@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-8L4q0IAvmNk5GCAC5agNfWFtokIkddO1Dec4m6/sWfg=";
 
+<<<<<<< HEAD
   meta = {
     description = "Best way to tail AWS CloudWatch Logs from your terminal";
     homepage = "https://github.com/lucagrulla/cw";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onthestairs ];
+=======
+  meta = with lib; {
+    description = "Best way to tail AWS CloudWatch Logs from your terminal";
+    homepage = "https://github.com/lucagrulla/cw";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ onthestairs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cw";
   };
 }

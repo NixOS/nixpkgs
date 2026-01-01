@@ -240,6 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
       "--enable-profiler" # build libprofiler_builtins
     ]
+<<<<<<< HEAD
     ++ optionals stdenv.targetPlatform.isDarwin [
       # potentially other llvm targets work with the same fix?
       "--enable-profiler" # build libprofiler_builtins
@@ -249,6 +250,8 @@ stdenv.mkDerivation (finalAttrs: {
       "--set=target.bpfel-unknown-none.profiler=false"
       "--set=target.bpfeb-unknown-none.profiler=false"
     ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ optionals stdenv.buildPlatform.isMusl [
       "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
     ]
@@ -451,6 +454,7 @@ stdenv.mkDerivation (finalAttrs: {
     // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
@@ -458,6 +462,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = [
       lib.licenses.mit
       lib.licenses.asl20
+=======
+  meta = with lib; {
+    homepage = "https://www.rust-lang.org/";
+    description = "Safe, concurrent, practical language";
+    teams = [ teams.rust ];
+    license = [
+      licenses.mit
+      licenses.asl20
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = rustc.targetPlatformsWithHostTools;
     # If rustc can't target a platform, we also can't build rustc for

@@ -61,11 +61,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple CLI tool to run networking commands remotely from hundreds of globally distributed servers";
     homepage = "https://www.jsdelivr.com/globalping/cli";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ xyenon ];
+=======
+  meta = with lib; {
+    description = "Simple CLI tool to run networking commands remotely from hundreds of globally distributed servers";
+    homepage = "https://www.jsdelivr.com/globalping/cli";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ xyenon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "globalping";
   };
 }

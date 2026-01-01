@@ -49,10 +49,17 @@ stdenv.mkDerivation rec {
     "--with-boost-filesystem=boost_filesystem"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://logstalgia.io/";
     description = "Website traffic visualization tool";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://logstalgia.io/";
+    description = "Website traffic visualization tool";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       Logstalgia is a website traffic visualization that replays or
@@ -73,8 +80,13 @@ stdenv.mkDerivation rec {
       a Miscellaneous section.
     '';
 
+<<<<<<< HEAD
     platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+    platforms = platforms.gnu ++ platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "logstalgia";
   };
 }

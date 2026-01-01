@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   lib,
   testers,
   fetchurl,
@@ -90,6 +91,15 @@ in
     '';
   };
 
+=======
+  testers,
+  fetchurl,
+  jq,
+  moreutils,
+  ...
+}:
+{
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Tests that we can send custom headers with spaces in them
   header =
     let
@@ -140,6 +150,7 @@ in
     # have to fallback to fetching the previously-built derivation from
     # tarballs.nixos.org, which provides pre-built derivation outputs.
   };
+<<<<<<< HEAD
 
   showURLs-urls-mirrors = testers.invalidateFetcherByDrvHash fetchurl (finalAttrs: {
     name = "test-fetchurl-showURLs-urls-mirrors";
@@ -186,4 +197,6 @@ in
       fi
     '';
   };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

@@ -71,6 +71,7 @@ let
 
   # more is unavailable in darwin
   # so we just use less
+<<<<<<< HEAD
   more_compat =
     runCommand pkgs.less.name
       {
@@ -82,6 +83,12 @@ let
         mkdir -p $out/bin
         ln -s ${pkgs.less}/bin/less $out/bin/more
       '';
+=======
+  more_compat = runCommand "more-${pkgs.less.name}" { } ''
+    mkdir -p $out/bin
+    ln -s ${pkgs.less}/bin/less $out/bin/more
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   bins = mapAttrs singleBinary {
     # singular binaries

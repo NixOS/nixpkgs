@@ -38,12 +38,21 @@ stdenv.mkDerivation {
     wayland-protocols
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wayland tool for idle inhibit when using joysticks";
     homepage = "https://github.com/nowrep/wljoywake";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.jtrees ];
+=======
+  meta = with lib; {
+    description = "Wayland tool for idle inhibit when using joysticks";
+    homepage = "https://github.com/nowrep/wljoywake";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.jtrees ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wljoywake";
   };
 }

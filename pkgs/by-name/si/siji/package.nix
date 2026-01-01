@@ -47,11 +47,20 @@ stdenv.mkDerivation {
     "bdf"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/stark/siji";
     description = "Iconic bitmap font based on Stlarch with additional glyphs";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.asymmetric ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/stark/siji";
+    description = "Iconic bitmap font based on Stlarch with additional glyphs";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = [ maintainers.asymmetric ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

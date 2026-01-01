@@ -28,7 +28,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "mkdocs_linkcheck" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Validate links in Markdown files for static site generators like MkDocs, Hugo or Jekyll";
     mainProgram = "mkdocs-linkcheck";
     longDescription = ''
@@ -36,7 +40,12 @@ buildPythonPackage {
       static site generators like MkDocs, Hugo or Jekyll. It can be used with any text files containing links.
     '';
     homepage = "https://github.com/byrnereese/mkdocs-linkcheck";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ totoroot ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ totoroot ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

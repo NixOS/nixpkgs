@@ -34,9 +34,16 @@ buildGhidraExtension {
     rm dist/ghidra*
     mv dist/safe.zip dist/$correct_version
   '';
+<<<<<<< HEAD
   meta = {
     description = "Reverse-Engineering Tools SYNChronization. Allows syncing between a debugging session and Ghidra";
     homepage = "https://github.com/bootleg/ret-sync";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Reverse-Engineering Tools SYNChronization. Allows syncing between a debugging session and Ghidra";
+    homepage = "https://github.com/bootleg/ret-sync";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

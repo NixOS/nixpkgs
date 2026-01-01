@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.rockbox.org";
     description = "Open source firmware for digital music players";
@@ -63,5 +64,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ozkutuk ];
     mainProgram = "RockboxUtility";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.rockbox.org";
+    description = "Open source firmware for digital music players";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ozkutuk ];
+    mainProgram = "RockboxUtility";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

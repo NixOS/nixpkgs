@@ -35,12 +35,21 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hiragana text to Kana Kanji mixed text Japanese input method";
     homepage = "https://anthy.osdn.jp/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Hiragana text to Kana Kanji mixed text Japanese input method";
+    homepage = "https://anthy.osdn.jp/";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postFixup = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

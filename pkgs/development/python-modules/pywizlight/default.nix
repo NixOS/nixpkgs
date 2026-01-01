@@ -42,12 +42,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywizlight" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python connector for WiZ light bulbs";
     mainProgram = "wizlight";
     homepage = "https://github.com/sbidy/pywizlight";
     changelog = "https://github.com/sbidy/pywizlight/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

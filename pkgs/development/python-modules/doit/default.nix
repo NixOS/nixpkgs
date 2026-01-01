@@ -59,11 +59,19 @@ let
 
     pythonImportsCheck = [ "doit" ];
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://pydoit.org/";
       description = "Task management & automation tool";
       mainProgram = "doit";
       license = lib.licenses.mit;
+=======
+    meta = with lib; {
+      homepage = "https://pydoit.org/";
+      description = "Task management & automation tool";
+      mainProgram = "doit";
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       longDescription = ''
         doit is a modern open-source build-tool written in python
         designed to be simple to use and flexible to deal with complex
@@ -71,7 +79,11 @@ let
         custom work-flows where there is no out-of-the-box solution
         available.
       '';
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [ pSub ];
+=======
+      maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

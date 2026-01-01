@@ -59,7 +59,10 @@ let
     cfg.serverSettings.tls_key
   ]
   ++ optionals cfg.provision.enable provisionSecretFiles;
+<<<<<<< HEAD
   enableServerBackup = cfg.enableServer && (cfg.serverSettings.online_backup.versions != 0);
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
@@ -874,7 +877,11 @@ in
 
     environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
 
+<<<<<<< HEAD
     systemd.tmpfiles.settings."10-kanidm" = mkIf enableServerBackup {
+=======
+    systemd.tmpfiles.settings."10-kanidm" = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ${cfg.serverSettings.online_backup.path}.d = {
         mode = "0700";
         user = "kanidm";
@@ -910,6 +917,7 @@ in
           User = "kanidm";
           Group = "kanidm";
 
+<<<<<<< HEAD
           BindPaths =
             [ ]
             # To store backups
@@ -917,6 +925,15 @@ in
             ++ optional (
               cfg.enablePam && cfg.unixSettings ? home_mount_prefix
             ) cfg.unixSettings.home_mount_prefix;
+=======
+          BindPaths = [
+            # To store backups
+            cfg.serverSettings.online_backup.path
+          ]
+          ++ optional (
+            cfg.enablePam && cfg.unixSettings ? home_mount_prefix
+          ) cfg.unixSettings.home_mount_prefix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];

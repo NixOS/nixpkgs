@@ -18,7 +18,10 @@
   isILP64 ? false,
 
   # passthru.tests
+<<<<<<< HEAD
   mpich,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   superlu_dist,
 }:
 
@@ -37,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-i/Gg+9oMNNRlviwXUSRkWNaLRZLPWZRtA1fGYqh2X0k=";
   };
 
+<<<<<<< HEAD
   # --oversubscribe unrecognized by mpich
   # see https://github.com/xiaoyeli/superlu_dist/issues/208
   postPatch = ''
@@ -44,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "-oversubscribe" ""
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   patches = [
     ./mc64ad_dist-stub.patch
   ];
@@ -97,11 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
     inherit isILP64;
     tests = {
       ilp64 = superlu_dist.override { isILP64 = true; };
+<<<<<<< HEAD
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       mpich = superlu_dist.override {
         mpi = mpich;
       };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

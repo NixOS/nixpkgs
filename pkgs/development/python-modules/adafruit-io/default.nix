@@ -41,10 +41,18 @@ buildPythonPackage rec {
     "tests/test_mqtt_client.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for interacting with Adafruit IO";
     homepage = "https://github.com/adafruit/Adafruit_IO_Python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for interacting with Adafruit IO";
+    homepage = "https://github.com/adafruit/Adafruit_IO_Python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

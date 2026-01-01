@@ -10,6 +10,7 @@ let
     {
       enable = true;
       settings = {
+<<<<<<< HEAD
         namespaces.outside.interfaces.eth1 = {
           addresses = [ "2001:0db8:a::${builtins.toString id}/64" ];
           link = {
@@ -18,12 +19,25 @@ let
           };
         };
         interfaces = {
+=======
+        interfaces = {
+          eth1 = {
+            addresses = [ "2001:0db8:a::${builtins.toString id}/64" ];
+            link = {
+              state = "up";
+              kind = "physical";
+            };
+          };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           wg0 = {
             addresses = [ "2001:0db8:b::${builtins.toString id}/64" ];
             link = {
               state = "up";
               kind = "wireguard";
+<<<<<<< HEAD
               bind_netns = "outside";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             };
             wireguard = {
               private_key = "!include ${pkgs.writeText "wg_priv.key" wgPriv}";
@@ -62,9 +76,12 @@ in
         };
 
         boot.initrd = {
+<<<<<<< HEAD
           # otherwise the interfaces do not get created
           kernelModules = [ "virtio_net" ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           network = {
             enable = true;
             ifstate =
@@ -76,10 +93,19 @@ in
                 wgPeerId = 2;
               }
               // {
+<<<<<<< HEAD
                 allowIfstateToDrasticlyIncreaseInitrdSize = true;
               };
           };
 
+=======
+                package = pkgs.ifstate.override {
+                  withConfigValidation = false;
+                };
+                allowIfstateToDrasticlyIncreaseInitrdSize = true;
+              };
+          };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           systemd = {
             enable = true;
             network.enable = false;

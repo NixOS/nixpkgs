@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
   '';
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://nifti-imaging.github.io";
     description = "Medical imaging format C API";
     maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.publicDomain;
+=======
+  meta = with lib; {
+    homepage = "https://nifti-imaging.github.io";
+    description = "Medical imaging format C API";
+    maintainers = with maintainers; [ bcdarwin ];
+    platforms = platforms.unix;
+    license = licenses.publicDomain;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -186,12 +186,21 @@ stdenv.mkDerivation (finalAttrs: {
       ]) != [ ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Performance portable programming model for machine learning tensor operators";
     homepage = "https://github.com/ROCm/composable_kernel";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Performance portable programming model for machine learning tensor operators";
+    homepage = "https://github.com/ROCm/composable_kernel";
+    license = with licenses; [ mit ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = true; # this base package shouldn't be built directly
   };
 })

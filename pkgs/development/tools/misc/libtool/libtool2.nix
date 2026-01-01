@@ -68,7 +68,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GNU Libtool, a generic library support script";
     longDescription = ''
       GNU libtool is a generic library support script.  Libtool hides
@@ -80,9 +84,15 @@ stdenv.mkDerivation rec {
       documentation for details.
     '';
     homepage = "https://www.gnu.org/software/libtool/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "libtool";
   };
 }

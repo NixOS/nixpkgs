@@ -22,11 +22,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/home-assistant-libs/psutil-home-assistant/releases/tag/${version}";
     description = "Wrapper of psutil that removes reliance on globals";
     homepage = "https://github.com/home-assistant-libs/psutil-home-assistant";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/home-assistant-libs/psutil-home-assistant/releases/tag/${version}";
+    description = "Wrapper of psutil that removes reliance on globals";
+    homepage = "https://github.com/home-assistant-libs/psutil-home-assistant";
+    license = licenses.asl20;
+    teams = [ teams.home-assistant ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

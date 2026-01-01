@@ -25,15 +25,26 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fontforge ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of Thai scalable fonts available under free licenses";
     homepage = "https://linux.thai.net/projects/fonts-tlwg";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Collection of Thai scalable fonts available under free licenses";
+    homepage = "https://linux.thai.net/projects/fonts-tlwg";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2
       publicDomain
       lppl13c
       free
     ];
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.yrashk ];
+=======
+    maintainers = [ maintainers.yrashk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

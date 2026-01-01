@@ -73,12 +73,21 @@ buildPythonPackage rec {
     "pyro.optim"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for probabilistic modeling and inference";
     homepage = "http://pyro.ai";
     changelog = "https://github.com/pyro-ppl/pyro/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Library for probabilistic modeling and inference";
+    homepage = "http://pyro.ai";
+    changelog = "https://github.com/pyro-ppl/pyro/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       teh
       georgewhewell
     ];

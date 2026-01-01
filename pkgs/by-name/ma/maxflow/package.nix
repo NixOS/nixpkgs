@@ -23,11 +23,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Software for computing mincut/maxflow in a graph";
     homepage = "https://github.com/gerddie/maxflow";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.tadfisher ];
+=======
+  meta = with lib; {
+    description = "Software for computing mincut/maxflow in a graph";
+    homepage = "https://github.com/gerddie/maxflow";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.tadfisher ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

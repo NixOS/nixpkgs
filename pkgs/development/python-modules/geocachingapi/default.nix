@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geocachingapi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API to control the Geocaching API";
     homepage = "https://github.com/Sholofly/geocachingapi-python";
     changelog = "https://github.com/Sholofly/geocachingapi-python/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API to control the Geocaching API";
+    homepage = "https://github.com/Sholofly/geocachingapi-python";
+    changelog = "https://github.com/Sholofly/geocachingapi-python/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

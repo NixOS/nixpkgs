@@ -39,7 +39,11 @@ appimageTools.wrapType2 {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
     license = lib.licenses.gpl3Only;

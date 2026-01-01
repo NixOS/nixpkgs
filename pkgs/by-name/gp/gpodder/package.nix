@@ -88,15 +88,25 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.
     '';
     homepage = "http://gpodder.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ mic92 ];
+=======
+    license = licenses.gpl3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ mic92 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

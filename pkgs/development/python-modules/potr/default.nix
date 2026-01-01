@@ -17,10 +17,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pycrypto ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python OTR implementation";
     homepage = "http://python-otr.pentabarf.de/";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Pure Python OTR implementation";
+    homepage = "http://python-otr.pentabarf.de/";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

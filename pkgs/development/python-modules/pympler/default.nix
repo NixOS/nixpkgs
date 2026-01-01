@@ -54,9 +54,16 @@ buildPythonPackage rec {
 
   doCheck = stdenv.hostPlatform.isLinux;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to measure, monitor and analyze memory behavior";
     homepage = "https://github.com/pympler/pympler";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Tool to measure, monitor and analyze memory behavior";
+    homepage = "https://github.com/pympler/pympler";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Small GTK application to allow to keep a diary of your life";
     mainProgram = "almanah";
@@ -74,5 +75,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "Small GTK application to allow to keep a diary of your life";
+    mainProgram = "almanah";
+    homepage = "https://gitlab.gnome.org/GNOME/almanah";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

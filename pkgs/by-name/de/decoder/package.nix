@@ -41,6 +41,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/PeterPawn/decoder";
     description = ''"secrets" decoding for FRITZ!OS devices'';
@@ -48,5 +49,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/PeterPawn/decoder";
+    description = ''"secrets" decoding for FRITZ!OS devices'';
+    mainProgram = "decoder";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

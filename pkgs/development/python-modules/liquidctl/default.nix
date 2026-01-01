@@ -76,12 +76,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "liquidctl" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
     homepage = "https://github.com/liquidctl/liquidctl";
     changelog = "https://github.com/liquidctl/liquidctl/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
+    homepage = "https://github.com/liquidctl/liquidctl";
+    changelog = "https://github.com/liquidctl/liquidctl/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       arturcygan
     ];
     mainProgram = "liquidctl";

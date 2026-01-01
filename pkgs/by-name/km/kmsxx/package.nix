@@ -49,11 +49,20 @@ stdenv.mkDerivation {
 
   mesonFlags = lib.optional (!withPython) "-Dpykms=disabled";
 
+<<<<<<< HEAD
   meta = {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
     homepage = "https://github.com/tomba/kmsxx";
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
+    homepage = "https://github.com/tomba/kmsxx";
+    license = licenses.mpl20;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

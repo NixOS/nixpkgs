@@ -40,10 +40,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "twitch" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Twitch module for Python";
     homepage = "https://github.com/PetterKraabol/Twitch-Python";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Twitch module for Python";
+    homepage = "https://github.com/PetterKraabol/Twitch-Python";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

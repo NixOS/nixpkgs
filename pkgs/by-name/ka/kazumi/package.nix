@@ -18,13 +18,21 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.9.3";
+=======
+  version = "1.9.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-ZAc8i7nsJ00rzrOevVd4apb+CJ43rnsTkWGXhsDvrdc=";
+=======
+    hash = "sha256-KcZh8T6tf81/bAJj2ZMNynfHWGvzrwxwj0nXbXckJhY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 flutter338.buildFlutterApplication {

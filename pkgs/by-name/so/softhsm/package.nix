@@ -43,7 +43,11 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -rf $out/var";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.softhsm.org/";
     description = "Cryptographic store accessible through a PKCS #11 interface";
     longDescription = "
@@ -57,7 +61,12 @@ stdenv.mkDerivation rec {
       able to work with many cryptographic products. SoftHSM is a
       programme of The Commons Conservancy.
     ";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

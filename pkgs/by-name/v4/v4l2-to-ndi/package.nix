@@ -47,15 +47,27 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Video input (V4L2) to NDI converter";
     homepage = "https://github.com/lplassman/V4L2-to-NDI";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Video input (V4L2) to NDI converter";
+    homepage = "https://github.com/lplassman/V4L2-to-NDI";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pinpox
       MayNiklas
     ];
     mainProgram = "v4l2ndi";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

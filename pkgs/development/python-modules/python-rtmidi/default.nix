@@ -52,11 +52,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rtmidi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python binding for the RtMidi C++ library implemented using Cython";
     homepage = "https://github.com/SpotlightKid/python-rtmidi";
     changelog = "https://github.com/SpotlightKid/python-rtmidi/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python binding for the RtMidi C++ library implemented using Cython";
+    homepage = "https://github.com/SpotlightKid/python-rtmidi";
+    changelog = "https://github.com/SpotlightKid/python-rtmidi/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

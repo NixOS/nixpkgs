@@ -19,10 +19,17 @@ stdenv.mkDerivation {
     PREFIX=$out make install
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/clvv/fasd";
     description = "Quick command-line access to files and directories for POSIX shells";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/clvv/fasd";
+    description = "Quick command-line access to files and directories for POSIX shells";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       Fasd is a command-line productivity booster.
@@ -32,7 +39,11 @@ stdenv.mkDerivation {
       command line.
     '';
 
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "fasd";
   };

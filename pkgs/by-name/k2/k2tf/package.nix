@@ -34,11 +34,20 @@ buildGoModule rec {
     "-X main.commit=v${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Kubernetes YAML to Terraform HCL converter";
     mainProgram = "k2tf";
     homepage = "https://github.com/sl1pm4t/k2tf";
     license = lib.licenses.mpl20;
     maintainers = [ lib.maintainers.flokli ];
+=======
+  meta = with lib; {
+    description = "Kubernetes YAML to Terraform HCL converter";
+    mainProgram = "k2tf";
+    homepage = "https://github.com/sl1pm4t/k2tf";
+    license = licenses.mpl20;
+    maintainers = [ maintainers.flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

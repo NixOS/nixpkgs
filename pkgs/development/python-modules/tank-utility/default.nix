@@ -40,12 +40,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tank_utility" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library for the Tank Utility API";
     mainProgram = "tank-utility";
     homepage = "https://github.com/krismolendyke/tank-utility";
     changelog = "https://github.com/krismolendyke/tank-utility/blob/${version}/HISTORY.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

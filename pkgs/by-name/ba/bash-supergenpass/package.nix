@@ -37,7 +37,11 @@ stdenv.mkDerivation {
     url = "https://github.com/lanzz/bash-supergenpass.git";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Bash shell-script implementation of SuperGenPass password generation";
     longDescription = ''
       Bash shell-script implementation of SuperGenPass password generation
@@ -50,9 +54,16 @@ stdenv.mkDerivation {
       supergenpass will ask for your master password interactively, and it will not be displayed on your terminal.
     '';
     homepage = "https://github.com/lanzz/bash-supergenpass";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "supergenpass";
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
+    mainProgram = "supergenpass";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

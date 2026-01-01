@@ -37,12 +37,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slapd" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Controls a slapd process in a pythonic way";
     homepage = "https://github.com/python-ldap/python-slapd";
     changelog = "https://github.com/python-ldap/python-slapd/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Controls a slapd process in a pythonic way";
+    homepage = "https://github.com/python-ldap/python-slapd";
+    changelog = "https://github.com/python-ldap/python-slapd/blob/${src.tag}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

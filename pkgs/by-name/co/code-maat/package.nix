@@ -36,6 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line tool to mine and analyze data from version-control systems";
     mainProgram = "code-maat";
@@ -43,5 +44,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ sir4ur0n ];
+=======
+  meta = with lib; {
+    description = "Command line tool to mine and analyze data from version-control systems";
+    mainProgram = "code-maat";
+    homepage = "https://github.com/adamtornhill/code-maat";
+    platforms = platforms.unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ sir4ur0n ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

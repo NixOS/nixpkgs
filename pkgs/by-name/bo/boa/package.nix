@@ -39,15 +39,27 @@ rustPlatform.buildRustPackage rec {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Embeddable and experimental Javascript engine written in Rust";
     mainProgram = "boa";
     homepage = "https://github.com/boa-dev/boa";
     changelog = "https://github.com/boa-dev/boa/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = with lib.licenses; [
       mit # or
       unlicense
     ];
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+    license = with licenses; [
+      mit # or
+      unlicense
+    ];
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

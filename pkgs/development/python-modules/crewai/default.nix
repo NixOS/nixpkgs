@@ -7,8 +7,13 @@
   hatchling,
 
   # dependencies
+<<<<<<< HEAD
   aiosqlite,
   appdirs,
+=======
+  appdirs,
+  blinker,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   chromadb,
   click,
   instructor,
@@ -16,7 +21,10 @@
   json5,
   jsonref,
   litellm,
+<<<<<<< HEAD
   mcp,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   openai,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
@@ -28,6 +36,11 @@
   pydantic-settings,
   pyjwt,
   python-dotenv,
+<<<<<<< HEAD
+=======
+  pyvis,
+  qdrant-client,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   regex,
   tokenizers,
   tomli,
@@ -36,32 +49,47 @@
 
   # tests
   pytestCheckHook,
+<<<<<<< HEAD
   pytest-asyncio,
   pytest-xdist,
   qdrant-client,
   vcrpy,
+=======
+  pytest-xdist,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "crewai";
+<<<<<<< HEAD
   version = "1.7.2";
+=======
+  version = "0.203.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-liJS3hrNsyAt49ROUi3/pWXfMP2wA/bFyy6yEOV6Rrk=";
   };
 
   sourceRoot = "${src.name}/lib/crewai";
 
+=======
+    hash = "sha256-vy3JdJjuiFbi66IDNo+dQ7MZqlHqvHt/zUb6eblPT7A=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "chromadb"
+<<<<<<< HEAD
     "click"
     "json-repair"
     "json5"
@@ -87,6 +115,18 @@ buildPythonPackage rec {
   dependencies = [
     aiosqlite
     appdirs
+=======
+    "json-repair"
+    "litellm"
+    "portalocker"
+    "pydantic"
+    "pyvis"
+  ];
+
+  dependencies = [
+    appdirs
+    blinker
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     chromadb
     click
     instructor
@@ -94,7 +134,10 @@ buildPythonPackage rec {
     json5
     jsonref
     litellm
+<<<<<<< HEAD
     mcp
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     openai
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-http
@@ -106,6 +149,10 @@ buildPythonPackage rec {
     pydantic-settings
     pyjwt
     python-dotenv
+<<<<<<< HEAD
+=======
+    pyvis
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     regex
     tokenizers
     tomli
@@ -127,6 +174,7 @@ buildPythonPackage rec {
 
     # ImportError: cannot import name 'InitFrom' from 'qdrant_client.models'
     "tests/rag/qdrant/test_client.py"
+<<<<<<< HEAD
 
     # Tests requiring optional dependencies
     "tests/llms/anthropic"
@@ -148,6 +196,8 @@ buildPythonPackage rec {
 
     # Tests requiring crewai-tools
     "tests/agents/test_lite_agent.py"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   disabledTests = [
@@ -412,6 +462,7 @@ buildPythonPackage rec {
     "test_asearch_wrong_client_type"
     "test_areset_wrong_client_type"
     "test_adelete_collection"
+<<<<<<< HEAD
 
     # Tests requiring litellm
     "test_litellm_anthropic_error_handling"
@@ -430,21 +481,32 @@ buildPythonPackage rec {
 
     # Not work with nixpkgs-review
     "test_concurrent_ainvoke_calls"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+<<<<<<< HEAD
     pytest-asyncio
     pytest-xdist
     qdrant-client
     vcrpy
+=======
+    pytest-xdist
+    qdrant-client
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
 
+<<<<<<< HEAD
   pytestFlagsArray = [
     "--override-ini=addopts="
   ];
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";

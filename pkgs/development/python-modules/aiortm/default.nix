@@ -50,6 +50,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiortm" ];
@@ -60,6 +61,18 @@ buildPythonPackage rec {
     changelog = "https://github.com/MartinHjelmare/aiortm/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "aiortm" ];
+
+  meta = with lib; {
+    description = "Library for the Remember the Milk API";
+    homepage = "https://github.com/MartinHjelmare/aiortm";
+    changelog = "https://github.com/MartinHjelmare/aiortm/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aiortm";
   };
 }

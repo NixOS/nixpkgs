@@ -34,10 +34,18 @@ stdenv.mkDerivation rec {
     "--libexecdir=$(out)/lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multiple Spanning Tree Protocol daemon";
     homepage = "https://github.com/mstpd/mstpd";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Multiple Spanning Tree Protocol daemon";
+    homepage = "https://github.com/mstpd/mstpd";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

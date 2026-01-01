@@ -50,13 +50,23 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/lxqt/compton-conf";
     description = "GUI configuration tool for compton X composite manager";
     mainProgram = "compton-conf";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     platforms = with lib.platforms; unix;
     teams = [ lib.teams.lxqt ];
+=======
+    license = licenses.lgpl21Plus;
+    platforms = with platforms; unix;
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

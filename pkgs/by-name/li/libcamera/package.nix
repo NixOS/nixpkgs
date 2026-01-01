@@ -27,12 +27,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
+<<<<<<< HEAD
   version = "0.6.0";
+=======
+  version = "0.5.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-zGcbzL1Q2hUaj/s9NjBlp7hVjmSFb0GF8CnCoDS82Tw=";
+=======
+    hash = "sha256-nr1LmnedZMGBWLf2i5uw4E/OMeXObEKgjuO+PUx/GDY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -112,7 +120,10 @@ stdenv.mkDerivation rec {
     "-Dv4l2=true"
     (lib.mesonEnable "tracing" withTracing)
     (lib.mesonEnable "qcam" withQcam)
+<<<<<<< HEAD
     "-Dlibunwind=disabled"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
@@ -129,6 +140,7 @@ stdenv.mkDerivation rec {
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
@@ -136,6 +148,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ citadelcore ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
+    homepage = "https://libcamera.org";
+    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ citadelcore ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

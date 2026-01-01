@@ -22,10 +22,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.myfonts.com/fonts/jan-fromm/camingo-code/";
     description = "Monospaced typeface designed for source-code editors";
     platforms = lib.platforms.all;
     license = lib.licenses.cc-by-nd-30;
+=======
+  meta = with lib; {
+    homepage = "https://www.myfonts.com/fonts/jan-fromm/camingo-code/";
+    description = "Monospaced typeface designed for source-code editors";
+    platforms = platforms.all;
+    license = licenses.cc-by-nd-30;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

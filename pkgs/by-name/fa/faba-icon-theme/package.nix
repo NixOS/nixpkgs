@@ -41,6 +41,7 @@ stdenvNoCC.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Sexy and modern icon theme with Tango influences";
     homepage = "https://snwh.org/moka";
@@ -50,5 +51,16 @@ stdenvNoCC.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    description = "Sexy and modern icon theme with Tango influences";
+    homepage = "https://snwh.org/moka";
+    license = with licenses; [
+      cc-by-sa-40
+      gpl3
+    ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

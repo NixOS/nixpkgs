@@ -33,9 +33,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ledger_bitcoin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for Ledger Bitcoin application";
     homepage = "https://github.com/LedgerHQ/app-bitcoin-new/tree/develop/bitcoin_client/ledger_bitcoin";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Client library for Ledger Bitcoin application";
+    homepage = "https://github.com/LedgerHQ/app-bitcoin-new/tree/develop/bitcoin_client/ledger_bitcoin";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,12 +22,21 @@ stdenv.mkDerivation {
     install -D zthrottle $out/bin/zthrottle
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Program that throttles a pipeline, only letting a line through at most every $1 seconds";
     homepage = "https://github.com/anko/zthrottle";
     license = lib.licenses.unlicense;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Program that throttles a pipeline, only letting a line through at most every $1 seconds";
+    homepage = "https://github.com/anko/zthrottle";
+    license = licenses.unlicense;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zthrottle";
   };
 }

@@ -79,12 +79,21 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "0.0.1" "${version}"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/icloud-photos-downloader/icloud_photos_downloader";
     description = "iCloud Photos Downloader";
     license = lib.licenses.mit;
     mainProgram = "icloudpd";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/icloud-photos-downloader/icloud_photos_downloader";
+    description = "iCloud Photos Downloader";
+    license = licenses.mit;
+    mainProgram = "icloudpd";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       anpin
     ];
   };

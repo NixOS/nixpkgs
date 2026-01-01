@@ -71,12 +71,21 @@ stdenvNoCC.mkDerivation {
       update-source-version libreoffice-bin $newVersion $newX86_64Sha256 --file=${defaultNixFile} --system=x86_64-darwin --ignore-same-version
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ tricktron ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
+    homepage = "https://libreoffice.org/";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ tricktron ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-darwin"
       "aarch64-darwin"

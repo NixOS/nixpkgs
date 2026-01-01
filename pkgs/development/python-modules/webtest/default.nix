@@ -46,10 +46,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webtest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Helper to test WSGI applications";
     homepage = "https://webtest.readthedocs.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Helper to test WSGI applications";
+    homepage = "https://webtest.readthedocs.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

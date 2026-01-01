@@ -3,6 +3,12 @@
   buildPythonPackage,
   cffi,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  filelock,
+  hatchling,
+  importlib-metadata,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytest-benchmark,
   pytest-cov-stub,
   pytest-xdist,
@@ -41,16 +47,27 @@ buildPythonPackage rec {
     popd
   '';
 
+<<<<<<< HEAD
   build-system = [
     cffi
     setuptools
   ];
+=======
+  build-system = [ hatchling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = [ pytest ];
 
   dependencies = [
     cffi
+<<<<<<< HEAD
     rich
+=======
+    filelock
+    importlib-metadata
+    rich
+    setuptools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   optional-dependencies = {

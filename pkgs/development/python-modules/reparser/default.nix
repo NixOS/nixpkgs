@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reparser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple regex-based lexer/parser for inline markup";
     homepage = "https://github.com/xmikos/reparser";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Simple regex-based lexer/parser for inline markup";
+    homepage = "https://github.com/xmikos/reparser";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

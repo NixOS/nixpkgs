@@ -22,12 +22,21 @@ stdenv.mkDerivation rec {
     install -D {,$out/share/man/}man1/yamdi.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Yet Another MetaData Injector for FLV";
     homepage = "https://yamdi.sourceforge.net/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.ryanartecona ];
+=======
+  meta = with lib; {
+    description = "Yet Another MetaData Injector for FLV";
+    homepage = "https://yamdi.sourceforge.net/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = [ maintainers.ryanartecona ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yamdi";
   };
 }

@@ -14,10 +14,17 @@ buildPythonPackage rec {
     sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Implements a XML/HTML/XHTML Markup safe string";
     homepage = "http://dev.pocoo.org";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Implements a XML/HTML/XHTML Markup safe string";
+    homepage = "http://dev.pocoo.org";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 

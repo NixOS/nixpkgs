@@ -40,11 +40,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Musical spectrum plugin for the DeaDBeeF music player";
     homepage = "https://github.com/cboxdoerfer/ddb_musical_spectrum";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.ddelabru ];
+=======
+  meta = with lib; {
+    description = "Musical spectrum plugin for the DeaDBeeF music player";
+    homepage = "https://github.com/cboxdoerfer/ddb_musical_spectrum";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.ddelabru ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

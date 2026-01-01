@@ -22,11 +22,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Posy's Improved Cursors for Linux";
     homepage = "https://github.com/simtrami/posy-improved-cursor-linux";
     platforms = lib.platforms.unix;
     license = lib.licenses.cc-by-nc-40;
     maintainers = with lib.maintainers; [ mkez ];
+=======
+  meta = with lib; {
+    description = "Posy's Improved Cursors for Linux";
+    homepage = "https://github.com/simtrami/posy-improved-cursor-linux";
+    platforms = platforms.unix;
+    license = licenses.cc-by-nc-40;
+    maintainers = with maintainers; [ mkez ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

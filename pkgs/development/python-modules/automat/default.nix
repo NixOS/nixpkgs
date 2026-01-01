@@ -40,11 +40,19 @@ let
       });
     };
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://github.com/glyph/Automat";
       description = "Self-service finite-state machines for the programmer on the go";
       mainProgram = "automat-visualize";
       license = lib.licenses.mit;
+=======
+    meta = with lib; {
+      homepage = "https://github.com/glyph/Automat";
+      description = "Self-service finite-state machines for the programmer on the go";
+      mainProgram = "automat-visualize";
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maintainers = [ ];
     };
   };

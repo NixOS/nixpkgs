@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool environment for safe floating-point code development";
     mainProgram = "sollya";
@@ -39,5 +40,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.cecill-c;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    description = "Tool environment for safe floating-point code development";
+    mainProgram = "sollya";
+    homepage = "https://www.sollya.org/";
+    license = licenses.cecill-c;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

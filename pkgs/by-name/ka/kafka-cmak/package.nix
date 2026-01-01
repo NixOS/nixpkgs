@@ -39,10 +39,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Cluster Manager for Apache Kafka, previously known as Kafka Manager";
     license = lib.licenses.apsl20;
     maintainers = with lib.maintainers; [ cafkafk ];
+=======
+  meta = with lib; {
+    description = "Cluster Manager for Apache Kafka, previously known as Kafka Manager";
+    license = licenses.apsl20;
+    maintainers = with maintainers; [ cafkafk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
     mainProgram = "cmak";
   };

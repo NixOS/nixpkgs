@@ -24,11 +24,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Bunch of tools that revolve around fiddling with dates and times in the command line";
     homepage = "http://www.fresse.org/dateutils/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.paperdigits ];
+=======
+  meta = with lib; {
+    description = "Bunch of tools that revolve around fiddling with dates and times in the command line";
+    homepage = "http://www.fresse.org/dateutils/";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.paperdigits ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

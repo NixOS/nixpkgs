@@ -32,12 +32,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line application as an alternative to the ReVanced Manager";
     homepage = "https://github.com/revanced/revanced-cli";
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
+=======
+  meta = with lib; {
+    description = "Command line application as an alternative to the ReVanced Manager";
+    homepage = "https://github.com/revanced/revanced-cli";
+    license = licenses.gpl3Only;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ jopejoe1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "revanced-cli";
   };
 }

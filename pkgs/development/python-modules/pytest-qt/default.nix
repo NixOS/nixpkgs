@@ -37,10 +37,17 @@ buildPythonPackage rec {
   # Tests require X server
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest support for PyQt and PySide applications";
     homepage = "https://github.com/pytest-dev/pytest-qt";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pytest support for PyQt and PySide applications";
+    homepage = "https://github.com/pytest-dev/pytest-qt";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

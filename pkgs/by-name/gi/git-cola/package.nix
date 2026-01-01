@@ -54,6 +54,11 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabledTestPaths = [
     "qtpy/"
     "contrib/win32"

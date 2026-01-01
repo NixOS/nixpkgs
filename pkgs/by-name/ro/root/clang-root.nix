@@ -5,19 +5,31 @@
   apple-sdk,
   cmake,
   git,
+<<<<<<< HEAD
   llvm_20,
+=======
+  llvm_18,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pkg-config,
   python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "clang-root";
+<<<<<<< HEAD
   version = "20-20250925-01";
+=======
+  version = "18-20250506-01";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchgit {
     url = "https://github.com/root-project/llvm-project";
     rev = "refs/tags/ROOT-llvm${version}";
+<<<<<<< HEAD
     hash = "sha256-qEoQVv/Aw9gqKSNa8ZJGqPzwXvH1yXiSOkvrUWeXI+g=";
+=======
+    hash = "sha256-8tviNWNmvIJhxF4j9Z7zMnjltTX0Ka2fN9HIgLfNAco=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -26,7 +38,11 @@ stdenv.mkDerivation rec {
     git
   ];
   buildInputs = [
+<<<<<<< HEAD
     llvm_20
+=======
+    llvm_18
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python3
   ];
 
@@ -46,7 +62,11 @@ stdenv.mkDerivation rec {
     "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
     "-DLLVM_INCLUDE_TESTS=OFF"
     "-DLLVM_LINK_LLVM_DYLIB=OFF"
+<<<<<<< HEAD
     "-DLLVM_MAIN_SRC_DIR=${llvm_20.src}"
+=======
+    "-DLLVM_MAIN_SRC_DIR=${llvm_18.src}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ (
     if stdenv.hostPlatform.isDarwin then

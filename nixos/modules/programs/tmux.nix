@@ -29,12 +29,16 @@ let
     setw -g pane-base-index ${toString cfg.baseIndex}
     set  -g history-limit   ${toString cfg.historyLimit}
 
+<<<<<<< HEAD
     ${optionalString cfg.newSession ''
       # Use -A to make new-session idempotent: attach if session "0" exists,
       # otherwise create it. This prevents duplicate sessions when multiple
       # configs (e.g., system and user) both enable newSession.
       new-session -A -s 0
     ''}
+=======
+    ${optionalString cfg.newSession "new-session"}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     ${optionalString cfg.reverseSplit ''
       bind v split-window -h

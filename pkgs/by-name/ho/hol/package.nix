@@ -26,7 +26,11 @@ let
 in
 
 stdenv.mkDerivation {
+<<<<<<< HEAD
   inherit pname version;
+=======
+  name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchurl {
     url = "mirror://sourceforge/hol/hol/${longVersion}/${holsubdir}.tar.gz";
@@ -76,7 +80,12 @@ stdenv.mkDerivation {
     # ln -s $out/src/hol4.${version}/bin $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
       HOL4 is the latest version of the HOL interactive proof
@@ -91,8 +100,14 @@ stdenv.mkDerivation {
       checking.
     '';
     homepage = "http://hol.sourceforge.net/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mudri ];
+=======
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ mudri ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

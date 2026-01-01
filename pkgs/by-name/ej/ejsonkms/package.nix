@@ -34,10 +34,18 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Integrates EJSON with AWS KMS";
     homepage = "https://github.com/envato/ejsonkms";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ viraptor ];
+=======
+  meta = with lib; {
+    description = "Integrates EJSON with AWS KMS";
+    homepage = "https://github.com/envato/ejsonkms";
+    license = licenses.mit;
+    maintainers = with maintainers; [ viraptor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

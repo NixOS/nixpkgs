@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "toonapi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for the Quby ToonAPI";
     homepage = "https://github.com/frenck/python-toonapi";
     changelog = "https://github.com/frenck/python-toonapi/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client for the Quby ToonAPI";
+    homepage = "https://github.com/frenck/python-toonapi";
+    changelog = "https://github.com/frenck/python-toonapi/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

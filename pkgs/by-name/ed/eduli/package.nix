@@ -4,11 +4,19 @@
   fetchzip,
 }:
 
+<<<<<<< HEAD
 stdenvNoCC.mkDerivation {
+=======
+stdenvNoCC.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "eduli";
   version = "3.0";
 
   src = fetchzip {
+<<<<<<< HEAD
+=======
+    name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/MoeLI-3.0.zip";
     hash = "sha256-bDQtLugYPWwJJNusBLEJrgIVufocRK4NIR0CCGaTkyw=";
   };

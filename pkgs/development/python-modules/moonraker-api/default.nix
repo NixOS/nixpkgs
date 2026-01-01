@@ -41,10 +41,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "moonraker_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API for the Moonraker API";
     homepage = "https://github.com/cmroche/moonraker-api";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API for the Moonraker API";
+    homepage = "https://github.com/cmroche/moonraker-api";
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

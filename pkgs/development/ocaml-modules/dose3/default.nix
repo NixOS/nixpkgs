@@ -45,11 +45,19 @@ buildDunePackage rec {
   # Check are not compatible with re ≥ 1.12
   doCheck = lib.versionAtLeast ocaml.version "4.08" && !lib.versionAtLeast ocaml.version "4.12";
 
+<<<<<<< HEAD
   meta = {
     description = "Dose library (part of Mancoosi tools)";
     downloadPage = "https://gitlab.com/irill/dose3/";
     homepage = "https://www.mancoosi.org/software/";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Dose library (part of Mancoosi tools)";
+    downloadPage = "https://gitlab.com/irill/dose3/";
+    homepage = "https://www.mancoosi.org/software/";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       The dose suite provides libraries for handling package meta-data, and various tools for analyzing package relationships in a large package repository.
       * dose-builddebcheck checks, given a collection of source package stanzas and a collection of binary package stanzas of Debian packages, whether the build-dependencies of each source package can be satisfied by the binary packages.

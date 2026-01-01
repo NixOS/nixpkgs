@@ -28,11 +28,19 @@ python3.pkgs.buildPythonApplication rec {
     install -Dm755 pig.py $out/bin/dhcpig
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to perform advanced DHCP exhaustion attack";
     homepage = "https://github.com/kamorin/DHCPig";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tochiaha ];
+=======
+  meta = with lib; {
+    description = "Tool to perform advanced DHCP exhaustion attack";
+    homepage = "https://github.com/kamorin/DHCPig";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ tochiaha ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dhcpig";
   };
 }

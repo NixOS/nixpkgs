@@ -20,7 +20,11 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "New coffee-break roguelike game";
     mainProgram = "boohu";
     longDescription = ''
@@ -30,8 +34,13 @@ buildGoModule rec {
       simplified inventory.
     '';
     homepage = "https://download.tuxfamily.org/boohu/index.html";
+<<<<<<< HEAD
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.isc;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

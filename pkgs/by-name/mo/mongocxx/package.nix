@@ -46,11 +46,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Official C++ client library for MongoDB";
     homepage = "http://mongocxx.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Official C++ client library for MongoDB";
+    homepage = "http://mongocxx.org";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       adriandole
       vcele
     ];
@@ -58,7 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
       "libmongocxx"
       "libbsoncxx"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [ "x86_64-darwin" ]; # needs sdk >= 10.14
   };
 })

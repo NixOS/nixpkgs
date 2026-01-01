@@ -51,7 +51,11 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "C/C++ toolkit for SOAP web services and XML-based applications";
     homepage = "https://www.genivia.com/products.html";
     # gsoap is dual/triple licensed (see homepage for details):
@@ -65,11 +69,17 @@ stdenv.mkDerivation rec {
     # 2. GPLv2 covers all of the software
     # 3. Proprietary commercial software development license (removes GPL
     #    restrictions)
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       bjornfor
       veprbl
     ];
+=======
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

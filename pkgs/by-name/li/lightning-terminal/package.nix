@@ -95,6 +95,10 @@ buildGoModule rec {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/litcli";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

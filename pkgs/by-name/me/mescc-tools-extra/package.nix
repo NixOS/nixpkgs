@@ -31,11 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://github.com/oriansj/mescc-tools-extra";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.minimal-bootstrap ];
+=======
+  meta = with lib; {
+    description = "Collection of tools written for use in bootstrapping";
+    homepage = "https://github.com/oriansj/mescc-tools-extra";
+    license = licenses.gpl3Only;
+    teams = [ teams.minimal-bootstrap ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (m2libc.meta) platforms;
   };
 })

@@ -12,13 +12,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starship";
+<<<<<<< HEAD
   version = "1.24.2";
+=======
+  version = "1.24.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-QE0zsQa7JRSXbCBe9yGGGW2ZNo0kp+JD0/5jIyN0OIQ=";
+=======
+    hash = "sha256-yWG06l/Gu2/u4NNAyCYjxlmEKIsDAaxWGp6fmqXvNl8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -44,7 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
   );
 
+<<<<<<< HEAD
   cargoHash = "sha256-CYRm8wvKK7HIPI1yxTWLV/wpK++mHVT9BvDVX96VFr0=";
+=======
+  cargoHash = "sha256-F7tzrMqF2xY8Ow+bAFbP0mQPomSe/oOHiQWHRHDmHio=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeCheckInputs = [
     gitMinimal
@@ -63,6 +75,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       danth
+<<<<<<< HEAD
+=======
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       Frostman
       da157
       sigmasquadron

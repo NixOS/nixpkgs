@@ -57,11 +57,19 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit withGurobi withCplex; };
 
+<<<<<<< HEAD
   meta = {
     description = "Abstract base class to a generic linear programming (LP) solver";
     homepage = "https://github.com/coin-or/Osi";
     license = lib.licenses.epl20;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Abstract base class to a generic linear programming (LP) solver";
+    homepage = "https://github.com/coin-or/Osi";
+    license = licenses.epl20;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

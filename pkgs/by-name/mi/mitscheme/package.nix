@@ -115,7 +115,11 @@ stdenv.mkDerivation {
   # XXX: The `check' target doesn't exist.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "MIT/GNU Scheme, a native code Scheme compiler";
 
     longDescription = ''
@@ -128,12 +132,20 @@ stdenv.mkDerivation {
 
     homepage = "https://www.gnu.org/software/mit-scheme/";
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
+=======
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     maintainers = [ ];
 
     # Build fails on Cygwin and Darwin:
     # <http://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
+<<<<<<< HEAD
     platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.freebsd;
+=======
+    platforms = platforms.gnu ++ platforms.linux ++ platforms.freebsd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

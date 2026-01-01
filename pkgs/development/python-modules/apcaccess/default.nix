@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library offers programmatic access to the status information provided by apcupsd over its Network Information Server";
     mainProgram = "apcaccess";
     homepage = "https://github.com/flyte/apcaccess";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uvnikita ];
+=======
+  meta = with lib; {
+    description = "Library offers programmatic access to the status information provided by apcupsd over its Network Information Server";
+    mainProgram = "apcaccess";
+    homepage = "https://github.com/flyte/apcaccess";
+    license = licenses.mit;
+    maintainers = with maintainers; [ uvnikita ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

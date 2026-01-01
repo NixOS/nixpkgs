@@ -10,16 +10,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wl-clipboard-rs";
+<<<<<<< HEAD
   version = "0.9.3";
+=======
+  version = "0.9.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "wl-clipboard-rs";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-eUD3XmEiBVMf+bImG6Ah48/96AxFhqTiLjK1gPJFdpw=";
   };
 
   cargoHash = "sha256-yTQ4EZ8ae3v0H4C94lV6AVNVSi+XDroKxjjHU4MagGU=";
+=======
+    hash = "sha256-IC19J3S4QP6eEH4zWDrTh/lQcsDzopjWGO6Vm+/cl78=";
+  };
+
+  cargoHash = "sha256-bkCrAyYxYkgeS0BSUzKipN21ZZL+RJzNyg7Mx+7V8Pg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cargoBuildFlags = [
     "--package=wl-clipboard-rs"

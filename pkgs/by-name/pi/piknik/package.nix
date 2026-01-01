@@ -31,11 +31,19 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Copy/paste anything over the network";
     homepage = "https://github.com/jedisct1/piknik";
     changelog = "https://github.com/jedisct1/piknik/blob/${src.rev}/ChangeLog";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Copy/paste anything over the network";
+    homepage = "https://github.com/jedisct1/piknik";
+    changelog = "https://github.com/jedisct1/piknik/blob/${src.rev}/ChangeLog";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "piknik";
   };

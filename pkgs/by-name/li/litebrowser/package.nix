@@ -44,13 +44,23 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.cc.isClang; # https://github.com/litehtml/litebrowser-linux/issues/19
     description = "Simple browser based on the litehtml engine";
     mainProgram = "litebrowser";
     homepage = "https://github.com/litehtml/litebrowser-linux";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

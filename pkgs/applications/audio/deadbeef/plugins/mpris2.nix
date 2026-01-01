@@ -29,11 +29,19 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "MPRISv2 plugin for the DeaDBeeF music player";
     homepage = "https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugin/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "MPRISv2 plugin for the DeaDBeeF music player";
+    homepage = "https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugin/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

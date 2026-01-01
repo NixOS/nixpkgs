@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
     $out/bin/jbang --version 2>&1 | grep -q "${version}"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Run java as scripts anywhere";
     mainProgram = "jbang";
     longDescription = ''
@@ -51,8 +55,14 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
     ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moaxcp ];
+=======
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ moaxcp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

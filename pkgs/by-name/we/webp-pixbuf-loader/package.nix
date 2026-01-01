@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
       --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "WebP GDK Pixbuf Loader library";
     homepage = "https://github.com/aruiz/webp-pixbuf-loader";
@@ -71,5 +72,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.cwyc ];
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "WebP GDK Pixbuf Loader library";
+    homepage = "https://github.com/aruiz/webp-pixbuf-loader";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.cwyc ];
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

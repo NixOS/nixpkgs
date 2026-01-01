@@ -1,4 +1,13 @@
+<<<<<<< HEAD
 { hostPkgs, ... }:
+=======
+{
+  hostPkgs,
+  lib,
+  withNg,
+  ...
+}:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 {
   name = "nixos-rebuild-specialisations";
 
@@ -28,6 +37,10 @@
           pkgs.grub2
         ];
 
+<<<<<<< HEAD
+=======
+        system.rebuild.enableNg = withNg;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         system.switch.enable = true;
 
         virtualisation = {
@@ -60,6 +73,11 @@
                 (pkgs.writeShellScriptBin "parent" "")
               ];
 
+<<<<<<< HEAD
+=======
+              system.rebuild.enableNg = ${lib.boolToString withNg};
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               specialisation.foo = {
                 inheritParentConfig = true;
 

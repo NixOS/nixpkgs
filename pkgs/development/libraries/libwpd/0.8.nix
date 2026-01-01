@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     bzip2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for importing WordPerfect documents";
     homepage = "https://libwpd.sourceforge.net";
@@ -39,5 +40,15 @@ stdenv.mkDerivation rec {
       mpl20
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for importing WordPerfect documents";
+    homepage = "https://libwpd.sourceforge.net";
+    license = with licenses; [
+      lgpl21
+      mpl20
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

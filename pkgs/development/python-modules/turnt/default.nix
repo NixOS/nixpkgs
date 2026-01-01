@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "turnt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Snapshot testing tool";
     mainProgram = "turnt";
     homepage = "https://github.com/cucapra/turnt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ leungbk ];
+=======
+  meta = with lib; {
+    description = "Snapshot testing tool";
+    mainProgram = "turnt";
+    homepage = "https://github.com/cucapra/turnt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ leungbk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -44,7 +44,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Calculate display info like DPI and aspect ratio";
     homepage = "https://github.com/cassidyjames/dippi";
+<<<<<<< HEAD
     mainProgram = "com.cassidyjames.dippi";
+=======
+    mainProgram = "com.github.cassidyjames.dippi";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];

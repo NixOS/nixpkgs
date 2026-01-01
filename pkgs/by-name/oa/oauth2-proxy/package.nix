@@ -22,6 +22,7 @@ buildGoModule rec {
   ldflags = [ "-X github.com/oauth2-proxy/oauth2-proxy/v7/pkg/version.VERSION=v${version}" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
   doInstallCheck = true;
 
   meta = {
@@ -29,6 +30,16 @@ buildGoModule rec {
     homepage = "https://github.com/oauth2-proxy/oauth2-proxy/";
     license = lib.licenses.mit;
     teams = [ lib.teams.serokell ];
+=======
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  meta = with lib; {
+    description = "Reverse proxy that provides authentication with Google, Github, or other providers";
+    homepage = "https://github.com/oauth2-proxy/oauth2-proxy/";
+    license = licenses.mit;
+    teams = [ teams.serokell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "oauth2-proxy";
   };
 }

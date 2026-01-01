@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "into_dbus_python" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Transformer to dbus-python types";
     homepage = "https://github.com/stratis-storage/into-dbus-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Transformer to dbus-python types";
+    homepage = "https://github.com/stratis-storage/into-dbus-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

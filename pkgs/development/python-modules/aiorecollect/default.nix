@@ -50,7 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiorecollect" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library for the Recollect Waste API";
     longDescription = ''
       aiorecollect is a Python asyncio-based library for the ReCollect
@@ -60,7 +64,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/bachya/aiorecollect";
     changelog = "https://github.com/bachya/aiorecollect/releases/tag/${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

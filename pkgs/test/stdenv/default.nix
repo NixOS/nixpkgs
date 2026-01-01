@@ -9,6 +9,7 @@
 }:
 
 let
+<<<<<<< HEAD
   # tests can be based on builtins.derivation and bootstrapTools directly to minimize rebuilds
   # see test 'make-symlinks-relative' in ./hooks.nix as an example.
   bootstrapTools = stdenv.bootstrapTools;
@@ -19,6 +20,15 @@ let
       or earlyPkgs;
   # use a early stdenv so when hacking on stdenv this test can be run quickly
   bootStdenv = earlyPkgs.stdenv.__bootPackages.stdenv.__bootPackages.stdenv or earlyPkgs.stdenv;
+=======
+  # early enough not to rebuild gcc but late enough to have patchelf
+  earlyPkgs = stdenv.__bootPackages.stdenv.__bootPackages;
+  earlierPkgs =
+    stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages;
+  # use a early stdenv so when hacking on stdenv this test can be run quickly
+  bootStdenv =
+    stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pkgsStructured = import pkgs.path {
     config = {
       structuredAttrsByDefault = true;
@@ -26,8 +36,12 @@ let
     inherit (stdenv.hostPlatform) system;
   };
   bootStdenvStructuredAttrsByDefault =
+<<<<<<< HEAD
     pkgsStructured.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv
       or pkgsStructured.stdenv;
+=======
+    pkgsStructured.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   runCommand = earlierPkgs.runCommand;
 
@@ -219,6 +233,7 @@ let
         touch $out
       '';
     };
+<<<<<<< HEAD
 
   testInputDerivationDep = stdenv.mkDerivation {
     name = "test-input-derivation-dependency";
@@ -235,6 +250,8 @@ let
     // {
       meta = { };
     };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 
 {
@@ -243,7 +260,11 @@ in
     import ./hooks.nix {
       stdenv = bootStdenv;
       pkgs = earlyPkgs;
+<<<<<<< HEAD
       inherit bootstrapTools lib;
+=======
+      inherit lib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
   );
 
@@ -375,6 +396,7 @@ in
         touch $out
       '';
 
+<<<<<<< HEAD
   test-inputDerivation-structured = testInputDerivation {
     name = "test-inDrv-structured";
     __structuredAttrs = true;
@@ -424,6 +446,8 @@ in
     outputChecks.out.disallowedRequisites = [ "${testInputDerivationDep}" ];
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   test-prepend-append-to-var = testPrependAndAppendToVar {
     name = "test-prepend-append-to-var";
     stdenv' = bootStdenv;
@@ -502,7 +526,11 @@ in
       import ./hooks.nix {
         stdenv = bootStdenvStructuredAttrsByDefault;
         pkgs = earlyPkgs;
+<<<<<<< HEAD
         inherit bootstrapTools lib;
+=======
+        inherit lib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
     );
 

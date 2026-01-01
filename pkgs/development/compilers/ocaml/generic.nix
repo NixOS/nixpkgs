@@ -118,10 +118,13 @@ stdenv.mkDerivation (
       ++ optional noNakedPointers (flags "--disable-naked-pointers" "-no-naked-pointers");
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
+<<<<<<< HEAD
     env = lib.optionalAttrs (lib.versionOlder version "4.14") {
       NIX_CFLAGS_COMPILE = "-std=gnu11";
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # on aarch64-darwin using --host and --target causes the build to invoke
     # `aarch64-apple-darwin-clang` while using assembler. However, such binary
     # does not exist. So, disable these configure flags on `aarch64-darwin`.
@@ -193,10 +196,17 @@ stdenv.mkDerivation (
       nativeCompilers = useNativeCompilers;
     };
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://ocaml.org/";
       branch = versionNoPatch;
       license = with lib.licenses; [
+=======
+    meta = with lib; {
+      homepage = "https://ocaml.org/";
+      branch = versionNoPatch;
+      license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         qpl # compiler
         lgpl2 # library
       ];
@@ -219,7 +229,11 @@ stdenv.mkDerivation (
         Learn more at: https://ocaml.org/learn/description.html
       '';
 
+<<<<<<< HEAD
       platforms = with lib.platforms; linux ++ darwin;
+=======
+      platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       broken =
         stdenv.hostPlatform.isAarch64
         && lib.versionOlder version (if stdenv.hostPlatform.isDarwin then "4.10" else "4.02");

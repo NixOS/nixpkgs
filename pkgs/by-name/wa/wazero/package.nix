@@ -8,16 +8,27 @@
 
 buildGoModule (finalAttrs: {
   pname = "wazero";
+<<<<<<< HEAD
   version = "1.11.0";
+=======
+  version = "1.10.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "tetratelabs";
     repo = "wazero";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-FYaWh1zfNcgtQ5S0flk0y6ehP4ZzCwIA+SZgLnha95U=";
   };
 
   vendorHash = "sha256-5jAwOu4F3DLVKhnEfEs/IvKwfan7hv65d8OY7gcawNo=";
+=======
+    hash = "sha256-VCbXPD34QXpcIdGL/vxD9d/+vmZXkZ5fCePktWZy6fM=";
+  };
+
+  vendorHash = null;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [
     "cmd/wazero"

@@ -19,7 +19,11 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (kernel.meta) homepage license;
 
     description = "Free-fall protection for spinning HP/Dell laptop hard drives";
@@ -33,6 +37,10 @@ stdenv.mkDerivation {
       disk heads, and an accelerometer device. It has no effect on SSD devices!
     '';
 
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

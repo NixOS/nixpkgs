@@ -23,11 +23,19 @@ buildGoModule rec {
   # Tests require a repository
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool for git";
     homepage = "https://github.com/chriswalz/bit";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Command-line tool for git";
+    homepage = "https://github.com/chriswalz/bit";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bit";
   };
 }

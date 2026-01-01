@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "osprofiler" ];
 
+<<<<<<< HEAD
   meta = {
     description = "OpenStack Library to profile request between all involved services";
     homepage = "https://opendev.org/openstack/osprofiler/";
     license = lib.licenses.asl20;
     mainProgram = "osprofiler";
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "OpenStack Library to profile request between all involved services";
+    homepage = "https://opendev.org/openstack/osprofiler/";
+    license = licenses.asl20;
+    mainProgram = "osprofiler";
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

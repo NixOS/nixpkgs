@@ -26,9 +26,16 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/iptools/iptools_test.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for manipulating IP addresses including a class that can be used to include CIDR network blocks in Django's INTERNAL_IPS setting";
     homepage = "https://github.com/bd808/python-iptools";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    description = "Utilities for manipulating IP addresses including a class that can be used to include CIDR network blocks in Django's INTERNAL_IPS setting";
+    homepage = "https://github.com/bd808/python-iptools";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

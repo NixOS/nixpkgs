@@ -14,7 +14,11 @@
   gtk-doc,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "dee";
   version = "unstable-2017-06-16";
 
@@ -26,11 +30,24 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dee";
+<<<<<<< HEAD
     rev = "applied/1.2.7+17.10.20170616-8build1";
     hash = "sha256-ttfppqb0t8cOhWaB97uyD9heVZKlBKYF2zD6yRwPyos=";
   };
 
   patches = [
+=======
+    rev = "import/1.2.7+17.10.20170616-4ubuntu3";
+    sha256 = "09blrdj7229vscp4mkg0fabmcvc6jdpamvblrq86rbky7j2nnwlk";
+  };
+
+  patches = [
+    "${src}/debian/patches/gtkdocize.patch"
+    "${src}/debian/patches/strict-prototype.patch"
+    "${src}/debian/patches/vapi-skip-properties.patch"
+    ./0001-Fix-build-with-Vala-0.54.patch
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Fixes glib 2.62 deprecations
     (fetchpatch {
       name = "dee-1.2.7-deprecated-g_type_class_add_private.patch";
@@ -65,12 +82,21 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
     mainProgram = "dee-tool";
     homepage = "https://launchpad.net/dee";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
+    mainProgram = "dee-tool";
+    homepage = "https://launchpad.net/dee";
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

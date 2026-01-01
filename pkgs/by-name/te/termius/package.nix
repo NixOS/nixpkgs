@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform SSH client with cloud data sync and more";
     homepage = "https://termius.com/";
@@ -116,6 +117,16 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cross-platform SSH client with cloud data sync and more";
+    homepage = "https://termius.com/";
+    downloadPage = "https://termius.com/linux/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       th0rgal
       Rishik-Y
     ];

@@ -33,8 +33,13 @@ in
 
         port = lib.mkOption {
           type = lib.types.port;
+<<<<<<< HEAD
           default = config.services.mpd.settings.port;
           defaultText = lib.literalExpression "config.services.mpd.settings.port";
+=======
+          default = config.services.mpd.network.port;
+          defaultText = lib.literalExpression "config.services.mpd.network.port";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           description = "The port where MPD is listening.";
           example = 6600;
         };

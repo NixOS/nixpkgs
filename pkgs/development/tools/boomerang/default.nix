@@ -46,9 +46,15 @@ mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/BoomerangDecompiler/boomerang";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/BoomerangDecompiler/boomerang";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "General, open source, retargetable decompiler";
     maintainers = [ ];
   };

@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   parallelBuild = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Lossy speech compression codec";
     homepage = "https://www.quut.com/gsm/";
@@ -67,5 +68,16 @@ stdenv.mkDerivation rec {
       raskin
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Lossy speech compression codec";
+    homepage = "https://www.quut.com/gsm/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+      codyopel
+      raskin
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

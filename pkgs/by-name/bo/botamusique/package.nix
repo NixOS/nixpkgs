@@ -156,11 +156,19 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) botamusique;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Bot to play youtube / soundcloud / radio / local music on Mumble";
     homepage = "https://github.com/azlux/botamusique";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Bot to play youtube / soundcloud / radio / local music on Mumble";
+    homepage = "https://github.com/azlux/botamusique";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "botamusique";
   };

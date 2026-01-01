@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "treebeard" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Efficient tree implementations for Django";
     homepage = "https://tabo.pe/projects/django-treebeard/";
     changelog = "https://github.com/django-treebeard/django-treebeard/blob/${version}/CHANGES.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Efficient tree implementations for Django";
+    homepage = "https://tabo.pe/projects/django-treebeard/";
+    changelog = "https://github.com/django-treebeard/django-treebeard/blob/${version}/CHANGES.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

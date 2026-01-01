@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "crypttokenplugindir=$(out)/lib/gwenhywfar/plugins/ct" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for access to chipcards";
     homepage = "https://www.aquamaniac.de/rdm/projects/libchipcard";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ aszlig ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library for access to chipcards";
+    homepage = "https://www.aquamaniac.de/rdm/projects/libchipcard";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ aszlig ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

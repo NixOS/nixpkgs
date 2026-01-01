@@ -62,12 +62,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/pika/pika/releases/tag/${version}";
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
     downloadPage = "https://github.com/pika/pika";
     homepage = "https://pika.readthedocs.org";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

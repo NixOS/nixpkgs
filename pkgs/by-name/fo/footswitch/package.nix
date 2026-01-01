@@ -37,11 +37,20 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Command line utlities for programming PCsensor and Scythe foot switches";
     homepage = "https://github.com/rgerganov/footswitch";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ baloo ];
+=======
+  meta = with lib; {
+    description = "Command line utlities for programming PCsensor and Scythe foot switches";
+    homepage = "https://github.com/rgerganov/footswitch";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ baloo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

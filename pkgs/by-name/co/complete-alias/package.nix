@@ -35,11 +35,19 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automagical shell alias completion";
     homepage = "https://github.com/cykerway/complete-alias";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ tuxinaut ];
+=======
+  meta = with lib; {
+    description = "Automagical shell alias completion";
+    homepage = "https://github.com/cykerway/complete-alias";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ tuxinaut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "complete_alias";
   };
 }

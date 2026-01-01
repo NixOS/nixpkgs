@@ -68,11 +68,20 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Game programming library";
     homepage = "https://liballeg.org/";
     license = lib.licenses.giftware;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Game programming library";
+    homepage = "https://liballeg.org/";
+    license = licenses.giftware;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

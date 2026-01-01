@@ -31,12 +31,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "karton.yaramatcher" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "File and analysis artifacts yara matcher for the Karton framework";
     mainProgram = "karton-yaramatcher";
     homepage = "https://github.com/CERT-Polska/karton-yaramatcher";
     changelog = "https://github.com/CERT-Polska/karton-yaramatcher/releases/tag/v${version}";
+<<<<<<< HEAD
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

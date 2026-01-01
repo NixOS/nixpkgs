@@ -62,10 +62,17 @@ buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for deploying to NixOS machines in a network or cloud";
     homepage = "https://github.com/NixOS/nixops";
     license = lib.licenses.lgpl3Only;
+=======
+  meta = with lib; {
+    description = "Tool for deploying to NixOS machines in a network or cloud";
+    homepage = "https://github.com/NixOS/nixops";
+    license = licenses.lgpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [
       aminechikhaoui
       roberth

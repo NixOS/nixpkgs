@@ -51,6 +51,7 @@ buildPythonPackage rec {
 
   disabled = stdenv.hostPlatform.isi686; # Failing tests
 
+<<<<<<< HEAD
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Computer vision package based on numpy";
@@ -58,5 +59,14 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ luispedro ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    description = "Computer vision package based on numpy";
+    homepage = "https://mahotas.readthedocs.io/";
+    maintainers = with maintainers; [ luispedro ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

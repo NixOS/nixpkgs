@@ -31,10 +31,18 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Useful property variants for Python programming";
     homepage = "https://github.com/xolox/python-property-manager";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
+=======
+  meta = with lib; {
+    description = "Useful property variants for Python programming";
+    homepage = "https://github.com/xolox/python-property-manager";
+    license = licenses.mit;
+    maintainers = with maintainers; [ eyjhb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

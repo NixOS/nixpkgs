@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
@@ -71,6 +72,21 @@ stdenv.mkDerivation rec {
       ++ lib.platforms.power
       ++ lib.platforms.riscv
       ++ lib.platforms.x86
+=======
+  meta = with lib; {
+    homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
+    description = "More Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
+    license = licenses.bsd3;
+    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/v0.3.1/webrtc/typedefs.h
+    # + our patches
+    platforms = intersectLists platforms.unix (
+      platforms.arm
+      ++ platforms.aarch64
+      ++ platforms.mips
+      ++ platforms.power
+      ++ platforms.riscv
+      ++ platforms.x86
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     );
   };
 }

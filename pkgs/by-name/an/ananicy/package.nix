@@ -57,12 +57,21 @@ stdenv.mkDerivation {
       --replace "/usr/bin/ananicy" "$out/bin/ananicy"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Nefelim4ag/Ananicy";
     description = "Another auto nice daemon, with community rules support";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ artturin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Nefelim4ag/Ananicy";
+    description = "Another auto nice daemon, with community rules support";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ artturin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ananicy";
   };
 }

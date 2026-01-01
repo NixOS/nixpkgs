@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
     rustc
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "High-performance implementation of KCL written in Rust that uses LLVM as the compiler backend";
     homepage = "https://github.com/kcl-lang/kcl";
@@ -33,6 +34,16 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       selfuryon
+=======
+  meta = with lib; {
+    description = "High-performance implementation of KCL written in Rust that uses LLVM as the compiler backend";
+    homepage = "https://github.com/kcl-lang/kcl";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+      selfuryon
+      peefy
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "kclvm_cli";
   };

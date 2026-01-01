@@ -37,12 +37,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Drop-in replacement for pprint that's actually pretty";
     homepage = "https://github.com/wolever/pprintpp";
     changelog = "https://github.com/wolever/pprintpp/blob/${version}/CHANGELOG.txt";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
+=======
+  meta = with lib; {
+    description = "Drop-in replacement for pprint that's actually pretty";
+    homepage = "https://github.com/wolever/pprintpp";
+    changelog = "https://github.com/wolever/pprintpp/blob/${version}/CHANGELOG.txt";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ jakewaksbaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pypprint";
   };
 }

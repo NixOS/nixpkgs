@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
       --replace $out/bin $dev/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Qt-based client-side and server-side SOAP component";
     longDescription = ''
       KD Soap is a Qt-based client-side and server-side SOAP component.
@@ -49,11 +53,19 @@ stdenv.mkDerivation rec {
       provides the means to create web services without the need for any further
       component such as a dedicated web server.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2
       gpl3
       lgpl21
     ];
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.ttuegel ];
+=======
+    maintainers = [ maintainers.ttuegel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

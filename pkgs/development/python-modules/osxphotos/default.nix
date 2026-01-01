@@ -41,14 +41,22 @@
 
 buildPythonPackage rec {
   pname = "osxphotos";
+<<<<<<< HEAD
   version = "0.74.2";
+=======
+  version = "0.74.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-dvY6ShScIpJ+HcTJFPOBSETibzfiV8meILI4WrQLsaU=";
+=======
+    hash = "sha256-iX+6zJNpLm4RBwjACHsRYyepRrifeKqy/GDbLrl8ZEA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

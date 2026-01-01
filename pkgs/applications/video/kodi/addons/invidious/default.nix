@@ -34,10 +34,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/petterreinholdtsen/kodi-invidious-plugin";
     description = "Privacy-friendly way of watching YouTube content";
     license = lib.licenses.mit;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/petterreinholdtsen/kodi-invidious-plugin";
+    description = "Privacy-friendly way of watching YouTube content";
+    license = licenses.mit;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

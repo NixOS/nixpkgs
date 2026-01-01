@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trustme" ];
 
+<<<<<<< HEAD
   meta = {
     description = "High quality TLS certs while you wait, for the discerning tester";
     homepage = "https://github.com/python-trio/trustme";
@@ -48,5 +49,16 @@ buildPythonPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ jfly ];
+=======
+  meta = with lib; {
+    description = "High quality TLS certs while you wait, for the discerning tester";
+    homepage = "https://github.com/python-trio/trustme";
+    changelog = "https://trustme.readthedocs.io/en/latest/#change-history";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [ jfly ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

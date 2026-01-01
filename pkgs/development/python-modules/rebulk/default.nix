@@ -28,11 +28,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rebulk" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced string matching from simple patterns";
     homepage = "https://github.com/Toilal/rebulk/";
     changelog = "https://github.com/Toilal/rebulk/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Advanced string matching from simple patterns";
+    homepage = "https://github.com/Toilal/rebulk/";
+    changelog = "https://github.com/Toilal/rebulk/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

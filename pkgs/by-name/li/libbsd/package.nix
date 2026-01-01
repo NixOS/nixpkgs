@@ -45,10 +45,17 @@ stdenv.mkDerivation rec {
     stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
   ) [ "LDFLAGS=-Wl,--undefined-version" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Common functions found on BSD systems";
     homepage = "https://libbsd.freedesktop.org/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Common functions found on BSD systems";
+    homepage = "https://libbsd.freedesktop.org/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       beerware
       bsd2
       bsd3
@@ -56,7 +63,11 @@ stdenv.mkDerivation rec {
       isc
       mit
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # See architectures defined in src/local-elf.h.
     badPlatforms = lib.platforms.microblaze;
     maintainers = [ ];

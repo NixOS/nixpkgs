@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyctr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to interact with Nintendo 3DS files";
     homepage = "https://github.com/ihaveamac/pyctr";
     changelog = "https://github.com/ihaveamac/pyctr/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python library to interact with Nintendo 3DS files";
+    homepage = "https://github.com/ihaveamac/pyctr";
+    changelog = "https://github.com/ihaveamac/pyctr/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

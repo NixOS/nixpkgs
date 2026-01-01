@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Dark theme for qt5";
     homepage = "https://github.com/dracula/qt5";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ vonfry ];
+=======
+  meta = with lib; {
+    description = "Dark theme for qt5";
+    homepage = "https://github.com/dracula/qt5";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ vonfry ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

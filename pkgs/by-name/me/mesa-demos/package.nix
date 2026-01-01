@@ -65,10 +65,18 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "wayland" (lib.meta.availableOn stdenv.hostPlatform wayland))
   ];
 
+<<<<<<< HEAD
   meta = {
     inherit (mesa.meta) homepage platforms;
     description = "Collection of demos and test programs for OpenGL and Mesa";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andersk ];
+=======
+  meta = with lib; {
+    inherit (mesa.meta) homepage platforms;
+    description = "Collection of demos and test programs for OpenGL and Mesa";
+    license = licenses.mit;
+    maintainers = with maintainers; [ andersk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

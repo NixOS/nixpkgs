@@ -16,11 +16,22 @@ bundlerApp {
   # toString prevents the update script from being copied into the nix store
   passthru.updateScript = toString ./update;
 
+<<<<<<< HEAD
   meta = {
     description = "Manages dependencies for your Xcode projects";
     homepage = "https://github.com/CocoaPods/CocoaPods";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Manages dependencies for your Xcode projects";
+    homepage = "https://github.com/CocoaPods/CocoaPods";
+    license = licenses.mit;
+    platforms = platforms.darwin;
+    maintainers = with maintainers; [
+      peterromfeldhk
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pod";
   };
 }

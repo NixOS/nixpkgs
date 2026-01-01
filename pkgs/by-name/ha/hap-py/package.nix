@@ -37,13 +37,18 @@ let
     ];
   my-python = python3.withPackages my-python-packages;
 in
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "hap.py";
   version = "0.3.15";
 
   src = fetchFromGitHub {
     owner = "Illumina";
     repo = "hap.py";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-K8XXhioMGMHw56MKvp0Eo8S6R36JczBzGRaBz035zRQ=";
   };
@@ -57,6 +62,17 @@ stdenv.mkDerivation (finalAttrs: {
         "cmake_minimum_required (VERSION 2.8)" \
         "cmake_minimum_required (VERSION 3.10)"
   '';
+=======
+    rev = "v${version}";
+    hash = "sha256-K8XXhioMGMHw56MKvp0Eo8S6R36JczBzGRaBz035zRQ=";
+  };
+  # For illumina script
+  BOOST_ROOT = "${boost.out}";
+  ZLIBSTATIC = "${zlib.static}";
+  # For cmake : boost lib and includedir are in different location
+  BOOST_LIBRARYDIR = "${boost.out}/lib";
+  BOOST_INCLUDEDIR = "${boost.dev}/include";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   patches = [
     # Compatibility with nix for boost and library flags : zlib, bzip2, curl, crypto, lzma
@@ -80,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+<<<<<<< HEAD
   env = {
     # For illumina script
     BOOST_ROOT = "${boost.out}";
@@ -104,3 +121,19 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "hap.py";
   };
 })
+=======
+  postFixup = ''
+    wrapProgram $out/bin/hap.py \
+       --set PATH ${lib.makeBinPath runtime} \
+       --add-flags "--engine-vcfeval-path=${rtg-tools}/bin/rtg"
+  '';
+
+  meta = with lib; {
+    description = "Compare genetics variants against a gold dataset";
+    homepage = "https://github.com/Illumina/hap.py";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ apraga ];
+    mainProgram = "hap.py";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -14,7 +14,11 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     urls = [
       "https://invisible-mirror.net/archives/mawk/mawk-${finalAttrs.version}.tgz"
+<<<<<<< HEAD
       "https://invisible-island.net/archives/mawk/mawk-${finalAttrs.version}.tgz"
+=======
+      "ftp://ftp.invisible-island.net/mawk/mawk-${finalAttrs.version}.tgz"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     hash = "sha256-bh/ejuetilwVOCMWhj/WtMbSP6t4HdWrAXf/o+6arlw=";
   };

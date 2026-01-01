@@ -17,7 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "8572e6313a0d7ec95492dcab04a46c5dd30ef33a";
     hash = "sha256-LQ9LLVumi3GN6c9tuMSOd1Bs2pgrwrLLQbs5XF+NZeA=";
   };
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/aseq2json";
+=======
+  sourceRoot = "source/aseq2json";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

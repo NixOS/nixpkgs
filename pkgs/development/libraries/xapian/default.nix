@@ -62,6 +62,7 @@ let
         python-xapian = python3.pkgs.xapian;
       };
 
+<<<<<<< HEAD
       meta = {
         description = "Search engine library";
         homepage = "https://xapian.org/";
@@ -69,6 +70,15 @@ let
         license = lib.licenses.gpl2Plus;
         maintainers = with lib.maintainers; [ matthiasbeyer ];
         platforms = lib.platforms.unix;
+=======
+      meta = with lib; {
+        description = "Search engine library";
+        homepage = "https://xapian.org/";
+        changelog = "https://xapian.org/docs/xapian-core-${version}/NEWS";
+        license = licenses.gpl2Plus;
+        maintainers = with maintainers; [ matthiasbeyer ];
+        platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in

@@ -44,11 +44,20 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SQL / SQLI tokenizer parser analyzer";
     homepage = "https://github.com/client9/libinjection";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "SQL / SQLI tokenizer parser analyzer";
+    homepage = "https://github.com/client9/libinjection";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

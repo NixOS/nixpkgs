@@ -6,13 +6,22 @@
 }:
 python3.pkgs.buildPythonApplication {
   pname = "yaookctl";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-12";
+=======
+  version = "0-unstable-2025-11-18";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "yaook";
     repo = "yaookctl";
+<<<<<<< HEAD
     rev = "94215db203cd8e471616d557cd83d71f0bc9918d";
     hash = "sha256-rAd69fJQSqo6Xe0yL4CmPn0/HmygWkojwBXPEOAY1dE=";
+=======
+    rev = "cc339565b136ec9bad36f9eb3dc1b3da728cc0ec";
+    hash = "sha256-9UCF1qo6OOfOBoWqsQMxlHZNJD7OQnSFONJ+cXT0LUs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pyproject = true;

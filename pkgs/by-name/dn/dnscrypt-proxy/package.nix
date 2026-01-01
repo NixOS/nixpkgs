@@ -8,7 +8,11 @@
 
 buildGoModule rec {
   pname = "dnscrypt-proxy";
+<<<<<<< HEAD
   version = "2.1.15";
+=======
+  version = "2.1.14";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   vendorHash = null;
 
@@ -18,7 +22,11 @@ buildGoModule rec {
     owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-o6XZR3w1LfyCGOcF6Gzp39neMp5QjbTxQdL8A81AakM=";
+=======
+    hash = "sha256-JPBAlRpJw6Oy4f3twyhX95XqWFtUTEFPjwyVaNMSHmQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -35,16 +43,29 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) dnscrypt-proxy; };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool that provides secure DNS resolution";
 
     license = lib.licenses.isc;
     homepage = "https://dnscrypt.info/";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool that provides secure DNS resolution";
+
+    license = licenses.isc;
+    homepage = "https://dnscrypt.info/";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       atemu
       waynr
     ];
     mainProgram = "dnscrypt-proxy";
+<<<<<<< HEAD
     platforms = with lib.platforms; unix;
+=======
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

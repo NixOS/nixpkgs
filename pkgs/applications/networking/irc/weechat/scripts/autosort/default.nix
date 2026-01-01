@@ -25,10 +25,18 @@ stdenv.mkDerivation {
     scripts = [ "autosort.py" ];
   };
 
+<<<<<<< HEAD
   meta = {
     inherit (weechat.meta) platforms;
     description = "autosort automatically keeps your buffers sorted and grouped by server";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ flokli ];
+=======
+  meta = with lib; {
+    inherit (weechat.meta) platforms;
+    description = "autosort automatically keeps your buffers sorted and grouped by server";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,9 +30,16 @@ buildDunePackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "In-memory BLOCK device for MirageOS";
     homepage = "https://github.com/mirage/mirage-block-ramdisk";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "In-memory BLOCK device for MirageOS";
+    homepage = "https://github.com/mirage/mirage-block-ramdisk";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

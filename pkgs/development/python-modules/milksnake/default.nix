@@ -30,10 +30,18 @@ buildPythonPackage rec {
   # tests rely on pip/venv
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python library that extends setuptools for binary extensions";
     homepage = "https://github.com/getsentry/milksnake";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Python library that extends setuptools for binary extensions";
+    homepage = "https://github.com/getsentry/milksnake";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ matthiasbeyer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

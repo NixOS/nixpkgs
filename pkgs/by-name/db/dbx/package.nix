@@ -129,6 +129,10 @@ python.pkgs.buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
   ]);
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # Fails because of dbfs CLI wrong call

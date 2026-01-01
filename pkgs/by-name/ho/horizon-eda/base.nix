@@ -24,13 +24,21 @@ in
 # This base is used in horizon-eda and python3Packages.horizon-eda
 rec {
   pname = "horizon-eda";
+<<<<<<< HEAD
   version = "2.7.2";
+=======
+  version = "2.7.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-YiTdY5FVbCSzohz0pZu8vLI2lohIbQYGAQIdQJwXAps=";
+=======
+    hash = "sha256-gigfwam7+KvmGAxex7Bi7a8xAmiNZ+YBZ5iMXneD4cw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

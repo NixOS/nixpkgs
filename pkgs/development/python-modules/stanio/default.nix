@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stanio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Preparing inputs to and reading outputs from Stan";
     homepage = "https://github.com/WardBrian/stanio";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    description = "Preparing inputs to and reading outputs from Stan";
+    homepage = "https://github.com/WardBrian/stanio";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

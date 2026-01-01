@@ -237,7 +237,11 @@ llvmPackages.stdenv.mkDerivation {
 
   __structuredAttrs = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "klee";
     description = "Symbolic virtual machine built on top of LLVM";
     longDescription = ''
@@ -260,9 +264,15 @@ llvmPackages.stdenv.mkDerivation {
       environment variables, and passing command line arguments.
     '';
     homepage = "https://klee.github.io";
+<<<<<<< HEAD
     license = lib.licenses.ncsa;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ numinit ];
+=======
+    license = licenses.ncsa;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ numinit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Upstream is still working on support for LLVM ≥ 16; see:
     #
     # * <https://github.com/klee/klee/pull/1664>

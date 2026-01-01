@@ -4,7 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+<<<<<<< HEAD
   pythonAtLeast,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nativeBuildInputs
   pkg-config,
@@ -34,14 +37,22 @@
 
 buildPythonPackage rec {
   pname = "pylance";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "0.39.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-S/zVpsfoQG9NYnJyAJm+a0LllVE/lfaCua+NA9DGIsw=";
+=======
+    hash = "sha256-e0ZpuC0ezk+ZwmCrWkdD2MnCvnjHVVPsN01JWUNyPf4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/python";
@@ -53,7 +64,11 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
+<<<<<<< HEAD
     hash = "sha256-5ngkyjzxQ2NVxst3t7U18hdZ5zHNo0gjv0dif9HlyhU=";
+=======
+    hash = "sha256-bvnmlUSnZolwesGtIrWve0a8yQXeYDuaP7mCh3KDd5U=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -102,11 +117,14 @@ buildPythonPackage rec {
     cd python/tests
   '';
 
+<<<<<<< HEAD
   pytestFlags = lib.optionals (pythonAtLeast "3.14") [
     # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
     "-Wignore::DeprecationWarning"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabledTests = [
     # Hangs indefinitely
     "test_all_permutations"
@@ -150,8 +168,11 @@ buildPythonPackage rec {
     "test_multiprocess_loading"
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Python wrapper for Lance columnar format";
     homepage = "https://github.com/lancedb/lance";

@@ -55,11 +55,19 @@ buildPythonApplication rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Flash Itead Sonoff devices with custom firmware via original OTA mechanism";
     homepage = src.meta.homepage;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Flash Itead Sonoff devices with custom firmware via original OTA mechanism";
+    homepage = src.meta.homepage;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sonota";
   };
 }

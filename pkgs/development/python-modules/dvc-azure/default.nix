@@ -41,10 +41,19 @@ buildPythonPackage rec {
   #   "dvc_azure"
   # ];
 
+<<<<<<< HEAD
   meta = {
     description = "Azure plugin for dvc";
     homepage = "https://pypi.org/project/dvc-azure/${version}";
     changelog = "https://github.com/iterative/dvc-azure/releases/tag/${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Azure plugin for dvc";
+    homepage = "https://pypi.org/project/dvc-azure/${version}";
+    changelog = "https://github.com/iterative/dvc-azure/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ melling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

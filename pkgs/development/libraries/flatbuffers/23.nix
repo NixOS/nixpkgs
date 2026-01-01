@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   checkTarget = "test";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Memory Efficient Serialization Library";
     longDescription = ''
       FlatBuffers is an efficient cross platform serialization library for
@@ -39,9 +43,16 @@ stdenv.mkDerivation rec {
       having great forwards/backwards compatibility.
     '';
     homepage = "https://google.github.io/flatbuffers/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.teh ];
     mainProgram = "flatc";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.asl20;
+    maintainers = [ maintainers.teh ];
+    mainProgram = "flatc";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

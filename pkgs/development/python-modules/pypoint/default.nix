@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypoint" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for communicating with Minut Point";
     homepage = "https://github.com/fredrike/pypoint";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python module for communicating with Minut Point";
+    homepage = "https://github.com/fredrike/pypoint";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

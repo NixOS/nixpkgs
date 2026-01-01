@@ -63,12 +63,21 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/intel/S0ixSelftestTool";
     description = "Tool for testing the S2idle path CPU Package C-state and S0ix failures";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ adamcstephens ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/intel/S0ixSelftestTool";
+    description = "Tool for testing the S2idle path CPU Package C-state and S0ix failures";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ adamcstephens ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "s0ix-selftest-tool";
   };
 }

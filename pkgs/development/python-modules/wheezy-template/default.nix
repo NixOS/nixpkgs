@@ -16,11 +16,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wheezy.template" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://wheezytemplate.readthedocs.io/en/latest/";
     description = "Lightweight template library";
     mainProgram = "wheezy.template";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://wheezytemplate.readthedocs.io/en/latest/";
+    description = "Lightweight template library";
+    mainProgram = "wheezy.template";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

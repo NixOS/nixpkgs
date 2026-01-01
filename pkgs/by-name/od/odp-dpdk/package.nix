@@ -62,11 +62,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Open Data Plane optimized for DPDK";
     homepage = "https://www.opendataplane.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.abuibrahim ];
+=======
+  meta = with lib; {
+    description = "Open Data Plane optimized for DPDK";
+    homepage = "https://www.opendataplane.org";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.abuibrahim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

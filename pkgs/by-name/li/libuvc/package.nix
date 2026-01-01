@@ -31,11 +31,20 @@ stdenv.mkDerivation {
 
   buildInputs = [ libusb1 ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ken.tossell.net/libuvc/";
     description = "Cross-platform library for USB video devices";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    homepage = "https://ken.tossell.net/libuvc/";
+    description = "Cross-platform library for USB video devices";
+    platforms = platforms.linux;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,11 +17,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-cPri384AX/FdfNtzt3xj4bF+/izSa4sZuAohK0R/7H4=";
 
+<<<<<<< HEAD
   meta = {
     description = "Simple command line tool to merge ip/ip cidr/ip range, supports IPv4/IPv6";
     mainProgram = "cidr-merger";
     homepage = "https://github.com/zhanhb/cidr-merger";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cyounkins ];
+=======
+  meta = with lib; {
+    description = "Simple command line tool to merge ip/ip cidr/ip range, supports IPv4/IPv6";
+    mainProgram = "cidr-merger";
+    homepage = "https://github.com/zhanhb/cidr-merger";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cyounkins ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

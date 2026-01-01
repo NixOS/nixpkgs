@@ -16,11 +16,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for writing text-based user interfaces";
     license = lib.licenses.mit;
     homepage = "https://github.com/termbox/termbox#readme";
     downloadPage = "https://github.com/termbox/termbox/releases";
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    description = "Library for writing text-based user interfaces";
+    license = licenses.mit;
+    homepage = "https://github.com/termbox/termbox#readme";
+    downloadPage = "https://github.com/termbox/termbox/releases";
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -22,7 +22,11 @@
   nix-update-script,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "pods";
   version = "2.2.0";
 
@@ -31,7 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     src = fetchFromGitHub {
       owner = "marhkb";
       repo = "pods";
+<<<<<<< HEAD
       tag = "v${finalAttrs.version}";
+=======
+      tag = "v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hash = "sha256-m+0XjxY0nDAJbVX3r/Jfg+G+RU8Q51e0ZXxkdH69SiQ=";
     };
 
@@ -42,7 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
+<<<<<<< HEAD
     inherit (finalAttrs) pname version src;
+=======
+    inherit pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-GBWaGCNXYCiT/favrIYB30VGMMoQQk1iUh4GTNPerK8=";
   };
 
@@ -69,6 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = nix-update-script { };
@@ -77,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Podman desktop application";
     homepage = "https://github.com/marhkb/pods";
+<<<<<<< HEAD
     changelog = "https://github.com/marhkb/pods/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ iamanaws ];
@@ -84,3 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pods";
   };
 })
+=======
+    changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    mainProgram = "pods";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

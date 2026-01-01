@@ -99,11 +99,19 @@ lib.genAttrs plugins (
 
     installFlags = buildFlags;
 
+<<<<<<< HEAD
     meta = {
       description = "Symbiflow ${plugin} plugin for Yosys";
       license = lib.licenses.isc;
       platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [
+=======
+    meta = with lib; {
+      description = "Symbiflow ${plugin} plugin for Yosys";
+      license = licenses.isc;
+      platforms = platforms.all;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ollieB
         thoughtpolice
       ];

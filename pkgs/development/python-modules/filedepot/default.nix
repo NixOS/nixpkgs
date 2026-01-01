@@ -63,11 +63,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "depot" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Toolkit for storing files and attachments in web applications";
     homepage = "https://github.com/amol-/depot";
     changelog = "https://github.com/amol-/depot/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Toolkit for storing files and attachments in web applications";
+    homepage = "https://github.com/amol-/depot";
+    changelog = "https://github.com/amol-/depot/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

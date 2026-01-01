@@ -45,6 +45,7 @@ stdenv.mkDerivation {
     install -Dm755 flasm -t $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Assembler and disassembler for Flash (SWF) bytecode";
     mainProgram = "flasm";
@@ -52,5 +53,14 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Assembler and disassembler for Flash (SWF) bytecode";
+    mainProgram = "flasm";
+    homepage = "https://flasm.sourceforge.net/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

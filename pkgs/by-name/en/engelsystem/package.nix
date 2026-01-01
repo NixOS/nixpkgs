@@ -4,6 +4,10 @@
   fetchYarnDeps,
   nodejs,
   yarn,
+<<<<<<< HEAD
+=======
+  yarnBuildHook,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   yarnConfigHook,
   nixosTests,
   php,
@@ -22,9 +26,15 @@ php.buildComposerProject2 (finalAttrs: {
 
   inherit php;
 
+<<<<<<< HEAD
   composerNoDev = true;
   composerStrictValidation = false;
   vendorHash = "sha256-JRd5FJviNf5NUI9PwRcMqdDXYBlMoBB6o5yx7dvostE=";
+=======
+  vendorHash = "sha256-ODJgsvECw+q3sAA6pWNw4X2Png7f4G2Jty9AQSj/SgE=";
+  composoerNoDev = true;
+  composerStrictValidation = false;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   yarnOfflineCache = fetchYarnDeps {
     pname = "${finalAttrs.pname}-yarn-deps";

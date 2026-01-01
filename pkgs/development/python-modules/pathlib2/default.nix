@@ -26,10 +26,17 @@ buildPythonPackage rec {
     typing
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems";
     homepage = "https://pypi.org/project/pathlib2/";
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems";
+    homepage = "https://pypi.org/project/pathlib2/";
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

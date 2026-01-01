@@ -29,10 +29,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/apenwarr/netselect";
     description = "Ultrafast intelligent parallelizing binary-search implementation of \"ping\"";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/apenwarr/netselect";
+    description = "Ultrafast intelligent parallelizing binary-search implementation of \"ping\"";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

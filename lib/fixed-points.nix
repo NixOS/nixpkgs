@@ -329,7 +329,11 @@ rec {
 
   /**
     Compose two overlay functions and return a single overlay function that combines them.
+<<<<<<< HEAD
     For more details see: [`composeManyExtensions`](#function-library-lib.fixedPoints.composeManyExtensions).
+=======
+    For more details see: [composeManyExtensions](#function-library-lib.fixedPoints.composeManyExtensions).
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   */
   composeExtensions =
     f: g: final: prev:

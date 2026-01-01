@@ -454,6 +454,7 @@ license = [
 ]
 homepage = "https://github.com/stuxf/adaptable-pset"
 
+<<<<<<< HEAD
 [adaptive-dots."0.1.0"]
 url = "https://packages.typst.org/preview/adaptive-dots-0.1.0.tar.gz"
 hash = "sha256-Bc1hqDXG8HduhXZ3cdEIShfu4nZ6TKL3s7rOwBKsUVM="
@@ -464,6 +465,8 @@ license = [
 ]
 homepage = "https://github.com/AJB-ajb/adaptive-dots"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [aero-check."0.1.1"]
 url = "https://packages.typst.org/preview/aero-check-0.1.1.tar.gz"
 hash = "sha256-rf9pPBnsXdxLW9r7iePL7VU61JP05g1m9L1Q6rsdmZQ="
@@ -519,6 +522,7 @@ license = [
 ]
 homepage = "https://github.com/a-mhamdi/ailab-isetbz"
 
+<<<<<<< HEAD
 [aio-studi-and-thesis."0.1.4"]
 url = "https://packages.typst.org/preview/aio-studi-and-thesis-0.1.4.tar.gz"
 hash = "sha256-IqyWMbHqHMycbNHU0xZNF7jbOEKjL526h7pT6u0oI7E="
@@ -529,6 +533,8 @@ license = [
 ]
 homepage = "https://github.com/fuchs-fabian/typst-template-aio-studi-and-thesis"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [aio-studi-and-thesis."0.1.3"]
 url = "https://packages.typst.org/preview/aio-studi-and-thesis-0.1.3.tar.gz"
 hash = "sha256-VsyMwnkTI1BnBczhxyRWc93tamvJ9sp4gAP0bOpsRIs="
@@ -816,6 +822,7 @@ license = [
 ]
 homepage = "https://github.com/platformer/typst-algorithms"
 
+<<<<<<< HEAD
 [algorithmic."1.0.7"]
 url = "https://packages.typst.org/preview/algorithmic-1.0.7.tar.gz"
 hash = "sha256-9EunGGI8vxZS9vFrnLv642JsFzrRoa2wy8jlMj2TS0E="
@@ -826,6 +833,8 @@ license = [
 ]
 homepage = "https://github.com/typst-community/typst-algorithmic"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [algorithmic."1.0.6"]
 url = "https://packages.typst.org/preview/algorithmic-1.0.6.tar.gz"
 hash = "sha256-mfKZfgNI0YIz+BpR5hdTTeqlfGGY6cUdHU+bMoFySr8="
@@ -1505,6 +1514,7 @@ license = [
 ]
 homepage = "https://github.com/waterlens/ascii-matrix"
 
+<<<<<<< HEAD
 [aspirationally."0.1.1"]
 url = "https://packages.typst.org/preview/aspirationally-0.1.1.tar.gz"
 hash = "sha256-oK4uuoVuGKYUnh005kKjocnWMtfqsJZfd1QREcV1xhg="
@@ -1518,6 +1528,8 @@ license = [
 ]
 homepage = "https://github.com/breezykermo/aspirationally"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [aspirationally."0.1.0"]
 url = "https://packages.typst.org/preview/aspirationally-0.1.0.tar.gz"
 hash = "sha256-yjigsQIk7EYckbdlL3rr2yL5L65lprkllo9ULrheVcA="
@@ -1586,6 +1598,7 @@ license = [
 ]
 homepage = "https://github.com/aargar1/atomic"
 
+<<<<<<< HEAD
 [atostate."1.0.0"]
 url = "https://packages.typst.org/preview/atostate-1.0.0.tar.gz"
 hash = "sha256-3stlcaDVBjB3lTu+KWIh5wQH4WPqPZWHIGeRDfllPAs="
@@ -1596,6 +1609,8 @@ license = [
 ]
 homepage = "https://gitlab.com/seamsay-xyz/AtoState/Typst.git"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [ats-friendly-resume."0.1.1"]
 url = "https://packages.typst.org/preview/ats-friendly-resume-0.1.1.tar.gz"
 hash = "sha256-8lsTVodasic/r6cZGcXdkk5uVpX8/oRQqDT3vVkFHgM="
@@ -1628,6 +1643,7 @@ license = [
 ]
 homepage = "https://github.com/euwbah/typst-packages/tree/auto-div"
 
+<<<<<<< HEAD
 [auto-jrubby."0.3.0"]
 url = "https://packages.typst.org/preview/auto-jrubby-0.3.0.tar.gz"
 hash = "sha256-x4IWisLNoooIrSiBXj2OkPATwrgsY3GQIRybvpa4L1w="
@@ -1664,6 +1680,8 @@ license = [
 ]
 homepage = "https://github.com/rice8y/auto-jrubby"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [autofletcher."0.1.1"]
 url = "https://packages.typst.org/preview/autofletcher-0.1.1.tar.gz"
 hash = "sha256-ELyFlfYqV8unjzWmNs9FfDOifSAUYBOgt4R7ZzCQRdg="
@@ -1859,6 +1877,7 @@ license = [
 ]
 homepage = "https://github.com/coli-saar/bananote"
 
+<<<<<<< HEAD
 [barcala."0.3.0"]
 url = "https://packages.typst.org/preview/barcala-0.3.0.tar.gz"
 hash = "sha256-HkIqKNTmTMfQ6W4+2wpw4lnkZnp51uLFSwwZoc4Ajoo="
@@ -1874,6 +1893,8 @@ license = [
 ]
 homepage = "https://github.com/JuanM04/barcala"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [barcala."0.2.0"]
 url = "https://packages.typst.org/preview/barcala-0.2.0.tar.gz"
 hash = "sha256-UCYioY6njOABEM6xNCwxcPa4TL7xQCt3yJnM66sZJY8="
@@ -2036,6 +2057,7 @@ license = [
 ]
 homepage = "https://github.com/EpicEricEE/typst-based"
 
+<<<<<<< HEAD
 [basic-academic-letter."0.1.0"]
 url = "https://packages.typst.org/preview/basic-academic-letter-0.1.0.tar.gz"
 hash = "sha256-y3EcT1RwsfCHaNGCTgALFToQwphr9rtnnAvEJvfOfv0="
@@ -2046,6 +2068,8 @@ license = [
 ]
 homepage = "https://github.com/whliao5am/basic-letter-typst-template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [basic-document-props."0.1.0"]
 url = "https://packages.typst.org/preview/basic-document-props-0.1.0.tar.gz"
 hash = "sha256-7gHvmsHDUtFNELBPzr2bqGYh+FTk2aI98i2f6n9+SZM="
@@ -2378,6 +2402,7 @@ license = [
     "Unlicense",
 ]
 
+<<<<<<< HEAD
 [biz-report."0.3.0"]
 url = "https://packages.typst.org/preview/biz-report-0.3.0.tar.gz"
 hash = "sha256-cqv1x75T/VFUVv1wkBVCqQHRiHTJ62jmkMjotByYPV4="
@@ -2420,6 +2445,8 @@ license = [
 ]
 homepage = "https://github.com/garethwebber/business-report"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [blind-cvpr."0.5.0"]
 url = "https://packages.typst.org/preview/blind-cvpr-0.5.0.tar.gz"
 hash = "sha256-TQT7Zj0n7OJVfI9btjb/IRzS/1kXzETm6QGM0B5ldwI="
@@ -2686,6 +2713,7 @@ license = [
     "Apache-2.0",
 ]
 
+<<<<<<< HEAD
 [bookly."1.1.1"]
 url = "https://packages.typst.org/preview/bookly-1.1.1.tar.gz"
 hash = "sha256-aNpYcc7iO+FEA6NKhDWpYqhSZFQ50dZy5ukbEZHpgFM="
@@ -2703,6 +2731,8 @@ license = [
 ]
 homepage = "https://github.com/maucejo/book_template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [bookly."1.1.0"]
 url = "https://packages.typst.org/preview/bookly-1.1.0.tar.gz"
 hash = "sha256-pDRNwpALRhhoDWN2JtZbXehLLJ0rJulDetUy50k5ZPY="
@@ -2843,6 +2873,7 @@ license = [
 ]
 homepage = "https://github.com/tndrle/briefs"
 
+<<<<<<< HEAD
 [brilliant-cv."3.1.1"]
 url = "https://packages.typst.org/preview/brilliant-cv-3.1.1.tar.gz"
 hash = "sha256-g+TrJAUxdMV6zola36MNWBweZRqzPlvc+BlwZ8bsEmg="
@@ -2868,6 +2899,8 @@ license = [
 ]
 homepage = "https://github.com/yunanwg/brilliant-CV"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [brilliant-cv."2.0.7"]
 url = "https://packages.typst.org/preview/brilliant-cv-2.0.7.tar.gz"
 hash = "sha256-uy3oUMZzKA2tNsZE+fEMqrAM4I3HcFnSUwCZc6oAFJQ="
@@ -3212,6 +3245,7 @@ license = [
 ]
 homepage = "https://github.com/cu1ch3n/caidan"
 
+<<<<<<< HEAD
 [caletz."0.1.0"]
 url = "https://packages.typst.org/preview/caletz-0.1.0.tar.gz"
 hash = "sha256-rrUpyTzDJl9ut6klrD1JIpujzG2WOzusY2uCT869ICw="
@@ -3224,6 +3258,8 @@ license = [
 ]
 homepage = "https://github.com/rice8y/caletz"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [callisto."0.2.4"]
 url = "https://packages.typst.org/preview/callisto-0.2.4.tar.gz"
 hash = "sha256-tXrlQemxWFQlIdr6Hv4wn74gZz+kkohFhafosxGfi0c="
@@ -3942,6 +3978,7 @@ license = [
 ]
 homepage = "https://github.com/JamesxX/typst-chem-par"
 
+<<<<<<< HEAD
 [chemformula."0.1.1"]
 url = "https://packages.typst.org/preview/chemformula-0.1.1.tar.gz"
 hash = "sha256-ARcBJtZEkawmU0DsIN/qjmZXYkH3C6N9NvUKTkExTo4="
@@ -3952,6 +3989,8 @@ license = [
 ]
 homepage = "https://github.com/pacaunt/chemformula"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [chemformula."0.1.0"]
 url = "https://packages.typst.org/preview/chemformula-0.1.0.tar.gz"
 hash = "sha256-yjcPTBo+z2ZXMW2tXoxyhKH5IyKtZDDm9VHY1+C79G8="
@@ -4401,6 +4440,7 @@ license = [
 ]
 homepage = "https://github.com/alexanderkoller/typst-citegeist"
 
+<<<<<<< HEAD
 [cjk-spacer."0.1.0"]
 url = "https://packages.typst.org/preview/cjk-spacer-0.1.0.tar.gz"
 hash = "sha256-0xr5kO5MgM+U/jlBtJL7aJFqvyDIj0CSxBN7tEP6hKY="
@@ -4414,6 +4454,8 @@ license = [
 ]
 homepage = "https://github.com/ryuryu-ymj/cjk-spacer"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [cjk-unbreak."0.2.1"]
 url = "https://packages.typst.org/preview/cjk-unbreak-0.2.1.tar.gz"
 hash = "sha256-f20yye3QpWzyGCvruICJcLsKHjYwMAG2ruHWSD6hNLU="
@@ -4662,6 +4704,7 @@ license = [
 ]
 homepage = "https://github.com/matisiekpl/agh-typst"
 
+<<<<<<< HEAD
 [clean-cnam-template."1.3.0"]
 url = "https://packages.typst.org/preview/clean-cnam-template-1.3.0.tar.gz"
 hash = "sha256-hhA+yv0R+EjrFO4gd7TYBE4vQlYpx4jZDCZ5b1piHsg="
@@ -4677,6 +4720,8 @@ license = [
 ]
 homepage = "https://github.com/TomPlanche/clean-cnam-template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [clean-cnam-template."1.2.0"]
 url = "https://packages.typst.org/preview/clean-cnam-template-1.2.0.tar.gz"
 hash = "sha256-/BECU/XWnGR4rdwfcXpuP7NNi7rVei0uRRySVKdAb5w="
@@ -4786,6 +4831,7 @@ license = [
 ]
 homepage = "https://github.com/roland-KA/clean-dhbw-typst-template"
 
+<<<<<<< HEAD
 [clean-ensam."0.1.0"]
 url = "https://packages.typst.org/preview/clean-ensam-0.1.0.tar.gz"
 hash = "sha256-nAHY5BYhk+MOaQ6h7/2G01SZ1qVDBUxq2BA1cGtxGw0="
@@ -4796,6 +4842,8 @@ license = [
 ]
 homepage = "https://github.com/ahmed-bahlaoui/clean-ensam"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [clean-hda."0.2.0"]
 url = "https://packages.typst.org/preview/clean-hda-0.2.0.tar.gz"
 hash = "sha256-6B+DQmhUw6m8gGH5QEqJKSt1c4vPgaJZeiIkoxEZMfc="
@@ -4825,6 +4873,7 @@ license = [
 ]
 homepage = "https://github.com/stefan-ctrl/clean-hda-typst-template"
 
+<<<<<<< HEAD
 [clean-hwr."0.1.5"]
 url = "https://packages.typst.org/preview/clean-hwr-0.1.5.tar.gz"
 hash = "sha256-6EG/DYsncerdOaXcrpmaQLFBh4rN5AxVEk8lz/BFZLU="
@@ -4839,6 +4888,8 @@ license = [
 ]
 homepage = "https://github.com/testspieler09/clean-hwr"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [clean-hwr."0.1.4"]
 url = "https://packages.typst.org/preview/clean-hwr-0.1.4.tar.gz"
 hash = "sha256-1/Bi1Vkr4fO+2f/U8RyX8UMukFmV6pdFcOVIvhbqnao="
@@ -5113,6 +5164,7 @@ license = [
 ]
 homepage = "https://github.com/sebaseb98/clean-math-thesis"
 
+<<<<<<< HEAD
 [clean-othaw."0.3.2"]
 url = "https://packages.typst.org/preview/clean-othaw-0.3.2.tar.gz"
 hash = "sha256-I1RlEI7D64UmbbhSXo0vvGksdprT/BTuOwJ77Pz43c0="
@@ -5127,6 +5179,8 @@ license = [
 ]
 homepage = "https://codeberg.org/ruebe5w/clean-othaw"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [clean-uoft-thesis."0.1.0"]
 url = "https://packages.typst.org/preview/clean-uoft-thesis-0.1.0.tar.gz"
 hash = "sha256-r+ojrTHkXSjQJD0nyQXbu8YgybLcP8Zr4LZPU/Zcwsg="
@@ -5235,6 +5289,7 @@ license = [
 ]
 homepage = "https://gitlab.com/hartang/typst/cloudy"
 
+<<<<<<< HEAD
 [cmarker."0.1.8"]
 url = "https://packages.typst.org/preview/cmarker-0.1.8.tar.gz"
 hash = "sha256-gM9Rz5rBuz+AbN9nxAKcDhhaMmxMd09oQ8hMa4lK6Ow="
@@ -5245,6 +5300,8 @@ license = [
 ]
 homepage = "https://github.com/SabrinaJewson/cmarker.typ"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [cmarker."0.1.7"]
 url = "https://packages.typst.org/preview/cmarker-0.1.7.tar.gz"
 hash = "sha256-ws+3x8u6nUOYZlXJzKJbFIHNUM9gdPYgSvOs+NfgclY="
@@ -5679,6 +5736,7 @@ license = [
 ]
 homepage = "https://github.com/swaits/typst-collection"
 
+<<<<<<< HEAD
 [cogsci-conference."0.1.1"]
 url = "https://packages.typst.org/preview/cogsci-conference-0.1.1.tar.gz"
 hash = "sha256-8CplOeNbzzPsFsFIvGlnu8fZp8UTvjpuCHpbx4L0EAY="
@@ -5689,6 +5747,8 @@ license = [
 ]
 homepage = "https://github.com/daeh/cogsci-typst-template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [cogsci-conference."0.1.0"]
 url = "https://packages.typst.org/preview/cogsci-conference-0.1.0.tar.gz"
 hash = "sha256-91r9O76QqutjEkng9zNRdc/2ZS686x8rPRRbhn15di0="
@@ -5973,6 +6033,7 @@ license = [
 ]
 homepage = "https://github.com/ivaquero/typst-consketcher"
 
+<<<<<<< HEAD
 [covered-cs-thesis."0.1.5"]
 url = "https://packages.typst.org/preview/covered-cs-thesis-0.1.5.tar.gz"
 hash = "sha256-mNP3IN8ygS4lXfjUAArC40zztzaZQyHGfj4KcQkrBD8="
@@ -5985,6 +6046,8 @@ license = [
 ]
 homepage = "https://github.com/WyvernIXTL/covered-cs-thesis-typst-template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [cram-snap."0.2.2"]
 url = "https://packages.typst.org/preview/cram-snap-0.2.2.tar.gz"
 hash = "sha256-jnIWn0RjxOFLvh0TNJ/GBDr8YJGCq7gV6RCgFw3uZJY="
@@ -6305,6 +6368,7 @@ license = [
 ]
 homepage = "https://github.com/Mc-Zen/curli"
 
+<<<<<<< HEAD
 [curriculo-acad."0.1.1"]
 url = "https://packages.typst.org/preview/curriculo-acad-0.1.1.tar.gz"
 hash = "sha256-v7+XoGwewZE6PUJbF+fTF679BTH0HkgBzU+yvCQ+Jis="
@@ -6318,6 +6382,8 @@ license = [
 ]
 homepage = "https://github.com/philkleer/curriculo-acad"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [curriculo-acad."0.1.0"]
 url = "https://packages.typst.org/preview/curriculo-acad-0.1.0.tar.gz"
 hash = "sha256-P2Ab3akFYBGq+STjUdKI+hEBnU/jInjskhkKObG4c0Y="
@@ -6810,6 +6876,7 @@ license = [
 ]
 homepage = "https://github.com/Jeomhps/datify-core"
 
+<<<<<<< HEAD
 [deal-us-tfc-template."1.1.0"]
 url = "https://packages.typst.org/preview/deal-us-tfc-template-1.1.0.tar.gz"
 hash = "sha256-7km2ERzTY0oPKTZp+IxTr2DIaMr4VayB0kUZq6xvJ6w="
@@ -6824,6 +6891,8 @@ license = [
     "MIT-0",
 ]
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [deal-us-tfc-template."1.0.0"]
 url = "https://packages.typst.org/preview/deal-us-tfc-template-1.0.0.tar.gz"
 hash = "sha256-pX7LRdIKJqhMgdPYOg/s0LGGfAe8NSNXa71NsLdbiMY="
@@ -7804,6 +7873,7 @@ license = [
 ]
 homepage = "https://github.com/syqwq-OMG/ecnu-math-hwk"
 
+<<<<<<< HEAD
 [edgeframe."0.3.0"]
 url = "https://packages.typst.org/preview/edgeframe-0.3.0.tar.gz"
 hash = "sha256-QjjnDg4mllJ8YDbp994MqAdjkwT4cg4tujexaTX+iKI="
@@ -7824,6 +7894,8 @@ license = [
 ]
 homepage = "https://github.com/neuralpain/edgeframe"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [edgeframe."0.1.0"]
 url = "https://packages.typst.org/preview/edgeframe-0.1.0.tar.gz"
 hash = "sha256-AVXSce2K+PcxHjtkm3PEChbsDIISnOqZmbA4Yl6i/J4="
@@ -8637,6 +8709,7 @@ license = [
 ]
 homepage = "https://github.com/the-mathing/ez-algo"
 
+<<<<<<< HEAD
 [ez-today."2.0.0"]
 url = "https://packages.typst.org/preview/ez-today-2.0.0.tar.gz"
 hash = "sha256-mlyNvN+8IhMDO44XaPe34iYMBOQvMiRca5ogzrxht38="
@@ -8647,6 +8720,8 @@ license = [
 ]
 homepage = "https://github.com/CarloSchafflik12/typst-ez-today"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [ez-today."1.1.0"]
 url = "https://packages.typst.org/preview/ez-today-1.1.0.tar.gz"
 hash = "sha256-voHxSdsDcXD5vDAS6/7763eFsO83d7kim8ePWWU5L+U="
@@ -8709,6 +8784,7 @@ license = [
 ]
 homepage = "https://github.com/gbchu/ezchem.git"
 
+<<<<<<< HEAD
 [ezexam."0.2.7"]
 url = "https://packages.typst.org/preview/ezexam-0.2.7.tar.gz"
 hash = "sha256-H9BqMu4NNAkQ+s/1vKYjINpTcL8r3mHs9yVSuuzG74g="
@@ -8739,6 +8815,8 @@ license = [
 ]
 homepage = "https://github.com/gbchu/ezexam.git"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [ezexam."0.2.4"]
 url = "https://packages.typst.org/preview/ezexam-0.2.4.tar.gz"
 hash = "sha256-O6MNmMigoMI0ZAKiRKJE+pJJy/dQCTnoippWnFjTLYM="
@@ -8899,6 +8977,7 @@ license = [
 ]
 homepage = "https://github.com/han190/fancy-affil"
 
+<<<<<<< HEAD
 [fancy-tiling."1.0.0"]
 url = "https://packages.typst.org/preview/fancy-tiling-1.0.0.tar.gz"
 hash = "sha256-XGz4FP1E8OXq+RI8BaW+9gGAjWpF0Ddpx4AUA9YS29g="
@@ -8908,6 +8987,8 @@ license = [
     "MIT-0",
 ]
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [fancy-units."0.1.1"]
 url = "https://packages.typst.org/preview/fancy-units-0.1.1.tar.gz"
 hash = "sha256-T5+jI23IzepSp4YHaPM4unZ547rvZieHmmYgjBz/ud0="
@@ -9845,6 +9926,7 @@ license = [
 ]
 homepage = "https://github.com/Brndan/lettre"
 
+<<<<<<< HEAD
 [forum-acusticum-2026."0.1.0"]
 url = "https://packages.typst.org/preview/forum-acusticum-2026-0.1.0.tar.gz"
 hash = "sha256-41a7WuO6FdbApZP3n7mhv7+m4pkwDjtw1wAFdzCBNqo="
@@ -9858,6 +9940,8 @@ license = [
 ]
 homepage = "https://git.iem.at/fa26-templates/fa26-typst-template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [frackable."0.2.0"]
 url = "https://packages.typst.org/preview/frackable-0.2.0.tar.gz"
 hash = "sha256-IbKUPIcWNBgzLCSyiw4hF2CEL6bVj6ygs2fyy3ZZB30="
@@ -9966,6 +10050,7 @@ license = [
 ]
 homepage = "https://github.com/liuguangxi/fractusist"
 
+<<<<<<< HEAD
 [frame-it."2.0.0"]
 url = "https://packages.typst.org/preview/frame-it-2.0.0.tar.gz"
 hash = "sha256-YXkMw1kWlcKVnPlMiI5jRwhP2ezhT2qVSCvzYqHocsw="
@@ -9976,6 +10061,8 @@ license = [
 ]
 homepage = "https://github.com/marc-thieme/frame-it"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [frame-it."1.2.0"]
 url = "https://packages.typst.org/preview/frame-it-1.2.0.tar.gz"
 hash = "sha256-DWn68Fo+tw//7J9SGE0BmhoXB/Rtv9Y4tsvxWssAhqI="
@@ -10302,6 +10389,7 @@ license = [
 ]
 homepage = "https://github.com/MatheSchool/typst-g-exam"
 
+<<<<<<< HEAD
 [gakusyun-doc."1.0.0"]
 url = "https://packages.typst.org/preview/gakusyun-doc-1.0.0.tar.gz"
 hash = "sha256-RgfRcdlV0tb65QHVLEU7lEosKiVHNyNqV7FO+xl7EvQ="
@@ -10315,6 +10403,8 @@ license = [
 ]
 homepage = "https://github.com/gakusyun/gakusyun-doc"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [gallus-hsg."1.0.0"]
 url = "https://packages.typst.org/preview/gallus-hsg-1.0.0.tar.gz"
 hash = "sha256-A747wV1XUbuIclmAC39vvZ2pBXlVR2R7evhuajKNV4I="
@@ -11206,6 +11296,7 @@ license = [
 ]
 homepage = "https://github.com/piepert/grape-suite"
 
+<<<<<<< HEAD
 [grayness."0.5.0"]
 url = "https://packages.typst.org/preview/grayness-0.5.0.tar.gz"
 hash = "sha256-svgS7Ze3G56KVa9M7Qcmsgg2CLM+w6Gy4OPFafAwiNE="
@@ -11216,6 +11307,8 @@ license = [
 ]
 homepage = "https://github.com/nineff/grayness"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [grayness."0.4.1"]
 url = "https://packages.typst.org/preview/grayness-0.4.1.tar.gz"
 hash = "sha256-Qb0zbsAe+VUjVqoH7MjMp0ZSswCoRaqW3Sa/1uk9KfQ="
@@ -11296,6 +11389,7 @@ license = [
 ]
 homepage = "https://github.com/jbirnick/typst-great-theorems"
 
+<<<<<<< HEAD
 [griddle."0.2.1"]
 url = "https://packages.typst.org/preview/griddle-0.2.1.tar.gz"
 hash = "sha256-PRRuRiCeohdspe8m2m9MV1t4M7f3h13O4eLhhLUr3pY="
@@ -11306,6 +11400,8 @@ license = [
 ]
 homepage = "https://github.com/micheledusi/Griddle"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [griddle."0.2.0"]
 url = "https://packages.typst.org/preview/griddle-0.2.0.tar.gz"
 hash = "sha256-FK20bs4kRQfBjOMZUfyqxEDtecTNWPgDd+fqTP42foE="
@@ -11710,6 +11806,7 @@ license = [
 ]
 homepage = "https://codeberg.org/hannesknoll/hannes-thesis"
 
+<<<<<<< HEAD
 [hanzi-calligraphy."0.1.1"]
 url = "https://packages.typst.org/preview/hanzi-calligraphy-0.1.1.tar.gz"
 hash = "sha256-2JRNos18DrGwoe6dkEyUggjFFbbV4Jfw6/5JX4FKNl4="
@@ -11720,6 +11817,8 @@ license = [
 ]
 homepage = "https://github.com/yuegeao/hanzi-calligraphy"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [hanzi-calligraphy."0.1.0"]
 url = "https://packages.typst.org/preview/hanzi-calligraphy-0.1.0.tar.gz"
 hash = "sha256-fWpqyCuAZkmK/YY0qVGL4ohbjo2d6gn/Ot60tQj49aE="
@@ -12889,6 +12988,7 @@ license = [
 ]
 homepage = "https://github.com/tshort/hyperscript"
 
+<<<<<<< HEAD
 [hypraw."0.1.0"]
 url = "https://packages.typst.org/preview/hypraw-0.1.0.tar.gz"
 hash = "sha256-yVYf6KlBs7qMmOoQQmMsxTZD8RgH6+jMPr9gJPbIHww="
@@ -12899,6 +12999,8 @@ license = [
 ]
 homepage = "https://github.com/QuadnucYard/typst-hypraw"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [i-am-acro."0.1.3"]
 url = "https://packages.typst.org/preview/i-am-acro-0.1.3.tar.gz"
 hash = "sha256-S/PHqBJIpNdCOnNs5mZliCd21r8DFzF2yOM2DeSfe68="
@@ -13719,6 +13821,7 @@ license = [
     "MIT",
 ]
 
+<<<<<<< HEAD
 [inknertia."0.1.0"]
 url = "https://packages.typst.org/preview/inknertia-0.1.0.tar.gz"
 hash = "sha256-Ymrk5MQYliGCO42eMCOgeLVCyeQlsYLxIqMUFGXEs+0="
@@ -13731,6 +13834,8 @@ license = [
 ]
 homepage = "https://github.com/ploliver/inknertia"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [intextual."0.1.1"]
 url = "https://packages.typst.org/preview/intextual-0.1.1.tar.gz"
 hash = "sha256-9CP/VUh41EhH7pBOsAupE94qSV6gi6lOPJuF5iv684k="
@@ -14752,6 +14857,7 @@ license = [
     "MIT",
 ]
 
+<<<<<<< HEAD
 [komet."0.2.0"]
 url = "https://packages.typst.org/preview/komet-0.2.0.tar.gz"
 hash = "sha256-eLYkNvp62q+uDynm5pmvqukuLyMnJ92Uh5DF/tRqRsY="
@@ -14762,6 +14868,8 @@ license = [
 ]
 homepage = "https://github.com/Mc-Zen/komet"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [komet."0.1.0"]
 url = "https://packages.typst.org/preview/komet-0.1.0.tar.gz"
 hash = "sha256-Hy06Ct0OsvmBZJSK77d7EhGM3u4M/z/spqIt3sSU9CE="
@@ -15133,6 +15241,7 @@ license = [
 ]
 homepage = "https://github.com/davystrong/layout-ltd"
 
+<<<<<<< HEAD
 [leetify."0.1.0"]
 url = "https://packages.typst.org/preview/leetify-0.1.0.tar.gz"
 hash = "sha256-poj6F9DTCBcw4aoZGnoJzxS6QnqgsiGw/KTl1i3obPA="
@@ -15143,6 +15252,8 @@ license = [
 ]
 homepage = "https://github.com/arne314/typst-leetify"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [leipzig-glossing."0.5.0"]
 url = "https://packages.typst.org/preview/leipzig-glossing-0.5.0.tar.gz"
 hash = "sha256-75TQDdX3XFIkPIGPfCorpM/JuHb7JNSURgJh/KxtvGE="
@@ -15412,6 +15523,7 @@ license = [
 ]
 homepage = "https://github.com/AnsgarLichter/cv-typst-template"
 
+<<<<<<< HEAD
 [light-report-uia."0.1.1"]
 url = "https://packages.typst.org/preview/light-report-uia-0.1.1.tar.gz"
 hash = "sha256-jABLoOGkA9/PxFL/fJ6oDiMLzQf+0VJGW1QF3kTQOjg="
@@ -15424,6 +15536,8 @@ license = [
 ]
 homepage = "https://github.com/sebastos1/light-report-uia"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [light-report-uia."0.1.0"]
 url = "https://packages.typst.org/preview/light-report-uia-0.1.0.tar.gz"
 hash = "sha256-7cu9FpnqoZZjtAkQlt0IGSdndnifRGTaPCSzf/60v7k="
@@ -15515,6 +15629,7 @@ license = [
 ]
 homepage = "https://github.com/ellsphillips/lineal"
 
+<<<<<<< HEAD
 [linedx2-sjtu."0.1.0"]
 url = "https://packages.typst.org/preview/linedx2-sjtu-0.1.0.tar.gz"
 hash = "sha256-0oQB4Q0dt7DHRNduYCYxmcx7FIGiQv8DKFScsgc76qA="
@@ -15525,6 +15640,8 @@ license = [
 ]
 homepage = "https://github.com/HellOwhatAs/linedx2-sjtu"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [lingotree."1.0.0"]
 url = "https://packages.typst.org/preview/lingotree-1.0.0.tar.gz"
 hash = "sha256-4y7QptYL3dM4Za4/Iv35X1Ofavyf0QC211a8gRaMHUU="
@@ -15608,6 +15725,7 @@ license = [
 ]
 homepage = "https://github.com/jomaway/typst-linguify"
 
+<<<<<<< HEAD
 [linked-cv."0.1.0"]
 url = "https://packages.typst.org/preview/linked-cv-0.1.0.tar.gz"
 hash = "sha256-pvxseyfopEF0zPQFFjQ+/SIpB8ys90BMz2rX6i6eQIs="
@@ -15618,6 +15736,8 @@ license = [
 ]
 homepage = "https://github.com/ellsphillips/linked-cv"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [linked-cv."0.0.1"]
 url = "https://packages.typst.org/preview/linked-cv-0.0.1.tar.gz"
 hash = "sha256-vNsifVzF7EocdAWM4eFrjGVVd62IMM8mwWuVCpYoSd0="
@@ -15809,6 +15929,7 @@ license = [
 ]
 homepage = "https://github.com/YDX-2147483647/typst-lure"
 
+<<<<<<< HEAD
 [luzid-checkbox."0.1.0"]
 url = "https://packages.typst.org/preview/luzid-checkbox-0.1.0.tar.gz"
 hash = "sha256-URcEcKfVf7js9Hp2JztKXb7cIWZ/8rZst7B4Re6wwj8="
@@ -15819,6 +15940,8 @@ license = [
 ]
 homepage = "https://github.com/z1glr/luzid-checkbox"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [lyceum."0.1.0"]
 url = "https://packages.typst.org/preview/lyceum-0.1.0.tar.gz"
 hash = "sha256-R9YJpG9Qh3Wfrad9kSZKLOJXMScffGX7adVigIb0mKs="
@@ -16140,6 +16263,7 @@ license = [
 ]
 homepage = "https://github.com/EpicEricEE/typst-marge"
 
+<<<<<<< HEAD
 [marginalia."0.3.1"]
 url = "https://packages.typst.org/preview/marginalia-0.3.1.tar.gz"
 hash = "sha256-ChnB60lkk7UJSt/kVlzMnfGDP3t1VYx0xRUp/8m/xJk="
@@ -16150,6 +16274,8 @@ license = [
 ]
 homepage = "https://github.com/nleanba/typst-marginalia"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [marginalia."0.3.0"]
 url = "https://packages.typst.org/preview/marginalia-0.3.0.tar.gz"
 hash = "sha256-GkXbKa+z+8AULWM6SujWvuOBhPvvwNvWN7c5oSY2evw="
@@ -16393,6 +16519,7 @@ license = [
 ]
 homepage = "https://github.com/sxdl/MCM-Typst-template"
 
+<<<<<<< HEAD
 [meander."0.3.0"]
 url = "https://packages.typst.org/preview/meander-0.3.0.tar.gz"
 hash = "sha256-hK9ev0epq1+A88eU42uBLb4a5ZrjkT6k0lnoqUbSyiA="
@@ -16403,6 +16530,8 @@ license = [
 ]
 homepage = "https://github.com/Vanille-N/meander.typ"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [meander."0.2.5"]
 url = "https://packages.typst.org/preview/meander-0.2.5.tar.gz"
 hash = "sha256-wVC4hYo5znCHfk6sBnZU7PLA+SAyNHgwTBXgIA6Te1M="
@@ -16485,6 +16614,7 @@ license = [
 ]
 homepage = "https://github.com/34j/typst-cetz-mechanical-system"
 
+<<<<<<< HEAD
 [melt."0.2.0"]
 url = "https://packages.typst.org/preview/melt-0.2.0.tar.gz"
 hash = "sha256-xoC5D0zz4H05+B6UXIyCBgrp7O5vyU13mNYT6y6Qe7o="
@@ -16497,6 +16627,8 @@ license = [
 ]
 homepage = "https://github.com/RungeCC/melt"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [melt."0.1.0"]
 url = "https://packages.typst.org/preview/melt-0.1.0.tar.gz"
 hash = "sha256-QSqvdHnu/hnUOY6R7Drru7UuT65xkVusjKJ+24VbE6g="
@@ -17108,6 +17240,7 @@ license = [
 ]
 homepage = "https://github.com/flavio20002/typst-presentation-minimal-template"
 
+<<<<<<< HEAD
 [minimal-thesis-luebeck."0.9.0"]
 url = "https://packages.typst.org/preview/minimal-thesis-luebeck-0.9.0.tar.gz"
 hash = "sha256-d5EcDiUl7mnzcFCjsi13jtlgMrEfq58EHr0RhL0JoBg="
@@ -17121,6 +17254,8 @@ license = [
 ]
 homepage = "https://github.com/fhemstra/minimal-thesis-luebeck"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [minimal-thesis-luebeck."0.8.0"]
 url = "https://packages.typst.org/preview/minimal-thesis-luebeck-0.8.0.tar.gz"
 hash = "sha256-OcV2RAzGpR2UNFeU3W7HM3n6M+t+viubK4r44NszJpk="
@@ -17418,6 +17553,7 @@ license = [
 ]
 homepage = "https://github.com/OrangeX4/mitex"
 
+<<<<<<< HEAD
 [modern-acad-cv."0.1.5"]
 url = "https://packages.typst.org/preview/modern-acad-cv-0.1.5.tar.gz"
 hash = "sha256-DXEVA2NnyNOD/mQKSVDudK7dYY9KWygDMoNK1I6hGVA="
@@ -17432,6 +17568,8 @@ license = [
 ]
 homepage = "https://github.com/philkleer/typst-modern-acad-cv"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [modern-acad-cv."0.1.4"]
 url = "https://packages.typst.org/preview/modern-acad-cv-0.1.4.tar.gz"
 hash = "sha256-FPgeJ02NPf8LJkluLdlus2oQCjQHtuqaKJB3ufjiOlo="
@@ -18123,6 +18261,7 @@ license = [
 ]
 homepage = "https://github.com/DzmingLi/hust-cse-report"
 
+<<<<<<< HEAD
 [modern-innopolis-thesis."0.1.1"]
 url = "https://packages.typst.org/preview/modern-innopolis-thesis-0.1.1.tar.gz"
 hash = "sha256-+YuIJ3O4kjaq47dwcAjzYie9jscS6OOcqzOqpb67ha8="
@@ -18133,6 +18272,8 @@ license = [
 ]
 homepage = "https://github.com/sh3b0/innopolis-thesis"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [modern-innopolis-thesis."0.1.0"]
 url = "https://packages.typst.org/preview/modern-innopolis-thesis-0.1.0.tar.gz"
 hash = "sha256-72F1Bhh3iIGFm3XwtcB2TCHSbjus5nSoO4ICCP+QIpk="
@@ -18443,6 +18584,7 @@ license = [
 ]
 homepage = "https://github.com/peterpf/modern-typst-resume"
 
+<<<<<<< HEAD
 [modern-ruc-thesis."0.1.1"]
 url = "https://packages.typst.org/preview/modern-ruc-thesis-0.1.1.tar.gz"
 hash = "sha256-n2gTVXXKdPQ4KX3ViGrELze+7/VvoFmgTFW2Olnu+bU="
@@ -18469,6 +18611,8 @@ license = [
 ]
 homepage = "https://github.com/ruc-thesis/modern-ruc-thesis"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [modern-russian-dissertation."0.0.1"]
 url = "https://packages.typst.org/preview/modern-russian-dissertation-0.0.1.tar.gz"
 hash = "sha256-dFgLnAx1rwcVmwu6vogKMmR8i+7wBntylDsZZcgXQ+U="
@@ -19487,6 +19631,7 @@ license = [
 ]
 homepage = "https://github.com/pavelzw/moderner-cv"
 
+<<<<<<< HEAD
 [modernpro-coverletter."0.0.8"]
 url = "https://packages.typst.org/preview/modernpro-coverletter-0.0.8.tar.gz"
 hash = "sha256-8TsyXOSsDAIvcJZNxouoIAux/MQPmVtRZsdngt77dQg="
@@ -19499,6 +19644,8 @@ license = [
 ]
 homepage = "https://github.com/jxpeng98/typst-coverletter"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [modernpro-coverletter."0.0.7"]
 url = "https://packages.typst.org/preview/modernpro-coverletter-0.0.7.tar.gz"
 hash = "sha256-vnwdrdqqHvOsRuowpSRRz9ISLTb0g2LIhpwikwWmr5E="
@@ -19671,6 +19818,7 @@ license = [
 ]
 homepage = "https://github.com/SillyFreak/typst-moodular"
 
+<<<<<<< HEAD
 [mtret."0.1.0"]
 url = "https://packages.typst.org/preview/mtret-0.1.0.tar.gz"
 hash = "sha256-ENlVrYOxeSGOwSLAyOxuafbkX4X5mxOh88ZNM74pJgs="
@@ -19685,6 +19833,8 @@ license = [
 ]
 homepage = "https://github.com/hinshiba/MTReT"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [muchpdf."0.1.2"]
 url = "https://packages.typst.org/preview/muchpdf-0.1.2.tar.gz"
 hash = "sha256-5cOmp2fjbC21WgIlLhzI+ruldourhMHoDXjQ8pNgCoc="
@@ -19862,6 +20012,7 @@ license = [
 ]
 homepage = "https://github.com/Haouo/NCKU-Thesis-Typst"
 
+<<<<<<< HEAD
 [neat-cv."0.6.0"]
 url = "https://packages.typst.org/preview/neat-cv-0.6.0.tar.gz"
 hash = "sha256-K+i5yfQ4deSKjxlO+O0u6z5/SIBC60qQFYN7lw7y3TE="
@@ -19875,6 +20026,8 @@ license = [
 ]
 homepage = "https://github.com/dialvarezs/neat-cv"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [neat-cv."0.5.1"]
 url = "https://packages.typst.org/preview/neat-cv-0.5.1.tar.gz"
 hash = "sha256-R6F9L61FIJxFSJxRUBTUJklIyMYXANFFdKr60oQcWGg="
@@ -20042,6 +20195,7 @@ license = [
 ]
 homepage = "https://gitlab.com/TuTiuTe/typst-nerdfont"
 
+<<<<<<< HEAD
 [neural-netz."0.3.0"]
 url = "https://packages.typst.org/preview/neural-netz-0.3.0.tar.gz"
 hash = "sha256-9+SrpR2kYThQbPgRa97p9mF6w5ONKXhZGT4QjsxcqmQ="
@@ -20078,6 +20232,8 @@ license = [
 ]
 homepage = "https://github.com/edgaremy/neural-netz"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [nifty-ntnu-thesis."0.1.3"]
 url = "https://packages.typst.org/preview/nifty-ntnu-thesis-0.1.3.tar.gz"
 hash = "sha256-GU/OcgxTdR4WgoOs6Sa9cmLT0emtGyci2dkhFXSViRg="
@@ -20259,6 +20415,7 @@ license = [
 ]
 homepage = "https://github.com/mohe2015/not-tudabeamer-2023"
 
+<<<<<<< HEAD
 [note-me."0.6.0"]
 url = "https://packages.typst.org/preview/note-me-0.6.0.tar.gz"
 hash = "sha256-jnkpzcEDLPfNDyxVC0yl1W/Wz+o03hO2jzTCumA/Gp4="
@@ -20269,6 +20426,8 @@ license = [
 ]
 homepage = "https://github.com/FlandiaYingman/note-me"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [note-me."0.5.0"]
 url = "https://packages.typst.org/preview/note-me-0.5.0.tar.gz"
 hash = "sha256-ayFptayKIUIMeSxBI/LJtrzCTTd0uhbGek9VM0CFnMY="
@@ -20597,6 +20756,7 @@ license = [
 ]
 homepage = "https://github.com/baptiste/nutshell"
 
+<<<<<<< HEAD
 [nutthead-ebnf."0.2.0"]
 url = "https://packages.typst.org/preview/nutthead-ebnf-0.2.0.tar.gz"
 hash = "sha256-JHrwCOr0/io9y/31AHtIj+TKFVPR1IzTf117Tzofgr8="
@@ -20627,6 +20787,8 @@ license = [
 ]
 homepage = "https://github.com/jdpieck/oasis-align"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [oasis-align."0.3.0"]
 url = "https://packages.typst.org/preview/oasis-align-0.3.0.tar.gz"
 hash = "sha256-pzOzbLP3sjwDkGKefcqnPFkjyDdQ6s3nQQg3j2+l8QQ="
@@ -20808,6 +20970,7 @@ license = [
 ]
 homepage = "https://github.com/v411e/optimal-ovgu-thesis"
 
+<<<<<<< HEAD
 [orange-book."0.6.2"]
 url = "https://packages.typst.org/preview/orange-book-0.6.2.tar.gz"
 hash = "sha256-IXvHETU/bDZWu4SC63gFs0Fy3R5nyAWVLiSEJY6zytk="
@@ -20818,6 +20981,8 @@ license = [
 ]
 homepage = "https://github.com/flavio20002/typst-orange-template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [orange-book."0.6.1"]
 url = "https://packages.typst.org/preview/orange-book-0.6.1.tar.gz"
 hash = "sha256-D2WQwAS6ftls8vN2YGDvbqbXh7NC+SUqfGHzvACt4To="
@@ -21002,6 +21167,7 @@ license = [
 ]
 homepage = "https://github.com/TobiBeh/HS-Emden-Leer-Typst-Template"
 
+<<<<<<< HEAD
 [ourchat."0.2.1"]
 url = "https://packages.typst.org/preview/ourchat-0.2.1.tar.gz"
 hash = "sha256-SutkP9LuOhH/wev3eQex8UvqeAsdYF7OwvZJG2p+JjY="
@@ -21012,6 +21178,8 @@ license = [
 ]
 homepage = "https://github.com/QuadnucYard/ourchat-typ"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [ourchat."0.2.0"]
 url = "https://packages.typst.org/preview/ourchat-0.2.0.tar.gz"
 hash = "sha256-yajMT4z06lyWNGn4DCWFy8SIAyRwYWg3nXb4cnRvvLQ="
@@ -21384,6 +21552,7 @@ license = [
 ]
 homepage = "https://github.com/QuadnucYard/pavemat"
 
+<<<<<<< HEAD
 [payqr-swiss."0.4.1"]
 url = "https://packages.typst.org/preview/payqr-swiss-0.4.1.tar.gz"
 hash = "sha256-eTih4Yh88VfUvnfDRj3OTspaoD68/iSES9gUITHNLMY="
@@ -21396,6 +21565,8 @@ license = [
 ]
 homepage = "https://github.com/philippdrebes/typst-payqr-swiss"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [payqr-swiss."0.4.0"]
 url = "https://packages.typst.org/preview/payqr-swiss-0.4.0.tar.gz"
 hash = "sha256-qoUe//NpTvyjJknTfNBdw8cFWjrJIqIwhN3kaHWd2GE="
@@ -21630,6 +21801,7 @@ license = [
 ]
 homepage = "https://github.com/Vanille-N/penpo.typ"
 
+<<<<<<< HEAD
 [pepentation."0.1.0"]
 url = "https://packages.typst.org/preview/pepentation-0.1.0.tar.gz"
 hash = "sha256-Ep498Us5269VIpAcfwwv+hH9kPn0+DRxMgYbg+QYTjY="
@@ -21640,6 +21812,8 @@ license = [
 ]
 homepage = "https://github.com/pepengu/pepentation"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [percencode."0.1.0"]
 url = "https://packages.typst.org/preview/percencode-0.1.0.tar.gz"
 hash = "sha256-uMSxUuO2bjAWwr8SQ+8jQIA4J/F0TetNAHr/MUYeqIE="
@@ -21652,6 +21826,7 @@ license = [
 ]
 homepage = "https://github.com/Servostar/typst-percencode"
 
+<<<<<<< HEAD
 [pergamon."0.6.0"]
 url = "https://packages.typst.org/preview/pergamon-0.6.0.tar.gz"
 hash = "sha256-WFPh+lSq44DsjVj62Jhjj/eNeE/+ClSlXzYmPvDJcIc="
@@ -21666,6 +21841,8 @@ license = [
 ]
 homepage = "https://github.com/alexanderkoller/pergamon"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [pergamon."0.5.0"]
 url = "https://packages.typst.org/preview/pergamon-0.5.0.tar.gz"
 hash = "sha256-E/HeIUVUOZq2tqX1vCQzKq6CnDo1TUizPBXk75JHmfU="
@@ -22534,6 +22711,7 @@ license = [
 ]
 homepage = "https://github.com/SillyFreak/typst-prequery"
 
+<<<<<<< HEAD
 [presentate."0.2.2"]
 url = "https://packages.typst.org/preview/presentate-0.2.2.tar.gz"
 hash = "sha256-chpQGr7FYj0C12EHZiq0bLQKyevWI4eWtvG2Z7TKMBk="
@@ -22544,6 +22722,8 @@ license = [
 ]
 homepage = "https://github.com/pacaunt/typst-presentate"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [presentate."0.2.1"]
 url = "https://packages.typst.org/preview/presentate-0.2.1.tar.gz"
 hash = "sha256-MqADWFU3M5aPLAOczrJNH6Ls6v3lPoId5ISoRNsyUts="
@@ -22824,6 +23004,7 @@ license = [
 ]
 homepage = "https://github.com/SillyFreak/typst-pull-eh"
 
+<<<<<<< HEAD
 [put-thesis."0.1.1"]
 url = "https://packages.typst.org/preview/put-thesis-0.1.1.tar.gz"
 hash = "sha256-ytP2TcLG68pA4BVnn9ZYBojUUZ+XKv9qqqwiAy9T7u4="
@@ -22841,6 +23022,8 @@ license = [
 ]
 homepage = "https://github.com/RoyalDonkey/put-thesis-typst"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [put-thesis."0.1.0"]
 url = "https://packages.typst.org/preview/put-thesis-0.1.0.tar.gz"
 hash = "sha256-Nn8aU2St0npCGfgopTzGtBrjKNHl0VfrNokWTlg7qe8="
@@ -23107,6 +23290,7 @@ license = [
 ]
 homepage = "https://github.com/ivaquero/qooklet.git"
 
+<<<<<<< HEAD
 [quest."0.2.0"]
 url = "https://packages.typst.org/preview/quest-0.2.0.tar.gz"
 hash = "sha256-TMJqLaCC6mwmRtySX2ca0otiD38K5QGAMyz+XQTa2TU="
@@ -23127,6 +23311,8 @@ license = [
 ]
 homepage = "https://github.com/kevinlin1/quest"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [quetta."0.2.0"]
 url = "https://packages.typst.org/preview/quetta-0.2.0.tar.gz"
 hash = "sha256-VOTfREPGxLOnzmZV21+A+D59u1aAahyB2iJm0dNlhF8="
@@ -23480,6 +23666,7 @@ license = [
     "MIT",
 ]
 
+<<<<<<< HEAD
 [red-agora."0.2.0"]
 url = "https://packages.typst.org/preview/red-agora-0.2.0.tar.gz"
 hash = "sha256-E5ugFwPQc8fvggezau06K7heIAgvlxmuN+qKe9t4krI="
@@ -23490,6 +23677,8 @@ license = [
 ]
 homepage = "https://github.com/essmehdi/ensias-report-template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [red-agora."0.1.2"]
 url = "https://packages.typst.org/preview/red-agora-0.1.2.tar.gz"
 hash = "sha256-1Lr9+LqKq0ms/ZNbnOuZlZomVClGG73T1s4f2S2kxOI="
@@ -23543,6 +23732,7 @@ license = [
 ]
 homepage = "https://github.com/sjfhsjfh/typst-relescope"
 
+<<<<<<< HEAD
 [rendercv."0.1.0"]
 url = "https://packages.typst.org/preview/rendercv-0.1.0.tar.gz"
 hash = "sha256-zcCqsWbjPjeJuiu4iOI4QRXmQmcKoo2DeITlpRv/hpA="
@@ -23555,6 +23745,8 @@ license = [
 ]
 homepage = "https://github.com/rendercv/rendercv-typst"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [report-flow-ustc."1.1.0"]
 url = "https://packages.typst.org/preview/report-flow-ustc-1.1.0.tar.gz"
 hash = "sha256-EB3bszDs16NK6vPY+LuNnPbZUa1OhnBMQIsFOE6GVuk="
@@ -23670,6 +23862,7 @@ license = [
 ]
 homepage = "https://github.com/eltos/accelerated-jacow/"
 
+<<<<<<< HEAD
 [rewind-note."0.1.0"]
 url = "https://packages.typst.org/preview/rewind-note-0.1.0.tar.gz"
 hash = "sha256-NNMIHhGdSBZlui6ehN35LbqXf8s/XRWQJWZbZjtkJUk="
@@ -23682,6 +23875,8 @@ license = [
 ]
 homepage = "https://github.com/Ri-Nai/typst-rednote"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [rexllent."0.4.0"]
 url = "https://packages.typst.org/preview/rexllent-0.4.0.tar.gz"
 hash = "sha256-p8Q+sCQD/gAi77mPNuEUdONPQW7OqfrRmwyrIYGY6Xw="
@@ -23880,6 +24075,7 @@ license = [
 ]
 homepage = "https://github.com/ThatOneCalculator/riesketcher"
 
+<<<<<<< HEAD
 [riichinator."0.1.0"]
 url = "https://packages.typst.org/preview/riichinator-0.1.0.tar.gz"
 hash = "sha256-fslGd7ysBIWcen0FbPLBDh4THapeK0oFTxsA2U9sBy4="
@@ -23890,6 +24086,8 @@ license = [
 ]
 homepage = "https://github.com/hemisemidemipresent/riichinator"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [rivet."0.3.0"]
 url = "https://packages.typst.org/preview/rivet-0.3.0.tar.gz"
 hash = "sha256-NywqmI2hFitxofTiILr0DijDaK8AUbC3xV8kK+OyyNA="
@@ -24596,6 +24794,7 @@ license = [
 ]
 homepage = "https://github.com/curvenote/scienceicons"
 
+<<<<<<< HEAD
 [scribbling-hm."0.1.5"]
 url = "https://packages.typst.org/preview/scribbling-hm-0.1.5.tar.gz"
 hash = "sha256-h+CBEhfkmKrfAXvbUSg1qdpqbVMtFf5Odw6nY0uQJAw="
@@ -24609,6 +24808,8 @@ license = [
 ]
 homepage = "https://github.com/fine-seat/hm-typst-template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [scribbling-hm."0.1.4"]
 url = "https://packages.typst.org/preview/scribbling-hm-0.1.4.tar.gz"
 hash = "sha256-VqQaytUS4GVmPBmsZDblqz45sY2EZpZXyLkdvxBSad0="
@@ -25046,6 +25247,7 @@ license = [
 ]
 homepage = "https://github.com/shaneworld/HHU-Thesis-Template"
 
+<<<<<<< HEAD
 [sheetstorm."0.4.0"]
 url = "https://packages.typst.org/preview/sheetstorm-0.4.0.tar.gz"
 hash = "sha256-sWbpNlwTtWRL4bO8FBCMmfFcEMDZjEd3aKlxcOxyDFQ="
@@ -25056,6 +25258,8 @@ license = [
 ]
 homepage = "https://github.com/rabuu/sheetstorm"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [sheetstorm."0.3.3"]
 url = "https://packages.typst.org/preview/sheetstorm-0.3.3.tar.gz"
 hash = "sha256-HDm3UT7rQzDvUIgE5v+cYxT6UPdx44prtNnP72PDAOU="
@@ -25086,6 +25290,7 @@ license = [
 ]
 homepage = "https://github.com/rabuu/sheetstorm"
 
+<<<<<<< HEAD
 [shiroa."0.3.1"]
 url = "https://packages.typst.org/preview/shiroa-0.3.1.tar.gz"
 hash = "sha256-6VKLMKKWj5ZWQrDmcR7jt9S4P4wtPueFu5FhO2dD5PQ="
@@ -25098,6 +25303,8 @@ license = [
 ]
 homepage = "https://github.com/Myriad-Dreamin/shiroa"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [shiroa."0.3.0"]
 url = "https://packages.typst.org/preview/shiroa-0.3.0.tar.gz"
 hash = "sha256-UWoqFcxRMdOSOjuV8Ten+PyCofGNOS7M2XWwNcYIKd4="
@@ -25180,6 +25387,7 @@ license = [
 ]
 homepage = "https://github.com/Myriad-Dreamin/shiroa"
 
+<<<<<<< HEAD
 [shiroa-mdbook."0.3.1"]
 url = "https://packages.typst.org/preview/shiroa-mdbook-0.3.1.tar.gz"
 hash = "sha256-VMOGjXY9fAxRPlfM7HR5OpuzMY1Q+gCt9L/zvkwmj9E="
@@ -25192,6 +25400,8 @@ license = [
 ]
 homepage = "https://github.com/Myriad-Dreamin/shiroa"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [shiroa-mdbook."0.3.0"]
 url = "https://packages.typst.org/preview/shiroa-mdbook-0.3.0.tar.gz"
 hash = "sha256-GGi7QaJgu6T0pGHr0LHmxIJDj8hhVxDkzYNGsoPrOBA="
@@ -25204,6 +25414,7 @@ license = [
 ]
 homepage = "https://github.com/Myriad-Dreamin/shiroa"
 
+<<<<<<< HEAD
 [shiroa-starlight."0.3.1"]
 url = "https://packages.typst.org/preview/shiroa-starlight-0.3.1.tar.gz"
 hash = "sha256-RLhpoVb1Bd2ACvF7sPqMG8o7gHw3krVaAMQQ77BJ9DA="
@@ -25216,6 +25427,8 @@ license = [
 ]
 homepage = "https://github.com/Myriad-Dreamin/shiroa"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [shiroa-starlight."0.3.0"]
 url = "https://packages.typst.org/preview/shiroa-starlight-0.3.0.tar.gz"
 hash = "sha256-lWsNe1YiIgQ91QQFm+CUwSyaFO/jAU4nkmQ2pFnsafs="
@@ -25369,6 +25582,7 @@ license = [
     "MIT",
 ]
 
+<<<<<<< HEAD
 [shuosc-shu-bachelor-thesis."1.0.0"]
 url = "https://packages.typst.org/preview/shuosc-shu-bachelor-thesis-1.0.0.tar.gz"
 hash = "sha256-Vnbv/eJJrANE6A6phhaCqsn1uNN5hfrfJ/6mKvKWlB0="
@@ -25385,6 +25599,8 @@ license = [
 ]
 homepage = "https://github.com/shuosc/SHU-Bachelor-Thesis-Typst"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [shuosc-shu-bachelor-thesis."0.3.1"]
 url = "https://packages.typst.org/preview/shuosc-shu-bachelor-thesis-0.3.1.tar.gz"
 hash = "sha256-THXfwL3ex2JfwPvwsOmDq268empnlVvce10+NzAcMT8="
@@ -25546,6 +25762,7 @@ license = [
 ]
 homepage = "https://github.com/VWWVVW/shuxuejuan"
 
+<<<<<<< HEAD
 [sicons."16.0.0"]
 url = "https://packages.typst.org/preview/sicons-16.0.0.tar.gz"
 hash = "sha256-IowYo+nUZ0qszGscQsQVHE5HIsLkDE7atG+zus8Cyqk="
@@ -25556,6 +25773,8 @@ license = [
 ]
 homepage = "https://github.com/cscnk52/typst-sicons"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [sicons."15.13.0"]
 url = "https://packages.typst.org/preview/sicons-15.13.0.tar.gz"
 hash = "sha256-injvgnY5RDBV5Ni4Y1FM8dicVeYgNoL6nJ8US0Cq6+4="
@@ -25851,6 +26070,7 @@ license = [
 ]
 homepage = "https://gitlab.inria.fr/soliman/inria-touying-theme"
 
+<<<<<<< HEAD
 [simple-ntnu-report."0.1.2"]
 url = "https://packages.typst.org/preview/simple-ntnu-report-0.1.2.tar.gz"
 hash = "sha256-iUu2XA/Yr9ioElNlOHxoTKr+VjvVWlYrDq5wBOOmvag="
@@ -25885,6 +26105,8 @@ license = [
 ]
 homepage = "https://github.com/torsteinnh/simple-ntnu-report"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [simple-ntnu-report."0.1.0"]
 url = "https://packages.typst.org/preview/simple-ntnu-report-0.1.0.tar.gz"
 hash = "sha256-nTqMzQDZGzBaFRjEBK3HFJkCy6XQE4w6MoyEKpZaE2E="
@@ -26056,6 +26278,7 @@ license = [
 ]
 homepage = "https://github.com/UtkarshVerma/sleek-university-assignment"
 
+<<<<<<< HEAD
 [slydst."0.1.5"]
 url = "https://packages.typst.org/preview/slydst-0.1.5.tar.gz"
 hash = "sha256-koBCXklTJgihnbiIquI0/Gy4qK2oOFHT/bA8vMNnLj0="
@@ -26066,6 +26289,8 @@ license = [
 ]
 homepage = "https://github.com/glambrechts/slydst"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [slydst."0.1.4"]
 url = "https://packages.typst.org/preview/slydst-0.1.4.tar.gz"
 hash = "sha256-34VTPaekOfhY1jAt67QmHWHyYcnpv7TcgJMa1xe5pI0="
@@ -26607,6 +26832,7 @@ license = [
 ]
 homepage = "https://github.com/SillyFreak/typst-stack-pointer"
 
+<<<<<<< HEAD
 [starter-journal-article."0.5.1"]
 url = "https://packages.typst.org/preview/starter-journal-article-0.5.1.tar.gz"
 hash = "sha256-cUMMm/dfs/ZYNBjRHrwrKmKZlDLG75DxLwWzMj7dWJY="
@@ -26620,6 +26846,8 @@ license = [
 ]
 homepage = "https://github.com/HPDell/typst-starter-journal-article"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [starter-journal-article."0.4.0"]
 url = "https://packages.typst.org/preview/starter-journal-article-0.4.0.tar.gz"
 hash = "sha256-e4Be7W7KlECKwqXtSt7iLeBzmzbTuoQJZvz/v4r6rwQ="
@@ -27406,6 +27634,7 @@ license = [
 ]
 homepage = "https://github.com/DannySeidel/typst-dhbw-template"
 
+<<<<<<< HEAD
 [supercharged-hm."0.1.0"]
 url = "https://packages.typst.org/preview/supercharged-hm-0.1.0.tar.gz"
 hash = "sha256-0LzAEIEnBH0uTIrtGsAz8OYT6e5qWZTtZysvsy8qC/4="
@@ -27422,6 +27651,8 @@ license = [
 ]
 homepage = "https://github.com/FelixSchladt/hm-template"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [svgalpha."0.0.1"]
 url = "https://packages.typst.org/preview/svgalpha-0.0.1.tar.gz"
 hash = "sha256-s7q1MoGZ+rNvXHnqA8iFh3qv7HhIwlM4THW44XGZmO4="
@@ -27974,6 +28205,7 @@ license = [
 ]
 homepage = "https://github.com/maxcrees/tbl.typ"
 
+<<<<<<< HEAD
 [tblr."0.4.2"]
 url = "https://packages.typst.org/preview/tblr-0.4.2.tar.gz"
 hash = "sha256-izComxcQ7DMpDse6Zc1weGasGzrCp0SLeDBrv9IH3ck="
@@ -27987,6 +28219,8 @@ license = [
 ]
 homepage = "https://github.com/tshort/tblr"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tblr."0.4.1"]
 url = "https://packages.typst.org/preview/tblr-0.4.1.tar.gz"
 hash = "sha256-W+ATn3TwrhVQIk/sEEijBwFiDHuM4qFo6qHUovYwu/Q="
@@ -28073,6 +28307,7 @@ license = [
 ]
 homepage = "https://github.com/tshort/tblr"
 
+<<<<<<< HEAD
 [tdtr."0.4.3"]
 url = "https://packages.typst.org/preview/tdtr-0.4.3.tar.gz"
 hash = "sha256-oKinakXOXKrgwiHetw9vk2qwyXK1n9uVFjW0G9HJ3gU="
@@ -28109,6 +28344,8 @@ license = [
 ]
 homepage = "https://github.com/Vertsineu/typst-tdtr"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tdtr."0.4.0"]
 url = "https://packages.typst.org/preview/tdtr-0.4.0.tar.gz"
 hash = "sha256-2SlnFbQgxjC7rUWKdlAp62z38OEXjkqCCUZLajP48NU="
@@ -28265,6 +28502,7 @@ license = [
 ]
 homepage = "https://github.com/pammacdotnet/TFGUF"
 
+<<<<<<< HEAD
 [tgm-hit-protocol."0.2.0"]
 url = "https://packages.typst.org/preview/tgm-hit-protocol-0.2.0.tar.gz"
 hash = "sha256-PHqRBHmZrfY70B7GEI41OSJTPauFYf/btQk/CdJLK40="
@@ -28281,6 +28519,8 @@ license = [
 ]
 homepage = "https://github.com/TGM-HIT/typst-protocol"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tgm-hit-protocol."0.1.0"]
 url = "https://packages.typst.org/preview/tgm-hit-protocol-0.1.0.tar.gz"
 hash = "sha256-nw8It3tBXA2XRhuZm0k5RrWOw0mTiIaDJ74B+NSFu/k="
@@ -28297,6 +28537,7 @@ license = [
 ]
 homepage = "https://github.com/TGM-HIT/typst-protocol"
 
+<<<<<<< HEAD
 [tgm-hit-sew-lecture."0.1.0"]
 url = "https://packages.typst.org/preview/tgm-hit-sew-lecture-0.1.0.tar.gz"
 hash = "sha256-HucuuqsYf1FwwjiLsyZqrrlB1JjXIz/J8ChZOTMqDf8="
@@ -28316,6 +28557,8 @@ license = [
 ]
 homepage = "https://github.com/TGM-HIT/typst-sew-lecture"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tgm-hit-thesis."0.4.0"]
 url = "https://packages.typst.org/preview/tgm-hit-thesis-0.4.0.tar.gz"
 hash = "sha256-1oDjbsmMnO2UI2H9XdHeeuIB0nYFDYdSG+ZkWNUoFRw="
@@ -28972,6 +29215,7 @@ license = [
 ]
 homepage = "https://github.com/sylvanfranklin/tinyset"
 
+<<<<<<< HEAD
 [tiptoe."0.4.0"]
 url = "https://packages.typst.org/preview/tiptoe-0.4.0.tar.gz"
 hash = "sha256-zl7jbgluFcIR2YCmYHM9AeRROJFHyd3gPLdfx0I7jVA="
@@ -28982,6 +29226,8 @@ license = [
 ]
 homepage = "https://github.com/Mc-Zen/tiptoe"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tiptoe."0.3.2"]
 url = "https://packages.typst.org/preview/tiptoe-0.3.2.tar.gz"
 hash = "sha256-IHCEpsHBo+HWzYOYOaXjmvQWz54gIqB0pY9Llbe6Sn4="
@@ -29070,6 +29316,7 @@ license = [
     "MIT",
 ]
 
+<<<<<<< HEAD
 [tntt."0.4.1"]
 url = "https://packages.typst.org/preview/tntt-0.4.1.tar.gz"
 hash = "sha256-c1sheek5n7fHrPhqWi0HGoOVuftOKr210+fRTs1tjXo="
@@ -29084,6 +29331,8 @@ license = [
 ]
 homepage = "https://github.com/chillcicada/tntt"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tntt."0.4.0"]
 url = "https://packages.typst.org/preview/tntt-0.4.0.tar.gz"
 hash = "sha256-xddFs47asAogO4qMDMxW77I817cGo0LBqUGxkefX5pY="
@@ -29194,6 +29443,7 @@ license = [
 ]
 homepage = "https://github.com/chillcicada/tntt"
 
+<<<<<<< HEAD
 [to-stuff."0.4.0"]
 url = "https://packages.typst.org/preview/to-stuff-0.4.0.tar.gz"
 hash = "sha256-yrkGyOyoxR+Ii5WcIXsnclp3v39vtIxd6n0JPFo4C6I="
@@ -29204,6 +29454,8 @@ license = [
 ]
 homepage = "https://codeberg.org/boondoc/typst-to-stuff"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [to-stuff."0.3.1"]
 url = "https://packages.typst.org/preview/to-stuff-0.3.1.tar.gz"
 hash = "sha256-KojNXZxdZAXepx1qQE/4FUN2dP9BdSgYvbhugWlHrD8="
@@ -29266,6 +29518,7 @@ license = [
 ]
 homepage = "https://codeberg.org/jianweicheong/toffee-tufte"
 
+<<<<<<< HEAD
 [tonguetoquill-usaf-memo."1.0.0"]
 url = "https://packages.typst.org/preview/tonguetoquill-usaf-memo-1.0.0.tar.gz"
 hash = "sha256-mkwig3bJOc9vrJyLOC78yXp+Pez6G6Nyw2RVZbSav6Y="
@@ -29276,6 +29529,8 @@ license = [
 ]
 homepage = "https://github.com/nibsbin/tonguetoquill-usaf-memo"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tonguetoquill-usaf-memo."0.2.0"]
 url = "https://packages.typst.org/preview/tonguetoquill-usaf-memo-0.2.0.tar.gz"
 hash = "sha256-u6nxMw2KvKiFSXiXupwBuu3f2/kIluTsaMUlIXyH3jU="
@@ -30097,6 +30352,7 @@ license = [
 ]
 homepage = "https://github.com/tzhTaylor/touying-sjtu"
 
+<<<<<<< HEAD
 [touying-simpl-swufe."0.1.0"]
 url = "https://packages.typst.org/preview/touying-simpl-swufe-0.1.0.tar.gz"
 hash = "sha256-wu901p+f0WaIK+7X2Xh+m3EUDCWKfbwahnlxGnpl0vE="
@@ -30111,6 +30367,8 @@ license = [
 ]
 homepage = "https://github.com/leichaol/touying-simpl-swufe"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [touying-simpres."0.1.0"]
 url = "https://packages.typst.org/preview/touying-simpres-0.1.0.tar.gz"
 hash = "sha256-7qM/g5d1/4i3gJ8oU8A5PMyu4+e5Nsk+DgyaA5y6xOM="
@@ -30254,6 +30512,7 @@ license = [
 ]
 homepage = "https://github.com/ToyHugs/toy-cv"
 
+<<<<<<< HEAD
 [tracl."0.7.1"]
 url = "https://packages.typst.org/preview/tracl-0.7.1.tar.gz"
 hash = "sha256-yX2gBm6Sbv9wEqmEOcJEcy09TPC2yPqkcm6EK9vxlkM="
@@ -30267,6 +30526,8 @@ license = [
 ]
 homepage = "https://github.com/coli-saar/tracl"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tracl."0.7.0"]
 url = "https://packages.typst.org/preview/tracl-0.7.0.tar.gz"
 hash = "sha256-UjlX2yW5x7YPv/dSR6+S9Ne0MBP45ZeLJ2sskBtaElg="
@@ -30627,6 +30888,7 @@ license = [
     "MIT",
 ]
 
+<<<<<<< HEAD
 [tufted."0.1.0"]
 url = "https://packages.typst.org/preview/tufted-0.1.0.tar.gz"
 hash = "sha256-BcSO41/udgeklcgPfSR0iQYlC9doyRAaEbCgoM06FyM="
@@ -30642,6 +30904,8 @@ license = [
 ]
 homepage = "https://github.com/vsheg/tufted"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tufted."0.0.1"]
 url = "https://packages.typst.org/preview/tufted-0.0.1.tar.gz"
 hash = "sha256-W+a4ylO6SYFD/URbi2swC3Gaw2XZaSyRq10aMbboYE4="
@@ -30865,6 +31129,7 @@ license = [
 ]
 homepage = "https://github.com/QuantumRange/twig"
 
+<<<<<<< HEAD
 [twilight-book."0.1.4"]
 url = "https://packages.typst.org/preview/twilight-book-0.1.4.tar.gz"
 hash = "sha256-aoRPg5Rw3qT5LCQ6+YS9jr0mZRKXAkx8tVfk3vigavc="
@@ -30877,6 +31142,8 @@ license = [
 ]
 homepage = "https://github.com/CrossDark/TwilightBook/"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [tyipa."0.1.0"]
 url = "https://packages.typst.org/preview/tyipa-0.1.0.tar.gz"
 hash = "sha256-DYIL0JnmjvxNTFj5XFHYuWPrbcbp+R8vSSE6cx4gVtw="
@@ -31038,6 +31305,7 @@ license = [
 ]
 homepage = "https://github.com/TeddyHuang-00/typpuccino"
 
+<<<<<<< HEAD
 [typsidian."0.0.2"]
 url = "https://packages.typst.org/preview/typsidian-0.0.2.tar.gz"
 hash = "sha256-SmCqqDSgSMlcQogIFiQvKG2pnGVetQ8Ov8mN3HhsOQ0="
@@ -31053,6 +31321,8 @@ license = [
 ]
 homepage = "https://github.com/k0src/Typsidian"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [typsidian."0.0.1"]
 url = "https://packages.typst.org/preview/typsidian-0.0.1.tar.gz"
 hash = "sha256-TyRIPmy09EkL0PByHcQqX5/kDKDHhfh96Vl0xolxq04="
@@ -31272,6 +31542,7 @@ license = [
 ]
 homepage = "https://github.com/manjavacas/typslides"
 
+<<<<<<< HEAD
 [typsy."0.2.1"]
 url = "https://packages.typst.org/preview/typsy-0.2.1.tar.gz"
 hash = "sha256-hume4ASj1gi4ceDD8zcbmdnEoFTc1GUkcCKA03J0Yts="
@@ -31282,6 +31553,8 @@ license = [
 ]
 homepage = "https://github.com/patrick-kidger/typsy"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [typsy."0.2.0"]
 url = "https://packages.typst.org/preview/typsy-0.2.0.tar.gz"
 hash = "sha256-/8KOodI0vfunokhfnYICUU/vu9KrM4qXNJTEbKUGeuI="
@@ -31534,6 +31807,7 @@ license = [
 ]
 homepage = "https://github.com/MDLC01/unichar"
 
+<<<<<<< HEAD
 [unified-uia-thesis."0.1.0"]
 url = "https://packages.typst.org/preview/unified-uia-thesis-0.1.0.tar.gz"
 hash = "sha256-C9B4/mYW35RRWqMf/yxLgPLRW2Z+Ro6ZtMfCXd8vew8="
@@ -31544,6 +31818,8 @@ license = [
 ]
 homepage = "https://github.com/sebastos1/unified-uia-thesis"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [unify."0.7.1"]
 url = "https://packages.typst.org/preview/unify-0.7.1.tar.gz"
 hash = "sha256-1GvuZQ2u9Ty7hqFxdsVg3yJ/S6rFa/c0/HYjoR2PESA="
@@ -31744,6 +32020,7 @@ license = [
 ]
 homepage = "https://github.com/islatri/universal-jlu-thesis"
 
+<<<<<<< HEAD
 [unofficial-cambridge-polylux-theme."0.0.1"]
 url = "https://packages.typst.org/preview/unofficial-cambridge-polylux-theme-0.0.1.tar.gz"
 hash = "sha256-A3AoCb4MmtXdk3+IzGuJ5bYqMbbQaPtLuZvUeuu9xr0="
@@ -31757,6 +32034,8 @@ license = [
     "MIT",
 ]
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [unofficial-cityu-phd-thesis."1.0.0"]
 url = "https://packages.typst.org/preview/unofficial-cityu-phd-thesis-1.0.0.tar.gz"
 hash = "sha256-KXkCStuhPf5ZuWr4s//mpmjPMA0ftXUE1w5KOMdVNWw="
@@ -32016,6 +32295,7 @@ license = [
 ]
 homepage = "https://github.com/AnsgarLichter/unofficial-hka-thesis"
 
+<<<<<<< HEAD
 [unofficial-kth-thesis-proposal."0.1.0"]
 url = "https://packages.typst.org/preview/unofficial-kth-thesis-proposal-0.1.0.tar.gz"
 hash = "sha256-NbLE/4DeP+0tSq/FIMYnxlKF0MbG8CFTG0aSjZb5VR8="
@@ -32026,6 +32306,8 @@ license = [
 ]
 homepage = "https://github.com/cseas002/kth-thesis-proposal"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [unofficial-sdu-thesis."1.0.0"]
 url = "https://packages.typst.org/preview/unofficial-sdu-thesis-1.0.0.tar.gz"
 hash = "sha256-RnBRBBqyjwEmjw+I7s8ld1fxRxRuwcx/biTDFXZzoJM="
@@ -33238,6 +33520,7 @@ license = [
 ]
 homepage = "https://github.com/typst/templates"
 
+<<<<<<< HEAD
 [wordc."0.1.0"]
 url = "https://packages.typst.org/preview/wordc-0.1.0.tar.gz"
 hash = "sha256-9s1bk/gwK81gdiRKgPeKj6o2D69poUAfSUZ7sd4RMjA="
@@ -33248,6 +33531,8 @@ license = [
 ]
 homepage = "https://github.com/MicDZ/typst-wordc"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [wordometer."0.1.5"]
 url = "https://packages.typst.org/preview/wordometer-0.1.5.tar.gz"
 hash = "sha256-8641l2B26RMq4aNzNnFHjJeTzqH0JD/utjOHnn81RS8="
@@ -33386,6 +33671,7 @@ license = [
 ]
 homepage = "https://github.com/fuine/wut-thesis-typst"
 
+<<<<<<< HEAD
 [xarrow."0.4.0"]
 url = "https://packages.typst.org/preview/xarrow-0.4.0.tar.gz"
 hash = "sha256-Chk9k1Cxahw8zf6y/W0IXjtbbrZIFwUJW4q2UiozsL4="
@@ -33396,6 +33682,8 @@ license = [
 ]
 homepage = "https://codeberg.org/loutr/typst-xarrow/"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [xarrow."0.3.1"]
 url = "https://packages.typst.org/preview/xarrow-0.3.1.tar.gz"
 hash = "sha256-5DdscbcplvUldzNiGpVCbutM23uVmm+zniXHM3ayN+E="
@@ -33570,6 +33858,7 @@ license = [
 ]
 homepage = "https://github.com/visika/yuan-resume"
 
+<<<<<<< HEAD
 [zap."0.5.0"]
 url = "https://packages.typst.org/preview/zap-0.5.0.tar.gz"
 hash = "sha256-bbs5DMPey9+Pxqq1ezSiJ5iDFSCzZxe/GXdU2C6PFeM="
@@ -33582,6 +33871,8 @@ license = [
 ]
 homepage = "https://github.com/l0uisgrange/zap"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [zap."0.4.0"]
 url = "https://packages.typst.org/preview/zap-0.4.0.tar.gz"
 hash = "sha256-UX6zBUjNEGrH+fDwRfYV8ROTpoQz06TJpPILelCD/eU="
@@ -33642,6 +33933,7 @@ license = [
 ]
 homepage = "https://github.com/l0uisgrange/zap"
 
+<<<<<<< HEAD
 [zebraw."0.6.1"]
 url = "https://packages.typst.org/preview/zebraw-0.6.1.tar.gz"
 hash = "sha256-zixd/XpbcsmSQQjc0dIsivNAOWUWCh+KqB4usGvAeLg="
@@ -33652,6 +33944,8 @@ license = [
 ]
 homepage = "https://github.com/hongjr03/typst-zebraw"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 [zebraw."0.6.0"]
 url = "https://packages.typst.org/preview/zebraw-0.6.0.tar.gz"
 hash = "sha256-hjEQko3FPJ+HhPuOBEl/V6Qc3MLvAB2NSq9QeP1nZ3E="

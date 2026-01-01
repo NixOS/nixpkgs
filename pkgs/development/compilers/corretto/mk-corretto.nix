@@ -28,6 +28,10 @@ in
 jdk.overrideAttrs (
   finalAttrs: oldAttrs: {
     inherit pname version src;
+<<<<<<< HEAD
+=======
+    name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
       jdk

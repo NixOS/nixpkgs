@@ -56,11 +56,20 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";
     description = "Custom NOR firmware loader/IPSW generator for the iPhone";
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    homepage = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";
+    description = "Custom NOR firmware loader/IPSW generator for the iPhone";
+    license = licenses.gpl3Plus;
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

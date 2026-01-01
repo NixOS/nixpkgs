@@ -26,11 +26,19 @@ buildPythonPackage rec {
   # uses networking
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/cedadev/ndg_httpsclient/";
     description = "Provide enhanced HTTPS support for httplib and urllib2 using PyOpenSSL";
     mainProgram = "ndg_httpclient";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/cedadev/ndg_httpsclient/";
+    description = "Provide enhanced HTTPS support for httplib and urllib2 using PyOpenSSL";
+    mainProgram = "ndg_httpclient";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

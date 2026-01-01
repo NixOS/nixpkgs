@@ -27,6 +27,7 @@ buildPythonPackage rec {
     sed -i "s|/usr/share/fonts|/nonexisting-fonts-path|" aafigure/PILhelper.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "ASCII art to image converter";
     mainProgram = "aafigure";
@@ -34,5 +35,14 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ bjornfor ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "ASCII art to image converter";
+    mainProgram = "aafigure";
+    homepage = "https://launchpad.net/aafigure/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ bjornfor ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

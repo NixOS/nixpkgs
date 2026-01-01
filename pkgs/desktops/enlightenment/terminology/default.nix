@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful terminal emulator based on EFL";
     homepage = "https://www.enlightenment.org/about-terminology";
@@ -49,5 +50,17 @@ stdenv.mkDerivation rec {
       ftrvxmtrx
     ];
     teams = [ lib.teams.enlightenment ];
+=======
+  meta = with lib; {
+    description = "Powerful terminal emulator based on EFL";
+    homepage = "https://www.enlightenment.org/about-terminology";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      matejc
+      ftrvxmtrx
+    ];
+    teams = [ teams.enlightenment ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

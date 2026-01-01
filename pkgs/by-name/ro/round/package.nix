@@ -19,11 +19,19 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool for rounding images";
     homepage = "https://github.com/mingrammer/round";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ addict3d ];
+=======
+  meta = with lib; {
+    description = "CLI tool for rounding images";
+    homepage = "https://github.com/mingrammer/round";
+    license = licenses.mit;
+    maintainers = with maintainers; [ addict3d ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "round";
   };
 }

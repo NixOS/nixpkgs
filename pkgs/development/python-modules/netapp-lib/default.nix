@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netapp_lib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Netapp-lib is required for Ansible deployments to interact with NetApp storage systems";
     homepage = "https://netapp.io/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Netapp-lib is required for Ansible deployments to interact with NetApp storage systems";
+    homepage = "https://netapp.io/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

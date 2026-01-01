@@ -50,11 +50,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhepmc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easy-to-use Python bindings for HepMC3";
     homepage = "https://github.com/scikit-hep/pyhepmc";
     changelog = "https://github.com/scikit-hep/pyhepmc/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Easy-to-use Python bindings for HepMC3";
+    homepage = "https://github.com/scikit-hep/pyhepmc";
+    changelog = "https://github.com/scikit-hep/pyhepmc/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

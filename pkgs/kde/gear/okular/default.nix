@@ -10,7 +10,10 @@
   libzip,
   djvulibre,
   ebook_tools,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   discount,
 }:
 mkKdeDerivation {
@@ -31,6 +34,7 @@ mkKdeDerivation {
     ebook_tools
     discount
   ];
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "okular-extreme-downsample-fix.patch";
@@ -38,5 +42,7 @@ mkKdeDerivation {
       hash = "sha256-S338z+92nBYMP6uqvk7rP9AsIoZ0JJCVu9Wo4NVSufk=";
     })
   ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta.mainProgram = "okular";
 }

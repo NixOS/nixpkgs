@@ -38,9 +38,16 @@ buildPythonPackage rec {
     "fluent.sender"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Structured logger for Fluentd (Python)";
     homepage = "https://github.com/fluent/fluent-logger-python";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Structured logger for Fluentd (Python)";
+    homepage = "https://github.com/fluent/fluent-logger-python";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

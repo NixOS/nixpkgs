@@ -22,11 +22,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Display, “Old Style” soft-serif typeface inspired by early 20th century typefaces";
     homepage = "https://github.com/undercasetype/Fraunces";
     license = lib.licenses.ofl;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Display, “Old Style” soft-serif typeface inspired by early 20th century typefaces";
+    homepage = "https://github.com/undercasetype/Fraunces";
+    license = licenses.ofl;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

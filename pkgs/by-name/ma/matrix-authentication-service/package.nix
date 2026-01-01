@@ -18,21 +18,36 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-LpjDmSadmga7L93y3UNEnMJQHAeANSbG0qRR7XLprfk=";
   };
 
   cargoHash = "sha256-PsQUA6KgkbKmVwnSUfAMqnULCIMJ4mLjGIGYRlhB4Pk=";
+=======
+    hash = "sha256-JSuhI38fLi9z7dMRL04eQ1UdMMe8S/F3qXrJT1DwnS0=";
+  };
+
+  cargoHash = "sha256-PNPZFxCsBXwiQ2leDyHWOFtEQJW0DxU6pTEs04sdM+M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
+<<<<<<< HEAD
     hash = "sha256-3OHKomEml0/g8E3S0fKPcscbv3BoOJ9dQrgLNSLHhvg=";
+=======
+    hash = "sha256-0YWguliIJjYh1IUUIX4/CHDYwvUk/M2Hz15tL558tws=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   npmRoot = "frontend";
@@ -87,6 +102,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
   passthru.updateScript = nix-update-script {
     extraArgs = [

@@ -19,11 +19,19 @@
 }:
 let
   pname = "bash";
+<<<<<<< HEAD
   version = "5.2.37";
 
   src = fetchurl {
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
     hash = "sha256-lZmyLs0dV4etfTt78MWfMSszltHigRdd0fikAU2mIf8=";
+=======
+  version = "5.2.15";
+
+  src = fetchurl {
+    url = "mirror://gnu/bash/bash-${version}.tar.gz";
+    sha256 = "132qng0jy600mv1fs95ylnlisx2wavkkgpb19c6kmz7lnmjhjwhk";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -93,12 +101,21 @@ bootBash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
+<<<<<<< HEAD
     meta = {
       description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
       homepage = "https://www.gnu.org/software/bash";
       license = lib.licenses.gpl3Plus;
       teams = [ lib.teams.minimal-bootstrap ];
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
+      homepage = "https://www.gnu.org/software/bash";
+      license = licenses.gpl3Plus;
+      teams = [ teams.minimal-bootstrap ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

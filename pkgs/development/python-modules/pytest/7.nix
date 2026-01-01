@@ -102,6 +102,7 @@ let
 
     pythonImportsCheck = [ "pytest" ];
 
+<<<<<<< HEAD
     meta = {
       description = "Framework for writing tests";
       homepage = "https://docs.pytest.org";
@@ -111,6 +112,18 @@ let
         madjar
       ];
       license = lib.licenses.mit;
+=======
+    meta = with lib; {
+      description = "Framework for writing tests";
+      homepage = "https://docs.pytest.org";
+      changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
+      maintainers = with maintainers; [
+        lovek323
+        madjar
+        lsix
+      ];
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

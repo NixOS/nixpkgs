@@ -39,11 +39,20 @@ buildPythonPackage rec {
     "connect_timeouterror"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to interact the OpenTherm Gateway";
     homepage = "https://github.com/mvn23/pyotgw";
     changelog = "https://github.com/mvn23/pyotgw/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to interact the OpenTherm Gateway";
+    homepage = "https://github.com/mvn23/pyotgw";
+    changelog = "https://github.com/mvn23/pyotgw/blob/${version}/CHANGELOG.md";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

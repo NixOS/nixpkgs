@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-/Ul8+5MmTntQ0OprfG4QhUNjc3PktCandzTTWn4FD0Y=";
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for easy management of Tensorflow containers";
     homepage = "https://github.com/pop-os/tensorman";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ thefenriswolf ];
+=======
+  meta = with lib; {
+    description = "Utility for easy management of Tensorflow containers";
+    homepage = "https://github.com/pop-os/tensorman";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ thefenriswolf ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tensorman";
   };
 }

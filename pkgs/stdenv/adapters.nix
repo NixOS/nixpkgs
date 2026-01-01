@@ -310,6 +310,7 @@ rec {
       let
         bintools = stdenv.cc.bintools.override {
           extraBuildCommands = ''
+<<<<<<< HEAD
             pushd $out/bin
             ln -s ${pkgs.buildPackages.mold}/bin/${stdenv.cc.bintools.targetPrefix}ld.mold ${stdenv.cc.bintools.targetPrefix}ld.mold
           '' # Pre-generated configure scripts call the linker binary without the target prefix when cross compiling.
@@ -318,6 +319,11 @@ rec {
           ''
           + ''
             popd
+=======
+            wrap ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.mold}/bin/ld.mold
+            wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.mold}/bin/ld.mold
+            wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.buildPackages.mold}/bin/ld.mold
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           '';
         };
       in

@@ -35,7 +35,11 @@ stdenv.mkDerivation {
 
   inherit (topkg) buildPhase installPhase;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Basic types for computer graphics in OCaml";
     longDescription = ''
       Gg is an OCaml module providing basic types for computer graphics. It
@@ -45,8 +49,13 @@ stdenv.mkDerivation {
     '';
     inherit homepage;
     inherit (ocaml.meta) platforms;
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.jirkamarsik ];
+=======
+    license = licenses.bsd3;
+    maintainers = [ maintainers.jirkamarsik ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }

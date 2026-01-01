@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     airsonic-starts = nixosTests.airsonic;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Personal media streamer";
     homepage = "https://airsonic.github.io";
@@ -30,5 +31,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ disassembler ];
+=======
+  meta = with lib; {
+    description = "Personal media streamer";
+    homepage = "https://airsonic.github.io";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ disassembler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

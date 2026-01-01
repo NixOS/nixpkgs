@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gemfileparser2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to parse Rubygem gemspec and Gemfile files";
     homepage = "https://github.com/aboutcode-org/gemfileparser2";
@@ -40,5 +41,16 @@ buildPythonPackage rec {
       gpl3Plus
     ];
     maintainers = with lib.maintainers; [ harvidsen ];
+=======
+  meta = with lib; {
+    description = "Library to parse Rubygem gemspec and Gemfile files";
+    homepage = "https://github.com/aboutcode-org/gemfileparser2";
+    changelog = "https://github.com/aboutcode-org/gemfileparser2/blob/v${version}/CHANGELOG.rst";
+    license = with licenses; [
+      mit # or
+      gpl3Plus
+    ];
+    maintainers = with maintainers; [ harvidsen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

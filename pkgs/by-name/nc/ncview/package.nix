@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXt
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Visual browser for netCDF format files";
     homepage = "http://meteora.ucsd.edu/~pierce/ncview_home_page.html";
@@ -43,5 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ncview";
     maintainers = with lib.maintainers; [ jmettes ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Visual browser for netCDF format files";
+    homepage = "http://meteora.ucsd.edu/~pierce/ncview_home_page.html";
+    license = licenses.gpl3Plus;
+    mainProgram = "ncview";
+    maintainers = with maintainers; [ jmettes ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

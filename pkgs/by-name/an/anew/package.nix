@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for adding new lines to files, skipping duplicates";
     mainProgram = "anew";
     homepage = "https://github.com/tomnomnom/anew";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tool for adding new lines to files, skipping duplicates";
+    mainProgram = "anew";
+    homepage = "https://github.com/tomnomnom/anew";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

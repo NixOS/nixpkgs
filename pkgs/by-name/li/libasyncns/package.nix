@@ -23,10 +23,18 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://0pointer.de/lennart/projects/libasyncns/";
     description = "C library for Linux/Unix for executing name service queries asynchronously";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://0pointer.de/lennart/projects/libasyncns/";
+    description = "C library for Linux/Unix for executing name service queries asynchronously";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

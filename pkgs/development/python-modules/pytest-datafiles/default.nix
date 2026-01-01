@@ -31,10 +31,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_datafiles" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to create a tmpdir containing predefined files/directories";
     homepage = "https://github.com/omarkohl/pytest-datafiles";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pytest plugin to create a tmpdir containing predefined files/directories";
+    homepage = "https://github.com/omarkohl/pytest-datafiles";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

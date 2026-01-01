@@ -73,6 +73,7 @@ python3Packages.buildPythonApplication rec {
     ln -s $out/bin/com.github.geigi.cozy $out/bin/cozy
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modern audio book player for Linux";
     homepage = "https://cozy.geigi.de/";
@@ -83,5 +84,17 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.geigi.cozy";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Modern audio book player for Linux";
+    homepage = "https://cozy.geigi.de/";
+    maintainers = with maintainers; [
+      makefu
+      aleksana
+    ];
+    license = licenses.gpl3Plus;
+    mainProgram = "com.github.geigi.cozy";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

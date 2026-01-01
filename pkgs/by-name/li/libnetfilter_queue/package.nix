@@ -22,10 +22,18 @@ stdenv.mkDerivation rec {
     libnfnetlink
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.netfilter.org/projects/libnetfilter_queue/";
     description = "Userspace API to packets queued by the kernel packet filter";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.netfilter.org/projects/libnetfilter_queue/";
+    description = "Userspace API to packets queued by the kernel packet filter";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,6 +31,11 @@ python3Packages.buildPythonApplication rec {
     versionCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Command-line utility that checks for best practices in SaltStack";
     homepage = "https://salt-lint.readthedocs.io/en/latest/";

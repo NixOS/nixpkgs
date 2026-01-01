@@ -27,11 +27,20 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/jmcollin78/versatile-thermostat-ui-card/releases/tag/${version}";
     description = "Home Assistant card for the Versatile Thermostat integration";
     homepage = "https://github.com/jmcollin78/versatile-thermostat-ui-card";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pwoelfel ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/jmcollin78/versatile-thermostat-ui-card/releases/tag/${version}";
+    description = "Home Assistant card for the Versatile Thermostat integration";
+    homepage = "https://github.com/jmcollin78/versatile-thermostat-ui-card";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pwoelfel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

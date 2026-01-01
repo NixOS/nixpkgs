@@ -29,11 +29,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam ];
 
+<<<<<<< HEAD
   meta = {
     description = "Virtual console locking program";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Virtual console locking program";
+    license = licenses.gpl2Only;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vlock";
   };
 }

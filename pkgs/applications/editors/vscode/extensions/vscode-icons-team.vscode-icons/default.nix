@@ -12,7 +12,11 @@
 
 let
   vsix = stdenvNoCC.mkDerivation (finalAttrs: {
+<<<<<<< HEAD
     name = "vscode-icons-${finalAttrs.version}.vsix";
+=======
+    name = "vscode-icons-${finalAttrs.version}.zip";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pname = "vscode-icons-vsix";
     version = "12.15.0";
 

@@ -49,10 +49,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "drivelib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easy access to the most common Google Drive API calls";
     homepage = "https://github.com/Lykos153/python-drivelib";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ gravndal ];
+=======
+  meta = with lib; {
+    description = "Easy access to the most common Google Drive API calls";
+    homepage = "https://github.com/Lykos153/python-drivelib";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ gravndal ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

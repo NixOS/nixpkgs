@@ -3,13 +3,20 @@
   stdenvNoCC,
   fetchFromGitHub,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   dart-sass,
   nix-update-script,
   nixosTests,
 }:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
   version = "25.11.1";
@@ -20,13 +27,22 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-6shFVaCtPQeZCeeswAQHgcXOwVwABNa3ljsdUG63QGo=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm_10.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit
       pname
       version
       src
+<<<<<<< HEAD
       ;
     pnpm = pnpm_10;
+=======
+
+      ;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 2;
     hash = "sha256-TtazfRhcniA1H//C95AMH8/Pw+Rbtinlfg7dDAmSk1w=";
   };
@@ -34,8 +50,12 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     nodejs
     dart-sass
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildPhase = ''
@@ -69,6 +89,7 @@ stdenvNoCC.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Very simple static homepage for your server";
     homepage = "https://github.com/bastienwirtz/homer";
@@ -79,5 +100,17 @@ stdenvNoCC.mkDerivation rec {
       christoph-heiss
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Very simple static homepage for your server";
+    homepage = "https://github.com/bastienwirtz/homer";
+    changelog = "https://github.com/bastienwirtz/homer/releases";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      stunkymonkey
+      christoph-heiss
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

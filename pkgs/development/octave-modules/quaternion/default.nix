@@ -6,11 +6,19 @@
 
 buildOctavePackage rec {
   pname = "quaternion";
+<<<<<<< HEAD
   version = "2.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
     sha256 = "sha256-kY5mU7dJuUjprub+LTc1BH6YGdEnP9ydX0lRU0fmOYE=";
+=======
+  version = "2.4.0";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
+    sha256 = "040ncksf0xz32qmi4484xs3q01nappxrsvwwa60g04yjy7c4sbac";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Octave replaced many of the is_thing_type check function with isthing.

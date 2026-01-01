@@ -92,10 +92,17 @@ stdenv.mkDerivation {
     inherit ipuVersion ipuTarget;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "HAL for processing of images in userspace";
     homepage = "https://github.com/intel/ipu6-camera-hal";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "HAL for processing of images in userspace";
+    homepage = "https://github.com/intel/ipu6-camera-hal";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

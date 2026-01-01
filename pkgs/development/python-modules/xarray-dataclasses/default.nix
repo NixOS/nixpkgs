@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xarray_dataclasses" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Xarray data creation made easy by dataclass";
     homepage = "https://github.com/astropenguin/xarray-dataclasses";
     changelog = "https://github.com/astropenguin/xarray-dataclasses/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Xarray data creation made easy by dataclass";
+    homepage = "https://github.com/astropenguin/xarray-dataclasses";
+    changelog = "https://github.com/astropenguin/xarray-dataclasses/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

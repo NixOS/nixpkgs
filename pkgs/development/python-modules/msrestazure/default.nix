@@ -42,11 +42,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "msrest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Runtime library 'msrestazure' for AutoRest generated Python clients";
     homepage = "https://azure.microsoft.com/en-us/develop/python/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Runtime library 'msrestazure' for AutoRest generated Python clients";
+    homepage = "https://azure.microsoft.com/en-us/develop/python/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bendlas
     ];
   };

@@ -7,16 +7,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rkik";
+<<<<<<< HEAD
   version = "2.0.0";
+=======
+  version = "1.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "aguacero7";
     repo = "rkik";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-qZVHDWVCRW/xuiEXBo923R2Wn8rK5VqKatwekWxkSnk=";
   };
 
   cargoHash = "sha256-zJ7xqidEkfxSIL/rR/hLR/vDn0Ac85AOFn6mluUER/8=";
+=======
+    hash = "sha256-bT1WTs/gei8CGundLynVgekNFlyY8p/mK73Utrw8N9I=";
+  };
+
+  cargoHash = "sha256-iu9vADHhems0pzQ0Hs+Zp0dZ4K185M5L4fftBaAZdvE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script { };
 

@@ -32,11 +32,20 @@ mkDerivation rec {
     kcrash
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Takes care of your health and regularly breaks your work to avoid repetitive strain injury (RSI)";
     mainProgram = "rsibreak";
     license = lib.licenses.gpl2;
     homepage = "https://www.kde.org/applications/utilities/rsibreak/";
     maintainers = with lib.maintainers; [ vandenoever ];
+=======
+  meta = with lib; {
+    description = "Takes care of your health and regularly breaks your work to avoid repetitive strain injury (RSI)";
+    mainProgram = "rsibreak";
+    license = licenses.gpl2;
+    homepage = "https://www.kde.org/applications/utilities/rsibreak/";
+    maintainers = with maintainers; [ vandenoever ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

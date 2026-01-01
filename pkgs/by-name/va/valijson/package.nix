@@ -20,10 +20,18 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Header-only C++ library for JSON Schema validation, with support for many popular parsers";
     homepage = "https://github.com/tristanpenman/valijson";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Header-only C++ library for JSON Schema validation, with support for many popular parsers";
+    homepage = "https://github.com/tristanpenman/valijson";
+    license = licenses.bsd2;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

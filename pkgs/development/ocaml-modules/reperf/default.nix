@@ -27,7 +27,11 @@ buildDunePackage {
     printbox-text
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Native Reason + JSOO cross-platform performance benchmarking tools";
     longDescription = ''
       Inspired by the core_bench tools from Janestreet.
@@ -42,6 +46,10 @@ buildDunePackage {
     '';
     homepage = "https://github.com/bryphe/reperf";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

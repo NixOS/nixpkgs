@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "CORS support for CherryPy";
     homepage = "https://github.com/cherrypy/cherrypy-cors";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jpts ];
+=======
+  meta = with lib; {
+    description = "CORS support for CherryPy";
+    homepage = "https://github.com/cherrypy/cherrypy-cors";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jpts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

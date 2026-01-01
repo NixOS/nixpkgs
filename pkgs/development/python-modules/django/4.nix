@@ -45,16 +45,27 @@
 
 buildPythonPackage rec {
   pname = "django";
+<<<<<<< HEAD
   version = "4.2.27";
   format = "pyproject";
 
   disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+=======
+  version = "4.2.26";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-vdY85Ib2knRFLPmZZ6ojiD5R9diuvpVut1+nOVXSp0Y=";
+=======
+    hash = "sha256-2NkkQcsY+BDvLGtvjYfGwgAK2S6LDbbcl7CwbwuF5a0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -137,7 +148,11 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   doCheck =
     !stdenv.hostPlatform.isDarwin
@@ -164,12 +179,21 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     mainProgram = "django-admin";
     homepage = "https://www.djangoproject.com";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

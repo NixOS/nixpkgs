@@ -9,7 +9,11 @@ stdenvNoCC.mkDerivation rec {
   version = "1.2";
 
   src = fetchzip {
+<<<<<<< HEAD
     url = "https://jamiewilson.github.io/norwester/assets/norwester.zip";
+=======
+    url = "http://jamiewilson.io/norwester/assets/norwester.zip";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     stripRoot = false;
     hash = "sha256-Ak/nobrQE/XYGWs/IhlZlTp74ff+s4adUR6Sht5Yf8g=";
   };
@@ -23,10 +27,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://jamiewilson.github.io/norwester/";
     description = "Condensed geometric sans serif by Jamie Wilson";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://jamiewilson.io/norwester";
+    description = "Condensed geometric sans serif by Jamie Wilson";
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

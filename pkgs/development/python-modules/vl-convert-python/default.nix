@@ -24,7 +24,12 @@ buildPythonPackage rec {
   patches = [ ./libffi-sys-system-feature.patch ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
+<<<<<<< HEAD
     inherit pname version src;
+=======
+    inherit src;
+    name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-oPUpX7aMZBSsVujcXkIBNL8pk2JJ0RyBCwoVsuARkkQ=";
   };
 

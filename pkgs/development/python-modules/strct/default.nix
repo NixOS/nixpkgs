@@ -40,10 +40,18 @@ buildPythonPackage rec {
     "strct.sortedlists"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small pure-python package for data structure related utility functions";
     homepage = "https://github.com/shaypal5/strct";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+  meta = with lib; {
+    description = "Small pure-python package for data structure related utility functions";
+    homepage = "https://github.com/shaypal5/strct";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

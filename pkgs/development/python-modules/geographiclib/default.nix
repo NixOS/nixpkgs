@@ -21,10 +21,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geographiclib" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://geographiclib.sourceforge.io";
     description = "Algorithms for geodesics (Karney, 2013) for solving the direct and inverse problems for an ellipsoid of revolution";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://geographiclib.sourceforge.io";
+    description = "Algorithms for geodesics (Karney, 2013) for solving the direct and inverse problems for an ellipsoid of revolution";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

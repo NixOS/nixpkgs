@@ -28,11 +28,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Shellcode writing toolkit";
     homepage = "https://github.com/reyammer/shellnoob";
     mainProgram = "snoob";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
+=======
+  meta = with lib; {
+    description = "Shellcode writing toolkit";
+    homepage = "https://github.com/reyammer/shellnoob";
+    mainProgram = "snoob";
+    license = licenses.mit;
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

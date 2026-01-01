@@ -39,5 +39,9 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/fatedier/frp";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

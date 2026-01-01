@@ -44,7 +44,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "File system visualizer in cyberspace";
     longDescription = ''
       fsv (pronounced eff-ess-vee) is a file system visualizer in cyberspace.
@@ -55,9 +59,15 @@ stdenv.mkDerivation rec {
       by the host computer's memory and graphics hardware.
     '';
     homepage = "https://github.com/jabl/fsv";
+<<<<<<< HEAD
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rnhmjoj ];
+=======
+    license = licenses.lgpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rnhmjoj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fsv";
   };
 }

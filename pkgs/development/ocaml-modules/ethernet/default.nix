@@ -28,10 +28,18 @@ buildDunePackage rec {
     logs
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "OCaml Ethernet (IEEE 802.3) layer, used in MirageOS";
     homepage = "https://github.com/mirage/ethernet";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "OCaml Ethernet (IEEE 802.3) layer, used in MirageOS";
+    homepage = "https://github.com/mirage/ethernet";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

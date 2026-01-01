@@ -27,10 +27,18 @@ python3Packages.buildPythonApplication rec {
   # There is no `pythonImportsCheck` because the package only outputs a binary: tflocal
   dontUsePythonImportsCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Terraform CLI wrapper to deploy your Terraform applications directly to LocalStack";
     homepage = "https://github.com/localstack/terraform-local";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shivaraj-bh ];
+=======
+  meta = with lib; {
+    description = "Terraform CLI wrapper to deploy your Terraform applications directly to LocalStack";
+    homepage = "https://github.com/localstack/terraform-local";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ shivaraj-bh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

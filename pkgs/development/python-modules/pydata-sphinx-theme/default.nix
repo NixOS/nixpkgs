@@ -38,11 +38,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydata_sphinx_theme" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bootstrap-based Sphinx theme from the PyData community";
     homepage = "https://github.com/pydata/pydata-sphinx-theme";
     changelog = "https://github.com/pydata/pydata-sphinx-theme/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Bootstrap-based Sphinx theme from the PyData community";
+    homepage = "https://github.com/pydata/pydata-sphinx-theme";
+    changelog = "https://github.com/pydata/pydata-sphinx-theme/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

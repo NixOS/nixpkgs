@@ -29,11 +29,19 @@ appimageTools.wrapType2 rec {
       substituteInPlace $out/share/applications/kchat-desktop.desktop --replace-fail 'Exec=AppRun' 'Exec=${meta.mainProgram}'
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Instant messaging service part of Infomaniak KSuite";
     homepage = "https://www.infomaniak.com/en/apps/download-kchat";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.vinetos ];
+=======
+  meta = with lib; {
+    description = "Instant messaging service part of Infomaniak KSuite";
+    homepage = "https://www.infomaniak.com/en/apps/download-kchat";
+    license = licenses.unfree;
+    maintainers = [ maintainers.vinetos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kchat";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

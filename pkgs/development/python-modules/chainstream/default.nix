@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "chainstream" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Chain I/O streams together into a single stream";
     homepage = "https://github.com/rrthomas/chainstream";
     license = lib.licenses.cc-by-sa-40;
     maintainers = with lib.maintainers; [ cbley ];
+=======
+  meta = with lib; {
+    description = "Chain I/O streams together into a single stream";
+    homepage = "https://github.com/rrthomas/chainstream";
+    license = licenses.cc-by-sa-40;
+    maintainers = with maintainers; [ cbley ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

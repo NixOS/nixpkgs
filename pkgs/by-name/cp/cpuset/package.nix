@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python application that forms a wrapper around the standard Linux filesystem calls, to make using the cpusets facilities in the Linux kernel easier";
     homepage = "https://github.com/SUSE/cpuset";
@@ -37,5 +38,14 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "cset";
     maintainers = with lib.maintainers; [ wykurz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Python application that forms a wrapper around the standard Linux filesystem calls, to make using the cpusets facilities in the Linux kernel easier";
+    homepage = "https://github.com/SUSE/cpuset";
+    license = licenses.gpl2;
+    mainProgram = "cset";
+    maintainers = with maintainers; [ wykurz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

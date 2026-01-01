@@ -49,12 +49,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radish" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Behaviour-Driven-Development tool for python";
     homepage = "https://radish-bdd.github.io/";
     changelog = "https://github.com/radish-bdd/radish/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Behaviour-Driven-Development tool for python";
+    homepage = "https://radish-bdd.github.io/";
+    changelog = "https://github.com/radish-bdd/radish/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kalbasit
       l33tname
     ];

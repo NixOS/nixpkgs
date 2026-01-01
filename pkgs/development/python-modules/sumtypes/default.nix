@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Algebraic data types for Python";
     homepage = "https://github.com/radix/sumtypes";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ NieDzejkob ];
+=======
+  meta = with lib; {
+    description = "Algebraic data types for Python";
+    homepage = "https://github.com/radix/sumtypes";
+    license = licenses.mit;
+    maintainers = with maintainers; [ NieDzejkob ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

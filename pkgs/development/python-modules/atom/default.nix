@@ -34,10 +34,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atom.api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Memory efficient Python objects";
     homepage = "https://github.com/nucleic/atom";
     changelog = "https://github.com/nucleic/atom/releases/tag/${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Memory efficient Python objects";
+    homepage = "https://github.com/nucleic/atom";
+    changelog = "https://github.com/nucleic/atom/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

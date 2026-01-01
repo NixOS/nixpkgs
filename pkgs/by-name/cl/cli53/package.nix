@@ -29,11 +29,19 @@ buildGoModule rec {
     package = cli53;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool for the Amazon Route 53 DNS service";
     homepage = "https://github.com/barnybug/cli53";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ benley ];
+=======
+  meta = with lib; {
+    description = "CLI tool for the Amazon Route 53 DNS service";
+    homepage = "https://github.com/barnybug/cli53";
+    license = licenses.mit;
+    maintainers = with maintainers; [ benley ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cli53";
   };
 }

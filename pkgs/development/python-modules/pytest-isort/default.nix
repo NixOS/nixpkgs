@@ -34,11 +34,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_isort" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to perform isort checks (import ordering)";
     homepage = "https://github.com/moccu/pytest-isort/";
     changelog = "https://github.com/stephrdev/pytest-isort/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Pytest plugin to perform isort checks (import ordering)";
+    homepage = "https://github.com/moccu/pytest-isort/";
+    changelog = "https://github.com/stephrdev/pytest-isort/blob/${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

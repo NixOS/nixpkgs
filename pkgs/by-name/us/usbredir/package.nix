@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "USB traffic redirection protocol";
     mainProgram = "usbredirect";
@@ -53,5 +54,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "USB traffic redirection protocol";
+    mainProgram = "usbredirect";
+    homepage = "https://www.spice-space.org/usbredir.html";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ offline ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

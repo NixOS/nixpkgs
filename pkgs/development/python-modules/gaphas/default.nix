@@ -38,11 +38,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gaphas" ];
 
+<<<<<<< HEAD
   meta = {
     description = "GTK+ based diagramming widget";
     homepage = "https://github.com/gaphor/gaphas";
     changelog = "https://github.com/gaphor/gaphas/releases/tag/${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "GTK+ based diagramming widget";
+    homepage = "https://github.com/gaphor/gaphas";
+    changelog = "https://github.com/gaphor/gaphas/releases/tag/${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

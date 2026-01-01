@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Typeface designed to offer greater legibility and readability for low vision readers";
     homepage = "https://brailleinstitute.org/freefont";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zhaofengli ];
+=======
+  meta = with lib; {
+    description = "Typeface designed to offer greater legibility and readability for low vision readers";
+    homepage = "https://brailleinstitute.org/freefont";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ zhaofengli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

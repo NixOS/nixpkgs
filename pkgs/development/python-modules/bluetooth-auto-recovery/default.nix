@@ -48,11 +48,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bluetooth_auto_recovery" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for recovering Bluetooth adapters";
     homepage = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery";
     changelog = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for recovering Bluetooth adapters";
+    homepage = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery";
+    changelog = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

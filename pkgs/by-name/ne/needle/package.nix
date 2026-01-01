@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Compile-time safe Swift dependency injection framework";
     homepage = "https://github.com/uber/needle";
@@ -45,5 +46,14 @@ stdenv.mkDerivation rec {
     mainProgram = "needle";
     maintainers = with lib.maintainers; [ matteopacini ];
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Compile-time safe Swift dependency injection framework";
+    homepage = "https://github.com/uber/needle";
+    license = licenses.asl20;
+    mainProgram = "needle";
+    maintainers = with maintainers; [ matteopacini ];
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

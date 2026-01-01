@@ -50,12 +50,21 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${lib.makeBinPath [ viu ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Meme system info tool for Linux";
     homepage = "https://github.com/TheDarkBug/uwufetch";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bbjubjub ];
+=======
+  meta = with lib; {
+    description = "Meme system info tool for Linux";
+    homepage = "https://github.com/TheDarkBug/uwufetch";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bbjubjub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "uwufetch";
   };
 }

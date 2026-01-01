@@ -160,10 +160,17 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
+<<<<<<< HEAD
       sha256 = "154rhbdplhrirxpli2jwwsmzcrk8vj51cn6zh8r7lp97vlrkybgp";
       type = "gem";
     };
     version = "0.11.2";
+=======
+      sha256 = "0v1lhwgxyli10rinw6h33ikhskx9j3b20h7plrx8c69z05sfsdd9";
+      type = "gem";
+    };
+    version = "0.10.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   mime-types = {
     dependencies = [
@@ -256,10 +263,17 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
+<<<<<<< HEAD
       sha256 = "0gcarlmpfbmqnjvwfz44gdjhcmm634di7plcx2zdgwdhrhifhqw7";
       type = "gem";
     };
     version = "1.4.0";
+=======
+      sha256 = "0k7j2wn14h1pl4smibasw0bp66kg626drxb59z7rzflch99cd4rg";
+      type = "gem";
+    };
+    version = "1.2.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   tzinfo = {
     dependencies = [ "concurrent-ruby" ];

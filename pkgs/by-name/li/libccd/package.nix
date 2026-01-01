@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for collision detection between two convex shapes";
     homepage = "https://github.com/danfis/libccd";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lopsided98 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for collision detection between two convex shapes";
+    homepage = "https://github.com/danfis/libccd";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lopsided98 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

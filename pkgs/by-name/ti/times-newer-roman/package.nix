@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Font that looks just like Times New Roman, except each character is 5-10% wider";
     homepage = "https://timesnewerroman.com/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Font that looks just like Times New Roman, except each character is 5-10% wider";
+    homepage = "https://timesnewerroman.com/";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

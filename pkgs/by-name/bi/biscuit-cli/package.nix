@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "CLI to generate and inspect biscuit tokens";
     homepage = "https://www.biscuitsec.org/";
@@ -37,6 +38,16 @@ rustPlatform.buildRustPackage rec {
       gaelreyrol
     ];
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "CLI to generate and inspect biscuit tokens";
+    homepage = "https://www.biscuitsec.org/";
+    maintainers = with maintainers; [
+      shlevy
+      gaelreyrol
+    ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "biscuit";
   };
 }

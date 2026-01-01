@@ -69,10 +69,17 @@ stdenv.mkDerivation rec {
     "build-data"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Space adventure game set in the Milky Way galaxy at the turn of the 31st century";
     homepage = "https://pioneerspacesim.net";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Space adventure game set in the Milky Way galaxy at the turn of the 31st century";
+    homepage = "https://pioneerspacesim.net";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Only
       cc-by-sa-30
     ];

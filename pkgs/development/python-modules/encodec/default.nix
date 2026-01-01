@@ -34,11 +34,20 @@ buildPythonPackage rec {
   # requires model data from the internet
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "State-of-the-art deep learning based audio codec supporting both mono 24 kHz audio and stereo 48 kHz audio";
     homepage = "https://github.com/facebookresearch/encodec";
     changelog = "https://github.com/facebookresearch/encodec/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    description = "State-of-the-art deep learning based audio codec supporting both mono 24 kHz audio and stereo 48 kHz audio";
+    homepage = "https://github.com/facebookresearch/encodec";
+    changelog = "https://github.com/facebookresearch/encodec/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

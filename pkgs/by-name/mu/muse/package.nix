@@ -80,7 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
       it is published under the GNU General Public License.
     '';
     license = lib.licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
     mainProgram = "muse4";
   };

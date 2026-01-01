@@ -16,9 +16,16 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://fedorahosted.org/offtrac";
     description = "Trac xmlrpc library";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "http://fedorahosted.org/offtrac";
+    description = "Trac xmlrpc library";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

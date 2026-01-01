@@ -29,13 +29,21 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlcompressor";
+<<<<<<< HEAD
   version = "0.3.1";
+=======
+  version = "0.2.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLCompressor";
     tag = "${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-G7tgRenRB6aYpi+BSiQzwSsekvCw4JPUuy1iXVj7HN0=";
+=======
+    hash = "sha256-0Z29+jLtAtThFaVVqvuqUJkj1VRI69WOvIbEfE45db4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -87,8 +95,11 @@ clangStdenv.mkDerivation (finalAttrs: {
       if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
     ))
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
+<<<<<<< HEAD
     # set the version for in the settings screen.
     (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   installPhase = ''

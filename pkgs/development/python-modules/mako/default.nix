@@ -49,7 +49,11 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = lib.optionals isPyPy [
     # https://github.com/sqlalchemy/mako/issues/315
@@ -61,13 +65,22 @@ buildPythonPackage rec {
     "test_bytestring_passthru"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Super-fast templating language";
     mainProgram = "mako-render";
     homepage = "https://www.makotemplates.org/";
     changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

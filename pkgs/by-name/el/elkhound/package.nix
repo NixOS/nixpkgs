@@ -50,12 +50,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Parser generator which emits GLR parsers, either in OCaml or C++";
     homepage = "https://scottmcpeak.com/elkhound/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Parser generator which emits GLR parsers, either in OCaml or C++";
+    homepage = "https://scottmcpeak.com/elkhound/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "elkhound";
   };
 }

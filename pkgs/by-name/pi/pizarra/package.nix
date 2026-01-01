@@ -47,7 +47,11 @@ rustPlatform.buildRustPackage rec {
       --replace "Icon=/usr/share/icons/hicolor/scalable/apps/pizarra.svg" "Icon=pizarra"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple blackboard written in GTK";
     mainProgram = "pizarra";
     longDescription = ''
@@ -61,7 +65,11 @@ rustPlatform.buildRustPackage rec {
       - Grids
     '';
     homepage = "https://pizarra.categulario.xyz/en/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
+=======
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

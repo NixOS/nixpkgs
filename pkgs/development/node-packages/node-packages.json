@@ -6,6 +6,10 @@
 , "@tailwindcss/line-clamp"
 , "@tailwindcss/typography"
 , "alex"
+<<<<<<< HEAD
+=======
+, "aws-cdk"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 , "browserify"
 , "browser-sync"
 , "coc-go"
@@ -16,10 +20,28 @@
 , "grunt-cli"
 , "gulp-cli"
 , "js-yaml"
+<<<<<<< HEAD
 , "lcov-result-merger"
 , "node2nix"
 , "sass"
 , "semver"
+=======
+, "jsdoc"
+, "lcov-result-merger"
+, "mathjax"
+, "node2nix"
+, "postcss"
+, "prebuild-install"
+, "pscid"
+, "pulp"
+, "purescript-language-server"
+, "purescript-psa"
+, "purs-tidy"
+, "sass"
+, "semver"
+, "sloc"
+, "vega-cli"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 , "vercel"
 , "wavedrom-cli"
 ]

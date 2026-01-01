@@ -47,11 +47,20 @@ stdenv.mkDerivation {
     mv sam.svg $out/share/icons/hicolor/scalable/apps
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/deadpixi/sam";
     description = "Updated version of the sam text editor";
     license = lib.licenses.lpl-102;
     maintainers = with lib.maintainers; [ ramkromberg ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/deadpixi/sam";
+    description = "Updated version of the sam text editor";
+    license = licenses.lpl-102;
+    maintainers = with maintainers; [ ramkromberg ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

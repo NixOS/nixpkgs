@@ -32,7 +32,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
+<<<<<<< HEAD
   version = "2.20.0";
+=======
+  # IMPORTANT: When bumping the minor version (2.XX.0 - the XX), please update pinned package in pkgs/top-level/all-packages.nix
+  # There are pinned packages called ansible_2_XX, create a new one with the previous minor version and then update the version here
+  version = "2.19.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -41,7 +47,11 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = "ansible";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-4kTBzDHDfdHR/W4edxrGtWhg6TRLMtdEgUZYcn8cFQg=";
+=======
+    hash = "sha256-TjafUlPKuxpXrfREK65D88SoGThGBzpbfCHr0ZkviI0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -101,12 +111,21 @@ buildPythonPackage rec {
   # internal import errors, missing dependencies
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
+    description = "Radically simple IT automation";
+    homepage = "https://www.ansible.com";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       HarisDotParis
       robsliwi
     ];

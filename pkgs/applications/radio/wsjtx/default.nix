@@ -56,7 +56,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Weak-signal digital communication modes for amateur radio";
     longDescription = ''
       WSJT-X implements communication protocols or "modes" called FT4, FT8, JT4,
@@ -66,11 +70,20 @@ stdenv.mkDerivation rec {
       contacts under extreme weak-signal conditions.
     '';
     homepage = "https://wsjt.sourceforge.io";
+<<<<<<< HEAD
     license = with lib.licenses; [ gpl3Plus ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       lasandell
       numinit
+=======
+    license = with licenses; [ gpl3Plus ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      lasandell
+      numinit
+      melling
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

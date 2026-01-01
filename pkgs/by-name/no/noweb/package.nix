@@ -93,11 +93,20 @@ stdenv.mkDerivation (finalAttrs: {
     pkgs = [ finalAttrs.finalPackage.tex ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, extensible literate-programming tool";
     homepage = "https://www.cs.tufts.edu/~nr/noweb";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ yurrriq ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "Simple, extensible literate-programming tool";
+    homepage = "https://www.cs.tufts.edu/~nr/noweb";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ yurrriq ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

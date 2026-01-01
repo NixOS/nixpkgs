@@ -24,7 +24,11 @@ let
       cp $src $out/lib/dotnet/keepass/
     '';
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Enables KeePass to display data as QR code images";
       longDescription = ''
         KeePassQRCodeView is a plugin for KeePass 2.x which shows QR codes for entry fields.
@@ -36,8 +40,13 @@ let
         "i686-linux"
         "x86_64-linux"
       ];
+<<<<<<< HEAD
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ nazarewk ];
+=======
+      license = licenses.mit;
+      maintainers = with maintainers; [ nazarewk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

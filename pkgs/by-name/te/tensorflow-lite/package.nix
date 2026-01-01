@@ -109,11 +109,19 @@ buildBazelPackage rec {
   dontAddPrefix = true;
   configurePlatforms = [ ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open source deep learning framework for on-device inference";
     homepage = "https://www.tensorflow.org/lite";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Open source deep learning framework for on-device inference";
+    homepage = "https://www.tensorflow.org/lite";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mschwaig
       cpcloud
     ];

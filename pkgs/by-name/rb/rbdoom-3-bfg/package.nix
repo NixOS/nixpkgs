@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/RobertBeckebans/RBDOOM-3-BFG";
     description = "Doom 3 BFG Edition with modern engine features";
@@ -74,5 +75,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ Zaechus ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/RobertBeckebans/RBDOOM-3-BFG";
+    description = "Doom 3 BFG Edition with modern engine features";
+    mainProgram = "RBDoom3BFG";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ Zaechus ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

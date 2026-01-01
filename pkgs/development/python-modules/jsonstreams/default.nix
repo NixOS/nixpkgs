@@ -30,11 +30,20 @@ buildPythonPackage rec {
     "jsonstreams"
   ];
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "JSON streaming writer";
     homepage = "https://github.com/dcbaker/jsonstreams";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ chkno ];
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "JSON streaming writer";
+    homepage = "https://github.com/dcbaker/jsonstreams";
+    license = licenses.mit;
+    maintainers = with maintainers; [ chkno ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

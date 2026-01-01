@@ -21,11 +21,20 @@ buildPythonPackage rec {
     six
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://urlgrabber.baseurl.org";
     license = lib.licenses.lgpl2Plus;
     description = "Python module for downloading files";
     mainProgram = "urlgrabber";
     maintainers = with lib.maintainers; [ qknight ];
+=======
+  meta = with lib; {
+    homepage = "http://urlgrabber.baseurl.org";
+    license = licenses.lgpl2Plus;
+    description = "Python module for downloading files";
+    mainProgram = "urlgrabber";
+    maintainers = with maintainers; [ qknight ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

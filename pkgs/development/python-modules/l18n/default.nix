@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "l18n" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Locale internationalization package";
     homepage = "https://github.com/tkhyn/l18n";
     changelog = "https://github.com/tkhyn/l18n/blob/${version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephi ];
+=======
+  meta = with lib; {
+    description = "Locale internationalization package";
+    homepage = "https://github.com/tkhyn/l18n";
+    changelog = "https://github.com/tkhyn/l18n/blob/${version}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sephi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

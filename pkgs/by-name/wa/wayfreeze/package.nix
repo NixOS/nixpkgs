@@ -25,15 +25,26 @@ rustPlatform.buildRustPackage {
     libxkbcommon
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to freeze the screen of a Wayland compositor";
     homepage = "https://github.com/Jappie3/wayfreeze";
     license = lib.licenses.agpl3Only;
+=======
+  meta = with lib; {
+    description = "Tool to freeze the screen of a Wayland compositor";
+    homepage = "https://github.com/Jappie3/wayfreeze";
+    license = licenses.agpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [
       purrpurrn
       jappie3 # upstream dev
     ];
     mainProgram = "wayfreeze";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

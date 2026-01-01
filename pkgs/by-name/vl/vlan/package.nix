@@ -28,11 +28,19 @@ stdenv.mkDerivation rec {
     cp vconfig.8 $out/share/man/man8/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "User mode programs to enable VLANs on Ethernet devices";
     homepage = "https://www.candelatech.com/~greear/vlan.html";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "User mode programs to enable VLANs on Ethernet devices";
+    homepage = "https://www.candelatech.com/~greear/vlan.html";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vconfig";
   };
 }

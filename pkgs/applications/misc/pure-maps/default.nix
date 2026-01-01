@@ -17,13 +17,21 @@
 
 mkDerivation rec {
   pname = "pure-maps";
+<<<<<<< HEAD
   version = "3.4.2";
+=======
+  version = "3.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "pure-maps";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-UkPZ5Wy/05srZv1r5GLoT5hFQVLfYF6Q2rQDFoILlQ0=";
+=======
+    hash = "sha256-Xh4TRc4B/rm2+S8ej/instfkO3271f0HPuqVJYGtCSM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -54,13 +62,23 @@ mkDerivation rec {
     qtWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Display vector and raster maps, places, routes, and provide navigation instructions with a flexible selection of data and service providers";
     mainProgram = "pure-maps";
     homepage = "https://github.com/rinigus/pure-maps";
     changelog = "https://github.com/rinigus/pure-maps/blob/${src.rev}/NEWS.md";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.Thra11 ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.Thra11 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

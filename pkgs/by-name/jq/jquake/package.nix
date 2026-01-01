@@ -67,15 +67,26 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Real-time earthquake map of Japan";
     homepage = "https://jquake.net";
     downloadPage = "https://jquake.net/en/terms.html?os=linux&arch=any";
     changelog = "https://jquake.net/en/changelog.html";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ nessdoor ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ nessdoor ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.unfree;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "JQuake";
   };
 }

@@ -25,12 +25,21 @@ python3.pkgs.buildPythonApplication {
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Extract only relevant history from git repo";
     homepage = "https://github.com/rainlabs-eu/git-relevant-history";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bendlas ];
+=======
+  meta = with lib; {
+    description = "Extract only relevant history from git repo";
+    homepage = "https://github.com/rainlabs-eu/git-relevant-history";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bendlas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-relevant-history";
   };
 }

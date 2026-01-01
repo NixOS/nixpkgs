@@ -50,7 +50,11 @@ stdenv.mkDerivation rec {
     description = "Audiovisual analytics and filtering of video files";
     homepage = "https://mediaarea.net/QCTools";
     license = lib.licenses.gpl3Only;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 }

@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ais" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for decoding maritime Automatic Identification System messages";
     homepage = "https://github.com/schwehr/libais";
@@ -38,5 +39,14 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for decoding maritime Automatic Identification System messages";
+    homepage = "https://github.com/schwehr/libais";
+    changelog = "https://github.com/schwehr/libais/blob/master/Changelog.md";
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

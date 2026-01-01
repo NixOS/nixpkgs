@@ -42,11 +42,20 @@ stdenv.mkDerivation {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Atari ST and Amiga music player";
     homepage = "http://sc68.atari.org/project.html";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Atari ST and Amiga music player";
+    homepage = "http://sc68.atari.org/project.html";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

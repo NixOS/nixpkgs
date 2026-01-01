@@ -23,12 +23,21 @@ stdenv.mkDerivation rec {
     make EPSTOOL_ROOT=$out install
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility to create or extract preview images in EPS files, fix bounding boxes and convert to bitmaps";
     homepage = "http://pages.cs.wisc.edu/~ghost/gsview/epstool.htm";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.asppsa ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Utility to create or extract preview images in EPS files, fix bounding boxes and convert to bitmaps";
+    homepage = "http://pages.cs.wisc.edu/~ghost/gsview/epstool.htm";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.asppsa ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "epstool";
   };
 }

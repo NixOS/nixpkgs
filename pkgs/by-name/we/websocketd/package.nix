@@ -19,11 +19,19 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Turn any program that uses STDIN/STDOUT into a WebSocket server";
     homepage = "http://websocketd.com/";
     maintainers = [ lib.maintainers.bjornfor ];
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Turn any program that uses STDIN/STDOUT into a WebSocket server";
+    homepage = "http://websocketd.com/";
+    maintainers = [ maintainers.bjornfor ];
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "websocketd";
   };
 }

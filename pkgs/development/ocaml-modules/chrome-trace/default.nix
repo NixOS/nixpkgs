@@ -17,9 +17,16 @@ buildDunePackage {
     rm -r vendor/csexp
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Chrome trace event generation library";
     inherit (dune_3.meta) homepage;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Chrome trace event generation library";
+    inherit (dune_3.meta) homepage;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

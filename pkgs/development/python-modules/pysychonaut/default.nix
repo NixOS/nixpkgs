@@ -35,10 +35,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pysychonaut" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unofficial python api for Erowid, PsychonautWiki and AskTheCaterpillar";
     homepage = "https://github.com/OpenJarbas/PySychonaut";
     maintainers = [ ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Unofficial python api for Erowid, PsychonautWiki and AskTheCaterpillar";
+    homepage = "https://github.com/OpenJarbas/PySychonaut";
+    maintainers = [ ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

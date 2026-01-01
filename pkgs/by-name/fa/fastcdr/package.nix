@@ -44,7 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ gtest ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/eProsima/Fast-CDR";
     description = "Serialization library for OMG's Common Data Representation (CDR)";
     longDescription = ''
@@ -52,8 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
       standard CDR serialization mechanism, while the other is a faster
       implementation that modifies the standard.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ panicgh ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ panicgh ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

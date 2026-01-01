@@ -17,15 +17,24 @@ buildGoModule rec {
 
   vendorHash = "sha256-2seQCVALU35l+aAsfag0W19FWlSTlEsSmxTmKKi3A+0=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Open-Source Phishing Toolkit";
     longDescription = ''
       Open-source phishing toolkit designed for businesses and penetration testers.
       Provides the ability to quickly and easily setup and execute phishing engagements and security awareness training.
     '';
     homepage = "https://github.com/gophish/gophish";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mib ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ mib ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gophish";
   };
 }

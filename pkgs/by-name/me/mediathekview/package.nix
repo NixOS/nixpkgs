@@ -1,11 +1,15 @@
 {
   lib,
+<<<<<<< HEAD
   pkgs,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   stdenv,
   fetchurl,
   makeWrapper,
   libglvnd,
   libnotify,
+<<<<<<< HEAD
   openjdk25, # 2025-12-25: pkgs.jre points to java 21 and there is no equivalent for jre25
   zip,
 }:
@@ -16,6 +20,18 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://download.mediathekview.de/stabil/MediathekView-${finalAttrs.version}-linux.tar.gz";
     sha256 = "sha256-sDZSXYzak2RKQiW1OGpgSvFlkZrttsoOxVqRaodol24=";
+=======
+  jre,
+  zip,
+}:
+
+stdenv.mkDerivation rec {
+  version = "14.2.0";
+  pname = "mediathekview";
+  src = fetchurl {
+    url = "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
+    sha256 = "sha256-EWpa6YE9Fk7K14vvsbjadKuGGZGqNhlouDtwj6KpbdE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -36,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/{bin,lib}
 
       install -m644 MediathekView.jar $out/lib
+<<<<<<< HEAD
       cp -r dependency $out/lib
 
       makeWrapper ${openjdk25}/bin/java $out/bin/mediathek \
@@ -46,11 +63,25 @@ stdenv.mkDerivation (finalAttrs: {
 
       makeWrapper ${openjdk25}/bin/java $out/bin/MediathekView_ipv4 \
       --add-flags "-Djava.net.preferIPv4Stack=true --add-exports=java.desktop/sun.swing=ALL-UNNAMED -XX:MaxRAMPercentage=10.0 -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=compact -XX:+UseStringDeduplication --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -cp \"$out/lib/dependency/*:$out/lib/MediathekView.jar\" mediathek.Main" \
+=======
+
+      makeWrapper ${jre}/bin/java $out/bin/mediathek \
+        --add-flags "-jar $out/lib/MediathekView.jar" \
+        --suffix LD_LIBRARY_PATH : "${libraryPath}"
+
+      makeWrapper ${jre}/bin/java $out/bin/MediathekView \
+        --add-flags "-jar $out/lib/MediathekView.jar" \
+        --suffix LD_LIBRARY_PATH : "${libraryPath}"
+
+      makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
+        --add-flags "-Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar" \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
       runHook postInstall
     '';
 
+<<<<<<< HEAD
   doInstallCheck = true;
   # sanity to ensure that mediathek can actually start
   # unfortunately the executable does not print its own version
@@ -70,3 +101,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
   };
 })
+=======
+  meta = with lib; {
+    description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
+    homepage = "https://mediathekview.de/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl3Plus;
+    mainProgram = "mediathek";
+    maintainers = [ ];
+    platforms = platforms.all;
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

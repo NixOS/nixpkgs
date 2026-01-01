@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
     perl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Documentation production system for software manuals";
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/halibut/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Documentation production system for software manuals";
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/halibut/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "halibut";
   };
 }

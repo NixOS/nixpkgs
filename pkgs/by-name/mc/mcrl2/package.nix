@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "Toolset for model-checking concurrent systems and protocols";
     longDescription = ''
@@ -38,8 +42,14 @@ stdenv.mkDerivation rec {
       concurrent systems and protocols
     '';
     homepage = "https://www.mcrl2.org/";
+<<<<<<< HEAD
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ moretea ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.boost;
+    maintainers = with maintainers; [ moretea ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

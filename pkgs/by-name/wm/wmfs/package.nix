@@ -50,11 +50,19 @@ stdenv.mkDerivation {
     "MANPREFIX=${placeholder "out"}/share/man"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Window manager from scratch";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.balsoft ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Window manager from scratch";
+    license = licenses.bsd2;
+    maintainers = [ maintainers.balsoft ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wmfs";
   };
 }

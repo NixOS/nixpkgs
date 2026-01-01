@@ -8,13 +8,21 @@
 
 buildGoModule rec {
   pname = "melange";
+<<<<<<< HEAD
   version = "0.34.1";
+=======
+  version = "0.33.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = "melange";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-nocfBhoe8iXs/fjKsYgXXdcc8U6vSQtb8wlhzZYRHLE=";
+=======
+    hash = "sha256-0wSOk+e0RWBB/R8Pxl4Op1Ej+eA5djhmijDxEBRN7o4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -27,7 +35,11 @@ buildGoModule rec {
     '';
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-nZD4e5l6sB5l6P1eZosTaCJ8cFTTSdOtyDI3/NYrUuA=";
+=======
+  vendorHash = "sha256-ErgX9umuYp83tGYKKDuWMG0ZOP1BcNBueP98IpxOZII=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "." ];
 
@@ -64,12 +76,21 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/chainguard-dev/melange";
     changelog = "https://github.com/chainguard-dev/melange/blob/${src.rev}/NEWS.md";
     description = "Build APKs from source code";
     mainProgram = "melange";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ developer-guy ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ developer-guy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

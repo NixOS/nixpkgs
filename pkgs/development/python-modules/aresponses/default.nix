@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aresponses" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/aresponses/aresponses/blob/${src.rev}/README.md#changelog";
     description = "Asyncio testing server";
     homepage = "https://github.com/aresponses/aresponses";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/aresponses/aresponses/blob/${src.rev}/README.md#changelog";
+    description = "Asyncio testing server";
+    homepage = "https://github.com/aresponses/aresponses";
+    license = licenses.mit;
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

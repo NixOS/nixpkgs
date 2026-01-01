@@ -32,15 +32,26 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux kernel hwmon drivers for AIO liquid coolers and other devices";
     homepage = "https://github.com/liquidctl/liquidtux";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Linux kernel hwmon drivers for AIO liquid coolers and other devices";
+    homepage = "https://github.com/liquidctl/liquidtux";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ nickhu ];
+=======
+    maintainers = with maintainers; [ nickhu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionOlder kernel.version "5.10";
   };
 }

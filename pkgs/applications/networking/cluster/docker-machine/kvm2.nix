@@ -28,6 +28,7 @@ buildGoModule rec {
     install out/docker-machine-driver-kvm2 -Dt $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://minikube.sigs.k8s.io/docs/drivers/kvm2";
     description = "KVM2 driver for docker-machine";
@@ -38,5 +39,17 @@ buildGoModule rec {
       atkinschang
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://minikube.sigs.k8s.io/docs/drivers/kvm2";
+    description = "KVM2 driver for docker-machine";
+    mainProgram = "docker-machine-driver-kvm2";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      tadfisher
+      atkinschang
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -56,17 +56,30 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Light-weight process isolation tool, making use of Linux namespaces and seccomp-bpf syscall filters";
     homepage = "https://nsjail.dev/";
     changelog = "https://github.com/google/nsjail/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Light-weight process isolation tool, making use of Linux namespaces and seccomp-bpf syscall filters";
+    homepage = "https://nsjail.dev/";
+    changelog = "https://github.com/google/nsjail/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       arturcygan
       bosu
       c0bw3b
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nsjail";
   };
 }

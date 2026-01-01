@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.pytest
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
@@ -86,5 +87,17 @@ stdenv.mkDerivation rec {
       qknight
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.clamav.net";
+    description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      robberer
+      qknight
+      globin
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -55,10 +55,18 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Webcam-tools package";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ jraygauthier ];
+=======
+  meta = with lib; {
+    description = "Webcam-tools package";
+    platforms = platforms.linux;
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ jraygauthier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

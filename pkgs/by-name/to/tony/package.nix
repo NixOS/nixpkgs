@@ -96,7 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tony";
     homepage = "https://www.sonicvisualiser.org/tony/";
     license = lib.licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 })

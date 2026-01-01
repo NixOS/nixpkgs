@@ -42,6 +42,10 @@ buildGoModule rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Command-line tool designed to simplify the process of deploying and managing applications on a VPS";

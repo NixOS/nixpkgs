@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
+<<<<<<< HEAD
   meta = {
     description = "High-performance connection pool for PostgreSQL";
     homepage = "https://agroal.github.io/pgagroal/";
@@ -42,5 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "High-performance connection pool for PostgreSQL";
+    homepage = "https://agroal.github.io/pgagroal/";
+    changelog = "https://github.com/agroal/pgagroal/releases/tag/${finalAttrs.version}";
+    license = licenses.bsd3;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

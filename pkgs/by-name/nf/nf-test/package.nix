@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     command = "nf-test version";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple test framework for Nextflow pipelines";
     homepage = "https://www.nf-test.com/";
@@ -48,5 +49,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rollf ];
     mainProgram = "nf-test";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple test framework for Nextflow pipelines";
+    homepage = "https://www.nf-test.com/";
+    changelog = "https://github.com/askimed/nf-test/releases";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rollf ];
+    mainProgram = "nf-test";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

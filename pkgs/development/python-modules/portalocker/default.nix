@@ -48,11 +48,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "portalocker" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/wolph/portalocker/releases/tag/v${version}";
     description = "Library to provide an easy API to file locking";
     homepage = "https://github.com/WoLpH/portalocker";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/wolph/portalocker/releases/tag/v${version}";
+    description = "Library to provide an easy API to file locking";
+    homepage = "https://github.com/WoLpH/portalocker";
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

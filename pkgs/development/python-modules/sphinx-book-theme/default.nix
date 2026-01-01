@@ -35,11 +35,19 @@ buildPythonPackage rec {
     inherit jupyter-book;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Clean book theme for scientific explanations and documentation with Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-book-theme";
     changelog = "https://github.com/executablebooks/sphinx-book-theme/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Clean book theme for scientific explanations and documentation with Sphinx";
+    homepage = "https://github.com/executablebooks/sphinx-book-theme";
+    changelog = "https://github.com/executablebooks/sphinx-book-theme/raw/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

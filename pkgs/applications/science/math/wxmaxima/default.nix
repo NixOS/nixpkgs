@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(--prefix PATH ":" ${maxima}/bin)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross platform GUI for the computer algebra system Maxima";
     mainProgram = "wxmaxima";
@@ -52,5 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wxmaxima-developers.github.io/wxmaxima/";
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Cross platform GUI for the computer algebra system Maxima";
+    mainProgram = "wxmaxima";
+    license = licenses.gpl2;
+    homepage = "https://wxmaxima-developers.github.io/wxmaxima/";
+    maintainers = with maintainers; [ doronbehar ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

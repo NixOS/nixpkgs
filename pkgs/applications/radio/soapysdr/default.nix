@@ -70,16 +70,28 @@ stdenv.mkDerivation (finalAttrs: {
     searchPath = "lib/SoapySDR/modules${finalAttrs.passthru.abiVersion}";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pothosware/SoapySDR";
+    description = "Vendor and platform neutral SDR support library";
+    license = licenses.boost;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       markuskowa
       numinit
     ];
     mainProgram = "SoapySDRUtil";
     pkgConfigModules = [ "SoapySDR" ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

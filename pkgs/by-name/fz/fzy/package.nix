@@ -17,12 +17,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Better fuzzy finder";
     homepage = "https://github.com/jhawthorn/fzy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dywedir ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Better fuzzy finder";
+    homepage = "https://github.com/jhawthorn/fzy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dywedir ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fzy";
   };
 }

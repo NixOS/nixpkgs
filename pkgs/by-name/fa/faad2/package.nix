@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     ocaml-faad = ocamlPackages.faad;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC decoder";
     homepage = "https://sourceforge.net/projects/faac/";
@@ -43,5 +44,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ codyopel ];
     mainProgram = "faad";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Open source MPEG-4 and MPEG-2 AAC decoder";
+    homepage = "https://sourceforge.net/projects/faac/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ codyopel ];
+    mainProgram = "faad";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

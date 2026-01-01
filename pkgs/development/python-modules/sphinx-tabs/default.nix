@@ -52,10 +52,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_tabs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension for creating tabbed content when building HTML";
     homepage = "https://github.com/executablebooks/sphinx-tabs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
+=======
+  meta = with lib; {
+    description = "Sphinx extension for creating tabbed content when building HTML";
+    homepage = "https://github.com/executablebooks/sphinx-tabs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kaction ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

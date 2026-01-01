@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/mergerfs.mktrash --prefix PATH : ${lib.makeBinPath [ python3.pkgs.xattr ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Optional tools to help manage data in a mergerfs pool";
     homepage = "https://github.com/trapexit/mergerfs-tools";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ makefu ];
+=======
+  meta = with lib; {
+    description = "Optional tools to help manage data in a mergerfs pool";
+    homepage = "https://github.com/trapexit/mergerfs-tools";
+    license = licenses.isc;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

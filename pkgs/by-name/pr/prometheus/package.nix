@@ -3,8 +3,13 @@
   lib,
   go,
   buildGoModule,
+<<<<<<< HEAD
   buildNpmPackage,
   fetchFromGitHub,
+=======
+  fetchFromGitHub,
+  fetchurl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nixosTests,
   enableAWS ? true,
   enableAzure ? true,
@@ -29,6 +34,7 @@
   enableVultr ? true,
   enableXDS ? true,
   enableZookeeper ? true,
+<<<<<<< HEAD
   versionCheckHook,
 }:
 
@@ -88,6 +94,13 @@ buildGoModule (finalAttrs: {
     vendorHash
     src
     ;
+=======
+}:
+
+buildGoModule (finalAttrs: {
+  pname = "prometheus";
+  version = "3.7.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -95,6 +108,23 @@ buildGoModule (finalAttrs: {
     "cli"
   ];
 
+<<<<<<< HEAD
+=======
+  src = fetchFromGitHub {
+    owner = "prometheus";
+    repo = "prometheus";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bitRDX1oymFfzvQVYL31BON6UBfQYnqjZefQKc+yXx0=";
+  };
+
+  vendorHash = "sha256-V+qLxjqGOaT1veEwtklqcS7iO31ufvDHBA9DbZLzDiE=";
+
+  webUiStatic = fetchurl {
+    url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
+    hash = "sha256-NFv6zNpMacd0RgVYBlWKbXKNCEh7WijpREg0bNojisM=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   excludedPackages = [
     "documentation/prometheus-mixin"
     "internal/tools"
@@ -102,7 +132,11 @@ buildGoModule (finalAttrs: {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     cp -r ${assets}/static web/ui/static/
+=======
+    tar -C web/ui -xzf ${finalAttrs.webUiStatic}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     patchShebangs scripts
 
@@ -136,6 +170,7 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
+<<<<<<< HEAD
     if [[ -d vendor ]]; then GOARCH= make -o assets plugins; fi
 
     # Recreate the `make assets-compress` target here - workaround permissions
@@ -148,6 +183,9 @@ buildGoModule (finalAttrs: {
 
     # EmbedFS requires relative paths
     substituteInPlace web/ui/embed.go --replace-fail "web/ui/" ""
+=======
+    if [[ -d vendor ]]; then GOARCH= make -o assets assets-compress plugins; fi
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   tags = [ "builtinassets" ];
@@ -158,6 +196,10 @@ buildGoModule (finalAttrs: {
     in
     [
       "-s"
+<<<<<<< HEAD
+=======
+      "-w"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
@@ -179,6 +221,7 @@ buildGoModule (finalAttrs: {
   # Test mock data uses 64 bit data without an explicit (u)int64
   doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.parsed.cpu.bits < 64);
 
+<<<<<<< HEAD
   checkFlags = [
     # Skip for issue during TSDB compaction
     "-skip=TestBlockRanges"
@@ -209,5 +252,21 @@ buildGoModule (finalAttrs: {
       jpds
     ];
     mainProgram = "prometheus";
+=======
+  checkFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-skip=TestEvaluations/testdata/aggregators.test"
+  ];
+
+  passthru.tests = { inherit (nixosTests) prometheus; };
+
+  meta = with lib; {
+    description = "Service monitoring system and time series database";
+    homepage = "https://prometheus.io";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      fpletz
+      Frostman
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

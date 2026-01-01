@@ -30,6 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Udev rules for nRF (Nordic Semiconductor) development kits";
     homepage = "https://github.com/NordicSemiconductor/nrf-udev";
@@ -37,5 +38,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ h7x4 ];
+=======
+  meta = with lib; {
+    description = "Udev rules for nRF (Nordic Semiconductor) development kits";
+    homepage = "https://github.com/NordicSemiconductor/nrf-udev";
+    changelog = "https://github.com/NordicSemiconductor/nrf-udev/releases/tag/${finalAttrs.src.rev}";
+    license = licenses.unfree;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ h7x4 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

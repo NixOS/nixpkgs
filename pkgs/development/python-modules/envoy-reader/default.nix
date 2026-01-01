@@ -53,10 +53,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "envoy_reader" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to read from Enphase Envoy units";
     homepage = "https://github.com/jesserizzo/envoy_reader";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to read from Enphase Envoy units";
+    homepage = "https://github.com/jesserizzo/envoy_reader";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

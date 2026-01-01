@@ -29,10 +29,18 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_mpris" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for controlling Mopidy through D-Bus using the MPRIS specification";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.nickhu ];
+=======
+  meta = with lib; {
+    homepage = "https://www.mopidy.com/";
+    description = "Mopidy extension for controlling Mopidy through D-Bus using the MPRIS specification";
+    license = licenses.asl20;
+    maintainers = [ maintainers.nickhu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

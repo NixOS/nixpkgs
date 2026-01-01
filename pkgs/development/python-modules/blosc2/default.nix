@@ -82,11 +82,20 @@ buildPythonPackage rec {
 
   passthru.c-blosc2 = c-blosc2;
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the extremely fast Blosc2 compression library";
     homepage = "https://github.com/Blosc/python-blosc2";
     changelog = "https://github.com/Blosc/python-blosc2/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for the extremely fast Blosc2 compression library";
+    homepage = "https://github.com/Blosc/python-blosc2";
+    changelog = "https://github.com/Blosc/python-blosc2/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

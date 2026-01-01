@@ -30,11 +30,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "prefix=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     description = "QMI IDL compiler";
     homepage = "https://github.com/linux-msm/qrtr";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.aarch64;
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ matthewcroughan ];
+    description = "QMI IDL compiler";
+    homepage = "https://github.com/linux-msm/qrtr";
+    license = licenses.bsd3;
+    platforms = platforms.aarch64;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

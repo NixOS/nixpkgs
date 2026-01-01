@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin for accessing test session metadata";
     homepage = "https://github.com/pytest-dev/pytest-metadata";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ mpoquet ];
+=======
+  meta = with lib; {
+    description = "Plugin for accessing test session metadata";
+    homepage = "https://github.com/pytest-dev/pytest-metadata";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ mpoquet ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

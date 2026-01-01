@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "heatshrink2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Compression using the Heatshrink algorithm";
     homepage = "https://github.com/eerimoq/pyheatshrink";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Compression using the Heatshrink algorithm";
+    homepage = "https://github.com/eerimoq/pyheatshrink";
+    license = licenses.isc;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,16 +32,43 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
+<<<<<<< HEAD
   version = "0.29.0";
   pyproject = true;
 
+=======
+  version = "0.28.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-7Eq0Z/BR/tvGS6RRRoy3jOyBQkc58QETHWy47S6tSD8=";
   };
 
+=======
+    hash = "sha256-+RXcCpsNAoGxK/taEf7+7QUDrHydvy5fIdBuEXi63DQ=";
+  };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/tfranzel/drf-spectacular/pull/1090
+      url = "https://github.com/tfranzel/drf-spectacular/commit/8db4c2458f8403c53db0db352dd94057d285814b.patch";
+      hash = "sha256-Ue5y7IB4ie+9CEineMBgMMCLGiF4zqmn60TJvKsV1h0=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace tests/conftest.py \
+      --replace-fail "'allauth.account'," "'allauth.account', 'allauth.socialaccount',"
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = [
@@ -94,11 +121,19 @@ buildPythonPackage rec {
 
   optional-dependencies.sidecar = [ drf-spectacular-sidecar ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sane and flexible OpenAPI 3 schema generation for Django REST framework";
     homepage = "https://github.com/tfranzel/drf-spectacular";
     changelog = "https://github.com/tfranzel/drf-spectacular/releases/tag/${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Sane and flexible OpenAPI 3 schema generation for Django REST framework";
+    homepage = "https://github.com/tfranzel/drf-spectacular";
+    changelog = "https://github.com/tfranzel/drf-spectacular/releases/tag/${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

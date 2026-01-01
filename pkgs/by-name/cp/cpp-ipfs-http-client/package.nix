@@ -35,10 +35,17 @@ stdenv.mkDerivation {
     "-Wno-error=deprecated-declarations"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "IPFS C++ API client library";
     homepage = "https://github.com/vasild/cpp-ipfs-http-client";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "IPFS C++ API client library";
+    homepage = "https://github.com/vasild/cpp-ipfs-http-client";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

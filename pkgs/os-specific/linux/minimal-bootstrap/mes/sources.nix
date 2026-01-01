@@ -55,9 +55,12 @@
       "lib/posix/write.c"
       "lib/stdlib/atoi.c"
       "lib/linux/lseek.c"
+<<<<<<< HEAD
       "lib/dirent/__getdirentries.c"
       "lib/dirent/closedir.c"
       "lib/dirent/opendir.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/mes/__assert_fail.c"
       "lib/mes/__buffered_read.c"
       "lib/mes/__mes_debug.c"
@@ -77,7 +80,10 @@
       "lib/stdio/putc.c"
       "lib/stdio/putchar.c"
       "lib/stdio/ungetc.c"
+<<<<<<< HEAD
       "lib/stdlib/calloc.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/free.c"
       "lib/stdlib/realloc.c"
       "lib/string/memchr.c"
@@ -91,6 +97,7 @@
       "lib/posix/raise.c"
       "lib/linux/access.c"
       "lib/linux/brk.c"
+<<<<<<< HEAD
       "lib/linux/chdir.c"
       "lib/linux/chmod.c"
       "lib/linux/clock_gettime.c"
@@ -124,6 +131,23 @@
       "lib/linux/uname.c"
       "lib/linux/unlink.c"
       "lib/linux/utimensat.c"
+=======
+      "lib/linux/chmod.c"
+      "lib/linux/clock_gettime.c"
+      "lib/linux/dup.c"
+      "lib/linux/dup2.c"
+      "lib/linux/execve.c"
+      "lib/linux/fork.c"
+      "lib/linux/fsync.c"
+      "lib/linux/_getcwd.c"
+      "lib/linux/gettimeofday.c"
+      "lib/linux/ioctl3.c"
+      "lib/linux/_open3.c"
+      "lib/linux/malloc.c"
+      "lib/linux/_read.c"
+      "lib/linux/time.c"
+      "lib/linux/unlink.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/wait4.c"
       "lib/linux/waitpid.c"
       "lib/linux/x86-mes-mescc/syscall.c"
@@ -164,9 +188,12 @@
       "lib/posix/write.c"
       "lib/stdlib/atoi.c"
       "lib/linux/lseek.c"
+<<<<<<< HEAD
       "lib/dirent/__getdirentries.c"
       "lib/dirent/closedir.c"
       "lib/dirent/opendir.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/mes/__assert_fail.c"
       "lib/mes/__buffered_read.c"
       "lib/mes/__mes_debug.c"
@@ -186,7 +213,10 @@
       "lib/stdio/putc.c"
       "lib/stdio/putchar.c"
       "lib/stdio/ungetc.c"
+<<<<<<< HEAD
       "lib/stdlib/calloc.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/free.c"
       "lib/stdlib/realloc.c"
       "lib/string/memchr.c"
@@ -200,6 +230,7 @@
       "lib/posix/raise.c"
       "lib/linux/access.c"
       "lib/linux/brk.c"
+<<<<<<< HEAD
       "lib/linux/chdir.c"
       "lib/linux/chmod.c"
       "lib/linux/clock_gettime.c"
@@ -233,6 +264,23 @@
       "lib/linux/uname.c"
       "lib/linux/unlink.c"
       "lib/linux/utimensat.c"
+=======
+      "lib/linux/chmod.c"
+      "lib/linux/clock_gettime.c"
+      "lib/linux/dup.c"
+      "lib/linux/dup2.c"
+      "lib/linux/execve.c"
+      "lib/linux/fork.c"
+      "lib/linux/fsync.c"
+      "lib/linux/_getcwd.c"
+      "lib/linux/gettimeofday.c"
+      "lib/linux/ioctl3.c"
+      "lib/linux/_open3.c"
+      "lib/linux/malloc.c"
+      "lib/linux/_read.c"
+      "lib/linux/time.c"
+      "lib/linux/unlink.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/wait4.c"
       "lib/linux/waitpid.c"
       "lib/linux/x86-mes-mescc/syscall.c"
@@ -266,6 +314,10 @@
       "lib/stdio/vsnprintf.c"
       "lib/stdio/vsprintf.c"
       "lib/stdio/vsscanf.c"
+<<<<<<< HEAD
+=======
+      "lib/stdlib/calloc.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/qsort.c"
       "lib/stdlib/strtod.c"
       "lib/stdlib/strtof.c"
@@ -286,10 +338,18 @@
       "lib/stub/ldexp.c"
       "lib/stub/mprotect.c"
       "lib/stub/localtime.c"
+<<<<<<< HEAD
       "lib/stub/putenv.c"
       "lib/stub/realpath.c"
       "lib/stub/sigemptyset.c"
       "lib/x86-mes-mescc/setjmp.c"
+=======
+      "lib/stub/sigemptyset.c"
+      "lib/x86-mes-mescc/setjmp.c"
+      "lib/linux/close.c"
+      "lib/linux/rmdir.c"
+      "lib/linux/stat.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     libc_gnu_SOURCES = [
       "lib/mes/__init_io.c"
@@ -325,9 +385,12 @@
       "lib/posix/write.c"
       "lib/stdlib/atoi.c"
       "lib/linux/lseek.c"
+<<<<<<< HEAD
       "lib/dirent/__getdirentries.c"
       "lib/dirent/closedir.c"
       "lib/dirent/opendir.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/mes/__assert_fail.c"
       "lib/mes/__buffered_read.c"
       "lib/mes/__mes_debug.c"
@@ -347,7 +410,10 @@
       "lib/stdio/putc.c"
       "lib/stdio/putchar.c"
       "lib/stdio/ungetc.c"
+<<<<<<< HEAD
       "lib/stdlib/calloc.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/free.c"
       "lib/stdlib/realloc.c"
       "lib/string/memchr.c"
@@ -361,6 +427,7 @@
       "lib/posix/raise.c"
       "lib/linux/access.c"
       "lib/linux/brk.c"
+<<<<<<< HEAD
       "lib/linux/chdir.c"
       "lib/linux/chmod.c"
       "lib/linux/clock_gettime.c"
@@ -394,6 +461,23 @@
       "lib/linux/uname.c"
       "lib/linux/unlink.c"
       "lib/linux/utimensat.c"
+=======
+      "lib/linux/chmod.c"
+      "lib/linux/clock_gettime.c"
+      "lib/linux/dup.c"
+      "lib/linux/dup2.c"
+      "lib/linux/execve.c"
+      "lib/linux/fork.c"
+      "lib/linux/fsync.c"
+      "lib/linux/_getcwd.c"
+      "lib/linux/gettimeofday.c"
+      "lib/linux/ioctl3.c"
+      "lib/linux/_open3.c"
+      "lib/linux/malloc.c"
+      "lib/linux/_read.c"
+      "lib/linux/time.c"
+      "lib/linux/unlink.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/wait4.c"
       "lib/linux/waitpid.c"
       "lib/linux/x86-mes-mescc/syscall.c"
@@ -427,6 +511,10 @@
       "lib/stdio/vsnprintf.c"
       "lib/stdio/vsprintf.c"
       "lib/stdio/vsscanf.c"
+<<<<<<< HEAD
+=======
+      "lib/stdlib/calloc.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/qsort.c"
       "lib/stdlib/strtod.c"
       "lib/stdlib/strtof.c"
@@ -447,10 +535,18 @@
       "lib/stub/ldexp.c"
       "lib/stub/mprotect.c"
       "lib/stub/localtime.c"
+<<<<<<< HEAD
       "lib/stub/putenv.c"
       "lib/stub/realpath.c"
       "lib/stub/sigemptyset.c"
       "lib/x86-mes-mescc/setjmp.c"
+=======
+      "lib/stub/sigemptyset.c"
+      "lib/x86-mes-mescc/setjmp.c"
+      "lib/linux/close.c"
+      "lib/linux/rmdir.c"
+      "lib/linux/stat.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/ctype/isalnum.c"
       "lib/ctype/isalpha.c"
       "lib/ctype/isascii.c"
@@ -458,6 +554,13 @@
       "lib/ctype/isgraph.c"
       "lib/ctype/isprint.c"
       "lib/ctype/ispunct.c"
+<<<<<<< HEAD
+=======
+      "lib/dirent/__getdirentries.c"
+      "lib/dirent/closedir.c"
+      "lib/dirent/opendir.c"
+      "lib/dirent/readdir.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/math/ceil.c"
       "lib/math/fabs.c"
       "lib/math/floor.c"
@@ -466,7 +569,10 @@
       "lib/posix/execl.c"
       "lib/posix/execlp.c"
       "lib/posix/mktemp.c"
+<<<<<<< HEAD
       "lib/posix/pathconf.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/posix/sbrk.c"
       "lib/posix/sleep.c"
       "lib/posix/unsetenv.c"
@@ -538,7 +644,16 @@
       "lib/stub/system.c"
       "lib/stub/times.c"
       "lib/stub/ttyname.c"
+<<<<<<< HEAD
       "lib/stub/utime.c"
+=======
+      "lib/stub/umask.c"
+      "lib/stub/utime.c"
+      "lib/linux/chdir.c"
+      "lib/linux/fcntl.c"
+      "lib/linux/fstat.c"
+      "lib/linux/getdents.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/getegid.c"
       "lib/linux/geteuid.c"
       "lib/linux/getgid.c"
@@ -546,13 +661,28 @@
       "lib/linux/getrusage.c"
       "lib/linux/getuid.c"
       "lib/linux/ioctl.c"
+<<<<<<< HEAD
       "lib/linux/mknod.c"
       "lib/linux/readlink.c"
+=======
+      "lib/linux/link.c"
+      "lib/linux/lstat.c"
+      "lib/linux/mkdir.c"
+      "lib/linux/mknod.c"
+      "lib/linux/nanosleep.c"
+      "lib/linux/pipe.c"
+      "lib/linux/readlink.c"
+      "lib/linux/rename.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/setgid.c"
       "lib/linux/settimer.c"
       "lib/linux/setuid.c"
       "lib/linux/signal.c"
       "lib/linux/sigprogmask.c"
+<<<<<<< HEAD
+=======
+      "lib/linux/symlink.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mes_SOURCES = [
       "src/builtins.c"
@@ -573,7 +703,10 @@
       "src/string.c"
       "src/struct.c"
       "src/symbol.c"
+<<<<<<< HEAD
       "src/variable.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "src/vector.c"
     ];
   };
@@ -631,9 +764,12 @@
       "lib/posix/write.c"
       "lib/stdlib/atoi.c"
       "lib/linux/lseek.c"
+<<<<<<< HEAD
       "lib/dirent/__getdirentries.c"
       "lib/dirent/closedir.c"
       "lib/dirent/opendir.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/mes/__assert_fail.c"
       "lib/mes/__buffered_read.c"
       "lib/mes/__mes_debug.c"
@@ -653,7 +789,10 @@
       "lib/stdio/putc.c"
       "lib/stdio/putchar.c"
       "lib/stdio/ungetc.c"
+<<<<<<< HEAD
       "lib/stdlib/calloc.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/free.c"
       "lib/stdlib/realloc.c"
       "lib/string/memchr.c"
@@ -667,6 +806,7 @@
       "lib/posix/raise.c"
       "lib/linux/access.c"
       "lib/linux/brk.c"
+<<<<<<< HEAD
       "lib/linux/chdir.c"
       "lib/linux/chmod.c"
       "lib/linux/clock_gettime.c"
@@ -700,6 +840,23 @@
       "lib/linux/uname.c"
       "lib/linux/unlink.c"
       "lib/linux/utimensat.c"
+=======
+      "lib/linux/chmod.c"
+      "lib/linux/clock_gettime.c"
+      "lib/linux/dup.c"
+      "lib/linux/dup2.c"
+      "lib/linux/execve.c"
+      "lib/linux/fork.c"
+      "lib/linux/fsync.c"
+      "lib/linux/_getcwd.c"
+      "lib/linux/gettimeofday.c"
+      "lib/linux/ioctl3.c"
+      "lib/linux/_open3.c"
+      "lib/linux/malloc.c"
+      "lib/linux/_read.c"
+      "lib/linux/time.c"
+      "lib/linux/unlink.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/wait4.c"
       "lib/linux/waitpid.c"
       "lib/linux/x86-mes-gcc/syscall.c"
@@ -740,9 +897,12 @@
       "lib/posix/write.c"
       "lib/stdlib/atoi.c"
       "lib/linux/lseek.c"
+<<<<<<< HEAD
       "lib/dirent/__getdirentries.c"
       "lib/dirent/closedir.c"
       "lib/dirent/opendir.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/mes/__assert_fail.c"
       "lib/mes/__buffered_read.c"
       "lib/mes/__mes_debug.c"
@@ -762,7 +922,10 @@
       "lib/stdio/putc.c"
       "lib/stdio/putchar.c"
       "lib/stdio/ungetc.c"
+<<<<<<< HEAD
       "lib/stdlib/calloc.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/free.c"
       "lib/stdlib/realloc.c"
       "lib/string/memchr.c"
@@ -776,6 +939,7 @@
       "lib/posix/raise.c"
       "lib/linux/access.c"
       "lib/linux/brk.c"
+<<<<<<< HEAD
       "lib/linux/chdir.c"
       "lib/linux/chmod.c"
       "lib/linux/clock_gettime.c"
@@ -809,6 +973,23 @@
       "lib/linux/uname.c"
       "lib/linux/unlink.c"
       "lib/linux/utimensat.c"
+=======
+      "lib/linux/chmod.c"
+      "lib/linux/clock_gettime.c"
+      "lib/linux/dup.c"
+      "lib/linux/dup2.c"
+      "lib/linux/execve.c"
+      "lib/linux/fork.c"
+      "lib/linux/fsync.c"
+      "lib/linux/_getcwd.c"
+      "lib/linux/gettimeofday.c"
+      "lib/linux/ioctl3.c"
+      "lib/linux/_open3.c"
+      "lib/linux/malloc.c"
+      "lib/linux/_read.c"
+      "lib/linux/time.c"
+      "lib/linux/unlink.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/wait4.c"
       "lib/linux/waitpid.c"
       "lib/linux/x86-mes-gcc/syscall.c"
@@ -842,6 +1023,10 @@
       "lib/stdio/vsnprintf.c"
       "lib/stdio/vsprintf.c"
       "lib/stdio/vsscanf.c"
+<<<<<<< HEAD
+=======
+      "lib/stdlib/calloc.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/qsort.c"
       "lib/stdlib/strtod.c"
       "lib/stdlib/strtof.c"
@@ -862,10 +1047,18 @@
       "lib/stub/ldexp.c"
       "lib/stub/mprotect.c"
       "lib/stub/localtime.c"
+<<<<<<< HEAD
       "lib/stub/putenv.c"
       "lib/stub/realpath.c"
       "lib/stub/sigemptyset.c"
       "lib/x86-mes-gcc/setjmp.c"
+=======
+      "lib/stub/sigemptyset.c"
+      "lib/x86-mes-gcc/setjmp.c"
+      "lib/linux/close.c"
+      "lib/linux/rmdir.c"
+      "lib/linux/stat.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     libc_gnu_SOURCES = [
       "lib/mes/__init_io.c"
@@ -901,9 +1094,12 @@
       "lib/posix/write.c"
       "lib/stdlib/atoi.c"
       "lib/linux/lseek.c"
+<<<<<<< HEAD
       "lib/dirent/__getdirentries.c"
       "lib/dirent/closedir.c"
       "lib/dirent/opendir.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/mes/__assert_fail.c"
       "lib/mes/__buffered_read.c"
       "lib/mes/__mes_debug.c"
@@ -923,7 +1119,10 @@
       "lib/stdio/putc.c"
       "lib/stdio/putchar.c"
       "lib/stdio/ungetc.c"
+<<<<<<< HEAD
       "lib/stdlib/calloc.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/free.c"
       "lib/stdlib/realloc.c"
       "lib/string/memchr.c"
@@ -937,6 +1136,7 @@
       "lib/posix/raise.c"
       "lib/linux/access.c"
       "lib/linux/brk.c"
+<<<<<<< HEAD
       "lib/linux/chdir.c"
       "lib/linux/chmod.c"
       "lib/linux/clock_gettime.c"
@@ -970,6 +1170,23 @@
       "lib/linux/uname.c"
       "lib/linux/unlink.c"
       "lib/linux/utimensat.c"
+=======
+      "lib/linux/chmod.c"
+      "lib/linux/clock_gettime.c"
+      "lib/linux/dup.c"
+      "lib/linux/dup2.c"
+      "lib/linux/execve.c"
+      "lib/linux/fork.c"
+      "lib/linux/fsync.c"
+      "lib/linux/_getcwd.c"
+      "lib/linux/gettimeofday.c"
+      "lib/linux/ioctl3.c"
+      "lib/linux/_open3.c"
+      "lib/linux/malloc.c"
+      "lib/linux/_read.c"
+      "lib/linux/time.c"
+      "lib/linux/unlink.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/wait4.c"
       "lib/linux/waitpid.c"
       "lib/linux/x86-mes-gcc/syscall.c"
@@ -1003,6 +1220,10 @@
       "lib/stdio/vsnprintf.c"
       "lib/stdio/vsprintf.c"
       "lib/stdio/vsscanf.c"
+<<<<<<< HEAD
+=======
+      "lib/stdlib/calloc.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/stdlib/qsort.c"
       "lib/stdlib/strtod.c"
       "lib/stdlib/strtof.c"
@@ -1023,10 +1244,18 @@
       "lib/stub/ldexp.c"
       "lib/stub/mprotect.c"
       "lib/stub/localtime.c"
+<<<<<<< HEAD
       "lib/stub/putenv.c"
       "lib/stub/realpath.c"
       "lib/stub/sigemptyset.c"
       "lib/x86-mes-gcc/setjmp.c"
+=======
+      "lib/stub/sigemptyset.c"
+      "lib/x86-mes-gcc/setjmp.c"
+      "lib/linux/close.c"
+      "lib/linux/rmdir.c"
+      "lib/linux/stat.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/ctype/isalnum.c"
       "lib/ctype/isalpha.c"
       "lib/ctype/isascii.c"
@@ -1034,6 +1263,13 @@
       "lib/ctype/isgraph.c"
       "lib/ctype/isprint.c"
       "lib/ctype/ispunct.c"
+<<<<<<< HEAD
+=======
+      "lib/dirent/__getdirentries.c"
+      "lib/dirent/closedir.c"
+      "lib/dirent/opendir.c"
+      "lib/dirent/readdir.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/math/ceil.c"
       "lib/math/fabs.c"
       "lib/math/floor.c"
@@ -1042,7 +1278,10 @@
       "lib/posix/execl.c"
       "lib/posix/execlp.c"
       "lib/posix/mktemp.c"
+<<<<<<< HEAD
       "lib/posix/pathconf.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/posix/sbrk.c"
       "lib/posix/sleep.c"
       "lib/posix/unsetenv.c"
@@ -1114,7 +1353,16 @@
       "lib/stub/system.c"
       "lib/stub/times.c"
       "lib/stub/ttyname.c"
+<<<<<<< HEAD
       "lib/stub/utime.c"
+=======
+      "lib/stub/umask.c"
+      "lib/stub/utime.c"
+      "lib/linux/chdir.c"
+      "lib/linux/fcntl.c"
+      "lib/linux/fstat.c"
+      "lib/linux/getdents.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/getegid.c"
       "lib/linux/geteuid.c"
       "lib/linux/getgid.c"
@@ -1122,13 +1370,28 @@
       "lib/linux/getrusage.c"
       "lib/linux/getuid.c"
       "lib/linux/ioctl.c"
+<<<<<<< HEAD
       "lib/linux/mknod.c"
       "lib/linux/readlink.c"
+=======
+      "lib/linux/link.c"
+      "lib/linux/lstat.c"
+      "lib/linux/mkdir.c"
+      "lib/linux/mknod.c"
+      "lib/linux/nanosleep.c"
+      "lib/linux/pipe.c"
+      "lib/linux/readlink.c"
+      "lib/linux/rename.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "lib/linux/setgid.c"
       "lib/linux/settimer.c"
       "lib/linux/setuid.c"
       "lib/linux/signal.c"
       "lib/linux/sigprogmask.c"
+<<<<<<< HEAD
+=======
+      "lib/linux/symlink.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mes_SOURCES = [
       "src/builtins.c"
@@ -1149,6 +1412,7 @@
       "src/string.c"
       "src/struct.c"
       "src/symbol.c"
+<<<<<<< HEAD
       "src/variable.c"
       "src/vector.c"
     ];
@@ -2302,6 +2566,8 @@
       "src/struct.c"
       "src/symbol.c"
       "src/variable.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "src/vector.c"
     ];
   };

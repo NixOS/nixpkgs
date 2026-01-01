@@ -23,10 +23,19 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fork of the capitaine cursor theme, with some additional variants (Gruvbox, Nord, Palenight) and support for HiDPI";
     homepage = "https://github.com/sainnhe/capitaine-cursors";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Fork of the capitaine cursor theme, with some additional variants (Gruvbox, Nord, Palenight) and support for HiDPI";
+    homepage = "https://github.com/sainnhe/capitaine-cursors";
+    license = licenses.lgpl3Only;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.math-42 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

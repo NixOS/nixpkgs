@@ -19,7 +19,11 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "cymem";
     tag = "release-v${version}";
+<<<<<<< HEAD
     hash = "sha256-kZHnfUNbDyw+LD/7GgtXa6ZssTkJG2PkcM+6YLFK5RQ=";
+=======
+    hash = "sha256-4srwdQS06KeBAIaJm6XxmsHEZto0eiXBznrCHgT/BAc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -37,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cymem" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cython memory pool for RAII-style memory management";
     homepage = "https://github.com/explosion/cymem";
     changelog = "https://github.com/explosion/cymem/releases/tag/release-${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Cython memory pool for RAII-style memory management";
+    homepage = "https://github.com/explosion/cymem";
+    changelog = "https://github.com/explosion/cymem/releases/tag/release-${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

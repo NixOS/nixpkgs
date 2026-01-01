@@ -45,7 +45,11 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix="$out" $configureFlags
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library for registering global key bindings";
     longDescription = ''
       keybinder is a library for registering global keyboard shortcuts.
@@ -58,8 +62,14 @@ stdenv.mkDerivation rec {
       * Lua bindings, ``lua-keybinder``
     '';
     homepage = "https://github.com/engla/keybinder/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

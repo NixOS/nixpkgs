@@ -65,17 +65,30 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Ruby interpreter written in Java";
     homepage = "https://www.jruby.org/";
     changelog = "https://github.com/jruby/jruby/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Ruby interpreter written in Java";
+    homepage = "https://www.jruby.org/";
+    changelog = "https://github.com/jruby/jruby/releases/tag/${finalAttrs.version}";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cpl10
       gpl2
       lgpl21
     ];
     platforms = jre.meta.platforms;
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.fzakaria ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+=======
+    maintainers = [ maintainers.fzakaria ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

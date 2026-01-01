@@ -20,7 +20,11 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass
+<<<<<<< HEAD
 from datetime import datetime, date
+=======
+from datetime import UTC, datetime
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
@@ -29,17 +33,23 @@ from typing import Any, Callable
 from urllib.parse import urljoin, urlparse
 
 import git
+<<<<<<< HEAD
 from packaging.version import InvalidVersion, parse as parse_version
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"  # " vim gets confused here
 ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 
+<<<<<<< HEAD
 GIT_TAGS_PREFIX = "refs/tags/"
 
 VERSION_DATE_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2})$")
 VERSION_TAG_PATTERN = re.compile(r"^(.+?)-unstable-")
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 LOG_LEVELS = {
     logging.getLevelName(level): level
     for level in [logging.DEBUG, logging.INFO, logging.WARN, logging.ERROR]
@@ -131,6 +141,7 @@ class Repo:
 
         return loaded["rev"], updated
 
+<<<<<<< HEAD
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def get_latest_tag(self) -> str | None:
         try:
@@ -183,6 +194,8 @@ class Repo:
             log.warning("Unexpected error fetching tags for %s: %s", self.uri, e)
             return None
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     def _prefetch(self, ref: str | None):
         cmd = ["nix-prefetch-git", "--quiet", "--fetch-submodules", self.uri]
         if ref is not None:
@@ -201,7 +214,11 @@ class Repo:
         return f"""fetchgit {{
       url = "{self.uri}";
       rev = "{plugin.commit}";
+<<<<<<< HEAD
       hash = "{plugin.to_sri_hash()}";
+=======
+      sha256 = "{plugin.sha256}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }}"""
 
 
@@ -256,6 +273,7 @@ class RepoGitHub(Repo):
             assert commit_link is not None, f"No link tag found feed entry {xml!r}"
             url = urlparse(commit_link.get("href"))
             updated_tag = latest_entry.find(ATOM_UPDATED)
+<<<<<<< HEAD
             assert updated_tag is not None and updated_tag.text is not None, (
                 f"No updated tag found feed entry {xml!r}"
             )
@@ -403,6 +421,14 @@ class RepoGitHub(Repo):
             )
             return None
 
+=======
+            assert (
+                updated_tag is not None and updated_tag.text is not None
+            ), f"No updated tag found feed entry {xml!r}"
+            updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
+            return Path(str(url.path)).name, updated
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     def _check_for_redirect(self, url: str, req: http.client.HTTPResponse):
         response_url = req.geturl()
         if url != response_url:
@@ -436,7 +462,11 @@ class RepoGitHub(Repo):
       owner = "{self.owner}";
       repo = "{self.repo}";
       rev = "{plugin.commit}";
+<<<<<<< HEAD
       hash = "{plugin.to_sri_hash()}";{submodule_attr}
+=======
+      sha256 = "{plugin.sha256}";{submodule_attr}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }}"""
 
 
@@ -485,12 +515,16 @@ class Plugin:
     has_submodules: bool
     sha256: str
     date: datetime | None = None
+<<<<<<< HEAD
     last_tag: str | None = None
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     @property
     def normalized_name(self) -> str:
         return self.name.replace(".", "-")
 
+<<<<<<< HEAD
     def to_sri_hash(self) -> str:
         if self.sha256.startswith("sha256-"):
             return self.sha256
@@ -538,6 +572,12 @@ class Plugin:
         )
 
         return date, last_tag
+=======
+    @property
+    def version(self) -> str:
+        assert self.date is not None
+        return self.date.strftime("%Y-%m-%d")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     def as_json(self) -> dict[str, str]:
         copy = self.__dict__.copy()
@@ -640,6 +680,7 @@ class Editor:
             autocommit = not args.no_commit
             if autocommit:
                 assert editor.nixpkgs_repo is not None
+<<<<<<< HEAD
 
                 commit_message = "{drv_name}: init at {version}".format(
                     drv_name=editor.get_drv_name(plugin.normalized_name),
@@ -655,6 +696,14 @@ class Editor:
                 commit(
                     editor.nixpkgs_repo,
                     commit_message,
+=======
+                commit(
+                    editor.nixpkgs_repo,
+                    "{drv_name}: init at {version}".format(
+                        drv_name=editor.get_drv_name(plugin.normalized_name),
+                        version=plugin.version,
+                    ),
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                     [args.outfile, args.input_file],
                 )
 
@@ -671,18 +720,33 @@ class Editor:
         plugins = []
         for name, attr in data.items():
             checksum = attr["checksum"]
+<<<<<<< HEAD
             version_str = attr["version"]
 
             date, last_tag = Plugin.parse_version_string(version_str)
 
             pdesc = PluginDesc.load_from_string(config, f"{attr['homePage']} as {name}")
+=======
+
+            # https://github.com/NixOS/nixpkgs/blob/8a335419/pkgs/applications/editors/neovim/build-neovim-plugin.nix#L36
+            # https://github.com/NixOS/nixpkgs/pull/344478#discussion_r1786646055
+            version = re.search(r"\d\d\d\d-\d\d?-\d\d?", attr["version"])
+            if version is None:
+                raise ValueError(f"Cannot parse version: {attr['version']}")
+            date = datetime.strptime(version.group(), "%Y-%m-%d")
+
+            pdesc = PluginDesc.load_from_string(config, f'{attr["homePage"]} as {name}')
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             p = Plugin(
                 attr["pname"],
                 checksum["rev"],
                 checksum["submodules"],
                 checksum["sha256"],
                 date,
+<<<<<<< HEAD
                 last_tag=last_tag,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             )
 
             plugins.append((pdesc, p))
@@ -758,12 +822,16 @@ class Editor:
             ]
         )
 
+<<<<<<< HEAD
         def update() -> tuple[Redirects, list[tuple[str, str, str]]]:
             """
             Returns:
                 tuple of (redirects, updated_plugins)
                 where updated_plugins is [(name, old_version, new_version), ...]
             """
+=======
+        def update() -> Redirects:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             if len(plugins_to_update) == 0:
                 log.error(
                     "\n\n\n\nIt seems like you provided some arguments to `--update`:\n"
@@ -773,7 +841,11 @@ class Editor:
                     "Are you sure you provided the same URIs as in your input file?\n"
                     "(" + str(input_file) + ")\n\n"
                 )
+<<<<<<< HEAD
                 return {}, []
+=======
+                return {}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
             try:
                 pool = Pool(processes=config.proc)
@@ -787,6 +859,7 @@ class Editor:
                 results = self.merge_results(current_plugins, results)
             plugins, redirects = check_results(results)
 
+<<<<<<< HEAD
             # Track version changes for commit message generation
             updated_plugins = []
             current_plugin_map = {p.normalized_name: p for _, p in current_plugins}
@@ -806,6 +879,12 @@ class Editor:
             self.generate_nix(plugins, output_file)
 
             return redirects, updated_plugins
+=======
+            plugins = sorted(plugins, key=lambda v: v[1].normalized_name)
+            self.generate_nix(plugins, output_file)
+
+            return redirects
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         return update
 
@@ -823,7 +902,11 @@ class Editor:
 
         for plugin_desc, plugin, redirect in fetched:
             # Check if plugin is a Plugin object and has normalized_name attribute
+<<<<<<< HEAD
             if isinstance(plugin, Plugin) and hasattr(plugin, "normalized_name"):
+=======
+            if isinstance(plugin, Plugin) and hasattr(plugin, 'normalized_name'):
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
             elif isinstance(plugin, Exception):
                 # For exceptions, we can't determine the normalized_name
@@ -831,9 +914,13 @@ class Editor:
                 log.error(f"Error fetching plugin {plugin_desc.name}: {plugin!r}")
             else:
                 # For unexpected types, log the issue
+<<<<<<< HEAD
                 log.error(
                     f"Unexpected plugin type for {plugin_desc.name}: {type(plugin)}"
                 )
+=======
+                log.error(f"Unexpected plugin type for {plugin_desc.name}: {type(plugin)}")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         return list(result.values())
 
@@ -993,18 +1080,24 @@ def prefetch_plugin(
     log.info(f"Fetching last commit for plugin {p.name} from {p.repo.uri}@{p.branch}")
     commit, date = p.repo.latest_commit()
 
+<<<<<<< HEAD
     latest_tag = p.repo.get_latest_tag()
     if latest_tag:
         log.debug("Latest tag for %s: %s", p.name, latest_tag)
     else:
         log.debug("No tags found for %s, will use '0' prefix", p.name)
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cached_plugin = cache[commit] if cache else None
     if cached_plugin is not None:
         log.debug(f"Cache hit for {p.name}!")
         cached_plugin.name = p.name
         cached_plugin.date = date
+<<<<<<< HEAD
         cached_plugin.last_tag = latest_tag
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         return cached_plugin, p.repo.redirect
 
     has_submodules = p.repo.has_submodules()
@@ -1012,7 +1105,11 @@ def prefetch_plugin(
     sha256 = p.repo.prefetch(commit)
 
     return (
+<<<<<<< HEAD
         Plugin(p.name, commit, has_submodules, sha256, date=date, last_tag=latest_tag),
+=======
+        Plugin(p.name, commit, has_submodules, sha256, date=date),
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         p.repo.redirect,
     )
 
@@ -1096,11 +1193,15 @@ class Cache:
             data = json.load(f)
             for attr in data.values():
                 p = Plugin(
+<<<<<<< HEAD
                     attr["name"],
                     attr["commit"],
                     attr["has_submodules"],
                     attr["sha256"],
                     last_tag=attr.get("last_tag"),
+=======
+                    attr["name"], attr["commit"], attr["has_submodules"], attr["sha256"]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 )
                 downloads[attr["commit"]] = p
         return downloads
@@ -1221,13 +1322,18 @@ def update_plugins(editor: Editor, args):
     )
 
     start_time = time.time()
+<<<<<<< HEAD
     redirects, updated_plugins = update()
+=======
+    redirects = update()
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     duration = time.time() - start_time
     print(f"The plugin update took {duration:.2f}s.")
     editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, redirects)
 
     autocommit = not args.no_commit
 
+<<<<<<< HEAD
     if autocommit and len(updated_plugins) > 0:
         try:
             repo = git.Repo(os.getcwd())
@@ -1240,6 +1346,14 @@ def update_plugins(editor: Editor, args):
 
             print(args.outfile)
             commit(repo, message, [args.outfile])
+=======
+    if autocommit:
+        try:
+            repo = git.Repo(os.getcwd())
+            updated = datetime.now(tz=UTC).strftime("%Y-%m-%d")
+            print(args.outfile)
+            commit(repo, f"{editor.attr_path}: update on {updated}", [args.outfile])
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         except git.InvalidGitRepositoryError as e:
             print(f"Not in a git repository: {e}", file=sys.stderr)
             sys.exit(1)

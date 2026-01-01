@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
   # tries to access /sys/
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "More powerful alternative to sysctl(8) with a terminal user interface";
     homepage = "https://github.com/orhun/systeroid";
@@ -40,6 +41,17 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "More powerful alternative to sysctl(8) with a terminal user interface";
+    homepage = "https://github.com/orhun/systeroid";
+    changelog = "https://github.com/orhun/systeroid/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
   };

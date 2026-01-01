@@ -58,12 +58,21 @@ rec {
     chmod a+x $out/bin/glow
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Glow: language for safe Decentralized Applications (DApps)";
     homepage = "https://glow-lang.org";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "Glow: language for safe Decentralized Applications (DApps)";
+    homepage = "https://glow-lang.org";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = true; # Broken for all platforms since 2023-10-13
   };
 }

@@ -45,7 +45,10 @@ in
     expected = ''
       on-unmatched = "info"
       tree-root-file = ".git/index"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       [formatter.nixfmt]
       command = "nixfmt"
       includes = ["*.nix"]
@@ -61,7 +64,10 @@ in
     expected = ''
       on-unmatched = "info"
       tree-root-file = "overridden"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       [formatter.nixfmt]
       command = "nixfmt"
       includes = ["*.nix"]

@@ -4,6 +4,10 @@
   name = "docker-registry";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
+<<<<<<< HEAD
+=======
+      globin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ironpinguin
       cafkafk
     ];

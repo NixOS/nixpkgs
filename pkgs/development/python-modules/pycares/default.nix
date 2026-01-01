@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycares" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface for c-ares";
     homepage = "https://github.com/saghul/pycares";
     changelog = "https://github.com/saghul/pycares/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python interface for c-ares";
+    homepage = "https://github.com/saghul/pycares";
+    changelog = "https://github.com/saghul/pycares/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -247,12 +247,21 @@ buildPythonPackage {
   ]
   ++ optional-dependencies.grpc;
 
+<<<<<<< HEAD
   meta = {
     description = "Build Production-Grade AI Applications";
     homepage = "https://github.com/bentoml/BentoML";
     changelog = "https://github.com/bentoml/BentoML/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Build Production-Grade AI Applications";
+    homepage = "https://github.com/bentoml/BentoML";
+    changelog = "https://github.com/bentoml/BentoML/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       happysalada
       natsukium
     ];

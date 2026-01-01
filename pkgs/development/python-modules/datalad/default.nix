@@ -58,7 +58,11 @@ buildPythonPackage rec {
     owner = "datalad";
     repo = "datalad";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-C3e9k4RDFfDMaimZ/7TtAJNzdlfVrKoTHVl0zKL9EjI=";
+=======
+    hash = "sha256-VkHTX0j963N2HMwHoJv8M314SykXFB9u4eqIUDeJ+tw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

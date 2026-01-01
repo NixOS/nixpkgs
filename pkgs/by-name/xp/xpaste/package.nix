@@ -25,11 +25,20 @@ python3Packages.buildPythonApplication rec {
   # no tests, no python module to import, no version output to check
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Paste text into X windows that don't work with selections";
     mainProgram = "xpaste";
     homepage = "https://github.com/ossobv/xpaste";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Paste text into X windows that don't work with selections";
+    mainProgram = "xpaste";
+    homepage = "https://github.com/ossobv/xpaste";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

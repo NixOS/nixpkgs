@@ -66,13 +66,21 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
+<<<<<<< HEAD
     version = "2.8.4";
+=======
+    version = "2.8.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
       hash = "sha256-rrwoyTejfOwSWMZ0juTE4CzgeRVBrC7AISFUoFBMaIs=";
+=======
+      hash = "sha256-QV9h+TMAuRCkYFr8KMOPhWq5fEnKpmA/HxQ8fV/jKBI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetchSubmodules = true;
     };
 
@@ -232,7 +240,11 @@ stdenv.mkDerivation (
         --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
         --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
         --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
+<<<<<<< HEAD
         --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "bin")' \
+=======
+        --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "${placeholder "out"}/sbin")' \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
     '';
 
@@ -266,6 +278,10 @@ stdenv.mkDerivation (
       ''}
 
       # Time to cleanup the output directory.
+<<<<<<< HEAD
+=======
+      unlink $out/sbin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cp $out/etc/netdata/edit-config $out/bin/netdata-edit-config
       mv $out/lib/netdata/conf.d $out/share/netdata/conf.d
       rm -rf $out/{var,usr,etc}
@@ -333,6 +349,7 @@ stdenv.mkDerivation (
       tests.netdata = nixosTests.netdata;
     };
 
+<<<<<<< HEAD
     meta = {
       broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
       description = "Real-time performance monitoring tool";
@@ -342,6 +359,17 @@ stdenv.mkDerivation (
       mainProgram = "netdata";
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [
+=======
+    meta = with lib; {
+      broken = stdenv.buildPlatform != stdenv.hostPlatform || withEbpf;
+      description = "Real-time performance monitoring tool";
+      homepage = "https://www.netdata.cloud/";
+      changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
+      license = [ licenses.gpl3Plus ] ++ lib.optionals withCloudUi [ licenses.ncul1 ];
+      mainProgram = "netdata";
+      platforms = platforms.unix;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         mkg20001
         rhoriguchi
       ];

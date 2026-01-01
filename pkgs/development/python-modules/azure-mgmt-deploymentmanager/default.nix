@@ -38,11 +38,19 @@ buildPythonPackage rec {
     "azure.mgmt.deploymentmanager"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Deployment Manager Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/deploymentmanager/azure-mgmt-deploymentmanager";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-deploymentmanager_${version}/sdk/deploymentmanager/azure-mgmt-deploymentmanager/setup.py";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Deployment Manager Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/deploymentmanager/azure-mgmt-deploymentmanager";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-deploymentmanager_${version}/sdk/deploymentmanager/azure-mgmt-deploymentmanager/setup.py";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

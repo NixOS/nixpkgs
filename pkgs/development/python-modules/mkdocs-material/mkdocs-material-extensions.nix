@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "materialx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Markdown extension resources for MkDocs Material";
     homepage = "https://github.com/facelessuser/mkdocs-material-extensions";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    description = "Markdown extension resources for MkDocs Material";
+    homepage = "https://github.com/facelessuser/mkdocs-material-extensions";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

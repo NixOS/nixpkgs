@@ -129,11 +129,19 @@ rec {
       err "this value is" (toString v);
 
   /**
+<<<<<<< HEAD
     Generate a line of key `k` and value `v`, separated by
     character `sep`. If `sep` appears in `k`, it is escaped.
     Helper for syntaxes with different separators.
 
     `mkValueString` specifies how values should be formatted.
+=======
+    Generate a line of key k and value v, separated by
+    character sep. If sep appears in k, it is escaped.
+    Helper for synaxes with different separators.
+
+    mkValueString specifies how values should be formatted.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     ```nix
     mkKeyValueDefault {} ":" "f:oo" "bar"
@@ -350,7 +358,11 @@ rec {
     1. values are indented with tabs
     2. sections can have sub-sections
 
+<<<<<<< HEAD
     Further: [git-config examples](https://git-scm.com/docs/git-config#EXAMPLES)
+=======
+    Further: https://git-scm.com/docs/git-config#EXAMPLES
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Examples
     :::{.example}
@@ -376,7 +388,11 @@ rec {
     `attrs`
 
     : Key-value pairs to be converted to a git-config file.
+<<<<<<< HEAD
       See the [git-config documentation](https://git-scm.com/docs/git-config#_variables) for possible values.
+=======
+      See: https://git-scm.com/docs/git-config#_variables for possible values.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   */
   toGitINI =
     attrs:
@@ -430,13 +446,21 @@ rec {
     toINI_ (gitFlattenAttrs attrs);
 
   /**
+<<<<<<< HEAD
     `mkKeyValueDefault` wrapper that handles dconf INI quirks.
+=======
+    mkKeyValueDefault wrapper that handles dconf INI quirks.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     The main differences of the format is that it requires strings to be quoted.
   */
   mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (gvariant.mkValue v); } "=";
 
   /**
+<<<<<<< HEAD
     Generates INI in dconf keyfile style. See the [GNOME documentation](https://help.gnome.org/system-admin-guide/dconf-keyfiles.html)
+=======
+    Generates INI in dconf keyfile style. See https://help.gnome.org/admin/system-admin-guide/stable/dconf-keyfiles.html.en
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     for details.
   */
   toDconfINI = toINI { mkKeyValue = mkDconfKeyValue; };
@@ -509,9 +533,15 @@ rec {
 
     Structured function argument
     : allowPrettyValues
+<<<<<<< HEAD
       : If this option is true, attrsets like `{ __pretty = fn; val = …; }`
         will use `fn` to convert `val` to a pretty printed representation.
         (This means `fn` is type `Val -> String`.)
+=======
+      : If this option is true, attrsets like { __pretty = fn; val = …; }
+        will use fn to convert val to a pretty printed representation.
+        (This means fn is type Val -> String.)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     : multiline
       : If this option is true, the output is indented with newlines for attribute sets and lists
     : indent
@@ -748,6 +778,7 @@ rec {
 
   /**
     Translate a simple Nix expression to Lua representation with occasional
+<<<<<<< HEAD
     Lua-inlines that can be constructed by `mkLuaInline` function.
 
     Configuration:
@@ -759,6 +790,19 @@ rec {
     ::: {.note}
     Regardless of multiline parameter there is no trailing newline.
     :::
+=======
+    Lua-inlines that can be constructed by mkLuaInline function.
+
+    Configuration:
+
+    * multiline - by default is true which results in indented block-like view.
+    * indent - initial indent.
+    * asBindings - by default generate single value, but with this use attrset to set global vars.
+
+    Attention:
+
+    Regardless of multiline parameter there is no trailing newline.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -868,7 +912,11 @@ rec {
       abort "generators.toLua: type ${typeOf v} is unsupported";
 
   /**
+<<<<<<< HEAD
     Mark string as Lua expression to be inlined when processed by `toLua`.
+=======
+    Mark string as Lua expression to be inlined when processed by toLua.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 

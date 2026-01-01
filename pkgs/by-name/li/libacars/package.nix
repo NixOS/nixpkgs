@@ -26,11 +26,20 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/szpajder/libacars";
     description = "Aircraft Communications Addressing and Reporting System (ACARS) message decoder";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.mafo ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/szpajder/libacars";
+    description = "Aircraft Communications Addressing and Reporting System (ACARS) message decoder";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.mafo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

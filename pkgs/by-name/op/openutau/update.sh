@@ -40,4 +40,8 @@ if [ "$updated" -eq 0 ]; then
     exit 0
 fi
 
+<<<<<<< HEAD
 (cd "$(dirname "$pkgpath")" && "$(nixbuildscript "$attr.fetch-deps")" "$(dirname "$pkgpath")/deps.json")
+=======
+(cd "$(dirname "$pkgpath")" && "$(nixbuildscript "$attr.fetch-deps")" "$(dirname "$pkgpath")/deps.nix")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

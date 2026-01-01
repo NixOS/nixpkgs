@@ -37,11 +37,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "backports.datetime_fromisoformat" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/movermeyer/backports.datetime_fromisoformat/releases/tag/v${version}";
     description = "Backport of Python 3.11's datetime.fromisoformat";
     homepage = "https://github.com/movermeyer/backports.datetime_fromisoformat";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/movermeyer/backports.datetime_fromisoformat/releases/tag/v${version}";
+    description = "Backport of Python 3.11's datetime.fromisoformat";
+    homepage = "https://github.com/movermeyer/backports.datetime_fromisoformat";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

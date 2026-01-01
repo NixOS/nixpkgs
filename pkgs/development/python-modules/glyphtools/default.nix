@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glyphtools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for extracting information from font glyphs";
     homepage = "https://github.com/simoncozens/glyphtools";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python library for extracting information from font glyphs";
+    homepage = "https://github.com/simoncozens/glyphtools";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

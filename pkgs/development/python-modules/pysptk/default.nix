@@ -40,10 +40,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysptk" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper for Speech Signal Processing Toolkit (SPTK)";
     homepage = "https://pysptk.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Wrapper for Speech Signal Processing Toolkit (SPTK)";
+    homepage = "https://pysptk.readthedocs.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hyphon81 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

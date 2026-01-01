@@ -7,8 +7,11 @@
   nodejs,
   libgudev,
   systemdLibs,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm,
   openssl,
   nix-update-script,
@@ -31,7 +34,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-XAU3ru+TxUo99OQwcXNLJ8gzBOZUkC8UCAApz7M/QTM=";
   cargoRoot = "src-tauri";
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 2;
     inherit (finalAttrs) pname version src;
     hash = "sha256-gamgu9koBf+JLDswi3eGXRZybF8UiYE8CoifpQCgLaI=";
@@ -39,8 +46,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     cargo-tauri.hook
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
     pkg-config
   ]

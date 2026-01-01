@@ -10,11 +10,20 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "2025.0.0";
     hash = "sha256-nwt9Pv084jt9nWvxSXLIWu7981UGSbCgVRTrFfJA6q4=";
   };
+<<<<<<< HEAD
   meta = {
     description = "Import sorting extension for Visual Studio Code using isort";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.isort";
     homepage = "https://github.com/microsoft/vscode-isort";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Import sorting extension for Visual Studio Code using isort";
+    downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.isort";
+    homepage = "https://github.com/microsoft/vscode-isort";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

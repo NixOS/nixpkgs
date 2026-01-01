@@ -49,10 +49,18 @@ buildPythonPackage rec {
 
   #pythonImportsCheck = [ "intake_parquet" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parquet plugin for Intake";
     homepage = "https://github.com/intake/intake-parquet";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Parquet plugin for Intake";
+    homepage = "https://github.com/intake/intake-parquet";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

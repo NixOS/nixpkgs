@@ -20,10 +20,18 @@ buildPythonPackage rec {
   # upstream doesn't contain tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to manipulate PDF page labels";
     homepage = "https://github.com/lovasoa/pagelabels-py";
     maintainers = with lib.maintainers; [ teto ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Python library to manipulate PDF page labels";
+    homepage = "https://github.com/lovasoa/pagelabels-py";
+    maintainers = with maintainers; [ teto ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

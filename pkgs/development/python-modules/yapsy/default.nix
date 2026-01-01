@@ -31,9 +31,16 @@ buildPythonPackage rec {
     tagPrefix = "release_Yapsy-";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    homepage = "https://yapsy.sourceforge.net/";
+    description = "Yet another plugin system";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

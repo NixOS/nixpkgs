@@ -34,10 +34,17 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open Apple Wireless Direct Link (AWDL) implementation written in C";
     homepage = "https://owlink.org/";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Open Apple Wireless Direct Link (AWDL) implementation written in C";
+    homepage = "https://owlink.org/";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "owl";

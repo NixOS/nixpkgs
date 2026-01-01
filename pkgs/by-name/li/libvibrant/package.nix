@@ -29,12 +29,21 @@ stdenv.mkDerivation (finalAttrs: {
     linuxPackages.nvidia_x11.settings.libXNVCtrl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple library to adjust color saturation of X11 outputs";
     homepage = "https://github.com/libvibrant/libvibrant";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Scrumplex ];
+=======
+  meta = with lib; {
+    description = "Simple library to adjust color saturation of X11 outputs";
+    homepage = "https://github.com/libvibrant/libvibrant";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Scrumplex ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vibrant-cli";
   };
 })

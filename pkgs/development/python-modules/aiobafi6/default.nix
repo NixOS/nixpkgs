@@ -35,12 +35,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiobafi6" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for communication with the Big Ass Fans i6 firmware";
     homepage = "https://github.com/jfroy/aiobafi6";
     changelog = "https://github.com/jfroy/aiobafi6/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for communication with the Big Ass Fans i6 firmware";
+    homepage = "https://github.com/jfroy/aiobafi6";
+    changelog = "https://github.com/jfroy/aiobafi6/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aiobafi6";
   };
 }

@@ -161,6 +161,7 @@ buildPythonPackage rec {
 
   passthru.tests.simple = callPackage ./tests.nix { };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for checking the quality of font projects";
     homepage = "https://github.com/googlefonts/fontbakery";
@@ -168,5 +169,14 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "fontbakery";
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Tool for checking the quality of font projects";
+    homepage = "https://github.com/googlefonts/fontbakery";
+    changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    mainProgram = "fontbakery";
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

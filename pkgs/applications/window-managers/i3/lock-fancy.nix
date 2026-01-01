@@ -69,6 +69,7 @@ stdenv.mkDerivation {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
     homepage = "https://github.com/meskarune/i3lock-fancy";
@@ -76,5 +77,14 @@ stdenv.mkDerivation {
     mainProgram = "i3lock-fancy";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Bash script that takes a screenshot of the desktop, blurs the background and adds a lock icon and text";
+    homepage = "https://github.com/meskarune/i3lock-fancy";
+    maintainers = [ maintainers.reedrw ];
+    mainProgram = "i3lock-fancy";
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

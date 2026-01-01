@@ -57,12 +57,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source collection of C++ code designed to augment the C++ standard library";
     homepage = "https://abseil.io/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.andersk ];
+=======
+  meta = with lib; {
+    description = "Open-source collection of C++ code designed to augment the C++ standard library";
+    homepage = "https://abseil.io/";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = [ maintainers.andersk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Requires LFS64 APIs. 202401 and later are fine.
     broken = stdenv.hostPlatform.isMusl;
   };

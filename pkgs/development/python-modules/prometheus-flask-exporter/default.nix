@@ -36,10 +36,18 @@ buildPythonPackage rec {
     "test_group_by_lambda_is_not_supported"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Prometheus exporter for Flask applications";
     homepage = "https://github.com/rycus86/prometheus_flask_exporter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lbpdt ];
+=======
+  meta = with lib; {
+    description = "Prometheus exporter for Flask applications";
+    homepage = "https://github.com/rycus86/prometheus_flask_exporter";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lbpdt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -60,7 +60,11 @@ in
           }
           {
             name = "not_low_resolution";
+<<<<<<< HEAD
             value = "NOT (Title ~ \"(?i).*(360p|240p).*\")";
+=======
+            value = "NOT (Title ~ \"(?i).*\(360p|240p\).*\")";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           }
           {
             name = "all_channels";

@@ -22,7 +22,11 @@ buildTopkgPackage rec {
     b0
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lookup documentation of installed OCaml packages";
     longDescription = ''
       odig is a command line tool to lookup documentation of installed OCaml
@@ -30,7 +34,12 @@ buildTopkgPackage rec {
       cross-referenced `odoc` API documentation and manuals.
     '';
     homepage = "https://erratique.ch/software/odig";
+<<<<<<< HEAD
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.Julow ];
+=======
+    license = licenses.isc;
+    maintainers = [ maintainers.Julow ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

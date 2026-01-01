@@ -24,11 +24,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cursor theme using a custom color palette inspired by boreal colors";
     homepage = "https://www.gnome-look.org/s/Gnome/p/1717914";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Cursor theme using a custom color palette inspired by boreal colors";
+    homepage = "https://www.gnome-look.org/s/Gnome/p/1717914";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ argrat ];
   };
 })

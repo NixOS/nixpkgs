@@ -54,11 +54,19 @@ buildPythonPackage rec {
     "test_cached_view_class"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Caching extension for Flask";
     homepage = "https://github.com/pallets-eco/flask-caching";
     changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

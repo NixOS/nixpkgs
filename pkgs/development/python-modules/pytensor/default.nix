@@ -3,7 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   setuptools,
@@ -16,13 +19,20 @@
   filelock,
   logical-unification,
   minikanren,
+<<<<<<< HEAD
   numba,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
+<<<<<<< HEAD
+=======
+  numba,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
@@ -34,7 +44,11 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
+<<<<<<< HEAD
   version = "2.36.1";
+=======
+  version = "2.35.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -44,6 +58,7 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
     '';
+<<<<<<< HEAD
     hash = "sha256-rXLtrkuwmEe5+64Aao490VqD96LJ37/mxekWOzWRMlw=";
   };
 
@@ -56,6 +71,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-5+yMZysK69g+3uYrP12WK3ngpAYn8XrHoVjLqjvbobg=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     setuptools
     cython
@@ -68,7 +88,10 @@ buildPythonPackage rec {
     filelock
     logical-unification
     minikanren
+<<<<<<< HEAD
     numba
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     numpy
     scipy
   ];
@@ -170,6 +193,10 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
+<<<<<<< HEAD
+=======
+    "tests/sparse/sandbox/"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   passthru.updateScript = nix-update-script {
@@ -187,6 +214,10 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
+<<<<<<< HEAD
+=======
+      ferrine
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

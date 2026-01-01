@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ util-linux ];
 
+<<<<<<< HEAD
   meta = {
     description = "Encryption utility";
     mainProgram = "scrypt";
@@ -47,5 +48,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "Encryption utility";
+    mainProgram = "scrypt";
+    homepage = "https://www.tarsnap.com/scrypt.html";
+    license = licenses.bsd2;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,11 +20,14 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+<<<<<<< HEAD
   pythonRelaxDeps = [
     # https://github.com/clokep/celery-batches/pull/100
     "celery"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   dependencies = [ celery ];
 
   # requires a running celery

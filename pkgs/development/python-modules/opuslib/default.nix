@@ -54,11 +54,20 @@ buildPythonPackage {
     "tests/hl_encoder.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings to the libopus, IETF low-delay audio codec";
     homepage = "https://github.com/orion-labs/opuslib";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thelegy ];
+=======
+  meta = with lib; {
+    description = "Python bindings to the libopus, IETF low-delay audio codec";
+    homepage = "https://github.com/orion-labs/opuslib";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ thelegy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

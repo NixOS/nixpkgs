@@ -146,10 +146,17 @@ buildPythonApplication rec {
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tastiest API documentation system";
     homepage = "https://hotdoc.github.io/";
     license = [ lib.licenses.lgpl21Plus ];
+=======
+  meta = with lib; {
+    description = "Tastiest API documentation system";
+    homepage = "https://hotdoc.github.io/";
+    license = [ licenses.lgpl21Plus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

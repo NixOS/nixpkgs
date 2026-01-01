@@ -99,7 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
     command = "env HOME=$TMPDIR nextflow -version";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "DSL for data-driven computational pipelines";
     longDescription = ''
       Nextflow is a bioinformatics workflow manager that enables the development of portable and reproducible workflows.
@@ -110,11 +114,21 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.nextflow.io/";
     changelog = "https://github.com/nextflow-io/nextflow/releases";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       Etjean
     ];
     mainProgram = "nextflow";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      Etjean
+      edmundmiller
+    ];
+    mainProgram = "nextflow";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

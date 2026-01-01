@@ -46,7 +46,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Near-optimal quantification of transcripts from RNA-seq data";
     longDescription = ''
       kallisto is a program for quantifying abundances of transcripts
@@ -58,8 +62,14 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "kallisto";
     homepage = "https://pachterlab.github.io/kallisto";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.arcadio ];
+=======
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.arcadio ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

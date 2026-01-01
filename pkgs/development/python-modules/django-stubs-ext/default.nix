@@ -56,11 +56,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_stubs_ext" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extensions and monkey-patching for django-stubs";
     homepage = "https://github.com/typeddjango/django-stubs";
     changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Extensions and monkey-patching for django-stubs";
+    homepage = "https://github.com/typeddjango/django-stubs";
+    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

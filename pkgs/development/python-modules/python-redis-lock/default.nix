@@ -69,11 +69,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "redis_lock" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/ionelmc/python-redis-lock/blob/v${version}/CHANGELOG.rst";
     description = "Lock context manager implemented via redis SETNX/BLPOP";
     homepage = "https://github.com/ionelmc/python-redis-lock";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/ionelmc/python-redis-lock/blob/v${version}/CHANGELOG.rst";
+    description = "Lock context manager implemented via redis SETNX/BLPOP";
+    homepage = "https://github.com/ionelmc/python-redis-lock";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

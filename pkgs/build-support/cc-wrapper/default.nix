@@ -125,12 +125,17 @@ let
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
+<<<<<<< HEAD
   cc_solib =
     optionalString (!nativeTools) (getLib cc)
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
   cc_bin =
     optionalString (!nativeTools) (getBin cc)
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+=======
+  cc_solib = getLib cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_bin = getBin cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);

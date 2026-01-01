@@ -22,12 +22,21 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to find graphql queries in Javascript files";
     homepage = "https://github.com/xssdoctor/graphqlMaker";
     # https://github.com/xssdoctor/graphqlMaker/issues/1
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to find graphql queries in Javascript files";
+    homepage = "https://github.com/xssdoctor/graphqlMaker";
+    # https://github.com/xssdoctor/graphqlMaker/issues/1
+    license = licenses.unfree;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "graphqlMaker";
   };
 }

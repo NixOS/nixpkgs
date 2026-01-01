@@ -65,11 +65,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "atsim.potentials" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mjdrushton/atsim-potentials";
     description = "Provides tools for working with pair and embedded atom method potential models including tabulation routines for DL_POLY and LAMMPS";
     mainProgram = "potable";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mjdrushton/atsim-potentials";
+    description = "Provides tools for working with pair and embedded atom method potential models including tabulation routines for DL_POLY and LAMMPS";
+    mainProgram = "potable";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

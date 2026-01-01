@@ -39,6 +39,7 @@ gccStdenv.mkDerivation {
     install -m0755 SPASS ${extraTools} $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automated theorem prover for first-order logic";
     maintainers = with lib.maintainers; [
@@ -46,6 +47,15 @@ gccStdenv.mkDerivation {
     ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Automated theorem prover for first-order logic";
+    maintainers = with maintainers; [
+      raskin
+    ];
+    platforms = platforms.unix;
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "http://www.spass-prover.org/download/index.html";
   };
 }

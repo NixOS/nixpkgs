@@ -44,6 +44,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Cargo plugin for showing a tree-like overview of a crate's modules";

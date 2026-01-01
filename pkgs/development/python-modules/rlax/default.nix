@@ -2,9 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
 
   # build-system
   flit-core,
+=======
+  fetchpatch,
+
+  # build-system
+  setuptools,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # dependencies
   absl-py,
@@ -14,6 +21,10 @@
   jax,
   jaxlib,
   numpy,
+<<<<<<< HEAD
+=======
+  tensorflow-probability,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # tests
   dm-haiku,
@@ -35,7 +46,11 @@ buildPythonPackage rec {
   };
 
   build-system = [
+<<<<<<< HEAD
     flit-core
+=======
+    setuptools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   dependencies = [

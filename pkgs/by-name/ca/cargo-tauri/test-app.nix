@@ -8,12 +8,23 @@
   openssl,
   pkg-config,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook4,
 }:
+<<<<<<< HEAD
+=======
+
+let
+  pnpm = pnpm_9;
+in
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenv.mkDerivation (finalAttrs: {
   pname = "test-app";
   inherit (cargo-tauri) version src;
@@ -25,13 +36,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (cargo-tauri) cargoDeps;
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       ;
+<<<<<<< HEAD
     pnpm = pnpm_9;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     fetcherVersion = 1;
     hash = "sha256-gHniZv847JFrmKnTUZcgyWhFl/ovJ5IfKbbM5I21tZc=";
@@ -42,8 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     nodejs
     pkg-config
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook4

@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Program that adds error correction blocks";
     homepage = "http://members.tripod.com/professor_tom/archives/index.html";
@@ -27,5 +28,16 @@ stdenv.mkDerivation rec {
       bsd2 # for fec
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Program that adds error correction blocks";
+    homepage = "http://members.tripod.com/professor_tom/archives/index.html";
+    maintainers = [ maintainers.ar1a ];
+    license = with licenses; [
+      gpl2 # for vdmfec
+      bsd2 # for fec
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

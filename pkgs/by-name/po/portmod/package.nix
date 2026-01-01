@@ -120,10 +120,18 @@ python3Packages.buildPythonApplication {
       "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs}")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mod manager for openMW based on portage";
     homepage = "https://gitlab.com/portmod/portmod";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ marius851000 ];
+=======
+  meta = with lib; {
+    description = "Mod manager for openMW based on portage";
+    homepage = "https://gitlab.com/portmod/portmod";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ marius851000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

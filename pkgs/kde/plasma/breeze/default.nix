@@ -8,6 +8,22 @@
 mkKdeDerivation {
   pname = "breeze";
 
+<<<<<<< HEAD
+=======
+  # Fix extra thicc padding on menu items
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/breeze/-/commit/4a8a46aba6b9e39bfb02c7f46933079b5a50eff5.diff";
+      hash = "sha256-ZzRMMwz3OihChywzQWBNv9rPcZI+IcXNVzoRuXTWt9c=";
+    })
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/breeze/-/commit/2cd5b37dad8f213aab4029b6d3b80ca7f159ea50.diff";
+      hash = "sha256-3pOJEH1H3o+U40K/mtKnruPsoA+vy+HrAa8vU5Oza6c=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   outputs = [
     "out"
     "dev"

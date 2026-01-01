@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
     libzip
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://ebook-tools.sourceforge.net";
     description = "Tools and library for dealing with various ebook file formats";
     maintainers = [ ];
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "http://ebook-tools.sourceforge.net";
+    description = "Tools and library for dealing with various ebook file formats";
+    maintainers = [ ];
+    platforms = platforms.all;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

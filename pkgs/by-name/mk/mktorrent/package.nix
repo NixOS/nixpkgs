@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command line utility to create BitTorrent metainfo files";
     homepage = "https://github.com/pobrn/mktorrent/wiki";
@@ -37,6 +38,17 @@ stdenv.mkDerivation rec {
       winter
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Command line utility to create BitTorrent metainfo files";
+    homepage = "https://github.com/pobrn/mktorrent/wiki";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      Profpatsch
+      winter
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mktorrent";
   };
 }

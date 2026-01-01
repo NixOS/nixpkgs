@@ -145,6 +145,7 @@ module.exports = async ({ github, context, core, dry }) => {
 
     // This API request is important for the merge-conflict label, because it triggers the
     // creation of a new test merge commit. This is needed to actually determine the state of a PR.
+<<<<<<< HEAD
     //
     // NOTE (2025-12-15): Temporarily skipping mergeability checks here
     // on GitHub’s request to measure the impact of the resulting ref
@@ -154,13 +155,18 @@ module.exports = async ({ github, context, core, dry }) => {
     //
     // TODO: Restore mergeability checks in some form after a few days
     // or when we hear back from GitHub.
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     const pull_request = (
       await github.rest.pulls.get({
         ...context.repo,
         pull_number,
+<<<<<<< HEAD
         // Undocumented parameter (as of 2025-12-15), added by GitHub
         // for us; stability unclear.
         skip_mergeability_checks: true,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       })
     ).data
 

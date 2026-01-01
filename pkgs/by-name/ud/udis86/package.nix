@@ -42,14 +42,25 @@ stdenv.mkDerivation {
     "lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://udis86.sourceforge.net";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ timor ];
+=======
+  meta = with lib; {
+    homepage = "https://udis86.sourceforge.net";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ timor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "udcli";
     description = ''
       Easy-to-use, minimalistic x86 disassembler library (libudis86)
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

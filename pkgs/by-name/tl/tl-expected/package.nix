@@ -18,11 +18,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "C++11/14/17 std::expected with functional-style extensions";
     homepage = "https://tl.tartanllama.xyz/en/latest/api/expected.html";
     license = lib.licenses.cc0;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C++11/14/17 std::expected with functional-style extensions";
+    homepage = "https://tl.tartanllama.xyz/en/latest/api/expected.html";
+    license = licenses.cc0;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

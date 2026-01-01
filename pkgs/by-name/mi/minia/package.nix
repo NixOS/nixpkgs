@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required (VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Short read genome assembler";
     mainProgram = "minia";
     homepage = "https://github.com/GATB/minia";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ jbedo ];
+=======
+  meta = with lib; {
+    description = "Short read genome assembler";
+    mainProgram = "minia";
+    homepage = "https://github.com/GATB/minia";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ jbedo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

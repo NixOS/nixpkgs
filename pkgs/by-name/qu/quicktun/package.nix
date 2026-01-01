@@ -41,6 +41,7 @@ stdenv.mkDerivation {
 
   passthru.tests.quicktun = nixosTests.quicktun;
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Very simple, yet secure VPN software";
@@ -48,5 +49,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ h7x4 ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Very simple, yet secure VPN software";
+    homepage = "http://wiki.ucis.nl/QuickTun";
+    maintainers = with maintainers; [ h7x4 ];
+    platforms = platforms.unix;
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

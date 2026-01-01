@@ -38,8 +38,13 @@ body:
       options:
         - "Please select a version."
         - "- Unstable (26.05)"
+<<<<<<< HEAD
         - "- Stable (25.11)"
         - "- Old Stable (25.05)"
+=======
+        - "- Beta (25.11)"
+        - "- Stable (25.05)"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       default: 0
     validations:
       required: true

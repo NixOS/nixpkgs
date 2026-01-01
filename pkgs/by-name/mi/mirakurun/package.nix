@@ -71,9 +71,16 @@ buildNpmPackage rec {
       popd
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Resource manager for TV tuners";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ midchildan ];
+=======
+  meta = with lib; {
+    description = "Resource manager for TV tuners";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ midchildan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

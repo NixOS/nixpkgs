@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wifi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provides a command line wrapper for iwlist and /etc/network/interfaces";
     mainProgram = "wifi";
     homepage = "https://github.com/rockymeza/wifi";
     maintainers = with lib.maintainers; [ rhoriguchi ];
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Provides a command line wrapper for iwlist and /etc/network/interfaces";
+    mainProgram = "wifi";
+    homepage = "https://github.com/rockymeza/wifi";
+    maintainers = with maintainers; [ rhoriguchi ];
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

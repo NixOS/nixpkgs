@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   # Tests fail on Darwin, possibly because of sandboxing.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "C++ bindings for the Cairo vector graphics library";
     homepage = "https://www.cairographics.org/";
@@ -57,5 +58,16 @@ stdenv.mkDerivation rec {
     ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C++ bindings for the Cairo vector graphics library";
+    homepage = "https://www.cairographics.org/";
+    license = with licenses; [
+      lgpl2Plus
+      mpl10
+    ];
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

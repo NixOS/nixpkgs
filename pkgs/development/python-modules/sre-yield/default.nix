@@ -21,11 +21,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to efficiently generate all values that can match a given regular expression";
     mainProgram = "demo_sre_yield";
     homepage = "https://github.com/sre-yield/sre-yield";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python library to efficiently generate all values that can match a given regular expression";
+    mainProgram = "demo_sre_yield";
+    homepage = "https://github.com/sre-yield/sre-yield";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

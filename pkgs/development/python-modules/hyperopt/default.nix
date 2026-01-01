@@ -42,12 +42,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hyperopt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed Asynchronous Hyperparameter Optimization";
     mainProgram = "hyperopt-mongo-worker";
     homepage = "http://hyperopt.github.io/hyperopt/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Distributed Asynchronous Hyperparameter Optimization";
+    mainProgram = "hyperopt-mongo-worker";
+    homepage = "http://hyperopt.github.io/hyperopt/";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

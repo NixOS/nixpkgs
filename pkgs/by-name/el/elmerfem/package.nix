@@ -73,6 +73,7 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "QWT_INCLUDE_DIR" "${qt6Packages.qwt}/lib/qwt.framework/Headers")
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://elmerfem.org";
     description = "Finite element software for multiphysical problems";
@@ -82,6 +83,17 @@ stdenv.mkDerivation {
       broke
     ];
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    homepage = "https://elmerfem.org";
+    description = "Finite element software for multiphysical problems";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      wulfsta
+      broke
+    ];
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

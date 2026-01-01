@@ -20,7 +20,10 @@
   gtksourceview4,
   bash,
   udevCheckHook,
+<<<<<<< HEAD
   versionCheckHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nixosTests,
   # Change the default log level to debug for easier debugging of package issues
   withDebugLogLevel ? false,
@@ -39,14 +42,22 @@ let
 in
 (buildPythonApplication rec {
   pname = "input-remapper";
+<<<<<<< HEAD
   version = "2.2.0";
+=======
+  version = "2.1.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sezanzeb";
     repo = "input-remapper";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-MZO40Y8ym/lwHB8PETdtByAJb/UMMM6pRAAgAYao8UI=";
+=======
+    hash = "sha256-GMKcs2UK1yegGT/TBsLGgTBJROQ38M6WwnLbJIuAZwg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -67,6 +78,10 @@ in
     glib
     gobject-introspection
     pygobject3
+<<<<<<< HEAD
+=======
+    udevCheckHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ maybeXmodmap;
 
@@ -81,6 +96,7 @@ in
     psutil
   ];
 
+<<<<<<< HEAD
   # buildPythonApplication maps nativeCheckInputs to nativeInstallCheckInputs.
   nativeCheckInputs = [
     udevCheckHook
@@ -89,6 +105,11 @@ in
   ++ lib.optionals withDoCheck [ psutil ];
 
   versionCheckProgram = "${placeholder "out"}/bin/input-remapper-control";
+=======
+  doCheck = withDoCheck;
+
+  nativeCheckInputs = [ psutil ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [
     "evdev"
@@ -120,7 +141,13 @@ in
   # We only run tests in the unit folder, integration tests require UI
   # To allow tests which access the system and session DBUS to run, we start a dbus session
   # and bind it to both the system and session buses
+<<<<<<< HEAD
   upstreamCheck = lib.optionalString withDoCheck ''
+=======
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     echo "<busconfig>
       <type>session</type>
       <listen>unix:tmpdir=$TMPDIR</listen>
@@ -148,11 +175,15 @@ in
       DBUS_SYSTEM_BUS_ADDRESS=unix:path=/build/system_bus_socket \
       ${dbus}/bin/dbus-run-session --config-file dbus.cfg \
       python tests/test.py --start-dir unit
+<<<<<<< HEAD
   '';
 
   installCheckPhase = ''
     runHook preInstallCheck
     eval "$upstreamCheck"
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     runHook postInstallCheck
   '';
 

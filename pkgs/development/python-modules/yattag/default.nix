@@ -19,10 +19,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yattag" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to generate HTML or XML";
     homepage = "https://www.yattag.org/";
     license = lib.licenses.lgpl21Only;
+=======
+  meta = with lib; {
+    description = "Library to generate HTML or XML";
+    homepage = "https://www.yattag.org/";
+    license = licenses.lgpl21Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

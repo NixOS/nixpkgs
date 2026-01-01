@@ -42,11 +42,19 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://fyne.io";
     description = "Cross platform GUI toolkit in Go";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ greg ];
+=======
+  meta = with lib; {
+    homepage = "https://fyne.io";
+    description = "Cross platform GUI toolkit in Go";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ greg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fyne";
   };
 }

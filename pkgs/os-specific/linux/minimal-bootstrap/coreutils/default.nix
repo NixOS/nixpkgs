@@ -81,12 +81,21 @@ kaem.runCommand "${pname}-${version}"
       gnupatch
     ];
 
+<<<<<<< HEAD
     meta = {
       description = "GNU Core Utilities";
       homepage = "https://www.gnu.org/software/coreutils";
       license = lib.licenses.gpl3Plus;
       teams = [ lib.teams.minimal-bootstrap ];
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      description = "GNU Core Utilities";
+      homepage = "https://www.gnu.org/software/coreutils";
+      license = licenses.gpl3Plus;
+      teams = [ teams.minimal-bootstrap ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

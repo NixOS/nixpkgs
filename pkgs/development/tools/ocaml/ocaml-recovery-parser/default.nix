@@ -31,15 +31,26 @@ buildDunePackage rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple fork of OCaml parser with support for error recovery";
     homepage = "https://github.com/serokell/ocaml-recovery-parser";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Simple fork of OCaml parser with support for error recovery";
+    homepage = "https://github.com/serokell/ocaml-recovery-parser";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl2Only
       mit
       mpl20
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ romildo ];
+=======
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "menhir-recover";
     broken = lib.versionAtLeast ocaml.version "5.0";
   };

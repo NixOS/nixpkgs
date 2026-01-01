@@ -54,6 +54,10 @@ let
 in
 {
   meta.maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+    Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     happysalada
   ];
   meta.doc = ./meilisearch.md;
@@ -179,9 +183,12 @@ in
 
       # this is intentionally different from upstream's default.
       no_analytics = lib.mkDefault true;
+<<<<<<< HEAD
 
       # allow updating without manual intervention
       experimental_dumpless_upgrade = lib.mkDefault true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     # used to restore dumps

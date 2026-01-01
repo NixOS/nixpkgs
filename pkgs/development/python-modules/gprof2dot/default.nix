@@ -35,12 +35,21 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python script to convert the output from many profilers into a dot graph";
     mainProgram = "gprof2dot";
     homepage = "https://github.com/jrfonseca/gprof2dot";
     changelog = "https://github.com/jrfonseca/gprof2dot/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ pmiddend ];
+=======
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ pmiddend ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

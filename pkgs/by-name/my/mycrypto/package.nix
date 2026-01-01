@@ -39,14 +39,22 @@ appimageTools.wrapType2 {
     mv $out/share/icons/hicolor/{0x0,256x256}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free, open-source interface for interacting with the blockchain";
     longDescription = ''
       MyCrypto is an open-source, client-side tool for generating ether wallets,
       handling ERC-20 tokens, and interacting with the blockchain more easily.
     '';
     homepage = "https://mycrypto.com";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
     mainProgram = "MyCrypto";

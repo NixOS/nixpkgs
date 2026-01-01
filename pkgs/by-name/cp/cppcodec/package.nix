@@ -30,7 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Header-only C++11 library for encode/decode functions as in RFC 4648";
     longDescription = ''
       Header-only C++11 library to encode/decode base64, base64url, base32,
@@ -38,8 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
       Crockford's base32.
     '';
     homepage = "https://github.com/tplgy/cppcodec";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       panicgh
       raitobezarius
     ];

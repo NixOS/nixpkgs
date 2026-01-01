@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
     SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/verilator/verilator/blob/${src.tag}/Changes";
     description = "Fast and robust (System)Verilog simulator/compiler and linter";
@@ -111,6 +112,18 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    changelog = "https://github.com/verilator/verilator/blob/${src.tag}/Changes";
+    description = "Fast and robust (System)Verilog simulator/compiler and linter";
+    homepage = "https://www.veripool.org/verilator";
+    license = with licenses; [
+      lgpl3Only
+      artistic2
+    ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       amiloradovsky
     ];

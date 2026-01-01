@@ -64,11 +64,19 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+<<<<<<< HEAD
   meta = {
     description = "Text-to-speech engine";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.free;
+=======
+  meta = with lib; {
+    description = "Text-to-speech engine";
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+    license = licenses.free;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {

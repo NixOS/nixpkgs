@@ -21,11 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-console";
+<<<<<<< HEAD
   version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
     hash = "sha256-J7As6OiQ/49TyoXbeGsa41kD8LYyeBLwIk3AtUsQiNs=";
+=======
+  version = "49.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    hash = "sha256-/KOf0EHgXufKbSpcggAZN9Aq4VE/PzZRvTeuDi72bj4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -61,6 +69,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.kgx;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple user-friendly terminal emulator for the GNOME desktop";
     homepage = "https://gitlab.gnome.org/GNOME/console";
@@ -68,6 +77,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ zhaofengli ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple user-friendly terminal emulator for the GNOME desktop";
+    homepage = "https://gitlab.gnome.org/GNOME/console";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ zhaofengli ];
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kgx";
   };
 }

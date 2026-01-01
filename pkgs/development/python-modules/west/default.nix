@@ -37,7 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "west" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Zephyr RTOS meta tool";
     mainProgram = "west";
     longDescription = ''
@@ -58,7 +62,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/zephyrproject-rtos/west";
     changelog = "https://github.com/zephyrproject-rtos/west/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ siriobalmelli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

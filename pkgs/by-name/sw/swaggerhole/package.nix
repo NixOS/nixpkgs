@@ -31,11 +31,20 @@ python3.pkgs.buildPythonApplication {
     "swaggerhole"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to searching for secret on swaggerhub";
     mainProgram = "swaggerhole";
     homepage = "https://github.com/Liodeus/swaggerHole";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to searching for secret on swaggerhub";
+    mainProgram = "swaggerhole";
+    homepage = "https://github.com/Liodeus/swaggerHole";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

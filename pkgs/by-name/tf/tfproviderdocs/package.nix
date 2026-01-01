@@ -31,16 +31,26 @@ buildGoModule rec {
   doInstallCheck = true;
   versionCheckProgramArg = "version";
 
+<<<<<<< HEAD
   meta = {
     description = "Terraform Provider Documentation Tool";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "Terraform Provider Documentation Tool";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       tfproviderdocs is an open-source tool for validating the documentation of Terraform providers.
       It automates the checking of documentation based on the provider's code specifications and configurations.
       This helps developers maintain consistent and up-to-date documentation.
     '';
     homepage = "https://github.com/bflad/tfproviderdocs";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ tembleking ];
+=======
+    maintainers = with maintainers; [ tembleking ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tfproviderdocs";
   };
 }

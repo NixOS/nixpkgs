@@ -8,7 +8,10 @@
   python3Packages,
   stdenv,
   config,
+<<<<<<< HEAD
   testers,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   enableCfp ? true,
   enableCuda ? config.cudaSupport,
   enableFortran ? builtins.elem stdenv.hostPlatform.system gfortran.meta.platforms,
@@ -39,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional enableCuda cudatoolkit
     ++ lib.optional enableFortran gfortran
+<<<<<<< HEAD
+=======
+    ++ lib.optional enableOpenMP llvmPackages.openmp
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ lib.optionals enablePython (
       with python3Packages;
       [
@@ -48,8 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
 
+<<<<<<< HEAD
   propagatedBuildInputs = lib.optional (enableOpenMP && stdenv.cc.isClang) llvmPackages.openmp;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # compile CUDA code for all extant GPUs so the binary will work with any GPU
   # and driver combination. to be ultimately solved upstream:
   # https://github.com/LLNL/zfp/issues/178
@@ -71,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   passthru.tests = {
     cmake-config = testers.hasCmakeConfigModules {
       moduleNames = [ "zfp" ];
@@ -78,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "https://computing.llnl.gov/projects/zfp";
     description = "Library for random-access compression of floating-point arrays";

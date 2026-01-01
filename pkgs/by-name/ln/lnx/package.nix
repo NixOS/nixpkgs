@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-9fro1Dx7P+P9NTsg0gtMfr0s4TEpkZA31EFAnObiNFo=";
+<<<<<<< HEAD
   meta = {
     description = "Ultra-fast, adaptable deployment of the tantivy search engine via REST";
     mainProgram = "lnx";
@@ -27,5 +28,14 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Ultra-fast, adaptable deployment of the tantivy search engine via REST";
+    mainProgram = "lnx";
+    homepage = "https://lnx.rs/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

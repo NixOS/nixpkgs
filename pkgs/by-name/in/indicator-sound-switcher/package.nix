@@ -55,12 +55,21 @@ python3Packages.buildPythonApplication rec {
     keybinder3
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sound input/output selector indicator for Linux";
     mainProgram = "indicator-sound-switcher";
     homepage = "https://yktoo.com/en/software/sound-switcher-indicator/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ alexnortung ];
+=======
+  meta = with lib; {
+    description = "Sound input/output selector indicator for Linux";
+    mainProgram = "indicator-sound-switcher";
+    homepage = "https://yktoo.com/en/software/sound-switcher-indicator/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ alexnortung ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

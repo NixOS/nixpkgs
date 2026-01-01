@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ripe.atlas.cousteau" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client library for RIPE ATLAS API";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-cousteau";
     changelog = "https://github.com/RIPE-NCC/ripe-atlas-cousteau/blob/v${version}/CHANGES.rst";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ raitobezarius ];
+=======
+  meta = with lib; {
+    description = "Python client library for RIPE ATLAS API";
+    homepage = "https://github.com/RIPE-NCC/ripe-atlas-cousteau";
+    changelog = "https://github.com/RIPE-NCC/ripe-atlas-cousteau/blob/v${version}/CHANGES.rst";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ raitobezarius ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

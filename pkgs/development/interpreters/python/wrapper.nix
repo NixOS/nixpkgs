@@ -50,7 +50,10 @@ let
                 if [ "$prg" = "${python.executable}" ]; then
                   makeWrapper "${python.interpreter}" "$out/bin/$prg" \
                     --inherit-argv0 \
+<<<<<<< HEAD
                     --resolve-argv0 \
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                     ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} \
                     ${lib.concatStringsSep " " makeWrapperArgs}
                 elif [ "$(readlink "$prg")" = "${python.executable}" ]; then

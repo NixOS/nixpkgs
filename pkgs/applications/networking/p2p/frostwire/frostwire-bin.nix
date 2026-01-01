@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.frostwire.com/";
     description = "BitTorrent Client and Cloud File Downloader";
@@ -48,6 +49,18 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ gavin ];
+=======
+  meta = with lib; {
+    homepage = "https://www.frostwire.com/";
+    description = "BitTorrent Client and Cloud File Downloader";
+    mainProgram = "frostwire";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ gavin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "multitime";
+<<<<<<< HEAD
   version = "1.5";
+=======
+  version = "1.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "multitime";
     rev = "multitime-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-oLtBUJbu+tVhzsUv+toz2oLeXCVLYKHQXUNsqpCZBGc=";
+=======
+    sha256 = "1p6m4gyy6dw7nxnpsk32qiijagmiq9vwch0fbc25qvmybwqp8qc0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -36,12 +36,21 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/share/man/man1";
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple XLib program to highlight the cursor position";
     homepage = "https://github.com/arp242/find-cursor";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.yanganto ];
+=======
+  meta = with lib; {
+    description = "Simple XLib program to highlight the cursor position";
+    homepage = "https://github.com/arp242/find-cursor";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.yanganto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "find-cursor";
   };
 }

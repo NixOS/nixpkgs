@@ -14,12 +14,22 @@
 }:
 let
   qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {
+<<<<<<< HEAD
     inherit withGrass withServer withWebKit;
+=======
+    withGrass = withGrass;
+    withServer = withServer;
+    withWebKit = withWebKit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 
 symlinkJoin {
+<<<<<<< HEAD
   inherit (qgis-unwrapped) version outputs src;
+=======
+  inherit (qgis-unwrapped) version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "qgis";
 
   paths = [ qgis-unwrapped ];
@@ -40,8 +50,11 @@ symlinkJoin {
         --prefix PATH : $program_PATH \
         --set PYTHONPATH $program_PYTHONPATH
     done
+<<<<<<< HEAD
 
     ln -s ${qgis-unwrapped.man} $man
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru = {

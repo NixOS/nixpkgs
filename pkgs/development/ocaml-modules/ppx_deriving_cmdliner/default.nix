@@ -47,11 +47,19 @@ buildDunePackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Ppx_deriving plugin for generating command line interfaces from types for OCaml";
     homepage = "https://github.com/hammerlab/ppx_deriving_cmdliner";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Ppx_deriving plugin for generating command line interfaces from types for OCaml";
+    homepage = "https://github.com/hammerlab/ppx_deriving_cmdliner";
+    license = licenses.asl20;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 }

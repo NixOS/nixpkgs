@@ -124,6 +124,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [ "--skip=::egl" ];
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {
@@ -137,6 +141,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/YaLTeR/niri/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      foo-dogsquared
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sodiboo
       getchoo
     ];

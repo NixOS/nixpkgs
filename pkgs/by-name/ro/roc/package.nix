@@ -85,12 +85,20 @@ rustPlatform.buildRustPackage {
   checkPhase =
     lib.optionalString stdenv.isLinux ''
       runHook preCheck
+<<<<<<< HEAD
       NIX_GLIBC_PATH=${glibc.out}/lib NIX_LIBGCC_S_PATH=${stdenv.cc.cc.lib}/lib cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip glue_cli_tests --skip test_snapshots
+=======
+      NIX_GLIBC_PATH=${glibc.out}/lib NIX_LIBGCC_S_PATH=${stdenv.cc.cc.lib}/lib cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip glue_cli_tests
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       runHook postCheck
     ''
     + lib.optionalString (!stdenv.isLinux) ''
       runHook preCheck
+<<<<<<< HEAD
       cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip glue_cli_tests --skip test_snapshots
+=======
+      cargo test --release --workspace --exclude test_mono --exclude uitest -- --skip glue_cli_tests
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       runHook postCheck
     '';
 

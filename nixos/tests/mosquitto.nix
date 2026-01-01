@@ -58,8 +58,13 @@ let
 in
 {
   name = "mosquitto";
+<<<<<<< HEAD
   meta = {
     maintainers = with pkgs.lib.maintainers; [ peterhoeg ];
+=======
+  meta = with pkgs.lib; {
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes =

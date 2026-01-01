@@ -91,6 +91,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     hardcodeZeroVersion = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Viewer and exporter for Unreal Engine 1-4 assets (aka umodel)";
     homepage = "https://www.gildor.org/en/projects/umodel";
@@ -99,5 +100,15 @@ gccStdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ OPNA2608 ];
     # Hardcoded usage of SSE2
     platforms = lib.platforms.x86;
+=======
+  meta = with lib; {
+    description = "Viewer and exporter for Unreal Engine 1-4 assets (aka umodel)";
+    homepage = "https://www.gildor.org/en/projects/umodel";
+    license = licenses.mit;
+    mainProgram = "umodel";
+    maintainers = with maintainers; [ OPNA2608 ];
+    # Hardcoded usage of SSE2
+    platforms = platforms.x86;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -11,10 +11,17 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ltspice";
+<<<<<<< HEAD
   version = "26.0.1";
   src = fetchurl {
     url = "https://ltspice.analog.com/download/${finalAttrs.version}/LTspice64.msi";
     hash = "sha256-7DUCZpftMtKuV7F746PIh3tjH2QrZjJkkamAjEfsAIE=";
+=======
+  version = "24.1.10";
+  src = fetchurl {
+    url = "https://web.archive.org/web/20251117140534if_/https://ltspice.analog.com/software/LTspice64.msi";
+    hash = "sha256-2t/6idUniSRHLdJQ+5OuvcRNGRIs2PR0iiezpZ0ovY8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   dontUnpack = true;
   dontConfigure = true;
@@ -81,7 +88,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "SPICE simulator, schematic capture and waveform viewer";
     homepage = "https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html";
+<<<<<<< HEAD
     changelog = "https://ltspice.analog.com/download/updates.txt";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.unfree;
     mainProgram = "ltspice";
     maintainers = [ lib.maintainers.zimward ];

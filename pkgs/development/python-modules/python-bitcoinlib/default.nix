@@ -32,11 +32,20 @@ buildPythonPackage rec {
     "bitcoin.core.key"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/petertodd/python-bitcoinlib";
     description = "Easy interface to the Bitcoin data structures and protocol";
     changelog = "https://github.com/petertodd/python-bitcoinlib/raw/${src.rev}/release-notes.md";
     license = with lib.licenses; [ lgpl3Plus ];
     maintainers = with lib.maintainers; [ jb55 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/petertodd/python-bitcoinlib";
+    description = "Easy interface to the Bitcoin data structures and protocol";
+    changelog = "https://github.com/petertodd/python-bitcoinlib/raw/${src.rev}/release-notes.md";
+    license = with licenses; [ lgpl3Plus ];
+    maintainers = with maintainers; [ jb55 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

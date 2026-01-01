@@ -17,9 +17,16 @@ buildPythonPackage rec {
 
   env.NIX_CFLAGS_COMPILE = "-std=c++11";
 
+<<<<<<< HEAD
   meta = {
     description = "Library to simulate plate tectonics with Python bindings";
     homepage = "https://github.com/Mindwerks/plate-tectonics";
     license = lib.licenses.lgpl3;
+=======
+  meta = with lib; {
+    description = "Library to simulate plate tectonics with Python bindings";
+    homepage = "https://github.com/Mindwerks/plate-tectonics";
+    license = licenses.lgpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

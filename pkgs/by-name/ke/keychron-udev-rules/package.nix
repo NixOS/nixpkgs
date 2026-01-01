@@ -28,10 +28,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Keychron Keyboard Udev Rules, fixes issues with keyboard detection on Linux";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ kruziikrel13 ];
+=======
+  meta = with lib; {
+    description = "Keychron Keyboard Udev Rules, fixes issues with keyboard detection on Linux";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ kruziikrel13 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

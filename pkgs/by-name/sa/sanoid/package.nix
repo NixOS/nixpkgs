@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Policy-driven snapshot management tool for ZFS filesystems";
     homepage = "https://github.com/jimsalterjrs/sanoid";
@@ -100,5 +101,16 @@ stdenv.mkDerivation rec {
       Frostman
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Policy-driven snapshot management tool for ZFS filesystems";
+    homepage = "https://github.com/jimsalterjrs/sanoid";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      lopsided98
+      Frostman
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

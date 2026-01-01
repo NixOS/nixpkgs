@@ -31,11 +31,17 @@
   libimagequant,
   libjpeg,
   libjxl,
+<<<<<<< HEAD
   libraw,
   librsvg,
   libpng,
   libtiff,
   libultrahdr,
+=======
+  librsvg,
+  libpng,
+  libtiff,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libwebp,
   matio,
   openexr,
@@ -54,7 +60,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
+<<<<<<< HEAD
   version = "8.18.0";
+=======
+  version = "8.17.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "bin"
@@ -68,7 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libvips";
     repo = "libvips";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-gAFB1VkOc+OBE8IvtKo5A/v2xqb/4RwV1Q8yU12HYOA=";
+=======
+    hash = "sha256-yxjfkb2R3JPHbz0vCG4hkW9Davoc9MUPHL9Cqc+Ik0Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -110,11 +124,17 @@ stdenv.mkDerivation (finalAttrs: {
     libimagequant
     libjpeg
     libjxl
+<<<<<<< HEAD
     libraw
     librsvg
     libpng
     libtiff
     libultrahdr
+=======
+    librsvg
+    libpng
+    libtiff
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libwebp
     matio
     openexr

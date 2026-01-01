@@ -52,11 +52,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux LED controller for some Logitech G Keyboards";
     homepage = "https://github.com/MatMoul/g810-led";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Linux LED controller for some Logitech G Keyboards";
+    homepage = "https://github.com/MatMoul/g810-led";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

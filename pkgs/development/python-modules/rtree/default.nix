@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rtree" ];
 
+<<<<<<< HEAD
   meta = {
     description = "R-Tree spatial index for Python GIS";
     homepage = "https://github.com/Toblerity/rtree";
@@ -51,5 +52,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bgamari ];
     teams = [ lib.teams.geospatial ];
+=======
+  meta = with lib; {
+    description = "R-Tree spatial index for Python GIS";
+    homepage = "https://github.com/Toblerity/rtree";
+    changelog = "https://github.com/Toblerity/rtree/blob/${src.tag}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bgamari ];
+    teams = [ teams.geospatial ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pixcat" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Display images on a kitty terminal with optional resizing";
     mainProgram = "pixcat";
     homepage = "https://github.com/mirukan/pixcat";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.tilcreator ];
+=======
+  meta = with lib; {
+    description = "Display images on a kitty terminal with optional resizing";
+    mainProgram = "pixcat";
+    homepage = "https://github.com/mirukan/pixcat";
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.tilcreator ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

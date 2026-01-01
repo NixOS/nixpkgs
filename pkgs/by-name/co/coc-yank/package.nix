@@ -1,7 +1,10 @@
 {
   lib,
   buildNpmPackage,
+<<<<<<< HEAD
   nodejs_22,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   nix-update-script,
   esbuild,
@@ -44,9 +47,12 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-ISHILT/FBy2Y0UWaQkjMm5ZsYacNt3M54IJ8ckYjq3A=";
 
+<<<<<<< HEAD
   # https://github.com/NixOS/nixpkgs/issues/474535
   nodejs = nodejs_22;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ esbuild' ];
 
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';

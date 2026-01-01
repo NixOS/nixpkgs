@@ -23,10 +23,18 @@ buildDunePackage rec {
     xtmpl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "OCaml library for syntax highlighting";
     inherit (src.meta) homepage;
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ regnat ];
+=======
+  meta = with lib; {
+    description = "OCaml library for syntax highlighting";
+    inherit (src.meta) homepage;
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ regnat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

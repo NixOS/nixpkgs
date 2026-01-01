@@ -11,16 +11,27 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clouddrive2";
+<<<<<<< HEAD
   version = "0.9.18";
+=======
+  version = "0.9.16";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchurl {
     url = "https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v${finalAttrs.version}/clouddrive-2-${os}-${arch}-${finalAttrs.version}.tgz";
     hash =
       {
+<<<<<<< HEAD
         x86_64-linux = "sha256-FTddo953oYhAwSXTiLWIN2y3BV6Q+cy8sE6dNJKghiU=";
         aarch64-linux = "sha256-j23/P9CDb+0+gheMMbxE7NyHmnhHmPRWLc9SvD27pRs=";
         x86_64-darwin = "sha256-YiCkYrDldm5JcAheTCUC/gg1ZgMxMue/bcz1gEjXdy0=";
         aarch64-darwin = "sha256-CbzA38bkavPGJko0x/JqBxkx5CP7wM6iDEB2aejZrN4=";
+=======
+        x86_64-linux = "sha256-CNB0nUMWpCFy/44meHZ9q4wqaQOK3KgV4cwlZeku+o4=";
+        aarch64-linux = "sha256-OOpLh0VPycfEcmaYLlayirgQohZQx1f6LBJgRZRaLTk=";
+        x86_64-darwin = "sha256-ijdUxs9cc9M4WRn0T8oWrThO/irD4ZT5d5TRlgrddzs=";
+        aarch64-darwin = "sha256-/xu6Q7TteqwEvMKc5VMYfz7wQAUjBc8qH3SCP+YbugY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
@@ -40,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeInstallCheckPhaseInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = ./update.sh;

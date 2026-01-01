@@ -37,10 +37,17 @@ buildPythonPackage rec {
 
   dontUsePythonImportsCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Installs all the Jupyter components in one go";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Installs all the Jupyter components in one go";
+    homepage = "https://jupyter.org/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     priority = 100; # This is a metapackage which is unimportant
   };
 }

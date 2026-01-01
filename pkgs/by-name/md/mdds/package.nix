@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/share/pkgconfig $out/lib/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/mdds/mdds";
     description = "Collection of multi-dimensional data structure and indexing algorithms";
@@ -36,6 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/mdds/mdds";
+    description = "Collection of multi-dimensional data structure and indexing algorithms";
+    changelog = "https://gitlab.com/mdds/mdds/-/blob/${finalAttrs.version}/CHANGELOG";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })
 # TODO: multi-output

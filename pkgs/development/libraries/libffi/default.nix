@@ -73,7 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
@@ -90,9 +94,15 @@ stdenv.mkDerivation (finalAttrs: {
       conversions for values passed between the two languages.
     '';
     homepage = "http://sourceware.org/libffi/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "libffi" ];
   };
 })

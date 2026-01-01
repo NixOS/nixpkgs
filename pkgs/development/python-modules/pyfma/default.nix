@@ -43,11 +43,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfma" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fused multiply-add for Python";
     homepage = "https://github.com/nschloe/pyfma";
     changelog = "https://github.com/nschloe/pyfma/releases/tag/${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Fused multiply-add for Python";
+    homepage = "https://github.com/nschloe/pyfma";
+    changelog = "https://github.com/nschloe/pyfma/releases/tag/${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -28,14 +28,23 @@ buildPythonPackage rec {
       "find_library('fuse')" "'${lib.getLib pkgs.fuse}/lib/libfuse.so'"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple ctypes bindings for FUSE";
     longDescription = ''
       Python module that provides a simple interface to FUSE and MacFUSE.
       It's just one file and is implemented using ctypes.
     '';
     homepage = "https://github.com/terencehonles/fusepy";
+<<<<<<< HEAD
     license = lib.licenses.isc;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.isc;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

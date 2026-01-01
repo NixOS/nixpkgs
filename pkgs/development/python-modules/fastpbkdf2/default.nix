@@ -29,10 +29,18 @@ buildPythonPackage rec {
   ];
   propagatedNativeBuildInputs = [ cffi ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Ayrx/python-fastpbkdf2";
     description = "Python bindings for fastpbkdf2";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jqueiroz ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Ayrx/python-fastpbkdf2";
+    description = "Python bindings for fastpbkdf2";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jqueiroz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "James Bond went on a new mission as a Secret Service provider";
     homepage = "https://github.com/bilelmoussaoui/oo7";
@@ -43,6 +44,18 @@ rustPlatform.buildRustPackage rec {
       Scrumplex
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "James Bond went on a new mission as a Secret Service provider";
+    homepage = "https://github.com/bilelmoussaoui/oo7";
+    changelog = "https://github.com/bilelmoussaoui/oo7/releases/tag/${src.rev}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      getchoo
+      Scrumplex
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "oo7-cli";
   };
 }

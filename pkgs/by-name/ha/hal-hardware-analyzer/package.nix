@@ -98,14 +98,24 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/emsec/hal/blob/${src.tag}/CHANGELOG.md";
     description = "Comprehensive reverse engineering and manipulation framework for gate-level netlists";
     mainProgram = "hal";
     homepage = "https://github.com/emsec/hal";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ris
       shamilton
     ];

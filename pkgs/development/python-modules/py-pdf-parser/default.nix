@@ -45,11 +45,19 @@ buildPythonPackage rec {
     "py_pdf_parser.loaders"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to help extracting information from structured PDFs";
     homepage = "https://github.com/jstockwin/py-pdf-parser";
     changelog = "https://github.com/jstockwin/py-pdf-parser/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tool to help extracting information from structured PDFs";
+    homepage = "https://github.com/jstockwin/py-pdf-parser";
+    changelog = "https://github.com/jstockwin/py-pdf-parser/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

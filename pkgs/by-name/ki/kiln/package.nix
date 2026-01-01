@@ -29,11 +29,19 @@ buildGoModule rec {
     installManPage docs/kiln.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple static site generator for Gemini";
     homepage = "https://kiln.adnano.co/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Simple static site generator for Gemini";
+    homepage = "https://kiln.adnano.co/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kiln";
   };
 }

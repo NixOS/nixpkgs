@@ -113,7 +113,11 @@ stdenv.mkDerivation rec {
     rm $out/libexec/genymotion/libxkbcommon*
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast and easy Android emulation";
     longDescription = ''
       Genymotion is a relatively fast Android emulator which comes with
@@ -121,9 +125,16 @@ stdenv.mkDerivation rec {
       suitable for application testing.
     '';
     homepage = "https://www.genymotion.com/";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.puffnfresh ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = [ maintainers.puffnfresh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

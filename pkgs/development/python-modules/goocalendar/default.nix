@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goocalendar" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Calendar widget for GTK using PyGoocanvas";
     homepage = "https://goocalendar.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/goocalendar/-/blob/${version}/CHANGELOG";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ udono ];
+=======
+  meta = with lib; {
+    description = "Calendar widget for GTK using PyGoocanvas";
+    homepage = "https://goocalendar.tryton.org/";
+    changelog = "https://foss.heptapod.net/tryton/goocalendar/-/blob/${version}/CHANGELOG";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ udono ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

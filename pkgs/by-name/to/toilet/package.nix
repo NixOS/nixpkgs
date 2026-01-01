@@ -24,12 +24,21 @@ stdenv.mkDerivation rec {
     package = toilet;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Display large colourful characters in text mode";
     homepage = "http://caca.zoy.org/wiki/toilet";
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Display large colourful characters in text mode";
+    homepage = "http://caca.zoy.org/wiki/toilet";
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "toilet";
   };
 }

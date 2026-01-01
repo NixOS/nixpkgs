@@ -28,12 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "chameleon" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/malthe/chameleon/blob/${src.tag}/CHANGES.rst";
     description = "Fast HTML/XML Template Compiler";
     downloadPage = "https://github.com/malthe/chameleon";
     homepage = "https://chameleon.readthedocs.io";
+<<<<<<< HEAD
     license = lib.licenses.bsd0;
+=======
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

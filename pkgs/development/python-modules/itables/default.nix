@@ -14,6 +14,7 @@
   # nativeBuildInputs
   nodejs,
 
+<<<<<<< HEAD
   # optional-dependencies
   ipython,
   numpy,
@@ -27,11 +28,21 @@
   marimo,
   pyarrow,
   typing-extensions,
+=======
+  # dependencies
+  ipython,
+  numpy,
+  pandas,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "itables";
+<<<<<<< HEAD
   version = "2.6.2";
+=======
+  version = "2.5.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # itables has 4 different node packages, each with their own
   # package-lock.json, and partially depending on each other.
@@ -39,7 +50,11 @@ buildPythonPackage rec {
   # the source tarball from pypi, which includes the javascript bundle already.
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-P3PzBBB022Q3+9L3Loq18kyWhXB2JcCF/3FwHUPkxi8=";
+=======
+    hash = "sha256-7DS7rPv0MFVw6nWzaXDeRC+SQSbzcBwyOlpGAY3oTIo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pyproject = true;
@@ -56,6 +71,7 @@ buildPythonPackage rec {
     nodejs
   ];
 
+<<<<<<< HEAD
   # shiny and modin omitted due to missing deps
   optional-dependencies = {
     all = [
@@ -94,6 +110,13 @@ buildPythonPackage rec {
       pyarrow
     ];
   };
+=======
+  dependencies = [
+    ipython
+    numpy
+    pandas
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # no tests in pypi tarball
   doCheck = false;

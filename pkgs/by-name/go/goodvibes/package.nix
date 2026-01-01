@@ -56,11 +56,20 @@ stdenv.mkDerivation rec {
     patchShebangs scripts
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight internet radio player";
     homepage = "https://gitlab.com/goodvibes/goodvibes";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
+=======
+  meta = with lib; {
+    description = "Lightweight internet radio player";
+    homepage = "https://gitlab.com/goodvibes/goodvibes";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ zendo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

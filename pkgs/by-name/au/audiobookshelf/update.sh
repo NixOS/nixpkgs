@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -i bash -p curl gnused nix-prefetch-git common-updater-scripts jq prefetch-npm-deps ripgrep
+=======
+#!nix-shell -i bash -p curl gnused gawk nix-prefetch nix-prefetch-git common-updater-scripts jq prefetch-npm-deps
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 set -euo pipefail
 

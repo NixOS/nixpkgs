@@ -48,12 +48,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gdown" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "CLI tool for downloading large files from Google Drive";
     mainProgram = "gdown";
     homepage = "https://github.com/wkentaro/gdown";
     changelog = "https://github.com/wkentaro/gdown/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ breakds ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ breakds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

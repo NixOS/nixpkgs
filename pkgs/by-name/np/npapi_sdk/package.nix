@@ -15,11 +15,20 @@ stdenv.mkDerivation rec {
     sha256 = "0xxfcsjmmgbbyl9zwpzdshbx27grj5fnzjfmldmm9apws2yk9gq1";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Bundle of NPAPI headers by Mozilla";
 
     homepage = "https://bitbucket.org/mgorny/npapi-sdk"; # see also https://github.com/mozilla/npapi-sdk
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Bundle of NPAPI headers by Mozilla";
+
+    homepage = "https://bitbucket.org/mgorny/npapi-sdk"; # see also https://github.com/mozilla/npapi-sdk
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -151,11 +151,20 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Remote desktop application, server component";
     homepage = "http://x2go.org/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ averelld ];
+=======
+  meta = with lib; {
+    description = "Remote desktop application, server component";
+    homepage = "http://x2go.org/";
+    platforms = lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ averelld ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -57,11 +57,20 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/SYSTRAN/faster-whisper/releases/tag/${src.tag}";
     description = "Faster Whisper transcription with CTranslate2";
     homepage = "https://github.com/SYSTRAN/faster-whisper";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/SYSTRAN/faster-whisper/releases/tag/${src.tag}";
+    description = "Faster Whisper transcription with CTranslate2";
+    homepage = "https://github.com/SYSTRAN/faster-whisper";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

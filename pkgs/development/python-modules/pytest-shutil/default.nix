@@ -45,10 +45,18 @@ buildPythonPackage {
     "test_run_integration"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Goodie-bag of unix shell and environment tools for py.test";
     homepage = "https://github.com/manahl/pytest-plugins";
     maintainers = with lib.maintainers; [ ryansydnor ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Goodie-bag of unix shell and environment tools for py.test";
+    homepage = "https://github.com/manahl/pytest-plugins";
+    maintainers = with maintainers; [ ryansydnor ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

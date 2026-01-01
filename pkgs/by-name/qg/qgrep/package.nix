@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast regular expression grep for source code with incremental index updates";
     mainProgram = "qgrep";
@@ -47,5 +48,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.yrashk ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Fast regular expression grep for source code with incremental index updates";
+    mainProgram = "qgrep";
+    homepage = "https://github.com/zeux/qgrep";
+    license = licenses.mit;
+    maintainers = [ maintainers.yrashk ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

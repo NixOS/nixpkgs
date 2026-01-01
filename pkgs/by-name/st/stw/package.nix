@@ -31,11 +31,19 @@ stdenv.mkDerivation {
     "PREFIX=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple text widget for X resembling the watch(1) command";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ somasis ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple text widget for X resembling the watch(1) command";
+    license = licenses.mit;
+    maintainers = with maintainers; [ somasis ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "stw";
   };

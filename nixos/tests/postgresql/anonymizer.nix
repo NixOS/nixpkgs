@@ -50,9 +50,15 @@ let
             ]
 
         def check_anonymized_row(row, id, original_name):
+<<<<<<< HEAD
             t.assertEqual(row[0], id)
             t.assertNotEqual(row[1], original_name)
             t.assertFalse(bool(row[2]))
+=======
+            assert row[0] == id, f"Expected first row to have ID {id}, but got {row[0]}"
+            assert row[1] != original_name, f"Expected first row to have a name other than {original_name}"
+            assert not bool(row[2]), "Expected points to be NULL in first row"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         def find_xsv_in_dump(dump, sep=','):
             """
@@ -81,8 +87,13 @@ let
                 raise
 
         def check_original_data(output):
+<<<<<<< HEAD
             t.assertEqual(output[0], ["1", "Foo", "23"])
             t.assertEqual(output[1], ["2", "Bar", "42"])
+=======
+            assert output[0] == ['1','Foo','23'], f"Expected first row from player table to be 1,Foo,23; got {output[0]}"
+            assert output[1] == ['2','Bar','42'], f"Expected first row from player table to be 2,Bar,42; got {output[1]}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         def check_anonymized_rows(output):
             check_anonymized_row(output[0], '1', 'Foo')

@@ -70,16 +70,29 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modern emoji picker for Linux";
     mainProgram = "emote";
     homepage = "https://github.com/tom-james-watson/emote";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Modern emoji picker for Linux";
+    mainProgram = "emote";
+    homepage = "https://github.com/tom-james-watson/emote";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       emilytrau
       SuperSandro2000
       aleksana
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -11,17 +11,29 @@
 
 maven.buildMavenPackage rec {
   pname = "protege";
+<<<<<<< HEAD
   version = "5.6.8";
+=======
+  version = "5.6.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "protegeproject";
     repo = "protege";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-GplMEVEBYSTTzrGzbHlbQTXqJYka6r0QfBZFVCS7wCs=";
   };
 
   mvnJdk = jdk11;
   mvnHash = "sha256-xC/zLPPLbQ8tZIkCZHOfY6FEaWXFF5ZC1LX4ovaSSqg=";
+=======
+    hash = "sha256-Q3MHa7nCeF31n7JPltcemFBc/sJwGA9Ev0ymjQhY/U0=";
+  };
+
+  mvnJdk = jdk11;
+  mvnHash = "sha256-kemP2gDv1CYuaoK0fwzBxdLTusarPasf2jCDQj/HPYE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   patches = [
     # Pin built-in Maven plugins to avoid checksum variations on Maven updates

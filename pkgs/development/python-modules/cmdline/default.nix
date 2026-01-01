@@ -19,9 +19,16 @@ buildPythonPackage rec {
   doCheck = false;
   propagatedBuildInputs = [ pyyaml ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for consistent command line tools";
     homepage = "https://github.com/rca/cmdline";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Utilities for consistent command line tools";
+    homepage = "https://github.com/rca/cmdline";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

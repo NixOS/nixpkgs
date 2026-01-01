@@ -24,9 +24,16 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mcmtroffaes/latexcodec";
     description = "Lexer and codec to work with LaTeX code in Python";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mcmtroffaes/latexcodec";
+    description = "Lexer and codec to work with LaTeX code in Python";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

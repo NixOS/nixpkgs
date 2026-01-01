@@ -73,12 +73,21 @@ stdenv.mkDerivation rec {
     update-source-version redux "$new_version" --system="x86_64-linux"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Sample-based instrument, with a powerful phrase sequencer";
     homepage = "https://www.renoise.com/products/redux";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ mihnea-s ];
+=======
+  meta = with lib; {
+    description = "Sample-based instrument, with a powerful phrase sequencer";
+    homepage = "https://www.renoise.com/products/redux";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ mihnea-s ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

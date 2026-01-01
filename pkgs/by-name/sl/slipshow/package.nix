@@ -9,13 +9,21 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "slipshow";
+<<<<<<< HEAD
   version = "0.7.0";
+=======
+  version = "0.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "panglesd";
     repo = "slipshow";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-HV4qUp/da0GjZ/KSaE4L/qxdosnOTRcC83zIRigxFSY=";
+=======
+    hash = "sha256-cmBq9RYjvl355+tV+Nf7XmDzgbOqusCjVrqoC34R5CI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -40,7 +48,10 @@ ocamlPackages.buildDunePackage rec {
     lwt
     magic-mime
     ppx_blob
+<<<<<<< HEAD
     ppx_deriving_yojson
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ppx_sexp_value
     sexplib
   ];
@@ -48,6 +59,10 @@ ocamlPackages.buildDunePackage rec {
   doCheck = true;
 
   nativeCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {

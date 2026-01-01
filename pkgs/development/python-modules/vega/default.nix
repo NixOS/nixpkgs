@@ -56,7 +56,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vega" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "IPython/Jupyter widget for Vega and Vega-Lite";
     longDescription = ''
       To use this you have to enter a nix-shell with vega. Then run:
@@ -65,7 +69,12 @@ buildPythonPackage rec {
       jupyter nbextension enable --user vega
     '';
     homepage = "https://github.com/vega/ipyvega";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ teh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

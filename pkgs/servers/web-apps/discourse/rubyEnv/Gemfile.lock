@@ -1243,4 +1243,8 @@ RUBY VERSION
    ruby 3.3.1p55
 
 BUNDLED WITH
+<<<<<<< HEAD
    2.7.2
+=======
+   2.5.22
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

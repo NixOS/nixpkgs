@@ -60,11 +60,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Test library providing test harnesses and mock classes complementing the classes provided by GLib";
     homepage = "https://gitlab.gnome.org/pwithnall/libglib-testing";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Test library providing test harnesses and mock classes complementing the classes provided by GLib";
+    homepage = "https://gitlab.gnome.org/pwithnall/libglib-testing";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

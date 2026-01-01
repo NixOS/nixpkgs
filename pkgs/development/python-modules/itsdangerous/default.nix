@@ -27,10 +27,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/pallets/itsdangerous/blob/${version}/CHANGES.rst";
     description = "Safely pass data to untrusted environments and back";
     homepage = "https://itsdangerous.palletsprojects.com";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/pallets/itsdangerous/blob/${version}/CHANGES.rst";
+    description = "Safely pass data to untrusted environments and back";
+    homepage = "https://itsdangerous.palletsprojects.com";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

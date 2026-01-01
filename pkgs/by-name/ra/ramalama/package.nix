@@ -14,14 +14,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ramalama";
+<<<<<<< HEAD
   version = "0.15.0";
+=======
+  version = "0.14.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-0R7y1PpAxXzSlhfOFHf3cWPzZ544fYVUL0w7jOFSuAU=";
+=======
+    hash = "sha256-4RoZX8CzMGNGsh8TawPYYMi2ZZXDIGfD/p94SS+326Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python3Packages; [

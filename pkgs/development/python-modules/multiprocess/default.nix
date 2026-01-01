@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multiprocess" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multiprocessing and multithreading in Python";
     homepage = "https://github.com/uqfoundation/multiprocess";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Multiprocessing and multithreading in Python";
+    homepage = "https://github.com/uqfoundation/multiprocess";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

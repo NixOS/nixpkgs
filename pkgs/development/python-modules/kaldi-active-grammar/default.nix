@@ -71,6 +71,7 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests exist
 
+<<<<<<< HEAD
   meta = {
     description = "Python Kaldi speech recognition";
     homepage = "https://github.com/daanzu/kaldi-active-grammar";
@@ -78,5 +79,14 @@ buildPythonPackage rec {
     maintainers = [ ];
     # Other platforms are supported upstream.
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Python Kaldi speech recognition";
+    homepage = "https://github.com/daanzu/kaldi-active-grammar";
+    license = licenses.agpl3Plus;
+    maintainers = [ ];
+    # Other platforms are supported upstream.
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "class_registry" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Factory and registry pattern for Python classes";
     homepage = "https://class-registry.readthedocs.io/en/latest/";
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Factory and registry pattern for Python classes";
+    homepage = "https://class-registry.readthedocs.io/en/latest/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      hrdinka
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

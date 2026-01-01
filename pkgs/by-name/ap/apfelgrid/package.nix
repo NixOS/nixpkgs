@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Ultra-fast theory predictions for collider observables";
     mainProgram = "apfelgrid-config";
@@ -39,5 +40,14 @@ stdenv.mkDerivation rec {
     homepage = "https://nhartland.github.io/APFELgrid/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Ultra-fast theory predictions for collider observables";
+    mainProgram = "apfelgrid-config";
+    license = licenses.mit;
+    homepage = "https://nhartland.github.io/APFELgrid/";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

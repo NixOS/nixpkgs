@@ -24,12 +24,21 @@ stdenv.mkDerivation rec {
     rm -rf $out/obs-plugins $out/data
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Replay source for OBS studio";
     homepage = "https://github.com/exeldro/obs-replay-source";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Replay source for OBS studio";
+    homepage = "https://github.com/exeldro/obs-replay-source";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       flexiondotorg
       pschmitt
     ];

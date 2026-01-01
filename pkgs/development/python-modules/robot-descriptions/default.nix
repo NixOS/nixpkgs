@@ -16,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "robot-descriptions";
+<<<<<<< HEAD
   version = "1.22.0";
+=======
+  version = "1.21.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robot-descriptions";
     repo = "robot_descriptions.py";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-4O2mAkO/2xc9cAq55DMdyCzdEwMzAo5uStJwS3rQdws=";
+=======
+    hash = "sha256-/NH9OaqWVzQ3XSLEJTLlpfeCmF1Iw2ItfyOIO3LuPT4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

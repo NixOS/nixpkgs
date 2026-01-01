@@ -12,16 +12,27 @@ let
 in
 buildNpmPackage rec {
   pname = "pocket-casts";
+<<<<<<< HEAD
   version = "0.11.1";
+=======
+  version = "0.11.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "felicianotech";
     repo = "pocket-casts-desktop-app";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-UvsEyWYbohwzBPTbWjiQXQzwfEvqTEJAwbS6Oi6wtLg=";
   };
 
   npmDepsHash = "sha256-Yo/vK7wtjSTXKAtm/Xr9HUPRsE4V1c9AfqlD6hnkH/Q=";
+=======
+    hash = "sha256-ZOOJAChKCLfwI8olQ2NSk8OaoEQ9wXNS6jwotc6fdnQ=";
+  };
+
+  npmDepsHash = "sha256-hSSo2Wv5UXoowt+1JuUQPWO4vI/FiICtscIFttOgniA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -53,6 +64,7 @@ buildNpmPackage rec {
       --add-flags $out/lib/node_modules/pocket-casts/main.js
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pocket Casts webapp, packaged for the Linux Desktop";
     homepage = "https://github.com/felicianotech/pocket-casts-desktop-app";
@@ -60,5 +72,14 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ yayayayaka ];
     mainProgram = "pocket-casts";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Pocket Casts webapp, packaged for the Linux Desktop";
+    homepage = "https://github.com/felicianotech/pocket-casts-desktop-app";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yayayayaka ];
+    mainProgram = "pocket-casts";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

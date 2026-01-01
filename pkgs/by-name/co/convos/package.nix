@@ -5,6 +5,10 @@
   perl,
   perlPackages,
   makeWrapper,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   openssl,
   nixosTests,
 }:
@@ -20,7 +24,14 @@ perlPackages.buildPerlPackage rec {
     sha256 = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ makeWrapper ];
+=======
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ shortenPerlShebang ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = with perlPackages; [
     CryptPassphrase
@@ -104,6 +115,12 @@ perlPackages.buildPerlPackage rec {
     cp -vR templates $out/templates
     cp Makefile.PL $out/Makefile.PL
   ''
+<<<<<<< HEAD
+=======
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/convos
+  ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   + ''
     wrapProgram $out/bin/convos --set MOJO_HOME $out
   '';

@@ -17,15 +17,29 @@
   libxml2,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "cjs";
   version = "128.1";
+=======
+stdenv.mkDerivation {
+  pname = "cjs";
+  version = "128.0-unstable-2025-09-15";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
+<<<<<<< HEAD
     tag = finalAttrs.version;
     hash = "sha256-YJwzFKEOnwBTJUPagXk1PCYmQqVqr7Zu7aVaJCPgirU=";
+=======
+    # Backport fixes to support GLib 2.86.0 typelibs
+    # nixpkgs-update: no auto update
+    # https://github.com/linuxmint/cjs/issues/130
+    rev = "1f39576bafe6bc05bce960e590dc743dd7990e39";
+    hash = "sha256-drKLaTZLIZfPIhcVcCAB48PdM2b0GNLe5xrHGBysVmM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -67,7 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs --build build/choose-tests-locale.sh
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/linuxmint/cjs";
     description = "JavaScript bindings for Cinnamon";
 
@@ -75,14 +93,25 @@ stdenv.mkDerivation (finalAttrs: {
       This module contains JavaScript bindings based on gobject-introspection.
     '';
 
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       lgpl2Plus
       mit
       mpl11
     ];
 
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
 })
+=======
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

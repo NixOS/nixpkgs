@@ -59,7 +59,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://filezilla-project.org/";
     description = "Graphical FTP, FTPS and SFTP client";
     longDescription = ''
@@ -68,8 +72,14 @@ stdenv.mkDerivation {
       under many platforms, binaries for Windows, Linux and macOS are
       provided.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

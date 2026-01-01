@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy_lookups_data" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Additional lookup tables and data resources for spaCy";
     homepage = "https://pypi.org/project/spacy-lookups-data";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jboy ];
+=======
+  meta = with lib; {
+    description = "Additional lookup tables and data resources for spaCy";
+    homepage = "https://pypi.org/project/spacy-lookups-data";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jboy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

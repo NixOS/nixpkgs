@@ -30,10 +30,18 @@ buildPythonPackage {
     extraArgs = [ "--version=branch" ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library for parsing Protocol Data Units (PDUs) in SMPP protocol";
     homepage = "https://github.com/hologram-io/smpp.pdu";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ flokli ];
+=======
+  meta = with lib; {
+    description = "Library for parsing Protocol Data Units (PDUs) in SMPP protocol";
+    homepage = "https://github.com/hologram-io/smpp.pdu";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

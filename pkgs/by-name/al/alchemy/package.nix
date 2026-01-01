@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/alchemy
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Drawing application";
     longDescription = ''
       Alchemy is an open drawing project aimed at exploring how we can sketch,
@@ -39,10 +43,17 @@ stdenv.mkDerivation rec {
       an expanded range of ideas and possibilities in a serendipitous way.
     '';
     homepage = "http://al.chemy.org/";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "alchemy";
   };
 }

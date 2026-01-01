@@ -26,11 +26,19 @@ stdenv.mkDerivation rec {
     cp clipnotify $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Notify on new X clipboard events";
     inherit (src.meta) homepage;
     maintainers = with lib.maintainers; [ jb55 ];
     license = lib.licenses.publicDomain;
+=======
+  meta = with lib; {
+    description = "Notify on new X clipboard events";
+    inherit (src.meta) homepage;
+    maintainers = with maintainers; [ jb55 ];
+    license = licenses.publicDomain;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "clipnotify";
   };
 }

@@ -19,7 +19,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
+<<<<<<< HEAD
   version = "2.24.8";
+=======
+  version = "2.22.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,7 +33,11 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-h/YlZatUn61M5/F4msJljZDWcQyivgCAi1HC9CXvTts=";
+=======
+      hash = "sha256-4Tp9kY+Sbirf4kN/C5Q1ClcoUI/fhfUJpqL+/eO8a/o=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -42,22 +50,37 @@ stdenv.mkDerivation rec {
       name = "vc-intrinsics";
       owner = "intel";
       repo = "vc-intrinsics";
+<<<<<<< HEAD
       tag = "v0.24.1";
       hash = "sha256-IpScRc+sWEcD8ZH5TinMPVFq1++vIVp774TJsg8mUMY=";
+=======
+      tag = "v0.23.4";
+      hash = "sha256-zorhOhBTcymnAlShJxJecXD+HIfScGouhSea/A3tBXE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     })
     (fetchFromGitHub {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
+<<<<<<< HEAD
       tag = "v16.0.6";
       hash = "sha256-qxMnKQWQ32yF2rZGGOel2ynZJKfbAlk9U+ttWuzYRog=";
+=======
+      tag = "v16.0.5";
+      hash = "sha256-JfynEsCXltVdVY/LqWvZwzWfzEFUz6nI9Zub+bze1zE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
+<<<<<<< HEAD
       tag = "v16.0.19";
       hash = "sha256-GTTEThCNPyq0CpD6Vp4L0ZEEqOZ7uLbt9sdgXLs7MUg=";
+=======
+      tag = "v16.0.18";
+      hash = "sha256-JwFwjHUv1tBC7KDWAhkse557R6QCaVjOekhndQlVetM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     })
   ];
 
@@ -66,6 +89,7 @@ stdenv.mkDerivation rec {
     # https://github.com/intel/intel-graphics-compiler/commit/4f0123a7d67fb716b647f0ba5c1ab550abf2f97d
     # https://github.com/intel/intel-graphics-compiler/pull/364
     ./bump-cmake.patch
+<<<<<<< HEAD
 
     # Fix for GCC 15 by adding a previously-implicit `#include <cstdint>` and
     # replacing `<ciso646>` with `<version>` in the the llvm directory. Based
@@ -76,6 +100,8 @@ stdenv.mkDerivation rec {
     # warnings within LLVM. This is in accordance with IGC disabling warnings
     # that originate from within LLVM (see `IGC/common/LLVMWarningsPush.hpp`).
     ./gcc15-allow-llvm-free-nonheap-object-warning.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   sourceRoot = ".";
@@ -100,7 +126,11 @@ stdenv.mkDerivation rec {
     git -C llvm-project init
     git -C llvm-project -c user.name=nixbld -c user.email= commit --allow-empty -m stub
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
+<<<<<<< HEAD
       --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
+=======
+      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --ignore-whitespace -C0 ' \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                      'COMMAND patch -p1 --ignore-whitespace -i '
 
     # match default LLVM version with our provided version to apply correct patches
@@ -145,6 +175,7 @@ stdenv.mkDerivation rec {
     inherit intel-compute-runtime;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     homepage = "https://github.com/intel/intel-graphics-compiler";
@@ -152,5 +183,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
+    homepage = "https://github.com/intel/intel-graphics-compiler";
+    changelog = "https://github.com/intel/intel-graphics-compiler/releases/tag/${version}";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

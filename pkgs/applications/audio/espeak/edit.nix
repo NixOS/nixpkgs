@@ -69,11 +69,20 @@ stdenv.mkDerivation rec {
     cp src/espeakedit "$out/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Phoneme editor for espeak";
     mainProgram = "espeakedit";
     homepage = "https://espeak.sourceforge.net/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Phoneme editor for espeak";
+    mainProgram = "espeakedit";
+    homepage = "https://espeak.sourceforge.net/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

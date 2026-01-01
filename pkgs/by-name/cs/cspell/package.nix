@@ -3,41 +3,68 @@
   stdenv,
   nodejs,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   gitMinimal,
   nix-update-script,
 }:
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "cspell";
   version = "9.5.0";
+=======
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "cspell";
+  version = "9.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "streetsidesoftware";
     repo = "cspell";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-O8CwJZfFSKmPP8tE5KcpW1bC3kUKjjjHS7QAKBc79qc=";
+=======
+    hash = "sha256-XF94Bkxx+OAEldRD4L8TBokuzgGil0LaPBUbNBiEcVE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pnpmWorkspaces = [ "cspell..." ];
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm_10.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
+<<<<<<< HEAD
     pnpm = pnpm_10;
     fetcherVersion = 2;
     hash = "sha256-DBCwysotJBsM8GYro2NTwMe+t29zooX8yAr1FyPR3Ek=";
+=======
+    fetcherVersion = 2;
+    hash = "sha256-lp3rXW16/w3ZPXTg/B951SL/WN+QpUQLPjlvc6QaU20=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [

@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytube" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python 3 library for downloading YouTube Videos";
     mainProgram = "pytube";
     homepage = "https://github.com/nficano/pytube";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python 3 library for downloading YouTube Videos";
+    mainProgram = "pytube";
+    homepage = "https://github.com/nficano/pytube";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

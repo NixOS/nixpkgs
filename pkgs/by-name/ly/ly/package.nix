@@ -13,14 +13,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "1.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "fairyglade";
     repo = "ly";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-OmbOWZZR5kvqWJkNhTkV5O2tfFj5BtJPLtINe59Y0tI=";
+=======
+    hash = "sha256-2JOpC70uBvGk17edXDNeNhNqn2hHZBpOoQaUxN0IlLk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

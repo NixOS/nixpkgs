@@ -30,11 +30,19 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "sr2t" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to convert scanning reports to a tabular format";
     homepage = "https://gitlab.com/0bs1d1an/sr2t";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to convert scanning reports to a tabular format";
+    homepage = "https://gitlab.com/0bs1d1an/sr2t";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sr2t";
   };
 }

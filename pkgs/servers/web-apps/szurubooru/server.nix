@@ -5,8 +5,11 @@
   nixosTests,
   fetchPypi,
   python3,
+<<<<<<< HEAD
   ffmpeg_4-full,
   szurubooru,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -54,6 +57,10 @@ python.pkgs.buildPythonApplication {
 
   nativeBuildInputs = with python.pkgs; [ setuptools ];
   propagatedBuildInputs = with python.pkgs; [
+<<<<<<< HEAD
+=======
+    alembic
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     certifi
     coloredlogs
     legacy-cgi
@@ -69,10 +76,13 @@ python.pkgs.buildPythonApplication {
     yt-dlp
   ];
 
+<<<<<<< HEAD
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg_4-full ]}"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postInstall = ''
     mkdir $out/bin
     install -m0755 $src/szuru-admin $out/bin/szuru-admin
@@ -80,6 +90,7 @@ python.pkgs.buildPythonApplication {
 
   passthru.tests.szurubooru = nixosTests.szurubooru;
 
+<<<<<<< HEAD
   # Database migration. Needs the szurubooru server in its environment for the
   # migration to complete successfully.
   passthru.alembic = python.pkgs.alembic.overrideAttrs (old: {
@@ -99,5 +110,12 @@ python.pkgs.buildPythonApplication {
     homepage = "https://github.com/rr-/szurubooru";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ratcornu ];
+=======
+  meta = with lib; {
+    description = "Server of szurubooru, an image board engine for small and medium communities";
+    homepage = "https://github.com/rr-/szurubooru";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ ratcornu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

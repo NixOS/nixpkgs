@@ -74,10 +74,18 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "piano_transcription_inference" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Piano transcription inference package";
     homepage = "https://github.com/qiuqiangkong/piano_transcription_inference";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ azuwis ];
+=======
+  meta = with lib; {
+    description = "Piano transcription inference package";
+    homepage = "https://github.com/qiuqiangkong/piano_transcription_inference";
+    license = licenses.mit;
+    maintainers = with maintainers; [ azuwis ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

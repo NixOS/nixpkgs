@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podofo";
+<<<<<<< HEAD
   version = "1.0.3";
+=======
+  version = "1.0.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "podofo";
     repo = "podofo";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-BJSQkcaE3oKq7ojJgfPyvOphw7pq+ilEIVIxaoIcdXw=";
+=======
+    hash = "sha256-mWomK+efiq2oLnYdLSWpqwtSd0WNVU1DsYmDHierQ64=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [

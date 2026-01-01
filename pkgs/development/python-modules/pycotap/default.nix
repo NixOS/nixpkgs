@@ -14,10 +14,18 @@ buildPythonPackage rec {
     hash = "sha256-Z0NV8BMAvgPff4cXhOSYZSwtiawZzXfujmFlJjSi+Do=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Test runner for unittest that outputs TAP results to stdout";
     homepage = "https://el-tramo.be/pycotap";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mwolfe ];
+=======
+  meta = with lib; {
+    description = "Test runner for unittest that outputs TAP results to stdout";
+    homepage = "https://el-tramo.be/pycotap";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mwolfe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

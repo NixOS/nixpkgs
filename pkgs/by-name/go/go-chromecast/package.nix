@@ -38,6 +38,11 @@ buildGoModule rec {
     versionCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
     installShellCompletion --cmd go-chromecast \
       --bash <($out/bin/go-chromecast completion bash) \

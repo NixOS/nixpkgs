@@ -29,11 +29,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility to specify which application bundle should open specific file extensions";
     homepage = "https://github.com/jdek/openwith";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ zowoq ];
+=======
+  meta = with lib; {
+    description = "Utility to specify which application bundle should open specific file extensions";
+    homepage = "https://github.com/jdek/openwith";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ zowoq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"

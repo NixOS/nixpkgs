@@ -49,11 +49,20 @@ buildPythonPackage rec {
   # needed for npmDeps update
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";
     homepage = "https://github.com/django-hijack/django-hijack";
     changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    description = "Allows superusers to hijack (=login as) and work on behalf of another user";
+    homepage = "https://github.com/django-hijack/django-hijack";
+    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

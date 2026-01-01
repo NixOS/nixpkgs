@@ -19,11 +19,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Programming font that combines BIZ UD Gothic and JetBrains Mono";
     homepage = "https://github.com/yuru7/udev-gothic";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ haruki7049 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Programming font that combines BIZ UD Gothic and JetBrains Mono";
+    homepage = "https://github.com/yuru7/udev-gothic";
+    license = licenses.ofl;
+    maintainers = with maintainers; [ haruki7049 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -46,9 +46,12 @@
   SDL2,
   SDL2_ttf,
   SDL2_image,
+<<<<<<< HEAD
   sdl3,
   sdl3-ttf,
   sdl3-image,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   systemd,
   libjpeg_turbo,
   libkrb5,
@@ -56,27 +59,41 @@
   buildServer ? true,
   nocaps ? false,
   withUnfree ? false,
+<<<<<<< HEAD
   withWaylandSupport ? false,
   withSDL2 ? false,
   makeWrapper,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # tries to compile and run generate_argument_docbook.c
   withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 
   gnome-remote-desktop,
   remmina,
+<<<<<<< HEAD
   nix-update-script,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
+<<<<<<< HEAD
   version = "3.20.0";
+=======
+  version = "3.18.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-/v6M3r0qELpKvDmM8p3SnOmstyqfYNzyS7gw6HBOSd0=";
+=======
+    hash = "sha256-+/nZulRjZ/Sc2x9WkKVxyrRX/8F/qDc+2B4QGTPWAmw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -106,7 +123,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     writableTmpDirAsHomeHook
+<<<<<<< HEAD
     makeWrapper
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -142,9 +162,15 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     pcsclite
     pkcs11helper
+<<<<<<< HEAD
     sdl3
     sdl3-ttf
     sdl3-image
+=======
+    SDL2
+    SDL2_ttf
+    SDL2_image
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     uriparser
     zlib
   ]
@@ -155,11 +181,14 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-scanner
   ]
+<<<<<<< HEAD
   ++ lib.optionals withSDL2 [
     SDL2
     SDL2_ttf
     SDL2_image
   ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optionals withUnfree [
     faac
   ];
@@ -170,6 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "DOCBOOKXSL_DIR" "${docbook-xsl-nons}/xml/xsl/docbook")
   ]
+<<<<<<< HEAD
   ++ lib.mapAttrsToList lib.cmakeBool (
     {
       BUILD_TESTING = false; # false is recommended by upstream
@@ -196,6 +226,28 @@ stdenv.mkDerivation (finalAttrs: {
       WITH_WAYLAND = withWaylandSupport;
     }
   )
+=======
+  ++ lib.mapAttrsToList lib.cmakeBool {
+    BUILD_TESTING = false; # false is recommended by upstream
+    WITH_CAIRO = cairo != null;
+    WITH_CUPS = cups != null;
+    WITH_FAAC = withUnfree && faac != null;
+    WITH_FAAD2 = faad2 != null;
+    WITH_FUSE = stdenv.hostPlatform.isLinux && fuse3 != null;
+    WITH_JPEG = libjpeg_turbo != null;
+    WITH_KRB5 = libkrb5 != null;
+    WITH_OPENH264 = openh264 != null;
+    WITH_OPUS = libopus != null;
+    WITH_OSS = false;
+    WITH_MANPAGES = withManPages;
+    WITH_PCSC = pcsclite != null;
+    WITH_PULSE = libpulseaudio != null;
+    WITH_SERVER = buildServer;
+    WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
+    WITH_VAAPI = false; # false is recommended by upstream
+    WITH_X11 = true;
+  }
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     (lib.cmakeBool "SDL_USE_COMPILED_RESOURCES" false)
   ];
@@ -209,6 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+<<<<<<< HEAD
   postFixup = lib.optionalString (withWaylandSupport && withSDL2) ''
     wrapProgram $out/bin/sdl2-freerdp \
       --set SDL_VIDEODRIVER wayland
@@ -219,6 +272,11 @@ stdenv.mkDerivation (finalAttrs: {
       inherit gnome-remote-desktop remmina;
     };
     updateScript = nix-update-script { };
+=======
+  passthru.tests = {
+    inherit remmina;
+    inherit gnome-remote-desktop;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   meta = {
@@ -229,7 +287,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.freerdp.com/";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ deimelias ];
+=======
+    maintainers = with lib.maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 })

@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$bin/bin/convmv" --prefix PERL5LIB : "$PERL5LIB"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Converts filenames from one encoding to another";
     downloadPage = "https://www.j3e.de/linux/convmv/";
@@ -71,5 +72,17 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ al3xtjames ];
     mainProgram = "convmv";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Converts filenames from one encoding to another";
+    downloadPage = "https://www.j3e.de/linux/convmv/";
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+    ];
+    maintainers = with maintainers; [ al3xtjames ];
+    mainProgram = "convmv";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

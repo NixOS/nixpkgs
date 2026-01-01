@@ -68,13 +68,23 @@ stdenv.mkDerivation rec {
       --replace "docbook2man" "docbook2man --sgml"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     isIbusEngine = true;
     description = "IBus framework for table-based input methods";
     mainProgram = "ibus-table-createdb";
     homepage = "https://github.com/kaio/ibus-table/wiki";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mudri ];
+=======
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mudri ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

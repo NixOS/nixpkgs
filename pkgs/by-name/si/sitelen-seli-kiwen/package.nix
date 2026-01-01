@@ -27,11 +27,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Handwritten sitelen pona font supporting UCSUR";
     homepage = "https://www.kreativekorp.com/software/fonts/sitelenselikiwen/";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ somasis ];
+=======
+  meta = with lib; {
+    description = "Handwritten sitelen pona font supporting UCSUR";
+    homepage = "https://www.kreativekorp.com/software/fonts/sitelenselikiwen/";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ somasis ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

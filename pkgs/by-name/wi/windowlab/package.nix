@@ -38,11 +38,19 @@ stdenv.mkDerivation {
     sed "s|/usr/local|$out|g" Makefile.orig >> Makefile
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Small and simple stacking window manager";
     homepage = "http://nickgravgaard.com/windowlab/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Small and simple stacking window manager";
+    homepage = "http://nickgravgaard.com/windowlab/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "windowlab";
   };
 }

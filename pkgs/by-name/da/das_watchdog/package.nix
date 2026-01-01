@@ -32,15 +32,25 @@ stdenv.mkDerivation {
     cp test_rt $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/kmatheussen/das_watchdog";
     description = "General watchdog for the linux operating system";
     longDescription = ''
       It should run in the background at all times to ensure a realtime process
       won't hang the machine.";
     '';
+<<<<<<< HEAD
     license = lib.licenses.free;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.free;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

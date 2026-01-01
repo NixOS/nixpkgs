@@ -33,11 +33,19 @@ stdenv.mkDerivation {
     cp dist/linux64/50-wally.rules $out/lib/udev/rules.d/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "udev rules for ZSA devices";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ davidak ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "udev rules for ZSA devices";
+    license = licenses.mit;
+    maintainers = with maintainers; [ davidak ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/zsa/wally/wiki/Linux-install#2-create-a-udev-rule-file";
   };
 }

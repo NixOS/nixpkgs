@@ -38,12 +38,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "socid_extractor" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to extract details from personal pages";
     homepage = "https://github.com/soxoj/socid-extractor";
     changelog = "https://github.com/soxoj/socid-extractor/blob/v${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to extract details from personal pages";
+    homepage = "https://github.com/soxoj/socid-extractor";
+    changelog = "https://github.com/soxoj/socid-extractor/blob/v${src.tag}/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "socid_extractor";
   };
 }

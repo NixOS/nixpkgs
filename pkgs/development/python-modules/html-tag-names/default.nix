@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "HtmlTagNames" ];
 
+<<<<<<< HEAD
   meta = {
     description = "List of known HTML tags";
     homepage = "https://github.com/Riverside-Healthcare/html-tag-names";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
+=======
+  meta = with lib; {
+    description = "List of known HTML tags";
+    homepage = "https://github.com/Riverside-Healthcare/html-tag-names";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ traxys ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

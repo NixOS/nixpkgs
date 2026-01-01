@@ -28,11 +28,19 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/influxdb2-provision --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Small utility to help provisioning influxdb2";
     homepage = "https://github.com/oddlama/influxdb2-provision";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oddlama ];
+=======
+  meta = with lib; {
+    description = "Small utility to help provisioning influxdb2";
+    homepage = "https://github.com/oddlama/influxdb2-provision";
+    license = licenses.mit;
+    maintainers = with maintainers; [ oddlama ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "influxdb2-provision";
   };
 }

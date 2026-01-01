@@ -4,7 +4,10 @@
   desktop-file-utils,
   gettext,
   glib,
+<<<<<<< HEAD
   glib-networking,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gobject-introspection,
   blueprint-compiler,
   gtk4,
@@ -24,7 +27,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
+<<<<<<< HEAD
   version = "1.98.0";
+=======
+  version = "1.94.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = false;
 
   src = fetchFromGitea {
@@ -32,7 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     owner = "valos";
     repo = "Komikku";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-7UMCSqVj6eOjpuuMeOuvMtBELjkG4ayaJgFVwMDP0Ag=";
+=======
+    hash = "sha256-oSeUJ1uODLlUcX6avUoVvkt+3LwSu4DpDEQRooHFjys=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -49,7 +60,10 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
+<<<<<<< HEAD
     glib-networking
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     gtk4
     libadwaita
     libglycin

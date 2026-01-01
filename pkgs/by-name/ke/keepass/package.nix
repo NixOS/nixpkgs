@@ -20,11 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepass";
+<<<<<<< HEAD
   version = "2.60";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
     hash = "sha256-AraAdneAkLTS1wZ7pWC0Mm51m50s2hCy6wN74nlUtxo=";
+=======
+  version = "2.59";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
+    hash = "sha256-esJxGCGDb8AZi28Z7NeHMYyL8GWFpKOusua9UxlgSns=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = ".";

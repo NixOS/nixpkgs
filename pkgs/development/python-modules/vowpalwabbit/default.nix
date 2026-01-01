@@ -65,11 +65,19 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py check -ms
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project";
     homepage = "https://github.com/JohnLangford/vowpal_wabbit";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teh ];
+=======
+  meta = with lib; {
+    description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project";
+    homepage = "https://github.com/JohnLangford/vowpal_wabbit";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ teh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Test again when new version is released
     broken = stdenv.hostPlatform.isLinux;
   };

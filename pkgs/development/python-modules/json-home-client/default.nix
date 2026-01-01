@@ -33,10 +33,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "json_home_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client class for calling http+json APIs in Python";
     homepage = "https://github.com/plinss/json_home_client";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Client class for calling http+json APIs in Python";
+    homepage = "https://github.com/plinss/json_home_client";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

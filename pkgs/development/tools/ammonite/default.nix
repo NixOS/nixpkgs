@@ -13,16 +13,27 @@
 }:
 
 let
+<<<<<<< HEAD
   repo = "git@github.com:com-lihaoyi/Ammonite.git";
+=======
+  repo = "git@github.com:lihaoyi/Ammonite.git";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   common =
     { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
+<<<<<<< HEAD
       version = "3.0.6";
 
       src = fetchurl {
         url = "https://github.com/com-lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
+=======
+      version = "3.0.2";
+
+      src = fetchurl {
+        url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         inherit sha256;
       };
 
@@ -72,7 +83,11 @@ let
         runHook postInstallCheck
       '';
 
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = "Improved Scala REPL";
         longDescription = ''
           The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
@@ -81,15 +96,23 @@ let
           that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
         '';
         homepage = "https://github.com/com-lihaoyi/Ammonite";
+<<<<<<< HEAD
         license = lib.licenses.mit;
         mainProgram = "amm";
         platforms = lib.platforms.all;
+=======
+        license = licenses.mit;
+        maintainers = [ maintainers.nequissimus ];
+        mainProgram = "amm";
+        platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in
 {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
+<<<<<<< HEAD
     sha256 = "sha256-EH6zBKSVy6uiCGYd+nTS5U2HTOdkOokYVxAiA98JLfE=";
   };
   ammonite_2_13 = common {
@@ -99,5 +122,16 @@ in
   ammonite_3_3 = common {
     scalaVersion = "3.3";
     sha256 = "sha256-C+ShjuF1EnF75cDN0o28q8Afw7wwod4EUsLkdTb54wo=";
+=======
+    sha256 = "sha256-wPVvLMuc8EjTqaHY4VcP1gd4DVJQhQm0uS2f+HFuTls=";
+  };
+  ammonite_2_13 = common {
+    scalaVersion = "2.13";
+    sha256 = "sha256-OU3lAls2n4dMONIogg/qAFj5OhzqR6rBF3Hay4Onwxg=";
+  };
+  ammonite_3_3 = common {
+    scalaVersion = "3.3";
+    sha256 = "sha256-M1Pg+HsWSkk60NUzNQXxOijnfFxX5ijao76Phaz7ykQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

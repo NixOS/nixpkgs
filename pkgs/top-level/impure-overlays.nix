@@ -38,10 +38,14 @@ let
       )
     else
       # it's a file, so the result is the contents of the file itself
+<<<<<<< HEAD
       let
         overlay = import path;
       in
       if builtins.isFunction overlay then [ overlay ] else overlay;
+=======
+      import path;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 if pathOverlays != "" && builtins.pathExists pathOverlays then
   overlays pathOverlays

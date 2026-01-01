@@ -42,10 +42,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "watchdog_gevent" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Gevent-based observer for watchdog";
     homepage = "https://github.com/Bogdanp/watchdog_gevent";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ traxys ];
+=======
+  meta = with lib; {
+    description = "Gevent-based observer for watchdog";
+    homepage = "https://github.com/Bogdanp/watchdog_gevent";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ traxys ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

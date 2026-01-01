@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
     qttools
   ]);
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Advanced MIDI arpeggiator";
     mainProgram = "qmidiarp";
     longDescription = ''
@@ -45,8 +49,14 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://qmidiarp.sourceforge.net";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sjfloat ];
+=======
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sjfloat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

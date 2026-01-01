@@ -2,8 +2,11 @@
   mkDerivation,
   openssl,
   libradius,
+<<<<<<< HEAD
   libutil,
   pwd_mkdb,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 mkDerivation {
   path = "lib/libpam/libpam";
@@ -17,9 +20,12 @@ mkDerivation {
   buildInputs = [
     libradius
     openssl
+<<<<<<< HEAD
     (libutil.override {
       withPwdMkdb = pwd_mkdb;
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   MK_NIS = "no"; # TODO

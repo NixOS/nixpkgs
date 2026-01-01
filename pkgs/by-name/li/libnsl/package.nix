@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libtirpc ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client interface library for NIS(YP) and NIS+";
     homepage = "https://github.com/thkukuk/libnsl";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.dezgeg ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Client interface library for NIS(YP) and NIS+";
+    homepage = "https://github.com/thkukuk/libnsl";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.dezgeg ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

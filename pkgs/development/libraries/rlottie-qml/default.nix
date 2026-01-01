@@ -65,11 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
   # Only a QML module
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Library for using rlottie via QML";
     homepage = "https://gitlab.com/mymike00/rlottie-qml";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Library for using rlottie via QML";
+    homepage = "https://gitlab.com/mymike00/rlottie-qml";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

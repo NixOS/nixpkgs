@@ -21,10 +21,17 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "setuptools_scm" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pypa/setuptools_scm/";
+    description = "Handles managing your python package versions in scm metadata";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

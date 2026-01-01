@@ -37,11 +37,19 @@ buildPythonPackage rec {
     "azure.mgmt.security"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Security Center Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/security/azure-mgmt-security";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-security_${version}/sdk/security/azure-mgmt-security/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Security Center Management Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/security/azure-mgmt-security";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-security_${version}/sdk/security/azure-mgmt-security/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

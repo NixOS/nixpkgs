@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of cross-platform tools to compute hashes";
     homepage = "https://github.com/jessek/hashdeep";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.karantan ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Set of cross-platform tools to compute hashes";
+    homepage = "https://github.com/jessek/hashdeep";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.karantan ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

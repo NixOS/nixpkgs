@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kml2geojson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to convert KML to GeoJSON";
     mainProgram = "k2g";
     homepage = "https://github.com/mrcagney/kml2geojson";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to convert KML to GeoJSON";
+    mainProgram = "k2g";
+    homepage = "https://github.com/mrcagney/kml2geojson";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

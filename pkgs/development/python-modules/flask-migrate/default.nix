@@ -40,10 +40,18 @@ buildPythonPackage rec {
     flask-script
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SQLAlchemy database migrations for Flask applications using Alembic";
     homepage = "https://github.com/miguelgrinberg/Flask-Migrate";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "SQLAlchemy database migrations for Flask applications using Alembic";
+    homepage = "https://github.com/miguelgrinberg/Flask-Migrate";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

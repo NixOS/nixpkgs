@@ -64,10 +64,18 @@ buildPythonPackage rec {
     "tests/test_dumpscript.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/django-extensions/django-extensions/releases/tag/${src.tag}";
     description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/django-extensions/django-extensions/releases/tag/${src.tag}";
+    description = "Collection of custom extensions for the Django Framework";
+    homepage = "https://github.com/django-extensions/django-extensions";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

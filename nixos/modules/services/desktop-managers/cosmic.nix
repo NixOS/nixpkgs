@@ -86,7 +86,10 @@ in
           cosmic-icons
           cosmic-player
           cosmic-randr
+<<<<<<< HEAD
           cosmic-reader
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           cosmic-screenshot
           cosmic-term
           cosmic-wallpapers

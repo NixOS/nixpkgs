@@ -30,6 +30,10 @@ let
       python-xapp
       zeroconf
       grpcio
+<<<<<<< HEAD
+=======
+      setuptools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cryptography
       pynacl
       netifaces
@@ -42,13 +46,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
+<<<<<<< HEAD
   version = "2.0.2";
+=======
+  version = "2.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "warpinator";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-bVK60fSIWp02qrKCJ68awyPcZhMTW5bjRPI7YHmmScc=";
+=======
+    hash = "sha256-R6ccyZLXwxvhvRCDguxufzXfVq5tzrPEtBbXgdO6AoI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -99,11 +111,20 @@ stdenv.mkDerivation rec {
     ignoredVersions = "^master.*";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/warpinator";
     description = "Share files across the LAN";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/warpinator";
+    description = "Share files across the LAN";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

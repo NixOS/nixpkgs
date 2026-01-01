@@ -30,12 +30,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for working with blackbox flight logs";
     homepage = "https://github.com/inavflight/blackbox-tools";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Tools for working with blackbox flight logs";
+    homepage = "https://github.com/inavflight/blackbox-tools";
+    license = licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/inav-blackbox-tools.x86_64-darwin
   };
 }

@@ -39,6 +39,7 @@ stdenv.mkDerivation {
 
   installTargets = [ (if stdenv.hostPlatform.isDarwin then "osx-install" else "gcc-install") ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool that supports Japanese incremental search with Romaji";
     mainProgram = "cmigemo";
@@ -46,5 +47,14 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.cohei ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Tool that supports Japanese incremental search with Romaji";
+    mainProgram = "cmigemo";
+    homepage = "https://www.kaoriya.net/software/cmigemo";
+    license = licenses.mit;
+    maintainers = [ maintainers.cohei ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

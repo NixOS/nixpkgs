@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "troposphere" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to create AWS CloudFormation descriptions";
     homepage = "https://github.com/cloudtools/troposphere";
     changelog = "https://github.com/cloudtools/troposphere/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jlesquembre ];
+=======
+  meta = with lib; {
+    description = "Library to create AWS CloudFormation descriptions";
+    homepage = "https://github.com/cloudtools/troposphere";
+    changelog = "https://github.com/cloudtools/troposphere/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ jlesquembre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

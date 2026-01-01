@@ -69,11 +69,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Faster version of dbus-next";
     homepage = "https://github.com/bluetooth-devices/dbus-fast";
     changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Faster version of dbus-next";
+    homepage = "https://github.com/bluetooth-devices/dbus-fast";
+    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

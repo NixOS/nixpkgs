@@ -20,10 +20,18 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ react ];
 
+<<<<<<< HEAD
   meta = {
     description = "OCaml module for functional reactive programming (FRP) based on React";
     homepage = "https://github.com/ocsigen/reactiveData";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    description = "OCaml module for functional reactive programming (FRP) based on React";
+    homepage = "https://github.com/ocsigen/reactiveData";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

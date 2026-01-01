@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -Wno-error=implicit-function-declaration";
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.liblogging.org/";
     description = "Lightweight signal-safe logging library";
     mainProgram = "stdlogctl";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://www.liblogging.org/";
+    description = "Lightweight signal-safe logging library";
+    mainProgram = "stdlogctl";
+    license = licenses.bsd2;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

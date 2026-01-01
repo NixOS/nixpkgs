@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hatch_nodejs_version" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugins for dealing with NodeJS versions";
     homepage = "https://github.com/agoose77/hatch-nodejs-version";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "Plugins for dealing with NodeJS versions";
+    homepage = "https://github.com/agoose77/hatch-nodejs-version";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

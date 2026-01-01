@@ -38,6 +38,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      catern
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lucasew
     ];
   };

@@ -193,10 +193,13 @@ stdenv.mkDerivation (
           stripLen = 1;
           hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
         })
+<<<<<<< HEAD
         # Fix build with gcc15
         # https://github.com/llvm/llvm-project/commit/8f39502b85d34998752193e85f36c408d3c99248
         # https://github.com/llvm/llvm-project/commit/7abf44069aec61eee147ca67a6333fc34583b524
         ./llvm-add-include-cstdint.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ]
       ++ lib.optionals (lib.versionOlder release_version "19") [
         # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)

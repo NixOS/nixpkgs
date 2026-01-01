@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhomeworks" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to Lutron Homeworks Series 4/8";
     homepage = "https://github.com/dubnom/pyhomeworks";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python interface to Lutron Homeworks Series 4/8";
+    homepage = "https://github.com/dubnom/pyhomeworks";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

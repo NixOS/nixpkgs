@@ -48,10 +48,18 @@ buildPythonPackage rec {
         "ffi.dlopen('${libngspice}/lib/libngspice${stdenv.hostPlatform.extensions.sharedLibrary}')"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simulate electronic circuit using Python and the Ngspice / Xyce simulators";
     homepage = "https://github.com/FabriceSalvaire/PySpice";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ matthuszagh ];
+=======
+  meta = with lib; {
+    description = "Simulate electronic circuit using Python and the Ngspice / Xyce simulators";
+    homepage = "https://github.com/FabriceSalvaire/PySpice";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ matthuszagh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

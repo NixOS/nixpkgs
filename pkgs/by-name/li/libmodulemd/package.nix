@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
     echo "$out ${python3.pkgs.pygobject3} ${python3.pkgs.six}" > "$py/nix-support/propagated-build-inputs"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C Library for manipulating module metadata files";
     mainProgram = "modulemd-validator";
@@ -95,5 +96,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "C Library for manipulating module metadata files";
+    mainProgram = "modulemd-validator";
+    homepage = "https://github.com/fedora-modularity/libmodulemd";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -47,10 +47,17 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ libarchive ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Most reliable stable TV fork of the great Sick-Beard to fully automate TV enjoyment with innovation";
     mainProgram = "sickgear";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Most reliable stable TV fork of the great Sick-Beard to fully automate TV enjoyment with innovation";
+    mainProgram = "sickgear";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/SickGear/SickGear";
     maintainers = with lib.maintainers; [ rembo10 ];
   };

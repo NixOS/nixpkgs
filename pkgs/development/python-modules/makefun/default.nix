@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "makefun" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/smarie/python-makefun";
     description = "Small library to dynamically create python functions";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ veehaitch ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/smarie/python-makefun";
+    description = "Small library to dynamically create python functions";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ veehaitch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

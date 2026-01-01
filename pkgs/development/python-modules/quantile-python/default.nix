@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "quantile" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Implementation of Graham Cormode and S. Muthukrishnan's Effective Computation of Biased Quantiles over Data Streams in ICDE'05";
     homepage = "https://github.com/matttproud/python_quantile_estimation";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Python Implementation of Graham Cormode and S. Muthukrishnan's Effective Computation of Biased Quantiles over Data Streams in ICDE'05";
+    homepage = "https://github.com/matttproud/python_quantile_estimation";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

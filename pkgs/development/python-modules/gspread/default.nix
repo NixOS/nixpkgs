@@ -40,11 +40,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gspread" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Google Spreadsheets client library";
     homepage = "https://github.com/burnash/gspread";
     changelog = "https://github.com/burnash/gspread/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Google Spreadsheets client library";
+    homepage = "https://github.com/burnash/gspread";
+    changelog = "https://github.com/burnash/gspread/blob/${src.tag}/HISTORY.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

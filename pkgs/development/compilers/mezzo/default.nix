@@ -70,10 +70,17 @@ stdenv.mkDerivation {
     cp mezzo $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://protz.github.io/mezzo/";
     description = "Programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "http://protz.github.io/mezzo/";
+    description = "Programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast ocaml.version "4.06";
     platforms = ocaml.meta.platforms or [ ];
   };

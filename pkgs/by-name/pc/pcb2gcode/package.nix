@@ -44,7 +44,11 @@ stdenv.mkDerivation rec {
     --replace '`git describe --dirty --always --tags`' '${version}'
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command-line tool for isolation, routing and drilling of PCBs";
     longDescription = ''
       pcb2gcode is a command-line software for the isolation, routing and drilling of PCBs.
@@ -52,8 +56,14 @@ stdenv.mkDerivation rec {
       It also includes an Autoleveller, useful for the automatic dynamic calibration of the milling depth.
     '';
     homepage = "https://github.com/pcb2gcode/pcb2gcode";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kritnich ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kritnich ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

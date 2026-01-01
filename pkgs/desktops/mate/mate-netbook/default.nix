@@ -10,10 +10,17 @@
   libXtst,
   mate,
   wrapGAppsHook3,
+<<<<<<< HEAD
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+  mateUpdateScript,
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "mate-netbook";
   version = "1.26.0";
   outputs = [
@@ -22,7 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-netbook-${finalAttrs.version}.tar.xz";
+=======
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "12gdy69nfysl8vmd8lv8b0lknkaagplrrz88nh6n0rmjkxnipgz3";
   };
 
@@ -42,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/mate-netbook";
     odd-unstable = true;
@@ -49,6 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "MATE utilities for netbooks";
     mainProgram = "mate-maximus";
     longDescription = ''
@@ -59,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       devices with low resolution displays.
     '';
     homepage = "https://mate-desktop.org";
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl3Only
       lgpl2Plus
@@ -67,3 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.mate ];
   };
 })
+=======
+    license = with licenses; [
+      gpl3Only
+      lgpl2Plus
+    ];
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

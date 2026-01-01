@@ -25,12 +25,21 @@ stdenv.mkDerivation {
     cp bin/srt-vtt $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Convert SRT files to VTT";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ericdallo ];
     homepage = "https://github.com/nwoltman/srt-to-vtt-cl";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Convert SRT files to VTT";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ericdallo ];
+    homepage = "https://github.com/nwoltman/srt-to-vtt-cl";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "srt-vtt";
   };
 }

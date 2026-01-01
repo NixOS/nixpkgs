@@ -43,10 +43,18 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible and powerful hierarchical key-value store for your Django models";
     homepage = "https://github.com/raphaelm/django-hierarkey";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Flexible and powerful hierarchical key-value store for your Django models";
+    homepage = "https://github.com/raphaelm/django-hierarkey";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

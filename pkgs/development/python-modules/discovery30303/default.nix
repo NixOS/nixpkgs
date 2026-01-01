@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "discovery30303" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to discover devices that respond on port 30303";
     homepage = "https://github.com/bdraco/discovery30303";
     changelog = "https://github.com/bdraco/discovery30303/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to discover devices that respond on port 30303";
+    homepage = "https://github.com/bdraco/discovery30303";
+    changelog = "https://github.com/bdraco/discovery30303/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

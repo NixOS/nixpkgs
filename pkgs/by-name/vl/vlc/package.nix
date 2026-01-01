@@ -1,23 +1,42 @@
 {
   lib,
+<<<<<<< HEAD
   alsa-lib,
   autoreconfHook,
   avahi,
   bison,
+=======
+  a52dec,
+  alsa-lib,
+  autoreconfHook,
+  avahi,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cairo,
   curl,
   dbus,
   faad2,
+<<<<<<< HEAD
   fetchFromGitLab,
   fetchpatch,
   ffmpeg_7,
   flac,
   flex,
+=======
+  fetchpatch,
+  fetchurl,
+  # Please unpin FFmpeg on the next upstream release.
+  ffmpeg_6,
+  flac,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fluidsynth,
   fontconfig,
   freefont_ttf,
   freetype,
   fribidi,
+<<<<<<< HEAD
+=======
+  genericUpdater,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gnutls,
   harfbuzz,
   libGL,
@@ -43,6 +62,10 @@
   libmatroska,
   libmicrodns,
   libmodplug,
+<<<<<<< HEAD
+=======
+  libmpeg2,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libmtp,
   libogg,
   libopus,
@@ -64,7 +87,10 @@
   live555,
   lua5,
   ncurses,
+<<<<<<< HEAD
   nix-update-script,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   perl,
   pkg-config,
   pkgsBuildBuild,
@@ -103,6 +129,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
+<<<<<<< HEAD
   version = "3.0.23-2";
 
   src = fetchFromGitLab {
@@ -111,14 +138,24 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "vlc";
     rev = finalAttrs.version;
     hash = "sha256-vg/kKNrIpGF7Olz8EiA1ZsW5SB4iHlvFbREDp4JokB0=";
+=======
+  version = "3.0.21";
+
+  src = fetchurl {
+    url = "https://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
+    hash = "sha256-JNu+HX367qCZTV3vC73iABdzRxNtv+Vz9bakzuJa+7A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   depsBuildBuild = optionals waylandSupport [ pkg-config ];
 
   nativeBuildInputs = [
     autoreconfHook
+<<<<<<< HEAD
     bison
     flex
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     lua5
     perl
     pkg-config
@@ -136,12 +173,20 @@ stdenv.mkDerivation (finalAttrs: {
   # which are not included here for no other reason that nobody has mentioned
   # needing them
   buildInputs = [
+<<<<<<< HEAD
+=======
+    a52dec
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     alsa-lib
     avahi
     cairo
     dbus
     faad2
+<<<<<<< HEAD
     ffmpeg_7
+=======
+    ffmpeg_6
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     flac
     fluidsynth
     fontconfig
@@ -168,6 +213,10 @@ stdenv.mkDerivation (finalAttrs: {
     libmad
     libmatroska
     libmodplug
+<<<<<<< HEAD
+=======
+    libmpeg2
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libmtp
     libogg
     libopus
@@ -238,13 +287,25 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
       hash = "sha256-qs3gY1ksCZlf931TSZyMuT2JD0sqrmcRCZwL+wVG0U8=";
     })
+<<<<<<< HEAD
+=======
+    # support VAAPI hardware video decoding with newer ffmpeg
+    # upstream merge request: https://code.videolan.org/videolan/vlc/-/merge_requests/6606 (will be included in the next release)
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/vlc/-/commit/ba5dc03aecc1d96f81b76838f845ebde7348cf62.diff";
+      hash = "sha256-s6AI9O0V3AKOyw9LbQ9CgjaCi5m5+nLacKNLl5ZLC6Q=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # make the plugins.dat file generation reproducible
     # upstream merge request: https://code.videolan.org/videolan/vlc/-/merge_requests/7149
     ./deterministic-plugin-cache.diff
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     echo "$version" > src/revision.txt
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h \
       --replace \
         /usr/share/fonts/truetype/freefont \
@@ -309,7 +370,15 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
+=======
+  passthru.updateScript = genericUpdater {
+    versionLister = writeShellScript "vlc-versionLister" ''
+      ${curl}/bin/curl -s https://get.videolan.org/vlc/ | sed -En 's/^.*href="([0-9]+(\.[0-9]+)+)\/".*$/\1/p'
+    '';
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Cross-platform media player and streaming server";

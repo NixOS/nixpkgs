@@ -90,15 +90,26 @@ stdenv.mkDerivation (finalAttrs: {
     tests = { inherit (nixosTests) dconf; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/dconf";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/dconf";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # Mandatory libdconfsettings shared library.
       lib.systems.inspect.platformPatterns.isStatic
     ];
+<<<<<<< HEAD
     teams = [ lib.teams.gnome ];
+=======
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dconf";
   };
 })

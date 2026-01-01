@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library to detect and configure devices";
     homepage = "https://gitlab.com/ubports/development/core/deviceinfo";
@@ -68,6 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library to detect and configure devices";
+    homepage = "https://gitlab.com/ubports/development/core/deviceinfo";
+    changelog = "https://gitlab.com/ubports/development/core/deviceinfo/-/blob/${finalAttrs.version}/ChangeLog";
+    license = licenses.gpl3Only;
+    teams = [ teams.lomiri ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "device-info";
     pkgConfigModules = [
       "deviceinfo"

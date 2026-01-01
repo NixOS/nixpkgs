@@ -41,11 +41,19 @@ buildPythonPackage rec {
     "tests/test_util_benchmark.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Constraint Solving Problem resolver for Python";
     homepage = "https://labix.org/doc/constraint/";
     downloadPage = "https://github.com/python-constraint/python-constraint/releases";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Constraint Solving Problem resolver for Python";
+    homepage = "https://labix.org/doc/constraint/";
+    downloadPage = "https://github.com/python-constraint/python-constraint/releases";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

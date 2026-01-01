@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       }"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "MSFvenom Payload Creator";
     mainProgram = "msfpc";
@@ -51,5 +52,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "MSFvenom Payload Creator";
+    mainProgram = "msfpc";
+    homepage = "https://github.com/g0tmi1k/msfpc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -21,6 +21,7 @@ stdenvNoCC.mkDerivation {
     install -Dm555 bemoji -t $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/marty-oehme/bemoji/";
     description = "Emoji picker with support for bemenu/wofi/rofi/dmenu and wayland/X11";
@@ -28,6 +29,15 @@ stdenvNoCC.mkDerivation {
     mainProgram = "bemoji";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/marty-oehme/bemoji/";
+    description = "Emoji picker with support for bemenu/wofi/rofi/dmenu and wayland/X11";
+    license = licenses.mit;
+    mainProgram = "bemoji";
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       laurent-f1z1
       MrSom3body
     ];

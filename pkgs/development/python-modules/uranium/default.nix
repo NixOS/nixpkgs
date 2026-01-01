@@ -54,11 +54,19 @@ buildPythonPackage rec {
      UM/Application.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python framework for building Desktop applications";
     homepage = "https://github.com/Ultimaker/Uranium";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Python framework for building Desktop applications";
+    homepage = "https://github.com/Ultimaker/Uranium";
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

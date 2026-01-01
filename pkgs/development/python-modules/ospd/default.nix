@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ospd" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Framework for vulnerability scanners which support OSP";
     homepage = "https://github.com/greenbone/ospd";
     changelog = "https://github.com/greenbone/ospd/releases/tag/v${version}";
     license = with lib.licenses; [ agpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Framework for vulnerability scanners which support OSP";
+    homepage = "https://github.com/greenbone/ospd";
+    changelog = "https://github.com/greenbone/ospd/releases/tag/v${version}";
+    license = with licenses; [ agpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

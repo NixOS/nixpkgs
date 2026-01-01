@@ -44,11 +44,20 @@ buildPythonPackage rec {
     "test_serializable_with_defaultNS"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to aid with serialisation and deserialisation to/from JSON and XML";
     homepage = "https://github.com/madpah/serializable";
     changelog = "https://github.com/madpah/serializable/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to aid with serialisation and deserialisation to/from JSON and XML";
+    homepage = "https://github.com/madpah/serializable";
+    changelog = "https://github.com/madpah/serializable/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

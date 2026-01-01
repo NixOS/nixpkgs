@@ -59,11 +59,20 @@ buildPythonPackage rec {
     popd
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/astropy/pyregion/blob/${src.tag}/CHANGES.rst";
     description = "Python parser for ds9 region files";
     homepage = "https://github.com/astropy/pyregion";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.smaret ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/astropy/pyregion/blob/${src.tag}/CHANGES.rst";
+    description = "Python parser for ds9 region files";
+    homepage = "https://github.com/astropy/pyregion";
+    license = licenses.mit;
+    maintainers = [ maintainers.smaret ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

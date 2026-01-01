@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
     mkdir -pv "$out"/{bin,share/man/man1}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Hides mouse pointer while not in use";
     longDescription = ''
       Unclutter hides your X mouse cursor when you do not need it, to prevent
@@ -48,7 +52,11 @@ stdenv.mkDerivation rec {
           unclutter -idle 1 &
     '';
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.publicDomain;
     mainProgram = "unclutter";
   };

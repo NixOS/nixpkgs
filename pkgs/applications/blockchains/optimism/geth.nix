@@ -38,6 +38,7 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
     broken = true;
@@ -45,5 +46,12 @@ buildGoModule rec {
     homepage = "https://github.com/ethereum-optimism/op-geth";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "";
+    homepage = "https://github.com/ethereum-optimism/op-geth";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

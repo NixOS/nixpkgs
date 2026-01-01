@@ -22,10 +22,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Draws ASCII trees";
     homepage = "https://github.com/mbr/asciitree";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Draws ASCII trees";
+    homepage = "https://github.com/mbr/asciitree";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

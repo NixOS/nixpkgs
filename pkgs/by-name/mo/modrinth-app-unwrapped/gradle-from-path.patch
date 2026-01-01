@@ -1,5 +1,9 @@
 diff --git a/packages/app-lib/build.rs b/packages/app-lib/build.rs
+<<<<<<< HEAD
 index 10ed29b9..97c832e1 100644
+=======
+index 251c4e84..eeacd02a 100644
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 --- a/packages/app-lib/build.rs
 +++ b/packages/app-lib/build.rs
 @@ -1,7 +1,7 @@
@@ -10,8 +14,13 @@ index 10ed29b9..97c832e1 100644
 +use std::env;
  
  fn main() {
+<<<<<<< HEAD
      println!("cargo::rerun-if-changed=.env");
 @@ -38,21 +38,12 @@ fn build_java_jars() {
+=======
+     println!("cargo::rerun-if-changed=java/gradle");
+@@ -19,21 +19,11 @@ fn main() {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
          out_dir.join("java/libs").display()
      );
  
@@ -22,7 +31,11 @@ index 10ed29b9..97c832e1 100644
 -        "java/gradlew",
 -    )
 -    .unwrap();
+<<<<<<< HEAD
  
+=======
+-
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
      let mut build_dir_str = OsString::from("-Dorg.gradle.project.buildDir=");
      build_dir_str.push(out_dir.join("java"));
 -    let exit_status = Command::new(gradle_path)

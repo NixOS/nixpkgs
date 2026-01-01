@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # tests are not distributed
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pypi.python.org/pypi/pdfkit";
     description = "Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://pypi.python.org/pypi/pdfkit";
+    description = "Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

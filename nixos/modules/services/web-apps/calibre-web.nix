@@ -91,7 +91,11 @@ in
           '';
         };
 
+<<<<<<< HEAD
         enableKepubify = mkEnableOption "kepub conversion support";
+=======
+        enableKepubify = mkEnableOption "kebup conversion support";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         enableBookUploading = mkOption {
           type = types.bool;

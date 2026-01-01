@@ -26,12 +26,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstall = ''
     install -Dm444 tailord/com.tux.Tailor.conf -t $out/share/dbus-1/system.d
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Rust utilities for interacting with hardware from TUXEDO Computers";
     longDescription = ''
       An alternative to the TUXEDO Control Center daemon.
@@ -41,12 +49,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
       - tailor: CLI
     '';
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       mrcjkb
       xaverdh
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      mrcjkb
+      xaverdh
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tailor";
   };
 })

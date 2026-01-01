@@ -47,7 +47,11 @@ stdenv.mkDerivation {
     miniupnpc
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/Holarse-Linuxgaming/yaup";
     description = "Yet Another UPnP Portmapper";
     longDescription = ''
@@ -55,9 +59,15 @@ stdenv.mkDerivation {
       Portforward your incoming traffic to a specified local ip.
       Mostly used for IPv4.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yaup";
   };
 }

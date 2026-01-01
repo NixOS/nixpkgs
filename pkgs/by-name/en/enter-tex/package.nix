@@ -72,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/enter-tex";
     description = "LaTeX editor for the GNOME desktop";
@@ -81,6 +82,17 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/World/gedit/enter-tex";
+    description = "LaTeX editor for the GNOME desktop";
+    maintainers = with maintainers; [
+      manveru
+      bobby285271
+    ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "enter-tex";
   };
 })

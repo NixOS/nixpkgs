@@ -22,10 +22,18 @@ buildPythonPackage rec {
     cffi
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python cffi bindings for the oniguruma regex engine";
     homepage = "https://github.com/asottile/onigurumacffi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ melkor333 ];
+=======
+  meta = with lib; {
+    description = "Python cffi bindings for the oniguruma regex engine";
+    homepage = "https://github.com/asottile/onigurumacffi";
+    license = licenses.mit;
+    maintainers = with maintainers; [ melkor333 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

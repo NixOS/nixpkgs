@@ -221,11 +221,19 @@ stdenv.mkDerivation (
       isGNU = true;
     };
 
+<<<<<<< HEAD
     meta = {
       description = "GNAT, the GNU Ada Translator";
       homepage = "https://www.gnu.org/software/gnat";
       license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [ ethindp ];
+=======
+    meta = with lib; {
+      description = "GNAT, the GNU Ada Translator";
+      homepage = "https://www.gnu.org/software/gnat";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ ethindp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       platforms = [
         "x86_64-linux"
         "x86_64-darwin"

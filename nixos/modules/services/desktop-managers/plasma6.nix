@@ -167,7 +167,10 @@ in
           spectacle
           ffmpegthumbs
           krdp
+<<<<<<< HEAD
           kconfig # required for xdg-terminal from xdg-utils
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ]
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6
@@ -329,6 +332,7 @@ in
           enable = true;
           package = kdePackages.kwallet-pam;
         };
+<<<<<<< HEAD
         # "kde" must not have fingerprint authentication otherwise it can block password login.
         # See https://github.com/NixOS/nixpkgs/issues/239770 and https://invent.kde.org/plasma/kscreenlocker/-/merge_requests/163.
         fprintAuth = false;
@@ -342,6 +346,11 @@ in
         p11Auth = true;
         fprintAuth = false;
       };
+=======
+      };
+      kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
+      kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     security.wrappers = {

@@ -40,6 +40,10 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # AssertionError CLI exists with non-zero error code

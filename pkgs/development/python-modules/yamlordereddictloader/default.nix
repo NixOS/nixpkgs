@@ -22,10 +22,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yamlordereddictloader" ];
 
+<<<<<<< HEAD
   meta = {
     description = "YAML loader and dump for PyYAML allowing to keep keys order";
     homepage = "https://github.com/fmenabe/python-yamlordereddictloader";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "YAML loader and dump for PyYAML allowing to keep keys order";
+    homepage = "https://github.com/fmenabe/python-yamlordereddictloader";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

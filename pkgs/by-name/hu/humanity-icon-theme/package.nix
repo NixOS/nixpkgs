@@ -44,11 +44,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Humanity icons from Ubuntu";
     homepage = "https://launchpad.net/humanity/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Humanity icons from Ubuntu";
+    homepage = "https://launchpad.net/humanity/";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

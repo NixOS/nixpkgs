@@ -28,10 +28,18 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_somafm" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.mopidy.com/";
     description = "Mopidy extension for playing music from SomaFM";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nickhu ];
+=======
+  meta = with lib; {
+    homepage = "https://www.mopidy.com/";
+    description = "Mopidy extension for playing music from SomaFM";
+    license = licenses.mit;
+    maintainers = [ maintainers.nickhu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

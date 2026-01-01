@@ -45,10 +45,18 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "--with-macosx-keyring";
 
+<<<<<<< HEAD
   meta = {
     description = "POP3 mail retrieval agent";
     homepage = "https://marlam.de/mpop";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "POP3 mail retrieval agent";
+    homepage = "https://marlam.de/mpop";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

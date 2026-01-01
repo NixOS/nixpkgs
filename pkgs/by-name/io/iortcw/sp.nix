@@ -59,11 +59,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Single player version of game engine for Return to Castle Wolfenstein";
     homepage = src.meta.homepage;
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rjpcasalino ];
+=======
+  meta = with lib; {
+    description = "Single player version of game engine for Return to Castle Wolfenstein";
+    homepage = src.meta.homepage;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rjpcasalino ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

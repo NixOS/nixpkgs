@@ -63,11 +63,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diff_cover" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Automatically find diff lines that need test coverage";
     homepage = "https://github.com/Bachmann1234/diff-cover";
     changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dzabraev ];
+=======
+  meta = with lib; {
+    description = "Automatically find diff lines that need test coverage";
+    homepage = "https://github.com/Bachmann1234/diff-cover";
+    changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dzabraev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -74,11 +74,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Agile dynamic language for the Java Platform";
     homepage = "http://groovy-lang.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Agile dynamic language for the Java Platform";
+    homepage = "http://groovy-lang.org/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

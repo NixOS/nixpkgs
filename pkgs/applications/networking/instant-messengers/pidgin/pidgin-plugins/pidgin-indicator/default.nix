@@ -32,11 +32,20 @@ stdenv.mkDerivation rec {
     pidgin
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "AppIndicator and KStatusNotifierItem Plugin for Pidgin";
     homepage = "https://github.com/philipl/pidgin-indicator";
     maintainers = with lib.maintainers; [ imalison ];
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "AppIndicator and KStatusNotifierItem Plugin for Pidgin";
+    homepage = "https://github.com/philipl/pidgin-indicator";
+    maintainers = with maintainers; [ imalison ];
+    license = licenses.gpl2;
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

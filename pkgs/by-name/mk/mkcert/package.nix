@@ -25,11 +25,19 @@ buildGoModule rec {
     "-X main.Version=v${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/FiloSottile/mkcert";
     description = "Simple tool for making locally-trusted development certificates";
     mainProgram = "mkcert";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/FiloSottile/mkcert";
+    description = "Simple tool for making locally-trusted development certificates";
+    mainProgram = "mkcert";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

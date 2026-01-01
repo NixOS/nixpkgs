@@ -12,7 +12,11 @@
     url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
     inherit hash;
   };
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Suite of tools for emulating optical drives and discs";
     longDescription = ''
       CDEmu consists of:
@@ -26,8 +30,13 @@
       Optical media emulated by CDemu can be mounted within Linux. Automounting is also allowed.
     '';
     homepage = "https://cdemu.sourceforge.io/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ bendlas ];
   };
 }

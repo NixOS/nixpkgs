@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeWrapper,
   libaio,
   pkg-config,
@@ -25,6 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-m4JskjSc/KHjID+6j/hbhnGzehPxMxA3m2Iyn49bJDU=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/axboe/fio/pull/2029
     (fetchpatch {
@@ -33,6 +37,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [
     python3
     zlib
@@ -75,10 +81,18 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible IO Tester - an IO benchmark tool";
     homepage = "https://git.kernel.dk/cgit/fio/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Flexible IO Tester - an IO benchmark tool";
+    homepage = "https://git.kernel.dk/cgit/fio/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

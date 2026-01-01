@@ -36,9 +36,15 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.8.7)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CMake modules needed to build Open WebOS components";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "CMake modules needed to build Open WebOS components";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

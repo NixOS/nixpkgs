@@ -37,11 +37,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.databoxedge" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Databoxedge Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/databox/azure-mgmt-databox";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-databoxedge_${version}/sdk/databox/azure-mgmt-databox/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Databoxedge Management Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/databox/azure-mgmt-databox";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-databoxedge_${version}/sdk/databox/azure-mgmt-databox/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

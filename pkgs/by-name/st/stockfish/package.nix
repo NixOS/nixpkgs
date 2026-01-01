@@ -102,7 +102,11 @@ stdenv.mkDerivation rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://stockfishchess.org/";
     description = "Strong open source chess engine";
     mainProgram = "stockfish";
@@ -110,7 +114,11 @@ stdenv.mkDerivation rec {
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       luispedro
       siraben
       thibaultd
@@ -122,7 +130,11 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
+=======
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

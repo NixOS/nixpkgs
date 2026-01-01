@@ -12,14 +12,22 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
+<<<<<<< HEAD
   version = "4.3.0";
+=======
+  version = "4.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-w2ev/fpswaNcutxg2zMwrtFkulMbbG7BUm3L8qlnZKk=";
+=======
+    hash = "sha256-nX4GXuQd+WzaRGBtsWduUpwtA3DGjpRkcxPmoEj7FIA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/source";
@@ -28,7 +36,10 @@ python3Packages.buildPythonApplication rec {
     mprisify
     requests
     ytmusicapi
+<<<<<<< HEAD
     logboth
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   build-system = with python3Packages; [
@@ -52,9 +63,13 @@ python3Packages.buildPythonApplication rec {
     gstreamer
   ]);
 
+<<<<<<< HEAD
   postInstall = ''
     make install prefix=$out
   '';
+=======
+  postInstall = "make install prefix=$out";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dontWrapGApps = true;
 
@@ -73,10 +88,14 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.com/zehkira/monophony";
     license = lib.licenses.bsd0;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       quadradical
       aleksana
     ];
+=======
+    maintainers = with lib.maintainers; [ quadradical ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "monophony";
   };
 }

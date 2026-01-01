@@ -17,12 +17,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-UoL1b+T4z2hAl7GOga68qwAyCtm+Xo+AbyORmwvsqkw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-monitor aware Hyprland workspace widget";
     homepage = "https://github.com/FieldofClay/hyprland-workspaces";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Multi-monitor aware Hyprland workspace widget";
+    homepage = "https://github.com/FieldofClay/hyprland-workspaces";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kiike
       donovanglover
     ];

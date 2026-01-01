@@ -38,10 +38,18 @@ stdenv.mkDerivation {
     cp metapixel-sizesort $out/bin/metapixel-sizesort
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/schani/metapixel";
     description = "Tool for generating photomosaics";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/schani/metapixel";
+    description = "Tool for generating photomosaics";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

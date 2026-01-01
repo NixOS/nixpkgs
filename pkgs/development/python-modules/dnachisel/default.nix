@@ -59,11 +59,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dnachisel" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel";
     description = "Optimize DNA sequences under constraints";
     changelog = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel";
+    description = "Optimize DNA sequences under constraints";
+    changelog = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -58,11 +58,20 @@ buildPythonPackage rec {
   # Tests use sockets
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";
     changelog = "https://github.com/h2non/pook/blob/v${src.tag}/History.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "HTTP traffic mocking and testing";
+    homepage = "https://github.com/h2non/pook";
+    changelog = "https://github.com/h2non/pook/blob/v${src.tag}/History.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

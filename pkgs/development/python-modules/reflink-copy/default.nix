@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reflink_copy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for reflink_copy Rust library";
     homepage = "https://github.com/iterative/reflink-copy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for reflink_copy Rust library";
+    homepage = "https://github.com/iterative/reflink-copy";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

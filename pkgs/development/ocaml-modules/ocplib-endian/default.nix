@@ -27,10 +27,18 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
 
+<<<<<<< HEAD
   meta = {
     description = "Optimised functions to read and write int16/32/64";
     homepage = "https://github.com/OCamlPro/ocplib-endian";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    description = "Optimised functions to read and write int16/32/64";
+    homepage = "https://github.com/OCamlPro/ocplib-endian";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

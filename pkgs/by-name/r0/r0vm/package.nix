@@ -46,12 +46,21 @@ rustPlatform.buildRustPackage rec {
       ln -sf ${recursionZkr} ./risc0/circuit/recursion/src/recursion_zkr.zip
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "RISC Zero zero-knowledge VM";
     homepage = "https://github.com/risc0/risc0";
     changelog = "https://github.com/risc0/risc0/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ marijanp ];
+=======
+  meta = with lib; {
+    description = "RISC Zero zero-knowledge VM";
+    homepage = "https://github.com/risc0/risc0";
+    changelog = "https://github.com/risc0/risc0/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ marijanp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "r0vm";
   };
 }

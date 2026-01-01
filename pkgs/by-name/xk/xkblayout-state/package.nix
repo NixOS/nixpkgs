@@ -23,11 +23,20 @@ stdenv.mkDerivation rec {
     cp xkblayout-state $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Small command-line program to get/set the current XKB keyboard layout";
     homepage = "https://github.com/nonpop/xkblayout-state";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Small command-line program to get/set the current XKB keyboard layout";
+    homepage = "https://github.com/nonpop/xkblayout-state";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.jagajaga ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xkblayout-state";
   };
 }

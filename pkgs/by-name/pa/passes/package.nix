@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzint
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Digital pass manager";
     mainProgram = "passes";
@@ -59,6 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Digital pass manager";
+    mainProgram = "passes";
+    homepage = "https://github.com/pablo-s/passes";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # Crashes
   };
 })

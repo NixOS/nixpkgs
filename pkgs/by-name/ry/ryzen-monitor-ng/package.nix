@@ -30,6 +30,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Access Ryzen SMU information exposed by the ryzen_smu driver";
     homepage = "https://github.com/plasmin/ryzen_monitor_ng";
@@ -37,6 +38,15 @@ stdenv.mkDerivation {
     license = lib.licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ phdyellow ];
+=======
+  meta = with lib; {
+    description = "Access Ryzen SMU information exposed by the ryzen_smu driver";
+    homepage = "https://github.com/plasmin/ryzen_monitor_ng";
+    changelog = "https://github.com/plasmin/ryzen_monitor_ng/blob/master/CHANGELOG.md";
+    license = licenses.agpl3Only;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ phdyellow ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ryzen_monitor";
   };
 }

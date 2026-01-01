@@ -30,10 +30,18 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python Lex/Yacc that works with RPython";
     homepage = "https://github.com/alex/rply";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nixy ];
+=======
+  meta = with lib; {
+    description = "Python Lex/Yacc that works with RPython";
+    homepage = "https://github.com/alex/rply";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ nixy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

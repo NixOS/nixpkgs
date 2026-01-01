@@ -18,11 +18,20 @@ stdenv.mkDerivation {
 
   buildInputs = [ libpng12 ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mikalstill/pngtools";
     description = "PNG manipulation tools";
     maintainers = with lib.maintainers; [ zendo ];
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mikalstill/pngtools";
+    description = "PNG manipulation tools";
+    maintainers = with maintainers; [ zendo ];
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

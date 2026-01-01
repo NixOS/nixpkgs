@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jinja2_git" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/wemake-services/jinja2-git";
     description = "Jinja2 extension to handle git-specific things";
     changelog = "https://github.com/wemake-services/jinja2-git/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/wemake-services/jinja2-git";
+    description = "Jinja2 extension to handle git-specific things";
+    changelog = "https://github.com/wemake-services/jinja2-git/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

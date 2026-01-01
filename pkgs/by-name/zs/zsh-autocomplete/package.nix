@@ -22,11 +22,20 @@ stdenvNoCC.mkDerivation rec {
     cp -R Functions $out/share/zsh-autocomplete/Functions
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Real-time type-ahead completion for Zsh. Asynchronous find-as-you-type autocompletion";
     homepage = "https://github.com/marlonrichert/zsh-autocomplete/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.leona ];
+=======
+  meta = with lib; {
+    description = "Real-time type-ahead completion for Zsh. Asynchronous find-as-you-type autocompletion";
+    homepage = "https://github.com/marlonrichert/zsh-autocomplete/";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.leona ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -5,7 +5,12 @@
   texliveInfraOnly,
 
   # build-system
+<<<<<<< HEAD
   hatchling,
+=======
+  poetry-core,
+  setuptools,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # buildInputs
   cairo,
@@ -36,8 +41,11 @@
   tqdm,
   typing-extensions,
   watchdog,
+<<<<<<< HEAD
   pythonAtLeast,
   audioop-lts,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # optional-dependencies
   jupyterlab,
@@ -188,17 +196,30 @@ in
 buildPythonPackage rec {
   pname = "manim";
   pyproject = true;
+<<<<<<< HEAD
   version = "0.19.1";
+=======
+  version = "0.19.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-VkMmIQNLUg6Epttze23vaAA8QOdlnAPQZ7UKpkFRzIk=";
   };
 
   build-system = [
     hatchling
+=======
+    hash = "sha256-eQgp/GwKsfQA1ZgqfB3HF2ThEgH3Fbn9uAtcko9pkjs=";
+  };
+
+  build-system = [
+    poetry-core
+    setuptools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   patches = [ ./pytest-report-header.patch ];
@@ -231,9 +252,12 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
     watchdog
+<<<<<<< HEAD
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     audioop-lts
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   optional-dependencies = {
@@ -263,6 +287,10 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
@@ -280,7 +308,11 @@ buildPythonPackage rec {
       manim.
     '';
     mainProgram = "manim";
+<<<<<<< HEAD
     changelog = "https://github.com/ManimCommunity/manim/releases/tag/${src.tag}";
+=======
+    changelog = "https://docs.manim.community/en/latest/changelog/${version}-changelog.html";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ osbm ];

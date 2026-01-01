@@ -20,11 +20,19 @@ buildGoModule rec {
   # Skip e2e tests requiring network access
   excludedPackages = [ "./e2e" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/peak/s5cmd";
     description = "Parallel S3 and local filesystem execution tool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomberek ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/peak/s5cmd";
+    description = "Parallel S3 and local filesystem execution tool";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tomberek ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "s5cmd";
   };
 }

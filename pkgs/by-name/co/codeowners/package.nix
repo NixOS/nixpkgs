@@ -17,11 +17,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-CpGlw4xe+gg2IRov9Atd8Z7XbXs1zkIYxvBVpsY/gxg=";
 
+<<<<<<< HEAD
   meta = {
     description = "CLI and Go library for Github's CODEOWNERS file";
     mainProgram = "codeowners";
     homepage = "https://github.com/hmarr/codeowners";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yorickvp ];
+=======
+  meta = with lib; {
+    description = "CLI and Go library for Github's CODEOWNERS file";
+    mainProgram = "codeowners";
+    homepage = "https://github.com/hmarr/codeowners";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yorickvp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

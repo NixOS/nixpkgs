@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shellingham" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to detect the surrounding shell";
     homepage = "https://github.com/sarugaku/shellingham";
     changelog = "https://github.com/sarugaku/shellingham/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ mbode ];
+=======
+  meta = with lib; {
+    description = "Tool to detect the surrounding shell";
+    homepage = "https://github.com/sarugaku/shellingham";
+    changelog = "https://github.com/sarugaku/shellingham/blob/${version}/CHANGELOG.rst";
+    license = licenses.isc;
+    maintainers = with maintainers; [ mbode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -10,14 +10,22 @@
 
 buildPythonPackage rec {
   pname = "stringzilla";
+<<<<<<< HEAD
   version = "4.6.0";
+=======
+  version = "4.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-5WAD5ZpzhdIDv1kUVinc5z91N/tQVScO75kOPC1WWlY=";
+=======
+    hash = "sha256-MitvjIb+mBK22hxjtqbVB6kYP7pdvF5LxWiS2R/6Jk4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -34,11 +42,14 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "scripts/test_stringzilla.py" ];
 
+<<<<<<< HEAD
   disabledTests = [
     # test downloads CaseFolding.txt from unicode.org
     "test_utf8_case_fold_all_codepoints"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${src.tag}";
     description = "SIMD-accelerated string search, sort, hashes, fingerprints, & edit distances";

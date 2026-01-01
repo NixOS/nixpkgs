@@ -59,11 +59,19 @@ buildPythonPackage rec {
   # Infinite recursion with celery
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to enable celery.contrib.pytest";
     homepage = "https://github.com/celery/pytest-celery";
     changelog = "https://github.com/celery/pytest-celery/blob/${src.tag}/Changelog.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pytest plugin to enable celery.contrib.pytest";
+    homepage = "https://github.com/celery/pytest-celery";
+    changelog = "https://github.com/celery/pytest-celery/blob/${src.tag}/Changelog.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

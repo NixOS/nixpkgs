@@ -27,11 +27,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open source programming font";
     homepage = "https://github.com/mishamyrt/Lilex";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ redyf ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Open source programming font";
+    homepage = "https://github.com/mishamyrt/Lilex";
+    license = licenses.ofl;
+    maintainers = with maintainers; [ redyf ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

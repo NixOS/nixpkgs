@@ -49,7 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       mit
     ];
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ lib.maintainers.orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 })

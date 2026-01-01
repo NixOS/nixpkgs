@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
+<<<<<<< HEAD
   meta = {
     description = "Compact and readable SAT solver";
     maintainers = with lib.maintainers; [
@@ -33,6 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Compact and readable SAT solver";
+    maintainers = with maintainers; [
+      raskin
+    ];
+    platforms = platforms.unix;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://minisat.se/";
   };
 })

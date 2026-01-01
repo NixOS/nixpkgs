@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./configpath.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Display and debug ASN.1 data";
     homepage = "https://github.com/katexochen/dumpasn1";
@@ -32,5 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dumpasn1";
     maintainers = with lib.maintainers; [ katexochen ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Display and debug ASN.1 data";
+    homepage = "https://github.com/katexochen/dumpasn1";
+    license = licenses.bsd2;
+    mainProgram = "dumpasn1";
+    maintainers = with maintainers; [ katexochen ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

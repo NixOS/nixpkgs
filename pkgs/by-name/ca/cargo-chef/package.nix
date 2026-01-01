@@ -15,11 +15,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-diox0Vafn8881tW4Z5Udm6U2lNQKe9m/H5bRTRN3aGs=";
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo-subcommand to speed up Rust Docker builds using Docker layer caching";
     mainProgram = "cargo-chef";
     homepage = "https://github.com/LukeMathWalker/cargo-chef";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kkharji ];
+=======
+  meta = with lib; {
+    description = "Cargo-subcommand to speed up Rust Docker builds using Docker layer caching";
+    mainProgram = "cargo-chef";
+    homepage = "https://github.com/LukeMathWalker/cargo-chef";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kkharji ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

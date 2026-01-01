@@ -42,11 +42,19 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pifpaf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Suite of tools and fixtures to manage daemons for testing";
     mainProgram = "pifpaf";
     homepage = "https://github.com/jd/pifpaf";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Suite of tools and fixtures to manage daemons for testing";
+    mainProgram = "pifpaf";
+    homepage = "https://github.com/jd/pifpaf";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -25,10 +25,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "noise" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Native-code and shader implementations of Perlin noise";
     homepage = "https://github.com/caseman/noise";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Native-code and shader implementations of Perlin noise";
+    homepage = "https://github.com/caseman/noise";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

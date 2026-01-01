@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "C library for manipulating POSIX tar files";
     mainProgram = "libtar";
@@ -56,5 +57,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "C library for manipulating POSIX tar files";
+    mainProgram = "libtar";
+    homepage = "https://repo.or.cz/libtar";
+    license = licenses.bsd3;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

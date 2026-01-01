@@ -22,9 +22,16 @@ stdenv.mkDerivation rec {
     cp mustache.hpp $out/include
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mustache text templates for modern C++";
     homepage = "https://github.com/kainjow/Mustache";
     license = lib.licenses.boost;
+=======
+  meta = with lib; {
+    description = "Mustache text templates for modern C++";
+    homepage = "https://github.com/kainjow/Mustache";
+    license = licenses.boost;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

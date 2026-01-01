@@ -36,11 +36,20 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh $completions_dir/_page
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Use neovim as pager";
     homepage = "https://github.com/I60R/page";
     license = lib.licenses.mit;
     mainProgram = "page";
     maintainers = [ lib.maintainers.s1341 ];
+=======
+  meta = with lib; {
+    description = "Use neovim as pager";
+    homepage = "https://github.com/I60R/page";
+    license = licenses.mit;
+    mainProgram = "page";
+    maintainers = [ maintainers.s1341 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -8,7 +8,10 @@
   nix-update-script,
   replaceVars,
   makeWrapper,
+<<<<<<< HEAD
   installShellFiles,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 let
   jdk = temurin-bin-21;
@@ -44,7 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     jdk
     kotlinOverlay
     makeWrapper
+<<<<<<< HEAD
     installShellFiles
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -83,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe jdk} $out/bin/pkl --add-flags "-jar $out/opt/pkl/jpkl.jar"
 
+<<<<<<< HEAD
     ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd pkl \
         --bash <($out/bin/pkl shell-completion bash) \
@@ -90,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
         --fish <($out/bin/pkl shell-completion fish)
     ''}
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     runHook postInstall
   '';
 

@@ -1,5 +1,9 @@
 # This module allows the test driver to connect to the virtual machine
+<<<<<<< HEAD
 # via a root shell attached to a virtio console.
+=======
+# via a root shell attached to port 514.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 {
   options,

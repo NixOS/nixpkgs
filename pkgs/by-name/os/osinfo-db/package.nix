@@ -9,11 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "osinfo-db";
+<<<<<<< HEAD
   version = "20251212";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.xz";
     hash = "sha256-BjeSUMkTBsmMuXJq9E6uWQnf3VRJ+QMx6QSuEiHY1ec=";
+=======
+  version = "20250606";
+
+  src = fetchurl {
+    url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.xz";
+    hash = "sha256-mUCqR98pgHPFHc+KTcyFX0lKuGTCTNvaRr2JeVc1f+E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

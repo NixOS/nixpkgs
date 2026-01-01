@@ -7,8 +7,11 @@
   jq,
   moreutils,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   cargo-tauri,
   pkg-config,
@@ -19,6 +22,10 @@
   openssl,
   webkitgtk_4_1,
 }:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
   version = "1.10.0";
@@ -30,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-SnPYuMYdoY69CWMztuDxw0ohRDU2uECNhBs46hLg+eA=";
   };
 
+<<<<<<< HEAD
   patches = [ ./fix-frontend-backend-tauri-version-mismatch.patch ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -44,10 +52,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-ILhAhpY9a50a0KKWs5Y+G3jDyWuySHw8QcOJlYePzmc=";
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
   '';
 
+<<<<<<< HEAD
+=======
+  pnpmDeps = pnpm_10.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
+    hash = "sha256-DYhPe59qfsSjyMIN31RL0mrHfmE6/I1SF+XutettkO8=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
@@ -56,8 +75,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     jq
     moreutils
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
     cargo-tauri.hook
     pkg-config

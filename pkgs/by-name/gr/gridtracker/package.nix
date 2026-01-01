@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Amateur radio companion to WSJT-X or JTDX";
     mainProgram = "gridtracker";
     longDescription = ''
@@ -47,7 +51,13 @@ stdenv.mkDerivation rec {
       logging frameworks including Logbook of the World.
     '';
     homepage = "https://gridtracker.org";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ melling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

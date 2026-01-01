@@ -6,16 +6,27 @@
 
 buildGoModule rec {
   pname = "kubectl-ktop";
+<<<<<<< HEAD
   version = "0.5.0";
+=======
+  version = "0.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "vladimirvivien";
     repo = "ktop";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-VNP66Mtzyd8U5ddP4n+VvT5ZrPDOqvDbylj3F0dMViM=";
   };
 
   vendorHash = "sha256-kSDbQFiZ8XMKyW7aYKe1s0pq038YC+RORCtMXFI+knA=";
+=======
+    sha256 = "sha256-5iFFYTZq5DcMYVnW90MKVDchVXzjXOPd5BeYcrqL9pQ=";
+  };
+
+  vendorHash = "sha256-qNrjyMMsFE2FmIJc46fYq08b3XFFZeLlspth5anjMm8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "." ];
 

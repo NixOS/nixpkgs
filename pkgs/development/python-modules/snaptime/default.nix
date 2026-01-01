@@ -29,10 +29,18 @@ buildPythonPackage rec {
   # no tests on Pypi, no tags on github
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Transform timestamps with a simple DSL";
     homepage = "https://github.com/zartstrom/snaptime";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+  meta = with lib; {
+    description = "Transform timestamps with a simple DSL";
+    homepage = "https://github.com/zartstrom/snaptime";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

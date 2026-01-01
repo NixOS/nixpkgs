@@ -41,15 +41,25 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Server side focus component used in Jitsi Meet conferences";
     mainProgram = "jicofo";
     longDescription = ''
       JItsi COnference FOcus is a server side focus component used in Jitsi Meet conferences.
     '';
     homepage = "https://github.com/jitsi/jicofo";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     teams = [ lib.teams.jitsi ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.asl20;
+    teams = [ teams.jitsi ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

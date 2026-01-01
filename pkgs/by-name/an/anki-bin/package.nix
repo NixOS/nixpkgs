@@ -54,7 +54,11 @@ let
     '';
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (anki.meta)
       license
       homepage
@@ -67,7 +71,11 @@ let
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mahmoudk1000
       cything
     ];

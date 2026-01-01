@@ -74,11 +74,19 @@ stdenv.mkDerivation rec {
     "--disable-examples"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://dbus-cplusplus.sourceforge.net";
     description = "C++ API for D-BUS";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://dbus-cplusplus.sourceforge.net";
+    description = "C++ API for D-BUS";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

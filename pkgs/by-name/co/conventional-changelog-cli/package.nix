@@ -3,8 +3,11 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm,
   makeBinaryWrapper,
   versionCheckHook,
@@ -22,7 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Pgx5gM4SdSL6WCkStByA7AP2O96MjAjyeMOI+Lo2mt0=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-ZfG3F0J1hIhZlF2OadhVdbxhQrFcMYDG9gEXR04DgEI=";
@@ -30,8 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     makeBinaryWrapper
   ];
 
@@ -65,6 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {

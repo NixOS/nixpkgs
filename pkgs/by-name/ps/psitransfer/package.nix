@@ -8,13 +8,21 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "psitransfer";
+<<<<<<< HEAD
   version = "2.3.1";
+=======
+  version = "2.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "psi-4ward";
     repo = "psitransfer";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-I5+SgPR53zdgTwHd4tdSoPr1y1iQ/JHH0KXqexgkGVE=";
+=======
+    hash = "sha256-XUEvR8dWwFBbZdwVM8PQnYBc17SvGF5uO04vb/nAR2A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   npmDepsHash = "sha256-BZpd/fsuV77uj2bGZcqBpIuOq3YlUw2bxovOfu8b9iE=";

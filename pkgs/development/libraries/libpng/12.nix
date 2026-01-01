@@ -39,16 +39,27 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Official reference implementation for the PNG file format";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     license = lib.licenses.libpng;
+=======
+  meta = with lib; {
+    description = "Official reference implementation for the PNG file format";
+    homepage = "http://www.libpng.org/pub/png/libpng.html";
+    license = licenses.libpng;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     branch = "1.2";
     pkgConfigModules = [
       "libpng"
       "libpng12"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

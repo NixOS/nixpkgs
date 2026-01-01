@@ -62,11 +62,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "schemdraw" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Package for producing high-quality electrical circuit schematic diagrams";
     homepage = "https://schemdraw.readthedocs.io/en/latest/";
     changelog = "https://schemdraw.readthedocs.io/en/latest/changes.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sfrijters ];
+=======
+  meta = with lib; {
+    description = "Package for producing high-quality electrical circuit schematic diagrams";
+    homepage = "https://schemdraw.readthedocs.io/en/latest/";
+    changelog = "https://schemdraw.readthedocs.io/en/latest/changes.html";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sfrijters ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,10 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansicolor" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to produce ansi color output and colored highlighting and diffing";
     homepage = "https://github.com/numerodix/ansicolor/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Library to produce ansi color output and colored highlighting and diffing";
+    homepage = "https://github.com/numerodix/ansicolor/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

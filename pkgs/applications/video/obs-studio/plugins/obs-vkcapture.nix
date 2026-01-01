@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "OBS Linux Vulkan/OpenGL game capture";
     homepage = "https://github.com/nowrep/obs-vkcapture";
@@ -90,5 +91,17 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "OBS Linux Vulkan/OpenGL game capture";
+    homepage = "https://github.com/nowrep/obs-vkcapture";
+    changelog = "https://github.com/nowrep/obs-vkcapture/releases/tag/v${finalAttrs.version}";
+    maintainers = with maintainers; [
+      atila
+      pedrohlc
+    ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

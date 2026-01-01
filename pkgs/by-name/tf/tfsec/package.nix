@@ -38,6 +38,10 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
+<<<<<<< HEAD
+=======
+      peterromfeldhk
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

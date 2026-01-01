@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Emulation of ACME";
     homepage = "http://wily.sourceforge.net";
     license = lib.licenses.artistic1;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Emulation of ACME";
+    homepage = "http://wily.sourceforge.net";
+    license = licenses.artistic1;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wily";
   };
 }

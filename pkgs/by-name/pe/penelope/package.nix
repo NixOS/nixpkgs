@@ -6,14 +6,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "penelope";
+<<<<<<< HEAD
   version = "0.15.0";
+=======
+  version = "0.14.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brightio";
     repo = "penelope";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-paVKCqR8J1bINz80qOBqiG2wxGjiJlf0gv3LIyS/Xs0=";
+=======
+    hash = "sha256-m4EYP1lKte8r9Xa/xAuv6aiwMNha+B8HXUCizH0JgmI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

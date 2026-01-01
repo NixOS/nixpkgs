@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage rec {
     export HOME=$TMPDIR
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Create beautiful image of your source code";
     homepage = "https://github.com/Aloxaf/silicon";
@@ -59,6 +60,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Create beautiful image of your source code";
+    homepage = "https://github.com/Aloxaf/silicon";
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       evanjs
       _0x4A6F
     ];

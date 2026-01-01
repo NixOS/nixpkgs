@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "apipkg" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/pytest-dev/apipkg/blob/main/CHANGELOG";
     description = "Namespace control and lazy-import mechanism";
     homepage = "https://github.com/pytest-dev/apipkg";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/pytest-dev/apipkg/blob/main/CHANGELOG";
+    description = "Namespace control and lazy-import mechanism";
+    homepage = "https://github.com/pytest-dev/apipkg";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

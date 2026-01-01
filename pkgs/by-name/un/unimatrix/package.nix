@@ -27,11 +27,19 @@ python3Packages.buildPythonApplication {
   dontConfigure = true;
   dontBuild = true;
 
+<<<<<<< HEAD
   meta = {
     description = ''Python script to simulate the display from "The Matrix" in terminal'';
     homepage = "https://github.com/will8211/unimatrix";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ anomalocaris ];
+=======
+  meta = with lib; {
+    description = ''Python script to simulate the display from "The Matrix" in terminal'';
+    homepage = "https://github.com/will8211/unimatrix";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ anomalocaris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "unimatrix";
   };
 }

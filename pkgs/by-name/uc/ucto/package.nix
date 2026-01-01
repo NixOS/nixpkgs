@@ -20,13 +20,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ucto";
+<<<<<<< HEAD
   version = "0.36";
+=======
+  version = "0.35";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "ucto";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-sq1AslcpoG5gY40DiSMtphp7gXGYRuX1QrQYVGuM/+4=";
+=======
+    hash = "sha256-DaLoq+FBNZG4J+h9fRh9HHl2TKVXUTrt9RAzwmv6lIc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -67,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Rule-based tokenizer for natural language";
     mainProgram = "ucto";
@@ -74,6 +83,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ roberth ];
+=======
+  meta = with lib; {
+    description = "Rule-based tokenizer for natural language";
+    mainProgram = "ucto";
+    homepage = "https://languagemachines.github.io/ucto/";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ roberth ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       Ucto tokenizes text files: it separates words from punctuation, and splits sentences. It offers several other basic preprocessing steps such as changing case that you can all use to make your text suited for further processing such as indexing, part-of-speech tagging, or machine translation.

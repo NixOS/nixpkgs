@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iso3166" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Self-contained ISO 3166-1 country definitions";
     homepage = "https://github.com/deactivated/python-iso3166";
     changelog = "https://github.com/deactivated/python-iso3166/blob/v${version}/CHANGES";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zraexy ];
+=======
+  meta = with lib; {
+    description = "Self-contained ISO 3166-1 country definitions";
+    homepage = "https://github.com/deactivated/python-iso3166";
+    changelog = "https://github.com/deactivated/python-iso3166/blob/v${version}/CHANGES";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zraexy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

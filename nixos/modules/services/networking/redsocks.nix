@@ -292,4 +292,8 @@ in
       ) cfg.redsocks;
     };
 
+<<<<<<< HEAD
+=======
+  meta.maintainers = with lib.maintainers; [ ekleog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

@@ -24,11 +24,20 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple CLI to help you with setting up and managing your Eludris instance";
     mainProgram = "eludris";
     homepage = "https://github.com/eludris/eludris/tree/main/cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ooliver1 ];
+=======
+  meta = with lib; {
+    description = "Simple CLI to help you with setting up and managing your Eludris instance";
+    mainProgram = "eludris";
+    homepage = "https://github.com/eludris/eludris/tree/main/cli";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ooliver1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

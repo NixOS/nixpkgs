@@ -30,16 +30,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://git.grimmauld.de/Grimmauld/swaymux/commits/branch/main";
     description = "Program to quickly navigate sway";
     homepage = "https://git.grimmauld.de/Grimmauld/swaymux";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://git.grimmauld.de/Grimmauld/swaymux/commits/branch/main";
+    description = "Program to quickly navigate sway";
+    homepage = "https://git.grimmauld.de/Grimmauld/swaymux";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       Swaymux allows the user to quickly navigate and administrate outputs, workspaces and containers in a tmux-style approach.
     '';
     mainProgram = "swaymux";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ grimmauld ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ grimmauld ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

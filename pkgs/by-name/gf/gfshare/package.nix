@@ -25,15 +25,25 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Not the most descriptive homepage but it's what Debian and Ubuntu use
     # https://packages.debian.org/sid/libgfshare2
     # https://launchpad.net/ubuntu/impish/+source/libgfshare/+copyright
     homepage = "https://git.gitano.org.uk/libgfshare.git/";
     description = "Shamir's secret-sharing method in the Galois Field GF(2**8)";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rraval ];
+=======
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.rraval ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gfshare.x86_64-darwin
   };
 }

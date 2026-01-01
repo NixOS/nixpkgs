@@ -62,7 +62,10 @@ python3Packages.buildPythonApplication rec {
     gst-python
     liblarch
     caldav
+<<<<<<< HEAD
     vobject
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -79,7 +82,11 @@ python3Packages.buildPythonApplication rec {
 
   checkPhase = "xvfb-run pytest ../tests/";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Personal tasks and TODO-list items organizer";
     mainProgram = "gtg";
     longDescription = ''
@@ -88,8 +95,14 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/getting-things-gnome/gtg";
     downloadPage = "https://github.com/getting-things-gnome/gtg/releases";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ oyren ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ oyren ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

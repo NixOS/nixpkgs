@@ -18,10 +18,17 @@ buildDunePackage {
 
   nativeBuildInputs = [ reason ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cubic bezier implementation in Reason / OCaml";
     homepage = "https://github.com/jchavarri/rebez/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Cubic bezier implementation in Reason / OCaml";
+    homepage = "https://github.com/jchavarri/rebez/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "RebezApp.exe";
   };

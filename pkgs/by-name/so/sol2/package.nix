@@ -25,7 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSOL2_BUILD_LUA=FALSE"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lua API wrapper with advanced features and top notch performance";
     longDescription = ''
       sol2 is a C++ library binding to Lua.
@@ -34,7 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
       The library is header-only for easy integration with projects, and a single header can be used for drag-and-drop start up.
     '';
     homepage = "https://github.com/ThePhD/sol2";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mrcjkb ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ mrcjkb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -33,11 +33,20 @@ buildPythonPackage rec {
     "cerberus/benchmarks/"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Schema and data validation tool for Python dictionaries";
     homepage = "http://python-cerberus.org/";
     changelog = "https://github.com/pyeve/cerberus/blob/${version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Schema and data validation tool for Python dictionaries";
+    homepage = "http://python-cerberus.org/";
+    changelog = "https://github.com/pyeve/cerberus/blob/${version}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

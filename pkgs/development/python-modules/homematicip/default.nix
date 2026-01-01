@@ -76,11 +76,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homematicip" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for the homematicIP REST API";
     homepage = "https://github.com/hahn-th/homematicip-rest-api";
     changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for the homematicIP REST API";
+    homepage = "https://github.com/hahn-th/homematicip-rest-api";
+    changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${src.tag}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

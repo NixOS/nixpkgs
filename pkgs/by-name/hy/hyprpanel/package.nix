@@ -37,7 +37,11 @@
 }:
 ags.bundle {
   pname = "hyprpanel";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-24";
+=======
+  version = "0-unstable-2025-11-07";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -45,8 +49,13 @@ ags.bundle {
   src = fetchFromGitHub {
     owner = "Jas-SinghFSU";
     repo = "HyprPanel";
+<<<<<<< HEAD
     rev = "17ecff630bece1ac81569e427088ee8b11322f36";
     hash = "sha256-xgMcrwKhFSQeSQN7ak0iUHNsnxaprEzuRYRo2ADeTtg=";
+=======
+    rev = "f9a04192e8fb90a48e1756989f582dc0baec2351";
+    hash = "sha256-W/eYgKKVqCh7SJLHk6Asc4LvU3YXvGtlL29yBMGymz4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # keep in sync with https://github.com/Jas-SinghFSU/HyprPanel/blob/master/flake.nix#L42
@@ -121,7 +130,11 @@ ags.bundle {
     description = "Bar/Panel for Hyprland with extensive customizability";
     homepage = "https://github.com/Jas-SinghFSU/HyprPanel";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ PerchunPak ];
+=======
+    maintainers = with lib.maintainers; [ perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hyprpanel";
     platforms = lib.platforms.linux;
   };

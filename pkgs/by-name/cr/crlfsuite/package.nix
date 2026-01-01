@@ -32,12 +32,21 @@ python3.pkgs.buildPythonApplication rec {
     "crlfsuite"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CRLF injection (HTTP Response Splitting) scanner";
     mainProgram = "crlfsuite";
     homepage = "https://github.com/Nefcore/CRLFsuite";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "CRLF injection (HTTP Response Splitting) scanner";
+    mainProgram = "crlfsuite";
+    homepage = "https://github.com/Nefcore/CRLFsuite";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       c0bw3b
       fab
     ];

@@ -17,9 +17,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pymongo ];
 
+<<<<<<< HEAD
   meta = {
     description = "MongoDB-backed Python dict-like interface";
     homepage = "https://github.com/turicas/mongodict/";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "MongoDB-backed Python dict-like interface";
+    homepage = "https://github.com/turicas/mongodict/";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

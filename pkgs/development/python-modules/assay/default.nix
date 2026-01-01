@@ -19,10 +19,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "assay" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/brandon-rhodes/assay";
     description = "Attempt to write a Python testing framework I can actually stand";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zane ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/brandon-rhodes/assay";
+    description = "Attempt to write a Python testing framework I can actually stand";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

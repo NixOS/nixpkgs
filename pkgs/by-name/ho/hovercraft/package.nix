@@ -8,7 +8,11 @@
 python3Packages.buildPythonApplication rec {
   pname = "hovercraft";
   version = "2.7";
+<<<<<<< HEAD
   pyproject = true;
+=======
+  format = "setuptools";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabled = !python3Packages.isPy3k;
 
   src = fetchFromGitHub {
@@ -18,9 +22,13 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-X6EaiVahAYAaFB65oqmj695wlJFXNseqz0SQLzGVD0w=";
   };
 
+<<<<<<< HEAD
   build-system = [ python3Packages.setuptools ];
 
   nativeCheckInputs = [ python3Packages.manuel ];
+=======
+  nativeCheckInputs = with python3Packages; [ manuel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   dependencies = with python3Packages; [
     setuptools
@@ -43,6 +51,10 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "hovercraft";
     homepage = "https://github.com/regebro/hovercraft";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.makefu ];
+=======
+    maintainers = with lib.maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

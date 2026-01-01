@@ -19,11 +19,19 @@ rustPlatform.buildRustPackage {
 
   doCheck = false; # No tests
 
+<<<<<<< HEAD
   meta = {
     description = "Sway workspaces with style";
     homepage = "https://github.com/pierrechevalier83/workstyle";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ FlorianFranzen ];
+=======
+  meta = with lib; {
+    description = "Sway workspaces with style";
+    homepage = "https://github.com/pierrechevalier83/workstyle";
+    license = licenses.mit;
+    maintainers = with maintainers; [ FlorianFranzen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "workstyle";
   };
 }

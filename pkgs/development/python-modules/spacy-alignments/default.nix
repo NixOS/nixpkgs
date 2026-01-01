@@ -42,10 +42,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spacy_alignments" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Align tokenizations for spaCy and transformers";
     homepage = "https://github.com/explosion/spacy-alignments";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Align tokenizations for spaCy and transformers";
+    homepage = "https://github.com/explosion/spacy-alignments";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

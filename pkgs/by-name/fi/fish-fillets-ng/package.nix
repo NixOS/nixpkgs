@@ -64,12 +64,21 @@ stdenv.mkDerivation rec {
     install -Dm644 ${./icon.xpm} $out/share/pixmaps/fish-fillets-ng.xpm
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Puzzle game";
     mainProgram = "fillets";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Puzzle game";
+    mainProgram = "fillets";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://fillets.sourceforge.net/";
   };
 }

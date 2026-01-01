@@ -51,12 +51,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aw_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for ActivityWatch";
     homepage = "https://github.com/ActivityWatch/aw-client";
     changelog = "https://github.com/ActivityWatch/aw-client/releases/tag/v${version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ huantian ];
+=======
+  meta = with lib; {
+    description = "Client library for ActivityWatch";
+    homepage = "https://github.com/ActivityWatch/aw-client";
+    changelog = "https://github.com/ActivityWatch/aw-client/releases/tag/v${version}";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ huantian ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aw-client";
   };
 }

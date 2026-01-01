@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
     gtk2
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple Ham Radio control (CAT) program based on Hamlib";
     mainProgram = "grig";
     longDescription = ''
@@ -44,9 +48,16 @@ stdenv.mkDerivation rec {
       same interface regardless of which radio they use.
     '';
     homepage = "https://groundstation.sourceforge.net/grig/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      melling
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mafo
     ];
   };

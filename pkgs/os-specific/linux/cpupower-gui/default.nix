@@ -99,11 +99,20 @@ buildPythonApplication rec {
     wrapPythonProgramsIn $out/lib "$out $propagatedBuildInputs"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Change the frequency limits of your cpu and its governor";
     mainProgram = "cpupower-gui";
     homepage = "https://github.com/vagnum08/cpupower-gui/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ unode ];
+=======
+  meta = with lib; {
+    description = "Change the frequency limits of your cpu and its governor";
+    mainProgram = "cpupower-gui";
+    homepage = "https://github.com/vagnum08/cpupower-gui/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ unode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

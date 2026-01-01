@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for relaying TCP connections over DNS";
     homepage = "https://github.com/alex-sector/dns2tcp";
@@ -36,5 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dns2tcpc";
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Tool for relaying TCP connections over DNS";
+    homepage = "https://github.com/alex-sector/dns2tcp";
+    license = licenses.gpl2Plus;
+    mainProgram = "dns2tcpc";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

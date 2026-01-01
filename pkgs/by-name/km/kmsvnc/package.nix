@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     libva
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "VNC server for DRM/KMS capable GNU/Linux devices";
     homepage = "https://github.com/isjerryxiao/kmsvnc";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "kmsvnc";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "VNC server for DRM/KMS capable GNU/Linux devices";
+    homepage = "https://github.com/isjerryxiao/kmsvnc";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nickcao ];
+    mainProgram = "kmsvnc";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

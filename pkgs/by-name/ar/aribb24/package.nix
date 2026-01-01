@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library for ARIB STD-B24, decoding JIS 8 bit characters and parsing MPEG-TS stream";
     homepage = "https://code.videolan.org/jeeb/aribb24/";
@@ -42,5 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "aribb24" ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jopejoe1 ];
+=======
+  meta = with lib; {
+    description = "Library for ARIB STD-B24, decoding JIS 8 bit characters and parsing MPEG-TS stream";
+    homepage = "https://code.videolan.org/jeeb/aribb24/";
+    license = licenses.lgpl3Plus;
+    pkgConfigModules = [ "aribb24" ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ jopejoe1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

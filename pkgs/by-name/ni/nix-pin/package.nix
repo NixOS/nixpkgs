@@ -63,12 +63,21 @@ let
             --modify-nix default.nix
         '';
       };
+<<<<<<< HEAD
     meta = {
       homepage = "https://github.com/timbertson/nix-pin";
       description = "Nixpkgs development utility";
       license = lib.licenses.mit;
       maintainers = [ lib.maintainers.timbertson ];
       platforms = lib.platforms.all;
+=======
+    meta = with lib; {
+      homepage = "https://github.com/timbertson/nix-pin";
+      description = "Nixpkgs development utility";
+      license = licenses.mit;
+      maintainers = [ maintainers.timbertson ];
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "nix-pin";
     };
   };

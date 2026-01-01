@@ -26,7 +26,11 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk17;
+<<<<<<< HEAD
   mvnHash = "sha256-Fk6JPMmzz7YnPWOdWKOXQ8z6bdYuXSgQdWBOaIlpd4A=";
+=======
+  mvnHash = "sha256-cRDrd2QysN3KCndfdnTn8/hXuJ1xd28GcE8vrd6ILuM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Disables failing tests which either need network access or are flaky.
   mvnParameters = lib.escapeShellArgs [
@@ -49,7 +53,11 @@ maven.buildMavenPackage rec {
 
     makeWrapper ${jre_headless}/bin/java $out/bin/sonarlint-ls \
       --add-flags "-jar $out/share/sonarlint-ls.jar" \
+<<<<<<< HEAD
       --add-flags "-analyzers $(find $out/share/plugins/ -type f -name '*.jar' | sort | tr '\n' ' ')"
+=======
+      --add-flags "-analyzers $(ls -1 $out/share/plugins | tr '\n' ' ')"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     runHook postInstall
   '';

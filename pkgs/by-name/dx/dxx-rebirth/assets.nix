@@ -48,11 +48,19 @@ let
         runHook postInstall
       '';
 
+<<<<<<< HEAD
       meta = {
         description = "Descent ${toString ver} assets from GOG";
         homepage = "https://www.dxx-rebirth.com/";
         license = lib.licenses.unfree;
         maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+      meta = with lib; {
+        description = "Descent ${toString ver} assets from GOG";
+        homepage = "https://www.dxx-rebirth.com/";
+        license = licenses.unfree;
+        maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         hydraPlatforms = [ ];
       };
     };

@@ -26,10 +26,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Updated configparser from Python 3.7 for Python 2.6+";
     homepage = "https://github.com/jaraco/configparser";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Updated configparser from Python 3.7 for Python 2.6+";
+    homepage = "https://github.com/jaraco/configparser";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

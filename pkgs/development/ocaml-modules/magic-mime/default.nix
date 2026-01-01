@@ -15,10 +15,18 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.03";
 
+<<<<<<< HEAD
   meta = {
     description = "Convert file extensions to MIME types";
     homepage = "https://github.com/mirage/ocaml-magic-mime";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    description = "Convert file extensions to MIME types";
+    homepage = "https://github.com/mirage/ocaml-magic-mime";
+    license = licenses.isc;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

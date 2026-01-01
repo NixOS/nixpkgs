@@ -43,10 +43,18 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of QUIC and HTTP/3";
     homepage = "https://github.com/aiortc/aioquic";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Implementation of QUIC and HTTP/3";
+    homepage = "https://github.com/aiortc/aioquic";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

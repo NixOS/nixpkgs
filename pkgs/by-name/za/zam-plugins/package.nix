@@ -57,12 +57,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.zamaudio.com/?p=976";
     description = "Collection of LV2/LADSPA/VST/JACK audio plugins by ZamAudio";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.zamaudio.com/?p=976";
+    description = "Collection of LV2/LADSPA/VST/JACK audio plugins by ZamAudio";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # tries to run dpf/utils/lv2_ttl_generator (built for host)
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };

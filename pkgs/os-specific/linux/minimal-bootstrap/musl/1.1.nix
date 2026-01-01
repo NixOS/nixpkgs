@@ -35,6 +35,21 @@ let
       hash = "sha256-/ZmH64J57MmbxdfQ4RNjamAiBdkImMTlHsHdgV4gMj4=";
     })
     (fetchurl {
+<<<<<<< HEAD
+=======
+      url = "${liveBootstrap}/patches/fenv.patch";
+      hash = "sha256-vMVGjoN4deAJW5gsSqA207SJqAbvhrnOsGK49DdEiTI=";
+    })
+    (fetchurl {
+      url = "${liveBootstrap}/patches/makefile.patch";
+      hash = "sha256-03iYBAUnsrEdLIIhhhq5mM6BGnPn2EfUmIHu51opxbw=";
+    })
+    (fetchurl {
+      url = "${liveBootstrap}/patches/musl_weak_symbols.patch";
+      hash = "sha256-/d9a2eUkpe9uyi1ye6T4CiYc9MR3FZ9na0Gb90+g4v0=";
+    })
+    (fetchurl {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       url = "${liveBootstrap}/patches/set_thread_area.patch";
       hash = "sha256-RIZYqbbRSx4X/0iFUhriwwBRmoXVR295GNBUjf2UrM0=";
     })
@@ -42,11 +57,21 @@ let
       url = "${liveBootstrap}/patches/sigsetjmp.patch";
       hash = "sha256-wd2Aev1zPJXy3q933aiup5p1IMKzVJBquAyl3gbK4PU=";
     })
+<<<<<<< HEAD
     # liveBootstrap/sysa/musl-1.1.24/patches/stdio_flush_on_exit.patch with forward declarations added
     # to avoid `error: implicit declaration of function '__stdio_exit'`
     # Required to fix buffered stdout being truncated on exit
     ./stdio_flush_on_exit.patch
     ./avoid_pthread_x86_64.patch
+=======
+    # FIXME: this patch causes the build to fail
+    # (fetchurl {
+    #   url = "${liveBootstrap}/patches/stdio_flush_on_exit.patch";
+    #   hash = "sha256-/z5ze3h3QTysay8nRvyvwPv3pmTcKptdkBIaMCoeLDg=";
+    # })
+    # HACK: always flush stdio immediately
+    ./always-flush.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (fetchurl {
       url = "${liveBootstrap}/patches/va_list.patch";
       hash = "sha256-UmcMIl+YCi3wIeVvjbsCyqFlkyYsM4ECNwTfXP+s7vg=";
@@ -88,11 +113,14 @@ bash.runCommand "${pname}-${version}"
     sed -i 's|execl("/bin/sh", "sh", "-c",|execlp("sh", "-c",|'\
       src/misc/wordexp.c
 
+<<<<<<< HEAD
     # @PLT specifier is not supported by tinycc.
     # Calls do go through PLT regardless.
     sed -i 's|@PLT||' src/math/x86_64/expl.s
     sed -i 's|@PLT||' src/signal/x86_64/sigsetjmp.s
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Configure
     bash ./configure \
       --prefix=$out \

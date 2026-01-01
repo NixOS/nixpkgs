@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.caida.org/projects/spoofer";
     description = "Assess and report on deployment of source address validation";
     longDescription = ''
@@ -52,8 +56,13 @@ stdenv.mkDerivation rec {
       deploying source address validation (e.g., network location,
       business type).
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
+=======
+    platforms = platforms.all;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "spoofer-prober";
   };
 }

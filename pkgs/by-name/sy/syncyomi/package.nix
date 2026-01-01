@@ -5,10 +5,16 @@
   buildGoModule,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   esbuild,
 }:
+=======
+  esbuild,
+}:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 buildGoModule rec {
   pname = "syncyomi";
   version = "1.1.2";
@@ -27,22 +33,33 @@ buildGoModule rec {
     inherit src version;
     sourceRoot = "${finalAttrs.src.name}/web";
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
+=======
+    pnpmDeps = pnpm_9.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+<<<<<<< HEAD
       pnpm = pnpm_9;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 1;
       hash = "sha256-edcZIqshnvM3jJpZWIR/UncI0VCMLq26h/n3VvV/384=";
     };
 
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_9
+=======
+      pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     env.ESBUILD_BINARY_PATH = lib.getExe (

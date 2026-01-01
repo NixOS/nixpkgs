@@ -9,10 +9,18 @@ grafanaPlugin {
     x86_64-darwin = "sha256-6sGA06INQbiRCd23ykdtUWAR+oA3YFh57KBT7zWUP44=";
     aarch64-darwin = "sha256-gzQRcPeRqLvl27SB18hTTtcHx/namT2V0NOgX5J1mbs=";
   };
+<<<<<<< HEAD
   meta = {
     description = "Load CSV data into Grafana, expanding your capabilities to visualize and analyze data stored in CSV (Comma-Separated Values) format";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nagisa ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Load CSV data into Grafana, expanding your capabilities to visualize and analyze data stored in CSV (Comma-Separated Values) format";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nagisa ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -60,11 +60,20 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Comps XML file manipulation library";
     homepage = "https://github.com/rpm-software-management/libcomps";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ katexochen ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Comps XML file manipulation library";
+    homepage = "https://github.com/rpm-software-management/libcomps";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ katexochen ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

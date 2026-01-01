@@ -54,6 +54,7 @@ buildDotnetModule rec {
     install -Dm444 NickvisionTagger.Shared/Linux/org.nickvision.tagger.desktop.in -T $out/share/applications/org.nickvision.tagger.desktop
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Easy-to-use music tag (metadata) editor";
     homepage = "https://github.com/NickvisionApps/Tagger";
@@ -61,6 +62,15 @@ buildDotnetModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Easy-to-use music tag (metadata) editor";
+    homepage = "https://github.com/NickvisionApps/Tagger";
+    mainProgram = "NickvisionTagger.GNOME";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zendo
       ratcornu
     ];

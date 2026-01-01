@@ -26,11 +26,19 @@ buildDunePackage rec {
     yaml
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lustre V6 compiler";
     homepage = "https://www-verimag.imag.fr/lustre-v6.html";
     license = lib.licenses.cecill21;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Lustre V6 compiler";
+    homepage = "https://www-verimag.imag.fr/lustre-v6.html";
+    license = licenses.cecill21;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       delta
       wegank
     ];

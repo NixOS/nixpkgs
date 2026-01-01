@@ -34,7 +34,10 @@ maven.buildMavenPackage rec {
     desktopName = "RuneLite";
     genericName = "Oldschool Runescape";
     categories = [ "Game" ];
+<<<<<<< HEAD
     startupWMClass = "net-runelite-client-RuneLite";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # tests require internet :(

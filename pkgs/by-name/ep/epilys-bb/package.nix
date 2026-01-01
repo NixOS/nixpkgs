@@ -17,12 +17,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-xUNvVG5jdAXsro2P8je3LFxqMycJEB4j7w3abf6jilw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Clean, simple, and fast process viewer";
     homepage = "https://nessuent.xyz/bb.html";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ cafkafk ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Clean, simple, and fast process viewer";
+    homepage = "https://nessuent.xyz/bb.html";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ cafkafk ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bb";
   };
 }

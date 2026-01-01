@@ -39,11 +39,19 @@ stdenv.mkDerivation rec {
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://howl.io/";
     description = "General purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ euxane ];
+=======
+  meta = with lib; {
+    homepage = "https://howl.io/";
+    description = "General purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
+    license = licenses.mit;
+    maintainers = with maintainers; [ euxane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "howl";
 
     # LuaJIT and Howl builds fail for x86_64-darwin and aarch64-linux respectively

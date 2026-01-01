@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrect" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple module with a Rect class for Pygame-like rectangular areas";
     homepage = "https://github.com/asweigart/pyrect";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lucasew ];
+=======
+  meta = with lib; {
+    description = "Simple module with a Rect class for Pygame-like rectangular areas";
+    homepage = "https://github.com/asweigart/pyrect";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lucasew ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -101,6 +101,10 @@ buildPythonPackage rec {
   ]
   ++ fakeredis.optional-dependencies.lua
   ++ optional-dependencies.optional;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # ValueError: Transform failed with error code 525: error creating static canvas/context for image server

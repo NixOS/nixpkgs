@@ -1,6 +1,10 @@
 {
   lib,
+<<<<<<< HEAD
   gcc15Stdenv,
+=======
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   fetchFromGitHub,
   hwdata,
@@ -21,7 +25,11 @@
   wayland-protocols,
   wayland-scanner,
 }:
+<<<<<<< HEAD
 gcc15Stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation (finalAttrs: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "aquamarine";
   version = "0.10.0";
 

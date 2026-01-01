@@ -23,10 +23,18 @@ stdenv.mkDerivation rec {
   PREFIX = "\${out}";
   USE_SSL = 1;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/redis/hiredis";
     description = "Minimalistic C client for Redis >= 1.2";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/redis/hiredis";
+    description = "Minimalistic C client for Redis >= 1.2";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

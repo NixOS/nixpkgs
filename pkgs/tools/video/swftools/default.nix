@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of SWF manipulation and creation utilities";
     homepage = "http://www.swftools.org/about.html";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.koral ];
+=======
+  meta = with lib; {
+    description = "Collection of SWF manipulation and creation utilities";
+    homepage = "http://www.swftools.org/about.html";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.koral ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
     knownVulnerabilities = [
       "CVE-2017-10976"

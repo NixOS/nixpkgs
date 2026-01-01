@@ -39,7 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     "volatility3"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Volatile memory extraction frameworks";
     homepage = "https://www.volatilityfoundation.org/";
     changelog = "https://github.com/volatilityfoundation/volatility3/releases/tag/${src.tag}";
@@ -48,6 +52,10 @@ python3.pkgs.buildPythonApplication rec {
       free = false;
       url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
     };
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ fab ];
+=======
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

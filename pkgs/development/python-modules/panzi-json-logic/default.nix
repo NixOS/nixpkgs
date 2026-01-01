@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   gitUpdater,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   unittestCheckHook,
   setuptools,
 }:
@@ -25,8 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "json_logic" ];
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Pure Python 3 JsonLogic and CertLogic implementation.";
     homepage = "https://github.com/panzi/panzi-json-logic";

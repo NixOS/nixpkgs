@@ -66,7 +66,11 @@ buildPythonPackage rec {
     ed25519
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "securesystemslib" ];
 
@@ -77,11 +81,20 @@ buildPythonPackage rec {
     "securesystemslib/_vendor/"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cryptographic and general-purpose routines";
     homepage = "https://github.com/secure-systems-lab/securesystemslib";
     changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Cryptographic and general-purpose routines";
+    homepage = "https://github.com/secure-systems-lab/securesystemslib";
+    changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

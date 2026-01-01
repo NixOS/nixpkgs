@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsons" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Turn Python objects into dicts or json strings and back";
     homepage = "https://github.com/ramonhagenaars/jsons";
     changelog = "https://github.com/ramonhagenaars/jsons/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fmoda3 ];
+=======
+  meta = with lib; {
+    description = "Turn Python objects into dicts or json strings and back";
+    homepage = "https://github.com/ramonhagenaars/jsons";
+    changelog = "https://github.com/ramonhagenaars/jsons/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fmoda3 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

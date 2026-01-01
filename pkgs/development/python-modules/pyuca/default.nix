@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of the Unicode Collation Algorithm";
     homepage = "https://github.com/jtauber/pyuca";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Python implementation of the Unicode Collation Algorithm";
+    homepage = "https://github.com/jtauber/pyuca";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

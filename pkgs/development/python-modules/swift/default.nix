@@ -77,10 +77,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swift" ];
 
+<<<<<<< HEAD
   meta = {
     description = "OpenStack Object Storage";
     homepage = "https://github.com/openstack/swift";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "OpenStack Object Storage";
+    homepage = "https://github.com/openstack/swift";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -59,12 +59,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvips" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for libvips";
     homepage = "https://github.com/libvips/pyvips";
     changelog = "https://github.com/libvips/pyvips/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python wrapper for libvips";
+    homepage = "https://github.com/libvips/pyvips";
+    changelog = "https://github.com/libvips/pyvips/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ccellado
       anthonyroussel
     ];

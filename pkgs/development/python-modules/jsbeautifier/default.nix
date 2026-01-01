@@ -31,12 +31,21 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "jsbeautifier/tests/testindentation.py" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "JavaScript unobfuscator and beautifier";
     mainProgram = "js-beautify";
     homepage = "http://jsbeautifier.org";
     changelog = "https://github.com/beautify-web/js-beautify/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ apeyroux ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ apeyroux ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

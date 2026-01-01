@@ -43,6 +43,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sciencentistguy
     ];
     mainProgram = "procs";

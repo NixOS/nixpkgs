@@ -24,11 +24,20 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GTK application theme inspired by material design";
     homepage = "https://drasite.com/flat-remix-gtk";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.mkg20001 ];
+=======
+  meta = with lib; {
+    description = "GTK application theme inspired by material design";
+    homepage = "https://drasite.com/flat-remix-gtk";
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = [ maintainers.mkg20001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

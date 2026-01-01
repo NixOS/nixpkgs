@@ -183,11 +183,20 @@ python3.pkgs.buildPythonApplication rec {
     inherit python3;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/idiap/coqui-ai-TTS";
     changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/${src.tag}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = lib.licenses.mpl20;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/idiap/coqui-ai-TTS";
+    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/${src.tag}";
+    description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
+    license = licenses.mpl20;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

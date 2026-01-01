@@ -29,9 +29,15 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--sbindir=\${out}/bin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Udev helper for naming devices per BIOS names";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Udev helper for naming devices per BIOS names";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -43,10 +43,18 @@ stdenv.mkDerivation rec {
       -i CMakeLists.txt
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Set of network-related (mostly VPN-related) tools";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Set of network-related (mostly VPN-related) tools";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

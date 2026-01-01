@@ -47,7 +47,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "FUSE file system that transparently transcodes to MP3";
     longDescription = ''
       A read-only FUSE filesystem which transcodes between audio formats
@@ -57,9 +61,15 @@ stdenv.mkDerivation rec {
       files through simple drag-and-drop in a file browser.
     '';
     homepage = "https://khenriks.github.io/mp3fs/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mp3fs";
   };
 }

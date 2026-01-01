@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags '-f ${scoreDirectory}/dopewars.sco'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Game simulating the life of a drug dealer in New York";
     homepage = "https://dopewars.sourceforge.io";
@@ -51,5 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ geri1701 ];
     mainProgram = "dopewars";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Game simulating the life of a drug dealer in New York";
+    homepage = "https://dopewars.sourceforge.io";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ geri1701 ];
+    mainProgram = "dopewars";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -94,7 +94,11 @@ buildPythonPackage rec {
     requests-mock
     respx
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "confluent_kafka" ];
 
@@ -115,11 +119,20 @@ buildPythonPackage rec {
     "tests/test_kafka_error.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
     changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mlieberman85 ];
+=======
+  meta = with lib; {
+    description = "Confluent's Apache Kafka client for Python";
+    homepage = "https://github.com/confluentinc/confluent-kafka-python";
+    changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mlieberman85 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

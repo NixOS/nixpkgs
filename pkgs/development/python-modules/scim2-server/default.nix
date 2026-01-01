@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scim2_server" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight SCIM2 server prototype";
     homepage = "https://github.com/python-scim/scim2-server";
     changelog = "https://github.com/python-scim/scim2-server/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Lightweight SCIM2 server prototype";
+    homepage = "https://github.com/python-scim/scim2-server";
+    changelog = "https://github.com/python-scim/scim2-server/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

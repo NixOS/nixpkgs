@@ -195,9 +195,12 @@ let
                   login = true;
                   replication = true;
                   bypassrls = true;
+<<<<<<< HEAD
                   # SCRAM-SHA-256 hashed password for "password"
                   password = "SCRAM-SHA-256$4096:SZEJF5Si4QZ6l4fedrZZWQ==$6u3PWVcz+dts+NdpByPIjKa4CaSnoXGG3M2vpo76bVU=:WSZ0iGUCmVtKYVvNX0pFOp/60IgsdJ+90Y67Eun+QE0=";
                   connection_limit = 5;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 };
               }
               {
@@ -221,10 +224,15 @@ let
               "rolcreatedb,"
               "rolcanlogin,"
               "rolreplication,"
+<<<<<<< HEAD
               "rolbypassrls,"
               "rolconnlimit,"
               "rolpassword"
               "FROM pg_authid"
+=======
+              "rolbypassrls"
+              "FROM pg_roles"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               "WHERE rolname = '${user}'"
               ") row;"
             ];
@@ -241,6 +249,7 @@ let
                 )
               )
               print(clauses)
+<<<<<<< HEAD
               t.assertTrue(clauses["rolsuper"])
               t.assertTrue(clauses["rolinherit"])
               t.assertTrue(clauses["rolcreaterole"])
@@ -253,6 +262,15 @@ let
               machine.succeed(
                 "PGPASSWORD='password' psql -h localhost -U all-clauses -d postgres -c \"SELECT 1\""
               )
+=======
+              assert clauses['rolsuper'], 'expected user with clauses to have superuser clause'
+              assert clauses['rolinherit'], 'expected user with clauses to have inherit clause'
+              assert clauses['rolcreaterole'], 'expected user with clauses to have create role clause'
+              assert clauses['rolcreatedb'], 'expected user with clauses to have create db clause'
+              assert clauses['rolcanlogin'], 'expected user with clauses to have login clause'
+              assert clauses['rolreplication'], 'expected user with clauses to have replication clause'
+              assert clauses['rolbypassrls'], 'expected user with clauses to have bypassrls clause'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           with subtest("All user permissions default when ensureClauses is not provided"):
               clauses = json.loads(
@@ -260,6 +278,7 @@ let
                     "sudo -u postgres psql -tc \"${getClausesQuery "default-clauses"}\""
                 )
               )
+<<<<<<< HEAD
               t.assertFalse(clauses["rolsuper"])
               t.assertTrue(clauses["rolinherit"])
               t.assertFalse(clauses["rolcreaterole"])
@@ -269,6 +288,15 @@ let
               t.assertFalse(clauses["rolbypassrls"])
               t.assertFalse(clauses["rolconnlimit"] == 5)
               t.assertFalse(clauses["rolpassword"])
+=======
+              assert not clauses['rolsuper'], 'expected user with no clauses set to have default superuser clause'
+              assert clauses['rolinherit'], 'expected user with no clauses set to have default inherit clause'
+              assert not clauses['rolcreaterole'], 'expected user with no clauses set to have default create role clause'
+              assert not clauses['rolcreatedb'], 'expected user with no clauses set to have default create db clause'
+              assert clauses['rolcanlogin'], 'expected user with no clauses set to have default login clause'
+              assert not clauses['rolreplication'], 'expected user with no clauses set to have default replication clause'
+              assert not clauses['rolbypassrls'], 'expected user with no clauses set to have default bypassrls clause'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           machine.shutdown()
         '';

@@ -9,16 +9,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weaver";
+<<<<<<< HEAD
   version = "0.20.0";
+=======
+  version = "0.19.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-cZWxXcU5yn1ShLWVMZznVNBmhx5npUGc3lJuuchb/FA=";
   };
 
   cargoHash = "sha256-4ezcHKXmEmnkRG6/Pt0ENUlkga7SesMfI52txEH9ph0=";
+=======
+    hash = "sha256-6rBgGU+6/EZaKkDdbRZPY+5ZS2mnUiPIPymhVpqVPX0=";
+  };
+
+  cargoHash = "sha256-9i+6xqOUUSWBPeoqgO9TpS2AkVLRB1CCZfMrPsZj8JQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   checkFlags = [
     # Skip tests requiring network

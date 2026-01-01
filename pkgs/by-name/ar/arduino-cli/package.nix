@@ -11,15 +11,26 @@
 
 let
 
+<<<<<<< HEAD
   pkg = buildGoModule (finalAttrs: {
     pname = "arduino-cli";
     version = "1.4.0";
+=======
+  pkg = buildGoModule rec {
+    pname = "arduino-cli";
+    version = "1.3.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = "arduino-cli";
+<<<<<<< HEAD
       tag = "v${finalAttrs.version}";
       hash = "sha256-H7vccxDzJt0e/91PIV6Qg8nRD0beb/3g7AZ4uk2ebXU=";
+=======
+      tag = "v${version}";
+      hash = "sha256-vUa/Mgztyu5jKVIIhp+Cg79n+ulN94mlfVpxecRb6PA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     nativeBuildInputs = [
@@ -31,7 +42,11 @@ let
 
     subPackages = [ "." ];
 
+<<<<<<< HEAD
     vendorHash = "sha256-GPZLvEgL/2Ekfj58d8dsbc6e2hHB2zUapvFdIT43hhQ=";
+=======
+    vendorHash = "sha256-msv+ZG6uabTtPDVcRksRd8UTSpoztMKw3YGxvhJr26w=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     postPatch =
       let
@@ -62,7 +77,11 @@ let
     ldflags = [
       "-s"
       "-w"
+<<<<<<< HEAD
       "-X github.com/arduino/arduino-cli/internal/version.versionString=${finalAttrs.version}"
+=======
+      "-X github.com/arduino/arduino-cli/internal/version.versionString=${version}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "-X github.com/arduino/arduino-cli/internal/version.commit=unknown"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
@@ -75,10 +94,17 @@ let
     '';
 
     meta = {
+<<<<<<< HEAD
       inherit (finalAttrs.src.meta) homepage;
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
       changelog = "https://github.com/arduino/arduino-cli/releases/tag/${finalAttrs.version}";
+=======
+      inherit (src.meta) homepage;
+      description = "Arduino from the command line";
+      mainProgram = "arduino-cli";
+      changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       license = with lib.licenses; [
         gpl3Only
         asl20
@@ -89,7 +115,11 @@ let
       ];
     };
 
+<<<<<<< HEAD
   });
+=======
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 in
 if stdenv.hostPlatform.isLinux then

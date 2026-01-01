@@ -19,14 +19,22 @@ let
     }:
     buildNpmPackage rec {
       pname = name;
+<<<<<<< HEAD
       version = "2025.12.0";
+=======
+      version = "2025.11.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nodejs = nodejs_22;
 
       src = fetchFromGitHub {
         owner = "bitwarden";
         repo = "directory-connector";
         rev = "v${version}";
+<<<<<<< HEAD
         hash = "sha256-kf4ky/dsZJJiShVJ2uYp1DsH5BP/RAeEnbjUQxjoxkk=";
+=======
+        hash = "sha256-U2/u29MKbnW0gcEZ08lhc31XsBxsoonON5/v3Ur7xXo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
       postPatch = ''
@@ -38,7 +46,11 @@ let
           --replace-fail "AppImage" "dir"
       '';
 
+<<<<<<< HEAD
       npmDepsHash = "sha256-j90y6R3MCcUmEuoI3clNz5WqVyTNH5x6xyg3Je+krL0=";
+=======
+      npmDepsHash = "sha256-9vQcR59eyQapiFzGfxYAJL6WHWS8VSJHnmccgALmRuc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -54,6 +66,7 @@ let
         pkg-config
       ];
 
+<<<<<<< HEAD
       meta = {
         description = "LDAP connector for Bitwarden";
         homepage = "https://github.com/bitwarden/directory-connector";
@@ -63,6 +76,17 @@ let
           SuperSandro2000
         ];
         platforms = lib.platforms.linux;
+=======
+      meta = with lib; {
+        description = "LDAP connector for Bitwarden";
+        homepage = "https://github.com/bitwarden/directory-connector";
+        license = licenses.gpl3Only;
+        maintainers = with maintainers; [
+          Silver-Golden
+          SuperSandro2000
+        ];
+        platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         mainProgram = name;
       };
     };

@@ -40,11 +40,19 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bundled QT4 libraries for the J-Link Software and Documentation pack";
     homepage = "https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack";
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ stargate01 ];
+=======
+  meta = with lib; {
+    description = "Bundled QT4 libraries for the J-Link Software and Documentation pack";
+    homepage = "https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ stargate01 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     knownVulnerabilities = [
       "This bundled version of Qt 4 has reached its end of life after 2015. See https://github.com/NixOS/nixpkgs/pull/174634"
       "CVE-2023-43114"

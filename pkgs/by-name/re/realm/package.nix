@@ -26,11 +26,20 @@ rustPlatform.buildRustPackage rec {
     tests = { inherit (nixosTests) realm; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, high performance relay server written in rust";
     homepage = "https://github.com/zhboner/realm";
     mainProgram = "realm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ocfox ];
+=======
+  meta = with lib; {
+    description = "Simple, high performance relay server written in rust";
+    homepage = "https://github.com/zhboner/realm";
+    mainProgram = "realm";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ocfox ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

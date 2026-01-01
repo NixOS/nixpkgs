@@ -9,7 +9,11 @@
   glib,
   wrapGAppsHook3,
   gobject-introspection,
+<<<<<<< HEAD
   gitUpdater,
+=======
+  mateUpdateScript,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,7 +24,11 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/mozo-${version}.tar.xz";
+=======
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "/piYT/1qqMNtBZS879ugPeObQtQeAHJRaAOE8870SSQ=";
   };
 
@@ -43,6 +51,7 @@ python3.pkgs.buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://git.mate-desktop.org/mozo";
     odd-unstable = true;
@@ -56,5 +65,16 @@ python3.pkgs.buildPythonApplication rec {
     license = with lib.licenses; [ lgpl2Plus ];
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
+=======
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "MATE Desktop menu editor";
+    mainProgram = "mozo";
+    homepage = "https://github.com/mate-desktop/mozo";
+    license = with licenses; [ lgpl2Plus ];
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

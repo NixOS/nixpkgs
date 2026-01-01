@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "django-pglock";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.7.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AmbitionEng";
     repo = "django-pglock";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-IXP7iZmGx0Odn73Tje/UkIpEkHCLhz42kLJppgy2nuU=";
+=======
+    hash = "sha256-FKAIftHNpfGzED0nkrLv3gVhfS7lyqfwZ1mEKsw/Vc8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ poetry-core ];

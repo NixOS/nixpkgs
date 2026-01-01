@@ -99,6 +99,10 @@ buildPythonPackage rec {
     # Tests that use a Jupyter notebook require $HOME to be writable
     writableTmpDirAsHomeHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     substituteInPlace tests/functional/contents_manager/test_async_and_sync_contents_manager_are_in_sync.py \

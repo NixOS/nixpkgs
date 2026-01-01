@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ flask.optional-dependencies.async;
 
+<<<<<<< HEAD
   meta = {
     description = "Extension that provides HTTP authentication for Flask routes";
     homepage = "https://github.com/miguelgrinberg/Flask-HTTPAuth";
     changelog = "https://github.com/miguelgrinberg/Flask-HTTPAuth/blob/v${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+  meta = with lib; {
+    description = "Extension that provides HTTP authentication for Flask routes";
+    homepage = "https://github.com/miguelgrinberg/Flask-HTTPAuth";
+    changelog = "https://github.com/miguelgrinberg/Flask-HTTPAuth/blob/v${version}/CHANGES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

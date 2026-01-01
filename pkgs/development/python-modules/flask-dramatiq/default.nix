@@ -68,10 +68,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "flask_dramatiq" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Adds Dramatiq support to your Flask application";
     homepage = "https://gitlab.com/bersace/flask-dramatiq";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ traxys ];
+=======
+  meta = with lib; {
+    description = "Adds Dramatiq support to your Flask application";
+    homepage = "https://gitlab.com/bersace/flask-dramatiq";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ traxys ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

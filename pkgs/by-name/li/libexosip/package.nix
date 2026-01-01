@@ -22,9 +22,16 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.gpl2Plus;
     description = "Library that hides the complexity of using the SIP protocol";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    license = licenses.gpl2Plus;
+    description = "Library that hides the complexity of using the SIP protocol";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

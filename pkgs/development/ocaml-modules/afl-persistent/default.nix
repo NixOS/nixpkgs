@@ -42,10 +42,18 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "./_build/test && ./_build/test2";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/stedolan/ocaml-afl-persistent";
     description = "Persistent-mode afl-fuzz for ocaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/stedolan/ocaml-afl-persistent";
+    description = "Persistent-mode afl-fuzz for ocaml";
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

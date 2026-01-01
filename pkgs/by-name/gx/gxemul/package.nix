@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
     export PREFIX=${placeholder "out"}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gavare.se/gxemul/";
     description = "Gavare's experimental emulator";
     longDescription = ''
@@ -41,9 +45,15 @@ stdenv.mkDerivation rec {
       controllers. The emulation is working well enough to allow several
       unmodified "guest" operating systems to run.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd3;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gxemul";
   };
 }

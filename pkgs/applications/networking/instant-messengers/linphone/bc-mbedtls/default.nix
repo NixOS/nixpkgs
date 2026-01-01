@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitLab,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cmake,
   ninja,
@@ -28,6 +31,7 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with gcc15
     # https://www.github.com/Mbed-TLS/mbedtls/pull/10215
@@ -39,6 +43,8 @@ stdenv.mkDerivation {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     ninja

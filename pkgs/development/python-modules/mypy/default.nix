@@ -110,7 +110,11 @@ buildPythonPackage rec {
     setuptools
     tomli
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # fails with typing-extensions>=4.10

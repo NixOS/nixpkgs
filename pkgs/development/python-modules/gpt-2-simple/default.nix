@@ -36,10 +36,17 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests in upstream
 
+<<<<<<< HEAD
   meta = {
     description = "Easily retrain OpenAI's GPT-2 text-generating model on new texts";
     homepage = "https://github.com/minimaxir/gpt-2-simple";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Easily retrain OpenAI's GPT-2 text-generating model on new texts";
+    homepage = "https://github.com/minimaxir/gpt-2-simple";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

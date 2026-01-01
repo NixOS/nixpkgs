@@ -3,7 +3,11 @@
   lib,
   meson,
   ninja,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchurl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cairo,
   girara,
   gtk-mac-integration,
@@ -18,12 +22,16 @@
   leptonica,
   mujs,
   desktop-file-utils,
+<<<<<<< HEAD
   appstream,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   appstream-glib,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+<<<<<<< HEAD
   version = "0.4.6";
   pname = "zathura-pdf-mupdf";
 
@@ -32,6 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "zathura-pdf-mupdf";
     tag = finalAttrs.version;
     hash = "sha256-vg/ac62MPTWRbTPjbh+rKcFjVb5237wBEIVvTef6K5Q=";
+=======
+  version = "0.4.4";
+  pname = "zathura-pdf-mupdf";
+
+  src = fetchurl {
+    url = "https://pwmt.org/projects/zathura-pdf-mupdf/download/zathura-pdf-mupdf-${finalAttrs.version}.tar.xz";
+    hash = "sha256-ASViSQHKvjov5jMVpG59lmoyPAKP9TiQ3694Vq2x9Pw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -39,7 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     desktop-file-utils
+<<<<<<< HEAD
     appstream
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     appstream-glib
   ];
 
@@ -64,7 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '/^mupdfthird =/d' -e 's/, mupdfthird//g' meson.build
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater { };
+=======
+  passthru.updateScript = gitUpdater { url = "https://git.pwmt.org/pwmt/zathura-pdf-mupdf.git"; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";

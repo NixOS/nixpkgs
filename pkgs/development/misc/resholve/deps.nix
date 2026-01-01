@@ -35,10 +35,17 @@ rec {
 
     pythonImportsCheck = [ "configargparse" ];
 
+<<<<<<< HEAD
     meta = {
       description = "Drop-in replacement for argparse";
       homepage = "https://github.com/bw2/ConfigArgParse";
       license = lib.licenses.mit;
+=======
+    meta = with lib; {
+      description = "Drop-in replacement for argparse";
+      homepage = "https://github.com/bw2/ConfigArgParse";
+      license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
   six = python27.pkgs.buildPythonPackage rec {
@@ -69,10 +76,17 @@ rec {
 
     doCheck = false;
 
+<<<<<<< HEAD
     meta = {
       description = "Backport of typing module to Python versions older than 3.5";
       homepage = "https://docs.python.org/3/library/typing.html";
       license = lib.licenses.psfl;
+=======
+    meta = with lib; {
+      description = "Backport of typing module to Python versions older than 3.5";
+      homepage = "https://docs.python.org/3/library/typing.html";
+      license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 }

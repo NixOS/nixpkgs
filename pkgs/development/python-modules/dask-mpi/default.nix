@@ -41,11 +41,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_mpi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Deploy Dask using mpi4py";
     mainProgram = "dask-mpi";
     homepage = "https://github.com/dask/dask-mpi";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Deploy Dask using mpi4py";
+    mainProgram = "dask-mpi";
+    homepage = "https://github.com/dask/dask-mpi";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

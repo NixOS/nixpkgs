@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Bluetooth Indicator for Wingpanel";
     mainProgram = "io.elementary.bluetooth";
@@ -56,5 +57,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+  meta = with lib; {
+    description = "Bluetooth Indicator for Wingpanel";
+    mainProgram = "io.elementary.bluetooth";
+    homepage = "https://github.com/elementary/wingpanel-indicator-bluetooth";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

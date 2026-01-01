@@ -21,10 +21,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rtfunicode" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Encoder for unicode to RTF 1.5 command sequences";
     maintainers = [ lib.maintainers.lucasew ];
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Encoder for unicode to RTF 1.5 command sequences";
+    maintainers = [ maintainers.lucasew ];
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/mjpieters/rtfunicode";
     changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${version}";
   };

@@ -20,9 +20,16 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libraw1394 ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.linux1394.org";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://www.linux1394.org";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

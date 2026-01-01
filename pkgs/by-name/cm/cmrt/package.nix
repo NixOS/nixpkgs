@@ -29,13 +29,23 @@ stdenv.mkDerivation rec {
     libva
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://01.org/linuxmedia";
     description = "Intel C for Media Runtime";
     longDescription = "Media GPU kernel manager for Intel G45 & HD Graphics family";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tadfisher ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ tadfisher ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

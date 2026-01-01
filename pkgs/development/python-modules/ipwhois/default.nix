@@ -62,11 +62,20 @@ buildPythonPackage rec {
     "test_get_http_json"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to retrieve and parse whois data";
     homepage = "https://github.com/secynic/ipwhois";
     changelog = "https://github.com/secynic/ipwhois/blob/v${version}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to retrieve and parse whois data";
+    homepage = "https://github.com/secynic/ipwhois";
+    changelog = "https://github.com/secynic/ipwhois/blob/v${version}/CHANGES.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

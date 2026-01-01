@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication {
     install -D -t $out/share/doc README.rst
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Desktop notification integration for connman";
     mainProgram = "connman-notify";
@@ -46,5 +47,14 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Desktop notification integration for connman";
+    mainProgram = "connman-notify";
+    homepage = "https://gitlab.com/wavexx/connman-notify";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

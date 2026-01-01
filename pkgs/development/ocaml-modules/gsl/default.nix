@@ -26,10 +26,18 @@ buildDunePackage rec {
     gsl
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://mmottl.github.io/gsl-ocaml/";
     description = "OCaml bindings to the GNU Scientific Library";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    homepage = "https://mmottl.github.io/gsl-ocaml/";
+    description = "OCaml bindings to the GNU Scientific Library";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

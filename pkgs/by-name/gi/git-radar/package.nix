@@ -30,12 +30,21 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/michaeldfallen/git-radar";
     license = lib.licenses.mit;
     description = "Tool you can add to your prompt to provide at-a-glance information on your git repo";
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ kamilchm ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/michaeldfallen/git-radar";
+    license = licenses.mit;
+    description = "Tool you can add to your prompt to provide at-a-glance information on your git repo";
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ kamilchm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-radar";
   };
 }

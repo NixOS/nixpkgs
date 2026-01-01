@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Software construction and deployment kit";
     longDescription = ''
       WARNING this package is unstable and work in progress, do not depend on
@@ -52,8 +56,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://erratique.ch/software/b0";
     inherit (ocaml.meta) platforms;
+<<<<<<< HEAD
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.Julow ];
+=======
+    license = licenses.isc;
+    maintainers = [ maintainers.Julow ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };
 }

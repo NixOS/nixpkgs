@@ -31,6 +31,7 @@ buildPythonPackage rec {
     inherit sage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for symbolic mathematics";
     mainProgram = "isympy";
@@ -38,5 +39,14 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lovek323 ];
     teams = [ lib.teams.sage ];
+=======
+  meta = with lib; {
+    description = "Python library for symbolic mathematics";
+    mainProgram = "isympy";
+    homepage = "https://www.sympy.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lovek323 ];
+    teams = [ teams.sage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

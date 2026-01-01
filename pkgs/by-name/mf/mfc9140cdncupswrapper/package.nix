@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/lib/cups/filter/brother_lpdwrapper_mfc9140cdn
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Brother MFC-9140CDN CUPS wrapper driver";
     homepage = "http://www.brother.com/";
@@ -72,5 +73,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Brother MFC-9140CDN CUPS wrapper driver";
+    homepage = "http://www.brother.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,11 +45,19 @@ stdenv.mkDerivation rec {
     extlib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library that parses Java .class files into OCaml data structures";
     homepage = "https://javalib-team.github.io/javalib/";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "Library that parses Java .class files into OCaml data structures";
+    homepage = "https://javalib-team.github.io/javalib/";
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (ocaml.meta) platforms;
     broken = !(lib.versionAtLeast ocaml.version "4.08");
   };

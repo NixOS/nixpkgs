@@ -4,7 +4,11 @@
   fetchFromGitHub,
   fetchPypi,
   nodejs,
+<<<<<<< HEAD
   python312,
+=======
+  python3,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gettext,
   nixosTests,
   pretix,
@@ -12,7 +16,11 @@
 }:
 
 let
+<<<<<<< HEAD
   python = python312.override {
+=======
+  python = python3.override {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     self = python;
     packageOverrides = self: super: {
       django = super.django_4;
@@ -42,13 +50,21 @@ let
   };
 
   pname = "pretix";
+<<<<<<< HEAD
   version = "2025.10.1";
+=======
+  version = "2025.10.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-O9HAslZ8xbmLgJi3y91M6mc1oIvJZ8nRJyFRuNorRHs=";
+=======
+    hash = "sha256-q8h7wYUv5ahWvM3sT9srVHnJv5QnakkUKYhgx1X/j5k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   npmDeps = buildNpmPackage {
@@ -82,7 +98,10 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "beautifulsoup4"
+<<<<<<< HEAD
     "bleach"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "celery"
     "css-inline"
     "django-bootstrap3"
@@ -257,7 +276,11 @@ python.pkgs.buildPythonApplication rec {
       fakeredis
       responses
     ]
+<<<<<<< HEAD
     ++ lib.concatAttrValues optional-dependencies;
+=======
+    ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pytestFlags = [
     "--reruns=3"
@@ -301,10 +324,17 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Ticketing software that cares about your event—all the way";
     homepage = "https://github.com/pretix/pretix";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Ticketing software that cares about your event—all the way";
+    homepage = "https://github.com/pretix/pretix";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       agpl3Only
       # 3rd party components below src/pretix/static
       bsd2
@@ -315,8 +345,14 @@ python.pkgs.buildPythonApplication rec {
       # all other files below src/pretix/static and src/pretix/locale and aux scripts
       asl20
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "pretix-manage";
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ hexa ];
+    mainProgram = "pretix-manage";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

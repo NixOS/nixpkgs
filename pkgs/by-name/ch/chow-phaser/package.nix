@@ -98,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp Standalone/ChowPhaserStereo  $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jatinchowdhury18/ChowPhaser";
     description = "Phaser effect based loosely on the Schulte Compact Phasing 'A'";
@@ -105,5 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ChowPhaserStereo";
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jatinchowdhury18/ChowPhaser";
+    description = "Phaser effect based loosely on the Schulte Compact Phasing 'A'";
+    license = with licenses; [ bsd3 ];
+    mainProgram = "ChowPhaserStereo";
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -81,15 +81,26 @@ perlPackages.buildPerlPackage rec {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       Easy to use, lightweight front-end for ClamAV (Clam Antivirus).
     '';
     mainProgram = "clamtk";
+<<<<<<< HEAD
     license = lib.licenses.gpl1Plus;
     homepage = "https://github.com/dave-theunsub/clamtk";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl1Plus;
+    homepage = "https://github.com/dave-theunsub/clamtk";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ShamrockLee
     ];
   };

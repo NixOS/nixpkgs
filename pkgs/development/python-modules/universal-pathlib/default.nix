@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "upath" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pathlib api extended to use fsspec backends";
     homepage = "https://github.com/fsspec/universal_pathlib";
     changelog = "https://github.com/fsspec/universal_pathlib/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pathlib api extended to use fsspec backends";
+    homepage = "https://github.com/fsspec/universal_pathlib";
+    changelog = "https://github.com/fsspec/universal_pathlib/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

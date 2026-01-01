@@ -27,11 +27,19 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ gtk4 ];
 
+<<<<<<< HEAD
   meta = {
     description = "Application that lets you drag and drop files from and to the terminal";
     homepage = "https://github.com/nik012003/ripdrag";
     changelog = "https://github.com/nik012003/ripdrag/releases/tag/${src.rev}";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Application that lets you drag and drop files from and to the terminal";
+    homepage = "https://github.com/nik012003/ripdrag";
+    changelog = "https://github.com/nik012003/ripdrag/releases/tag/${src.rev}";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "ripdrag";
   };

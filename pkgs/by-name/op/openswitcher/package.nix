@@ -73,12 +73,21 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Blackmagic Design mixer control application";
     downloadPage = "https://git.sr.ht/~martijnbraam/pyatem";
     homepage = "https://openswitcher.org/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Blackmagic Design mixer control application";
+    downloadPage = "https://git.sr.ht/~martijnbraam/pyatem";
+    homepage = "https://openswitcher.org/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "switcher-control";
   };
 }

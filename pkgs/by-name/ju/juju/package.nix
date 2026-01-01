@@ -40,11 +40,19 @@ buildGoModule rec {
     command = "HOME=\"$(mktemp -d)\" juju --version";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source modelling tool for operating software in the cloud";
     homepage = "https://juju.is";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ citadelcore ];
+=======
+  meta = with lib; {
+    description = "Open source modelling tool for operating software in the cloud";
+    homepage = "https://juju.is";
+    license = licenses.mit;
+    maintainers = with maintainers; [ citadelcore ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "juju";
   };
 }

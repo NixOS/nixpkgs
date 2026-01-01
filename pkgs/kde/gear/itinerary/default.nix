@@ -3,7 +3,10 @@
   pkg-config,
   qtlocation,
   qtpositioning,
+<<<<<<< HEAD
   qcoro,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   shared-mime-info,
   libical,
 }:
@@ -20,7 +23,10 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtlocation
     qtpositioning
+<<<<<<< HEAD
     qcoro
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libical
   ];
   meta.mainProgram = "itinerary";

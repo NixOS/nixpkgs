@@ -70,10 +70,18 @@ stdenv.mkDerivation rec {
   # requires gbenchmark and gtest but it also installs them out $dev
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://google.github.io/snappy/";
     license = lib.licenses.bsd3;
     description = "Compression/decompression library for very high speeds";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://google.github.io/snappy/";
+    license = licenses.bsd3;
+    description = "Compression/decompression library for very high speeds";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,10 +20,18 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/metachris/logzero";
     description = "Robust and effective logging for Python 2 and 3";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/metachris/logzero";
+    description = "Robust and effective logging for Python 2 and 3";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jakewaksbaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

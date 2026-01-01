@@ -10,10 +10,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zap";
+<<<<<<< HEAD
   version = "2.17.0";
   src = fetchurl {
     url = "https://github.com/zaproxy/zaproxy/releases/download/v${finalAttrs.version}/ZAP_${finalAttrs.version}_Linux.tar.gz";
     hash = "sha256-7+eZqqNifbaDtD8AycIQrqC3XADMjwoPBDTRK7Pd3lo=";
+=======
+  version = "2.16.1";
+  src = fetchurl {
+    url = "https://github.com/zaproxy/zaproxy/releases/download/v${finalAttrs.version}/ZAP_${finalAttrs.version}_Linux.tar.gz";
+    hash = "sha256-Wy64MZsIUSGm6K1Q1p1n2++MhnFm9xqTe/yIjSR6KsE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   desktopItems = [

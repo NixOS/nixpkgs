@@ -33,16 +33,26 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-release" ];
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Breadth-first version of the UNIX find command";
     longDescription = ''
       bfs is a variant of the UNIX find command that operates breadth-first rather than
       depth-first. It is otherwise intended to be compatible with many versions of find.
     '';
     homepage = "https://github.com/tavianator/bfs";
+<<<<<<< HEAD
     license = lib.licenses.bsd0;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd0;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       yesbox
       cafkafk
     ];

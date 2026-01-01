@@ -14,10 +14,17 @@ buildPythonPackage rec {
     sha256 = "1gn2ka4vqpayx4cpbp8712agqjh3wdpk9smdxnp709ccc2v7zg46";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "PHPUnit-like @dataprovider decorator for unittest";
     homepage = "https://github.com/yourlabs/unittest-data-provider";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "PHPUnit-like @dataprovider decorator for unittest";
+    homepage = "https://github.com/yourlabs/unittest-data-provider";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

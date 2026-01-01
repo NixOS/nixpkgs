@@ -24,11 +24,20 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     description = "Print x509 certificate info";
     mainProgram = "certinfo";
     homepage = "https://github.com/pete911/certinfo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jakuzure ];
+=======
+  meta = with lib; {
+    description = "Print x509 certificate info";
+    mainProgram = "certinfo";
+    homepage = "https://github.com/pete911/certinfo";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jakuzure ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

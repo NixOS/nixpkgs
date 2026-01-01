@@ -79,7 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://tunefish-synth.com/";
     description = "Virtual analog synthesizer LV2 plugin";
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 })

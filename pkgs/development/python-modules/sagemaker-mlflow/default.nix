@@ -17,16 +17,31 @@
 
 buildPythonPackage rec {
   pname = "sagemaker-mlflow";
+<<<<<<< HEAD
   version = "0.2.0";
+=======
+  version = "0.1.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-mlflow";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-EmfEqL+J+cZVdBfUJtAPHpUZCoDV4X1yRfVJYWky1HU=";
   };
 
+=======
+    hash = "sha256-mHwlP1bVkUiT6RbVf8YLHG+tzkw5+UVrPzcExgcEoJM=";
+  };
+
+  postPatch = ''
+    substituteInPlace VERSION \
+      --replace-fail "${version}.dev0" "${version}"
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     setuptools
   ];
@@ -36,7 +51,13 @@ buildPythonPackage rec {
     mlflow
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [ "sagemaker_mlflow" ];
+=======
+  pythonImportsCheck = [
+    "sagemaker_mlflow"
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeCheckInputs = [
     pytestCheckHook

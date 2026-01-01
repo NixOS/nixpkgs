@@ -100,11 +100,19 @@ python3Packages.buildPythonApplication rec {
 
   passthru.bindir = bindir;
 
+<<<<<<< HEAD
   meta = {
     description = "Basic Atomic Swap Proof of Concept";
     homepage = "https://basicswapdex.com";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ linsui ];
+=======
+  meta = with lib; {
+    description = "Basic Atomic Swap Proof of Concept";
+    homepage = "https://basicswapdex.com";
+    license = licenses.mit;
+    maintainers = with maintainers; [ linsui ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "basicswap-run";
   };
 }

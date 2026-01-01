@@ -44,11 +44,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "irc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "IRC (Internet Relay Chat) protocol library for Python";
     homepage = "https://github.com/jaraco/irc";
     changelog = "https://github.com/jaraco/irc/blob/v${version}/NEWS.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "IRC (Internet Relay Chat) protocol library for Python";
+    homepage = "https://github.com/jaraco/irc";
+    changelog = "https://github.com/jaraco/irc/blob/v${version}/NEWS.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

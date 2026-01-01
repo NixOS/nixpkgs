@@ -5,6 +5,10 @@
   pyjwt,
   pytestCheckHook,
   python-dateutil,
+<<<<<<< HEAD
+=======
+  pythonAtLeast,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonOlder,
   requests,
   responses,
@@ -62,11 +66,20 @@ buildPythonPackage rec {
     "test_integration/"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client library for the IBM Cloud services";
     homepage = "https://github.com/IBM/python-sdk-core";
     changelog = "https://github.com/IBM/python-sdk-core/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Client library for the IBM Cloud services";
+    homepage = "https://github.com/IBM/python-sdk-core";
+    changelog = "https://github.com/IBM/python-sdk-core/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ globin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

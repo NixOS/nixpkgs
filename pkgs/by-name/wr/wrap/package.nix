@@ -39,10 +39,18 @@ buildGoModule rec {
     wrapProgram $out/bin/wrap --prefix XDG_DATA_DIRS : ${courier-prime}/share/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fountain export tool with some extras";
     homepage = "https://github.com/Wraparound/wrap";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.austinbutler ];
+=======
+  meta = with lib; {
+    description = "Fountain export tool with some extras";
+    homepage = "https://github.com/Wraparound/wrap";
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.austinbutler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

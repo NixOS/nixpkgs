@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-narrowing" ];
 
+<<<<<<< HEAD
   meta = {
     description = "File editor/viewer/analyzer for executables";
     homepage = "https://hte.sourceforge.net";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "File editor/viewer/analyzer for executables";
+    homepage = "https://hte.sourceforge.net";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "ht";
   };

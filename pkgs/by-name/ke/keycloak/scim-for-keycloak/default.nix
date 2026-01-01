@@ -21,6 +21,7 @@ maven.buildMavenPackage rec {
     install -D "scim-for-keycloak-server/target/scim-for-keycloak-${version}.jar" "$out/scim-for-keycloak-${version}.jar"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Captain-P-Goldfish/scim-for-keycloak";
     description = "Third party module that extends Keycloak with SCIM functionality";
@@ -30,5 +31,16 @@ maven.buildMavenPackage rec {
     ];
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mkg20001 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Captain-P-Goldfish/scim-for-keycloak";
+    description = "Third party module that extends Keycloak with SCIM functionality";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # dependencies
+    ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mkg20001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

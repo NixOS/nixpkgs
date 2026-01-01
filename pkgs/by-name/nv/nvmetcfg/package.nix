@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) nvmetcfg;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "NVMe-oF Target Configuration Utility for Linux";
     homepage = "https://github.com/vifino/nvmetcfg";
@@ -29,5 +30,14 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "nvmetcfg";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "NVMe-oF Target Configuration Utility for Linux";
+    homepage = "https://github.com/vifino/nvmetcfg";
+    license = licenses.isc;
+    maintainers = with maintainers; [ nickcao ];
+    mainProgram = "nvmetcfg";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

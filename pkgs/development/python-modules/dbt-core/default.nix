@@ -37,14 +37,22 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
+<<<<<<< HEAD
   version = "1.10.15";
+=======
+  version = "1.10.13";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-n/tU34XUf/s4m/SbPth/jlfo2xKhQk1hVjP3vLA/67s=";
+=======
+    hash = "sha256-uXuoOyo/F7eaZva45EARES9e8GpQJEz6ka39eLOhENE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/core";
@@ -124,6 +132,10 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       mausch
+<<<<<<< HEAD
+=======
+      tjni
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "dbt";
   };

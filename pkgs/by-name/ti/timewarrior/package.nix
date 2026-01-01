@@ -34,15 +34,27 @@ stdenv.mkDerivation rec {
       --zsh completion/timew.zsh
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line time tracker";
     homepage = "https://timewarrior.net";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Command-line time tracker";
+    homepage = "https://timewarrior.net";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
       mrVanDalo
     ];
     mainProgram = "timew";
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

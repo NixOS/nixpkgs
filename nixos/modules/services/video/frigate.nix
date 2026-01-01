@@ -53,7 +53,10 @@ let
         cp ${configFileUnchecked} $out
         export CONFIG_FILE=$out
         export PYTHONPATH=${cfg.package.pythonPath}
+<<<<<<< HEAD
         ${cfg.preCheckConfig}
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ${cfg.package.python.interpreter} -m frigate --validate-config || error
       '';
   configFile = if cfg.checkConfig then configFileChecked else configFileUnchecked;
@@ -209,6 +212,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     preCheckConfig = mkOption {
       type = types.lines;
       default = "";
@@ -219,6 +223,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     settings = mkOption {
       type = submodule {
         freeformType = format.type;

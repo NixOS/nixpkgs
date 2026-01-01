@@ -37,12 +37,21 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-KabaW2BH4zAS0xWkzCM8YaAnP/hkZL7Wq3EARantRis=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical application for configuring displays in Wayland compositors";
     homepage = "https://github.com/artizirk/wdisplays";
     maintainers = with lib.maintainers; [ ma27 ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Graphical application for configuring displays in Wayland compositors";
+    homepage = "https://github.com/artizirk/wdisplays";
+    maintainers = with maintainers; [ ma27 ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wdisplays";
   };
 })

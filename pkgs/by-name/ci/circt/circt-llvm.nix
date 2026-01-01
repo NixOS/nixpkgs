@@ -6,7 +6,10 @@
   circt,
   llvm,
   python3,
+<<<<<<< HEAD
   zstd,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 stdenv.mkDerivation {
   pname = circt.pname + "-llvm";
@@ -20,16 +23,20 @@ stdenv.mkDerivation {
     python3
   ];
 
+<<<<<<< HEAD
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     # This is needed for darwin builds
     zstd
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preConfigure = ''
     cd llvm/llvm
   '';
 
   cmakeFlags = [
+<<<<<<< HEAD
     # Based on utils/build-llvm.sh
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "LLVM_BUILD_EXAMPLES" false)
@@ -41,6 +48,18 @@ stdenv.mkDerivation {
     (lib.cmakeBool "LLVM_INSTALL_GTEST" true)
     (lib.cmakeBool "LLVM_OPTIMIZED_TABLEGEN" true)
     (lib.cmakeFeature "LLVM_TARGETS_TO_BUILD" "host")
+=======
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DLLVM_ENABLE_BINDINGS=OFF"
+    "-DLLVM_ENABLE_OCAMLDOC=OFF"
+    "-DLLVM_BUILD_EXAMPLES=OFF"
+    "-DLLVM_OPTIMIZED_TABLEGEN=ON"
+    "-DLLVM_ENABLE_PROJECTS=mlir"
+    "-DLLVM_TARGETS_TO_BUILD=Native"
+
+    # This option is needed to install llvm-config
+    "-DLLVM_INSTALL_UTILS=ON"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   outputs = [

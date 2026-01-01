@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "karere";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "tobagin";
     repo = "karere";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-4jV2vE7KtdpA9qjKR4xj/w6g1WZD/l8ezRtuFyzJtZ8=";
+=======
+    hash = "sha256-QpKKUP/Lp0nWI+h67Uc2f+4G3LG593hLB7b7IMinThI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
     cp '${./Makefile}' Makefile
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the redo build system in portable C with zero dependencies";
     homepage = "https://github.com/leahneukirchen/redo-c";
     license = lib.licenses.cc0;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ck3d ];
+=======
+  meta = with lib; {
+    description = "Implementation of the redo build system in portable C with zero dependencies";
+    homepage = "https://github.com/leahneukirchen/redo-c";
+    license = licenses.cc0;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ck3d ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

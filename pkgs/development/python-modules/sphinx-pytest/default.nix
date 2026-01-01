@@ -34,11 +34,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/sphinx-extensions2/sphinx-pytest/releases/tag/v${version}";
     description = "Helpful pytest fixtures for Sphinx extensions";
     homepage = "https://github.com/chrisjsewell/sphinx-pytest";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ loicreynier ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/sphinx-extensions2/sphinx-pytest/releases/tag/v${version}";
+    description = "Helpful pytest fixtures for Sphinx extensions";
+    homepage = "https://github.com/chrisjsewell/sphinx-pytest";
+    license = licenses.mit;
+    maintainers = with maintainers; [ loicreynier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

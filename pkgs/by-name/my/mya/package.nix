@@ -50,7 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Minimalistic command line interface for fetching user anime data from MyAnimeList";
     longDescription = ''
       Minimalistic command line interface for fetching user anime data from MyAnimeList.
@@ -61,9 +65,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/jmakhack/myanimelist-cli";
     changelog = "https://github.com/jmakhack/myanimelist-cli/releases/tag/v${finalAttrs.version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "mya";
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
+    mainProgram = "mya";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

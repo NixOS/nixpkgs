@@ -4,7 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+<<<<<<< HEAD
   pythonOlder,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   replaceVars,
 
   # build
@@ -35,14 +38,22 @@
 
 let
   pname = "psycopg";
+<<<<<<< HEAD
   version = "3.3.2";
   pyproject = true;
+=======
+  version = "3.2.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-ynzXQkTnCCkJK3EZrGHSpzgMeeX92U6+08m8QtNfAc4=";
+=======
+    hash = "sha256-g1mms12EqRiln5dK/BmBa9dd9duSPRgRIiZkVmSRaYI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -61,7 +72,12 @@ let
 
   psycopg-c = buildPythonPackage {
     pname = "${pname}-c";
+<<<<<<< HEAD
     inherit version pyproject src;
+=======
+    inherit version src;
+    format = "pyproject";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # apply patches to base repo
     inherit patches;
@@ -69,6 +85,7 @@ let
     # move into source root after patching
     postPatch = ''
       cd psycopg_c
+<<<<<<< HEAD
 
       substituteInPlace pyproject.toml \
         --replace-fail "setuptools ==" "setuptools >="
@@ -84,6 +101,15 @@ let
 
     nativeBuildInputs = [
       libpq.pg_config
+=======
+    '';
+
+    nativeBuildInputs = [
+      cython
+      libpq.pg_config
+      setuptools
+      tomli
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     buildInputs = [
@@ -100,7 +126,12 @@ let
 
   psycopg-pool = buildPythonPackage {
     pname = "${pname}-pool";
+<<<<<<< HEAD
     inherit version pyproject src;
+=======
+    inherit version src;
+    format = "setuptools";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # apply patches to base repo
     inherit patches;
@@ -110,9 +141,13 @@ let
       cd psycopg_pool
     '';
 
+<<<<<<< HEAD
     build-system = [ setuptools ];
 
     dependencies = [ typing-extensions ];
+=======
+    propagatedBuildInputs = [ typing-extensions ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # tested in psycopg
     doCheck = false;
@@ -124,12 +159,17 @@ let
 in
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   inherit
     pname
     version
     pyproject
     src
     ;
+=======
+  inherit pname version src;
+  pyproject = true;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -153,11 +193,20 @@ buildPythonPackage rec {
     cd psycopg
   '';
 
+<<<<<<< HEAD
   build-system = [ setuptools ];
 
   # building the docs fails with the following error when cross compiling
   #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
   nativeBuildInputs = lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+=======
+  nativeBuildInputs = [
+    setuptools
+  ]
+  # building the docs fails with the following error when cross compiling
+  #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     furo
     sphinx-autodoc-typehints
     sphinxHook

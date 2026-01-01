@@ -13,15 +13,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
+<<<<<<< HEAD
   version = "2025-12-22";
 
   cargoHash = "sha256-nCBk88TUeIC6kG3xp3B6bbLOtHkQtOS90GspKWeY09s=";
+=======
+  version = "2025-10-28";
+
+  cargoHash = "sha256-iw+Pgtv5VkCRSa07ap5fjhVZQgo+sfNjp5A4yaHdX1M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-8DHvVHKPZ4GLf4xjCEZMaJjyv81hA+YHzztczFizLo0=";
+=======
+    hash = "sha256-rNsxpCKWzVNJ5FR71mpZFSEPxuvZfAQzcVpgfwgajQU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoBuildFlags = [
@@ -69,6 +79,7 @@ rustPlatform.buildRustPackage rec {
     # tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Language server for the Rust language";
     homepage = "https://rust-analyzer.github.io";
@@ -77,6 +88,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ oxalica ];
+=======
+  meta = with lib; {
+    description = "Language server for the Rust language";
+    homepage = "https://rust-analyzer.github.io";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [ oxalica ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rust-analyzer";
   };
 }

@@ -47,11 +47,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "txaio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities to support code that runs unmodified on Twisted and asyncio";
     homepage = "https://github.com/crossbario/txaio";
     changelog = "https://github.com/crossbario/txaio/blob/v${version}/docs/releases.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Utilities to support code that runs unmodified on Twisted and asyncio";
+    homepage = "https://github.com/crossbario/txaio";
+    changelog = "https://github.com/crossbario/txaio/blob/v${version}/docs/releases.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

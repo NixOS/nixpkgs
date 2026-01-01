@@ -44,13 +44,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy_rs" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs";
     changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md#${
       lib.replaceStrings [ "." ] [ "" ] version
     }";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (mitmproxy.meta) maintainers;
   };
 }

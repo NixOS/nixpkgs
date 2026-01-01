@@ -51,7 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libpcap" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python binding for the libpcap C library";
     longDescription = ''
       Python libpcap module is a low-level binding for libpcap C library.
@@ -64,7 +68,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/karpierz/libpcap/";
     changelog = "https://github.com/karpierz/libpcap/blob/${version}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     teams = [ lib.teams.ororatech ];
+=======
+    license = licenses.bsd3;
+    teams = [ teams.ororatech ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

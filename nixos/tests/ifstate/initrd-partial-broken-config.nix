@@ -28,9 +28,12 @@ in
         };
 
         boot.initrd = {
+<<<<<<< HEAD
           # otherwise the interfaces do not get created
           kernelModules = [ "virtio_net" ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           network = {
             enable = true;
             ifstate = lib.mkMerge [
@@ -49,7 +52,10 @@ in
               }
             ];
           };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           systemd = {
             enable = true;
             network.enable = false;

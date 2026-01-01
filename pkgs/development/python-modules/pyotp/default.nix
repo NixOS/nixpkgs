@@ -22,11 +22,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyotp" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/pyauth/pyotp/blob/v${version}/Changes.rst";
     description = "Python One Time Password Library";
     homepage = "https://github.com/pyauth/pyotp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/pyauth/pyotp/blob/v${version}/Changes.rst";
+    description = "Python One Time Password Library";
+    homepage = "https://github.com/pyauth/pyotp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

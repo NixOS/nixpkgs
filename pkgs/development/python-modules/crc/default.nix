@@ -29,12 +29,21 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "test/bench" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for calculating and verifying predefined & custom CRC's";
     homepage = "https://nicoretti.github.io/crc/";
     changelog = "https://github.com/Nicoretti/crc/releases/tag/${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jleightcap ];
+=======
+  meta = with lib; {
+    description = "Python module for calculating and verifying predefined & custom CRC's";
+    homepage = "https://nicoretti.github.io/crc/";
+    changelog = "https://github.com/Nicoretti/crc/releases/tag/${version}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ jleightcap ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "crc";
   };
 }

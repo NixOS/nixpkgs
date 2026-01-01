@@ -22,10 +22,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datadiff" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to provide human-readable diffs of Python data structures";
     homepage = "https://sourceforge.net/projects/datadiff/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Library to provide human-readable diffs of Python data structures";
+    homepage = "https://sourceforge.net/projects/datadiff/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

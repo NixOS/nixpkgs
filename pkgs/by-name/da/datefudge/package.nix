@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/datefudge --prefix PATH : ${coreutils}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fake the system date";
     longDescription = ''
       datefudge is a small utility that pretends that the system time is
@@ -43,8 +47,13 @@ stdenv.mkDerivation rec {
       gettimeofday and clock_gettime system calls.
     '';
     homepage = "https://packages.qa.debian.org/d/datefudge.html";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "datefudge";
   };
 }

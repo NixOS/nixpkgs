@@ -9,13 +9,21 @@
 
 buildGoModule rec {
   pname = "temporal";
+<<<<<<< HEAD
   version = "1.29.2";
+=======
+  version = "1.29.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-WiiezZ/2FgRte4BStIGHQhb5bHtfldi3TaIRG0xFtW0=";
+=======
+    hash = "sha256-rUm1zHxM0KYPgKpK7w0XLU7aF3H6sECgSe/UtbNdgJM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-HW2j8swbaWwU1i3udqlT8VyFreML6ZH14zWxF8L5NTQ=";

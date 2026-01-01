@@ -82,7 +82,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description =
       "A retro-styled platform game"
       + lib.optionalString makeAndPlay " (redistributable, without original levels)";
@@ -95,8 +99,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://thelettervsixtim.es";
     changelog = "https://github.com/TerryCavanagh/VVVVVV/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.unfree;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

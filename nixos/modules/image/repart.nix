@@ -201,6 +201,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     imageSize = lib.mkOption {
       type = lib.types.strMatching "^([0-9]+[KMGTP]?|auto)$";
       default = "auto";
@@ -209,6 +210,8 @@ in
         or 'auto' to determine the minimal size automatically";
     };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     package = lib.mkPackageOption pkgs "systemd-repart" {
       # We use buildPackages so that repart images are built with the build
       # platform's systemd, allowing for cross-compiled systems to work.
@@ -423,7 +426,10 @@ in
             compression
             split
             seed
+<<<<<<< HEAD
             imageSize
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             sectorSize
             finalPartitions
             ;

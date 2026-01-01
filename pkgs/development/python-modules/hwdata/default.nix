@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings to hwdata";
     homepage = "https://github.com/xsuchy/python-hwdata";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lurkki ];
+=======
+  meta = with lib; {
+    description = "Python bindings to hwdata";
+    homepage = "https://github.com/xsuchy/python-hwdata";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lurkki ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

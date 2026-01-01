@@ -68,10 +68,18 @@ stdenv.mkDerivation rec {
     "USRLIBDIR=$(lib)/lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://people.redhat.com/dhowells/keyutils/";
     description = "Tools used to control the Linux kernel key management system";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://people.redhat.com/dhowells/keyutils/";
+    description = "Tools used to control the Linux kernel key management system";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

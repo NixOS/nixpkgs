@@ -327,18 +327,30 @@ stdenv.mkDerivation (finalAttrs: {
       inherit lib32;
     };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "${
       if useFabricmanager then "Data Center" else "X.org"
     } driver and kernel module for NVIDIA cards";
+<<<<<<< HEAD
     license = lib.licenses.unfreeRedistributable;
+=======
+    license = licenses.unfreeRedistributable;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
     ]
     ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
     ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kiskae
       edwtjo
     ];

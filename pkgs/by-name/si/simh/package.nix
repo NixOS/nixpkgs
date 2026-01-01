@@ -61,7 +61,11 @@ stdenv.mkDerivation rec {
     (cd $out/bin; for i in *; do ln -s $i simh-$i; done)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://simh.trailing-edge.com/";
     description = "Collection of simulators of historic hardware";
     longDescription = ''
@@ -71,9 +75,15 @@ stdenv.mkDerivation rec {
       simulators and to publish them as freeware on the Internet, with freely
       available copies of significant or representative software.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; mit;
     maintainers = [ ];
     platforms = with lib.platforms; unix;
+=======
+    license = with licenses; mit;
+    maintainers = [ ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 # TODO: install documentation

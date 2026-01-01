@@ -50,11 +50,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swiftclient" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/openstack/python-swiftclient";
     description = "Python bindings to the OpenStack Object Storage API";
     mainProgram = "swift";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/openstack/python-swiftclient";
+    description = "Python bindings to the OpenStack Object Storage API";
+    mainProgram = "swift";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

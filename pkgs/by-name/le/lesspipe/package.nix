@@ -223,7 +223,11 @@ stdenv.mkDerivation rec {
     }}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Preprocessor for less";
     longDescription = ''
       Usually lesspipe.sh is called as an input filter to less. With the help
@@ -238,8 +242,14 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "lesspipe.sh";
     homepage = "https://github.com/wofr06/lesspipe";
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.martijnvermaat ];
+=======
+    platforms = platforms.all;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.martijnvermaat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

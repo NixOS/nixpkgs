@@ -26,18 +26,31 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   doCheck = false; # tries to access network to test broken web link functionality
 
   passthru.tests.version = testers.testVersion { package = mdbook-linkcheck; };
 
+<<<<<<< HEAD
   meta = {
     description = "Backend for `mdbook` which will check your links for you";
     mainProgram = "mdbook-linkcheck";
     homepage = "https://github.com/Michael-F-Bryan/mdbook-linkcheck";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Backend for `mdbook` which will check your links for you";
+    mainProgram = "mdbook-linkcheck";
+    homepage = "https://github.com/Michael-F-Bryan/mdbook-linkcheck";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zhaofengli
       matthiasbeyer
     ];

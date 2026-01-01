@@ -68,10 +68,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flit_gettext" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Compiling gettext i18n messages during project bundling";
     homepage = "https://github.com/codingjoe/flit-gettext";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Compiling gettext i18n messages during project bundling";
+    homepage = "https://github.com/codingjoe/flit-gettext";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

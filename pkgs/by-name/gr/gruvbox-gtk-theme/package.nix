@@ -115,6 +115,10 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [
         luftmensch-luftmensch
+<<<<<<< HEAD
+=======
+        math-42
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         d3vil0p3r
       ];
     };

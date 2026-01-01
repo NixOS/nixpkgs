@@ -47,12 +47,21 @@ rustPlatform.buildRustPackage {
     }
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple log in screen for use on touch screens";
     homepage = "https://git.raatty.club/raatty/lightdm-mobile-greeter";
     maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple log in screen for use on touch screens";
+    homepage = "https://git.raatty.club/raatty/lightdm-mobile-greeter";
+    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lightdm-mobile-greeter";
   };
 }

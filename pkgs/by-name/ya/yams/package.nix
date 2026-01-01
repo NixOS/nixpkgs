@@ -30,11 +30,20 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "yams.scrobble" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Berulacks/yams";
     description = "Last.FM scrobbler for MPD";
     mainProgram = "yams";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ccellado ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Berulacks/yams";
+    description = "Last.FM scrobbler for MPD";
+    mainProgram = "yams";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ccellado ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

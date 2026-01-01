@@ -89,12 +89,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for Git Tag Operations";
     homepage = "https://github.com/iterative/gto";
     changelog = "https://github.com/iterative/gto/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for Git Tag Operations";
+    homepage = "https://github.com/iterative/gto";
+    changelog = "https://github.com/iterative/gto/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gto";
   };
 }

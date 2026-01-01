@@ -7,14 +7,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "friture";
+<<<<<<< HEAD
   version = "0.54";
+=======
+  version = "0.51";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = "friture";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-KWj2AhPloomjYwd7besX5QIG8snZe1L2hATEfm/HaIE=";
+=======
+    hash = "sha256-1Swkk7bhQTSo17Gj0i1VNiIt+fSXgDIeWfJ9LpoUEHg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -34,8 +42,11 @@ python3Packages.buildPythonApplication rec {
   buildInputs = with qt5; [ qtquickcontrols2 ];
 
   propagatedBuildInputs = with python3Packages; [
+<<<<<<< HEAD
     platformdirs
     pyinstaller
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sounddevice
     pyopengl
     pyopengl-accelerate
@@ -63,6 +74,7 @@ python3Packages.buildPythonApplication rec {
     cp $src/resources/images-src/window-icon.svg $out/share/icons/hicolor/scalable/apps/friture.svg
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Real-time audio analyzer";
     mainProgram = "friture";
@@ -70,6 +82,15 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux; # fails on Darwin
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Real-time audio analyzer";
+    mainProgram = "friture";
+    homepage = "https://friture.org/";
+    license = licenses.gpl3;
+    platforms = platforms.linux; # fails on Darwin
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       laikq
       pentane
     ];

@@ -27,11 +27,20 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@TINYOBJLOADER_INCLUDE_DIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tinyobjloader/tinyobjloader";
     description = "Tiny but powerful single file wavefront obj loader";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tinyobjloader/tinyobjloader";
+    description = "Tiny but powerful single file wavefront obj loader";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

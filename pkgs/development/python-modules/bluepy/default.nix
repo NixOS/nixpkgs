@@ -27,11 +27,20 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "bluepy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to Bluetooth LE on Linux";
     homepage = "https://github.com/IanHarvey/bluepy";
     maintainers = with lib.maintainers; [ georgewhewell ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "Python interface to Bluetooth LE on Linux";
+    homepage = "https://github.com/IanHarvey/bluepy";
+    maintainers = with maintainers; [ georgewhewell ];
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

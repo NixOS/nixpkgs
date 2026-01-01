@@ -42,6 +42,11 @@ python3Packages.buildPythonApplication rec {
   # Fails due to having no tests
   dontUsePytestCheck = true;
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     mainProgram = "tt-smi";
     description = "Tenstorrent console based hardware information program";

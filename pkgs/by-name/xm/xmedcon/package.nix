@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open source toolkit for medical image conversion";
     homepage = "https://xmedcon.sourceforge.net/";
@@ -40,5 +41,16 @@ stdenv.mkDerivation rec {
       flokli
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open source toolkit for medical image conversion";
+    homepage = "https://xmedcon.sourceforge.net/";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [
+      arianvp
+      flokli
+    ];
+    platforms = platforms.darwin ++ platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

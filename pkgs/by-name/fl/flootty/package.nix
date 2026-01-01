@@ -18,11 +18,20 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collaborative terminal. In practice, it's similar to a shared screen or tmux session";
     mainProgram = "flootty";
     homepage = "https://floobits.com/help/flootty";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sellout ];
+=======
+  meta = with lib; {
+    description = "Collaborative terminal. In practice, it's similar to a shared screen or tmux session";
+    mainProgram = "flootty";
+    homepage = "https://floobits.com/help/flootty";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sellout ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

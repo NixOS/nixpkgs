@@ -29,12 +29,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Compiler and inspector for the miniscript Bitcoin policy language";
     longDescription = "Miniscript is a language for writing (a subset of) Bitcoin Scripts in a structured way, enabling analysis, composition, generic signing and more.";
     homepage = "https://bitcoin.sipa.be/miniscript/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Compiler and inspector for the miniscript Bitcoin policy language";
+    longDescription = "Miniscript is a language for writing (a subset of) Bitcoin Scripts in a structured way, enabling analysis, composition, generic signing and more.";
+    homepage = "https://bitcoin.sipa.be/miniscript/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       RaghavSood
       jb55
     ];

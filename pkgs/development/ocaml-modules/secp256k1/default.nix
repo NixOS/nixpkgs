@@ -34,10 +34,18 @@ buildDunePackage rec {
     secp256k1
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dakk/secp256k1-ml";
     description = "Elliptic curve library secp256k1 wrapper for Ocaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vyorkin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dakk/secp256k1-ml";
+    description = "Elliptic curve library secp256k1 wrapper for Ocaml";
+    license = licenses.mit;
+    maintainers = [ maintainers.vyorkin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

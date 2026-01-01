@@ -41,11 +41,20 @@ stdenv.mkDerivation rec {
   # Library only
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for annotating images";
     homepage = "https://github.com/ksnip/kImageAnnotator";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ fliegendewurst ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tool for annotating images";
+    homepage = "https://github.com/ksnip/kImageAnnotator";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ fliegendewurst ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

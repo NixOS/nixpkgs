@@ -33,10 +33,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "acoustid" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bindings for Chromaprint acoustic fingerprinting";
     homepage = "https://github.com/sampsyo/pyacoustid";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Bindings for Chromaprint acoustic fingerprinting";
+    homepage = "https://github.com/sampsyo/pyacoustid";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

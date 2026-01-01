@@ -27,11 +27,19 @@ perlPackages.buildPerlPackage rec {
 
   passthru.perlPackages = [ "self" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Text::Bidi Perl package using fribidi, providing a urxvt plugin";
     homepage = "https://github.com/mkamensky/Text-Bidi";
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Text::Bidi Perl package using fribidi, providing a urxvt plugin";
+    homepage = "https://github.com/mkamensky/Text-Bidi";
+    maintainers = with maintainers; [ doronbehar ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Quote from the README:
     # same terms as the Perl 5 programming language system itself
     license = perlPackages.perl.meta.license;

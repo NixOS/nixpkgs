@@ -45,10 +45,17 @@ let
 
       enableParallelBuilding = true;
 
+<<<<<<< HEAD
       meta = {
         description = "Hercules ${depName} library";
         license = lib.licenses.free; # Mixture of Public Domain, ICU (MIT compatible) and others
         maintainers = with lib.maintainers; [
+=======
+      meta = with lib; {
+        description = "Hercules ${depName} library";
+        license = lib.licenses.free; # Mixture of Public Domain, ICU (MIT compatible) and others
+        maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           anna328p
           vifino
         ];
@@ -143,7 +150,11 @@ stdenv.mkDerivation rec {
     "--enable-regina-rexx"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://sdl-hercules-390.github.io/html/";
     description = "IBM mainframe emulator";
     longDescription = ''
@@ -152,8 +163,13 @@ stdenv.mkDerivation rec {
       z/Architecture. Hercules runs under Linux, Windows, Solaris, FreeBSD, and
       Mac OS X.
     '';
+<<<<<<< HEAD
     license = lib.licenses.qpl;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.qpl;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       anna328p
       vifino
     ];

@@ -75,7 +75,11 @@ stdenv.mkDerivation rec {
     tests = nixosTests.wireguard;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tools for the WireGuard secure network tunnel";
     longDescription = ''
       Supplies the main userspace tooling for using and configuring WireGuard tunnels, including the wg(8) and wg-quick(8) utilities.
@@ -86,6 +90,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       zx2c4
@@ -93,5 +98,15 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "wg";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      zx2c4
+      globin
+      ma27
+    ];
+    mainProgram = "wg";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

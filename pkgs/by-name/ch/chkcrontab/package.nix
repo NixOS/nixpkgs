@@ -16,10 +16,17 @@ buildPythonApplication rec {
     sha256 = "0gmxavjkjkvjysgf9cf5fcpk589gb75n1mn20iki82wifi1pk1jn";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to detect crontab errors";
     mainProgram = "chkcrontab";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Tool to detect crontab errors";
+    mainProgram = "chkcrontab";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     homepage = "https://github.com/lyda/chkcrontab";
   };

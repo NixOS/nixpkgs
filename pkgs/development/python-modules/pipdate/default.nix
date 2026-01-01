@@ -37,11 +37,19 @@ buildPythonPackage rec {
   # Tests require network access and pythonImportsCheck requires configuration file
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Pip update helpers";
     mainProgram = "pipdate";
     homepage = "https://github.com/nschloe/pipdate";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Pip update helpers";
+    mainProgram = "pipdate";
+    homepage = "https://github.com/nschloe/pipdate";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -25,11 +25,20 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://rlepigre.github.io/ocaml-bindlib";
     description = "Efficient binder representation in Ocaml";
     license = lib.licenses.gpl3;
     changelog = "https://github.com/rlepigre/ocaml-bindlib/raw/${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    homepage = "https://rlepigre.github.io/ocaml-bindlib";
+    description = "Efficient binder representation in Ocaml";
+    license = licenses.gpl3;
+    changelog = "https://github.com/rlepigre/ocaml-bindlib/raw/${version}/CHANGELOG.md";
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

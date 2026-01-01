@@ -197,7 +197,11 @@ mkDerivation rec {
 
   enableParallelBuilding = false; # XXX: -j44 tried linking befoire librecoll had been created
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Full-text search tool";
     longDescription = ''
       Recoll is an Xapian frontend that can search through files, archive
@@ -205,9 +209,15 @@ mkDerivation rec {
     '';
     homepage = "https://www.recoll.org";
     changelog = "https://www.recoll.org/pages/release-history.html";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jcumming
     ];
 

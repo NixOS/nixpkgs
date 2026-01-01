@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mopeka_iot_ble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Mopeka IoT BLE devices";
     homepage = "https://github.com/bluetooth-devices/mopeka-iot-ble";
     changelog = "https://github.com/Bluetooth-Devices/mopeka-iot-ble/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Mopeka IoT BLE devices";
+    homepage = "https://github.com/bluetooth-devices/mopeka-iot-ble";
+    changelog = "https://github.com/Bluetooth-Devices/mopeka-iot-ble/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

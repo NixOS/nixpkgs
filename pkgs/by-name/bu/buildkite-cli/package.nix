@@ -31,11 +31,19 @@ buildGoModule rec {
     "-X main.VERSION=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command line interface for Buildkite";
     homepage = "https://github.com/buildkite/cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ groodt ];
+=======
+  meta = with lib; {
+    description = "Command line interface for Buildkite";
+    homepage = "https://github.com/buildkite/cli";
+    license = licenses.mit;
+    maintainers = with maintainers; [ groodt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bk";
   };
 }

@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   glibcLocales,
   installShellFiles,
   python3Packages,
@@ -21,6 +24,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-pbBdScyYQMdT2NjCk2dKPkR75Zcizzco2IkXpHkgPR8=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/pimutils/khal/pull/1418/
     (fetchpatch {
@@ -30,6 +34,8 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = with python3Packages; [
     setuptools
     setuptools-scm

@@ -38,9 +38,16 @@ buildPythonPackage rec {
   # fails due to trying to run CSS as test
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Scientific reports with embedded python computations with reST, LaTeX or markdown";
     homepage = "https://mpastell.com/pweave/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Scientific reports with embedded python computations with reST, LaTeX or markdown";
+    homepage = "https://mpastell.com/pweave/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

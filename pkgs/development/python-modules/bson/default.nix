@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "BSON codec for Python";
     homepage = "https://github.com/py-bson/bson";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "BSON codec for Python";
+    homepage = "https://github.com/py-bson/bson";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

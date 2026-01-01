@@ -10,13 +10,22 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpuinfo";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-09";
+=======
+  version = "0-unstable-2025-11-19";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "cpuinfo";
+<<<<<<< HEAD
     rev = "ff24ffee8340fbd9001cce6a9ef41cdd16aa2bd3";
     hash = "sha256-lvsM/K0CDknsGN/ZXSZCg6nr6BLMQce8wlHncjGHMdk=";
+=======
+    rev = "161a9ec374884f4b3e85725cb22e05f9458fdc93";
+    hash = "sha256-uzo6QpNfzTcqOpDse14e2OoxNyKDU8jSx+/wPLxmpJg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
@@ -50,7 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cpu-info";
     maintainers = with lib.maintainers; [ pawelchcki ];
     pkgConfigModules = [ "libcpuinfo" ];
+<<<<<<< HEAD
     # https://github.com/pytorch/cpuinfo/blob/ff24ffee8340fbd9001cce6a9ef41cdd16aa2bd3/CMakeLists.txt#L98
+=======
+    # https://github.com/pytorch/cpuinfo/blob/161a9ec374884f4b3e85725cb22e05f9458fdc93/CMakeLists.txt#L98
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.x86 ++ lib.platforms.aarch ++ lib.platforms.riscv;
   };
 })

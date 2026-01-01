@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
     description = "UPnP AV client, mounts as a Linux filesystem the media content of compatible UPnP AV devices";
     mainProgram = "djmount";
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.jagajaga ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl2Plus;
   };
 }

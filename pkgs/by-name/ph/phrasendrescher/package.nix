@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-plugins" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Modular and multi processing pass phrase cracking tool";
     homepage = "https://leidecker.info/projects/phrasendrescher/index.shtml";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Modular and multi processing pass phrase cracking tool";
+    homepage = "https://leidecker.info/projects/phrasendrescher/index.shtml";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pd";
   };
 }

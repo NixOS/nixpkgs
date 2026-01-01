@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "squarify" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/laserson/squarify";
     description = "Pure Python implementation of the squarify treemap layout algorithm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veehaitch ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/laserson/squarify";
+    description = "Pure Python implementation of the squarify treemap layout algorithm";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ veehaitch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

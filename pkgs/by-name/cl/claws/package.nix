@@ -22,10 +22,17 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/thehowl/claws";
     description = "Interactive command line client for testing websocket servers";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/thehowl/claws";
+    description = "Interactive command line client for testing websocket servers";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "claws";
   };

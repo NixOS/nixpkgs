@@ -9,7 +9,10 @@
   stdenv,
   stdenvNoCC,
   rustPlatform,
+<<<<<<< HEAD
   callPackage,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ant,
   cmake,
@@ -38,6 +41,7 @@
 
 let
   kotlin' = kotlin.overrideAttrs (oldAttrs: {
+<<<<<<< HEAD
     version = "2.2.20";
     src = fetchurl {
       url = oldAttrs.src.url;
@@ -46,6 +50,16 @@ let
   });
 
   jbr = jetbrains.jdk-no-jcef;
+=======
+    version = "2.1.10";
+    src = fetchurl {
+      url = oldAttrs.src.url;
+      sha256 = "sha256-xuniY2iJgo4ZyIEdWriQhiU4yJ3CoxAZVt/uPCqLprE=";
+    };
+  });
+
+  jbr = jetbrains.jdk-no-jcef-17;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
@@ -135,7 +149,29 @@ let
     ];
   };
 
+<<<<<<< HEAD
   jpsRepo = callPackage ./jps_repo.nix { inherit jpsHash src jbr; };
+=======
+  jpsRepo =
+    runCommand "jps-bootstrap-repository"
+      {
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+        outputHash = jpsHash;
+        nativeBuildInputs = [
+          ant
+          jbr
+        ];
+      }
+      ''
+        ant -Duser.home=$out -Dbuild.dir=/build/tmp -f ${src}/platform/jps-bootstrap/jps-bootstrap-classpath.xml
+        find $out -type f \( \
+          -name \*.lastUpdated \
+          -o -name resolver-status.properties \
+          -o -name _remote.repositories \) \
+          -delete
+      '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   jps-bootstrap = stdenvNoCC.mkDerivation {
     pname = "jps-bootstrap";
@@ -152,8 +188,12 @@ let
     buildPhase = ''
       runHook preBuild
 
+<<<<<<< HEAD
       BUILD_HOME=$(mktemp -d)
       ant -Duser.home=${jpsRepo} -Dbuild.dir="$BUILD_HOME" -f jps-bootstrap-classpath.xml
+=======
+      ant -Duser.home=${jpsRepo} -Dbuild.dir=/build/out -f jps-bootstrap-classpath.xml
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       runHook postBuild
     '';
@@ -161,8 +201,13 @@ let
       runHook preInstall
 
       mkdir -p $out/share/java/
+<<<<<<< HEAD
       cp "$BUILD_HOME/jps-bootstrap.classes.jar" $out/share/java/jps-bootstrap.jar
       cp -r "$BUILD_HOME/jps-bootstrap.out.lib" $out/share/java/jps-bootstrap-classpath
+=======
+      cp /build/out/jps-bootstrap.classes.jar $out/share/java/jps-bootstrap.jar
+      cp -r /build/out/jps-bootstrap.out.lib $out/share/java/jps-bootstrap-classpath
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       makeWrapper ${jbr}/bin/java $out/bin/jps-bootstrap \
         --add-flags "-cp $out/share/java/jps-bootstrap-classpath/'*' org.jetbrains.jpsBootstrap.JpsBootstrapMain"
 
@@ -174,12 +219,16 @@ let
   mkRepoEntry = entry: {
     name = ".m2/repository/" + entry.path;
     path = fetchurl {
+<<<<<<< HEAD
       urls = lib.concatMap (url: [
         "https://cache-redirector.jetbrains.com/${url}/${entry.url}"
         "https://${url}/${entry.url}"
       ]) repositories;
       # Do not try to retry 4xx errors
       curlOptsList = [ "--no-retry-all-errors" ];
+=======
+      urls = map (url: "${url}/${entry.url}") repositories;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sha256 = entry.hash;
     };
   };
@@ -187,16 +236,22 @@ let
 
   kotlin-jps-plugin-classpath =
     let
+<<<<<<< HEAD
       repoBaseUrl = "packages.jetbrains.team/maven/p/ij/intellij-dependencies";
       repoUrls = [
         "https://cache-redirector.jetbrains.com/${repoBaseUrl}"
         "https://${repoBaseUrl}"
       ];
       groupId = "org/jetbrains/kotlin";
+=======
+      repoUrl = "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies";
+      groupId = builtins.replaceStrings [ "." ] [ "/" ] "org.jetbrains.kotlin";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       artefactId = "kotlin-jps-plugin-classpath";
       version = kotlin-jps-plugin.version;
     in
     fetchurl {
+<<<<<<< HEAD
       urls = map (
         url:
         lib.concatStringsSep "/" [
@@ -207,6 +262,21 @@ let
           "${artefactId}-${version}.jar"
         ]
       ) repoUrls;
+=======
+      url =
+        repoUrl
+        + "/"
+        + groupId
+        + "/"
+        + artefactId
+        + "/"
+        + version
+        + "/"
+        + artefactId
+        + "-"
+        + version
+        + ".jar";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hash = kotlin-jps-plugin.hash;
     };
 
@@ -222,17 +292,32 @@ let
       "OpenSourceCommunityInstallersBuildTarget";
 
   xplat-launcher = fetchzip {
+<<<<<<< HEAD
     urls = [
       "https://cache-redirector.jetbrains.com/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz"
       "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz"
     ];
+=======
+    url = "https://cache-redirector.jetbrains.com/intellij-dependencies/org/jetbrains/intellij/deps/launcher/242.22926/launcher-242.22926.tar.gz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-ttrQZUbBvvyH1BSVt1yWOoD82WwRi/hkoRfrsdCjwTA=";
     stripRoot = false;
   };
 
+<<<<<<< HEAD
 in
 stdenvNoCC.mkDerivation rec {
   pname = "${buildType}-oss";
+=======
+  brokenPlugins = fetchurl {
+    url = "https://web.archive.org/web/20250509141038/https://downloads.marketplace.jetbrains.com/files/brokenPlugins.json";
+    hash = "sha256-FzYANZSTasCdVEu9jLF1+2PEH8SadUddaIaec5vhKH8=";
+  };
+
+in
+stdenvNoCC.mkDerivation rec {
+  pname = "${buildType}-community";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit version buildNumber;
   name = "${pname}-${version}.tar.gz";
   inherit src;
@@ -249,9 +334,12 @@ stdenvNoCC.mkDerivation rec {
     ../patches/bump-jackson-core-in-source.patch
   ];
 
+<<<<<<< HEAD
   # Regarding brokenPlugins.json:
   #  We provide an empty brokenPlugins.json because the original file is 2.8 MB in size and can't be reliably
   #  downloaded without hash changes. The file is not important for the IDEs to function properly.
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     cp ${restarter}/bin/restarter bin/linux/amd64/restarter
     cp ${fsnotifier}/bin/fsnotifier bin/linux/amd64/fsnotifier
@@ -266,7 +354,11 @@ stdenvNoCC.mkDerivation rec {
       --replace-fail 'JDK_PATH_HERE' '${jbr}/lib/openjdk'
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/brokenPlugins.kt \
+<<<<<<< HEAD
       --replace-fail 'BROKEN_PLUGINS_HERE' '${./brokenPlugins.json}'
+=======
+      --replace-fail 'BROKEN_PLUGINS_HERE' '${brokenPlugins}'
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     substituteInPlace \
       platform/build-scripts/src/org/jetbrains/intellij/build/impl/LinuxDistributionBuilder.kt \
       --replace-fail 'XPLAT_LAUNCHER_PREBUILT_PATH_HERE' '${xplat-launcher}'
@@ -281,8 +373,13 @@ stdenvNoCC.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
+<<<<<<< HEAD
     ln -s "$repo"/.m2 ../.m2
     export JPS_BOOTSTRAP_COMMUNITY_HOME="$PWD"
+=======
+    ln -s "$repo"/.m2 /build/.m2
+    export JPS_BOOTSTRAP_COMMUNITY_HOME=/build/source
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     jps-bootstrap \
       -Dbuild.number=${buildNumber} \
       -Djps.kotlin.home=${kotlin'} \
@@ -291,7 +388,11 @@ stdenvNoCC.mkDerivation rec {
       -Dintellij.build.skip.build.steps=mac_artifacts,mac_dmg,mac_sit,windows_exe_installer,windows_sign,repair_utility_bundle_step,sources_archive \
       -Dintellij.build.unix.snaps=false \
       --java-argfile-target=java_argfile \
+<<<<<<< HEAD
       "$PWD" \
+=======
+      /build/source \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ${targetClass} \
       ${targetName}
 

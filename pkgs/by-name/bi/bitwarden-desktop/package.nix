@@ -3,10 +3,17 @@
   buildNpmPackage,
   cargo,
   copyDesktopItems,
+<<<<<<< HEAD
   dart-sass,
   darwin,
   electron_37,
   fetchFromGitHub,
+=======
+  darwin,
+  electron_37,
+  fetchFromGitHub,
+  fetchpatch2,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gnome-keyring,
   jq,
   llvmPackages_18,
@@ -34,13 +41,21 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
+<<<<<<< HEAD
   version = "2025.12.0";
+=======
+  version = "2025.10.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
+<<<<<<< HEAD
     hash = "sha256-i+hLslZ2i94r04vaOzx9e55AR8aXa9sSK8el+Dcp05A=";
+=======
+    hash = "sha256-A7bxAdFDChr7yiexV70N3tqhaUVAwJdGhhRKJyX0ra8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -55,6 +70,14 @@ buildNpmPackage' rec {
     ./skip-afterpack-and-aftersign.patch
     # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
     ./dont-use-platform-triple.patch
+<<<<<<< HEAD
+=======
+
+    (fetchpatch2 {
+      url = "https://github.com/bitwarden/clients/commit/cd56d01894c38cf046a7e44dcacc7e0ff2aa2a37.patch?full_index=1";
+      hash = "sha256-NRZiM+Y/ifh77vS+8mldbiwv/vPDr1JUOJzSu2tFMS8=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''
@@ -87,7 +110,11 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
+<<<<<<< HEAD
   npmDepsHash = "sha256-OT9Ll+F4e/yOJVpay/zwfEHcBqRvSFOM2mtlrJ8E6fs=";
+=======
+  npmDepsHash = "sha256-Qhj8Lh25vNnJzbUm/M+mKIc6Fa5plSCiy53vjevs7Tc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -97,7 +124,11 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
+<<<<<<< HEAD
     hash = "sha256-rA9zY9TAF6DnsTT3MzU18VeQDm6m25gjZ0rcmnbZb8E=";
+=======
+    hash = "sha256-fgnf+yT3UV8dHTE2tDHdBWTBW+LHAYI/JGgfS0J/Bgk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -130,6 +161,7 @@ buildNpmPackage' rec {
       exit 1
     fi
 
+<<<<<<< HEAD
     # force our dart-sass executable
     substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
       --replace-fail "dart-sass/src/sass.snapshot" "dart-sass/src/sass.snapshot.disabled"
@@ -138,6 +170,8 @@ buildNpmPackage' rec {
       ln -sf ${lib.getExe dart-sass} $f
     done
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pushd apps/desktop/desktop_native/napi
     npm run build
     popd

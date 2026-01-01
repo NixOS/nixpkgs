@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsmin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "JavaScript minifier";
     homepage = "https://github.com/tikitu/jsmin/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "JavaScript minifier";
+    homepage = "https://github.com/tikitu/jsmin/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

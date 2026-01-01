@@ -3,6 +3,10 @@
   stdenv,
   fetchFromGitHub,
   perlPackages,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   texlive,
 }:
 
@@ -77,6 +81,10 @@ perlPackages.buildPerlModule {
     XMLWriter
     autovivification
   ];
+<<<<<<< HEAD
+=======
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preConfigure = ''
     cp '${multiscriptBltxml}' t/tdata/multiscript.bltxml
@@ -84,6 +92,7 @@ perlPackages.buildPerlModule {
 
   postInstall = ''
     mv "$out"/bin/biber{,-ms}
+<<<<<<< HEAD
   '';
 
   meta = {
@@ -91,6 +100,18 @@ perlPackages.buildPerlModule {
     license = biberSource.meta.license;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.xworld21 ];
+=======
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang "$out"/bin/biber-ms
+  '';
+
+  meta = with lib; {
+    description = "Backend for BibLaTeX (multiscript version)";
+    license = biberSource.meta.license;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.xworld21 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "biber-ms";
   };
 }

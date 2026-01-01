@@ -36,12 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
+<<<<<<< HEAD
   meta = {
     description = "FUSE module to mount ext2, ext3 and ext4 with read write support";
     homepage = "https://github.com/alperakcan/fuse-ext2";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "FUSE module to mount ext2, ext3 and ext4 with read write support";
+    homepage = "https://github.com/alperakcan/fuse-ext2";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fuse-ext2";
   };
 })

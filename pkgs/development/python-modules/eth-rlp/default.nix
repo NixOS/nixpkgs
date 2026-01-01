@@ -45,10 +45,17 @@ buildPythonPackage rec {
     "test_install_local_wheel"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "RLP definitions for common Ethereum objects";
     homepage = "https://github.com/ethereum/eth-rlp";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "RLP definitions for common Ethereum objects";
+    homepage = "https://github.com/ethereum/eth-rlp";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

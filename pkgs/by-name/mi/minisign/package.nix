@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libsodium ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple tool for signing files and verifying signatures";
     longDescription = ''
       minisign uses public key cryptography to help facilitate secure (but not
@@ -32,9 +36,15 @@ stdenv.mkDerivation rec {
       is similar to and compatible with OpenBSD's signify.
     '';
     homepage = "https://jedisct1.github.io/minisign/";
+<<<<<<< HEAD
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ joachifm ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.isc;
+    maintainers = with maintainers; [ joachifm ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "minisign";
   };
 }

@@ -59,11 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Structural variant caller for mapped DNA sequenced data";
     mainProgram = "delly";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Structural variant caller for mapped DNA sequenced data";
+    mainProgram = "delly";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ scalavision ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       Delly is an integrated structural variant (SV) prediction method
       that can discover, genotype and visualize deletions, tandem duplications,

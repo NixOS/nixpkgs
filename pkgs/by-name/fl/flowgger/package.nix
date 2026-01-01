@@ -31,10 +31,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=flowgger::encoder::ltsv_encoder::test_ltsv_full_encode_no_sd"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/awslabs/flowgger";
     description = "Fast, simple and lightweight data collector written in Rust";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/awslabs/flowgger";
+    description = "Fast, simple and lightweight data collector written in Rust";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "flowgger";
   };

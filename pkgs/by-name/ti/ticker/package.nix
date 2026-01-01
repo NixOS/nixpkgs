@@ -8,13 +8,21 @@
 
 buildGoModule rec {
   pname = "ticker";
+<<<<<<< HEAD
   version = "5.2.0";
+=======
+  version = "5.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
     repo = "ticker";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-GH+2as3aK462cTguGekbB4HchVzC1HdBsXwJHwAh47Q=";
+=======
+    hash = "sha256-/W/BZzrIkz/3F2jzQGJ79UycrdEBVTMF+YncCS5TibE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-EKc9QRDSOD4WetCXORjMUlaFqh0+B3Aa3m5SR1WiKN4=";

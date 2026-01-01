@@ -57,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Lomiri Push Notifications QML plugin";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-push-qml";
@@ -64,5 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Lomiri Push Notifications QML plugin";
+    homepage = "https://gitlab.com/ubports/development/core/lomiri-push-qml";
+    # License file indicates gpl3Only, but de87869c2cdb9819c2ca7c9eca9c5fb8b500a01f says it should be lgpl3Only
+    license = licenses.lgpl3Only;
+    teams = [ teams.lomiri ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -63,6 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }/bin/update-tideways-daemon";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tideways Daemon";
     homepage = "https://tideways.com/";
@@ -70,6 +71,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "tideways-daemon";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ shyim ];
+=======
+  meta = with lib; {
+    description = "Tideways Daemon";
+    homepage = "https://tideways.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "tideways-daemon";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ shyim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 })

@@ -29,10 +29,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/maxbambi/plugin.video.raitv/";
     description = "Live radio and TV channels, latest 7 days of programming, broadcast archive, news";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/maxbambi/plugin.video.raitv/";
+    description = "Live radio and TV channels, latest 7 days of programming, broadcast archive, news";
+    license = licenses.gpl3Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

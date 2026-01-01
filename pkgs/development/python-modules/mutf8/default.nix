@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mutf8" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast MUTF-8 encoder & decoder";
     homepage = "https://github.com/TkTech/mutf8";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Fast MUTF-8 encoder & decoder";
+    homepage = "https://github.com/TkTech/mutf8";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

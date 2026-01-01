@@ -116,6 +116,7 @@ python.pkgs.buildPythonApplication rec {
       ${python.interpreter} -m unittest
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
@@ -126,5 +127,17 @@ python.pkgs.buildPythonApplication rec {
     ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pytrainer/pytrainer";
+    description = "Application for logging and graphing sporting excursions";
+    mainProgram = "pytrainer";
+    maintainers = with maintainers; [
+      rycee
+      dotlambda
+    ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

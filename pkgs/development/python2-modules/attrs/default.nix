@@ -33,10 +33,17 @@ buildPythonPackage rec {
   # Instead, we do this as a passthru.tests test.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/hynek/attrs";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python attributes without boilerplate";
+    homepage = "https://github.com/hynek/attrs";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

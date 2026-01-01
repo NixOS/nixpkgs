@@ -29,8 +29,11 @@
   poppler-utils,
   pytest-playwright,
   playwright-driver,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm,
   nodejs,
   markdown,
@@ -62,8 +65,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   dependencies = [
@@ -95,7 +102,11 @@ buildPythonPackage rec {
     #annotate = [ fcdocs-annotate ];
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit pname version src;
     fetcherVersion = 1;
     hash = "sha256-kvLV/pCX/wQHG0ttrjSro7/CoQ5K1T0aFChafQOwvNw=";

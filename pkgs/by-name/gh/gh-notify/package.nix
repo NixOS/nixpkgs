@@ -47,6 +47,7 @@ stdenvNoCC.mkDerivation {
     wrapProgram "$out/bin/gh-notify" --prefix PATH : "${binPath}"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/meiji163/gh-notify";
     description = "GitHub CLI extension to display GitHub notifications";
@@ -54,5 +55,14 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.unlicense;
     mainProgram = "gh-notify";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/meiji163/gh-notify";
+    description = "GitHub CLI extension to display GitHub notifications";
+    maintainers = with maintainers; [ loicreynier ];
+    license = licenses.unlicense;
+    mainProgram = "gh-notify";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

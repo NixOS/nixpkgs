@@ -57,11 +57,20 @@ buildPythonPackage rec {
     "test_screener_overview"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Finviz Finance information downloader";
     homepage = "https://github.com/lit26/finvizfinance";
     changelog = "https://github.com/lit26/finvizfinance/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ icyrockcom ];
+=======
+  meta = with lib; {
+    description = "Finviz Finance information downloader";
+    homepage = "https://github.com/lit26/finvizfinance";
+    changelog = "https://github.com/lit26/finvizfinance/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ icyrockcom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

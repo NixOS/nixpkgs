@@ -27,7 +27,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --bash --name kestrel completion/kestrel.bash-completion
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "File encryption done right";
     mainProgram = "kestrel";
     longDescription = "
@@ -35,7 +39,12 @@ rustPlatform.buildRustPackage rec {
       that lets you encrypt files to anyone with a public key.
     ";
     homepage = "https://getkestrel.com";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ zendo ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ zendo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

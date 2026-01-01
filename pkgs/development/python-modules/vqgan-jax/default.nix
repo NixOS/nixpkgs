@@ -33,11 +33,19 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "vqgan_jax" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "JAX implementation of VQGAN";
     homepage = "https://github.com/patil-suraj/vqgan-jax";
     # license unknown: https://github.com/patil-suraj/vqgan-jax/issues/9
     license = lib.licenses.unfree;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ r-burns ];
+=======
+    maintainers = with maintainers; [ r-burns ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

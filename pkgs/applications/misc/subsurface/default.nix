@@ -64,12 +64,21 @@ let
 
     enableParallelBuilding = true;
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://www.libdivecomputer.org";
       description = "Cross-platform and open source library for communication with dive computers from various manufacturers";
       maintainers = with lib.maintainers; [ mguentner ];
       license = lib.licenses.lgpl21;
       platforms = lib.platforms.all;
+=======
+    meta = with lib; {
+      homepage = "https://www.libdivecomputer.org";
+      description = "Cross-platform and open source library for communication with dive computers from various manufacturers";
+      maintainers = with maintainers; [ mguentner ];
+      license = licenses.lgpl21;
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -103,12 +112,21 @@ let
       mv lib $out/
     '';
 
+<<<<<<< HEAD
     meta = {
       inherit (src.meta) homepage;
       description = "QtLocation plugin for Google maps tile API";
       maintainers = [ ];
       license = lib.licenses.mit;
       platforms = lib.platforms.all;
+=======
+    meta = with lib; {
+      inherit (src.meta) homepage;
+      description = "QtLocation plugin for Google maps tile API";
+      maintainers = with maintainers; [ orivej ];
+      license = licenses.mit;
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -177,7 +195,11 @@ stdenv.mkDerivation {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Divelog program";
     mainProgram = "subsurface";
     longDescription = ''
@@ -187,8 +209,14 @@ stdenv.mkDerivation {
       names of other divers, and lets users rate dives and provide additional notes.
     '';
     homepage = "https://subsurface-divelog.org";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ mguentner ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ mguentner ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

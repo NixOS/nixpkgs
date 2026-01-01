@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_inline_tabs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Add inline tabbed content to your Sphinx documentation";
     homepage = "https://github.com/pradyunsg/sphinx-inline-tabs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    description = "Add inline tabbed content to your Sphinx documentation";
+    homepage = "https://github.com/pradyunsg/sphinx-inline-tabs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

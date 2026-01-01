@@ -23,11 +23,20 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Vault CLI";
     mainProgram = "safe";
     homepage = "https://github.com/starkandwayne/safe";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eonpatapon ];
+=======
+  meta = with lib; {
+    description = "Vault CLI";
+    mainProgram = "safe";
+    homepage = "https://github.com/starkandwayne/safe";
+    license = licenses.mit;
+    maintainers = with maintainers; [ eonpatapon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

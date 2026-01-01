@@ -6,7 +6,11 @@
   fetchpatch,
   onetbb,
 
+<<<<<<< HEAD
   useTBB ? lib.meta.availableOn stdenv.hostPlatform onetbb,
+=======
+  useTBB ? true,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,12 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-kidCMGd/i9D9HLLTt7l1DbiU71sFTEyr3Vew4XHUHls=";
       relative = "c";
     })
+<<<<<<< HEAD
     # fix cygwin build
     (fetchpatch {
       url = "https://github.com/BLAKE3-team/BLAKE3/commit/d62babb7ebb01c8ac4aaa580f4b49071a639195e.patch";
       hash = "sha256-qO8HsmBIAkR03rqITooyBiQTorUM6JCJLZOrOc2yss8=";
       relative = "c";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   sourceRoot = finalAttrs.src.name + "/c";

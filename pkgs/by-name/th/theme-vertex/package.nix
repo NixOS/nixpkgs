@@ -37,11 +37,20 @@ stdenv.mkDerivation rec {
     cp AUTHORS README.md $out/share/doc/$pname/
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "Theme for GTK 3, GTK 2, Gnome-Shell, and Cinnamon";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "Theme for GTK 3, GTK 2, Gnome-Shell, and Cinnamon";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,18 @@ buildPythonPackage rec {
     pytest-flakes
   ];
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.asl20;
     homepage = "https://pypi.python.org/pypi/pytest-quickcheck";
     description = "Pytest plugin to generate random data inspired by QuickCheck";
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    license = licenses.asl20;
+    homepage = "https://pypi.python.org/pypi/pytest-quickcheck";
+    description = "Pytest plugin to generate random data inspired by QuickCheck";
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

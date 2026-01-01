@@ -49,11 +49,20 @@ stdenv.mkDerivation (finalAttrs: {
       ./autogen.sh
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/espeak-ng/pcaudiolib";
     description = "Provides a C API to different audio devices";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aske ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/espeak-ng/pcaudiolib";
+    description = "Provides a C API to different audio devices";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ aske ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

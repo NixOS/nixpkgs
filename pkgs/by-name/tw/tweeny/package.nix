@@ -22,11 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Modern C++ tweening library";
     license = lib.licenses.mit;
     homepage = "http://mobius3.github.io/tweeny";
     maintainers = [ lib.maintainers.doronbehar ];
     platforms = with lib.platforms; darwin ++ linux;
+=======
+  meta = with lib; {
+    description = "Modern C++ tweening library";
+    license = licenses.mit;
+    homepage = "http://mobius3.github.io/tweeny";
+    maintainers = [ maintainers.doronbehar ];
+    platforms = with platforms; darwin ++ linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

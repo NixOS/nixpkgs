@@ -45,14 +45,22 @@ buildPythonPackage rec {
       ;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Non-validating SQL parser for Python";
     longDescription = ''
       Provides support for parsing, splitting and formatting SQL statements.
     '';
     homepage = "https://github.com/andialbrecht/sqlparse";
     changelog = "https://github.com/andialbrecht/sqlparse/blob/${version}/CHANGELOG";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sqlformat";
   };
 }

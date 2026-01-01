@@ -115,16 +115,29 @@ stdenv.mkDerivation (finalAttrs: {
   # Couldn't get CUDA to run properly in the sandbox
   doCheck = !enableCuda && !enableOpencl;
 
+<<<<<<< HEAD
   meta = {
     description = "Toolkit for molecular simulation using high performance GPU code";
     mainProgram = "TestReferenceHarmonicBondForce";
     homepage = "https://openmm.org/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Toolkit for molecular simulation using high performance GPU code";
+    mainProgram = "TestReferenceHarmonicBondForce";
+    homepage = "https://openmm.org/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Plus
       lgpl3Plus
       mit
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

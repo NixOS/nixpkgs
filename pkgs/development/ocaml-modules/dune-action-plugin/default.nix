@@ -25,10 +25,18 @@ buildDunePackage {
     rm -r vendor/csexp
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit (dune_3.meta) homepage;
     description = "API for writing dynamic Dune actions";
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    inherit (dune_3.meta) homepage;
+    description = "API for writing dynamic Dune actions";
+    maintainers = [ ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

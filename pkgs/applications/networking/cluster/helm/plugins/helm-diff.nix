@@ -35,10 +35,18 @@ buildGoModule rec {
     install -m644 -Dt $out/${pname} plugin.yaml
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Helm plugin that shows a diff";
     homepage = "https://github.com/databus23/helm-diff";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yurrriq ];
+=======
+  meta = with lib; {
+    description = "Helm plugin that shows a diff";
+    homepage = "https://github.com/databus23/helm-diff";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ yurrriq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

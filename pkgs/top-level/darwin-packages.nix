@@ -3,9 +3,12 @@
   buildPackages,
   pkgs,
   targetPackages,
+<<<<<<< HEAD
   libc,
   preLibcHeaders,
   darwin,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   stdenv,
@@ -56,7 +59,11 @@ makeScopeWithSplicing' {
         };
 
         binutils = pkgs.wrapBintoolsWith {
+<<<<<<< HEAD
           libc = targetPackages.libc or libc;
+=======
+          inherit (targetPackages) libc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           bintools = self.binutils-unwrapped;
         };
 
@@ -87,7 +94,11 @@ makeScopeWithSplicing' {
         };
 
         binutilsNoLibc = pkgs.wrapBintoolsWith {
+<<<<<<< HEAD
           libc = targetPackages.preLibcHeaders or preLibcHeaders;
+=======
+          libc = targetPackages.preLibcHeaders;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           bintools = self.binutils-unwrapped;
         };
 
@@ -113,7 +124,11 @@ makeScopeWithSplicing' {
 
         iosSdkPkgs = callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
           buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
+<<<<<<< HEAD
           targetIosSdkPkgs = (targetPackages.darwin or darwin).iosSdkPkgs;
+=======
+          targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           inherit (pkgs.llvmPackages) clang-unwrapped;
         };
 

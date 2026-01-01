@@ -4,6 +4,10 @@
   fetchFromGitHub,
   makeWrapper,
   stdenv,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   perl,
   atomicparsley,
   ffmpeg,
@@ -22,7 +26,11 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-O/mVtbudrYw0jKeSckZlgonFDiWxfeiVc8gdcy4iNBw=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ makeWrapper ];
+=======
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
     LWP
@@ -53,12 +61,20 @@ perlPackages.buildPerlPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
+=======
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/.get_iplayer-wrapped
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru.tests.version = testers.testVersion {
     package = get_iplayer;
     command = "HOME=$(mktemp -d) get_iplayer --help";
     version = "v${version}";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Downloads TV and radio programmes from BBC iPlayer and BBC Sounds";
     mainProgram = "get_iplayer";
@@ -66,6 +82,15 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://github.com/get-iplayer/get_iplayer";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Downloads TV and radio programmes from BBC iPlayer and BBC Sounds";
+    mainProgram = "get_iplayer";
+    license = licenses.gpl3Plus;
+    homepage = "https://github.com/get-iplayer/get_iplayer";
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rika
       chewblacka
     ];

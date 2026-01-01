@@ -28,12 +28,21 @@ stdenvNoCC.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for automatic centralized changing of avatar in Github, Discord, Steam, Shikimori, and many more";
     homepage = "https://github.com/yunfachi/yunfaAvatar";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ yunfachi ];
+=======
+  meta = with lib; {
+    description = "Utility for automatic centralized changing of avatar in Github, Discord, Steam, Shikimori, and many more";
+    homepage = "https://github.com/yunfachi/yunfaAvatar";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ yunfachi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yunfaavatar";
   };
 }

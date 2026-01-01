@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "QML settings components for the Lomiri Desktop Environment";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-settings-components";
@@ -65,5 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "QML settings components for the Lomiri Desktop Environment";
+    homepage = "https://gitlab.com/ubports/development/core/lomiri-settings-components";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-settings-components/-/blob/${finalAttrs.version}/ChangeLog";
+    license = licenses.lgpl3Only;
+    teams = [ teams.lomiri ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

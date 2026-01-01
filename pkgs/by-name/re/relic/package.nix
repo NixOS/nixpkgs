@@ -36,11 +36,20 @@ buildGoModule rec {
   # https://github.com/NixOS/nixpkgs/pull/374824
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sassoftware/relic";
     description = "Service and a tool for adding digital signatures to operating system packages for Linux and Windows";
     mainProgram = "relic";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ strager ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sassoftware/relic";
+    description = "Service and a tool for adding digital signatures to operating system packages for Linux and Windows";
+    mainProgram = "relic";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ strager ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

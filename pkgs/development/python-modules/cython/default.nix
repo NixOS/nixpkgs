@@ -3,6 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   gdb,
+<<<<<<< HEAD
+=======
+  isPyPy,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ncurses,
   numpy,
   pkg-config,
@@ -15,13 +19,18 @@
 
 buildPythonPackage rec {
   pname = "cython";
+<<<<<<< HEAD
   version = "3.1.6";
+=======
+  version = "3.1.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-OB9DsGabbn5pE+8Ru29D3Jp9Wu+gwlHYYy79x+M+HPI=";
   };
 
@@ -31,6 +40,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+=======
+    hash = "sha256-qFj7w0fQY6X1oADLsAgwFefzx92/Pmgv9j5S6v0sdPg=";
+  };
+
+  build-system = [
+    pkg-config
+    setuptools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [
@@ -39,6 +56,13 @@ buildPythonPackage rec {
     ncurses
   ];
 
+<<<<<<< HEAD
+=======
+  env = lib.optionalAttrs (!isPyPy) {
+    LC_ALL = "en_US.UTF-8";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
   doCheck = false;

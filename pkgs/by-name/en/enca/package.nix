@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Detects the encoding of text files and reencodes them";
 
     longDescription = ''
@@ -31,7 +35,11 @@ stdenv.mkDerivation rec {
       Unicode variants, independently on language.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
+=======
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   };
 }

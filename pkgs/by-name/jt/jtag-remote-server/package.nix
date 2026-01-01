@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ libftdi1 ];
 
+<<<<<<< HEAD
   meta = {
     description = "Remote JTAG server for remote debugging";
     mainProgram = "jtag-remote-server";
@@ -31,5 +32,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Remote JTAG server for remote debugging";
+    mainProgram = "jtag-remote-server";
+    homepage = "https://github.com/jiegec/jtag-remote-server";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

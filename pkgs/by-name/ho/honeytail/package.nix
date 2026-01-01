@@ -15,10 +15,18 @@ buildGoModule rec {
     hash = "sha256-S0hIgNNzF1eNe+XJs+PT7EUIl5oJCXu+B/zQago4sf8=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Agent for ingesting log file data into honeycomb.io and making it available for exploration";
     homepage = "https://honeycomb.io/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.iand675 ];
+=======
+  meta = with lib; {
+    description = "Agent for ingesting log file data into honeycomb.io and making it available for exploration";
+    homepage = "https://honeycomb.io/";
+    license = licenses.asl20;
+    maintainers = [ maintainers.iand675 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

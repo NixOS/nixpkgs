@@ -40,12 +40,21 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "End-2-end encrypted IPv6 overlay network";
     homepage = "https://github.com/threefoldtech/mycelium";
     changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "End-2-end encrypted IPv6 overlay network";
+    homepage = "https://github.com/threefoldtech/mycelium";
+    changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       flokli
       matthewcroughan
       rvdp

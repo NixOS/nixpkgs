@@ -35,10 +35,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "plaid" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client library for the Plaid API and Link";
     homepage = "https://github.com/plaid/plaid-python";
     changelog = "https://github.com/plaid/plaid-python/blob/master/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python client library for the Plaid API and Link";
+    homepage = "https://github.com/plaid/plaid-python";
+    changelog = "https://github.com/plaid/plaid-python/blob/master/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,10 +17,18 @@ buildKodiAddon rec {
 
   passthru.pythonPath = "lib/api";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://forum.kodi.tv/showthread.php?tid=187421";
     description = "Comic book reader";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://forum.kodi.tv/showthread.php?tid=187421";
+    description = "Comic book reader";
+    license = licenses.gpl2Plus;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

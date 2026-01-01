@@ -100,11 +100,20 @@ python3Packages.buildPythonApplication rec {
         '';
       });
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Command-line tool for accessing the Backblaze B2 storage service";
+    homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
+    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hrdinka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "backblaze-b2";
   };
 }

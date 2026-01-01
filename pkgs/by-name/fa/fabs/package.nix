@@ -55,7 +55,11 @@ python3.pkgs.buildPythonApplication rec {
     sqlite
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     outputsToInstall = [
       "out"
       "man"
@@ -63,8 +67,13 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "fabsys";
     description = "Flexible AFS Backup System for the OpenAFS distributed file system";
     homepage = "https://github.com/openafs-contrib/fabs";
+<<<<<<< HEAD
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ spacefrogg ];
+=======
+    license = with licenses; [ isc ];
+    maintainers = with maintainers; [ spacefrogg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionAtLeast python3.pkgs.sqlalchemy.version "2.0";
     badPlatforms = [
       "x86_64-darwin"

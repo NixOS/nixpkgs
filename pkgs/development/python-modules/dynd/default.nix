@@ -60,10 +60,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dynd" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://libdynd.org";
     license = lib.licenses.bsd2;
     description = "Python exposure of dynd";
     maintainers = with lib.maintainers; [ teh ];
+=======
+  meta = with lib; {
+    homepage = "http://libdynd.org";
+    license = licenses.bsd2;
+    description = "Python exposure of dynd";
+    maintainers = with maintainers; [ teh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

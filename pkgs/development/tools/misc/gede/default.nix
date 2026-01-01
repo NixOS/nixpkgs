@@ -48,6 +48,7 @@ mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical frontend (GUI) to GDB";
     mainProgram = "gede";
@@ -55,5 +56,14 @@ mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ juliendehos ];
+=======
+  meta = with lib; {
+    description = "Graphical frontend (GUI) to GDB";
+    mainProgram = "gede";
+    homepage = "http://gede.dexar.se";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ juliendehos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

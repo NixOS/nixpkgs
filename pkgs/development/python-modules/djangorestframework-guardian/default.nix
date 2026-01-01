@@ -37,10 +37,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rest_framework_guardian" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Django-guardian support for Django REST Framework";
     homepage = "https://github.com/rpkilby/django-rest-framework-guardian";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Django-guardian support for Django REST Framework";
+    homepage = "https://github.com/rpkilby/django-rest-framework-guardian";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

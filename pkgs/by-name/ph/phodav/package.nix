@@ -60,11 +60,20 @@ stdenv.mkDerivation rec {
     install -vDt $out/lib/udev/rules.d/ data/*-spice-webdavd.rules
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "WebDav server implementation and library using libsoup";
     homepage = "https://gitlab.gnome.org/GNOME/phodav";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "WebDav server implementation and library using libsoup";
+    homepage = "https://gitlab.gnome.org/GNOME/phodav";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

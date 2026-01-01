@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Modern, lightweight and efficient 2D level editor";
     homepage = "https://ldtk.io/";
@@ -71,6 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ felschr ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+=======
+  meta = with lib; {
+    description = "Modern, lightweight and efficient 2D level editor";
+    homepage = "https://ldtk.io/";
+    changelog = "https://github.com/deepnight/ldtk/releases/tag/v${finalAttrs.version}";
+    license = licenses.mit;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ felschr ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ldtk";
   };
 })

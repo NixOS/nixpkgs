@@ -36,10 +36,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "commentjson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Add JavaScript or Python style comments in JSON";
     homepage = "https://github.com/vaidik/commentjson/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Add JavaScript or Python style comments in JSON";
+    homepage = "https://github.com/vaidik/commentjson/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

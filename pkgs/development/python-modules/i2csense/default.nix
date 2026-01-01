@@ -26,11 +26,20 @@ buildPythonPackage rec {
     "i2csense.htu21d"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to handle i2c sensors with the Raspberry Pi";
     mainProgram = "i2csense";
     homepage = "https://github.com/azogue/i2csense";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Library to handle i2c sensors with the Raspberry Pi";
+    mainProgram = "i2csense";
+    homepage = "https://github.com/azogue/i2csense";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

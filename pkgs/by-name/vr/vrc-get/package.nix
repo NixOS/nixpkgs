@@ -37,11 +37,19 @@ rustPlatform.buildRustPackage rec {
         --zsh <(${vrc-get} completion zsh)
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command line client of VRChat Package Manager, the main feature of VRChat Creator Companion (VCC)";
     homepage = "https://github.com/vrc-get/vrc-get";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bddvlpr ];
+=======
+  meta = with lib; {
+    description = "Command line client of VRChat Package Manager, the main feature of VRChat Creator Companion (VCC)";
+    homepage = "https://github.com/vrc-get/vrc-get";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bddvlpr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vrc-get";
   };
 }

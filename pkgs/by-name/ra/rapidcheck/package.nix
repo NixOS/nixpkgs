@@ -35,11 +35,19 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ framework for property based testing inspired by QuickCheck";
     inherit (finalAttrs.src.meta) homepage;
     maintainers = [ ];
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "C++ framework for property based testing inspired by QuickCheck";
+    inherit (finalAttrs.src.meta) homepage;
+    maintainers = [ ];
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "rapidcheck"
       # Extras
@@ -49,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
       "rapidcheck_doctest"
       "rapidcheck_gtest"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

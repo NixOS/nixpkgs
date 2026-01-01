@@ -36,10 +36,18 @@ buildPythonPackage rec {
     responses
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mixpanel/mixpanel-python";
     description = "Official Mixpanel Python library";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mixpanel/mixpanel-python";
+    description = "Official Mixpanel Python library";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

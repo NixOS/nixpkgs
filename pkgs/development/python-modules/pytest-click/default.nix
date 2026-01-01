@@ -27,11 +27,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin for click";
     homepage = "https://github.com/Stranger6667/pytest-click";
     changelog = "https://github.com/Stranger6667/pytest-click/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pytest plugin for click";
+    homepage = "https://github.com/Stranger6667/pytest-click";
+    changelog = "https://github.com/Stranger6667/pytest-click/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -57,7 +57,11 @@ stdenv.mkDerivation rec {
     cp $debian/ucspi-tcp-man/*.1 "$out/share/man/man1"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command-line tools for building TCP client-server applications";
     longDescription = ''
       tcpserver waits for incoming connections and, for each connection, runs a
@@ -87,8 +91,14 @@ stdenv.mkDerivation rec {
       different networks.
     '';
     homepage = "http://cr.yp.to/ucspi-tcp.html";
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    license = licenses.publicDomain;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

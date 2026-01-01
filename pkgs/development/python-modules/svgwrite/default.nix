@@ -28,9 +28,16 @@ buildPythonPackage rec {
     "test_embed_google_web_font"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to create SVG drawings";
     homepage = "https://github.com/mozman/svgwrite";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python library to create SVG drawings";
+    homepage = "https://github.com/mozman/svgwrite";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -165,7 +165,11 @@ stdenv.mkDerivation rec {
       -weights "${test_model_weights}"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Deep learning framework";
     longDescription = ''
       Caffe is a deep learning framework made with expression, speed, and
@@ -178,7 +182,12 @@ stdenv.mkDerivation rec {
       (pythonSupport && (python.isPy310))
       || !(leveldbSupport -> (leveldb != null && snappy != null))
       || !(pythonSupport -> (python != null && numpy != null));
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    license = licenses.bsd2;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

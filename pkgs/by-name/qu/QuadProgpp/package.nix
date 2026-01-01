@@ -27,15 +27,25 @@ stdenv.mkDerivation {
       'cmake_minimum_required(VERSION 3.10)'
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "C++ library for Quadratic Programming";
     longDescription = ''
       QuadProg++ is a C++ library for Quadratic Programming which implements
       the Goldfarb-Idnani active-set dual method.
     '';
     homepage = "https://github.com/liuq/QuadProgpp";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

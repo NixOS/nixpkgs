@@ -54,7 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://volatilityfoundation.org/";
     mainProgram = "volatility2";
     description = "Advanced memory forensics framework";

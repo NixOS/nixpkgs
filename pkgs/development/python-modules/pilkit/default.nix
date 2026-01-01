@@ -41,10 +41,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pilkit" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of utilities and processors for the Python Imaging Library";
     homepage = "https://github.com/matthewwithanm/pilkit/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Collection of utilities and processors for the Python Imaging Library";
+    homepage = "https://github.com/matthewwithanm/pilkit/";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

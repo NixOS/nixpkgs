@@ -42,10 +42,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyopenweathermap" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for OpenWeatherMap API for Home Assistant";
     homepage = "https://github.com/freekode/pyopenweathermap";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Python library for OpenWeatherMap API for Home Assistant";
+    homepage = "https://github.com/freekode/pyopenweathermap";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

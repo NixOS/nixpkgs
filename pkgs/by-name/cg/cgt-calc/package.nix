@@ -37,6 +37,7 @@ python3Packages.buildPythonApplication rec {
     "${lib.getBin texliveSmall}/bin"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "UK capital gains tax calculator";
     homepage = "https://github.com/KapJI/capital-gains-calculator";
@@ -44,5 +45,14 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "cgt-calc";
     maintainers = with lib.maintainers; [ ambroisie ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "UK capital gains tax calculator";
+    homepage = "https://github.com/KapJI/capital-gains-calculator";
+    license = licenses.mit;
+    mainProgram = "cgt-calc";
+    maintainers = with maintainers; [ ambroisie ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

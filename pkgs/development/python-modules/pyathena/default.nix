@@ -51,11 +51,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyathena" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python DB API 2.0 (PEP 249) client for Amazon Athena";
     homepage = "https://github.com/laughingman7743/PyAthena/";
     changelog = "https://github.com/laughingman7743/PyAthena/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python DB API 2.0 (PEP 249) client for Amazon Athena";
+    homepage = "https://github.com/laughingman7743/PyAthena/";
+    changelog = "https://github.com/laughingman7743/PyAthena/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

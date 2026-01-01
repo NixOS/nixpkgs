@@ -31,10 +31,17 @@ buildGoModule rec {
     package = git-sizer;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Compute various size metrics for a Git repository";
     homepage = "https://github.com/github/git-sizer";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Compute various size metrics for a Git repository";
+    homepage = "https://github.com/github/git-sizer";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "git-sizer";
   };

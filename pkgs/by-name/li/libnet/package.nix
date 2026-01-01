@@ -5,7 +5,10 @@
   autoconf,
   automake,
   libtool,
+<<<<<<< HEAD
   bash,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-P3LaDMMNPyEnA8nO1Bm7H0mW/hVBr0cFdg+p2JmWcGI=";
   };
 
+<<<<<<< HEAD
   strictDeps = true;
   enableParallelBuilding = true;
 
@@ -27,12 +31,15 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     autoconf
     automake
     libtool
   ];
 
+<<<<<<< HEAD
   buildInputs = [
     bash
   ];
@@ -49,5 +56,15 @@ stdenv.mkDerivation rec {
     mainProgram = "libnet-config";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  preConfigure = "./autogen.sh";
+
+  meta = with lib; {
+    homepage = "https://github.com/sam-github/libnet";
+    description = "Portable framework for low-level network packet construction";
+    mainProgram = "libnet-config";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

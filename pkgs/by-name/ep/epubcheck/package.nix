@@ -36,18 +36,32 @@ stdenv.mkDerivation rec {
       --add-flags "-classpath $classpath com.adobe.epubcheck.tool.Checker"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/w3c/epubcheck";
     description = "Validation tool for EPUB";
     mainProgram = "epubcheck";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/w3c/epubcheck";
+    description = "Validation tool for EPUB";
+    mainProgram = "epubcheck";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       bsd3
       mpl10
       w3c
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ eadwu ];
+=======
+    platforms = platforms.all;
+    maintainers = with maintainers; [ eadwu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

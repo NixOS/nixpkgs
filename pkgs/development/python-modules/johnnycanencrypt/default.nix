@@ -70,11 +70,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "johnnycanencrypt" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for OpenPGP written in Rust";
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
     changelog = "https://github.com/kushaldas/johnnycanencrypt/blob/v${version}/changelog.md";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ _0x4A6F ];
+=======
+  meta = with lib; {
+    description = "Python module for OpenPGP written in Rust";
+    homepage = "https://github.com/kushaldas/johnnycanencrypt";
+    changelog = "https://github.com/kushaldas/johnnycanencrypt/blob/v${version}/changelog.md";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ _0x4A6F ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

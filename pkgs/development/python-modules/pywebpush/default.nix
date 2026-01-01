@@ -44,12 +44,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywebpush" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Webpush Data encryption library for Python";
     homepage = "https://github.com/web-push-libs/pywebpush";
     changelog = "https://github.com/web-push-libs/pywebpush/releases/tag/${version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Webpush Data encryption library for Python";
+    homepage = "https://github.com/web-push-libs/pywebpush";
+    changelog = "https://github.com/web-push-libs/pywebpush/releases/tag/${version}";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pywebpush";
   };
 }

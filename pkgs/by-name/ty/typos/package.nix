@@ -31,6 +31,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Source code spell checker";

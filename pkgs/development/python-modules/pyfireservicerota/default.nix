@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfireservicerota" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/cyberjunky/python-fireservicerota/releases/tag/${src.tag}";
     description = "Python 3 API wrapper for FireServiceRota/BrandweerRooster";
     homepage = "https://github.com/cyberjunky/python-fireservicerota";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/cyberjunky/python-fireservicerota/releases/tag/${src.tag}";
+    description = "Python 3 API wrapper for FireServiceRota/BrandweerRooster";
+    homepage = "https://github.com/cyberjunky/python-fireservicerota";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

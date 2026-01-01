@@ -185,7 +185,11 @@ let
           type = types.nullOr nonEmptyStr;
           description = ''
             Label of the device. This simply sets {option}`device` to
+<<<<<<< HEAD
             `/dev/disk/by-label/''${label}`. Note that devices will not
+=======
+            `/dev/disk/by-id/''${label}`. Note that devices will not
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             have a label unless they contain a filesystem which
             supports labels, such as ext4 or fat32.
           '';

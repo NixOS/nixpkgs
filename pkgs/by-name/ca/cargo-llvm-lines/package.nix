@@ -17,16 +17,28 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JrH7W2zRDoPa1ENQCfE++2y2VEC3INg/cst5ob2hmy0=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Count the number of lines of LLVM IR across all instantiations of a generic function";
     mainProgram = "cargo-llvm-lines";
     homepage = "https://github.com/dtolnay/cargo-llvm-lines";
     changelog = "https://github.com/dtolnay/cargo-llvm-lines/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
     maintainers = with lib.maintainers; [
+=======
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
   };

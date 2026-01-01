@@ -5,7 +5,10 @@
   qtsvg,
   hunspell,
   pkg-config,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 qtModule {
@@ -17,6 +20,7 @@ qtModule {
     hunspell
   ];
   nativeBuildInputs = [ pkg-config ];
+<<<<<<< HEAD
   patches = [
     # https://qt-project.atlassian.net/browse/QTBUG-137440
     (fetchpatch {
@@ -25,4 +29,6 @@ qtModule {
       hash = "sha256-Uk6EJOlkCRLUg1w3ljHaxV/dXEVWyUpP/ijoyjptbNc=";
     })
   ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

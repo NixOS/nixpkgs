@@ -4,14 +4,22 @@
   buildGoModule,
   buildNpmPackage,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
   nixosTests,
 }:
 let
   version = "2.44.1";
 
+<<<<<<< HEAD
+=======
+  pnpm = pnpm_9;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
@@ -25,18 +33,28 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
+<<<<<<< HEAD
     nativeBuildInputs = [ pnpm_9 ];
     npmConfigHook = pnpmConfigHook;
     npmDeps = pnpmDeps;
 
     pnpmDeps = fetchPnpmDeps {
+=======
+    npmConfigHook = pnpm.configHook;
+    npmDeps = pnpmDeps;
+
+    pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit
         pname
         version
         src
         sourceRoot
         ;
+<<<<<<< HEAD
       pnpm = pnpm_9;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 2;
       hash = "sha256-3n44BGJLdQR6uBSF09oyUzJm35/S3/ZEyZh4Wxqlfiw=";
     };
@@ -75,11 +93,19 @@ buildGoModule {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ oakenshield ];
+=======
+  meta = with lib; {
+    description = "Web application for managing files and directories";
+    homepage = "https://filebrowser.org";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ oakenshield ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "filebrowser";
   };
 }

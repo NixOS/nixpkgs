@@ -34,6 +34,7 @@ buildPythonPackage rec {
     pytest -k 'not truecase'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/alvations/sacremoses";
     description = "Python port of Moses tokenizer, truecaser and normalizer";
@@ -41,5 +42,14 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pashashocky ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/alvations/sacremoses";
+    description = "Python port of Moses tokenizer, truecaser and normalizer";
+    mainProgram = "sacremoses";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pashashocky ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

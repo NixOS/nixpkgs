@@ -64,11 +64,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trio_websocket" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/HyperionGray/trio-websocket/blob/${version}/CHANGELOG.md";
     description = "WebSocket client and server implementation for Python Trio";
     homepage = "https://github.com/HyperionGray/trio-websocket";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/HyperionGray/trio-websocket/blob/${version}/CHANGELOG.md";
+    description = "WebSocket client and server implementation for Python Trio";
+    homepage = "https://github.com/HyperionGray/trio-websocket";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

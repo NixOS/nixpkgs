@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dvc_hdfs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HDFS/WebHDFS plugin for dvc";
     homepage = "https://github.com/iterative/dvc-hdfs";
     changelog = "https://github.com/iterative/dvc-hdfs/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "HDFS/WebHDFS plugin for dvc";
+    homepage = "https://github.com/iterative/dvc-hdfs";
+    changelog = "https://github.com/iterative/dvc-hdfs/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

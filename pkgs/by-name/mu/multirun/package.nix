@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Minimalist init process designed for Docker";
     homepage = "https://github.com/nicolas-van/multirun";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "multirun";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Minimalist init process designed for Docker";
+    homepage = "https://github.com/nicolas-van/multirun";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
+    mainProgram = "multirun";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

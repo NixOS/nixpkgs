@@ -49,11 +49,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "base2048" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Binary encoding with base-2048 in Python with Rust";
     homepage = "https://github.com/ionite34/base2048";
     changelog = "https://github.com/ionite34/base2048/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Binary encoding with base-2048 in Python with Rust";
+    homepage = "https://github.com/ionite34/base2048";
+    changelog = "https://github.com/ionite34/base2048/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

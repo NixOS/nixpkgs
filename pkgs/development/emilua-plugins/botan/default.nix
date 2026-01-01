@@ -52,11 +52,20 @@ stdenv.mkDerivation rec {
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Securely clears secrets from memory in Emilua";
     homepage = "https://emilua.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ manipuladordedados ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Securely clears secrets from memory in Emilua";
+    homepage = "https://emilua.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ manipuladordedados ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

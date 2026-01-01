@@ -55,11 +55,20 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/yezz123/pyngo/releases/tag/${src.tag}";
     description = "Pydantic model support for Django & Django-Rest-Framework";
     homepage = "https://github.com/yezz123/pyngo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/yezz123/pyngo/releases/tag/${src.tag}";
+    description = "Pydantic model support for Django & Django-Rest-Framework";
+    homepage = "https://github.com/yezz123/pyngo";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

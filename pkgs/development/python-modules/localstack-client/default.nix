@@ -40,10 +40,17 @@ buildPythonPackage rec {
     inherit (pkgs) localstack;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight Python client for LocalStack";
     homepage = "https://github.com/localstack/localstack-python-client";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Lightweight Python client for LocalStack";
+    homepage = "https://github.com/localstack/localstack-python-client";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

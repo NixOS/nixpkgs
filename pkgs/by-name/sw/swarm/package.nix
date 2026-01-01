@@ -20,12 +20,21 @@ stdenv.mkDerivation {
     install -Dm644 Doc/swarm.1 $out/share/man/man1/swarm.1
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Verification script generator for Spin";
     mainProgram = "swarm";
     homepage = "http://spinroot.com/";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Verification script generator for Spin";
+    mainProgram = "swarm";
+    homepage = "http://spinroot.com/";
+    license = licenses.free;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

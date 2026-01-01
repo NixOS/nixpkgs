@@ -88,11 +88,20 @@ stdenv.mkDerivation rec {
       ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Evolution connector for Microsoft Exchange Server protocols";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-ews";
     license = lib.licenses.lgpl21Plus; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
     maintainers = [ lib.maintainers.dasj19 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Evolution connector for Microsoft Exchange Server protocols";
+    homepage = "https://gitlab.gnome.org/GNOME/evolution-ews";
+    license = licenses.lgpl21Plus; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
+    maintainers = [ maintainers.dasj19 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

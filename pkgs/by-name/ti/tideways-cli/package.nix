@@ -78,6 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }/bin/update-tideways-cli";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tideways Profiler CLI";
     homepage = "https://tideways.com/";
@@ -85,6 +86,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "tideways";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ shyim ];
+=======
+  meta = with lib; {
+    description = "Tideways Profiler CLI";
+    homepage = "https://tideways.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "tideways";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ shyim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 })

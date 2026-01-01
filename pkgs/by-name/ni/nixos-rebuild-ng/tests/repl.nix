@@ -37,7 +37,11 @@ runCommand "test-nixos-rebuild-repl"
     nativeBuildInputs = [
       expect
       nix
+<<<<<<< HEAD
       nixos-rebuild-ng
+=======
+      (nixos-rebuild-ng.override { withNgSuffix = false; })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     nixpkgs = if builtins.pathExists (path + "/.git") then lib.cleanSource path else path;

@@ -15,10 +15,18 @@ buildFishPlugin {
     sha256 = "0ifqdbaw09hd1ai0ykhxl8735fcsm0x2fwfzsk7my2z52ds60bwa";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Fish shell plugin to colorize man pages";
     homepage = "https://github.com/PatrickF1/colored_man_pages.fish";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.jocelynthode ];
+=======
+  meta = with lib; {
+    description = "Fish shell plugin to colorize man pages";
+    homepage = "https://github.com/PatrickF1/colored_man_pages.fish";
+    license = licenses.mit;
+    maintainers = [ maintainers.jocelynthode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

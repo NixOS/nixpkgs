@@ -15,15 +15,25 @@ stdenv.mkDerivation rec {
 
   installPhase = ''mkdir "$out"; cp -r . "$out"'';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Instrument patches, for MIDI synthesizers";
     longDescription = ''
       Freepats is a project to create a free and open set of instrument
       patches, in any format, that can be used with softsynths.
     '';
     homepage = "https://freepats.zenvoid.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

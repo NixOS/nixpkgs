@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation {
     chmod +x $out/bin/latexrun
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "21st century LaTeX wrapper";
     mainProgram = "latexrun";
@@ -31,5 +32,14 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lucus16 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "21st century LaTeX wrapper";
+    mainProgram = "latexrun";
+    homepage = "https://github.com/aclements/latexrun";
+    license = licenses.mit;
+    maintainers = [ maintainers.lucus16 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

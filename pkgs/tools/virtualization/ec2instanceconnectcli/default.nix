@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ec2instanceconnectcli" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command Line Interface for AWS EC2 Instance Connect";
     homepage = "https://github.com/aws/aws-ec2-instance-connect-cli";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yurrriq ];
+=======
+  meta = with lib; {
+    description = "Command Line Interface for AWS EC2 Instance Connect";
+    homepage = "https://github.com/aws/aws-ec2-instance-connect-cli";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ yurrriq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

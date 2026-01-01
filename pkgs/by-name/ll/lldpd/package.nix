@@ -61,11 +61,20 @@ stdenv.mkDerivation rec {
     find $out -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "802.1ab implementation (LLDP) to help you locate neighbors of all your equipments";
     homepage = "https://lldpd.github.io/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "802.1ab implementation (LLDP) to help you locate neighbors of all your equipments";
+    homepage = "https://lldpd.github.io/";
+    license = licenses.isc;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

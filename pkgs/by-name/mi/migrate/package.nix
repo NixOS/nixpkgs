@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     "mpis"
   ];
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Estimates population size, migration, population splitting parameters using genetic/genomic data";
@@ -34,6 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Estimates population size, migration, population splitting parameters using genetic/genomic data";
+    homepage = "https://peterbeerli.com/migrate-html5/index.html";
+    license = licenses.mit;
+    maintainers = [ maintainers.bzizou ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "migrate-n";
   };
 })

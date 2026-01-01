@@ -36,11 +36,19 @@ buildPythonApplication rec {
     pyusb
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/tinyfpga/TinyFPGA-Bootloader/tree/master/programmer";
     description = "Programmer for FPGA boards using the TinyFPGA USB Bootloader";
     mainProgram = "tinyprog";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

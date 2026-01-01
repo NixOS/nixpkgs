@@ -45,11 +45,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hwilib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bitcoin Hardware Wallet Interface";
     homepage = "https://github.com/bitcoin-core/hwi";
     changelog = "https://github.com/bitcoin-core/HWI/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Bitcoin Hardware Wallet Interface";
+    homepage = "https://github.com/bitcoin-core/hwi";
+    changelog = "https://github.com/bitcoin-core/HWI/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -26,11 +26,19 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple API client (postman like) in your terminal";
     homepage = "https://github.com/Julien-cpsn/ATAC";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vinnymeller ];
+=======
+  meta = with lib; {
+    description = "Simple API client (postman like) in your terminal";
+    homepage = "https://github.com/Julien-cpsn/ATAC";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vinnymeller ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "atac";
   };
 }

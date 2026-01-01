@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   kernel,
   kernelModuleMakeFlags,
 }:
@@ -24,6 +27,7 @@ stdenv.mkDerivation (finalAttr: {
 
   makeFlags = kernelModuleMakeFlags;
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/medusalix/xpad-noone/pull/9
     (fetchpatch2 {
@@ -33,6 +37,8 @@ stdenv.mkDerivation (finalAttr: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     substituteInPlace Makefile --replace-fail "/lib/modules/\$(shell uname -r)/build" "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';

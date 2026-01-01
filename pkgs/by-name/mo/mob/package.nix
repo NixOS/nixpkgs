@@ -37,11 +37,20 @@ buildGoModule rec {
       --set MOB_VOICE_COMMAND "${lib.getBin espeak-ng}/bin/espeak"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for smooth git handover";
     mainProgram = "mob";
     homepage = "https://github.com/remotemobprogramming/mob";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ericdallo ];
+=======
+  meta = with lib; {
+    description = "Tool for smooth git handover";
+    mainProgram = "mob";
+    homepage = "https://github.com/remotemobprogramming/mob";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ericdallo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -19,12 +19,19 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ openssl ];
 
+<<<<<<< HEAD
   env = {
     # Needed to get openssl-sys to use pkg-config.
     OPENSSL_NO_VENDOR = 1;
     OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
     OPENSSL_DIR = "${lib.getDev openssl}";
   };
+=======
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+  OPENSSL_DIR = "${lib.getDev openssl}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Simple command-line interface for ChatGPT API";

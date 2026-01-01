@@ -33,11 +33,20 @@ python3Packages.buildPythonApplication rec {
     tiktoken
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/npiv/chatblade/";
     description = "CLI Swiss Army Knife for ChatGPT";
     mainProgram = "chatblade";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ deejayem ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/npiv/chatblade/";
+    description = "CLI Swiss Army Knife for ChatGPT";
+    mainProgram = "chatblade";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ deejayem ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

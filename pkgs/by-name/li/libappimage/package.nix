@@ -96,11 +96,20 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Implements functionality for dealing with AppImage files";
     homepage = "https://github.com/AppImageCommunity/libappimage/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ k900 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Implements functionality for dealing with AppImage files";
+    homepage = "https://github.com/AppImageCommunity/libappimage/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ k900 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

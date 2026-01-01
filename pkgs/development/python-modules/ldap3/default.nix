@@ -51,10 +51,17 @@ buildPythonPackage rec {
     export SERVER=NONE
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/cannatag/ldap3";
     description = "Strictly RFC 4510 conforming LDAP V3 pure Python client library";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/cannatag/ldap3";
+    description = "Strictly RFC 4510 conforming LDAP V3 pure Python client library";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

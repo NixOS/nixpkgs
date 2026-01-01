@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mediafile" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to the metadata tags for many audio file formats";
     homepage = "https://github.com/beetbox/mediafile";
     changelog = "https://github.com/beetbox/mediafile/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
+=======
+  meta = with lib; {
+    description = "Python interface to the metadata tags for many audio file formats";
+    homepage = "https://github.com/beetbox/mediafile";
+    changelog = "https://github.com/beetbox/mediafile/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lovesegfault ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

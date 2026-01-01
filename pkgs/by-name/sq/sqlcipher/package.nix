@@ -4,21 +4,34 @@
   fetchFromGitHub,
   openssl,
   tcl,
+<<<<<<< HEAD
+=======
+  installShellFiles,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPackages,
   readline,
   ncurses,
   zlib,
   sqlite,
+<<<<<<< HEAD
   util-linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlcipher";
   version = "4.12.0";
+=======
+}:
+
+stdenv.mkDerivation rec {
+  pname = "sqlcipher";
+  version = "4.6.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-dJBZw8SzcNS0GGt9el4tiR7gc2DOajuUVfDukwrVPeQ=";
   };
@@ -26,6 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     tcl
     util-linux
+=======
+    rev = "v${version}";
+    hash = "sha256-VcD3NwVrC75kLOJiIgrnzVpkBPhjxTmEFyKg/87wHGc=";
+  };
+
+  nativeBuildInputs = [
+    installShellFiles
+    tcl
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -42,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--enable-threadsafe"
     "--with-readline-inc=-I${lib.getDev readline}/include"
+<<<<<<< HEAD
     "--enable-load-extension"
   ];
 
@@ -92,6 +115,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/sqlcipher/sqlcipher/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+=======
+  ];
+
+  CFLAGS = [
+    # We want feature parity with sqlite
+    sqlite.NIX_CFLAGS_COMPILE
+    "-DSQLITE_HAS_CODEC"
+  ];
+
+  BUILD_CC = "$(CC_FOR_BUILD)";
+
+  TCLLIBDIR = "${placeholder "out"}/lib/tcl${lib.versions.majorMinor tcl.version}";
+
+  postInstall = ''
+    installManPage sqlcipher.1
+  '';
+
+  meta = {
+    changelog = "https://github.com/sqlcipher/sqlcipher/blob/v${version}/CHANGELOG.md";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "SQLite extension that provides 256 bit AES encryption of database files";
     mainProgram = "sqlcipher";
     homepage = "https://www.zetetic.net/sqlcipher/";
@@ -99,4 +142,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

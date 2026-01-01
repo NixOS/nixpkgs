@@ -148,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     buildTests = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "ROCm communication collectives library";
     homepage = "https://github.com/ROCm/rccl";
@@ -157,5 +158,16 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "ROCm communication collectives library";
+    homepage = "https://github.com/ROCm/rccl";
+    license = with licenses; [
+      bsd2
+      bsd3
+    ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -26,10 +26,17 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python client library for Core Schema";
     homepage = "https://github.com/ivegotasthma/python-coreschema";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python client library for Core Schema";
+    homepage = "https://github.com/ivegotasthma/python-coreschema";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "runs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Run a block of text as a subprocess";
     homepage = "https://github.com/rec/runs";
     changelog = "https://github.com/rec/runs/blob/${src.rev}/CHANGELOG";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Run a block of text as a subprocess";
+    homepage = "https://github.com/rec/runs";
+    changelog = "https://github.com/rec/runs/blob/${src.rev}/CHANGELOG";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

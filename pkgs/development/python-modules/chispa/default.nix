@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   # pythonImportsCheck needs spark installation
 
+<<<<<<< HEAD
   meta = {
     description = "PySpark test helper methods with beautiful error messages";
     homepage = "https://github.com/MrPowers/chispa";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ratsclub ];
+=======
+  meta = with lib; {
+    description = "PySpark test helper methods with beautiful error messages";
+    homepage = "https://github.com/MrPowers/chispa";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ratsclub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

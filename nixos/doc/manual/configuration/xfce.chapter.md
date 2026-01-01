@@ -26,14 +26,22 @@ example settings:
 
 Some Xfce programs are not installed automatically. To install them
 manually (system wide), put them into your
+<<<<<<< HEAD
 [](#opt-environment.systemPackages).
+=======
+[](#opt-environment.systemPackages) from `pkgs.xfce`.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 ## Thunar {#sec-xfce-thunar-plugins}
 
 Thunar (the Xfce file manager) is automatically enabled when Xfce is
 enabled. To enable Thunar without enabling Xfce, use the configuration
 option [](#opt-programs.thunar.enable) instead of adding
+<<<<<<< HEAD
 `pkgs.thunar` to [](#opt-environment.systemPackages).
+=======
+`pkgs.xfce.thunar` to [](#opt-environment.systemPackages).
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 If you'd like to add extra plugins to Thunar, add them to
 [](#opt-programs.thunar.plugins). You shouldn't just add them to

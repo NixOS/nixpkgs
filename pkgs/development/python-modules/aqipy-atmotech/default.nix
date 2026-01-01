@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aqipy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for AQI calculation";
     homepage = "https://github.com/atmotube/aqipy";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for AQI calculation";
+    homepage = "https://github.com/atmotube/aqipy";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

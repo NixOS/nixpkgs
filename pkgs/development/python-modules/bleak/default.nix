@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   async-timeout,
   bluez,
   buildPythonPackage,
@@ -11,9 +14,12 @@
   pytestCheckHook,
   pythonOlder,
   typing-extensions,
+<<<<<<< HEAD
   pyobjc-core,
   pyobjc-framework-CoreBluetooth,
   pyobjc-framework-libdispatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
@@ -30,7 +36,11 @@ buildPythonPackage rec {
     hash = "sha256-z0Mxr1pUQWNEK01PKMV/CzpW+GeCRcv/+9BADts1FuU=";
   };
 
+<<<<<<< HEAD
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+=======
+  postPatch = ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # bleak checks BlueZ's version with a call to `bluetoothctl --version`
     substituteInPlace bleak/backends/bluezdbus/version.py \
       --replace-fail \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
@@ -39,6 +49,7 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+<<<<<<< HEAD
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus-fast
@@ -49,6 +60,9 @@ buildPythonPackage rec {
     pyobjc-framework-libdispatch
   ]
   ++ lib.optionals (pythonOlder "3.12") [
+=======
+    dbus-fast
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     typing-extensions
   ]
   ++ lib.optionals (pythonOlder "3.11") [
@@ -62,6 +76,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bleak" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
@@ -69,5 +84,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+  meta = with lib; {
+    description = "Bluetooth Low Energy platform agnostic client";
+    homepage = "https://github.com/hbldh/bleak";
+    changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

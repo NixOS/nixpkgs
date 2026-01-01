@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrap tests with fixtures in freeze_time";
     homepage = "https://github.com/ktosiek/pytest-freezegun";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mic92 ];
+=======
+  meta = with lib; {
+    description = "Wrap tests with fixtures in freeze_time";
+    homepage = "https://github.com/ktosiek/pytest-freezegun";
+    license = licenses.mit;
+    maintainers = [ maintainers.mic92 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

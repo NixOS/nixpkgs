@@ -57,7 +57,11 @@ buildPythonPackage rec {
     webtest
     build
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   __darwinAllowLocalNetworking = true;
 
@@ -84,6 +88,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypiserver" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal PyPI server for use with pip/easy_install";
     homepage = "https://github.com/pypiserver/pypiserver";
@@ -93,6 +98,17 @@ buildPythonPackage rec {
       zlib
     ];
     maintainers = with lib.maintainers; [ austinbutler ];
+=======
+  meta = with lib; {
+    description = "Minimal PyPI server for use with pip/easy_install";
+    homepage = "https://github.com/pypiserver/pypiserver";
+    changelog = "https://github.com/pypiserver/pypiserver/releases/tag/v${version}";
+    license = with licenses; [
+      mit
+      zlib
+    ];
+    maintainers = with maintainers; [ austinbutler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pypi-server";
   };
 }

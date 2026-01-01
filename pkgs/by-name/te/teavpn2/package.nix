@@ -30,6 +30,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open source VPN Software";
     homepage = "https://github.com/TeaInside/teavpn2";
@@ -37,5 +38,14 @@ stdenv.mkDerivation {
     mainProgram = "teavpn2";
     maintainers = with lib.maintainers; [ ludovicopiero ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open source VPN Software";
+    homepage = "https://github.com/TeaInside/teavpn2";
+    license = licenses.gpl2Plus;
+    mainProgram = "teavpn2";
+    maintainers = with maintainers; [ ludovicopiero ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

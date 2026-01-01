@@ -33,11 +33,19 @@ python3Packages.buildPythonApplication rec {
     "git_annex_remote_googledrive"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Git-annex special remote for Google Drive";
     homepage = "https://github.com/Lykos153/git-annex-remote-googledrive";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ gravndal ];
+=======
+  meta = with lib; {
+    description = "Git-annex special remote for Google Drive";
+    homepage = "https://github.com/Lykos153/git-annex-remote-googledrive";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ gravndal ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-annex-remote-googledrive";
   };
 }

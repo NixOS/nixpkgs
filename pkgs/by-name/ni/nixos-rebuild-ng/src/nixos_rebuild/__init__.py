@@ -5,7 +5,11 @@ from subprocess import CalledProcessError, run
 from typing import Final, assert_never
 
 from . import nix, services
+<<<<<<< HEAD
 from .constants import EXECUTABLE, WITH_SHELL_FILES
+=======
+from .constants import EXECUTABLE, WITH_REEXEC, WITH_SHELL_FILES
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 from .models import Action, BuildAttr, Flake, GroupedNixArgs, Profile
 from .process import Remote
 from .utils import LogFormatter
@@ -288,7 +292,11 @@ def execute(argv: list[str]) -> None:
 
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
+<<<<<<< HEAD
     if can_run and not args.no_reexec:
+=======
+    if WITH_REEXEC and can_run and not args.no_reexec:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         services.reexec(argv, args, grouped_nix_args)
 
     profile = Profile.from_arg(args.profile_name)

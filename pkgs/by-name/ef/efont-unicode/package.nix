@@ -57,11 +57,20 @@ stdenv.mkDerivation rec {
     "bdf"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "/efont/ Unicode bitmap font";
     homepage = "http://openlab.ring.gr.jp/efont/unicode/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.ncfavier ];
+=======
+  meta = with lib; {
+    description = "/efont/ Unicode bitmap font";
+    homepage = "http://openlab.ring.gr.jp/efont/unicode/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = [ maintainers.ncfavier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

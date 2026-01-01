@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "make -C tools/cjflash install";
 
+<<<<<<< HEAD
   meta = {
     description = "REINER SCT cyberJack USB chipcard reader user space driver";
     mainProgram = "cjflash";
@@ -59,5 +60,17 @@ stdenv.mkDerivation rec {
       flokli
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "REINER SCT cyberJack USB chipcard reader user space driver";
+    mainProgram = "cjflash";
+    homepage = "https://www.reiner-sct.com/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      aszlig
+      flokli
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

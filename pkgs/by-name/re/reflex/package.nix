@@ -22,11 +22,20 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small tool to watch a directory and rerun a command when certain files change";
     mainProgram = "reflex";
     homepage = "https://github.com/cespare/reflex";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicknovitski ];
+=======
+  meta = with lib; {
+    description = "Small tool to watch a directory and rerun a command when certain files change";
+    mainProgram = "reflex";
+    homepage = "https://github.com/cespare/reflex";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nicknovitski ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

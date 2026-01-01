@@ -26,6 +26,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest test
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python GPX (GPS eXchange format) parser";
     mainProgram = "gpxinfo";
@@ -33,5 +34,14 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Python GPX (GPS eXchange format) parser";
+    mainProgram = "gpxinfo";
+    homepage = "https://github.com/tkrajina/gpxpy";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -15,7 +15,11 @@ import ./make-test-python.nix (
   {
     name = "qgis";
     meta = {
+<<<<<<< HEAD
       maintainers = lib.teams.geospatial.members;
+=======
+      maintainers = with lib; [ teams.geospatial.members ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     nodes = {

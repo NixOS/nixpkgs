@@ -68,7 +68,11 @@ mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "OpenTX Companion transmitter support software";
     longDescription = ''
       OpenTX Companion is used for many different tasks like loading OpenTX
@@ -77,13 +81,21 @@ mkDerivation rec {
     '';
     mainProgram = "companion" + lib.concatStrings (lib.take 2 (lib.splitVersion version));
     homepage = "https://www.open-tx.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
+=======
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       elitak
       lopsided98
     ];

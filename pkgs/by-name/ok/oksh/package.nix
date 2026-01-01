@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+<<<<<<< HEAD
   meta = {
     description = "Portable OpenBSD ksh, based on the Public Domain Korn Shell (pdksh)";
     mainProgram = "oksh";
@@ -34,6 +35,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Portable OpenBSD ksh, based on the Public Domain Korn Shell (pdksh)";
+    mainProgram = "oksh";
+    homepage = "https://github.com/ibara/oksh";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru = {

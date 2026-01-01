@@ -62,7 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohomekit" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python module that implements the HomeKit protocol";
     longDescription = ''
       This Python library implements the HomeKit protocol for controlling
@@ -70,8 +74,13 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
     changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aiohomekitctl";
   };
 }

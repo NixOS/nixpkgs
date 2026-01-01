@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://mpmath.org/";
     description = "Pure-Python library for multiprecision floating arithmetic";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://mpmath.org/";
+    description = "Pure-Python library for multiprecision floating arithmetic";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

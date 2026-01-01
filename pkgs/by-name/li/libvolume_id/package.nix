@@ -23,9 +23,15 @@ stdenv.mkDerivation rec {
     cp -f libvolume_id.so.0 $out/lib/
   ";
 
+<<<<<<< HEAD
   meta = {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.marcuscom.com/downloads/";
   };
 }

@@ -150,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
       ++ lib.optional unrarSupport unrardll
     ))
+<<<<<<< HEAD
     xdg-utils
   ]
   ++ lib.optionals speechSupport [
@@ -175,10 +176,32 @@ stdenv.mkDerivation (finalAttrs: {
   // lib.optionalAttrs speechSupport {
     PIPER_TTS_DIR = "${lib.getBin piper-tts}/bin";
   };
+=======
+    piper-tts
+    xdg-utils
+  ]
+  ++ lib.optional speechSupport speechd-minimal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   installPhase = ''
     runHook preInstall
 
+<<<<<<< HEAD
+=======
+    export HOME=$TMPDIR/fakehome
+    export POPPLER_INC_DIR=${poppler-utils.dev}/include/poppler
+    export POPPLER_LIB_DIR=${poppler-utils.out}/lib
+    export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
+    export MAGICK_LIB=${imagemagick.out}/lib
+    export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
+    export FC_LIB_DIR=${fontconfig.lib}/lib
+    export PODOFO_INC_DIR=${podofo_0_10.dev}/include/podofo
+    export PODOFO_LIB_DIR=${podofo_0_10}/lib
+    export XDG_DATA_HOME=$out/share
+    export XDG_UTILS_INSTALL_MODE="user"
+    export PIPER_TTS_DIR=${piper-tts}/bin
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
@@ -219,7 +242,11 @@ stdenv.mkDerivation (finalAttrs: {
               optipng
             ]
           } \
+<<<<<<< HEAD
           ${lib.optionalString popplerSupport popplerArgs}
+=======
+          ${if popplerSupport then popplerArgs else ""}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       done
     '';
 
@@ -251,9 +278,12 @@ stdenv.mkDerivation (finalAttrs: {
         # Attempt to use DefaultLogger but none has been registered.
         "test_plugins"
       ]
+<<<<<<< HEAD
       ++ lib.optionals (!speechSupport) [
         "test_speech_dispatcher"
       ]
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ++ lib.optionals (!unrarSupport) [
         "test_unrar"
       ];

@@ -18,14 +18,24 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ];
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       A utility designed to kill a single instance of a wayland compositor
     '';
     mainProgram = "wayland-logout";
     homepage = "https://github.com/soreau/wayland-logout";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ quantenzitrone ];
     license = with lib.licenses; [ mit ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ quantenzitrone ];
+    license = with licenses; [ mit ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

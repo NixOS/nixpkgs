@@ -6,6 +6,10 @@
   ...
 }:
 let
+<<<<<<< HEAD
+=======
+  version = "1.10.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -14,6 +18,7 @@ let
   };
 in
 {
+<<<<<<< HEAD
   imports = [
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2605;
@@ -34,6 +39,8 @@ in
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   options.services.kubernetes.addons.dns = {
     enable = lib.mkEnableOption "kubernetes dns addon";
 
@@ -80,12 +87,23 @@ in
       ];
     };
 
+<<<<<<< HEAD
     corednsImage = lib.mkOption {
       description = "Docker image to seed for the CoreDNS container.";
       type = lib.types.package;
       default = pkgs.dockerTools.buildImage {
         name = "coredns";
         config.Entrypoint = [ "${pkgs.coredns}/bin/coredns" ];
+=======
+    coredns = lib.mkOption {
+      description = "Docker image to seed for the CoreDNS container.";
+      type = lib.types.attrs;
+      default = {
+        imageName = "coredns/coredns";
+        imageDigest = "sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e";
+        finalImageTag = version;
+        sha256 = "0wg696920smmal7552a2zdhfncndn5kfammfa8bk8l7dz9bhk0y1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 
@@ -133,7 +151,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+<<<<<<< HEAD
     services.kubernetes.kubelet.seedDockerImages = lib.singleton (cfg.corednsImage);
+=======
+    services.kubernetes.kubelet.seedDockerImages = lib.singleton (
+      pkgs.dockerTools.pullImage cfg.coredns
+    );
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     services.kubernetes.addonManager.bootstrapAddons = {
       coredns-cr = {
@@ -279,7 +303,11 @@ in
                     "-conf"
                     "/etc/coredns/Corefile"
                   ];
+<<<<<<< HEAD
                   image = with cfg.corednsImage; "${imageName}:${imageTag}";
+=======
+                  image = with cfg.coredns; "${imageName}:${finalImageTag}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                   imagePullPolicy = "Never";
                   livenessProbe = {
                     failureThreshold = 5;
@@ -322,7 +350,10 @@ in
                   securityContext = {
                     allowPrivilegeEscalation = false;
                     capabilities = {
+<<<<<<< HEAD
                       add = [ "NET_BIND_SERVICE" ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                       drop = [ "all" ];
                     };
                     readOnlyRootFilesystem = true;

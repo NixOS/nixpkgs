@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
     cp *.so *.ttl $d
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jeremysalwen/TalentedHack";
     description = "LV2 port of Autotalent pitch correction plugin";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.michalrus ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jeremysalwen/TalentedHack";
+    description = "LV2 port of Autotalent pitch correction plugin";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.michalrus ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

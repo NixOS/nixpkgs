@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyombi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to retrieve information from Ombi";
     homepage = "https://github.com/larssont/pyombi";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to retrieve information from Ombi";
+    homepage = "https://github.com/larssont/pyombi";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

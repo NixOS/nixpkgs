@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [ "offline_tests" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Manage cargo cache (\${CARGO_HOME}, ~/.cargo/), print sizes of dirs and remove dirs selectively";
     mainProgram = "cargo-cache";
@@ -34,6 +35,18 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Manage cargo cache (\${CARGO_HOME}, ~/.cargo/), print sizes of dirs and remove dirs selectively";
+    mainProgram = "cargo-cache";
+    homepage = "https://github.com/matthiaskrgr/cargo-cache";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
   };

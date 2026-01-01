@@ -259,11 +259,20 @@ stdenv.mkDerivation rec {
     glusterfs = nixosTests.glusterfs;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed storage system";
     homepage = "https://www.gluster.org";
     license = lib.licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
     maintainers = [ lib.maintainers.raskin ];
     platforms = with lib.platforms; linux ++ freebsd;
+=======
+  meta = with lib; {
+    description = "Distributed storage system";
+    homepage = "https://www.gluster.org";
+    license = licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
+    maintainers = [ maintainers.raskin ];
+    platforms = with platforms; linux ++ freebsd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "Schematic capture and netlisting EDA tool";
     longDescription = ''
@@ -51,8 +55,14 @@ stdenv.mkDerivation rec {
       the drawn schematic, allowing the simulation of the circuit.
     '';
     homepage = "https://xschem.sourceforge.io/stefan/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fbeffa ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fbeffa ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

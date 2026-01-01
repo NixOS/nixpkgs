@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # No tests available
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for writing pandoc filters, with a collection of examples";
     homepage = "https://github.com/jgm/pandocfilters";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python module for writing pandoc filters, with a collection of examples";
+    homepage = "https://github.com/jgm/pandocfilters";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

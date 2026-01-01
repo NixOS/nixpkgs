@@ -90,6 +90,7 @@ maven.buildMavenPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/gluonhq/scenebuilder/releases/tag/${src.rev}";
     description = "Visual, drag'n'drop, layout tool for designing JavaFX application user interfaces";
@@ -99,6 +100,17 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ wirew0rm ];
     platforms = jdk.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    changelog = "https://github.com/gluonhq/scenebuilder/releases/tag/${src.rev}";
+    description = "Visual, drag'n'drop, layout tool for designing JavaFX application user interfaces";
+    homepage = "https://gluonhq.com/products/scene-builder/";
+    license = licenses.bsd3;
+    mainProgram = "scenebuilder";
+    maintainers = with maintainers; [ wirew0rm ];
+    platforms = jdk.meta.platforms;
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fromSource
       binaryBytecode # deps
     ];

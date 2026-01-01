@@ -27,6 +27,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "radicale" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Unrud/RadicaleInfCloud/";
     description = "Integrate InfCloud into Radicale's web interface";
@@ -35,5 +36,15 @@ buildPythonPackage {
       gpl3Plus
     ];
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Unrud/RadicaleInfCloud/";
+    description = "Integrate InfCloud into Radicale's web interface";
+    license = with licenses; [
+      agpl3Plus
+      gpl3Plus
+    ];
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

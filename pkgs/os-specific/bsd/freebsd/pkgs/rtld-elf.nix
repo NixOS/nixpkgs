@@ -3,7 +3,10 @@
   fetchpatch,
   include,
   rpcgen,
+<<<<<<< HEAD
   libsys,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   flex,
   byacc,
   csu,
@@ -19,7 +22,10 @@ mkDerivation {
     "lib/msun"
     "lib/libutil"
     "lib/libc_nonshared"
+<<<<<<< HEAD
     "lib/libsys"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "include/rpcsvc"
     "contrib/libc-pwcache"
     "contrib/libc-vis"
@@ -30,7 +36,10 @@ mkDerivation {
     "sys/kern"
     "sys/libkern"
     "sys/crypto"
+<<<<<<< HEAD
     "include/gssapi"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ extraSrc;
 
@@ -54,7 +63,10 @@ mkDerivation {
 
   buildInputs = [
     include
+<<<<<<< HEAD
     libsys
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   extraNativeBuildInputs = [
@@ -63,6 +75,7 @@ mkDerivation {
     byacc
   ];
 
+<<<<<<< HEAD
   # see comment in libc-minimal about -fno-blocks
   preBuild = ''
     ln -s ${libsys}/lib/libsys_pic.a ../../lib/libsys/libsys_pic.a
@@ -81,6 +94,15 @@ mkDerivation {
     "stackprotector"
     "fortify"
   ];
+=======
+  preBuild = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+    make -C $BSDSRCDIR/lib/libc $makeFlags libc_nossp_pic.a
+  '';
+
+  # definitely a bad idea to enable stack protection on the stack protection initializers
+  hardeningDisable = [ "stackprotector" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env.MK_TESTS = "no";
 }

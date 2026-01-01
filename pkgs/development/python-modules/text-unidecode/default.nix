@@ -21,9 +21,16 @@ buildPythonPackage rec {
     py.test
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Most basic Text::Unidecode port";
     homepage = "https://github.com/kmike/text-unidecode";
     license = lib.licenses.artistic1;
+=======
+  meta = with lib; {
+    description = "Most basic Text::Unidecode port";
+    homepage = "https://github.com/kmike/text-unidecode";
+    license = licenses.artistic1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

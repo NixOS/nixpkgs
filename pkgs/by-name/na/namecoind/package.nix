@@ -68,11 +68,20 @@ stdenv.mkDerivation rec {
 
   checkFlags = [ "LC_ALL=en_US.UTF-8" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Decentralized open source information registration and transfer system based on the Bitcoin cryptocurrency";
     homepage = "https://namecoin.org";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Decentralized open source information registration and transfer system based on the Bitcoin cryptocurrency";
+    homepage = "https://namecoin.org";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

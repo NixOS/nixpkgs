@@ -273,6 +273,7 @@ in
 
   tle = null; # builtin
 
+<<<<<<< HEAD
   # test/resources/foo.iso/ is introduced in 2.8.0.4
   # it causes a build error: "Package does not untar cleanly into directory tramp-2.8.0.4/"
   # delete it as a workaround
@@ -298,6 +299,8 @@ in
       '';
   });
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # kv is required in triples-test.el
   # Alternatively, we can delete that file.  But adding a dependency is easier.
   triples = addPackageRequires super.triples [ self.kv ];

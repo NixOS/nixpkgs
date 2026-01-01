@@ -31,11 +31,20 @@ python3Packages.buildPythonApplication rec {
     python3Packages.regex
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Replace strings in files";
     mainProgram = "rpl";
     homepage = "https://github.com/rrthomas/rpl";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ cbley ];
+=======
+  meta = with lib; {
+    description = "Replace strings in files";
+    mainProgram = "rpl";
+    homepage = "https://github.com/rrthomas/rpl";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ cbley ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

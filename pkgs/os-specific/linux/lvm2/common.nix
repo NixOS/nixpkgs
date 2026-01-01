@@ -143,6 +143,11 @@ stdenv.mkDerivation rec {
       }
     ))
     ./fix-stdio-usage.patch
+<<<<<<< HEAD
+=======
+    # https://gitlab.com/lvmteam/lvm2/-/merge_requests/33
+    ./fix-manpage-reproducibility.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   doCheck = false; # requires root
@@ -230,16 +235,28 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "http://sourceware.org/lvm2/";
+    description = "Tools to support Logical Volume Management (LVM) on Linux";
+    platforms = platforms.linux;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Only
       bsd2
       lgpl21
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raskin
       ajs124
     ];

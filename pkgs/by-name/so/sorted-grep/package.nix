@@ -45,7 +45,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://sgrep.sourceforge.net/";
     description = "Sgrep (sorted grep) searches sorted input files for lines that match a search key";
     mainProgram = "sgrep";
@@ -54,8 +58,14 @@ stdenv.mkDerivation rec {
       key and outputs the matching lines. When searching large files sgrep is much
       faster than traditional Unix grep, but with significant restrictions.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ivan ];
+=======
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ivan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

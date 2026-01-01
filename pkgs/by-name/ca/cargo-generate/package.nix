@@ -12,16 +12,32 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-generate";
+<<<<<<< HEAD
   version = "0.23.7";
+=======
+  version = "0.23.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-1GMgVdRhgZPYCOxn6Y7q+1xgIJL7XSbY/F2tW1N9ckw=";
   };
 
   cargoHash = "sha256-zO8h567ptsIQmexmdfqC6++xjxxOTjVvJFDB3Hxgt78=";
+=======
+    hash = "sha256-h6WsTXPlJYoMZ6QDR99LQr5uV0ij8NC02ZEVhg/U+qc=";
+  };
+
+  postPatch = ''
+    substituteInPlace src/hooks/system_mod.rs \
+      --replace-fail "/bin/cat" "${lib.getExe' coreutils "cat"}"
+  '';
+
+  cargoHash = "sha256-pZm7bsMIOQF/wSwFH5kFXN5mG/H1cKz5hyM2DeNmUQ8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ pkg-config ];
 

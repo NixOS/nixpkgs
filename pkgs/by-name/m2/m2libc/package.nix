@@ -34,11 +34,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "More standards compliant C library written in M2-Planet's C subset";
     homepage = "https://github.com/oriansj/m2libc";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.minimal-bootstrap ];
+=======
+  meta = with lib; {
+    description = "More standards compliant C library written in M2-Planet's C subset";
+    homepage = "https://github.com/oriansj/m2libc";
+    license = licenses.gpl3Only;
+    teams = [ teams.minimal-bootstrap ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

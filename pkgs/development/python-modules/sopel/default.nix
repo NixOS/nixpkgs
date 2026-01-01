@@ -78,11 +78,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sopel" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and extensible IRC bot";
     homepage = "https://sopel.chat";
     license = lib.licenses.efl20;
     maintainers = with lib.maintainers; [ mog ];
+=======
+  meta = with lib; {
+    description = "Simple and extensible IRC bot";
+    homepage = "https://sopel.chat";
+    license = licenses.efl20;
+    maintainers = with maintainers; [ mog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sopel";
   };
 }

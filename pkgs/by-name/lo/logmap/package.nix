@@ -26,11 +26,19 @@ python3.pkgs.buildPythonApplication {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for fuzzing Log4j2 jndi injection";
     homepage = "https://github.com/zhzyker/logmap";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tools for fuzzing Log4j2 jndi injection";
+    homepage = "https://github.com/zhzyker/logmap";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "logmap";
   };
 }

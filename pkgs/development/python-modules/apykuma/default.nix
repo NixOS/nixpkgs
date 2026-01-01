@@ -38,6 +38,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/PerchunPak/apykuma";
     changelog = "https://github.com/PerchunPak/apykuma/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ PerchunPak ];
+=======
+    maintainers = with lib.maintainers; [ perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

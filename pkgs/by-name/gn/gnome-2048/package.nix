@@ -56,13 +56,23 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.gnome.org/GNOME/gnome-2048";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-2048/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Obtain the 2048 tile";
     mainProgram = "gnome-2048";
+<<<<<<< HEAD
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+    teams = [ teams.gnome ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -53,11 +53,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_opensky" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asynchronous Python client for the OpenSky API";
     homepage = "https://github.com/joostlek/python-opensky";
     changelog = "https://github.com/joostlek/python-opensky/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Asynchronous Python client for the OpenSky API";
+    homepage = "https://github.com/joostlek/python-opensky";
+    changelog = "https://github.com/joostlek/python-opensky/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

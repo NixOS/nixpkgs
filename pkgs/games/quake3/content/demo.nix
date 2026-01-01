@@ -25,7 +25,11 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Demo of Quake 3 Arena, a classic first-person shooter";
     longDescription = ''
       Quake III Arena and it's demo don't offer current wide screen resolutions in the menu.
@@ -39,8 +43,13 @@ stdenv.mkDerivation {
       $ quake3 +set r_mode -1 +set r_customwidth 2560 +set r_customheight 1440 +set r_fullscreen 1
     '';
     homepage = "https://www.idsoftware.com/";
+<<<<<<< HEAD
     license = lib.licenses.unfreeRedistributable;
     platforms = lib.platforms.all;
+=======
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

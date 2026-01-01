@@ -4,6 +4,7 @@
   name = "jellyfin";
   meta.maintainers = with lib.maintainers; [ minijackson ];
 
+<<<<<<< HEAD
   nodes = {
     machine = {
       services.jellyfin.enable = true;
@@ -63,6 +64,13 @@
       environment.systemPackages = with pkgs; [ ffmpeg ];
       virtualisation.diskSize = 3 * 1024;
     };
+=======
+  nodes.machine = {
+    services.jellyfin.enable = true;
+    environment.systemPackages = with pkgs; [ ffmpeg ];
+    # Jellyfin fails to start if the data dir doesn't have at least 2GiB of free space
+    virtualisation.diskSize = 3 * 1024;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Documentation of the Jellyfin API: https://api.jellyfin.org/
@@ -82,16 +90,23 @@
       import json
       from urllib.parse import urlencode
 
+<<<<<<< HEAD
       def wait_for_jellyfin(machine):
           machine.wait_for_unit("jellyfin.service")
           machine.wait_for_open_port(8096)
           machine.wait_until_succeeds("journalctl --since -1m --unit jellyfin --grep 'Startup complete'")
 
       wait_for_jellyfin(machine)
+=======
+      machine.wait_for_unit("jellyfin.service")
+      machine.wait_for_open_port(8096)
+      machine.wait_until_succeeds("journalctl --since -1m --unit jellyfin --grep 'Startup complete'")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       machine.succeed("curl --fail http://localhost:8096/")
 
       machine.wait_until_succeeds("curl --fail http://localhost:8096/health | grep Healthy")
 
+<<<<<<< HEAD
       # Test hardware acceleration configuration
       with subtest("Hardware acceleration configuration"):
           wait_for_jellyfin(machineWithTranscoding)
@@ -122,6 +137,8 @@
           # Verify the new encoding.xml does not have the marker (was overwritten)
           machineWithForceConfig.fail("grep -q 'MARKER' /var/lib/jellyfin/config/encoding.xml")
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       auth_header = 'MediaBrowser Client="NixOS Integration Tests", DeviceId="1337", Device="Apple II", Version="20.09"'
 
 
@@ -135,6 +152,7 @@
           else:
               return f"curl --fail -X post 'http://localhost:8096{path}' -H 'X-Emby-Authorization:{auth_header}'"
 
+<<<<<<< HEAD
       # Test dashboard-based configuration verification
       with subtest("Dashboard configuration verification"):
           # Complete setup and get admin token
@@ -184,6 +202,8 @@
           assert "hevc" in decoding_codecs, f"hevc should be in HardwareDecodingCodecs, got {decoding_codecs}"
           assert "vp9" in decoding_codecs, f"vp9 should be in HardwareDecodingCodecs, got {decoding_codecs}"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       with machine.nested("Wizard completes"):
           machine.wait_until_succeeds(api_get("/Startup/Configuration"))
@@ -290,7 +310,10 @@
 
           if duration.strip() != "5.000000":
               raise Exception("Downloaded video has wrong duration")
+<<<<<<< HEAD
 
       machine.log(machine.succeed("systemd-analyze security jellyfin.service | grep -v '✓'"))
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '';
 }

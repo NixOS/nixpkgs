@@ -62,10 +62,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytds" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python DBAPI driver for MSSQL using pure Python TDS (Tabular Data Stream) protocol implementation";
     homepage = "https://python-tds.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Python DBAPI driver for MSSQL using pure Python TDS (Tabular Data Stream) protocol implementation";
+    homepage = "https://python-tds.readthedocs.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

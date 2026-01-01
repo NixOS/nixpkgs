@@ -50,11 +50,20 @@ buildDunePackage rec {
     mirage-mtime
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SSH implementation in OCaml";
     homepage = "https://github.com/mirage/awa-ssh";
     changelog = "https://github.com/mirage/awa-ssh/raw/v${version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "SSH implementation in OCaml";
+    homepage = "https://github.com/mirage/awa-ssh";
+    changelog = "https://github.com/mirage/awa-ssh/raw/v${version}/CHANGES.md";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

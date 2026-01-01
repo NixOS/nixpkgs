@@ -89,6 +89,7 @@ let
         ''
         + postPatch;
 
+<<<<<<< HEAD
         preConfigure = ''
           # Copy the source so it can be used by mix projects
           # do this before building to avoid build artifacts but after patching
@@ -97,6 +98,8 @@ let
           cp -r "." "$out/src"
         '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         buildPhase = ''
           runHook preBuild
           HOME=. rebar3 bare compile --paths "."

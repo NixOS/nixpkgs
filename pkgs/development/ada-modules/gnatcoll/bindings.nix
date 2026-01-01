@@ -78,11 +78,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GNAT Components Collection - Bindings to C libraries";
     homepage = "https://github.com/AdaCore/gnatcoll-bindings";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "GNAT Components Collection - Bindings to C libraries";
+    homepage = "https://github.com/AdaCore/gnatcoll-bindings";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

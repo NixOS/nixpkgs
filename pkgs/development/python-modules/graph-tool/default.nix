@@ -2,6 +2,7 @@
   buildPythonPackage,
   lib,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch,
   stdenv,
 
@@ -12,6 +13,16 @@
   fontconfig,
   gobject-introspection,
   graphviz,
+=======
+  stdenv,
+
+  boost,
+  cairomm,
+  cgal,
+  expat,
+  gmp,
+  gobject-introspection,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gtk3,
   llvmPackages,
   matplotlib,
@@ -23,11 +34,15 @@
   python,
   scipy,
   sparsehash,
+<<<<<<< HEAD
   zstandard,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gitUpdater,
 }:
 
 let
+<<<<<<< HEAD
   boost' = boost189.override {
     patches = [
       # required to build against Clang >= 21 (https://github.com/boostorg/lexical_cast/pull/87)
@@ -39,6 +54,9 @@ let
         hash = "sha256-OO39ejR+I5ufjqinrMJ6HgjTE7Ph+XBu50PqcIKaIQo=";
       })
     ];
+=======
+  boost' = boost.override {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     enablePython = true;
     inherit python;
   };
@@ -46,13 +64,18 @@ in
 buildPythonPackage rec {
   pname = "graph-tool";
   version = "2.98";
+<<<<<<< HEAD
   pyproject = false;
+=======
+  format = "other";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
     hash = "sha256-7vGUi5N/XwQ3Se7nX+DG1+jwNlUdlF6dVeN4cLBsxSc=";
   };
 
+<<<<<<< HEAD
   postPatch =
     # remove error messages about tput during build process without adding ncurses
     ''
@@ -88,10 +111,32 @@ buildPythonPackage rec {
 
   # https://graph-tool.skewed.de/installation.html#manual-compilation
   buildInputs = [
+=======
+  postPatch = ''
+    # remove error messages about tput during build process without adding ncurses
+    substituteInPlace configure \
+      --replace-fail 'tput setaf $1' : \
+      --replace-fail 'tput sgr0' :
+  '';
+
+  configureFlags = [
+    "--with-python-module-path=$(out)/${python.sitePackages}"
+    "--with-boost-libdir=${boost'}/lib"
+    "--with-cgal=${cgal}"
+  ];
+
+  enableParallelBuilding = true;
+
+  build-system = [ pkg-config ];
+
+  # https://graph-tool.skewed.de/installation.html#manual-compilation
+  dependencies = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     boost'
     cairomm
     cgal
     expat
+<<<<<<< HEAD
     mpfr
     sparsehash
   ]
@@ -100,10 +145,18 @@ buildPythonPackage rec {
   dependencies = [
     gtk3
     matplotlib
+=======
+    gmp
+    gobject-introspection
+    gtk3
+    matplotlib
+    mpfr
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     numpy
     pycairo
     pygobject3
     scipy
+<<<<<<< HEAD
     zstandard
   ];
 
@@ -117,6 +170,13 @@ buildPythonPackage rec {
     '';
 
   pythonImportsCheck = [ "graph_tool.all" ];
+=======
+    sparsehash
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+
+  pythonImportsCheck = [ "graph_tool" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = gitUpdater {
     url = "https://git.skewed.de/count0/graph-tool";

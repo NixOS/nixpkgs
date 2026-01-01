@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "efibooteditor";
+<<<<<<< HEAD
   version = "1.5.5";
+=======
+  version = "1.5.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Neverous";
     repo = "efibooteditor";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-OtNZA2K6Kr4IHnTw0i+evHJmBx9oAGKuU90XtUfXKy0=";
+=======
+    hash = "sha256-xD40ZzkpwerDYC8nzGVqEHLV0KWbxcc0ApquQjrPJTc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isLinux efivar;
@@ -39,11 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
         'sh -c "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY efibooteditor"'
   '';
 
+<<<<<<< HEAD
   env = {
     LANG = "C.UTF8";
     BUILD_VERSION = "v${finalAttrs.version}";
   };
 
+=======
+  env.BUILD_VERSION = "v${finalAttrs.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmakeBuildType = "MinSizeRel";
   cmakeFlags = [ "-DQT_VERSION_MAJOR=6" ];
 
@@ -51,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/LICENSE.txt $out/share/licenses/efibooteditor/LICENSE
   '';
 
+<<<<<<< HEAD
   doCheck = true;
   checkPhase = ''
     runHook preCheck
@@ -60,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Boot Editor for (U)EFI based systems";
     homepage = "https://github.com/Neverous/efibooteditor";

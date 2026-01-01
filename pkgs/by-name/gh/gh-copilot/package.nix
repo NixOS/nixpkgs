@@ -55,7 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/github/gh-copilot";
     license = lib.licenses.unfree;
     mainProgram = "gh-copilot";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ PerchunPak ];
+=======
+    maintainers = with lib.maintainers; [ perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.attrNames systemToPlatform;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

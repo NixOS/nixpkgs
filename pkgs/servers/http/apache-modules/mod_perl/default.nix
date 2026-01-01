@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Integration of perl with the Apache2 web server";
     homepage = "https://perl.apache.org/download/index.html";
@@ -54,5 +55,15 @@ stdenv.mkDerivation rec {
     mainProgram = "mp2bug";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Integration of perl with the Apache2 web server";
+    homepage = "https://perl.apache.org/download/index.html";
+    changelog = "https://github.com/apache/mod_perl/blob/trunk/Changes";
+    license = licenses.asl20;
+    mainProgram = "mp2bug";
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

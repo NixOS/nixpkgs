@@ -1,6 +1,9 @@
 {
   lib,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   fetchPypi,
   maturin,
@@ -12,10 +15,15 @@
   setuptools,
   setuptools-rust,
   setuptools-scm,
+<<<<<<< HEAD
   replaceVars,
   python,
   targetPackages,
 }:
+=======
+}:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 buildPythonPackage rec {
   pname = "setuptools-rust";
   version = "1.12.0";
@@ -43,6 +51,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   # integrate the setup hook to set up the build environment for cross compilation
   # this hook is automatically propagated to consumers using setuptools-rust as build-system
   #
@@ -60,6 +69,8 @@ buildPythonPackage rec {
         targetLinker = "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc";
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   passthru.tests = {
     pyo3 = maturin.tests.pyo3.override {
       format = "setuptools";
@@ -82,11 +93,19 @@ buildPythonPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Setuptools plugin for Rust support";
     homepage = "https://github.com/PyO3/setuptools-rust";
     changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Setuptools plugin for Rust support";
+    homepage = "https://github.com/PyO3/setuptools-rust";
+    changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

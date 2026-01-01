@@ -79,11 +79,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
+<<<<<<< HEAD
   version = "4.22.6";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
     hash = "sha256-jmvrDM6H+zx2OvlMLcIf1HuP0C1Gs8sd6ypy35JZxCU=";
+=======
+  version = "4.22.5";
+
+  src = fetchurl {
+    url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
+    hash = "sha256-2FZqFdPb/At3fR6Puy7umIoCTKnHhtysZd0QNHMHQA0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -330,6 +338,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.samba.org";
     changelog = "https://www.samba.org/samba/history/samba-${finalAttrs.version}.html";
@@ -338,6 +347,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = enableGlusterFS;
     maintainers = with lib.maintainers; [ aneeshusa ];
+=======
+  meta = with lib; {
+    homepage = "https://www.samba.org";
+    description = "Standard Windows interoperability suite of programs for Linux and Unix";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    broken = enableGlusterFS;
+    maintainers = with maintainers; [ aneeshusa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "ndr_krb5pac"
       "ndr_nbt"

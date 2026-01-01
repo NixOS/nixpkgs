@@ -18,12 +18,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://jb55.com/datefmt";
     description = "Tool that formats timestamps in text streams";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ jb55 ];
+=======
+  meta = with lib; {
+    homepage = "https://jb55.com/datefmt";
+    description = "Tool that formats timestamps in text streams";
+    platforms = platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ jb55 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "datefmt";
   };
 })

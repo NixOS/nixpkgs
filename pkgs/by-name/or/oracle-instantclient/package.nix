@@ -187,22 +187,35 @@ stdenv.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Oracle instant client libraries and sqlplus CLI";
     longDescription = ''
       Oracle instant client provides access to Oracle databases (OCI,
       OCCI, Pro*C, ODBC or JDBC). This package includes the sqlplus
       command line SQL client.
     '';
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.unfree;
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ dylanmtaylor ];
+=======
+    maintainers = with maintainers; [ dylanmtaylor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hydraPlatforms = [ ];
   };
 }

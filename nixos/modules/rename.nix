@@ -71,6 +71,7 @@ in
       "programs"
       "gnome-documents"
     ] "The corresponding package was removed from nixpkgs.")
+<<<<<<< HEAD
     (mkRemovedOptionModule
       [
         "services"
@@ -81,6 +82,8 @@ in
         due to lack of usage and being broken since its introduction.
       ''
     ) # added 2025-11-29
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (mkRemovedOptionModule [
       "programs"
       "goldwarden"
@@ -151,9 +154,12 @@ in
       "services"
       "couchpotato"
     ] "The corresponding package was removed from nixpkgs.")
+<<<<<<< HEAD
     (mkRemovedOptionModule [ "services" "crabfit" ]
       "The corresponding packages were removed from nixpkgs because they are unmaintained upstream and insecure."
     )
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (mkRemovedOptionModule [ "services" "crowd" ]
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
     )
@@ -171,9 +177,12 @@ in
 
       To wrap a resolver with DNSCrypt you can instead use dnsdist. See options `services.dnsdist.dnscrypt.*`
     '')
+<<<<<<< HEAD
     (mkRemovedOptionModule [ "services" "ethercalc" ] ''
       The ethercalc module has been removed from nixpkgs as the project was old, unmaintained, and could not be packaged well in nixpkgs.
     '')
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (mkRemovedOptionModule [
       "services"
       "exhibitor"
@@ -258,9 +267,12 @@ in
       The Javascript version of Parsoid configured through this module does not work with modern MediaWiki versions,
       and has been deprecated by upstream, so it has been removed. MediaWiki comes with a new PHP-based parser built-in, so there is no need for this module.
     '')
+<<<<<<< HEAD
     (mkRemovedOptionModule [ "services" "pingvin-share" ] ''
       The `pingvin-share.backend` package was broken and the project was archived upstream, so it was removed from nixpkgs.
     '')
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (mkRemovedOptionModule [ "services" "polipo" ] ''
       The polipo project is unmaintained and archived upstream.
     '')
@@ -299,6 +311,12 @@ in
     (mkRemovedOptionModule [ "services" "sourcehut" ] ''
       The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
     '')
+<<<<<<< HEAD
+=======
+    (mkRemovedOptionModule [ "services" "tt-rss" ] ''
+      The tt-rss package and module have been removed, since upstream development ceased 2025-11-01 and the source is no longer available officially.
+    '')
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (mkRemovedOptionModule [ "services" "tvheadend" ]
       "The tvheadend package and the corresponding module have been removed as nobody was willing to maintain them and they were stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version."
     )
@@ -447,9 +465,12 @@ in
       to periodically collect random data from the device and mix it
       into the kernel's RNG.
     '')
+<<<<<<< HEAD
     (mkRemovedOptionModule [ "virtualisation" "multipass" ] ''
       virtualisation.multipass has been removed since it was unmaintained in nixpkgs
     '')
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Do NOT add any option renames here, see top of the file
   ];
 }

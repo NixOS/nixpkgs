@@ -40,6 +40,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nwdiag" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
@@ -48,5 +49,15 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ bjornfor ];
     mainProgram = "rackdiag";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
+    homepage = "http://blockdiag.com/";
+    changelog = "https://github.com/blockdiag/nwdiag/blob/${version}/CHANGES.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "rackdiag";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

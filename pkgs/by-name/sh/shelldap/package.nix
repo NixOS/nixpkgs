@@ -3,6 +3,10 @@
   stdenv,
   fetchFromGitHub,
   perlPackages,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -28,6 +32,11 @@ perlPackages.buildPerlPackage rec {
     YAMLSyck
   ];
 
+<<<<<<< HEAD
+=======
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   prePatch = ''
     touch Makefile.PL
   '';
@@ -38,6 +47,13 @@ perlPackages.buildPerlPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
+=======
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/shelldap
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # no make target 'test', not tests provided by source
   doCheck = false;
 

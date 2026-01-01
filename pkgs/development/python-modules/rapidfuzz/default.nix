@@ -18,14 +18,22 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
+<<<<<<< HEAD
   version = "3.14.3";
+=======
+  version = "3.14.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-DOXeZaD21Qsum4brBlMSFcBAUbNEOgCXc6AqEboP1e4=";
+=======
+    hash = "sha256-p+Z2c+PBNdjfaRjZErWwWgihzuddV14PgTHE3NVNHs8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -37,11 +45,14 @@ buildPythonPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "Cython >=3.1.6, <3.2.0" "Cython >=3.1.6"
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     cmake
     cython

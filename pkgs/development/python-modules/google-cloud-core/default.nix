@@ -50,11 +50,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud" ];
 
+<<<<<<< HEAD
   meta = {
     description = "API Client library for Google Cloud: Core Helpers";
     homepage = "https://github.com/googleapis/python-cloud-core";
     changelog = "https://github.com/googleapis/python-cloud-core/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "API Client library for Google Cloud: Core Helpers";
+    homepage = "https://github.com/googleapis/python-cloud-core";
+    changelog = "https://github.com/googleapis/python-cloud-core/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

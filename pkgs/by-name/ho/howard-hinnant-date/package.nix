@@ -63,11 +63,20 @@ stdenv.mkDerivation rec {
     mv $out/CMake $dev/lib/cmake
   '';
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.mit;
     description = "Date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ r-burns ];
+=======
+  meta = with lib; {
+    license = licenses.mit;
+    description = "Date and time library based on the C++11/14/17 <chrono> header";
+    homepage = "https://github.com/HowardHinnant/date";
+    platforms = with platforms; unix ++ windows;
+    maintainers = with maintainers; [ r-burns ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

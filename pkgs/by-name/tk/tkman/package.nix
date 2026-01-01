@@ -70,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Graphical, hypertext manual page and Texinfo browser for UNIX";
     mainProgram = "tkman";
     longDescription = ''
@@ -86,8 +90,14 @@ stdenv.mkDerivation (finalAttrs: {
       Preferences panel, and man page versioning support, among many other features.
     '';
     homepage = "https://tkman.sourceforge.net/index.html";
+<<<<<<< HEAD
     license = lib.licenses.artistic1;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+    license = licenses.artistic1;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

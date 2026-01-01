@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 source "$NIX_ATTRS_SH_FILE"
 source $mirrorsFile
 
@@ -11,6 +12,10 @@ if [[ "$(declare -p curlOpts 2&>/dev/null || true)" =~ ^"declare -a" ]]; then
     unset _temp
 fi
 
+=======
+source $mirrorsFile
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 curlVersion=$(curl -V | head -1 | cut -d' ' -f2)
 
 # Curl flags to handle redirects, not use EPSV, handle cookies for
@@ -33,6 +38,7 @@ if ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
 fi
 
+<<<<<<< HEAD
 # NOTE:
 # `netrcPhase` should not attempt to access builder.sh implementation details (e.g., the `${curl[@]}` array),
 # The implementation detail could change in any Nixpkgs revision, including backports.
@@ -43,6 +49,11 @@ fi
 
 curl+=(
     "${curlOptsList[@]}"
+=======
+eval "curl+=($curlOptsList)"
+
+curl+=(
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     $curlOpts
     $NIX_CURL_FLAGS
 )
@@ -50,6 +61,10 @@ curl+=(
 downloadedFile="$out"
 if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 tryDownload() {
     local url="$1"
     local target="$2"
@@ -124,10 +139,17 @@ tryHashedMirrors() {
 # URL list may contain ?. No glob expansion for that, please
 set -o noglob
 
+<<<<<<< HEAD
 resolvedUrls=()
 for url in "${urls[@]}"; do
     if test "${url:0:9}" != "mirror://"; then
         resolvedUrls+=("$url")
+=======
+urls2=
+for url in $urls; do
+    if test "${url:0:9}" != "mirror://"; then
+        urls2="$urls2 $url"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     else
         url2="${url:9}"; echo "${url2/\// }" > split; read site fileName < split
         #varName="mirror_$site"
@@ -142,17 +164,29 @@ for url in "${urls[@]}"; do
             if test -n "${!varName}"; then mirrors="${!varName}"; fi
 
             for url3 in $mirrors; do
+<<<<<<< HEAD
                 resolvedUrls+=("$url3$fileName");
+=======
+                urls2="$urls2 $url3$fileName";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             done
         fi
     fi
 done
+<<<<<<< HEAD
+=======
+urls="$urls2"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 # Restore globbing settings
 set +o noglob
 
 if test -n "$showURLs"; then
+<<<<<<< HEAD
     echo "${resolvedUrls[*]}" > $out
+=======
+    echo "$urls" > $out
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     exit 0
 fi
 
@@ -164,7 +198,11 @@ fi
 set -o noglob
 
 success=
+<<<<<<< HEAD
 for url in "${resolvedUrls[@]}"; do
+=======
+for url in $urls; do
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     if [ -z "$postFetch" ]; then
        case "$url" in
            https://github.com/*/archive/*)

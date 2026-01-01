@@ -89,6 +89,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "A Rust implementation of ECMAScript's Temporal API";
     homepage = "https://github.com/boa-dev/temporal";
@@ -98,5 +99,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [ aduh95 ];
+=======
+  meta = with lib; {
+    description = "A Rust implementation of ECMAScript's Temporal API";
+    homepage = "https://github.com/boa-dev/temporal";
+    changelog = "https://github.com/boa-dev/temporal/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ aduh95 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

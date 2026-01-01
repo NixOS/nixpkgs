@@ -31,12 +31,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Cross-platform version of flock(1)";
     homepage = "https://github.com/discoteq/flock";
     maintainers = [ ];
     mainProgram = "flock";
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     license = lib.licenses.isc;
+=======
+    platforms = platforms.all;
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

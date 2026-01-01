@@ -12,6 +12,7 @@
 
 let
   pname = "flclash";
+<<<<<<< HEAD
   version = "0.8.91";
 
   src = fetchFromGitHub {
@@ -26,6 +27,23 @@ let
     hash = "sha256-jQ0phrTWlZZj5sVvnHAuC5h1nbJCcr/0wKw61mZMtes=";
     fetchSubmodules = true;
   };
+=======
+  version = "0.8.90";
+
+  src =
+    (fetchFromGitHub {
+      owner = "chen08209";
+      repo = "FlClash";
+      tag = "v${version}";
+      hash = "sha256-wEgWjzdP7HeWgDacaP9fYNczG9BrTN790AQ5aj9scwM=";
+      fetchSubmodules = true;
+    }).overrideAttrs
+      (_: {
+        GIT_CONFIG_COUNT = 1;
+        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
+        GIT_CONFIG_VALUE_0 = "git@github.com:";
+      });
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Proxy client based on ClashMeta, simple and easy to use";
@@ -40,7 +58,11 @@ let
 
     modRoot = "core";
 
+<<<<<<< HEAD
     vendorHash = "sha256-/natNGWXF6be7kyLYF2fHg0o0C1zkBAg1k8BAH5Dl9E=";
+=======
+    vendorHash = "sha256-5oYJMcyKh8CpMLOLch5/svwa148hY4rnSR5inTRNK4M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     env.CGO_ENABLED = 0;
 
@@ -59,7 +81,14 @@ flutter335.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
+<<<<<<< HEAD
   gitHashes = lib.importJSON ./git-hashes.json;
+=======
+  gitHashes = {
+    flutter_js = "sha256-4PgiUL7aBnWVOmz2bcSxKt81BRVMnopabj5LDbtPYk4=";
+    re_editor = "sha256-PuaXoByTmkov2Dsz0kBHBHr/o63+jgPrnY9gpK7AOhA=";
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     copyDesktopItems

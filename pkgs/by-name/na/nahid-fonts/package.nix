@@ -23,11 +23,19 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rastikerdar/nahid-font";
     description = "Persian (Farsi) Font - قلم (فونت) فارسی ناهید";
     license = lib.licenses.free;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rastikerdar/nahid-font";
+    description = "Persian (Farsi) Font - قلم (فونت) فارسی ناهید";
+    license = licenses.free;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -44,11 +44,20 @@ stdenv.mkDerivation rec {
     find . -name "CMakeLists.txt" -exec sed -i 's/cmake_minimum_required(VERSION [^)]*)/cmake_minimum_required(VERSION 3.16)/g' {} \;
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GlobalProtect VPN client (GUI) for Linux based on OpenConnect that supports SAML auth mode";
     homepage = "https://github.com/yuezk/GlobalProtect-openconnect";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.jerith666 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GlobalProtect VPN client (GUI) for Linux based on OpenConnect that supports SAML auth mode";
+    homepage = "https://github.com/yuezk/GlobalProtect-openconnect";
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.jerith666 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

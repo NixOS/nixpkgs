@@ -41,11 +41,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.tntnet.org/tntnet.html";
     description = "Web server which allows users to develop web applications using C++";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.juliendehos ];
+=======
+  meta = with lib; {
+    homepage = "http://www.tntnet.org/tntnet.html";
+    description = "Web server which allows users to develop web applications using C++";
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.juliendehos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

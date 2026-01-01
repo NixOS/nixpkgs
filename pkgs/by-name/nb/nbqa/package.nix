@@ -70,11 +70,19 @@ let
         pytestCheckHook
         yapf
       ])
+<<<<<<< HEAD
       ++ lib.concatAttrValues optional-dependencies
+=======
+      ++ lib.flatten (lib.attrValues optional-dependencies)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ++ [
         addBinToPathHook
         versionCheckHook
       ];
+<<<<<<< HEAD
+=======
+    versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     disabledTests = [
       # Test data not found

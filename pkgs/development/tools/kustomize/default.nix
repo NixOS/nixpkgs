@@ -64,6 +64,10 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       carlosdagos
       vdemeester
+<<<<<<< HEAD
+=======
+      periklis
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zaninime
       Chili-Man
       saschagrunert

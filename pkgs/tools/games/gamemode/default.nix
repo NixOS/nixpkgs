@@ -105,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Optimise Linux system performance on demand";
     homepage = "https://feralinteractive.github.io/gamemode";
@@ -112,6 +113,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Optimise Linux system performance on demand";
+    homepage = "https://feralinteractive.github.io/gamemode";
+    changelog = "https://github.com/FeralInteractive/gamemode/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gamemoderun"; # Requires NixOS module to run
   };
 })

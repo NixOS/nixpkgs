@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Health tracking app for the GNOME desktop";
     homepage = "https://apps.gnome.org/app/dev.Cogitri.Health";
@@ -67,5 +68,14 @@ stdenv.mkDerivation rec {
     mainProgram = "dev.Cogitri.Health";
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Health tracking app for the GNOME desktop";
+    homepage = "https://apps.gnome.org/app/dev.Cogitri.Health";
+    license = licenses.gpl3Plus;
+    mainProgram = "dev.Cogitri.Health";
+    teams = [ lib.teams.gnome-circle ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

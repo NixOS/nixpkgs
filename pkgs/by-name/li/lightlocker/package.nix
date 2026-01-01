@@ -74,7 +74,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/the-cavalry/light-locker";
     description = "Simple session-locker for LightDM";
     longDescription = ''
@@ -86,9 +90,16 @@ stdenv.mkDerivation rec {
       It relies on LightDM for locking and unlocking your session via
       ConsoleKit/UPower or logind/systemd.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ obadz ];
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ obadz ];
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

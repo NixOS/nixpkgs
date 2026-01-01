@@ -157,7 +157,11 @@ stdenvNoCC.mkDerivation (
             buildArgs = toString ../.;
             open = "/share/doc/nixpkgs/index.html";
           };
+<<<<<<< HEAD
           nixos-render-docs-redirects' = writeShellScriptBin "redirects" ''${lib.getExe nixos-render-docs-redirects} --file '${toString ../redirects.json}' "$@"'';
+=======
+          nixos-render-docs-redirects' = writeShellScriptBin "redirects" "${lib.getExe nixos-render-docs-redirects} --file ${toString ../redirects.json} $@";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         in
         mkShellNoCC {
           packages = [

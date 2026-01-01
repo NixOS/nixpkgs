@@ -52,11 +52,19 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/canokeys/canokey-qemu";
     description = "CanoKey QEMU Virt Card";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ oxalica ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/canokeys/canokey-qemu";
+    description = "CanoKey QEMU Virt Card";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ oxalica ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Uses a four‐year‐old patched vendored version of Mbed TLS for
     # cryptography that doesn’t build with CMake 4. Doesn’t build with
     # gurrent versions of `canokey-core`, either. No upstream

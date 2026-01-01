@@ -48,11 +48,20 @@ stdenv.mkDerivation rec {
     cd dbxml
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.oracle.com/database/berkeley-db/xml.html";
     description = "Embeddable XML database based on Berkeley DB";
     license = lib.licenses.agpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.oracle.com/database/berkeley-db/xml.html";
+    description = "Embeddable XML database based on Berkeley DB";
+    license = licenses.agpl3Only;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,10 +31,17 @@ buildNpmPackage {
     ln -s $out/lib/node_modules/translation-server/modules $out/share/zotero-translation-server/modules
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Node.js-based server to run Zotero translators";
     homepage = "https://github.com/zotero/translation-server";
     license = lib.licenses.agpl3Only;
+=======
+  meta = with lib; {
+    description = "Node.js-based server to run Zotero translators";
+    homepage = "https://github.com/zotero/translation-server";
+    license = licenses.agpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "translation-server";
   };

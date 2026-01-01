@@ -18,6 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
+<<<<<<< HEAD
   version = "6.18.0";
 
   src = fetchurl {
@@ -25,6 +26,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-a6Ug4ZdeTFDckx7q6R6jfBmLihc3RIhfiJW4QyX51FY=";
   };
 
+=======
+  version = "6.17.0";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-l4HllBCrfeqOn3m7EP8UiOY9EPy7cFA7lEJronqOLew=";
+  };
+
+  patches = [
+    (fetchurl {
+      name = "musl-redefinition.patch";
+      url = "https://lore.kernel.org/netdev/20251012124002.296018-1-yureka@cyberchaos.dev/raw";
+      hash = "sha256-8gSpZb/B5sMd2OilUQqg0FqM9y3GZd5Ch5AXV5wrCZQ=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     substituteInPlace Makefile \
       --replace "CC := gcc" "CC ?= $CC"
@@ -96,6 +114,7 @@ stdenv.mkDerivation rec {
   # needed for nixos-anywhere
   passthru.tests.static = pkgsStatic.iproute2;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
@@ -103,6 +122,16 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       fpletz
+=======
+  meta = with lib; {
+    homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
+    description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      fpletz
+      globin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

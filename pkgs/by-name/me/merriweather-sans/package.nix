@@ -25,11 +25,20 @@ stdenvNoCC.mkDerivation rec {
     # TODO: install variable version?
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/SorkinType/Merriweather-Sans";
     description = "Merriweather Sans is a low-contrast semi-condensed sans-serif text typeface family designed to be pleasant to read at very small sizes";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ emily ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/SorkinType/Merriweather-Sans";
+    description = "Merriweather Sans is a low-contrast semi-condensed sans-serif text typeface family designed to be pleasant to read at very small sizes";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ emily ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

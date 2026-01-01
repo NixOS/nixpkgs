@@ -35,12 +35,21 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lresolv";
 
+<<<<<<< HEAD
   meta = {
     description = "Determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data";
     homepage = "http://www.mavetju.org/unix/general.php";
     license = lib.licenses.bsd2;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data";
+    homepage = "http://www.mavetju.org/unix/general.php";
+    license = licenses.bsd2;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dnstracer";
   };
 }

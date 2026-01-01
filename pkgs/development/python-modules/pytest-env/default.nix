@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin used to set environment variables";
     homepage = "https://github.com/MobileDynasty/pytest-env";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erikarvstedt ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin used to set environment variables";
+    homepage = "https://github.com/MobileDynasty/pytest-env";
+    license = licenses.mit;
+    maintainers = with maintainers; [ erikarvstedt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

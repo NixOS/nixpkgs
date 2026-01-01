@@ -66,12 +66,21 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     pkgConfigModules = [ "double-conversion" ];
     description = "Binary-decimal and decimal-binary routines for IEEE doubles";
     homepage = "https://github.com/google/double-conversion";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+=======
+  meta = with lib; {
+    pkgConfigModules = [ "double-conversion" ];
+    description = "Binary-decimal and decimal-binary routines for IEEE doubles";
+    homepage = "https://github.com/google/double-conversion";
+    license = licenses.bsd3;
+    platforms = platforms.unix ++ platforms.windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ fzakaria ];
   };
 })

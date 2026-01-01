@@ -38,11 +38,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.tntnet.org/tntdb.html";
     description = "C++ library which makes accessing SQL databases easy and robust";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.juliendehos ];
+=======
+  meta = with lib; {
+    homepage = "http://www.tntnet.org/tntdb.html";
+    description = "C++ library which makes accessing SQL databases easy and robust";
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.juliendehos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

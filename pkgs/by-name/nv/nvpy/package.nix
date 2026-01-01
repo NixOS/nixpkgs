@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   lib,
+=======
+  pkgs,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   python3Packages,
 }:
@@ -41,11 +45,19 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "nvpy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simplenote-syncing note-taking tool inspired by Notational Velocity";
     homepage = "https://github.com/cpbotha/nvpy";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+=======
+  meta = with pkgs.lib; {
+    description = "Simplenote-syncing note-taking tool inspired by Notational Velocity";
+    homepage = "https://github.com/cpbotha/nvpy";
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nvpy";
   };
 }

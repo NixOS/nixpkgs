@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     "CXX=g++"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Atomic Tanks ballistics game";
     mainProgram = "atanks";
@@ -29,5 +30,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Atomic Tanks ballistics game";
+    mainProgram = "atanks";
+    homepage = "http://atanks.sourceforge.net/";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

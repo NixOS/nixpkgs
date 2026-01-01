@@ -31,10 +31,18 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/man/man3 ./*/*.3
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Highly dynamic multi-platform foreign function call interface library";
     homepage = "https://www.dyncall.org";
     license = lib.licenses.isc;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Highly dynamic multi-platform foreign function call interface library";
+    homepage = "https://www.dyncall.org";
+    license = licenses.isc;
+    maintainers = with maintainers; [ dtzWill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -63,12 +63,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nptyping" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Type hints for numpy";
     homepage = "https://github.com/ramonhagenaars/nptyping";
     changelog = "https://github.com/ramonhagenaars/nptyping/blob/v${version}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Type hints for numpy";
+    homepage = "https://github.com/ramonhagenaars/nptyping";
+    changelog = "https://github.com/ramonhagenaars/nptyping/blob/v${version}/HISTORY.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bcdarwin
       pandapip1
     ];

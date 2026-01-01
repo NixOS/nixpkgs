@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "i18naddress" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Google's i18n address data packaged for Python";
     homepage = "https://github.com/mirumee/google-i18n-address";
     changelog = "https://github.com/mirumee/google-i18n-address/releases/tag/${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Google's i18n address data packaged for Python";
+    homepage = "https://github.com/mirumee/google-i18n-address";
+    changelog = "https://github.com/mirumee/google-i18n-address/releases/tag/${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "update-validation-files";
   };

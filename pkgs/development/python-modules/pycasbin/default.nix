@@ -34,11 +34,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "casbin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Authorization library that supports access control models like ACL, RBAC and ABAC";
     homepage = "https://github.com/casbin/pycasbin";
     changelog = "https://github.com/casbin/pycasbin/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Authorization library that supports access control models like ACL, RBAC and ABAC";
+    homepage = "https://github.com/casbin/pycasbin";
+    changelog = "https://github.com/casbin/pycasbin/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

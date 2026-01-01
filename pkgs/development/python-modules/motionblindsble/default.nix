@@ -50,11 +50,20 @@ buildPythonPackage rec {
     "test_establish_connection"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interface with Motionblinds motors using Bluetooth Low Energy (BLE)";
     homepage = "https://github.com/LennP/motionblindsble";
     changelog = "https://github.com/LennP/motionblindsble/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interface with Motionblinds motors using Bluetooth Low Energy (BLE)";
+    homepage = "https://github.com/LennP/motionblindsble";
+    changelog = "https://github.com/LennP/motionblindsble/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

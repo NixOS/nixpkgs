@@ -17,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Touch-typing tutor";
     mainProgram = "gotypist";
     longDescription = ''
@@ -25,7 +29,12 @@ buildGoModule rec {
       going in fast, slow, and medium cycles.
     '';
     homepage = "https://github.com/pb-/gotypist";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pb- ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ pb- ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

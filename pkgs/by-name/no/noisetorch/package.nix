@@ -40,6 +40,7 @@ buildGoModule rec {
     install -Dm444 ./assets/noisetorch.desktop $out/share/applications/noisetorch.desktop
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Virtual microphone device with noise supression for PulseAudio";
     homepage = "https://github.com/noisetorch/NoiseTorch";
@@ -47,6 +48,16 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       panaeon
+=======
+  meta = with lib; {
+    description = "Virtual microphone device with noise supression for PulseAudio";
+    homepage = "https://github.com/noisetorch/NoiseTorch";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      panaeon
+      lom
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "noisetorch";
   };

@@ -85,12 +85,21 @@ buildPythonPackage {
     pytest-mock
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "";
     mainProgram = "unstructured_api_tools";
     homepage = "https://github.com/Unstructured-IO/unstructured-api-tools";
     changelog = "https://github.com/Unstructured-IO/unstructured-api-tools/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,10 +20,17 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ocaml-migrate-parsetree ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/let-def/ppx_tools_versioned";
     description = "Tools for authors of syntactic tools (such as ppx rewriters)";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/let-def/ppx_tools_versioned";
+    description = "Tools for authors of syntactic tools (such as ppx rewriters)";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

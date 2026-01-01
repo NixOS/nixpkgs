@@ -36,7 +36,11 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
+<<<<<<< HEAD
   version = "0.32.0";
+=======
+  version = "0.31.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,7 +49,11 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-kZKP5TFg9M+NCx9V9B0qNbGiwZtBPtgVKgZYjX5w1ok=";
+=======
+    hash = "sha256-cl1GstWVHDD3nWx835k2hnswt/+AnoTLXjxVIfLP6Es=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -63,15 +71,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     astor
+<<<<<<< HEAD
+=======
+    jedi
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pyopenssl
     pytestCheckHook
     pytest-trio'
     pyyaml
     trustme
+<<<<<<< HEAD
   ]
   # jedi has no compatibility with python 3.14 yet
   # https://github.com/davidhalter/jedi/issues/2064
   ++ lib.optional (pythonOlder "3.14") jedi;
+=======
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -109,5 +125,9 @@ buildPythonPackage rec {
       mit
       asl20
     ];
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

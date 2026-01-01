@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
     versionCheckHook
   ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     changelog = "https://github.com/slavaGanzin/await/releases/tag/${version}";

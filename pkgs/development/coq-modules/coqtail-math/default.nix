@@ -26,8 +26,14 @@ mkCoqDerivation {
   release."20201124".rev = "5c22c3d7dcd8cf4c47cf84a281780f5915488e9e";
   release."20201124".sha256 = "sha256-wd+Lh7dpAD4zfpyKuztDmSFEZo5ZiFrR8ti2jUCVvoQ=";
   mlPlugin = true;
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.siraben ];
+=======
+  meta = with lib; {
+    license = licenses.lgpl3Only;
+    maintainers = [ maintainers.siraben ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,11 +43,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/15five/django-scim2/blob/${src.tag}/CHANGES.txt";
     description = "SCIM 2.0 Service Provider Implementation (for Django)";
     homepage = "https://github.com/15five/django-scim2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ s1341 ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/15five/django-scim2/blob/${src.tag}/CHANGES.txt";
+    description = "SCIM 2.0 Service Provider Implementation (for Django)";
+    homepage = "https://github.com/15five/django-scim2";
+    license = licenses.mit;
+    maintainers = with maintainers; [ s1341 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

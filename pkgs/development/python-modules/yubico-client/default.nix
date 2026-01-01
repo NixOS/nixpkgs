@@ -20,9 +20,17 @@ buildPythonPackage rec {
   # pypi package missing test_utils and github releases is behind
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Verifying Yubico OTPs based on the validation protocol version 2.0";
     homepage = "https://github.com/Kami/python-yubico-client/";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Verifying Yubico OTPs based on the validation protocol version 2.0";
+    homepage = "https://github.com/Kami/python-yubico-client/";
+    maintainers = with maintainers; [ peterromfeldhk ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

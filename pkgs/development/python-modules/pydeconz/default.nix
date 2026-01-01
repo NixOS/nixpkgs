@@ -48,12 +48,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydeconz" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library wrapping the Deconz REST API";
     homepage = "https://github.com/Kane610/deconz";
     changelog = "https://github.com/Kane610/deconz/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library wrapping the Deconz REST API";
+    homepage = "https://github.com/Kane610/deconz";
+    changelog = "https://github.com/Kane610/deconz/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pydeconz";
   };
 }

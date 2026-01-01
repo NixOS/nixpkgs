@@ -46,11 +46,20 @@ buildGoModule rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Convenient authentication method that lets you use your android device as a key for your Linux machine";
     homepage = "https://github.com/gernotfeichter/alp";
     license = lib.licenses.gpl2Only;
     mainProgram = "alp";
     maintainers = with lib.maintainers; [ gernotfeichter ];
+=======
+  meta = with lib; {
+    description = "Convenient authentication method that lets you use your android device as a key for your Linux machine";
+    homepage = "https://github.com/gernotfeichter/alp";
+    license = licenses.gpl2Only;
+    mainProgram = "alp";
+    maintainers = with maintainers; [ gernotfeichter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -9,7 +9,10 @@
   boost,
   cmake,
   cmake-extras,
+<<<<<<< HEAD
   ctestCheckHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doxygen,
   gst_all_1,
   gdk-pixbuf,
@@ -34,13 +37,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
+<<<<<<< HEAD
   version = "3.1.0";
+=======
+  version = "3.0.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-lXvXK7UCLX5aoGID8sOoeHBEMhdle7RUMACLHiWpcEo=";
+=======
+    hash = "sha256-TfBGcHg9y9G2Rxs/OpZ8CcQrhK05gijZjVxOYSTkJJ8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -61,8 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/thumbnailer-admin/thumbnailer-admin_test.cpp \
       --replace-fail '/usr/bin/test' 'test'
 
+<<<<<<< HEAD
     substituteInPlace plugins/Lomiri/Thumbnailer*/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+=======
+    substituteInPlace plugins/*/Thumbnailer*/CMakeLists.txt \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # I think this variable fails to be populated because of our toolchain, while upstream uses Debian / Ubuntu where this works fine
     # https://cmake.org/cmake/help/v3.26/variable/CMAKE_LIBRARY_ARCHITECTURE.html
@@ -116,11 +132,20 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
+<<<<<<< HEAD
+=======
+    # Something seems borked with bad's h264 decoder, add libav as a workaround
+    # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
+    gst-libav
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # maybe add ugly to cover all kinds of formats?
   ]);
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     ctestCheckHook
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     shared-mime-info
     xvfb-run
   ];
@@ -137,15 +162,28 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
     (lib.cmakeBool "Werror" false)
+<<<<<<< HEAD
+=======
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # QSignalSpy tests in QML suite always fail, pass when running interactively
+        "-E"
+        "^qml"
+      ]
+    ))
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
+<<<<<<< HEAD
   disabledTests = [
     # QSignalSpy tests in QML suite always fail, pass when running interactively
     "qml"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   enableParallelChecking = false;
 
   preCheck = ''
@@ -180,10 +218,14 @@ stdenv.mkDerivation (finalAttrs: {
       # music app relies on thumbnailer to extract embedded cover art
       music-app = nixosTests.lomiri-music-app;
 
+<<<<<<< HEAD
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
         versionCheck = true;
       };
+=======
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     updateScript = gitUpdater { };
   };

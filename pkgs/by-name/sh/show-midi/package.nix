@@ -92,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-lXrandr"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-platform GUI application to effortlessly visualize MIDI activity";
     homepage = "https://github.com/gbevin/ShowMIDI";
@@ -99,5 +100,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ minijackson ];
     mainProgram = "ShowMIDI";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Multi-platform GUI application to effortlessly visualize MIDI activity";
+    homepage = "https://github.com/gbevin/ShowMIDI";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ minijackson ];
+    mainProgram = "ShowMIDI";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

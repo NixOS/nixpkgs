@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pygments ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/miyakogi/m2r";
     description = "Markdown to reStructuredText converter";
@@ -46,5 +47,14 @@ buildPythonPackage rec {
     maintainers = [ ];
     # https://github.com/miyakogi/m2r/issues/66
     broken = lib.versionAtLeast mistune.version "2";
+=======
+  meta = with lib; {
+    homepage = "https://github.com/miyakogi/m2r";
+    description = "Markdown to reStructuredText converter";
+    license = licenses.mit;
+    maintainers = [ ];
+    # https://github.com/miyakogi/m2r/issues/66
+    broken = versionAtLeast mistune.version "2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

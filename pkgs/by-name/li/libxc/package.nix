@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitLab,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmake,
   gfortran,
   perl,
@@ -27,6 +30,7 @@ stdenv.mkDerivation rec {
     hash = versionHashes."${version}";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with newer CMake versions
     (fetchpatch {
@@ -35,6 +39,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Timeout increase has already been included upstream in master.
   # Check upon updates if this can be removed.
   postPatch = ''
@@ -58,6 +64,10 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+<<<<<<< HEAD
+=======
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "-DENABLE_FORTRAN=ON"
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_XHOST=OFF"
@@ -70,6 +80,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Library of exchange-correlation functionals for density-functional theory";
     mainProgram = "xc-info";
@@ -77,5 +88,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ markuskowa ];
+=======
+  meta = with lib; {
+    description = "Library of exchange-correlation functionals for density-functional theory";
+    mainProgram = "xc-info";
+    homepage = "https://www.tddft.org/programs/Libxc/";
+    license = licenses.mpl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

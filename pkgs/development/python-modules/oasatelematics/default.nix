@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oasatelematics" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the OASA Telematics API";
     homepage = "https://github.com/panosmz/oasatelematics";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for the OASA Telematics API";
+    homepage = "https://github.com/panosmz/oasatelematics";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -73,10 +73,18 @@ buildPythonPackage rec {
     "test_get_agent_sock_path"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Using hardware wallets as SSH/GPG agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ np ];
+=======
+  meta = with lib; {
+    description = "Using hardware wallets as SSH/GPG agent";
+    homepage = "https://github.com/romanz/trezor-agent";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ np ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

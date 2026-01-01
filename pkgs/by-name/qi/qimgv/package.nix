@@ -52,6 +52,7 @@ stdenv.mkDerivation {
     "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Qt5 image viewer with optional video support";
     mainProgram = "qimgv";
@@ -59,5 +60,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ cole-h ];
+=======
+  meta = with lib; {
+    description = "Qt5 image viewer with optional video support";
+    mainProgram = "qimgv";
+    homepage = "https://github.com/easymodo/qimgv";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ cole-h ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -50,7 +50,11 @@ rustPlatform.buildRustPackage rec {
     version = testers.testVersion { package = faircamp; };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Self-hostable, statically generated bandcamp alternative";
     mainProgram = "faircamp";
     longDescription = ''
@@ -66,8 +70,14 @@ rustPlatform.buildRustPackage rec {
       means you prefer to do that manually.
     '';
     homepage = "https://simonrepp.com/faircamp/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

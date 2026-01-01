@@ -40,11 +40,20 @@ buildPythonPackage rec {
     "test_update"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the Twitch API";
     homepage = "https://github.com/tsifrer/python-twitch-client";
     changelog = "https://github.com/tsifrer/python-twitch-client/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for the Twitch API";
+    homepage = "https://github.com/tsifrer/python-twitch-client";
+    changelog = "https://github.com/tsifrer/python-twitch-client/blob/${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

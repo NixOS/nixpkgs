@@ -58,10 +58,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gource.io/";
     description = "Software version control visualization tool";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://gource.io/";
+    description = "Software version control visualization tool";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       Software projects are displayed by Gource as an animated tree with
       the root directory of the project at its centre. Directories
@@ -72,8 +79,13 @@ stdenv.mkDerivation rec {
       Mercurial and Bazaar and SVN. Gource can also parse logs produced
       by several third party tools for CVS repositories.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gource";
   };
 }

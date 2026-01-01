@@ -22,12 +22,21 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
 
+<<<<<<< HEAD
   meta = {
     description = "Application to configure Logitech wireless G933/G533 headsets";
     homepage = "https://github.com/ashkitten/g933-utils";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ seqizz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Application to configure Logitech wireless G933/G533 headsets";
+    homepage = "https://github.com/ashkitten/g933-utils";
+    license = licenses.mit;
+    maintainers = with maintainers; [ seqizz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "g933-utils";
   };
 }

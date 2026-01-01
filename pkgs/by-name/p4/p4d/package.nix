@@ -38,6 +38,7 @@ stdenv.mkDerivation {
     install -D -t $out/doc/p4d -m 0644 *.txt
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Perforce Helix Core Server";
     homepage = "https://www.perforce.com";
@@ -46,6 +47,16 @@ stdenv.mkDerivation {
     mainProgram = "p4d";
     platforms = builtins.attrNames srcs;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Perforce Helix Core Server";
+    homepage = "https://www.perforce.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    mainProgram = "p4d";
+    platforms = builtins.attrNames srcs;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       corngood
       impl
     ];

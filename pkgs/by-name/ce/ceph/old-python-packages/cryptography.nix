@@ -9,7 +9,11 @@
   rustPlatform,
   cargo,
   rustc,
+<<<<<<< HEAD
   setuptools-rust,
+=======
+  setuptoolsRustBuildHook,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   openssl,
   Security ? null,
   isPyPy,
@@ -74,12 +78,18 @@ buildPythonPackage rec {
 
   cargoRoot = "src/rust";
 
+<<<<<<< HEAD
   build-system = [
     setuptools-rust
   ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
+=======
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    setuptoolsRustBuildHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cargo
     rustc
     pkg-config
@@ -121,7 +131,11 @@ buildPythonPackage rec {
     "tests/hazmat/backends/test_openssl_memleak.py"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
@@ -132,12 +146,21 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pyca/cryptography";
     changelog =
+<<<<<<< HEAD
       "https://cryptography.io/en/latest/changelog/#v" + lib.replaceStrings [ "." ] [ "-" ] version;
     license = with lib.licenses; [
+=======
+      "https://cryptography.io/en/latest/changelog/#v" + replaceStrings [ "." ] [ "-" ] version;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       bsd3
       psfl
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ nh2 ];
+=======
+    maintainers = with maintainers; [ nh2 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

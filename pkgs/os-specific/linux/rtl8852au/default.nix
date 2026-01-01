@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Driver for Realtek 802.11ac, rtl8852au, provides the 8852au mod";
     homepage = "https://github.com/lwfinger/rtl8852au";
@@ -73,5 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
     # FIX: error: invalid initializer
     broken = (kernel.kernelOlder "6" && kernel.isHardened) || kernel.kernelAtLeast "6.17";
     maintainers = with lib.maintainers; [ lonyelon ];
+=======
+  meta = with lib; {
+    description = "Driver for Realtek 802.11ac, rtl8852au, provides the 8852au mod";
+    homepage = "https://github.com/lwfinger/rtl8852au";
+    license = licenses.gpl2Only;
+    platforms = [ "x86_64-linux" ];
+    # FIX: error: invalid initializer
+    broken = (kernel.kernelOlder "6" && kernel.isHardened) || kernel.kernelAtLeast "6.17";
+    maintainers = with maintainers; [ lonyelon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

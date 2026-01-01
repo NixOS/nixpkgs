@@ -27,6 +27,7 @@ let
 
   src = sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
+<<<<<<< HEAD
   meta = {
     description = "VR coworking platform";
     homepage = "https://immersed.com";
@@ -34,6 +35,15 @@ let
     maintainers = with lib.maintainers; [ pandapip1 ];
     platforms = builtins.attrNames sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "VR coworking platform";
+    homepage = "https://immersed.com";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ pandapip1 ];
+    platforms = builtins.attrNames sources;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 in

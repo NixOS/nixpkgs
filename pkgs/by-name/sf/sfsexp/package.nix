@@ -18,11 +18,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small Fast S-Expression Library";
     homepage = "https://github.com/mjsottile/sfsexp";
     maintainers = with lib.maintainers; [ jb55 ];
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Small Fast S-Expression Library";
+    homepage = "https://github.com/mjsottile/sfsexp";
+    maintainers = with maintainers; [ jb55 ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

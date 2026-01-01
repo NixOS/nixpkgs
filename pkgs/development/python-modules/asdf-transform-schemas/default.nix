@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf_transform_schemas" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ASDF schemas for validating transform tags";
     homepage = "https://github.com/asdf-format/asdf-transform-schemas";
     changelog = "https://github.com/asdf-format/asdf-transform-schemas/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "ASDF schemas for validating transform tags";
+    homepage = "https://github.com/asdf-format/asdf-transform-schemas";
+    changelog = "https://github.com/asdf-format/asdf-transform-schemas/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

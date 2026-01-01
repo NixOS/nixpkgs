@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [
     "PREFIX=$(out)"
+<<<<<<< HEAD
     "--directory=src"
+=======
+    "-C src"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   passthru.tests = {
@@ -59,6 +63,7 @@ stdenv.mkDerivation rec {
 
   # outputs = [ "out" "dev" ];
 
+<<<<<<< HEAD
   __structuredAttrs = true;
 
   meta = {
@@ -69,11 +74,25 @@ stdenv.mkDerivation rec {
       bsd2
     ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Library for loading eBPF programs and reading and manipulating eBPF objects from user-space";
+    homepage = "https://github.com/libbpf/libbpf";
+    license = with licenses; [
+      lgpl21 # or
+      bsd2
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       vcunat
       saschagrunert
       martinetd
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

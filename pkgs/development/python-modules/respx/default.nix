@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "respx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for mocking HTTPX";
     homepage = "https://lundberg.github.io/respx/";
     changelog = "https://github.com/lundberg/respx/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for mocking HTTPX";
+    homepage = "https://lundberg.github.io/respx/";
+    changelog = "https://github.com/lundberg/respx/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

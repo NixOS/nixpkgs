@@ -93,12 +93,21 @@ resholve.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Git powered FTP client written as shell script";
     homepage = "https://git-ftp.github.io/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ tweber ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Git powered FTP client written as shell script";
+    homepage = "https://git-ftp.github.io/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ tweber ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-ftp";
   };
 }

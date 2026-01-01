@@ -46,6 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ''${gappsWrapperArgs[@]}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Querz/mcaselector";
     description = "Tool to select chunks from Minecraft worlds for deletion or export";
@@ -54,5 +55,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.Scrumplex ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Querz/mcaselector";
+    description = "Tool to select chunks from Minecraft worlds for deletion or export";
+    mainProgram = "mcaselector";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.mit;
+    maintainers = [ maintainers.Scrumplex ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

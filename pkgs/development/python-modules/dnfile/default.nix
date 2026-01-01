@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dnfile" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to parse .NET executable files";
     homepage = "https://github.com/malwarefrank/dnfile";
     changelog = "https://github.com/malwarefrank/dnfile/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to parse .NET executable files";
+    homepage = "https://github.com/malwarefrank/dnfile";
+    changelog = "https://github.com/malwarefrank/dnfile/blob/${src.tag}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

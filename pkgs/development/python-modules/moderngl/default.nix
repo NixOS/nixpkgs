@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "moderngl" ];
 
+<<<<<<< HEAD
   meta = {
     description = "High performance rendering for Python";
     homepage = "https://github.com/moderngl/moderngl";
@@ -49,5 +50,15 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ c0deaddict ];
     # should be mesa.meta.platforms, darwin build breaks.
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "High performance rendering for Python";
+    homepage = "https://github.com/moderngl/moderngl";
+    changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ c0deaddict ];
+    # should be mesa.meta.platforms, darwin build breaks.
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

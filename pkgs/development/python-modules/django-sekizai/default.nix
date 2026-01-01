@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
+<<<<<<< HEAD
   meta = {
     description = "Define placeholders where your blocks get rendered and append to those blocks";
     homepage = "https://github.com/django-cms/django-sekizai";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Define placeholders where your blocks get rendered and append to those blocks";
+    homepage = "https://github.com/django-cms/django-sekizai";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

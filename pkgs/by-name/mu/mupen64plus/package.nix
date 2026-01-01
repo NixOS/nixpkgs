@@ -52,10 +52,18 @@ stdenv.mkDerivation rec {
     dash m64p_install.sh DESTDIR="$out" PREFIX=""
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Nintendo 64 Emulator";
     license = lib.licenses.gpl2Plus;
     homepage = "http://www.mupen64plus.org/";
+=======
+  meta = with lib; {
+    description = "Nintendo 64 Emulator";
+    license = licenses.gpl2Plus;
+    homepage = "http://www.mupen64plus.org/";
+    maintainers = [ maintainers.sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "mupen64plus";
   };

@@ -53,7 +53,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit description;
     homepage = "https://fteqw.org";
     longDescription = ''
@@ -63,8 +67,14 @@ stdenv.mkDerivation {
       limits, vulkan and OpenGL renderers, a dedicated
       server, and fteqcc, for easier QuakeC development
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ necrophcodr ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ necrophcodr ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

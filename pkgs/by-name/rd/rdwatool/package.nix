@@ -39,11 +39,19 @@ python3.pkgs.buildPythonApplication {
     "rdwatool"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to extract information from a Microsoft Remote Desktop Web Access (RDWA) application";
     homepage = "https://github.com/p0dalirius/RDWAtool";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to extract information from a Microsoft Remote Desktop Web Access (RDWA) application";
+    homepage = "https://github.com/p0dalirius/RDWAtool";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rdwatool";
   };
 }

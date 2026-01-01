@@ -40,13 +40,23 @@ buildPythonPackage rec {
     "lazrs"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Interface for reading/modifying/creating .LAS LIDAR files";
     mainProgram = "laspy";
     homepage = "https://github.com/laspy/laspy";
     changelog = "https://github.com/laspy/laspy/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     teams = [ lib.teams.geospatial ];
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ matthewcroughan ];
+    teams = [ teams.geospatial ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

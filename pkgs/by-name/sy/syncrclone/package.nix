@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     "syncrclone"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bidirectional sync tool for rclone";
     homepage = "https://github.com/Jwink3101/syncrclone";
@@ -29,6 +30,15 @@ python3.pkgs.buildPythonApplication rec {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prominentretail ];
+=======
+  meta = with lib; {
+    description = "Bidirectional sync tool for rclone";
+    homepage = "https://github.com/Jwink3101/syncrclone";
+    changelog = "https://github.com/Jwink3101/syncrclone/blob/${src.rev}/docs/changelog.md";
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ prominentretail ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "syncrclone";
   };
 }

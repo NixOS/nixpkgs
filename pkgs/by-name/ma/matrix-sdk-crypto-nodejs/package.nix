@@ -54,12 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "No-network-IO implementation of a state machine that handles E2EE for Matrix clients";
     homepage = "https://github.com/matrix-org/matrix-rust-sdk-crypto-nodejs";
     changelog = "https://github.com/matrix-org/matrix-rust-sdk-crypto-nodejs/blob/main/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "No-network-IO implementation of a state machine that handles E2EE for Matrix clients";
+    homepage = "https://github.com/matrix-org/matrix-rust-sdk-crypto-nodejs";
+    changelog = "https://github.com/matrix-org/matrix-rust-sdk-crypto-nodejs/blob/main/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       winter
       dandellion
     ];

@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "klayout" ];
 
+<<<<<<< HEAD
   meta = {
     description = "KLayout’s Python API";
     homepage = "https://github.com/KLayout/klayout";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fbeffa ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "KLayout’s Python API";
+    homepage = "https://github.com/KLayout/klayout";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fbeffa ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

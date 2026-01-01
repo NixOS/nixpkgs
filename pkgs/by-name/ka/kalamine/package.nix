@@ -31,10 +31,17 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "kalamine" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Keyboard Layout Maker";
     homepage = "https://github.com/OneDeadKey/kalamine/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Keyboard Layout Maker";
+    homepage = "https://github.com/OneDeadKey/kalamine/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "kalamine";
   };

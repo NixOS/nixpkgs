@@ -36,12 +36,21 @@ buildDotnetModule (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { url = finalAttrs.meta.homepage; };
 
+<<<<<<< HEAD
   meta = {
     description = "Formal Specifications for Verification and Synthesis";
     homepage = "https://github.com/VUISIS/formula-dotnet";
     license = lib.licenses.mspl;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Formal Specifications for Verification and Synthesis";
+    homepage = "https://github.com/VUISIS/formula-dotnet";
+    license = licenses.mspl;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "formula";
   };
 })

@@ -74,10 +74,18 @@ stdenv.mkDerivation rec {
     gtk = gtk2;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical User Interface Toolkit for mono and .Net";
     homepage = "https://www.mono-project.com/docs/gui/gtksharp";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "Graphical User Interface Toolkit for mono and .Net";
+    homepage = "https://www.mono-project.com/docs/gui/gtksharp";
+    platforms = platforms.unix;
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

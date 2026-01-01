@@ -161,12 +161,21 @@ stdenv.mkDerivation {
       --add-flags $out/share/playonlinux/playonlinux-wrapped
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GUI for managing Windows programs under linux";
     homepage = "https://www.playonlinux.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.pasqui23 ];
+=======
+  meta = with lib; {
+    description = "GUI for managing Windows programs under linux";
+    homepage = "https://www.playonlinux.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3;
+    maintainers = [ maintainers.pasqui23 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -26,10 +26,18 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Dynamic types for data description and in-memory computations";
     homepage = "https://xnd.io/";
     license = lib.licenses.bsdOriginal;
     maintainers = [ lib.maintainers.costrouc ];
+=======
+  meta = with lib; {
+    description = "Dynamic types for data description and in-memory computations";
+    homepage = "https://xnd.io/";
+    license = licenses.bsdOriginal;
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

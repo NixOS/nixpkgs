@@ -139,7 +139,11 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "strawberry" ];
 
@@ -162,12 +166,21 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
     changelog = "https://github.com/strawberry-graphql/strawberry/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ izorkin ];
+=======
+  meta = with lib; {
+    description = "GraphQL library for Python that leverages type annotations";
+    homepage = "https://strawberry.rocks";
+    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ izorkin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "strawberry";
   };
 }

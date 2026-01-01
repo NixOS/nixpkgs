@@ -63,9 +63,15 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "PySide2 development tools";
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "PySide2 development tools";
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = [ ];
   };

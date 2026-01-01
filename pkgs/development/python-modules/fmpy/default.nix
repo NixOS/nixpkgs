@@ -41,7 +41,11 @@
 }:
 buildPythonPackage rec {
   pname = "fmpy";
+<<<<<<< HEAD
   version = "0.3.27";
+=======
+  version = "0.3.26";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   # Bumping version? Make sure to look through the commit history for
@@ -51,7 +55,11 @@ buildPythonPackage rec {
     repo = "FMPy";
     tag = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-Sx3lHiEMPESbUN8LIb4o0J7t/ZPavsyfh1QJJpocNaA=";
+=======
+    hash = "sha256-NAaROHrZ8OPmj/3lWFk9hNrrlqsDbscGdDn6G7xfFeQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -141,6 +149,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     # From sundials, build only the CVODE solver. C.f.

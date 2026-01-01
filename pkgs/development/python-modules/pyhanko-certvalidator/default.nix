@@ -63,11 +63,19 @@ buildPythonPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for validating X.509 certificates and paths";
     homepage = "https://github.com/MatthiasValvekens/pyHanko/tree/master/pkgs/pyhanko-certvalidator";
     changelog = "https://github.com/MatthiasValvekens/pyhanko/blob/pyhanko-certvalidator/${src.tag}/docs/changelog.rst#pyhanko-certvalidator";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python library for validating X.509 certificates and paths";
+    homepage = "https://github.com/MatthiasValvekens/pyHanko/tree/master/pkgs/pyhanko-certvalidator";
+    changelog = "https://github.com/MatthiasValvekens/pyhanko/blob/pyhanko-certvalidator/${src.tag}/docs/changelog.rst#pyhanko-certvalidator";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.antonmosich ];
   };
 }

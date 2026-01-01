@@ -9,20 +9,38 @@
   makeWrapper,
   ivpn-service,
 }:
+<<<<<<< HEAD
 buildNpmPackage (finalAttrs: {
   pname = "ivpn-ui";
   version = "3.15.0";
+=======
+let
+  version = "3.14.34";
+in
+buildNpmPackage {
+  pname = "ivpn-ui";
+  inherit version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-Y+oW/2WDkH/YydR+xSzEHPdCNKTmmsV4yEsju+OmDYE=";
+=======
+    tag = "v${version}";
+    hash = "sha256-Q96G5mJahJnXxpqJ8IF0oFie7l0Nd1p8drHH9NSpwEw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "source/ui";
 
+<<<<<<< HEAD
   npmDepsHash = "sha256-OOBBUDJwTP2T/KqzJPRV+A9ncRmb14KBoAXqa0T6c58=";
+=======
+  npmDepsHash = "sha256-y/VxvSZUvcIuckJF87639i5pcVJLg8SDAbWmg5bO3/s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -82,9 +100,17 @@ buildNpmPackage (finalAttrs: {
     mainProgram = "ivpn-ui";
     homepage = "https://www.ivpn.net";
     downloadPage = "https://github.com/ivpn/desktop-app";
+<<<<<<< HEAD
     changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${finalAttrs.version}";
+=======
+    changelog = "https://github.com/ivpn/desktop-app/releases/tag/v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ blenderfreaky ];
     platforms = [ "x86_64-linux" ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

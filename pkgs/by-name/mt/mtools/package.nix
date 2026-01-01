@@ -29,10 +29,18 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.gnu.org/software/mtools/";
     description = "Utilities to access MS-DOS disks";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/mtools/";
+    description = "Utilities to access MS-DOS disks";
+    platforms = platforms.unix;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

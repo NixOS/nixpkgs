@@ -49,15 +49,25 @@ stdenv.mkDerivation rec {
     install 99-dmr.rules $out/lib/udev/rules.d/99-dmr.rules
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Configuration utility for DMR radios";
     longDescription = ''
       DMRconfig is a utility for programming digital radios via USB programming cable.
     '';
     homepage = "https://github.com/sergev/dmrconfig";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dmrconfig";
   };
 }

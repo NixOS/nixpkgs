@@ -24,11 +24,20 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ python3 ];
 
+<<<<<<< HEAD
   meta = {
     description = "Text scroller for use with panels and shells";
     mainProgram = "zscroll";
     homepage = "https://github.com/noctuid/zscroll";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Text scroller for use with panels and shells";
+    mainProgram = "zscroll";
+    homepage = "https://github.com/noctuid/zscroll";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

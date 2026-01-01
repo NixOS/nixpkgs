@@ -54,10 +54,18 @@ buildPythonPackage rec {
     ${python.interpreter} tests/runtests.py -d ${normalization}/tests
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of the JSON-LD API";
     homepage = "https://github.com/digitalbazaar/pyld";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ apeschar ];
+=======
+  meta = with lib; {
+    description = "Python implementation of the JSON-LD API";
+    homepage = "https://github.com/digitalbazaar/pyld";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ apeschar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -38,12 +38,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "songpal" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library for interfacing with Sony's Songpal devices";
     mainProgram = "songpal";
     homepage = "https://github.com/rytilahti/python-songpal";
     changelog = "https://github.com/rytilahti/python-songpal/blob/release/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

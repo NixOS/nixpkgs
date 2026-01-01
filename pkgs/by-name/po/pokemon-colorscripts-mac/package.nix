@@ -38,7 +38,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Pokémon colorscripts for the terminal, compatible for mac";
     longDescription = ''
       Show colored sprites of pokémons in your terminal.
@@ -46,9 +50,15 @@ stdenv.mkDerivation {
       Inspired by DT's colorscripts.
     '';
     homepage = "https://github.com/nuke-dash/pokemon-colorscripts-mac";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.wesleyjrz ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit;
+    maintainers = [ maintainers.wesleyjrz ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pokemon-colorscripts";
   };
 }

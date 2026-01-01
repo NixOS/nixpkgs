@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Assembler for 6502 and other 8-bit microprocessors";
     homepage = "https://dasm-assembler.github.io";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.jwatt ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Assembler for 6502 and other 8-bit microprocessors";
+    homepage = "https://dasm-assembler.github.io";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.jwatt ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

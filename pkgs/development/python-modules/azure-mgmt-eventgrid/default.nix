@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.mgmt.eventgrid" ];
 
+<<<<<<< HEAD
   meta = {
     description = "This is the Microsoft Azure EventGrid Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/eventgrid/azure-mgmt-eventgrid";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-eventgrid_${version}/sdk/eventgrid/azure-mgmt-eventgrid/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ maxwilson ];
+=======
+  meta = with lib; {
+    description = "This is the Microsoft Azure EventGrid Management Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/eventgrid/azure-mgmt-eventgrid";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-eventgrid_${version}/sdk/eventgrid/azure-mgmt-eventgrid/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ maxwilson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

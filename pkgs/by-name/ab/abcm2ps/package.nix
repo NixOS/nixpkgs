@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchfossil,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   docutils,
   pkg-config,
   freetype,
@@ -20,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YA36wfj7owKu/KyWgCj6U8EJEh831cFtQj4/JtH6kVg=";
   };
 
+<<<<<<< HEAD
   patches = [
     # fix build with C23
     #   'bool' is a keyword with '-std=c23' onwards
@@ -30,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   configureFlags = [
     "--INSTALL=install"
   ];

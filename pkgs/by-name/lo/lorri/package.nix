@@ -64,11 +64,19 @@ in
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Your project's nix-env";
     homepage = "https://github.com/nix-community/lorri";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Your project's nix-env";
+    homepage = "https://github.com/nix-community/lorri";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       grahamc
       Profpatsch
       nyarly

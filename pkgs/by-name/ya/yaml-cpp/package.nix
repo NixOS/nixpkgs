@@ -50,11 +50,20 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "YAML parser and emitter for C++";
     homepage = "https://github.com/jbeder/yaml-cpp";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ OPNA2608 ];
+=======
+  meta = with lib; {
+    description = "YAML parser and emitter for C++";
+    homepage = "https://github.com/jbeder/yaml-cpp";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ OPNA2608 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

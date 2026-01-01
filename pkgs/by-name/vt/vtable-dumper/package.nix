@@ -19,11 +19,21 @@ stdenv.mkDerivation rec {
   buildInputs = [ libelf ];
   makeFlags = [ "prefix=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lvc/vtable-dumper";
     description = "Tool to list content of virtual tables in a C++ shared library";
     mainProgram = "vtable-dumper";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lvc/vtable-dumper";
+    description = "Tool to list content of virtual tables in a C++ shared library";
+    mainProgram = "vtable-dumper";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.bhipple ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

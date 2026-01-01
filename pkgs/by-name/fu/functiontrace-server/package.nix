@@ -18,10 +18,18 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Server for FunctionTrace, a graphical Python profiler";
     homepage = "https://functiontrace.com";
     license = with lib.licenses; [ prosperity30 ];
     maintainers = with lib.maintainers; [ tehmatt ];
+=======
+  meta = with lib; {
+    description = "Server for FunctionTrace, a graphical Python profiler";
+    homepage = "https://functiontrace.com";
+    license = with licenses; [ prosperity30 ];
+    maintainers = with maintainers; [ tehmatt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

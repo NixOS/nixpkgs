@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     cp ../../../../bin/t7z $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/BubblesInTheTub/torrent7z";
     description = "Fork of torrent7z, viz a derivative of 7zip that produces invariant .7z archives for torrenting";
@@ -54,5 +55,15 @@ stdenv.mkDerivation rec {
     mainProgram = "t7z";
     # RAR code is under non-free UnRAR license, but we remove it
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/BubblesInTheTub/torrent7z";
+    description = "Fork of torrent7z, viz a derivative of 7zip that produces invariant .7z archives for torrenting";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ cirno-999 ];
+    mainProgram = "t7z";
+    # RAR code is under non-free UnRAR license, but we remove it
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

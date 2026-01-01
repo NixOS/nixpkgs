@@ -27,6 +27,7 @@ buildKodiBinaryAddon rec {
     libretro
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/kodi-game/game.libretro.fuse";
     description = "Sinclair - ZX Spectrum (Fuse) GameClient for Kodi";
@@ -34,5 +35,14 @@ buildKodiBinaryAddon rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kazenyuk ];
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/kodi-game/game.libretro.fuse";
+    description = "Sinclair - ZX Spectrum (Fuse) GameClient for Kodi";
+    platforms = platforms.all;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kazenyuk ];
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -25,6 +25,7 @@ in
         default = [ "cockpit" ];
       };
 
+<<<<<<< HEAD
       plugins = lib.mkOption {
         type = types.listOf types.package;
         default = [ ];
@@ -43,6 +44,13 @@ in
       allowed-origins = lib.mkOption {
         type = types.listOf types.str;
         default = [ ];
+=======
+      allowed-origins = lib.mkOption {
+        type = types.listOf types.str;
+
+        default = [ ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = ''
           List of allowed origins.
 
@@ -84,6 +92,14 @@ in
   };
 
   config = mkIf cfg.enable {
+<<<<<<< HEAD
+=======
+    # expose cockpit-bridge system-wide
+    environment.systemPackages = [ cfg.package ];
+
+    # allow cockpit to find its plugins
+    environment.pathsToLink = [ "/share/cockpit" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     environment.etc = {
       # generate cockpit settings
@@ -98,6 +114,7 @@ in
         enable = cfg.showBanner;
         source = "/run/cockpit/issue";
       };
+<<<<<<< HEAD
 
       # Add plugins in discoverable folder
       "cockpit/share/cockpit".source = "${
@@ -116,6 +133,8 @@ in
           pathsToLink = [ "/bin" ];
         }
       }/bin";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     security.pam.services.cockpit = {

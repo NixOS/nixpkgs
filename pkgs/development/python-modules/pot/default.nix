@@ -137,10 +137,18 @@ buildPythonPackage rec {
     "ot.lp"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Optimal Transport Library";
     homepage = "https://pythonot.github.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yl3dy ];
+=======
+  meta = with lib; {
+    description = "Python Optimal Transport Library";
+    homepage = "https://pythonot.github.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yl3dy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

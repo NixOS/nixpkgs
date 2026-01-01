@@ -25,10 +25,17 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Current stars history tells only half the story";
     homepage = "https://github.com/Canop/starry";
     license = lib.licenses.agpl3Only;
+=======
+  meta = with lib; {
+    description = "Current stars history tells only half the story";
+    homepage = "https://github.com/Canop/starry";
+    license = licenses.agpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "starry";
   };

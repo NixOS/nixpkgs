@@ -57,12 +57,21 @@ buildPythonPackage {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Dead-simple tool for executing Jupyter notebooks from the command line";
     mainProgram = "nbexec";
     homepage = "https://github.com/jsvine/nbexec";
     changelog = "https://github.com/jsvine/nbexec/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

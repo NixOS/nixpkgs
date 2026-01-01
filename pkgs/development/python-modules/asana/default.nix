@@ -45,11 +45,19 @@ buildPythonPackage rec {
     "build_tests/"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client library for Asana";
     homepage = "https://github.com/asana/python-asana";
     changelog = "https://github.com/Asana/python-asana/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python client library for Asana";
+    homepage = "https://github.com/asana/python-asana";
+    changelog = "https://github.com/Asana/python-asana/releases/tag/${src.tag}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -18,11 +18,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rVYRbaj+9nFVyo9Zjdmd5t7CoFfxtntXIW2bWp2L7DE=";
 
+<<<<<<< HEAD
   meta = {
     description = "VK-GL-CTS/dEQP wrapper program to parallelize it across CPUs and report results against a baseline";
     homepage = "https://gitlab.freedesktop.org/anholt/deqp-runner";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "VK-GL-CTS/dEQP wrapper program to parallelize it across CPUs and report results against a baseline";
+    homepage = "https://gitlab.freedesktop.org/anholt/deqp-runner";
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

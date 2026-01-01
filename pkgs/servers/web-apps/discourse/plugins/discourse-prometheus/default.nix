@@ -21,10 +21,17 @@ mkDiscoursePlugin {
     ./spec-import-fix-abi-version.patch
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/discourse/discourse-prometheus";
     maintainers = with lib.maintainers; [ dpausp ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/discourse/discourse-prometheus";
+    maintainers = with maintainers; [ dpausp ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Official Discourse Plugin for Prometheus Monitoring";
   };
 }

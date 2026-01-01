@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdf2image" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module that wraps the pdftoppm utility to convert PDF to PIL Image object";
     homepage = "https://github.com/Belval/pdf2image";
@@ -37,5 +38,14 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gerschtli ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Module that wraps the pdftoppm utility to convert PDF to PIL Image object";
+    homepage = "https://github.com/Belval/pdf2image";
+    changelog = "https://github.com/Belval/pdf2image/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gerschtli ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

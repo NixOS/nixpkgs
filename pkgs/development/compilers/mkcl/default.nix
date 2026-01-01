@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "ANSI Common Lisp Implementation";
@@ -72,5 +73,15 @@ stdenv.mkDerivation rec {
     mainProgram = "mkcl";
     teams = [ lib.teams.lisp ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    description = "ANSI Common Lisp Implementation";
+    homepage = "https://common-lisp.net/project/mkcl/";
+    license = licenses.lgpl2Plus;
+    mainProgram = "mkcl";
+    teams = [ lib.teams.lisp ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

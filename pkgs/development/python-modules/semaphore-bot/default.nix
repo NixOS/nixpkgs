@@ -37,10 +37,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "semaphore" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple rule-based bot library for Signal Private Messenger";
     homepage = "https://github.com/lwesterhof/semaphore";
     license = with lib.licenses; [ agpl3Plus ];
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Simple rule-based bot library for Signal Private Messenger";
+    homepage = "https://github.com/lwesterhof/semaphore";
+    license = with licenses; [ agpl3Plus ];
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

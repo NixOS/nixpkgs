@@ -26,11 +26,19 @@ rustPlatform.buildRustPackage rec {
       --zsh pnpm-shell-completion.plugin.zsh
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/g-plane/pnpm-shell-completion";
     description = "Complete your pnpm command fastly";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ donovanglover ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/g-plane/pnpm-shell-completion";
+    description = "Complete your pnpm command fastly";
+    license = licenses.mit;
+    maintainers = with maintainers; [ donovanglover ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pnpm-shell-completion";
   };
 }

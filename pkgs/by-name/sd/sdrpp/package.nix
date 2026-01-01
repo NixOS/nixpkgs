@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-Platform SDR Software";
     homepage = "https://github.com/AlexandreRouma/SDRPlusPlus";
@@ -203,6 +204,15 @@ stdenv.mkDerivation (finalAttrs: {
     # The DAB decoder is broken upstream. See: https://github.com/AlexandreRouma/SDRPlusPlus/issues/1511
     broken = dab_decoder;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Cross-Platform SDR Software";
+    homepage = "https://github.com/AlexandreRouma/SDRPlusPlus";
+    license = licenses.gpl3Only;
+    # The DAB decoder is broken upstream. See: https://github.com/AlexandreRouma/SDRPlusPlus/issues/1511
+    broken = dab_decoder;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sikmir
       zaninime
     ];

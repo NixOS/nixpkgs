@@ -32,12 +32,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "versioneer" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Version-string management for VCS-controlled trees";
     mainProgram = "versioneer";
     homepage = "https://github.com/python-versioneer/python-versioneer";
     changelog = "https://github.com/python-versioneer/python-versioneer/blob/${version}/NEWS.md";
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

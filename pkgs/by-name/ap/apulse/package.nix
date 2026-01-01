@@ -46,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/i-rinat/apulse/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.jagajaga ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "apulse";
   };
 })

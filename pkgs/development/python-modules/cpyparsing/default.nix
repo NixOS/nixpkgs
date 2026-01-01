@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cPyparsing" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cython PyParsing implementation";
     homepage = "https://github.com/evhub/cpyparsing";
     changelog = "https://github.com/evhub/cpyparsing/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fabianhjr ];
+=======
+  meta = with lib; {
+    description = "Cython PyParsing implementation";
+    homepage = "https://github.com/evhub/cpyparsing";
+    changelog = "https://github.com/evhub/cpyparsing/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fabianhjr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

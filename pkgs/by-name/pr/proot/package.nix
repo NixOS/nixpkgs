@@ -43,10 +43,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   makeFlags = [ "--directory=src" ];
 
   postBuild = ''
     make --directory=doc proot/man.1
+=======
+  makeFlags = [ "-C src" ];
+
+  postBuild = ''
+    make -C doc proot/man.1
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -58,12 +65,21 @@ stdenv.mkDerivation rec {
   # proot provides tests with `make -C test` however they do not run in the sandbox
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://proot-me.github.io";
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://proot-me.github.io";
+    description = "User-space implementation of chroot, mount --bind and binfmt_misc";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ianwookim
       makefu
       veprbl

@@ -20,9 +20,16 @@ buildPythonPackage rec {
   # No proper test suite
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Tiny 'shelve'-like database with concurrency support";
     homepage = "https://github.com/vivainio/pickleshare";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tiny 'shelve'-like database with concurrency support";
+    homepage = "https://github.com/vivainio/pickleshare";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

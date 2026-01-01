@@ -63,7 +63,11 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Create beautiful ASCII art";
     longDescription = ''
       Letterpress converts your images into a picture made up of ASCII characters.
@@ -72,10 +76,17 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://apps.gnome.org/Letterpress/";
     changelog = "https://gitlab.gnome.org/World/Letterpress/-/releases/${version}";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.dawidd6 ];
+    teams = [ teams.gnome-circle ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "letterpress";
   };
 }

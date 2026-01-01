@@ -62,15 +62,24 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "DPAA2 Resource Management Tool";
     longDescription = ''
       restool is a user space application providing the ability to dynamically
       create and manage DPAA2 containers and objects from Linux.
     '';
     homepage = "https://github.com/nxp-qoriq/restool";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

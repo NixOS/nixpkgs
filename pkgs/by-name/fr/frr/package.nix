@@ -216,7 +216,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://frrouting.org/";
     description = "FRR BGP/OSPF/ISIS/RIP/RIPNG routing daemon suite";
     longDescription = ''
@@ -241,18 +245,30 @@ stdenv.mkDerivation (finalAttrs: {
       infrastructure, web 2.0 businesses, hyperscale services, and Fortune 500
       private clouds.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
     maintainers = with lib.maintainers; [
+=======
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       woffs
       thillux
     ];
     # adapt to platforms stated in http://docs.frrouting.org/en/latest/overview.html#supported-platforms
+<<<<<<< HEAD
     platforms = (
       lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.netbsd ++ lib.platforms.openbsd
     );
+=======
+    platforms = (platforms.linux ++ platforms.freebsd ++ platforms.netbsd ++ platforms.openbsd);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru.tests = { inherit (nixosTests) frr; };

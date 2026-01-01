@@ -20,6 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-oD7LS+c+mZ8W4YnAaAYxQkbUlmO8E2TPxy0PBI7Jr7A=";
   };
 
+<<<<<<< HEAD
   # Several tests fail with:
   # - beartype.roar.BeartypeDecorHintNonpepException
   # - RuntimeError: There is no current event loop in thread 'MainThread'
@@ -28,6 +29,8 @@ buildPythonPackage rec {
   # - ...
   disabled = pythonAtLeast "3.14";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ hatchling ];
 
   nativeCheckInputs = [

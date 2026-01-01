@@ -17,12 +17,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-4d1bgkwzC0jFD21Yb8mbnLXTqXTRsJPsMPidSRY4GVw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Maintain a database sorted by frecency (frequency + recency)";
     mainProgram = "frece";
     homepage = "https://github.com/YodaEmbedding/frece";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Maintain a database sorted by frecency (frequency + recency)";
+    mainProgram = "frece";
+    homepage = "https://github.com/YodaEmbedding/frece";
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

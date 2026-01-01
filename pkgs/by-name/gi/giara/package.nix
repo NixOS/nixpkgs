@@ -67,12 +67,21 @@ python3.pkgs.buildPythonApplication rec {
       --replace "item { custom: profile; }" 'item { custom: "profile"; }'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
     maintainers = with lib.maintainers; [ dasj19 ];
     homepage = "https://gitlab.gnome.org/World/giara";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Reddit app, built with Python, GTK and Handy; Created with mobile Linux in mind";
+    maintainers = with maintainers; [ dasj19 ];
+    homepage = "https://gitlab.gnome.org/World/giara";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "giara";
   };
 }

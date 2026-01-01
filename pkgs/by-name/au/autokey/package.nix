@@ -47,7 +47,10 @@ python3Packages.buildPythonApplication rec {
     xlib
     pygobject3
     packaging
+<<<<<<< HEAD
     standard-imghdr
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   runtimeDeps = [

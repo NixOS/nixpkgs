@@ -45,11 +45,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "logilab.constraint" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Logilab-database provides some classes to make unified access to different";
     homepage = "https://forge.extranet.logilab.fr/open-source/logilab-constraint";
     changelog = "https://forge.extranet.logilab.fr/open-source/logilab-constraint/-/blob/${version}/CHANGELOG.md";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "Logilab-database provides some classes to make unified access to different";
+    homepage = "https://forge.extranet.logilab.fr/open-source/logilab-constraint";
+    changelog = "https://forge.extranet.logilab.fr/open-source/logilab-constraint/-/blob/${version}/CHANGELOG.md";
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

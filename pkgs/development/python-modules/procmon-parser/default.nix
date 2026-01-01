@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "procmon_parser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Parser to process monitor file formats";
     homepage = "https://github.com/eronnen/procmon-parser/";
     changelog = "https://github.com/eronnen/procmon-parser/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Parser to process monitor file formats";
+    homepage = "https://github.com/eronnen/procmon-parser/";
+    changelog = "https://github.com/eronnen/procmon-parser/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

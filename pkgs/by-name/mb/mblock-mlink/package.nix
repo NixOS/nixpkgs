@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/mlink
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Driver for mBlock web version";
     homepage = "https://mblock.makeblock.com/en-us/download/";
@@ -42,5 +43,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.mausch ];
+=======
+  meta = with lib; {
+    description = "Driver for mBlock web version";
+    homepage = "https://mblock.makeblock.com/en-us/download/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = [ maintainers.mausch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

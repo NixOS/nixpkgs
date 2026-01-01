@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://dotcolon.net/fonts/vegur/";
     description = "Humanist sans serif font";
@@ -33,5 +34,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       minijackson
     ];
     license = lib.licenses.cc0;
+=======
+  meta = with lib; {
+    homepage = "http://dotcolon.net/fonts/vegur/";
+    description = "Humanist sans serif font";
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      djacu
+      minijackson
+    ];
+    license = licenses.cc0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

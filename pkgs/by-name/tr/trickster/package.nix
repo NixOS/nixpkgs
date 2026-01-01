@@ -39,7 +39,11 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) trickster; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Reverse proxy cache and time series dashboard accelerator";
     mainProgram = "trickster";
     longDescription = ''
@@ -47,8 +51,14 @@ buildGoModule rec {
       applications like static file servers and web APIs.
     '';
     homepage = "https://trickstercache.org/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ _1000101 ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ _1000101 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

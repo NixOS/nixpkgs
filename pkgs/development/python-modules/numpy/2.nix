@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python,
   numpy_2,
   pythonAtLeast,
@@ -61,7 +64,11 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
+<<<<<<< HEAD
   version = "2.3.5";
+=======
+  version = "2.3.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -71,6 +78,7 @@ buildPythonPackage rec {
     repo = "numpy";
     tag = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-CMgJmsjPLgMCWN2iJk0OzcKIlnRRcayrTAns51S4B6k=";
   };
 
@@ -93,6 +101,17 @@ buildPythonPackage rec {
             hash = "sha256-bLPLExlKnX18MXhbZxzCHniaAE0yTSyK9WuQyFyYHOI=";
           })
         ];
+=======
+    hash = "sha256-MfL7UQeSuxJIEQzY/0LIuScyBCilINt8e+zAeUNPmH0=";
+  };
+
+  patches = lib.optionals python.hasDistutilsCxxPatch [
+    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+    # Patching of numpy.distutils is needed to prevent it from undoing the
+    # patch to distutils.
+    ./numpy-distutils-C++.patch
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postPatch = ''
     # remove needless reference to full Python path stored in built wheel

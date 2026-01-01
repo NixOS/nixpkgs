@@ -28,11 +28,20 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Extended Pratt parser";
     homepage = "https://github.com/gabrielhdt/pratter";
     license = lib.licenses.bsd3;
     changelog = "https://github.com/gabrielhdt/pratter/raw/${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Extended Pratt parser";
+    homepage = "https://github.com/gabrielhdt/pratter";
+    license = licenses.bsd3;
+    changelog = "https://github.com/gabrielhdt/pratter/raw/${version}/CHANGELOG.md";
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

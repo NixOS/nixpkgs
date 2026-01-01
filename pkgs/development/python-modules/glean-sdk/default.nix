@@ -61,5 +61,9 @@ buildPythonPackage rec {
     description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
     license = lib.licenses.mpl20;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ melling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

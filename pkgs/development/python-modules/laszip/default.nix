@@ -55,11 +55,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "laszip" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unofficial bindings between Python and LASzip made using pybind11";
     homepage = "https://github.com/tmontaigu/laszip-python";
     changelog = "https://github.com/tmontaigu/laszip-python/blob/${src.rev}/Changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
+=======
+  meta = with lib; {
+    description = "Unofficial bindings between Python and LASzip made using pybind11";
+    homepage = "https://github.com/tmontaigu/laszip-python";
+    changelog = "https://github.com/tmontaigu/laszip-python/blob/${src.rev}/Changelog.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

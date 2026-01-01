@@ -44,8 +44,13 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       cddl
       gpl2Plus
@@ -53,6 +58,10 @@ stdenv.mkDerivation {
     homepage = "https://www.brendangregg.com/flamegraphs.html";
     description = "Visualization for profiled code";
     mainProgram = "flamegraph.pl";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -95,7 +95,11 @@ stdenv.mkDerivation {
       --set-default OCIO "$out/share/OpenColorIO-Configs/blender/config.ocio"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Node-graph based, open-source compositing software";
     longDescription = ''
       Node-graph based, open-source compositing software. Similar in
@@ -103,8 +107,13 @@ stdenv.mkDerivation {
     '';
     homepage = "https://natron.fr/";
     license = lib.licenses.gpl2;
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.puffnfresh ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = [ maintainers.puffnfresh ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # error: 'LogMessageVoidify' is not a member of 'google'
     broken = true;
   };

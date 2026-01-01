@@ -56,10 +56,18 @@ stdenv.mkDerivation {
     patchShebangs src/embrace
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://enblend.sourceforge.net/";
     description = "Blends away the seams in a panoramic image mosaic using a multiresolution spline";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    homepage = "https://enblend.sourceforge.net/";
+    description = "Blends away the seams in a panoramic image mosaic using a multiresolution spline";
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -7,13 +7,21 @@
 
 buildPythonPackage rec {
   pname = "altgraph";
+<<<<<<< HEAD
   version = "0.17.5";
+=======
+  version = "0.17.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-yHs5XdEvq96cmVc6l0nWfajSnvneASXH9TZpm0qbyec=";
+=======
+    hash = "sha256-G1r7uY9sTcrbLirmq5+plLu4wddfT6ltNA+UN65FRAY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dependencies = [
@@ -24,7 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "altgraph" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/ronaldoussoren/altgraph/tags${version}";
     description = "Fork of graphlib: a graph (network) package for constructing graphs";
     longDescription = ''
@@ -34,7 +46,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://altgraph.readthedocs.io/";
     downloadPage = "https://pypi.org/project/altgraph/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ septem9er ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ septem9er ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

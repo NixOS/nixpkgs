@@ -207,7 +207,11 @@ stdenv.mkDerivation (
     # Wine locates a lot of libraries dynamically through dlopen().  Add
     # them to the RPATH so that the user doesn't have to set them in
     # LD_LIBRARY_PATH.
+<<<<<<< HEAD
     env.NIX_LDFLAGS = toString (
+=======
+    NIX_LDFLAGS = toString (
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       map (path: "-rpath " + path) (
         map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ finalAttrs.buildInputs)
         # libpulsecommon.so is linked but not found otherwise

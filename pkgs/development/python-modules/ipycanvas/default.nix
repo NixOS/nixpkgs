@@ -11,14 +11,22 @@
 
 buildPythonPackage rec {
   pname = "ipycanvas";
+<<<<<<< HEAD
   version = "0.14.2";
+=======
+  version = "0.14.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-OFNwRHcRlN2jFjbEEHh4RxZyp6y1hLfotRgrIpsXBtU=";
+=======
+    hash = "sha256-kh8UgiWLWSm1mTF7XBKZMdgOFr41+jgwCjLnqkz+n4k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # We relax dependencies here instead of pulling in a patch because upstream
@@ -43,11 +51,20 @@ buildPythonPackage rec {
   doCheck = false; # tests are in Typescript and require `npx` and `chromium`
   pythonImportsCheck = [ "ipycanvas" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Expose the browser's Canvas API to IPython";
     homepage = "https://ipycanvas.readthedocs.io";
     changelog = "https://github.com/jupyter-widgets-contrib/ipycanvas/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Expose the browser's Canvas API to IPython";
+    homepage = "https://ipycanvas.readthedocs.io";
+    changelog = "https://github.com/jupyter-widgets-contrib/ipycanvas/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

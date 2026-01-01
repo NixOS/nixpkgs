@@ -24,12 +24,21 @@ stdenv.mkDerivation rec {
     icu
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Clock, timer, and stopwatch for the terminal";
     homepage = "https://octobanana.com/software/peaclock";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ djanatyn ];
+=======
+  meta = with lib; {
+    description = "Clock, timer, and stopwatch for the terminal";
+    homepage = "https://octobanana.com/software/peaclock";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ djanatyn ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "peaclock";
   };
 }

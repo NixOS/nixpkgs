@@ -27,9 +27,17 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-applehelp";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books";
+    homepage = "https://github.com/sphinx-doc/sphinxcontrib-applehelp";
+    license = licenses.bsd2;
+    teams = [ teams.sphinx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

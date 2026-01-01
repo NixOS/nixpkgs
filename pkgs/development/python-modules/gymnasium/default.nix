@@ -38,7 +38,11 @@
 
 buildPythonPackage rec {
   pname = "gymnasium";
+<<<<<<< HEAD
   version = "1.2.3";
+=======
+  version = "1.2.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pyproject = true;
 
@@ -46,7 +50,11 @@ buildPythonPackage rec {
     owner = "Farama-Foundation";
     repo = "gymnasium";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-b712BPs7AS8UE8Zsu9GW/J6Vag9NB/x728MtQ5yrjbY=";
+=======
+    hash = "sha256-GD/ZC6BRcsIiVrvTz3j2hg10tbJMfCou/ydUFbC2fc4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

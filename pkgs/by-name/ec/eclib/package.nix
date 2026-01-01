@@ -46,11 +46,20 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
   doCheck = true;
+<<<<<<< HEAD
   meta = {
     description = "Elliptic curve tools";
     homepage = "https://github.com/JohnCremona/eclib";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Elliptic curve tools";
+    homepage = "https://github.com/JohnCremona/eclib";
+    license = licenses.gpl2Plus;
+    teams = [ teams.sage ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

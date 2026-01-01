@@ -62,11 +62,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "devolo_home_control_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to work with devolo Home Control";
     homepage = "https://github.com/2Fake/devolo_home_control_api";
     changelog = "https://github.com/2Fake/devolo_home_control_api/blob/${src.tag}/docs/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library to work with devolo Home Control";
+    homepage = "https://github.com/2Fake/devolo_home_control_api";
+    changelog = "https://github.com/2Fake/devolo_home_control_api/blob/${src.tag}/docs/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

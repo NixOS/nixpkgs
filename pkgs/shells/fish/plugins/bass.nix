@@ -26,9 +26,17 @@ buildFishPlugin rec {
     make test
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fish function making it easy to use utilities written for Bash in Fish shell";
     homepage = "https://github.com/edc/bass";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Fish function making it easy to use utilities written for Bash in Fish shell";
+    homepage = "https://github.com/edc/bass";
+    license = licenses.mit;
+    maintainers = with maintainers; [ beezow ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

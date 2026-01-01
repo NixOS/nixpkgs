@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-2HsUNN3lyGb/eOUEN/vTOQbAy59DQSzIaOqdk9+KhfU=";
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool to prevent committing secret keys into your source code";
     homepage = "https://github.com/sirwart/ripsecrets";
     changelog = "https://github.com/sirwart/ripsecrets/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Command-line tool to prevent committing secret keys into your source code";
+    homepage = "https://github.com/sirwart/ripsecrets";
+    changelog = "https://github.com/sirwart/ripsecrets/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "ripsecrets";
   };

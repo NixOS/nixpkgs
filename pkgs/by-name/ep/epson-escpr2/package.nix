@@ -8,15 +8,24 @@
 
 stdenv.mkDerivation {
   pname = "epson-inkjet-printer-escpr2";
+<<<<<<< HEAD
   version = "1.2.37";
+=======
+  version = "1.2.35";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchurl {
     # To find the most recent version go to
     # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
     # and retrieve the download link for source package for arm CPU for the tar.gz (the x86 link targets to rpm source files)
+<<<<<<< HEAD
 
     url = "https://download-center.epson.com/f/module/1316b6b0-77cd-438c-95e1-c71e760a7579/epson-inkjet-printer-escpr2-1.2.37-1.tar.gz";
     hash = "sha256-jSh2HVb490CYJ/C+Eh1T5TmnBF7hmBmsGHuVbiWTHQ0=";
+=======
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/17/28/09/4e8dc40219d4b52e414b608de92552af4fd46eca/epson-inkjet-printer-escpr2-1.2.35-1.tar.gz";
+    hash = "sha256-aYEuEION/C32/SnngreX/nqK/6Yzkuxf0k0HpferTYM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [ cups ];
@@ -38,8 +47,11 @@ stdenv.mkDerivation {
     "--with-cupsppddir=${placeholder "out"}/share/cups/model"
   ];
 
+<<<<<<< HEAD
   passthru.updateScript = ./update.sh;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R 2 Driver (generic driver)";

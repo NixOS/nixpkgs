@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lenovo/tlmi-auth";
     maintainers = with lib.maintainers; [ snpschaaf ];
@@ -36,5 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tlmi-auth";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lenovo/tlmi-auth";
+    maintainers = with maintainers; [ snpschaaf ];
+    description = "Utility for creating signature strings needed for thinklmi certificate based authentication";
+    mainProgram = "tlmi-auth";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

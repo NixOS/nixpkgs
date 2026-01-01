@@ -18,11 +18,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-eT4u/IHj+yqeLQZ7E4cWAJFMT503zHq7HYyIhsoaj6s=";
 
+<<<<<<< HEAD
   meta = {
     description = "Match and rename subtitle files to video files and perform other batch operations on subtitle files";
     homepage = "https://github.com/kl/sub-batch";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Match and rename subtitle files to video files and perform other batch operations on subtitle files";
+    homepage = "https://github.com/kl/sub-batch";
+    license = licenses.mit;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "sub-batch";
   };

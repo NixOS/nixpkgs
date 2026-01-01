@@ -29,10 +29,17 @@ buildPythonPackage rec {
   # no tests with sdist
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Servicelinker Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Servicelinker Management Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

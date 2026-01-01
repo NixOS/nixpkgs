@@ -8,6 +8,7 @@ stdenv.mkDerivation {
   pname = "keyfuzz";
   version = "0.2";
 
+<<<<<<< HEAD
   meta = {
     description = "Manipulate the scancode/keycode translation tables of keyboard drivers";
     mainProgram = "keyfuzz";
@@ -15,6 +16,15 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mboes ];
+=======
+  meta = with lib; {
+    description = "Manipulate the scancode/keycode translation tables of keyboard drivers";
+    mainProgram = "keyfuzz";
+    homepage = "http://0pointer.de/lennart/projects/keyfuzz/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mboes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   src = fetchurl {

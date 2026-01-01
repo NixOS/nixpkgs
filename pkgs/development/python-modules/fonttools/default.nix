@@ -97,11 +97,20 @@ buildPythonPackage rec {
     "test_ttcompile_timestamp_calcs"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/fonttools/fonttools";
     description = "Library to manipulate font files from Python";
     changelog = "https://github.com/fonttools/fonttools/blob/${src.tag}/NEWS.rst";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/fonttools/fonttools";
+    description = "Library to manipulate font files from Python";
+    changelog = "https://github.com/fonttools/fonttools/blob/${src.tag}/NEWS.rst";
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

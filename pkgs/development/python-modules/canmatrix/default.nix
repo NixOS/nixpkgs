@@ -57,7 +57,11 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pytestFlags = [
     # long_envvar_name_imports requires stable key value pair ordering
@@ -73,11 +77,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "canmatrix" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Support and convert several CAN (Controller Area Network) database formats";
     homepage = "https://github.com/ebroecker/canmatrix";
     changelog = "https://github.com/ebroecker/canmatrix/releases/tag/${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ sorki ];
+=======
+  meta = with lib; {
+    description = "Support and convert several CAN (Controller Area Network) database formats";
+    homepage = "https://github.com/ebroecker/canmatrix";
+    changelog = "https://github.com/ebroecker/canmatrix/releases/tag/${version}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ sorki ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

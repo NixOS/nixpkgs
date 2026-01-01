@@ -54,10 +54,17 @@ stdenv.mkDerivation (finalAttrs: {
     "--x-libraries=${libX11.out}/lib"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bastard hacked offspring of Blackbox";
     homepage = "https://github.com/museoa/hackedbox/";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Bastard hacked offspring of Blackbox";
+    homepage = "https://github.com/museoa/hackedbox/";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     inherit (libX11.meta) platforms;
   };

@@ -32,13 +32,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
+<<<<<<< HEAD
   version = "19.6";
+=======
+  version = "19.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-U0Yd3Xus0hsBpbXUsEC7EyoMtmsOXZJT4c3cFai918g=";
+=======
+    hash = "sha256-L9n6jvI9rzrBp8yzKQPZRBSbT5/ZnEm6eLW6qMA+sy0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -130,6 +138,10 @@ stdenv.mkDerivation rec {
       cc-by-sa-30
     ];
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      lom
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ncfavier
       Scrumplex
       sirseruju

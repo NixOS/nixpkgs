@@ -27,11 +27,20 @@ stdenv.mkDerivation rec {
     install --target $out/bin -D cramfsswap
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Swap endianess of a cram filesystem (cramfs)";
     mainProgram = "cramfsswap";
     homepage = "https://packages.debian.org/sid/utils/cramfsswap";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Swap endianess of a cram filesystem (cramfs)";
+    mainProgram = "cramfsswap";
+    homepage = "https://packages.debian.org/sid/utils/cramfsswap";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

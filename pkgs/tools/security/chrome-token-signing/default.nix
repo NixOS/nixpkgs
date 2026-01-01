@@ -40,6 +40,7 @@ mkDerivation rec {
     install -D -t $out/lib/mozilla/native-messaging-hosts host-linux/ff/ee.ria.esteid.json
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Chrome and Firefox extension for signing with your eID on the web";
     mainProgram = "chrome-token-signing";
@@ -47,5 +48,14 @@ mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.mmahut ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Chrome and Firefox extension for signing with your eID on the web";
+    mainProgram = "chrome-token-signing";
+    homepage = "https://github.com/open-eid/chrome-token-signing/wiki";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.mmahut ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

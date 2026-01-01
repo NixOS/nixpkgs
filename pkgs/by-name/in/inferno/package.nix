@@ -33,6 +33,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jonhoo/inferno";
     changelog = "https://github.com/jonhoo/inferno/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.cddl;
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

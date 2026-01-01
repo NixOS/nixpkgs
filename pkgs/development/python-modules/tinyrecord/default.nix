@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tinyrecord" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Transaction support for TinyDB";
     homepage = "https://github.com/eugene-eeo/tinyrecord";
     changelog = "https://github.com/eugene-eeo/tinyrecord/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Transaction support for TinyDB";
+    homepage = "https://github.com/eugene-eeo/tinyrecord";
+    changelog = "https://github.com/eugene-eeo/tinyrecord/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

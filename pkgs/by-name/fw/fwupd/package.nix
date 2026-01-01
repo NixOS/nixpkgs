@@ -135,7 +135,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
+<<<<<<< HEAD
   version = "2.0.19";
+=======
+  version = "2.0.17";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -153,7 +157,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-DjO+7CEOef5KMbYEPtDr3GrnXTDUO/jwwZ4P17o4oDg=";
+=======
+    hash = "sha256-PhG30TKwOqOCMI3e1D9cbNN6hKiVVyrzi9vG+CG5bY0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -174,6 +182,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # EFI capsule is located in fwupd-efi now.
     ./0004-Get-the-efi-app-from-fwupd-efi.patch
+<<<<<<< HEAD
+=======
+
+    # TODO: drop after 2.0.17
+    (fetchpatch {
+      url = "https://github.com/fwupd/fwupd/commit/7ded10f22875da9b0f5f21cb41f8663049da6311.patch";
+      hash = "sha256-rEoSwcTmxJGX2ZdWAjDvsvgnP2qZp3ErnJVCIQlplhQ=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''

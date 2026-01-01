@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.cs.waikato.ac.nz/ml/weka/";
     description = "Collection of machine learning algorithms for data mining tasks";
@@ -97,5 +98,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.mimame ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.cs.waikato.ac.nz/ml/weka/";
+    description = "Collection of machine learning algorithms for data mining tasks";
+    mainProgram = "weka";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.mimame ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -52,11 +52,20 @@ rec {
     chmod a+x $out/bin/run-ethereum-test-net
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Gerbil Ethereum: a Scheme alternative to web3.js";
     homepage = "https://github.com/fare/gerbil-ethereum";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "Gerbil Ethereum: a Scheme alternative to web3.js";
+    homepage = "https://github.com/fare/gerbil-ethereum";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -61,11 +61,19 @@ buildGoModule rec {
       --zsh tk.zsh
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible, reusable and concise configuration for Kubernetes";
     homepage = "https://tanka.dev";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mikefaille ];
+=======
+  meta = with lib; {
+    description = "Flexible, reusable and concise configuration for Kubernetes";
+    homepage = "https://tanka.dev";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mikefaille ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tk";
   };
 }

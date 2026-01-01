@@ -145,13 +145,22 @@ rec {
         runHook postInstall
       '';
 
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         # The package does not build with lua 5.4 or luaJIT
         broken = luaAtLeast "5.4" || isLuaJIT;
         description = "Lua module for PAM authentication";
         homepage = "https://github.com/devurandom/lua-pam";
+<<<<<<< HEAD
         license = lib.licenses.mit;
         maintainers = with lib.maintainers; [ traxys ];
+=======
+        license = licenses.mit;
+        maintainers = with maintainers; [ traxys ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     }
   ) { };
@@ -160,21 +169,36 @@ rec {
     { fetchFromGitHub }:
     buildLuaPackage rec {
       pname = "lua-resty-core";
+<<<<<<< HEAD
       version = "0.1.32";
+=======
+      version = "0.1.31";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       src = fetchFromGitHub {
         owner = "openresty";
         repo = "lua-resty-core";
         rev = "v${version}";
+<<<<<<< HEAD
         sha256 = "sha256-ba/ahIl8BDfyXIbaN6zVCh3UwY6JbAqqZEpXktOfeYo=";
+=======
+        sha256 = "sha256-WUiBFJ8L8NzSGoEwTAw/iHAzPqJqaOUSFyqGeEf+f94==";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
       propagatedBuildInputs = [ lua-resty-lrucache ];
 
+<<<<<<< HEAD
       meta = {
         description = "New FFI-based API for lua-nginx-module";
         homepage = "https://github.com/openresty/lua-resty-core";
         license = lib.licenses.bsd3;
+=======
+      meta = with lib; {
+        description = "New FFI-based API for lua-nginx-module";
+        homepage = "https://github.com/openresty/lua-resty-core";
+        license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         maintainers = [ ];
       };
     }
@@ -193,10 +217,17 @@ rec {
         sha256 = "sha256-G2l4Zo9Xm/m4zRfxrgzEvRE5LMO+UuX3kd7FwlCnxDA=";
       };
 
+<<<<<<< HEAD
       meta = {
         description = "Lua-land LRU Cache based on LuaJIT FFI";
         homepage = "https://github.com/openresty/lua-resty-lrucache";
         license = lib.licenses.bsd3;
+=======
+      meta = with lib; {
+        description = "Lua-land LRU Cache based on LuaJIT FFI";
+        homepage = "https://github.com/openresty/lua-resty-lrucache";
+        license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         maintainers = [ ];
       };
     }
@@ -238,6 +269,7 @@ rec {
         );
       '';
 
+<<<<<<< HEAD
       meta = {
         broken = stdenv.hostPlatform.isDarwin;
         description = "Lightweight UNIX I/O and POSIX binding for Lua";
@@ -245,6 +277,15 @@ rec {
         license = lib.licenses.mit;
         maintainers = with lib.maintainers; [ richardipsum ];
         platforms = lib.platforms.unix;
+=======
+      meta = with lib; {
+        broken = stdenv.hostPlatform.isDarwin;
+        description = "Lightweight UNIX I/O and POSIX binding for Lua";
+        homepage = "https://www.gitano.org.uk/luxio/";
+        license = licenses.mit;
+        maintainers = with maintainers; [ richardipsum ];
+        platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     }
   ) { };
@@ -274,17 +315,30 @@ rec {
         printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
       '';
 
+<<<<<<< HEAD
       meta = {
         description = "Modular widget library for the awesome window manager";
         homepage = "https://vicious.rtfd.io";
         changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
         license = lib.licenses.gpl2Plus;
         maintainers = with lib.maintainers; [
+=======
+      meta = with lib; {
+        description = "Modular widget library for the awesome window manager";
+        homepage = "https://vicious.rtfd.io";
+        changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
+        license = licenses.gpl2Plus;
+        maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           makefu
           mic92
           McSinyx
         ];
+<<<<<<< HEAD
         platforms = lib.platforms.linux;
+=======
+        platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     }
   ) { };

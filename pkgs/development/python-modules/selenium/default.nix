@@ -80,10 +80,18 @@ buildPythonPackage rec {
     testing-vaultwarden = nixosTests.vaultwarden;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Bindings for Selenium WebDriver";
     homepage = "https://selenium.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jraygauthier ];
+=======
+  meta = with lib; {
+    description = "Bindings for Selenium WebDriver";
+    homepage = "https://selenium.dev/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jraygauthier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

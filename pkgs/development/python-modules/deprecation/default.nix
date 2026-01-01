@@ -30,9 +30,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to handle automated deprecations";
     homepage = "https://deprecation.readthedocs.io/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Library to handle automated deprecations";
+    homepage = "https://deprecation.readthedocs.io/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

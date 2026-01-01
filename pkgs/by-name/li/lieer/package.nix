@@ -37,7 +37,11 @@ python3Packages.buildPythonApplication rec {
     "lieer"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast email-fetching and two-way tag synchronization between notmuch and GMail";
     longDescription = ''
       This program can pull email and labels (and changes to labels)
@@ -47,8 +51,13 @@ python3Packages.buildPythonApplication rec {
       GMail account.
     '';
     homepage = "https://lieer.gaute.vetsj.com/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       archer-65
       flokli
     ];

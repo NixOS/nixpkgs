@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication rec {
     matrix-client
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Download backlogs from Matrix as raw text";
     mainProgram = "matrix-dl";
@@ -31,5 +32,14 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl1Plus;
     maintainers = with lib.maintainers; [ aw ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Download backlogs from Matrix as raw text";
+    mainProgram = "matrix-dl";
+    homepage = src.meta.homepage;
+    license = licenses.gpl1Plus;
+    maintainers = with maintainers; [ aw ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

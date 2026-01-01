@@ -23,11 +23,19 @@ rustPlatform.buildRustPackage {
     cp README.md $out/share/doc/git-vanity-hash
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/prasmussen/git-vanity-hash";
     description = "Tool for creating commit hashes with a specific prefix";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.kaction ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/prasmussen/git-vanity-hash";
+    description = "Tool for creating commit hashes with a specific prefix";
+    license = [ licenses.mit ];
+    maintainers = [ maintainers.kaction ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-vanity-hash";
   };
 }

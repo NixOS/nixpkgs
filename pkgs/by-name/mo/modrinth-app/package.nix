@@ -7,7 +7,10 @@
   glib,
   glib-networking,
   gsettings-desktop-schemas,
+<<<<<<< HEAD
   jdk25,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   jdk17,
   jdk21,
   jdk8,
@@ -15,7 +18,10 @@
     jdk8
     jdk17
     jdk21
+<<<<<<< HEAD
     jdk25
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ],
   libGL,
   libjack2,

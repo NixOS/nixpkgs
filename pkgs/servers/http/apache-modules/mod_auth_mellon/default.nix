@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     cp ./.libs/mod_auth_mellon.so $out/modules
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/latchset/mod_auth_mellon";
     description = "Apache module with a simple SAML 2.0 service provider";
@@ -66,6 +67,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ womfoo ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/latchset/mod_auth_mellon";
+    description = "Apache module with a simple SAML 2.0 service provider";
+    mainProgram = "mellon_create_metadata.sh";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ womfoo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "natsort" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple natural order sorting API for Python that just works";
     homepage = "https://github.com/xolox/python-naturalsort";
     changelog = "https://github.com/xolox/python-naturalsort/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
+=======
+  meta = with lib; {
+    description = "Simple natural order sorting API for Python that just works";
+    homepage = "https://github.com/xolox/python-naturalsort";
+    changelog = "https://github.com/xolox/python-naturalsort/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ eyjhb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

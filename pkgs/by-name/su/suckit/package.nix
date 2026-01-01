@@ -29,10 +29,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_external_download"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Recursively visit and download a website's content to your disk";
     homepage = "https://github.com/skallwar/suckit";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Recursively visit and download a website's content to your disk";
+    homepage = "https://github.com/skallwar/suckit";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20 # or
       mit
     ];

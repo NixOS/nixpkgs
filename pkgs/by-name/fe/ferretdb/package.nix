@@ -34,6 +34,10 @@ buildGoModule (finalAttrs: {
   # the binary panics if something required wasn't set during compilation
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.tests = nixosTests.ferretdb;
 

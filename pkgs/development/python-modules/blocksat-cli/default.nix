@@ -66,12 +66,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blocksatcli" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Blockstream Satellite CLI";
     homepage = "https://github.com/Blockstream/satellite";
     changelog = "https://github.com/Blockstream/satellite/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ prusnak ];
+=======
+  meta = with lib; {
+    description = "Blockstream Satellite CLI";
+    homepage = "https://github.com/Blockstream/satellite";
+    changelog = "https://github.com/Blockstream/satellite/releases/tag/${src.tag}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ prusnak ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "blocksat-cli";
   };
 }

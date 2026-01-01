@@ -33,11 +33,20 @@ stdenv.mkDerivation {
     install -Dm0644 fzf-zsh.plugin.zsh $out/share/zsh/plugins/fzf-zsh/fzf-zsh.plugin.zsh
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/wyntau/fzf-zsh";
     description = "Wrap fzf to use in oh-my-zsh";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/wyntau/fzf-zsh";
+    description = "Wrap fzf to use in oh-my-zsh";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,11 +27,20 @@ buildPythonPackage rec {
   doCheck = false; # there's no test
   pythonImportsCheck = [ "formbox" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Script to format mbox as HTML/XML";
     mainProgram = "formbox";
     homepage = "https://trong.loang.net/~cnx/formbox";
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
+=======
+  meta = with lib; {
+    description = "Script to format mbox as HTML/XML";
+    mainProgram = "formbox";
+    homepage = "https://trong.loang.net/~cnx/formbox";
+    license = licenses.agpl3Plus;
+    maintainers = [ maintainers.McSinyx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

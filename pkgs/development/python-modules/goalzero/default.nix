@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goalzero" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Goal Zero Yeti REST Api Library";
     homepage = "https://github.com/tkdrob/goalzero";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Goal Zero Yeti REST Api Library";
+    homepage = "https://github.com/tkdrob/goalzero";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

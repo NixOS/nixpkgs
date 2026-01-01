@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_basicauth" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP basic authentication middleware for aiohttp 3.0";
     homepage = "https://github.com/romis2012/aiohttp-basicauth";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "HTTP basic authentication middleware for aiohttp 3.0";
+    homepage = "https://github.com/romis2012/aiohttp-basicauth";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

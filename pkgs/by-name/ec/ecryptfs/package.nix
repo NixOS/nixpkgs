@@ -98,10 +98,18 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ecryptfs; };
 
+<<<<<<< HEAD
   meta = {
     description = "Enterprise-class stacked cryptographic filesystem";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Enterprise-class stacked cryptographic filesystem";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ obadz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

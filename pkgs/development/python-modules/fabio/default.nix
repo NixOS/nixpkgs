@@ -16,12 +16,20 @@
 
 buildPythonPackage rec {
   pname = "fabio";
+<<<<<<< HEAD
   version = "2025.10.0";
+=======
+  version = "2024.9.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-wZdjvPoCp4pQfz2RS1ZKiZfIimqntPh/nbTOf6OX0lY=";
+=======
+    hash = "sha256-+HPfUfRoUxwRqufgzYihTyIfTvCUMfvFpspnse1HU1s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonImportsCheck = [ "fabio" ];

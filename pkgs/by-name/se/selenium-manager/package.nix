@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   # check the Gentoo package for inspiration
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Browser automation framework and ecosystem";
     homepage = "https://github.com/SeleniumHQ/selenium";
@@ -35,5 +36,14 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "selenium-manager";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Browser automation framework and ecosystem";
+    homepage = "https://github.com/SeleniumHQ/selenium";
+    license = licenses.asl20;
+    maintainers = [ ];
+    mainProgram = "selenium-manager";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -18,10 +18,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oath" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of the three main OATH specifications: HOTP, TOTP and OCRA";
     homepage = "https://github.com/bdauvergne/python-oath";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ aw ];
+=======
+  meta = with lib; {
+    description = "Python implementation of the three main OATH specifications: HOTP, TOTP and OCRA";
+    homepage = "https://github.com/bdauvergne/python-oath";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ aw ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

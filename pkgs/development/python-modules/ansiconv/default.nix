@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for converting ANSI coded text and converts it to either plain text or HTML";
     homepage = "https://github.com/ansible/ansiconv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
+=======
+  meta = with lib; {
+    description = "Module for converting ANSI coded text and converts it to either plain text or HTML";
+    homepage = "https://github.com/ansible/ansiconv";
+    license = licenses.mit;
+    maintainers = with maintainers; [ psyanticy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

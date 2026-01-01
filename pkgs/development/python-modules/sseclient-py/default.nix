@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unittests.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure-Python Server Side Events (SSE) client";
     homepage = "https://github.com/mpetazzoni/sseclient";
     changelog = "https://github.com/mpetazzoni/sseclient/releases/tag/sseclient-py-${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  meta = with lib; {
+    description = "Pure-Python Server Side Events (SSE) client";
+    homepage = "https://github.com/mpetazzoni/sseclient";
+    changelog = "https://github.com/mpetazzoni/sseclient/releases/tag/sseclient-py-${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

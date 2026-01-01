@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libusb1 ];
 
+<<<<<<< HEAD
   meta = {
     description = "User mode driver for Airspy HF+";
     homepage = "https://github.com/airspy/airspyhf";
@@ -34,5 +35,16 @@ stdenv.mkDerivation {
       sikmir
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "User mode driver for Airspy HF+";
+    homepage = "https://github.com/airspy/airspyhf";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+      aciceri
+      sikmir
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

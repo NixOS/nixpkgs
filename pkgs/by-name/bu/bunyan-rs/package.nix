@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-eLbfrlZWwPv1AFgwFz+IacLZrSl9/KU9zfTstwB8ol0=";
 
+<<<<<<< HEAD
   meta = {
     description = "CLI to pretty print logs in bunyan format (Rust port of the original JavaScript bunyan CLI)";
     homepage = "https://github.com/LukeMathWalker/bunyan";
@@ -25,6 +26,16 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ netcrns ];
+=======
+  meta = with lib; {
+    description = "CLI to pretty print logs in bunyan format (Rust port of the original JavaScript bunyan CLI)";
+    homepage = "https://github.com/LukeMathWalker/bunyan";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ netcrns ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bunyan";
   };
 }

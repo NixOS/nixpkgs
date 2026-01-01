@@ -44,12 +44,21 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::process_exec_cwd"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Standalone Luau script runtime";
     mainProgram = "lune";
     homepage = "https://github.com/lune-org/lune";
     changelog = "https://github.com/lune-org/lune/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ lammermann ];
+=======
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ lammermann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

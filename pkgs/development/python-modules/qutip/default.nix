@@ -63,7 +63,11 @@ buildPythonPackage rec {
     pytest-rerunfailures
     writableTmpDirAsHomeHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.

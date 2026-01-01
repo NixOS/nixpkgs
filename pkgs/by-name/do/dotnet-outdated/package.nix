@@ -30,17 +30,29 @@ buildDotnetModule rec {
     "net8.0"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = ".NET Core global tool to display and update outdated NuGet packages in a project";
     homepage = "https://github.com/dotnet-outdated/dotnet-outdated";
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    description = ".NET Core global tool to display and update outdated NuGet packages in a project";
+    homepage = "https://github.com/dotnet-outdated/dotnet-outdated";
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fromSource
       # deps
       binaryBytecode
       binaryNativeCode
     ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilioziniades ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ emilioziniades ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dotnet-outdated";
   };
 }

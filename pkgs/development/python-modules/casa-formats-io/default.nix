@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "casa_formats_io" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dask-based reader for CASA data";
     homepage = "https://casa-formats-io.readthedocs.io/";
     changelog = "https://github.com/radio-astro-tools/casa-formats-io/blob/v${version}/CHANGES.rst";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ smaret ];
+=======
+  meta = with lib; {
+    description = "Dask-based reader for CASA data";
+    homepage = "https://casa-formats-io.readthedocs.io/";
+    changelog = "https://github.com/radio-astro-tools/casa-formats-io/blob/v${version}/CHANGES.rst";
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ smaret ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

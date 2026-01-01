@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiortsp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asyncio-based RTSP library";
     homepage = "https://github.com/marss/aiortsp";
     changelog = "https://github.com/marss/aiortsp/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Asyncio-based RTSP library";
+    homepage = "https://github.com/marss/aiortsp";
+    changelog = "https://github.com/marss/aiortsp/blob/${src.rev}/CHANGELOG.rst";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

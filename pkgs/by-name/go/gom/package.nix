@@ -58,11 +58,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GObject to SQLite object mapper";
     homepage = "https://gitlab.gnome.org/GNOME/gom";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "GObject to SQLite object mapper";
+    homepage = "https://gitlab.gnome.org/GNOME/gom";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

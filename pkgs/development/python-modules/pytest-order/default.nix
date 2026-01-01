@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin that allows you to customize the order in which your tests are run";
     homepage = "https://github.com/pytest-dev/pytest-order";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Pytest plugin that allows you to customize the order in which your tests are run";
+    homepage = "https://github.com/pytest-dev/pytest-order";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jacg
       Luflosi
     ];

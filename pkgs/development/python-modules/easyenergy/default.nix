@@ -66,11 +66,20 @@ buildPythonPackage rec {
     "test_electricity_midnight"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for getting energy/gas prices from easyEnergy";
     homepage = "https://github.com/klaasnicolaas/python-easyenergy";
     changelog = "https://github.com/klaasnicolaas/python-easyenergy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for getting energy/gas prices from easyEnergy";
+    homepage = "https://github.com/klaasnicolaas/python-easyenergy";
+    changelog = "https://github.com/klaasnicolaas/python-easyenergy/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

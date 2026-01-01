@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Curses-based interface for MPD (music player daemon)";
     homepage = "https://www.musicpd.org/clients/ncmpc/";
@@ -59,6 +60,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ fpletz ];
+=======
+  meta = with lib; {
+    description = "Curses-based interface for MPD (music player daemon)";
+    homepage = "https://www.musicpd.org/clients/ncmpc/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
+    maintainers = with maintainers; [ fpletz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ncmpc";
   };
 }

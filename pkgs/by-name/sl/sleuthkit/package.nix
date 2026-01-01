@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoreconfHook,
   ant,
   jdk,
@@ -16,13 +19,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sleuthkit";
+<<<<<<< HEAD
   version = "4.14.0"; # Note: when updating don't forget to also update the rdeps outputHash
+=======
+  version = "4.12.1"; # Note: when updating don't forget to also update the rdeps outputHash
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "sleuthkit-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-WvGVEDuhpmcyPOaihDruBbQbcj7s+Zkt2/D5CIsu0u8=";
+=======
+    hash = "sha256-q51UY2lIcLijycNaq9oQIwUXpp/1mfc3oPN4syOPF44=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Fetch libraries using a fixed output derivation
@@ -59,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
+<<<<<<< HEAD
     outputHash = "sha256-HfO8yWlL16NuXQ+NWIHwii69Vfb1vvSmNC3+6p0ALdg=";
+=======
+    outputHash = "sha256-mc/KQrwn3xpPI0ngOLcpoQDaJJm/rM8XgaX//5PiRZk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postUnpack = ''
@@ -76,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R 755 $IVY_HOME
   '';
 
+<<<<<<< HEAD
   patches = [
     # Fix build with gcc 15
     (fetchpatch {
@@ -88,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     substituteInPlace tsk/img/ewf.cpp --replace libewf_handle_read_random libewf_handle_read_buffer_at_offset
   '';
@@ -114,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf */.libs
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Forensic/data recovery tool";
     homepage = "https://www.sleuthkit.org/";
@@ -128,5 +147,21 @@ stdenv.mkDerivation (finalAttrs: {
       binaryBytecode # dependencies
     ];
     license = lib.licenses.ipl10;
+=======
+  meta = with lib; {
+    description = "Forensic/data recovery tool";
+    homepage = "https://www.sleuthkit.org/";
+    changelog = "https://github.com/sleuthkit/sleuthkit/blob/${finalAttrs.src.rev}/NEWS.txt";
+    maintainers = with maintainers; [
+      raskin
+      gfrascadorio
+    ];
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # dependencies
+    ];
+    license = licenses.ipl10;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

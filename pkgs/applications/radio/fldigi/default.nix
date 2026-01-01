@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Digital modem program";
     homepage = "https://sourceforge.net/projects/fldigi/";
@@ -58,5 +59,16 @@ stdenv.mkDerivation rec {
       ftrvxmtrx
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Digital modem program";
+    homepage = "https://sourceforge.net/projects/fldigi/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      relrod
+      ftrvxmtrx
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

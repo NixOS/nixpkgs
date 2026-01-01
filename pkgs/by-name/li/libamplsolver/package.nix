@@ -44,12 +44,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library of routines that help solvers work with AMPL";
     homepage = "https://ampl.com/netlib/ampl/";
     license = [ lib.licenses.mit ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aanderse ];
+=======
+  meta = with lib; {
+    description = "Library of routines that help solvers work with AMPL";
+    homepage = "https://ampl.com/netlib/ampl/";
+    license = [ licenses.mit ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ aanderse ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # generates header at compile time
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };

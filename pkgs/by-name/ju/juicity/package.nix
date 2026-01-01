@@ -38,10 +38,18 @@ buildGoModule rec {
       --replace /usr/bin/juicity-client $out/bin/juicity-client
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/juicity/juicity";
     description = "Quic-based proxy protocol";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ oluceps ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/juicity/juicity";
+    description = "Quic-based proxy protocol";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ oluceps ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

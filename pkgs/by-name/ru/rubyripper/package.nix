@@ -46,11 +46,19 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "High quality CD audio ripper";
     mainProgram = "rrip_cli";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "High quality CD audio ripper";
+    mainProgram = "rrip_cli";
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/bleskodev/rubyripper";
   };
 }

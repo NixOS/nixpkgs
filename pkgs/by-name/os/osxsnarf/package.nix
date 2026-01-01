@@ -21,11 +21,20 @@ stdenv.mkDerivation rec {
   ];
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plan 9-inspired way to share your OS X clipboard";
     homepage = "https://github.com/eraserhd/osxsnarf";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.darwin;
     maintainers = [ lib.maintainers.eraserhd ];
+=======
+  meta = with lib; {
+    description = "Plan 9-inspired way to share your OS X clipboard";
+    homepage = "https://github.com/eraserhd/osxsnarf";
+    license = licenses.unlicense;
+    platforms = platforms.darwin;
+    maintainers = [ maintainers.eraserhd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

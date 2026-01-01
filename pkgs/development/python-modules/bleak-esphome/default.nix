@@ -65,11 +65,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bleak_esphome" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bleak backend of ESPHome";
     homepage = "https://github.com/bluetooth-devices/bleak-esphome";
     changelog = "https://github.com/bluetooth-devices/bleak-esphome/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Bleak backend of ESPHome";
+    homepage = "https://github.com/bluetooth-devices/bleak-esphome";
+    changelog = "https://github.com/bluetooth-devices/bleak-esphome/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

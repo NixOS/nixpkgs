@@ -8,6 +8,10 @@ in
   name = "zookeeper";
   meta = with pkgs.lib.maintainers; {
     maintainers = [
+<<<<<<< HEAD
+=======
+      nequissimus
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ztzg
     ];
   };

@@ -80,12 +80,21 @@ stdenv.mkDerivation rec {
   buildInputs =
     lib.optional enableNLS libnatspec ++ lib.optional stdenv.hostPlatform.isCygwin libiconv;
 
+<<<<<<< HEAD
   meta = {
     description = "Compressor/archiver for creating and modifying zipfiles";
     homepage = "http://www.info-zip.org";
     license = lib.licenses.bsdOriginal;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ RossComputerGuy ];
+=======
+  meta = with lib; {
+    description = "Compressor/archiver for creating and modifying zipfiles";
+    homepage = "http://www.info-zip.org";
+    license = licenses.bsdOriginal;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ RossComputerGuy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zip";
   };
 }

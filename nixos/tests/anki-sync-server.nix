@@ -4,6 +4,7 @@ let
     #!${pkgs.python3}/bin/python
 
     import sys
+<<<<<<< HEAD
     import os
 
     # anki is built with buildPythonApplication.
@@ -19,6 +20,13 @@ let
     sys.path.append(anki_libs)
 
     import anki.collection
+=======
+
+    # get site paths from anki itself
+    from runpy import run_path
+    run_path("${pkgs.anki}/bin/.anki-wrapped")
+    import anki
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     col = anki.collection.Collection('test_collection')
     endpoint = 'http://localhost:27701'

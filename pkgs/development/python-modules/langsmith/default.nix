@@ -13,7 +13,10 @@
   pydantic,
   requests,
   requests-toolbelt,
+<<<<<<< HEAD
   uuid-utils,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   zstandard,
 
   # tests
@@ -32,14 +35,22 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
+<<<<<<< HEAD
   version = "0.4.59";
+=======
+  version = "0.4.41";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-IL1lwV+WkIpYAlx+n08XlzbvzyDMUQCCZKmA+ImBIqU=";
+=======
+    hash = "sha256-hZRZ4IAPKxCtvDZfk9D5irkYk0KM6pG2l+HSq742KYw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/python";
@@ -54,7 +65,10 @@ buildPythonPackage rec {
     pydantic
     requests
     requests-toolbelt
+<<<<<<< HEAD
     uuid-utils
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     zstandard
   ];
 

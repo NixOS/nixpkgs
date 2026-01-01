@@ -25,11 +25,20 @@
     sha256 = "1zfccqaibwy2b3srwmwwgv91dwy1xl18cfimxhcsxl6mxvgm61pd";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "libxml bindings for Gerbil";
     homepage = "https://github.com/mighty-gerbils/gerbil-libxml";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "libxml bindings for Gerbil";
+    homepage = "https://github.com/mighty-gerbils/gerbil-libxml";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

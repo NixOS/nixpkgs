@@ -147,11 +147,20 @@ buildPythonPackage rec {
     fullTestsuite = afdko.override { runAllTests = true; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Adobe Font Development Kit for OpenType";
     changelog = "https://github.com/adobe-type-tools/afdko/blob/${version}/NEWS.md";
     homepage = "https://adobe-type-tools.github.io/afdko";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Adobe Font Development Kit for OpenType";
+    changelog = "https://github.com/adobe-type-tools/afdko/blob/${version}/NEWS.md";
+    homepage = "https://adobe-type-tools.github.io/afdko";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

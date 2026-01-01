@@ -4,7 +4,10 @@
   fetchFromGitHub,
   setuptools,
   requests,
+<<<<<<< HEAD
   unstableGitUpdater,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage {
@@ -28,8 +31,11 @@ buildPythonPackage {
   # The tests require an internet connection and an API key
   doCheck = false;
 
+<<<<<<< HEAD
   passthru.updateScript = unstableGitUpdater { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Wrapper for The Movie Database API v3";
     homepage = "https://github.com/celiao/tmdbsimple";

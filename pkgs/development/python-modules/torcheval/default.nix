@@ -13,9 +13,12 @@ let
   pname = "torcheval";
   version = "0.0.7";
 in
+<<<<<<< HEAD
 
 # nixpkgs-update: no auto update
 # upstream is missing the tag, so r-ryantm is attempting downgrades, e.g. #460611
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 buildPythonPackage {
   inherit pname version;
   pyproject = true;

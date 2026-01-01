@@ -31,12 +31,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "libusb tool for flashing chinese ST-Link dongles";
     homepage = "https://github.com/jeanthom/stlink-tool";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.wucke13 ];
+=======
+  meta = with lib; {
+    description = "libusb tool for flashing chinese ST-Link dongles";
+    homepage = "https://github.com/jeanthom/stlink-tool";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.wucke13 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "stlink-tool";
   };
 }

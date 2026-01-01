@@ -10,14 +10,22 @@
 
 buildPythonPackage rec {
   pname = "coqpit-config";
+<<<<<<< HEAD
   version = "0.2.2";
+=======
+  version = "0.2.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-coqpit";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-g0NE9batSxlM/qnxj1CMMdGLD+lLRUJ9Ssaxx6ju6S8=";
+=======
+    hash = "sha256-puTqaYK1j1SGqGQQsrEH9lbpcF0FzcQ8v2siUQVyHsE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -40,13 +48,22 @@ buildPythonPackage rec {
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [ "tests/test_nested_configs.py" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple but maybe too simple config management through python data classes";
     longDescription = ''
       Simple, light-weight and no dependency config handling through python data classes with to/from JSON serialization/deserialization.
     '';
     homepage = "https://github.com/idiap/coqui-ai-coqpit";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

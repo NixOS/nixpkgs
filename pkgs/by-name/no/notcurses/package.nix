@@ -66,7 +66,11 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/dankamongmen/notcurses";
     description = "Blingful TUIs and character graphics";
     longDescription = ''
@@ -78,7 +82,11 @@ stdenv.mkDerivation rec {
       It is not a source-compatible X/Open Curses implementation, nor a
       replacement for NCURSES on existing systems.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     inherit (ncurses.meta) platforms;
   };

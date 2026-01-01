@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   #     first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
+<<<<<<< HEAD
   meta = {
     description = "CPU/GPU miner in c for bitcoin";
     mainProgram = "cgminer";
@@ -75,5 +76,17 @@ stdenv.mkDerivation rec {
       mmahut
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "CPU/GPU miner in c for bitcoin";
+    mainProgram = "cgminer";
+    homepage = "https://github.com/ckolivas/cgminer";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+      offline
+      mmahut
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

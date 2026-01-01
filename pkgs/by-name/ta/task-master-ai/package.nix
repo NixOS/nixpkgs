@@ -40,6 +40,7 @@ buildNpmPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/task-master";
+<<<<<<< HEAD
 
   meta = {
     description = "Node.js agentic AI workflow orchestrator";
@@ -49,5 +50,17 @@ buildNpmPackage (finalAttrs: {
     mainProgram = "task-master-ai";
     maintainers = [ lib.maintainers.repparw ];
     platforms = lib.platforms.all;
+=======
+  versionCheckProgramArg = "--version";
+
+  meta = with lib; {
+    description = "Node.js agentic AI workflow orchestrator";
+    homepage = "https://task-master.dev";
+    changelog = "https://github.com/eyaltoledano/claude-task-master/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    mainProgram = "task-master-ai";
+    maintainers = [ maintainers.repparw ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

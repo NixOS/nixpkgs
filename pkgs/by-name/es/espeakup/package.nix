@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
+<<<<<<< HEAD
   env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   meta = {
@@ -43,6 +44,16 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ethindp ];
     platforms = with lib.platforms; linux;
+=======
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+
+  meta = with lib; {
+    homepage = "https://github.com/linux-speakup/espeakup";
+    description = "Lightweight connector for espeak-ng and speakup";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ethindp ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "espeakup";
   };
 }

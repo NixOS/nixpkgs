@@ -6,13 +6,21 @@
 
 buildGoModule rec {
   pname = "sshified";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.2.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "hoffie";
     repo = "sshified";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-+YaqHkcsP6+J39w4WP5iA0LowmGwDHBoDNzT8fhv+Xg=";
+=======
+    hash = "sha256-oCeuQ4Do+Lyqsf8hBH9qvLxWbWQlqol481VrbnAW2ic=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = null;

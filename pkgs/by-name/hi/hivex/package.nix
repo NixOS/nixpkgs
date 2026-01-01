@@ -58,11 +58,20 @@ stdenv.mkDerivation rec {
         --prefix "PATH" : "$out/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Windows registry hive extraction library";
     license = lib.licenses.lgpl2Only;
     homepage = "https://github.com/libguestfs/hivex";
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Windows registry hive extraction library";
+    license = licenses.lgpl2Only;
+    homepage = "https://github.com/libguestfs/hivex";
+    maintainers = with maintainers; [ offline ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

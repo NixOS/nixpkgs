@@ -32,10 +32,17 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python extension module which implements the fast marching method";
     homepage = "https://github.com/scikit-fmm/scikit-fmm";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python extension module which implements the fast marching method";
+    homepage = "https://github.com/scikit-fmm/scikit-fmm";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

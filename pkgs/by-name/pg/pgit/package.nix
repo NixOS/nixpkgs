@@ -39,11 +39,20 @@ buildGoModule (finalAttrs: {
         touch $out
       '';
 
+<<<<<<< HEAD
   meta = {
     description = "static site generator for git";
     homepage = "https://pgit.pico.sh/";
     license = lib.licenses.mit;
     mainProgram = "pgit";
     maintainers = with lib.maintainers; [ jaculabilis ];
+=======
+  meta = with lib; {
+    description = "static site generator for git";
+    homepage = "https://pgit.pico.sh/";
+    license = licenses.mit;
+    mainProgram = "pgit";
+    maintainers = with maintainers; [ jaculabilis ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C99 implementation of huffman encoding/decoding";
     homepage = "https://github.com/awslabs/aws-c-compression";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ r-burns ];
+=======
+  meta = with lib; {
+    description = "C99 implementation of huffman encoding/decoding";
+    homepage = "https://github.com/awslabs/aws-c-compression";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ r-burns ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,11 +39,19 @@ buildPythonPackage rec {
     install -Dm444 -t $out/share/doc/${pname} README*
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
     homepage = "https://github.com/redacted/XKCD-password-generator";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
+    homepage = "https://github.com/redacted/XKCD-password-generator";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xkcdpass";
   };
 }

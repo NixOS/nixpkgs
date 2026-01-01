@@ -21,11 +21,19 @@ rustPlatform.buildRustPackage rec {
     export DIFFR_TESTS_BINARY_PATH=$releaseDir/diffr
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Yet another diff highlighting tool";
     mainProgram = "diffr";
     homepage = "https://github.com/mookid/diffr";
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    description = "Yet another diff highlighting tool";
+    mainProgram = "diffr";
+    homepage = "https://github.com/mookid/diffr";
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

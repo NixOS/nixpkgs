@@ -5,14 +5,21 @@
   beamPackages,
   gitMinimal,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   tailwindcss_3,
   esbuild,
 
   mixReleaseName ? "domain", # "domain" "web" or "api"
 }:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 beamPackages.mixRelease rec {
   pname = "firezone-server-${mixReleaseName}";
   version = "0-unstable-2025-08-31";
@@ -22,7 +29,11 @@ beamPackages.mixRelease rec {
       owner = "firezone";
       repo = "firezone";
       rev = "f86719db19b848ab757995361032c1f2b7927d13";
+<<<<<<< HEAD
       hash = "sha256-MrW+mnVMi3mOwkcWDsY84rVBaX1qJPmqkecdH8I2ng0=";
+=======
+      hash = "sha256-YvPxLEE6pdILrABWCZs7ebf6i3Inm1k/YkotZgI7A2k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       # This is necessary to allow sending mails via SMTP, as the default
       # SMTP adapter is current broken: https://github.com/swoosh/swoosh/issues/785
@@ -32,9 +43,14 @@ beamPackages.mixRelease rec {
     }
   }/elixir";
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit pname version;
     pnpm = pnpm_9;
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit pname version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     src = "${src}/apps/web/assets";
     fetcherVersion = 1;
     hash = "sha256-40vtQIBhJNnzdxkAOVAcPN57IuD0IB6LFxGICo68AbQ=";
@@ -62,8 +78,13 @@ beamPackages.mixRelease rec {
   '';
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
   ];
 

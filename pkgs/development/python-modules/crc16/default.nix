@@ -25,10 +25,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "crc16" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for calculating CRC16";
     homepage = "https://code.google.com/archive/p/pycrc16/";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Python library for calculating CRC16";
+    homepage = "https://code.google.com/archive/p/pycrc16/";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

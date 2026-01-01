@@ -23,11 +23,19 @@ stdenv.mkDerivation {
     mv risc $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pdewacht/oberon-risc-emu/";
     description = "Emulator for the Oberon RISC machine";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ siraben ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pdewacht/oberon-risc-emu/";
+    description = "Emulator for the Oberon RISC machine";
+    license = licenses.isc;
+    maintainers = with maintainers; [ siraben ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "risc";
   };
 }

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libbsd ];
   installFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Store and restore metadata from a filesystem";
     mainProgram = "metastore";
@@ -26,5 +27,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ sstef ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Store and restore metadata from a filesystem";
+    mainProgram = "metastore";
+    homepage = "https://software.przemoc.net/#metastore";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ sstef ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

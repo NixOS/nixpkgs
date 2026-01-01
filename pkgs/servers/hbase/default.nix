@@ -35,10 +35,17 @@ let
 
       passthru = { inherit tests; };
 
+<<<<<<< HEAD
       meta = {
         description = "Distributed, scalable, big data store";
         homepage = "https://hbase.apache.org";
         license = lib.licenses.asl20;
+=======
+      meta = with lib; {
+        description = "Distributed, scalable, big data store";
+        homepage = "https://hbase.apache.org";
+        license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         maintainers = with lib.maintainers; [ illustris ];
         platforms = lib.platforms.linux;
       };

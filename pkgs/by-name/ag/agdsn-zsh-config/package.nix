@@ -28,11 +28,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Modified version of the Grml Zsh configuration specialised for the needs of system administration";
     homepage = "https://github.com/agdsn/agdsn-zsh-config";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fugi ];
+=======
+  meta = with lib; {
+    description = "Modified version of the Grml Zsh configuration specialised for the needs of system administration";
+    homepage = "https://github.com/agdsn/agdsn-zsh-config";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fugi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

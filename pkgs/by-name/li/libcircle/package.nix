@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi ];
 
+<<<<<<< HEAD
   meta = {
     description = "API for distributing embarrassingly parallel workloads using self-stabilization";
     homepage = "http://hpc.github.io/libcircle/";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
+=======
+  meta = with lib; {
+    description = "API for distributing embarrassingly parallel workloads using self-stabilization";
+    homepage = "http://hpc.github.io/libcircle/";
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

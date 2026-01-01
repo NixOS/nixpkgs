@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-SDL1" ];
 
+<<<<<<< HEAD
   meta = {
     description = "LMI (Lambda Lisp Machine) emulator";
     homepage = "https://github.com/dseagrav/ld";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "LMI (Lambda Lisp Machine) emulator";
+    homepage = "https://github.com/dseagrav/ld";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

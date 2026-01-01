@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycketcasts" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with PocketCast's unofficial API";
     homepage = "https://github.com/nwithan8/pycketcasts";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with PocketCast's unofficial API";
+    homepage = "https://github.com/nwithan8/pycketcasts";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

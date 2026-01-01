@@ -14,19 +14,32 @@ let
   testsuite = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "testsuite";
+<<<<<<< HEAD
     rev = "4b24564c844e3d34bf46dfcb3c774ee5163e31cc";
     hash = "sha256-8VirKLRro0iST58Rfg17u4tTO57KNC/7F/NB43dZ7w4=";
+=======
+    rev = "e05365077e13a1d86ffe77acfb1a835b7aa78422";
+    hash = "sha256-yvZ5AZTPUA6nsD3xpFC0VLthiu2CxVto66RTXBXXeJM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
+<<<<<<< HEAD
   version = "125";
+=======
+  version = "124";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
+<<<<<<< HEAD
     hash = "sha256-QG8ZhvjcTbhIfYkVfrjxd97v9KaG/A8jO69rPg99/ME=";
+=======
+    hash = "sha256-tkvO0gNESliRV6FOpXDQd7ZKujGe6q1mGX5V+twcE1o=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -80,6 +93,7 @@ stdenv.mkDerivation rec {
 
   doCheck = (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin);
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
@@ -89,6 +103,17 @@ stdenv.mkDerivation rec {
       willcohen
     ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/WebAssembly/binaryen";
+    description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      asppsa
+      willcohen
+    ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   passthru.tests = { inherit emscripten; };
 }

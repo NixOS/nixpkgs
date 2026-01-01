@@ -51,12 +51,21 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple app for checking usual checksums - Designed for elementary OS";
     homepage = "https://github.com/artemanufrij/hashit";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Simple app for checking usual checksums - Designed for elementary OS";
+    homepage = "https://github.com/artemanufrij/hashit";
+    license = licenses.gpl2Plus;
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "com.github.artemanufrij.hashit";
   };
 }

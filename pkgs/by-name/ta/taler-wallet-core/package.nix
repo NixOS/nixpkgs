@@ -9,8 +9,11 @@
   removeReferencesTo,
   nodejs_20,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python3,
   gitMinimal,
   jq,
@@ -18,7 +21,10 @@
 }:
 let
   nodeSources = srcOnly nodejs_20;
+<<<<<<< HEAD
   pnpm' = pnpm_9.override { nodejs = nodejs_20; };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   esbuild' = esbuild.override {
     buildGoModule =
       args:
@@ -51,16 +57,25 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     customPython
     nodejs_20
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm'
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     gitMinimal
     jq
     zip
   ];
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-pLe5smsXdzSBgz/OYNO5FVEI2L6y/p+jMxEkzqUaX34=";
   };

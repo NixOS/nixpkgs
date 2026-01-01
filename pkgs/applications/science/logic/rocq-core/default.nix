@@ -11,7 +11,10 @@
   fetchurl,
   writeText,
   pkg-config,
+<<<<<<< HEAD
   dune,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   customOCamlPackages ? null,
   ocamlPackages_4_14,
   ncurses,
@@ -57,7 +60,11 @@ let
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
+<<<<<<< HEAD
     dune
+=======
+    ocamlPackages.dune_3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
   ocamlPropagatedBuildInputs = [ ocamlPackages.zarith ];
   self = stdenv.mkDerivation {
@@ -163,7 +170,11 @@ let
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Rocq Prover";
       longDescription = ''
         The Rocq Prover is an interactive theorem prover, or proof assistant. It provides
@@ -172,15 +183,25 @@ let
         semi-interactive development of machine-checked proofs.
       '';
       homepage = "https://rocq-prover.org";
+<<<<<<< HEAD
       license = lib.licenses.lgpl21;
       branch = rocq-version;
       maintainers = with lib.maintainers; [
+=======
+      license = licenses.lgpl21;
+      branch = rocq-version;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         proux01
         roconnor
         vbgl
         Zimmi48
       ];
+<<<<<<< HEAD
       platforms = lib.platforms.unix;
+=======
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "rocq";
     };
   };

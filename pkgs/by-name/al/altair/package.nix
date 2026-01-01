@@ -31,12 +31,21 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Feature-rich GraphQL Client IDE";
     mainProgram = "altair";
     homepage = "https://github.com/imolorhe/altair";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evalexpr ];
+=======
+  meta = with lib; {
+    description = "Feature-rich GraphQL Client IDE";
+    mainProgram = "altair";
+    homepage = "https://github.com/imolorhe/altair";
+    license = licenses.mit;
+    maintainers = with maintainers; [ evalexpr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

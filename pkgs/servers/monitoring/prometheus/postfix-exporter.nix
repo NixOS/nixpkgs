@@ -4,7 +4,11 @@
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
+<<<<<<< HEAD
   systemdLibs,
+=======
+  systemd,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   withSystemdSupport ? true,
 }:
 
@@ -27,12 +31,20 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = lib.optionals withSystemdSupport [ makeWrapper ];
+<<<<<<< HEAD
   buildInputs = lib.optionals withSystemdSupport [ systemdLibs ];
+=======
+  buildInputs = lib.optionals withSystemdSupport [ systemd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   tags = lib.optionals (!withSystemdSupport) "nosystemd";
 
   postInstall = lib.optionals withSystemdSupport ''
     wrapProgram $out/bin/postfix_exporter \
+<<<<<<< HEAD
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemdLibs}/lib"
+=======
+      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) postfix; };

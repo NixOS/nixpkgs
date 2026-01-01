@@ -77,6 +77,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Tweak tool for the MATE Desktop";
     homepage = "https://github.com/ubuntu-mate/mate-tweak";
@@ -84,5 +85,14 @@ python3Packages.buildPythonApplication rec {
     license = [ lib.licenses.gpl2Plus ];
     platforms = lib.platforms.linux;
     teams = [ lib.teams.mate ];
+=======
+  meta = with lib; {
+    description = "Tweak tool for the MATE Desktop";
+    homepage = "https://github.com/ubuntu-mate/mate-tweak";
+    changelog = "https://github.com/ubuntu-mate/mate-tweak/releases/tag/${version}";
+    license = [ licenses.gpl2Plus ];
+    platforms = platforms.linux;
+    teams = [ teams.mate ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

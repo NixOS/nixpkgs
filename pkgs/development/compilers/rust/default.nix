@@ -11,7 +11,10 @@
   llvmSharedForHost,
   llvmSharedForTarget,
   llvmPackages, # Exposed through rustc for LTO in Firefox
+<<<<<<< HEAD
   cargo-auditable,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 {
   stdenv,
@@ -126,7 +129,11 @@ in
             }
           else
             self.callPackage ./cargo_cross.nix { };
+<<<<<<< HEAD
         inherit cargo-auditable;
+=======
+        cargo-auditable = self.callPackage ./cargo-auditable.nix { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
         clippy-unwrapped = self.callPackage ./clippy.nix { };
         clippy = if !fastCross then self.clippy-unwrapped else self.callPackage ./clippy-wrapper.nix { };

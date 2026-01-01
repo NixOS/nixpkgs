@@ -42,6 +42,7 @@ stdenv.mkDerivation {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Neofetch but for ip addresses";
     mainProgram = "ipfetch";
@@ -49,5 +50,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ annaaurora ];
+=======
+  meta = with lib; {
+    description = "Neofetch but for ip addresses";
+    mainProgram = "ipfetch";
+    homepage = "https://github.com/trakBan/ipfetch";
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ annaaurora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

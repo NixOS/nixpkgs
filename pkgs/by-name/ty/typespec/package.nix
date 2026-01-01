@@ -5,8 +5,11 @@
   makeWrapper,
   nix-update-script,
   nodejs,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm,
   versionCheckHook,
 }:
@@ -28,12 +31,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
   ];
 
   pnpmWorkspaces = [ workspace ];
   pnpmDeps = fetchPnpmDeps {
+=======
+    pnpm.configHook
+  ];
+
+  pnpmWorkspaces = [ workspace ];
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
@@ -98,6 +109,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ ''--version-regex=typespec-stable@(\d+\.\d+\.\d+)'' ];

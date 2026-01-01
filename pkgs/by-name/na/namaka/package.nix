@@ -39,12 +39,20 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion artifacts/namaka.{bash,fish} --zsh artifacts/_namaka
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Snapshot testing tool for Nix based on haumea";
     mainProgram = "namaka";
     homepage = "https://github.com/nix-community/namaka";
     changelog = "https://github.com/nix-community/namaka/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mpl20;
+=======
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

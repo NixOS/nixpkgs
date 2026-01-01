@@ -37,11 +37,20 @@ buildGoModule rec {
       "${builtins.concatStringsSep "|" skippedTests}"
     ];
 
+<<<<<<< HEAD
   meta = {
     description = "Autostart and stop minecraft-server when players join/leave";
     mainProgram = "msh";
     homepage = "https://github.com/gekware/minecraft-server-hibernation";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ squarepear ];
+=======
+  meta = with lib; {
+    description = "Autostart and stop minecraft-server when players join/leave";
+    mainProgram = "msh";
+    homepage = "https://github.com/gekware/minecraft-server-hibernation";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ squarepear ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

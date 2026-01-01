@@ -29,10 +29,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "plantuml" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to a plantuml web service instead of having to run java locally";
     homepage = "https://github.com/dougn/python-plantuml";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nikstur ];
+=======
+  meta = with lib; {
+    description = "Python interface to a plantuml web service instead of having to run java locally";
+    homepage = "https://github.com/dougn/python-plantuml";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ nikstur ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

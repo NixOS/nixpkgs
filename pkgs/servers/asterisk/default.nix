@@ -150,12 +150,21 @@ let
         make install-headers
       '';
 
+<<<<<<< HEAD
       meta = {
         description = "Software implementation of a telephone private branch exchange (PBX)";
         homepage = "https://www.asterisk.org/";
         license = lib.licenses.gpl2Only;
         mainProgram = "asterisk";
         maintainers = with lib.maintainers; [
+=======
+      meta = with lib; {
+        description = "Software implementation of a telephone private branch exchange (PBX)";
+        homepage = "https://www.asterisk.org/";
+        license = licenses.gpl2Only;
+        mainProgram = "asterisk";
+        maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           auntie
           DerTim1
           yorickvp

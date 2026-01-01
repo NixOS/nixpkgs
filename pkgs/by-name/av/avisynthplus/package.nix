@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Improved version of the AviSynth frameserver";
     homepage = "https://avs-plus.net/";
@@ -52,5 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "avisynth" ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jopejoe1 ];
+=======
+  meta = with lib; {
+    description = "Improved version of the AviSynth frameserver";
+    homepage = "https://avs-plus.net/";
+    changelog = "https://github.com/AviSynth/AviSynthPlus/releases/tag/${finalAttrs.src.rev}";
+    license = licenses.gpl2Only;
+    pkgConfigModules = [ "avisynth" ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ jopejoe1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

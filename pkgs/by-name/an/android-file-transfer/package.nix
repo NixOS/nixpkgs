@@ -39,11 +39,20 @@ stdenv.mkDerivation rec {
     mv $out/*.app $out/Applications
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Reliable MTP client with minimalistic UI";
     homepage = "https://whoozle.github.io/android-file-transfer-linux/";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.xaverdh ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Reliable MTP client with minimalistic UI";
+    homepage = "https://whoozle.github.io/android-file-transfer-linux/";
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.xaverdh ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

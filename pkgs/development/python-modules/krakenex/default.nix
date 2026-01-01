@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "krakenex" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/veox/python3-krakenex/blob/${src.rev}/CHANGELOG.rst";
     description = "Kraken.com cryptocurrency exchange API";
     homepage = "https://github.com/veox/python3-krakenex";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/veox/python3-krakenex/blob/${src.rev}/CHANGELOG.rst";
+    description = "Kraken.com cryptocurrency exchange API";
+    homepage = "https://github.com/veox/python3-krakenex";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

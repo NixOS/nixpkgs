@@ -63,13 +63,23 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tour";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-tour/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME Greeter & Tour";
     mainProgram = "gnome-tour";
+<<<<<<< HEAD
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+    teams = [ teams.gnome ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

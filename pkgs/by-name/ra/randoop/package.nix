@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     cp README.txt $out/doc
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automatic test generation for Java";
     homepage = "https://randoop.github.io/randoop/";
@@ -30,5 +31,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Automatic test generation for Java";
+    homepage = "https://randoop.github.io/randoop/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

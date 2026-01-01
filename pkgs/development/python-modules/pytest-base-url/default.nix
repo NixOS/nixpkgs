@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_base_url" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin for URL based tests";
     homepage = "https://github.com/pytest-dev/pytest-base-url";
     changelog = "https://github.com/pytest-dev/pytest-base-url/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ sephi ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin for URL based tests";
+    homepage = "https://github.com/pytest-dev/pytest-base-url";
+    changelog = "https://github.com/pytest-dev/pytest-base-url/blob/${src.rev}/CHANGES.rst";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ sephi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

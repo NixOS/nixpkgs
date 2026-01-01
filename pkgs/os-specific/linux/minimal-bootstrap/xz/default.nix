@@ -42,6 +42,7 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
+<<<<<<< HEAD
     meta = {
       description = "General-purpose data compression software, successor of LZMA";
       homepage = "https://tukaani.org/xz";
@@ -51,6 +52,17 @@ bash.runCommand "${pname}-${version}"
       ];
       teams = [ lib.teams.minimal-bootstrap ];
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      description = "General-purpose data compression software, successor of LZMA";
+      homepage = "https://tukaani.org/xz";
+      license = with licenses; [
+        gpl2Plus
+        lgpl21Plus
+      ];
+      teams = [ teams.minimal-bootstrap ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''
@@ -62,10 +74,13 @@ bash.runCommand "${pname}-${version}"
     export CC="tcc -B ${tinycc.libs}/lib"
     export AR="tcc -ar"
     export LD=tcc
+<<<<<<< HEAD
     # With a lower max_cmd_len (which is mistakenly detected by the
     # configure script), libtool invokes ar in append mode. This is not
     # supported by tinycc.
     export lt_cv_sys_max_cmd_len=32768
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \

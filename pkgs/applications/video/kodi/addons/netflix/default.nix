@@ -29,11 +29,20 @@ buildKodiAddon rec {
     myconnpy
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/CastagnaIT/plugin.video.netflix";
     description = "Netflix VOD Services Add-on";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pks ];
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/CastagnaIT/plugin.video.netflix";
+    description = "Netflix VOD Services Add-on";
+    license = licenses.mit;
+    maintainers = [ maintainers.pks ];
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
     url = "git://git.ghostscript.com/mujs.git";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://mujs.com/";
     description = "Lightweight, embeddable Javascript interpreter";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pSub ];
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    homepage = "https://mujs.com/";
+    description = "Lightweight, embeddable Javascript interpreter";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pSub ];
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

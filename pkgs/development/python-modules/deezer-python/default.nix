@@ -48,11 +48,20 @@ buildPythonPackage rec {
     "test_with_language_header"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper around the Deezer API";
     homepage = "https://github.com/browniebroke/deezer-python";
     changelog = "https://github.com/browniebroke/deezer-python/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ synthetica ];
+=======
+  meta = with lib; {
+    description = "Python wrapper around the Deezer API";
+    homepage = "https://github.com/browniebroke/deezer-python";
+    changelog = "https://github.com/browniebroke/deezer-python/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ synthetica ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

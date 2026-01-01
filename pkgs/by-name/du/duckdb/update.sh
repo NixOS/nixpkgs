@@ -35,6 +35,9 @@ json=$(nix-prefetch-github "${owner}" "${repo}" --rev "v${tag}")
 json_set ".version" "${tag}"
 json_set ".rev" "$(jq -r '.rev' <<< "${json}")"
 json_set ".hash" "$(jq -r '.hash' <<< "${json}")"
+<<<<<<< HEAD
 
 python_json=$(nix-prefetch-github "${owner}" "${repo}-python" --rev "v${tag}")
 json_set ".python_hash" "$(jq -r '.hash' <<< "${python_json}")"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

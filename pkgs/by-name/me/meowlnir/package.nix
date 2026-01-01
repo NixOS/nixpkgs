@@ -25,6 +25,7 @@ buildGoModule rec {
   doCheck = true;
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
 
   passthru.updateScript = nix-update-script { };
 
@@ -33,6 +34,17 @@ buildGoModule rec {
     description = "Opinionated Matrix moderation bot";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ sumnerevans ];
+=======
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = with lib; {
+    homepage = "https://github.com/maunium/meowlnir";
+    description = "Opinionated Matrix moderation bot";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ sumnerevans ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "meowlnir";
   };
 }

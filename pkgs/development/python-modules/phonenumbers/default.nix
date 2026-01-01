@@ -27,10 +27,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "phonenumbers" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for handling international phone numbers";
     homepage = "https://github.com/daviddrysdale/python-phonenumbers";
     changelog = "https://github.com/daviddrysdale/python-phonenumbers/blob/v${version}/python/HISTORY.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python module for handling international phone numbers";
+    homepage = "https://github.com/daviddrysdale/python-phonenumbers";
+    changelog = "https://github.com/daviddrysdale/python-phonenumbers/blob/v${version}/python/HISTORY.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fadenb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

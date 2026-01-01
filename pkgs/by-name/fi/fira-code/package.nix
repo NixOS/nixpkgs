@@ -26,7 +26,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/tonsky/FiraCode";
     description = "Monospace font with programming ligatures";
     longDescription = ''
@@ -34,8 +38,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       a set of ligatures for common programming multi-character
       combinations.
     '';
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     maintainers = [ lib.maintainers.rycee ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    maintainers = [ maintainers.rycee ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

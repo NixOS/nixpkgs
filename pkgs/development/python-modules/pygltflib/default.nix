@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygltflib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for reading and writing basic glTF files";
     homepage = "https://gitlab.com/dodgyville/pygltflib";
     changelog = "https://gitlab.com/dodgyville/pygltflib/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Module for reading and writing basic glTF files";
+    homepage = "https://gitlab.com/dodgyville/pygltflib";
+    changelog = "https://gitlab.com/dodgyville/pygltflib/-/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

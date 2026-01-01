@@ -15,11 +15,14 @@
     "hash": "sha256-qCbqEwIB/j6HToEPpDEdQGGIPGQNmrULrCHnEGZSd5c="
   },
   {
+<<<<<<< HEAD
     "pname": "FCastSenderSDKDotnet",
     "version": "0.0.5",
     "hash": "sha256-UTCgJ1M0n7PcVoU/7slh5sFitJ+t7ZdgkdUDZ5CVvGk="
   },
   {
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "pname": "Fizzler",
     "version": "1.2.0",
     "hash": "sha256-lHoNw1Ze197Tkhlpg4QjX5wC0Xmeu7TUKBTzEineE60="
@@ -65,11 +68,14 @@
     "hash": "sha256-54bbiVJoXDrePISZHuEcOax+kgyaIftL684bt3EgYy8="
   },
   {
+<<<<<<< HEAD
     "pname": "Microsoft.ClearScript.V8.Native.linux-arm64",
     "version": "7.4.5",
     "hash": "sha256-pufUKVsXaKOc7FoKxHwtvMDzx2etOLOzTXvWhBRy1Ho="
   },
   {
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "pname": "Microsoft.ClearScript.V8.Native.linux-x64",
     "version": "7.4.5",
     "hash": "sha256-MCRTRO7WiWnWYdvYSwv1kvZakcVcvckio98SJLhYgoM="

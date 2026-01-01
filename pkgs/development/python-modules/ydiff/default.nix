@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "ydiff";
+<<<<<<< HEAD
   version = "1.5";
+=======
+  version = "1.4.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ymattw";
     repo = "ydiff";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-9a7M6+CqGRvO1yainImN2RQVH3XMxE9PTLXJGKekXLg=";
+=======
+    hash = "sha256-JaGkABroj+/7MrgpFYI2vE1bndsilIodopMUnfmNhwA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patchPhase = ''
@@ -44,7 +52,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "View colored, incremental diff in workspace or from stdin with side by side and auto pager support (Was \"cdiff\")";
     mainProgram = "ydiff";
     longDescription = ''
@@ -54,7 +66,12 @@ buildPythonPackage rec {
       and auto pager support.
     '';
     homepage = "https://github.com/ymattw/ydiff";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     teams = [ lib.teams.deshaw ];
+=======
+    license = licenses.bsd3;
+    teams = [ teams.deshaw ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

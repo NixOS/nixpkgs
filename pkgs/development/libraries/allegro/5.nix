@@ -131,11 +131,20 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Game programming library";
     homepage = "https://liballeg.org/";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Game programming library";
+    homepage = "https://liballeg.org/";
+    license = licenses.zlib;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

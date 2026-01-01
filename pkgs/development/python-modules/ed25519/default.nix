@@ -32,12 +32,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ed25519" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Ed25519 public-key signatures";
     mainProgram = "edsig";
     homepage = "https://github.com/warner/python-ed25519";
     changelog = "https://github.com/warner/python-ed25519/blob/${version}/NEWS";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ np ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ np ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

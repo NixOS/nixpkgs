@@ -44,6 +44,10 @@ let
       '';
       license = lib.licenses.bsd3;
       platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
+=======
+      maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       teams = [ lib.teams.cuda ];
     };
   });

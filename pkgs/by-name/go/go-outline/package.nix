@@ -17,11 +17,20 @@ buildGoModule {
 
   vendorHash = "sha256-jYYtSXdJd2eUc80UfwRRMPcX6tFiXE3LbxV3NAdKVKE=";
 
+<<<<<<< HEAD
   meta = {
     description = "Utility to extract JSON representation of declarations from a Go source file";
     mainProgram = "go-outline";
     homepage = "https://github.com/ramya-rao-a/go-outline";
     maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Utility to extract JSON representation of declarations from a Go source file";
+    mainProgram = "go-outline";
+    homepage = "https://github.com/ramya-rao-a/go-outline";
+    maintainers = with maintainers; [ vdemeester ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

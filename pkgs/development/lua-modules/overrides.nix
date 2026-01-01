@@ -85,8 +85,13 @@ in
     '';
   };
 
+<<<<<<< HEAD
   busted = prev.busted.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs ++ [
+=======
+  busted = prev.busted.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       installShellFiles
     ];
     postConfigure = ''
@@ -102,7 +107,11 @@ in
 
   cjson = prev.lua-cjson;
 
+<<<<<<< HEAD
   cqueues = prev.cqueues.overrideAttrs (old: {
+=======
+  cqueues = prev.cqueues.overrideAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Parse out a version number without the Lua version inserted
     version =
       let
@@ -116,7 +125,11 @@ in
 
     meta.broken = luaOlder "5.1" || luaAtLeast "5.5";
 
+<<<<<<< HEAD
     nativeBuildInputs = old.nativeBuildInputs ++ [
+=======
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gnum4
     ];
 
@@ -258,8 +271,13 @@ in
     ];
   };
 
+<<<<<<< HEAD
   ldbus = prev.ldbus.overrideAttrs (old: {
     luarocksConfig = old.luarocksConfig // {
+=======
+  ldbus = prev.ldbus.overrideAttrs (oa: {
+    luarocksConfig = oa.luarocksConfig // {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       variables = {
         DBUS_DIR = "${dbus.lib}";
         DBUS_ARCH_INCDIR = "${dbus.lib}/lib/dbus-1.0/include";
@@ -271,8 +289,13 @@ in
     ];
   });
 
+<<<<<<< HEAD
   lgi = prev.lgi.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs ++ [
+=======
+  lgi = prev.lgi.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pkg-config
     ];
     buildInputs = [
@@ -311,7 +334,11 @@ in
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
+<<<<<<< HEAD
   ljsyscall = prev.ljsyscall.overrideAttrs (old: rec {
+=======
+  ljsyscall = prev.ljsyscall.overrideAttrs (oa: rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     version = "unstable-20180515";
     # package hasn't seen any release for a long time
     src = fetchFromGitHub {
@@ -327,11 +354,19 @@ in
     '';
     meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
 
+<<<<<<< HEAD
     propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional (!isLuaJIT) final.luaffi;
   });
 
   llscheck = prev.llscheck.overrideAttrs (old: {
     propagatedBuildInputs = old.propagatedBuildInputs ++ [ lua-language-server ];
+=======
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ lib.optional (!isLuaJIT) final.luaffi;
+  });
+
+  llscheck = prev.llscheck.overrideAttrs (oa: {
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ lua-language-server ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   });
 
   lmathx = prev.luaLib.overrideLuarocks prev.lmathx (
@@ -389,8 +424,13 @@ in
     '';
   };
 
+<<<<<<< HEAD
   lrexlib-gnu = prev.lrexlib-gnu.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
+=======
+  lrexlib-gnu = prev.lrexlib-gnu.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gnulib
     ];
   });
@@ -413,20 +453,35 @@ in
     ];
   };
 
+<<<<<<< HEAD
   lrexlib-posix = prev.lrexlib-posix.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
+=======
+  lrexlib-posix = prev.lrexlib-posix.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       glibc.dev
     ];
   });
 
+<<<<<<< HEAD
   lua-curl = prev.lua-curl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
+=======
+  lua-curl = prev.lua-curl.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       curl.dev
     ];
   });
 
+<<<<<<< HEAD
   lua-iconv = prev.lua-iconv.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
+=======
+  lua-iconv = prev.lua-iconv.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       libiconv
     ];
   });
@@ -449,6 +504,7 @@ in
     };
   };
 
+<<<<<<< HEAD
   lua-rtoml = prev.lua-rtoml.overrideAttrs (old: {
 
     cargoDeps = rustPlatform.fetchCargoVendor {
@@ -457,6 +513,16 @@ in
     };
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
+=======
+  lua-rtoml = prev.lua-rtoml.overrideAttrs (oa: {
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (oa) src;
+      hash = "sha256-7mFn4dLgaxfAxtPFCc3VzcBx2HuywcZTYqCGTbaGS0k=";
+    };
+
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cargo
       rustPlatform.cargoSetupHook
     ];
@@ -470,27 +536,46 @@ in
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   };
 
+<<<<<<< HEAD
   lua-yajl = prev.lua-yajl.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
+=======
+  lua-yajl = prev.lua-yajl.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       yajl
     ];
   });
 
+<<<<<<< HEAD
   lua-zlib = prev.lua-zlib.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
       zlib.dev
     ];
     meta = old.meta // {
+=======
+  lua-zlib = prev.lua-zlib.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+      zlib.dev
+    ];
+    meta = oa.meta // {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       broken = luaOlder "5.1" || luaAtLeast "5.4";
     };
   });
 
+<<<<<<< HEAD
   luacheck = prev.luacheck.overrideAttrs (old: {
     meta = old.meta // {
+=======
+  luacheck = prev.luacheck.overrideAttrs (oa: {
+    meta = oa.meta // {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "luacheck";
     };
   });
 
+<<<<<<< HEAD
   luacov = prev.luacov.overrideAttrs (old: {
     postInstall = ''
       mkdir -p $out/share/lua/${lua.luaversion}/luacov/reporter/src/luacov/reporter/html
@@ -501,19 +586,33 @@ in
   luadbi-mysql = prev.luadbi-mysql.overrideAttrs (old: {
 
     luarocksConfig = lib.recursiveUpdate old.luarocksConfig {
+=======
+  luadbi-mysql = prev.luadbi-mysql.overrideAttrs (oa: {
+
+    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       variables = {
         MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
         MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib//mysql/";
       };
     };
+<<<<<<< HEAD
     buildInputs = old.buildInputs ++ [
+=======
+    buildInputs = oa.buildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mariadb.client
       libmysqlclient
     ];
   });
 
+<<<<<<< HEAD
   luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
+=======
+  luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       (lib.getDev libpq)
     ];
   });
@@ -527,8 +626,13 @@ in
     ];
   };
 
+<<<<<<< HEAD
   luaevent = prev.luaevent.overrideAttrs (old: {
     propagatedBuildInputs = old.propagatedBuildInputs ++ [
+=======
+  luaevent = prev.luaevent.overrideAttrs (oa: {
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       final.luasocket
     ];
     externalDeps = [
@@ -589,7 +693,11 @@ in
     '';
   });
 
+<<<<<<< HEAD
   luaossl = prev.luaossl.overrideAttrs (old: {
+=======
+  luaossl = prev.luaossl.overrideAttrs (_: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     externalDeps = [
       {
         name = "CRYPTO";
@@ -600,10 +708,13 @@ in
         dep = openssl;
       }
     ];
+<<<<<<< HEAD
 
     env = old.env // {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types"; # for gcc15
     };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   });
 
   luaposix = prev.luaposix.overrideAttrs (_: {
@@ -615,7 +726,11 @@ in
     ];
   });
 
+<<<<<<< HEAD
   luaprompt = prev.luaprompt.overrideAttrs (old: {
+=======
+  luaprompt = prev.luaprompt.overrideAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     externalDeps = [
       {
         name = "READLINE";
@@ -627,17 +742,28 @@ in
       }
     ];
 
+<<<<<<< HEAD
     nativeBuildInputs = old.nativeBuildInputs ++ [ installShellFiles ];
+=======
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ installShellFiles ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     postInstall = ''
       installManPage luap.1
     '';
   });
 
+<<<<<<< HEAD
   luarocks = prev.luarocks.overrideAttrs (old: {
     # As a nix user, use this derivation instead of "luarocks_bootstrap"
 
     nativeBuildInputs = old.nativeBuildInputs ++ [
+=======
+  luarocks = prev.luarocks.overrideAttrs (oa: {
+    # As a nix user, use this derivation instead of "luarocks_bootstrap"
+
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       installShellFiles
       lua
       unzip
@@ -647,6 +773,10 @@ in
     dontUseCmakeConfigure = true;
 
     doInstallCheck = true;
+<<<<<<< HEAD
+=======
+    versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     propagatedBuildInputs = [
       zip
@@ -666,7 +796,11 @@ in
         --zsh <($out/bin/luarocks-admin completion zsh)
     '';
 
+<<<<<<< HEAD
     meta = old.meta // {
+=======
+    meta = oa.meta // {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "luarocks";
     };
 
@@ -691,6 +825,10 @@ in
   };
 
   luasystem = prev.luasystem.overrideAttrs (
+<<<<<<< HEAD
+=======
+    _oa:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     lib.optionalAttrs stdenv.hostPlatform.isLinux {
       buildInputs = [ glibc.out ];
     }
@@ -705,8 +843,13 @@ in
     ];
   };
 
+<<<<<<< HEAD
   luazip = prev.luazip.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
+=======
+  luazip = prev.luazip.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zziplib
     ];
   });
@@ -719,7 +862,11 @@ in
     '';
   };
 
+<<<<<<< HEAD
   luuid = prev.luuid.overrideAttrs (old: {
+=======
+  luuid = prev.luuid.overrideAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     externalDeps = [
       {
         name = "LIBUUID";
@@ -738,7 +885,11 @@ in
     postConfigure = ''
       sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
     '';
+<<<<<<< HEAD
     meta = old.meta // {
+=======
+    meta = oa.meta // {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       broken = luaOlder "5.1" || (luaAtLeast "5.4");
       platforms = lib.platforms.linux;
     };
@@ -796,8 +947,13 @@ in
     '';
   };
 
+<<<<<<< HEAD
   magick = prev.magick.overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
+=======
+  magick = prev.magick.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       imagemagick
     ];
 
@@ -834,9 +990,15 @@ in
     '';
   };
 
+<<<<<<< HEAD
   neotest = prev.neotest.overrideAttrs (old: {
     doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = old.nativeCheckInputs ++ [
+=======
+  neotest = prev.neotest.overrideAttrs (oa: {
+    doCheck = stdenv.hostPlatform.isLinux;
+    nativeCheckInputs = oa.nativeCheckInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       final.nlua
       final.busted
       neovim-unwrapped
@@ -1029,8 +1191,13 @@ in
     '';
   };
 
+<<<<<<< HEAD
   sofa = prev.sofa.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs ++ [
+=======
+  sofa = prev.sofa.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       installShellFiles
     ];
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -1049,14 +1216,22 @@ in
       writableTmpDirAsHomeHook
     ];
 
+<<<<<<< HEAD
     # the plugin loldds the library from either the LIBSQLITE env
+=======
+    # the plugin loads the library from either the LIBSQLITE env
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # or the vim.g.sqlite_clib_path variable.
     postPatch = ''
       substituteInPlace lua/sqlite/defs.lua \
         --replace-fail "path = vim.g.sqlite_clib_path" 'path = vim.g.sqlite_clib_path or  "${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}"'
     '';
 
+<<<<<<< HEAD
     # we override 'luarocks test' because otherwise neovim doesn't find/loldd the plenary plugin
+=======
+    # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     checkPhase = ''
       nvim --headless -i NONE \
         -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
@@ -1078,30 +1253,54 @@ in
     '';
   };
 
+<<<<<<< HEAD
   tiktoken_core = prev.tiktoken_core.overrideAttrs (old: {
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
       hash = "sha256-egmb4BTbORpTpVO50IcqbZU1Y0hioXLMkxxUAo05TIA=";
     };
     nativeBuildInputs = old.nativeBuildInputs ++ [
+=======
+  tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (oa) src;
+      hash = "sha256-egmb4BTbORpTpVO50IcqbZU1Y0hioXLMkxxUAo05TIA=";
+    };
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cargo
       rustPlatform.cargoSetupHook
     ];
   });
 
+<<<<<<< HEAD
   tl = prev.tl.overrideAttrs (old: {
     preConfigure = ''
       rm luarocks.lock
     '';
     meta = old.meta // {
+=======
+  tl = prev.tl.overrideAttrs (oa: {
+    preConfigure = ''
+      rm luarocks.lock
+    '';
+    meta = oa.meta // {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "tl";
     };
   });
 
+<<<<<<< HEAD
   toml-edit = prev.toml-edit.overrideAttrs (old: {
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
+=======
+  toml-edit = prev.toml-edit.overrideAttrs (oa: {
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (oa) src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hash = "sha256-ow0zefFFrU91Q2PJww2jtd6nqUjwXUtfQzjkzl/AXuo=";
     };
 
@@ -1109,7 +1308,11 @@ in
       if lua.pkgs.isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua"
     );
 
+<<<<<<< HEAD
     nativeBuildInputs = old.nativeBuildInputs ++ [
+=======
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cargo
       rustPlatform.cargoSetupHook
       lua.pkgs.luarocks-build-rust-mlua
@@ -1117,50 +1320,88 @@ in
 
   });
 
+<<<<<<< HEAD
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
+=======
+  tree-sitter-http = prev.tree-sitter-http.overrideAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     propagatedBuildInputs =
       let
         # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
         # but that doesn't seem to work
+<<<<<<< HEAD
         lua = lib.head old.propagatedBuildInputs;
       in
       old.propagatedBuildInputs
+=======
+        lua = lib.head oa.propagatedBuildInputs;
+      in
+      oa.propagatedBuildInputs
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ++ [
         lua.pkgs.luarocks-build-treesitter-parser
         tree-sitter
       ];
 
+<<<<<<< HEAD
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+=======
+    nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       writableTmpDirAsHomeHook
     ];
   });
 
+<<<<<<< HEAD
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
+=======
+  tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     propagatedBuildInputs =
       let
         # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
         # but that doesn't seem to work
+<<<<<<< HEAD
         lua = lib.head old.propagatedBuildInputs;
       in
       old.propagatedBuildInputs
+=======
+        lua = lib.head oa.propagatedBuildInputs;
+      in
+      oa.propagatedBuildInputs
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ++ [
         lua.pkgs.luarocks-build-treesitter-parser-cpp
       ];
   });
 
+<<<<<<< HEAD
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
+=======
+  tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     propagatedBuildInputs =
       let
         # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
         # but that doesn't seem to work
+<<<<<<< HEAD
         lua = lib.head old.propagatedBuildInputs;
       in
       old.propagatedBuildInputs
+=======
+        lua = lib.head oa.propagatedBuildInputs;
+      in
+      oa.propagatedBuildInputs
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ++ [
         lua.pkgs.luarocks-build-treesitter-parser
         tree-sitter
       ];
+<<<<<<< HEAD
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+=======
+    nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       writableTmpDirAsHomeHook
     ];
   });

@@ -15,13 +15,21 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-forgit";
+<<<<<<< HEAD
   version = "25.12.0";
+=======
+  version = "25.10.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-DN2QUxCVVjYn7b4xt/7+k5g1/7dfZ+cp5Yi0nJWh1mM=";
+=======
+    hash = "sha256-MG60GzRG0NFQsGXBXBedSweucxo88S/NACXTme7ixRM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;
@@ -58,6 +66,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/wfxr/forgit";
     description = "Utility tool powered by fzf for using git interactively";
@@ -65,5 +74,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ deejayem ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/wfxr/forgit";
+    description = "Utility tool powered by fzf for using git interactively";
+    mainProgram = "git-forgit";
+    license = licenses.mit;
+    maintainers = with maintainers; [ deejayem ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

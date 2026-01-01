@@ -42,11 +42,19 @@ stdenv.mkDerivation rec {
     "PCDIR=$(dev)/lib/pkgconfig"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools and library to manipulate EFI variables";
     homepage = "https://github.com/rhboot/efivar";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21Only;
+=======
+  meta = with lib; {
+    description = "Tools and library to manipulate EFI variables";
+    homepage = "https://github.com/rhboot/efivar";
+    platforms = platforms.linux;
+    license = licenses.lgpl21Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # See https://github.com/NixOS/nixpkgs/issues/388309
     broken = stdenv.hostPlatform.is32bit;
   };

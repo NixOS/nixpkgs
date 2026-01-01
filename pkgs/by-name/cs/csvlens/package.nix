@@ -17,12 +17,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ro+vlkuX2eZ6Sh8uW/0ZZJnl8YqW7Yij+6xneQMDpEQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Command line csv viewer";
     homepage = "https://github.com/YS-L/csvlens";
     changelog = "https://github.com/YS-L/csvlens/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Command line csv viewer";
+    homepage = "https://github.com/YS-L/csvlens";
+    changelog = "https://github.com/YS-L/csvlens/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "csvlens";
   };
 }

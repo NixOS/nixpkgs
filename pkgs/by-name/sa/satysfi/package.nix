@@ -4,7 +4,10 @@
   ocaml-ng,
   ipaexfont,
   junicode,
+<<<<<<< HEAD
   libpng,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   lmodern,
   lmmath,
   which,
@@ -48,7 +51,11 @@ ocamlPackages.buildDunePackage {
   };
 
   preConfigure = ''
+<<<<<<< HEAD
     substituteInPlace src/frontend/main.ml --replace-fail \
+=======
+    substituteInPlace src/frontend/main.ml --replace \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '/usr/local/share/satysfi"; "/usr/share/satysfi' \
     $out/share/satysfi
   '';
@@ -60,7 +67,10 @@ ocamlPackages.buildDunePackage {
 
   buildInputs = [
     camlpdf
+<<<<<<< HEAD
     libpng
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     yojson-with-position
   ]
   ++ (with ocamlPackages; [

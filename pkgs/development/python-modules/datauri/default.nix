@@ -38,11 +38,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datauri" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for Data URI manipulation";
     homepage = "https://github.com/fcurella/python-datauri";
     changelog = "https://github.com/fcurella/python-datauri/releases/tag/${src.tag}";
     license = lib.licenses.unlicense;
+=======
+  meta = with lib; {
+    description = "Module for Data URI manipulation";
+    homepage = "https://github.com/fcurella/python-datauri";
+    changelog = "https://github.com/fcurella/python-datauri/releases/tag/${src.tag}";
+    license = licenses.unlicense;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

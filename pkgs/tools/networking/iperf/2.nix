@@ -20,11 +20,19 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/iperf2 $out/bin/iperf
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://sourceforge.net/projects/iperf/";
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/iperf/";
+    description = "Tool to measure IP bandwidth using UDP or TCP";
+    platforms = platforms.unix;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # prioritize iperf3
     priority = 10;

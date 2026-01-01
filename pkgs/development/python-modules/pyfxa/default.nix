@@ -54,11 +54,19 @@ buildPythonPackage rec {
     "fxa/tests/test_oauth.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Firefox Accounts client library";
     mainProgram = "fxa-client";
     homepage = "https://github.com/mozilla/PyFxA";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "Firefox Accounts client library";
+    mainProgram = "fxa-client";
+    homepage = "https://github.com/mozilla/PyFxA";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

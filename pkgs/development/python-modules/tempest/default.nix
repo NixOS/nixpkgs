@@ -93,11 +93,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tempest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
     homepage = "https://github.com/openstack/tempest";
     license = lib.licenses.asl20;
     mainProgram = "tempest";
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
+    homepage = "https://github.com/openstack/tempest";
+    license = licenses.asl20;
+    mainProgram = "tempest";
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

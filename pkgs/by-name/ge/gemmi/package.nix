@@ -57,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
       addBinToPathHook
       versionCheckHook
     ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Numerical precision error

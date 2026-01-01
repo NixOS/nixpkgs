@@ -25,11 +25,19 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     description = "CLI to render Go template text files";
     mainProgram = "renderizer";
     inherit (src.meta) homepage;
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "CLI to render Go template text files";
+    mainProgram = "renderizer";
+    inherit (src.meta) homepage;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

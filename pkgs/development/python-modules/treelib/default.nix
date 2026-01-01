@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "treelib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Efficient implementation of tree data structure in python 2/3";
     homepage = "https://github.com/caesar0301/treelib";
     changelog = "https://github.com/caesar0301/treelib/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Efficient implementation of tree data structure in python 2/3";
+    homepage = "https://github.com/caesar0301/treelib";
+    changelog = "https://github.com/caesar0301/treelib/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

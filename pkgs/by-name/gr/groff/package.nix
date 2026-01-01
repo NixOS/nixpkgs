@@ -154,12 +154,21 @@ stdenv.mkDerivation rec {
     find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.gnu.org/software/groff/";
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/groff/";
+    description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       groff is the GNU implementation of troff, a document formatting

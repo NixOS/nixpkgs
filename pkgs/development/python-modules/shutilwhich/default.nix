@@ -23,10 +23,18 @@ buildPythonPackage rec {
     pytest -rs
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Backport of shutil.which";
     license = lib.licenses.psfl;
     homepage = "https://github.com/mbr/shutilwhich";
     maintainers = with lib.maintainers; [ multun ];
+=======
+  meta = with lib; {
+    description = "Backport of shutil.which";
+    license = licenses.psfl;
+    homepage = "https://github.com/mbr/shutilwhich";
+    maintainers = with maintainers; [ multun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

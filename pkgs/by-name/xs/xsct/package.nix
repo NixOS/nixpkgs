@@ -29,13 +29,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Set color temperature of screen";
     mainProgram = "xsct";
     homepage = "https://github.com/faf0/sct";
     changelog = "https://github.com/faf0/sct/blob/${finalAttrs.version}/CHANGELOG";
+<<<<<<< HEAD
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = with lib.platforms; linux ++ freebsd ++ openbsd;
+=======
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = with platforms; linux ++ freebsd ++ openbsd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

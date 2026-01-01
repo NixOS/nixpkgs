@@ -64,11 +64,19 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
     changelog = "https://github.com/Quansight-Labs/uarray/releases/tag/${src.tag}";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    description = "Universal array library";
+    homepage = "https://github.com/Quansight-Labs/uarray";
+    changelog = "https://github.com/Quansight-Labs/uarray/releases/tag/${src.tag}";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.pbsds ];
   };
 }

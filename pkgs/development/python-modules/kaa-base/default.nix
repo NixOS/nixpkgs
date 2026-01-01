@@ -43,10 +43,17 @@ buildPythonPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generic application framework, providing the foundation for other modules";
     homepage = "https://github.com/freevo/kaa-base";
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    description = "Generic application framework, providing the foundation for other modules";
+    homepage = "https://github.com/freevo/kaa-base";
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

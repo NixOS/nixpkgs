@@ -31,6 +31,7 @@ python3Packages.buildPythonApplication rec {
   # upstream has no code tests, but uses its "tests" for linting and formatting checks
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pwittchen.github.io/spotify-cli-linux/";
     maintainers = [ lib.maintainers.kmein ];
@@ -38,5 +39,14 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "spotifycli";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://pwittchen.github.io/spotify-cli-linux/";
+    maintainers = [ maintainers.kmein ];
+    description = "Command line interface to Spotify on Linux";
+    mainProgram = "spotifycli";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

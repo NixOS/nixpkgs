@@ -62,11 +62,20 @@ buildPythonPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Triton Python client";
     homepage = "https://github.com/triton-inference-server/client";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Triton Python client";
+    homepage = "https://github.com/triton-inference-server/client";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ happysalada ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

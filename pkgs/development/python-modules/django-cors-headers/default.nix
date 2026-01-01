@@ -38,11 +38,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "corsheaders" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Django app for handling server Cross-Origin Resource Sharing (CORS) headers";
     homepage = "https://github.com/OttoYiu/django-cors-headers";
     changelog = "https://github.com/adamchainz/django-cors-headers/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Django app for handling server Cross-Origin Resource Sharing (CORS) headers";
+    homepage = "https://github.com/OttoYiu/django-cors-headers";
+    changelog = "https://github.com/adamchainz/django-cors-headers/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

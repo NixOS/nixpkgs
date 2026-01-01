@@ -73,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GTK widget for displaying OpenStreetMap tiles";
     homepage = "https://nzjrs.github.io/osm-gps-map";
     license = lib.licenses.gpl2Plus;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ hrdinka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

@@ -48,11 +48,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "inquirer" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of common interactive command line user interfaces, based on Inquirer.js";
     homepage = "https://github.com/magmax/python-inquirer";
     changelog = "https://github.com/magmax/python-inquirer/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmahut ];
+=======
+  meta = with lib; {
+    description = "Collection of common interactive command line user interfaces, based on Inquirer.js";
+    homepage = "https://github.com/magmax/python-inquirer";
+    changelog = "https://github.com/magmax/python-inquirer/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

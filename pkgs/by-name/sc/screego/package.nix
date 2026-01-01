@@ -74,11 +74,19 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Screen sharing for developers";
     homepage = "https://screego.net";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pinpox ];
+=======
+  meta = with lib; {
+    description = "Screen sharing for developers";
+    homepage = "https://screego.net";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ pinpox ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "screego";
   };
 }

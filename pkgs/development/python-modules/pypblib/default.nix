@@ -16,10 +16,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypblib" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pypi.org/project/pypblib/";
     description = "PBLib Python3 Bindings";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.marius851000 ];
+=======
+  meta = with lib; {
+    homepage = "https://pypi.org/project/pypblib/";
+    description = "PBLib Python3 Bindings";
+    license = licenses.mit;
+    maintainers = [ maintainers.marius851000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

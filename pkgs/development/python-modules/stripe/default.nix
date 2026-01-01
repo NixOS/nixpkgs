@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stripe" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stripe Python bindings";
     homepage = "https://github.com/stripe/stripe-python";
     changelog = "https://github.com/stripe/stripe-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Stripe Python bindings";
+    homepage = "https://github.com/stripe/stripe-python";
+    changelog = "https://github.com/stripe/stripe-python/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

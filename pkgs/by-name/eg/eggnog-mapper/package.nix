@@ -47,11 +47,20 @@ python3Packages.buildPythonApplication rec {
   # the user can download only those that interest them.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Fast genome-wide functional annotation through orthology assignment";
     license = lib.licenses.gpl2;
     homepage = "https://github.com/eggnogdb/eggnog-mapper/wiki";
     maintainers = with lib.maintainers; [ luispedro ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Fast genome-wide functional annotation through orthology assignment";
+    license = licenses.gpl2;
+    homepage = "https://github.com/eggnogdb/eggnog-mapper/wiki";
+    maintainers = with maintainers; [ luispedro ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

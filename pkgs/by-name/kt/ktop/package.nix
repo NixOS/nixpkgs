@@ -29,14 +29,23 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Top-like tool for your Kubernetes cluster";
     mainProgram = "ktop";
     longDescription = ''
       Following the tradition of Unix/Linux top tools, ktop is a tool that displays useful metrics information about nodes, pods, and other workload resources running in a Kubernetes cluster.
     '';
     homepage = "https://github.com/vladimirvivien/ktop/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ qjoly ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

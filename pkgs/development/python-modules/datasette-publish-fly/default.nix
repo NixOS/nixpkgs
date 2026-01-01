@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datasette_publish_fly" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Datasette plugin for publishing data using Fly";
     homepage = "https://datasette.io/plugins/datasette-publish-fly";
     changelog = "https://github.com/simonw/datasette-publish-fly/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Datasette plugin for publishing data using Fly";
+    homepage = "https://datasette.io/plugins/datasette-publish-fly";
+    changelog = "https://github.com/simonw/datasette-publish-fly/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

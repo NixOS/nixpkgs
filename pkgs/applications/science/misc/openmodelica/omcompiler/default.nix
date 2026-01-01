@@ -68,6 +68,7 @@ mkOpenModelicaDerivation (
       done
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "Modelica compiler from OpenModelica suite";
       homepage = "https://openmodelica.org";
@@ -77,6 +78,17 @@ mkOpenModelicaDerivation (
         smironov
       ];
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      description = "Modelica compiler from OpenModelica suite";
+      homepage = "https://openmodelica.org";
+      license = licenses.gpl3Only;
+      maintainers = with maintainers; [
+        balodja
+        smironov
+      ];
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   // lib.optionalAttrs isCross {

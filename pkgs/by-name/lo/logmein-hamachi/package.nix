@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Hosted VPN service that lets you securely extend LAN-like networks to distributed teams";
     homepage = "https://secure.logmein.com/products/hamachi/";
@@ -52,5 +53,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Hosted VPN service that lets you securely extend LAN-like networks to distributed teams";
+    homepage = "https://secure.logmein.com/products/hamachi/";
+    changelog = "https://support.logmeininc.com/central/help/whats-new-in-hamachi";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfreeRedistributable;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

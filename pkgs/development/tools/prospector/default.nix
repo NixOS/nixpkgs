@@ -68,11 +68,20 @@ python3.pkgs.buildPythonApplication rec {
     "tests/tools/pyroma/test_pyroma_tool.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
     homepage = "https://github.com/PyCQA/prospector";
     changelog = "https://github.com/PyCQA/prospector/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
+    homepage = "https://github.com/PyCQA/prospector";
+    changelog = "https://github.com/PyCQA/prospector/blob/v${version}/CHANGELOG.rst";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

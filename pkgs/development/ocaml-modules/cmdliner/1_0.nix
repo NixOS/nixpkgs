@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
     mv $out/lib/ocaml/${ocaml.version}/site-lib/${pname}/{opam,${pname}.opam}
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://erratique.ch/software/cmdliner";
     description = "OCaml module for the declarative definition of command line interfaces";
     license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    homepage = "https://erratique.ch/software/cmdliner";
+    description = "OCaml module for the declarative definition of command line interfaces";
+    license = licenses.isc;
+    inherit (ocaml.meta) platforms;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = !(lib.versionAtLeast ocaml.version "4.03");
   };
 }

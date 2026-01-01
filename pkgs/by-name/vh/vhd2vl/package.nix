@@ -42,11 +42,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "VHDL to Verilog converter";
     mainProgram = "vhd2vl";
     homepage = "https://github.com/ldoolitt/vhd2vl";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ matthuszagh ];
+=======
+  meta = with lib; {
+    description = "VHDL to Verilog converter";
+    mainProgram = "vhd2vl";
+    homepage = "https://github.com/ldoolitt/vhd2vl";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ matthuszagh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

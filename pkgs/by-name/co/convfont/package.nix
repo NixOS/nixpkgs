@@ -21,12 +21,20 @@ stdenv.mkDerivation {
     install -Dm755 convfont $out/bin/convfont
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Converts font for use with FontLibC";
     homepage = "https://github.com/drdnar/convfont";
     license = lib.licenses.unfree;
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "convfont";
   };
 }

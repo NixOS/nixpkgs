@@ -79,11 +79,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tbm_utils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Commonly-used set of utilities";
     homepage = "https://github.com/thebigmunch/tbm-utils";
     changelog = "https://github.com/thebigmunch/tbm-utils/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Commonly-used set of utilities";
+    homepage = "https://github.com/thebigmunch/tbm-utils";
+    changelog = "https://github.com/thebigmunch/tbm-utils/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

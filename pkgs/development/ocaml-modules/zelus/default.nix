@@ -33,11 +33,20 @@ buildDunePackage rec {
     menhirLib
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Synchronous language with ODEs";
     homepage = "https://zelus.di.ens.fr";
     license = lib.licenses.inria-zelus;
     mainProgram = "zeluc";
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    description = "Synchronous language with ODEs";
+    homepage = "https://zelus.di.ens.fr";
+    license = licenses.inria-zelus;
+    mainProgram = "zeluc";
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

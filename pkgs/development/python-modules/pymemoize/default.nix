@@ -21,10 +21,18 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: Requested settings, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple Python cache and memoizing module";
     homepage = "https://github.com/mikeboers/PyMemoize";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmai ];
+=======
+  meta = with lib; {
+    description = "Simple Python cache and memoizing module";
+    homepage = "https://github.com/mikeboers/PyMemoize";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mmai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

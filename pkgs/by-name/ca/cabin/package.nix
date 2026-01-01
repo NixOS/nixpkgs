@@ -24,7 +24,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Humanist sans with 4 weights and true italics";
     longDescription = ''
       The Cabin font family is a humanist sans with 4 weights and true italics,
@@ -39,8 +43,14 @@ stdenvNoCC.mkDerivation rec {
       shorter center arms. M is splashed.
     '';
     homepage = "http://www.impallari.com/cabin";
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,10 +43,17 @@ buildPythonPackage rec {
 
   buildInputs = [
     taskwarrior2
+<<<<<<< HEAD
   ];
 
   dependencies = [
     distutils
+=======
+    distutils
+  ];
+
+  dependencies = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     kitchen
     python-dateutil
     pytz
@@ -54,10 +61,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytest7CheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ralphbean/taskw";
     description = "Python bindings for your taskwarrior database";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pierron ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ralphbean/taskw";
+    description = "Python bindings for your taskwarrior database";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pierron ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

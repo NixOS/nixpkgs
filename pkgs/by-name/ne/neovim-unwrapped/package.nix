@@ -34,7 +34,11 @@ stdenv.mkDerivation (
         let
           luaLibDir = "$out/lib/lua/${lib.versions.majorMinor luapkgs.lua.luaversion}";
         in
+<<<<<<< HEAD
         (luapkgs.lpeg.overrideAttrs (old: {
+=======
+        (luapkgs.lpeg.overrideAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           preConfigure = ''
             # neovim wants clang .dylib
             substituteInPlace Makefile \
@@ -53,7 +57,11 @@ stdenv.mkDerivation (
             rm -f ${luaLibDir}/lpeg.so
           '';
           nativeBuildInputs =
+<<<<<<< HEAD
             old.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
+=======
+            oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         }))
       else
         luapkgs.lpeg;
@@ -236,6 +244,10 @@ stdenv.mkDerivation (
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/nvim";
+<<<<<<< HEAD
+=======
+    versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     doInstallCheck = true;
 
     passthru = {

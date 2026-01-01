@@ -29,11 +29,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Dark theme created by Rocketseat";
     homepage = "https://github.com/getomni/gtk";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zoedsoupe ];
+=======
+  meta = with lib; {
+    description = "Dark theme created by Rocketseat";
+    homepage = "https://github.com/getomni/gtk";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ zoedsoupe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

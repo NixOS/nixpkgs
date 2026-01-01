@@ -22,10 +22,18 @@ buildGoModule rec {
   # some tests require network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Database client every command line junkie deserves";
     homepage = "https://github.com/danvergara/dblab";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Database client every command line junkie deserves";
+    homepage = "https://github.com/danvergara/dblab";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

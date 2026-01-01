@@ -38,7 +38,11 @@
 
 let
   pname = "mindustry";
+<<<<<<< HEAD
   version = "153";
+=======
+  version = "152.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,14 +52,22 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-yVrOHZOCZrI5SsmMdo7Eh+zS0PXv2X67zLCdLOWcPVc=";
+=======
+    hash = "sha256-DRH6Gd/NOXvTZAMu3qcpEk6Ii1l7NMPLd8+RLUyt7yE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-JyiFxzdZtU0ILytTCfZrhBU2oZ3gF1kzMbSdjxqvTYs=";
+=======
+    hash = "sha256-TfDgzApR9LlnVVUOgIZu5pSLzbGlqrsXqzUN88lYN8s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -155,6 +167,7 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString enableClient ''
     pushd ../Arc
+<<<<<<< HEAD
     # unsupported platforms need to be excluded because their native build tools aren't available
     gradle jnigenBuild -x jnigenBuildAndroid -x jnigenBuildWindows -x jnigenBuildWindows64
     gradle jnigenJarNativesDesktop
@@ -169,6 +182,18 @@ stdenv.mkDerivation {
     # below target dirs are based on Arc upstream: Arc/extensions/../build.gradle
     cp extensions/freetype/build/Arc/extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
     cp extensions/filedialogs/build/Arc/extensions/filedialogs/libs/*/* natives/natives-filedialogs/libs/
+=======
+    gradle jnigenBuild
+    gradle jnigenJarNativesDesktop
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
+    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+      --add-needed $glewlib \
+      --add-needed $sdllib
+    # Put the freshly-built libraries where the pre-built libraries used to be:
+    cp arc-core/libs/*/* natives/natives-desktop/libs/
+    cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     popd
 
     gradle desktop:dist

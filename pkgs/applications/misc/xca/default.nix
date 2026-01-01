@@ -47,12 +47,21 @@ stdenv.mkDerivation (finalAttrs: {
     mv "$out/xca.app" "$out/Applications/xca.app"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "X509 certificate generation tool, handling RSA, DSA and EC keys, certificate signing requests (PKCS#10) and CRLs";
     mainProgram = "xca";
     homepage = "https://hohnstaedt.de/xca/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "X509 certificate generation tool, handling RSA, DSA and EC keys, certificate signing requests (PKCS#10) and CRLs";
+    mainProgram = "xca";
+    homepage = "https://hohnstaedt.de/xca/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       offline
       peterhoeg
     ];

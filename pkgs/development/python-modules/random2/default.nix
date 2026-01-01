@@ -26,9 +26,16 @@ buildPythonPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://pypi.python.org/pypi/random2";
     description = "Python 3 compatible Python 2 `random` Module";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    homepage = "http://pypi.python.org/pypi/random2";
+    description = "Python 3 compatible Python 2 `random` Module";
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -20,10 +20,17 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Kerberos high-level interface";
     homepage = "https://pypi.org/project/kerberos/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Kerberos high-level interface";
+    homepage = "https://pypi.org/project/kerberos/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     knownVulnerabilities = [ "CVE-2015-3206" ];
   };
 }

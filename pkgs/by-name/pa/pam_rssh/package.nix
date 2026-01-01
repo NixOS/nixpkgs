@@ -68,12 +68,21 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "PAM module for authenticating via ssh-agent, written in Rust";
     homepage = "https://github.com/z4yx/pam_rssh";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "PAM module for authenticating via ssh-agent, written in Rust";
+    homepage = "https://github.com/z4yx/pam_rssh";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kranzes
       xyenon
     ];

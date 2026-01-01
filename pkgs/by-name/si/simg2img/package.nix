@@ -34,12 +34,21 @@ stdenv.mkDerivation rec {
     "DEP_CXX:=$(CXX)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to convert Android sparse images to raw images";
     homepage = "https://github.com/anestisb/android-simg2img";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool to convert Android sparse images to raw images";
+    homepage = "https://github.com/anestisb/android-simg2img";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dezgeg
       arkivm
     ];

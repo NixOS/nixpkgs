@@ -3,12 +3,22 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
   npmHooks,
   nix-update-script,
 }:
+=======
+  pnpm_10,
+  npmHooks,
+  nix-update-script,
+}:
+let
+  pnpm = pnpm_10;
+in
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenv.mkDerivation (finalAttrs: {
   pname = "changelogen";
   version = "0.6.2";
@@ -20,7 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-N6X9Wffl9WumCXvAt4y+vs3ZJY7NheK+O8BObmuIa/g=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-UKSIfn2iR8Ydk9ViGCgWtspZr1FjTeW49UMwTcL57UA=";
@@ -28,8 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     npmHooks.npmInstallHook
   ];
 

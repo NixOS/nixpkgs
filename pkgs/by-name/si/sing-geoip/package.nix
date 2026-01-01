@@ -25,11 +25,19 @@ let
       cat ${./main.go} >> main.go
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "GeoIP data for sing-box";
       homepage = "https://github.com/SagerNet/sing-geoip";
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [ linsui ];
+=======
+    meta = with lib; {
+      description = "GeoIP data for sing-box";
+      homepage = "https://github.com/SagerNet/sing-geoip";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ linsui ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mainProgram = "sing-geoip";
     };
   };

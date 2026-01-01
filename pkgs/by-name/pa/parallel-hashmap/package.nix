@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Family of header-only, very fast and memory-friendly hashmap and btree containers";
     homepage = "https://github.com/greg7mdp/parallel-hashmap";
@@ -46,5 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Family of header-only, very fast and memory-friendly hashmap and btree containers";
+    homepage = "https://github.com/greg7mdp/parallel-hashmap";
+    changelog = "https://github.com/greg7mdp/parallel-hashmap/releases/tag/v${finalAttrs.version}";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

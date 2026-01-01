@@ -48,18 +48,31 @@ mkDerivation rec {
         sed '1d;$d' > $udev/lib/udev/rules.d/50-mooltipass.rules
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GUI app and daemon to work with Mooltipass device via USB";
     longDescription = ''
       To install udev rules, add `services.udev.packages = [ pkgs.moolticute.udev ]`
       into `nixos/configuration.nix`.
     '';
     homepage = "https://github.com/mooltipass/moolticute";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       kirikaza
       hughobrien
     ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      kirikaza
+      hughobrien
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

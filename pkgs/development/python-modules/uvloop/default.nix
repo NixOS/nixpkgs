@@ -2,9 +2,15 @@
   lib,
   stdenv,
   buildPythonPackage,
+<<<<<<< HEAD
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
+=======
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   cython,
@@ -79,10 +85,13 @@ buildPythonPackage rec {
     "tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
     # Broken: https://github.com/NixOS/nixpkgs/issues/160904
     "tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
+<<<<<<< HEAD
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonAtLeast "3.14") [
     # https://github.com/MagicStack/uvloop/issues/709
     "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   preCheck = ''
@@ -103,11 +112,19 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/MagicStack/uvloop/releases/tag/v${version}";
     description = "Fast implementation of asyncio event loop on top of libuv";
     homepage = "https://github.com/MagicStack/uvloop";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/MagicStack/uvloop/releases/tag/v${version}";
+    description = "Fast implementation of asyncio event loop on top of libuv";
+    homepage = "https://github.com/MagicStack/uvloop";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

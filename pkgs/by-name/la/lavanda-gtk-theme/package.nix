@@ -42,11 +42,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lavanda gtk theme for linux desktops";
     homepage = "https://github.com/vinceliuice/Lavanda-gtk-theme";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dretyuiop ];
+=======
+  meta = with lib; {
+    description = "Lavanda gtk theme for linux desktops";
+    homepage = "https://github.com/vinceliuice/Lavanda-gtk-theme";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dretyuiop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

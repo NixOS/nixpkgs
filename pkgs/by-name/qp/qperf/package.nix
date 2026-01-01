@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Measure RDMA and IP performance";
     mainProgram = "qperf";
@@ -54,5 +55,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ edwtjo ];
+=======
+  meta = with lib; {
+    description = "Measure RDMA and IP performance";
+    mainProgram = "qperf";
+    homepage = "https://github.com/linux-rdma/qperf";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ edwtjo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

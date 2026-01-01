@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo-seahorse";
+<<<<<<< HEAD
   version = "6.6.0";
+=======
+  version = "6.4.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-tXeMkaCYnWzg+6ng8Tyg4Ms1aUeE3xiEkQ3tKEX6Vv8=";
+=======
+    hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/nemo-seahorse";

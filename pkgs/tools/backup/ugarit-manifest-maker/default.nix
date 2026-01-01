@@ -29,11 +29,21 @@ eggDerivation rec {
     numbers
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.kitten-technologies.co.uk/project/ugarit-manifest-maker/";
     description = "Tool for generating import manifests for Ugarit";
     mainProgram = "ugarit-manifest-maker";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.kitten-technologies.co.uk/project/ugarit-manifest-maker/";
+    description = "Tool for generating import manifests for Ugarit";
+    mainProgram = "ugarit-manifest-maker";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.ebzzry ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

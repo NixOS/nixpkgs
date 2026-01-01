@@ -32,11 +32,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "omemo_dr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "OMEMO Double Ratchet";
     homepage = "https://dev.gajim.org/gajim/omemo-dr/";
     changelog = "https://dev.gajim.org/gajim/omemo-dr/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "OMEMO Double Ratchet";
+    homepage = "https://dev.gajim.org/gajim/omemo-dr/";
+    changelog = "https://dev.gajim.org/gajim/omemo-dr/-/blob/v${version}/CHANGELOG.md";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

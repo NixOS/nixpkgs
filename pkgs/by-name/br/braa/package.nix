@@ -21,12 +21,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mass snmp scanner";
     homepage = "http://s-tech.elsat.net.pl";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bycEEE ];
+=======
+  meta = with lib; {
+    description = "Mass snmp scanner";
+    homepage = "http://s-tech.elsat.net.pl";
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bycEEE ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "braa";
   };
 }

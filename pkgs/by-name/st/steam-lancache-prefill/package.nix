@@ -10,13 +10,21 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "steam-lancache-prefill";
+<<<<<<< HEAD
   version = "3.4.2";
+=======
+  version = "3.4.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "tpill90";
     repo = "steam-lancache-prefill";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-FD7rC73VF+jhdCrSPKEillRXAi7jbY+h+oHi0Bpng3k=";
+=======
+    hash = "sha256-6XBe64hAe5mPakjcTAPdwnMKsVlvCeorItLVS5cf+cI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 

@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   doCheck = pythonAtLeast "3.11"; # infinite recursion with pytest
 
+<<<<<<< HEAD
   disabledTests = lib.optionals (pythonAtLeast "3.14") [
     # RecursionError not raised
     "test_deep_split"
@@ -45,5 +46,15 @@ buildPythonPackage rec {
     changelog = "https://github.com/agronholm/exceptiongroup/blob/${version}/CHANGES.rst";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  pythonImportsCheck = [ "exceptiongroup" ];
+
+  meta = with lib; {
+    description = "Backport of PEP 654 (exception groups)";
+    homepage = "https://github.com/agronholm/exceptiongroup";
+    changelog = "https://github.com/agronholm/exceptiongroup/blob/${version}/CHANGES.rst";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

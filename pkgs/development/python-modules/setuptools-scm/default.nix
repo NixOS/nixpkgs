@@ -61,11 +61,20 @@ buildPythonPackage rec {
 
   setupHook = ./setup-hook.sh;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/pypa/setuptools_scm/blob/${version}/CHANGELOG.md";
     homepage = "https://github.com/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/pypa/setuptools_scm/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/pypa/setuptools_scm/";
+    description = "Handles managing your python package versions in scm metadata";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

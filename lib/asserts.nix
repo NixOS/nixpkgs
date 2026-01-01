@@ -14,7 +14,11 @@ in
 rec {
 
   /**
+<<<<<<< HEAD
     Throw if `pred` is false, else return `pred`.
+=======
+    Throw if pred is false, else return pred.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     Intended to be used to augment asserts with helpful error messages.
 
     # Inputs

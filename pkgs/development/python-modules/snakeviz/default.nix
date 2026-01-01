@@ -44,13 +44,22 @@ buildPythonPackage rec {
     mkdir -p "$HOME"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Browser based viewer for profiling data";
     mainProgram = "snakeviz";
     homepage = "https://jiffyclub.github.io/snakeviz";
     changelog = "https://github.com/jiffyclub/snakeviz/blob/v${version}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nixy
       pbsds
     ];

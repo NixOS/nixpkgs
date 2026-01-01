@@ -36,7 +36,10 @@
   sscg,
   systemd,
   udev,
+<<<<<<< HEAD
   util-linux,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   xmlto,
   # Enables lightweight NixOS branding, replacing the default Cockpit icons
   withBranding ? true,
@@ -45,13 +48,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
+<<<<<<< HEAD
   version = "353.1";
+=======
+  version = "351";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-uJBrBsNCYkdq+13UGJ6nPr55HPD4R0BTugWCKrycaIY=";
+=======
+    hash = "sha256-8f/mm53eE0L5fxNwgBkKeNvlBV2gPPvLI+U8c7QkKAI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -168,7 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--enable-prefix-only=yes"
     "--disable-pcp" # TODO: figure out how to package its dependency
+<<<<<<< HEAD
     "--with-default-session-path=${placeholder "out"}/bin:/etc/cockpit/bin:${util-linux}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+=======
+    "--with-default-session-path=/run/wrappers/bin:/run/current-system/sw/bin"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "--with-admin-group=root" # TODO: really? Maybe "wheel"?
   ];
 
@@ -192,8 +207,12 @@ stdenv.mkDerivation (finalAttrs: {
     for binary in $out/bin/cockpit-bridge $out/libexec/cockpit-askpass; do
       chmod +x $binary
       wrapProgram $binary \
+<<<<<<< HEAD
         --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages} \
         --prefix XDG_DATA_DIRS : /etc/cockpit/share # Cockpit apps will be stored at /etc/cockpit/share/cockpit/ (managed by Cockpit nixos service)
+=======
+        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     done
 
     patchShebangs $out/share/cockpit/issue/update-issue

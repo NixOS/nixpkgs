@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # Require networking
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python NTP library";
     homepage = "http://code.google.com/p/ntplib/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python NTP library";
+    homepage = "http://code.google.com/p/ntplib/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

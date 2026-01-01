@@ -32,9 +32,15 @@ stdenv.mkDerivation rec {
     "--with-tclinc=${tcl}/include/tcl.h"
   ];
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.eggheads.org";
     description = "Internet Relay Chat (IRC) bot";
   };

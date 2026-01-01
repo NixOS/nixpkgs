@@ -23,12 +23,21 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line Pomodoro tracker which uses the Open Pomodoro Format";
     homepage = "https://github.com/open-pomodoro/openpomodoro-cli";
     changelog = "https://github.com/open-pomodoro/openpomodoro-cli/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gdifolco ];
+=======
+  meta = with lib; {
+    description = "Command-line Pomodoro tracker which uses the Open Pomodoro Format";
+    homepage = "https://github.com/open-pomodoro/openpomodoro-cli";
+    changelog = "https://github.com/open-pomodoro/openpomodoro-cli/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gdifolco ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "openpomodoro-cli";
   };
 }

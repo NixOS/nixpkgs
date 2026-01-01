@@ -18,11 +18,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "autopsy";
+<<<<<<< HEAD
   version = "4.22.1";
 
   src = fetchzip {
     url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${version}/autopsy-${version}_v2.zip";
     hash = "sha256-IHpUzwSXoghjixsPwpj3lMwHIby3+zx7BjzGRlAVcVs=";
+=======
+  version = "4.21.0";
+
+  src = fetchzip {
+    url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${version}/autopsy-${version}.zip";
+    hash = "sha256-32iOQA3+ykltCYW/MpqCVxyhh3mm6eYzY+t0smAsWRw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

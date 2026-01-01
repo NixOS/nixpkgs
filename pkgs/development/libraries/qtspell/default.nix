@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Provides spell-checking to Qt's text widgets, using the enchant spell-checking library";
     homepage = "https://github.com/manisandro/qtspell";
@@ -50,5 +51,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dansbandit ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Provides spell-checking to Qt's text widgets, using the enchant spell-checking library";
+    homepage = "https://github.com/manisandro/qtspell";
+    changelog = "https://github.com/manisandro/qtspell/blob/version/NEWS";
+    maintainers = with maintainers; [ dansbandit ];
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

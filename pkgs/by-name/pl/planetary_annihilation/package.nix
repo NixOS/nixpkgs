@@ -102,11 +102,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.uberent.com/pa/";
     description = "Next-generation RTS that takes the genre to a planetary scale";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://www.uberent.com/pa/";
+    description = "Next-generation RTS that takes the genre to a planetary scale";
+    license = lib.licenses.unfree;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

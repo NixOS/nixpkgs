@@ -29,12 +29,21 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to scan for secret files on HTTP servers";
     homepage = "https://github.com/hannob/snallygaster";
     changelog = "https://github.com/hannob/snallygaster/releases/tag/${src.tag}";
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to scan for secret files on HTTP servers";
+    homepage = "https://github.com/hannob/snallygaster";
+    changelog = "https://github.com/hannob/snallygaster/releases/tag/${src.tag}";
+    license = licenses.bsd0;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "snallygaster";
   };
 }

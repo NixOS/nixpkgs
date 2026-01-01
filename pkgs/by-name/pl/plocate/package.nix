@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     "-Ddbpath=locatedb"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Much faster locate";
     homepage = "https://plocate.sesse.net/";
@@ -51,5 +52,16 @@ stdenv.mkDerivation rec {
       SuperSandro2000
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Much faster locate";
+    homepage = "https://plocate.sesse.net/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      peterhoeg
+      SuperSandro2000
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

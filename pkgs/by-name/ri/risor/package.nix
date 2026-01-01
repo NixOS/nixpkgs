@@ -37,12 +37,20 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast and flexible scripting for Go developers and DevOps";
     mainProgram = "risor";
     homepage = "https://github.com/risor-io/risor";
     changelog = "https://github.com/risor-io/risor/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vertica_python" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Native Python client for Vertica database";
     homepage = "https://github.com/vertica/vertica-python";
     changelog = "https://github.com/vertica/vertica-python/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ arnoldfarkas ];
+=======
+  meta = with lib; {
+    description = "Native Python client for Vertica database";
+    homepage = "https://github.com/vertica/vertica-python";
+    changelog = "https://github.com/vertica/vertica-python/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ arnoldfarkas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

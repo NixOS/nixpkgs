@@ -34,11 +34,19 @@ rustPlatform.buildRustPackage rec {
   # Requires network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Find unused dependencies in Cargo.toml";
     homepage = "https://github.com/est31/cargo-udeps";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Find unused dependencies in Cargo.toml";
+    homepage = "https://github.com/est31/cargo-udeps";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       b4dm4n
       matthiasbeyer
     ];

@@ -20,14 +20,20 @@ let
     bool
     float
     int
+<<<<<<< HEAD
     package
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ;
   cfg = config.services.ersatztv;
   defaultEnv = {
     ETV_UI_PORT = 8409;
     ETV_BASE_URL = "/";
   };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 {
   options = {
@@ -56,8 +62,11 @@ in
             int
             float
             bool
+<<<<<<< HEAD
             path
             package
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ]);
         default = defaultEnv;
         example = {
@@ -112,7 +121,11 @@ in
           ETV_CONFIG_FOLDER = "/var/lib/ersatztv/config";
           ETV_TRANSCODE_FOLDER = "/var/lib/ersatztv/transcode";
         }
+<<<<<<< HEAD
         // (lib.mapAttrs (_: s: if lib.isBool s then lib.boolToString s else toString s) cfg.environment);
+=======
+        // cfg.environment;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 

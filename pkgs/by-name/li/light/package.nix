@@ -45,6 +45,10 @@ stdenv.mkDerivation {
     mainProgram = "light";
     maintainers = with lib.maintainers; [
       puffnfresh
+<<<<<<< HEAD
+=======
+      dtzWill
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = lib.platforms.linux;
   };

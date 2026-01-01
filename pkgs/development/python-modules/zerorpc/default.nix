@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   doCheck = false; # pypi version doesn't include tests
 
+<<<<<<< HEAD
   meta = {
     description = "Easy to use, intuitive, and cross-language RPC";
     mainProgram = "zerorpc";
     homepage = "https://www.zerorpc.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xeji ];
+=======
+  meta = with lib; {
+    description = "Easy to use, intuitive, and cross-language RPC";
+    mainProgram = "zerorpc";
+    homepage = "https://www.zerorpc.io";
+    license = licenses.mit;
+    maintainers = with maintainers; [ xeji ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

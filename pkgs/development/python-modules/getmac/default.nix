@@ -49,11 +49,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "getmac" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package to get the MAC address of network interfaces and hosts on the local network";
     homepage = "https://github.com/GhostofGoes/getmac";
     changelog = "https://github.com/GhostofGoes/getmac/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python package to get the MAC address of network interfaces and hosts on the local network";
+    homepage = "https://github.com/GhostofGoes/getmac";
+    changelog = "https://github.com/GhostofGoes/getmac/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "getmac";
   };

@@ -46,6 +46,10 @@ let
         name = "kernel-${linuxPackages.kernel.version}";
         meta = with pkgs.lib.maintainers; {
           maintainers = [
+<<<<<<< HEAD
+=======
+            nequissimus
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             atemu
             ma27
           ];

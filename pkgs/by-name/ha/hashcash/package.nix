@@ -27,10 +27,18 @@ stdenv.mkDerivation rec {
     "DOC_INSTALL_PATH=${placeholder "out"}/share/doc/hashcash-$(version)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Proof-of-work algorithm used as spam and denial-of-service counter measure";
     homepage = "http://hashcash.org";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ kisonecat ];
+=======
+  meta = with lib; {
+    description = "Proof-of-work algorithm used as spam and denial-of-service counter measure";
+    homepage = "http://hashcash.org";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ kisonecat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

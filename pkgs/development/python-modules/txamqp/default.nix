@@ -18,10 +18,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ twisted ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/txamqp/txamqp";
     description = "Library for communicating with AMQP peers and brokers using Twisted";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/txamqp/txamqp";
+    description = "Library for communicating with AMQP peers and brokers using Twisted";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

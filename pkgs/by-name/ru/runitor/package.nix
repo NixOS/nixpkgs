@@ -33,7 +33,11 @@ buildGoModule rec {
   # Unit tests require binding to local addresses for listening sockets.
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://bdd.fi/x/runitor";
     description = "Command runner with healthchecks.io integration";
     longDescription = ''
@@ -45,8 +49,13 @@ buildGoModule rec {
       dead man's switch for your cron jobs. You get alerted if they don't run on time
       or terminate with a failure.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ bdd ];
+=======
+    license = licenses.bsd0;
+    maintainers = with maintainers; [ bdd ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "runitor";
   };
 }

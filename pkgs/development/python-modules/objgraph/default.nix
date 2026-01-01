@@ -45,11 +45,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Draws Python object reference graphs with graphviz";
     homepage = "https://mg.pov.lt/objgraph/";
     changelog = "https://github.com/mgedmin/objgraph/blob/${version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Draws Python object reference graphs with graphviz";
+    homepage = "https://mg.pov.lt/objgraph/";
+    changelog = "https://github.com/mgedmin/objgraph/blob/${version}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

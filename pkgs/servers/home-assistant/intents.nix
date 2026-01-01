@@ -22,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
+<<<<<<< HEAD
   version = "2025.12.2";
+=======
+  version = "2025.11.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +36,11 @@ buildPythonPackage rec {
     repo = "intents-package";
     tag = version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-7fav3h8/Eu4Q4I0deDWov5UP5aEyS/ypIGLvuQlGWCI=";
+=======
+    hash = "sha256-F6QctdjF6xoQ3d49MdOUb/8CHgV84wxZHUrGGmiYYcs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -62,11 +70,20 @@ buildPythonPackage rec {
     "intents/tests"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${src.tag}";
     description = "Intents to be used with Home Assistant";
     homepage = "https://github.com/OHF-Voice/intents-package";
     license = lib.licenses.cc-by-40;
     teams = [ lib.teams.home-assistant ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/OHF-Voice/intents-package/releases/tag/${src.tag}";
+    description = "Intents to be used with Home Assistant";
+    homepage = "https://github.com/OHF-Voice/intents-package";
+    license = licenses.cc-by-40;
+    teams = [ teams.home-assistant ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

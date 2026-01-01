@@ -28,6 +28,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/PieterL75/netbox_contextmenus/";
     changelog = "https://github.com/PieterL75/netbox_contextmenus/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     teams = with lib.teams; [ secshell ];
+=======
+    maintainers = with lib.maintainers; [ felbinger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

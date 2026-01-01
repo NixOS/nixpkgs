@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     gnatcoll-iconv
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Framework for analyzing the GNAT Project (GPR) files";
     homepage = "https://github.com/AdaCore/gpr";
@@ -66,6 +67,17 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ heijligen ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Framework for analyzing the GNAT Project (GPR) files";
+    homepage = "https://github.com/AdaCore/gpr";
+    license = with licenses; [
+      asl20
+      gpl3Only
+    ];
+    maintainers = with maintainers; [ heijligen ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # TODO(@sternenseemann): investigate failure with gnat 13
     broken = lib.versionOlder gnat.version "14";
   };

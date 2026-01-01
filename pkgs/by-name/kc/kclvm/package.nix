@@ -49,6 +49,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       selfuryon
+<<<<<<< HEAD
+=======
+      peefy
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 })

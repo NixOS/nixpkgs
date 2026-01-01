@@ -61,7 +61,11 @@ in
           UMask = "0007";
           ConfigurationDirectory = "woodpecker-server";
           EnvironmentFile = cfg.environmentFile;
+<<<<<<< HEAD
           ExecStart = lib.getExe cfg.package;
+=======
+          ExecStart = "${cfg.package}/bin/woodpecker-server";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           Restart = "on-failure";
           RestartSec = 15;
           CapabilityBoundingSet = "";

@@ -59,12 +59,21 @@ buildGoModule rec {
 
   passthru.tests.karma = nixosTests.karma;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/prymitive/karma/blob/${src.rev}/CHANGELOG.md";
     description = "Alert dashboard for Prometheus Alertmanager";
     mainProgram = "karma";
     homepage = "https://karma-dashboard.io/";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nukaduka ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nukaduka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

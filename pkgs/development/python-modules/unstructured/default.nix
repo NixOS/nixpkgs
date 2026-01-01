@@ -116,7 +116,11 @@
   grpcio,
 }:
 let
+<<<<<<< HEAD
   version = "0.18.22";
+=======
+  version = "0.18.20";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 buildPythonPackage rec {
   pname = "unstructured";
@@ -127,7 +131,11 @@ buildPythonPackage rec {
     owner = "Unstructured-IO";
     repo = "unstructured";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-m5sBFra/7qjJ/mBq+r7HA+ZURGpiaK1FzR9crL16jtQ=";
+=======
+    hash = "sha256-BeoIjFhLu/EM0iAErW3eST5/D+TBuAOZ4lDPTXEqpzc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -274,12 +282,21 @@ buildPythonPackage rec {
     grpcio
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Open source libraries and APIs to build custom preprocessing pipelines for labeling, training, or production machine learning pipelines";
     mainProgram = "unstructured-ingest";
     homepage = "https://github.com/Unstructured-IO/unstructured";
     changelog = "https://github.com/Unstructured-IO/unstructured/blob/${src.tag}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

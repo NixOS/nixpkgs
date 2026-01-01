@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     extensionPortalSlug = "pidgin-im-integration";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/muffinmad/pidgin-im-gnome-shell-extension";
     description = "Make Pidgin IM conversations appear in the Gnome Shell message tray";
@@ -41,5 +42,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
     broken = lib.versionAtLeast gnome-shell.version "3.32"; # Doesn't support 3.34
+=======
+  meta = with lib; {
+    homepage = "https://github.com/muffinmad/pidgin-im-gnome-shell-extension";
+    description = "Make Pidgin IM conversations appear in the Gnome Shell message tray";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ ];
+    broken = versionAtLeast gnome-shell.version "3.32"; # Doesn't support 3.34
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

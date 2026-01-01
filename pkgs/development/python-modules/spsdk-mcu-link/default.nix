@@ -43,7 +43,10 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+<<<<<<< HEAD
     "hidapi"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "pyusb"
   ];
 

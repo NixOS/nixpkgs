@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "somfy_mylink_synergy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API to utilise the Somfy Synergy JsonRPC API";
     homepage = "https://github.com/bendews/somfy-mylink-synergy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python API to utilise the Somfy Synergy JsonRPC API";
+    homepage = "https://github.com/bendews/somfy-mylink-synergy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

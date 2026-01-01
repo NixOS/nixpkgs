@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dtschema" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tooling for devicetree validation using YAML and jsonschema";
     homepage = "https://github.com/devicetree-org/dt-schema/";
@@ -48,6 +49,17 @@ buildPythonPackage rec {
       gpl2Only
     ];
     maintainers = with lib.maintainers; [ sorki ];
+=======
+  meta = with lib; {
+    description = "Tooling for devicetree validation using YAML and jsonschema";
+    homepage = "https://github.com/devicetree-org/dt-schema/";
+    changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
+    license = with licenses; [
+      bsd2 # or
+      gpl2Only
+    ];
+    maintainers = with maintainers; [ sorki ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     broken = (
       # Library not loaded: @rpath/libfdt.1.dylib
@@ -55,7 +67,11 @@ buildPythonPackage rec {
       ||
 
         # see https://github.com/devicetree-org/dt-schema/issues/108
+<<<<<<< HEAD
         lib.versionAtLeast jsonschema.version "4.18"
+=======
+        versionAtLeast jsonschema.version "4.18"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     );
   };
 }

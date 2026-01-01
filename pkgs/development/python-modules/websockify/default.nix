@@ -44,12 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "websockify" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "WebSockets support for any application/server";
     mainProgram = "websockify";
     homepage = "https://github.com/kanaka/websockify";
     changelog = "https://github.com/novnc/websockify/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Only;
+=======
+    license = licenses.lgpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

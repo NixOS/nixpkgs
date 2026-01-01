@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bnunicodenormalizer" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bangla Unicode Normalization Toolkit";
     homepage = "https://github.com/mnansary/bnUnicodeNormalizer";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    description = "Bangla Unicode Normalization Toolkit";
+    homepage = "https://github.com/mnansary/bnUnicodeNormalizer";
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

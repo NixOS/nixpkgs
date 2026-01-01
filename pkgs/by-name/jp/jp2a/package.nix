@@ -14,14 +14,22 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+<<<<<<< HEAD
   version = "1.3.3";
+=======
+  version = "1.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "jp2a";
 
   src = fetchFromGitHub {
     owner = "Talinx";
     repo = "jp2a";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-GvPRLYrqZyzk24RmJJ1VcnXo6uda50qqqRA/pioPm5Q=";
+=======
+    hash = "sha256-GcwwzVgF7BK2N8TL8z/7R7Ry1e9pmGiXUrOAQQmPIBo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

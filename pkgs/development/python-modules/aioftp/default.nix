@@ -40,7 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
     trustme
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # uses 127.0.0.2, which macos doesn't like
@@ -49,11 +53,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioftp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python FTP client/server for asyncio";
     homepage = "https://aioftp.readthedocs.io/";
     changelog = "https://github.com/aio-libs/aioftp/blob/${version}/history.rst";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python FTP client/server for asyncio";
+    homepage = "https://aioftp.readthedocs.io/";
+    changelog = "https://github.com/aio-libs/aioftp/blob/${version}/history.rst";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

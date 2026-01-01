@@ -40,11 +40,20 @@ buildPythonPackage rec {
   # requires a running MeshCat viewer
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rdeits/meshcat-python";
     description = "WebGL-based 3D visualizer for Python";
     mainProgram = "meshcat-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rdeits/meshcat-python";
+    description = "WebGL-based 3D visualizer for Python";
+    mainProgram = "meshcat-server";
+    license = licenses.mit;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

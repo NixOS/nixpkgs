@@ -323,6 +323,7 @@ self: super:
       '';
     }) super.di-core;
 
+<<<<<<< HEAD
     # Template Haskell on Darwin fails to load an available symbol in these
     # transitive dependencies since GHC 9.10.3.
     # See issue https://github.com/NixOS/nixpkgs/issues/461651
@@ -347,6 +348,8 @@ self: super:
       + (old.preBuild or "");
     }) super.cachix;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Require /usr/bin/security which breaks sandbox
     http-reverse-proxy = dontCheck super.http-reverse-proxy;
     servant-auth-server = dontCheck super.servant-auth-server;
@@ -401,6 +404,7 @@ self: super:
         ${old.postInstall or ""}
       '';
     }) super.cabal2nix-unstable;
+<<<<<<< HEAD
     happy = overrideCabal (old: {
       postInstall = ''
         remove-references-to -t ${lib.getLib self.happy-lib} "''${!outputBin}/bin/happy"
@@ -408,6 +412,8 @@ self: super:
         ${old.postInstall or ""}
       '';
     }) super.happy;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # https://github.com/fpco/unliftio/issues/87
     unliftio = dontCheck super.unliftio;
@@ -422,10 +428,13 @@ self: super:
       '';
     }) super.rio;
 
+<<<<<<< HEAD
     # Don't use homebrew icu on macOS
     # https://github.com/NixOS/nixpkgs/issues/462046
     text-icu = disableCabalFlag "homebrew" super.text-icu;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # https://github.com/haskell-crypto/cryptonite/issues/360
     cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
 

@@ -34,11 +34,19 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
+<<<<<<< HEAD
   meta = {
     description = "CommonMark parser and renderer for OCaml";
     homepage = "https://erratique.ch/software/cmarkit";
     changelog = "https://github.com/dbuenzli/cmarkit/blob/v${version}/CHANGES.md";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "CommonMark parser and renderer for OCaml";
+    homepage = "https://erratique.ch/software/cmarkit";
+    changelog = "https://github.com/dbuenzli/cmarkit/blob/v${version}/CHANGES.md";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     inherit (ocaml.meta) platforms;
     broken = lib.versionOlder ocaml.version "4.14.0";

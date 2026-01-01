@@ -14,13 +14,21 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
+<<<<<<< HEAD
   version = "2025.12.0";
+=======
+  version = "2025.11.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "cli-v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Pas9NQKLblVuB0Gx4j6Y64Mb2+RaCg7iquSWtN4K7kU=";
+=======
+    hash = "sha256-wG0JKQKjNAEoQt/8BFIzISNNUrBqKQHPZ8DRJ69eA5s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -34,7 +42,11 @@ buildNpmPackage (finalAttrs: {
 
   nodejs = nodejs_22;
 
+<<<<<<< HEAD
   npmDepsHash = "sha256-N7e8WKk2REEH4gP5c7k5zsu3n44hFFLxQ2X35viMuwM=";
+=======
+  npmDepsHash = "sha256-/57+ch1d1VMGIMO0Kzu6o3tUX/3adgLkONNRgtyARtQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     perl
@@ -91,6 +103,10 @@ buildNpmPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     tests = {

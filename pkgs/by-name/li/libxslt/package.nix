@@ -17,7 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxslt";
+<<<<<<< HEAD
   version = "1.1.45";
+=======
+  version = "1.1.43";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "bin"
@@ -31,7 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxslt/${lib.versions.majorMinor finalAttrs.version}/libxslt-${finalAttrs.version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-ms/mhBnE0GpFxVAyGzISdi2S9BRlBiyk6hnmMu5dIW4=";
+=======
+    hash = "sha256-Wj1rODylr8I1sXERjpD1/2qifp/qMwMGUjGm1APwGDo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -94,12 +102,21 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libxslt";
     description = "C library and tools to do XSL transformations";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ jtojnar ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/libxslt";
+    description = "C library and tools to do XSL transformations";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
   };
 })

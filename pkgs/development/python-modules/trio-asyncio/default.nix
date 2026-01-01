@@ -62,6 +62,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trio_asyncio" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/python-trio/trio-asyncio/blob/v${version}/docs/source/history.rst";
     description = "Re-implementation of the asyncio mainloop on top of Trio";
@@ -71,5 +72,16 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/python-trio/trio-asyncio/blob/v${version}/docs/source/history.rst";
+    description = "Re-implementation of the asyncio mainloop on top of Trio";
+    homepage = "https://github.com/python-trio/trio-asyncio";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

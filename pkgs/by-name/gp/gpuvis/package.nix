@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     "-include cstdint"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GPU Trace Visualizer";
     mainProgram = "gpuvis";
@@ -53,5 +54,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emantor ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "GPU Trace Visualizer";
+    mainProgram = "gpuvis";
+    homepage = "https://github.com/mikesart/gpuvis";
+    license = licenses.mit;
+    maintainers = with maintainers; [ emantor ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

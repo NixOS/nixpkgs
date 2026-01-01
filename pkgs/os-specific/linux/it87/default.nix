@@ -33,14 +33,25 @@ stdenv.mkDerivation rec {
     "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Patched module for IT87xx superio chip sensors support";
     homepage = "https://github.com/frankcrawford/it87";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Patched module for IT87xx superio chip sensors support";
+    homepage = "https://github.com/frankcrawford/it87";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
+<<<<<<< HEAD
     teams = [ lib.teams.lumiguide ];
+=======
+    teams = [ teams.lumiguide ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

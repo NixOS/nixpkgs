@@ -44,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Lekensteyn/dmg2img";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ KSJ2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dmg2img";
   };
 })

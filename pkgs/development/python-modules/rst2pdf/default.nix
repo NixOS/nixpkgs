@@ -72,12 +72,21 @@ buildPythonPackage rec {
     installManPage rst2pdf.1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Convert reStructured Text to PDF via ReportLab";
     mainProgram = "rst2pdf";
     homepage = "https://rst2pdf.org/";
     changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ pyrox0 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

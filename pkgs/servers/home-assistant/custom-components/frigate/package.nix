@@ -18,13 +18,21 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
+<<<<<<< HEAD
   version = "5.13.0";
+=======
+  version = "5.11.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-etYPrWa4xzfFm1QQuxh+rJqeoQ3P/nITM6GxJA/tPAA=";
+=======
+    hash = "sha256-cXjf5e4gbkvRS43xnpmL1lSaSvhts4eMetEqTP/RCOo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   dependencies = [ hass-web-proxy-lib ];
@@ -53,11 +61,20 @@ buildHomeAssistantComponent rec {
     "tests/test_media_source.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provides Home Assistant integration to interface with a separately running Frigate service";
     homepage = "https://github.com/blakeblackshear/frigate-hass-integration";
     changelog = "https://github.com/blakeblackshear/frigate-hass-integration/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ presto8 ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Provides Home Assistant integration to interface with a separately running Frigate service";
+    homepage = "https://github.com/blakeblackshear/frigate-hass-integration";
+    changelog = "https://github.com/blakeblackshear/frigate-hass-integration/releases/tag/v${version}";
+    maintainers = with maintainers; [ presto8 ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

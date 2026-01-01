@@ -15,11 +15,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-8waVWCyjulMrXRc1nXZsiP4tMg70VZJ4wbgCQUgpX4A=";
 
+<<<<<<< HEAD
   meta = {
     description = "Book auto-summary for gitbook and mdBook";
     mainProgram = "book-summary";
     homepage = "https://github.com/dvogt23/book-summary";
     license = lib.licenses.mit;
     teams = with lib.teams; [ iog ];
+=======
+  meta = with lib; {
+    description = "Book auto-summary for gitbook and mdBook";
+    mainProgram = "book-summary";
+    homepage = "https://github.com/dvogt23/book-summary";
+    license = licenses.mit;
+    teams = with teams; [ iog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

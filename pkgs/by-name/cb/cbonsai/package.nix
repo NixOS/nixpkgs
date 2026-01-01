@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Grow bonsai trees in your terminal";
     mainProgram = "cbonsai";
@@ -37,5 +38,14 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ manveru ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Grow bonsai trees in your terminal";
+    mainProgram = "cbonsai";
+    homepage = "https://gitlab.com/jallbrit/cbonsai";
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ manveru ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

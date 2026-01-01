@@ -6,8 +6,11 @@
   makeWrapper,
   gdal,
   geos,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm,
   nodejs,
   postgresql,
@@ -64,8 +67,12 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     makeWrapper
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   dependencies = with python.pkgs; [
@@ -119,7 +126,11 @@ python.pkgs.buildPythonApplication rec {
     websockets
   ];
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit pname version src;
     fetcherVersion = 1;
     hash = "sha256-g7YX2fVXGmb3Qq9NNCb294bk4/0khcIZVSskYbE8Mdw=";
@@ -194,10 +205,13 @@ python.pkgs.buildPythonApplication rec {
   # Playwright tests not supported on RiscV yet
   doCheck = lib.meta.availableOn stdenv.hostPlatform playwright-driver.browsers;
 
+<<<<<<< HEAD
   passthru = {
     inherit python;
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Freedom of Information Portal";
     homepage = "https://github.com/okfde/froide";

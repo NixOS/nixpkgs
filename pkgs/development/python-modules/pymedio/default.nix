@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymedio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read medical image files into Numpy arrays";
     homepage = "https://github.com/jcreinhold/pymedio";
     changelog = "https://github.com/jcreinhold/pymedio/blob/v${version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "Read medical image files into Numpy arrays";
+    homepage = "https://github.com/jcreinhold/pymedio";
+    changelog = "https://github.com/jcreinhold/pymedio/blob/v${version}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

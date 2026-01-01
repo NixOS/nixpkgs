@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/java-native-access/jna/blob/${finalAttrs.version}/CHANGES.md";
     description = "Java Native Access";
@@ -47,5 +48,17 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ nagy ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/java-native-access/jna/blob/${finalAttrs.version}/CHANGES.md";
+    description = "Java Native Access";
+    homepage = "https://github.com/java-native-access/jna";
+    license = with licenses; [
+      lgpl21
+      asl20
+    ];
+    maintainers = with maintainers; [ nagy ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -51,7 +51,11 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "erfa" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python bindings for ERFA routines";
     longDescription = ''
       PyERFA is the Python wrapper for the ERFA library (Essential Routines
@@ -62,7 +66,12 @@ buildPythonPackage rec {
       array inputs.
     '';
     homepage = "https://github.com/liberfa/pyerfa";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.rmcgibbo ];
+=======
+    license = licenses.bsd3;
+    maintainers = [ maintainers.rmcgibbo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

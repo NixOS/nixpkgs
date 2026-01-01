@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     install -m 755 x11.so $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/hautreux/slurm-spank-x11";
     description = "Plugin for SLURM to allow for interactive X11 sessions";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ markuskowa ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/hautreux/slurm-spank-x11";
+    description = "Plugin for SLURM to allow for interactive X11 sessions";
+    mainProgram = "slurm-spank-x11";
+    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

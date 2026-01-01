@@ -277,7 +277,11 @@ stdenv.mkDerivation rec {
           ${with perlPackages; makePerlPath [ GD ]}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://salsa.debian.org/signing-party-team/signing-party";
     description = "Collection of several projects relating to OpenPGP";
     longDescription = ''
@@ -300,7 +304,11 @@ stdenv.mkDerivation rec {
       * keyart: creates a random ASCII art of a PGP key file
       * gpg-key2latex: generate LaTeX file with fingerprint paper slips
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd2
       bsd3
       gpl2Only
@@ -308,6 +316,10 @@ stdenv.mkDerivation rec {
       gpl3Plus
     ];
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

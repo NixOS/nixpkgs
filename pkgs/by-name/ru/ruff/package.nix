@@ -16,18 +16,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
+<<<<<<< HEAD
   version = "0.14.9";
+=======
+  version = "0.14.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-2EuI11mdwxKry7d56Ua7ZEU7K0XMgIVHm1zSVoWLkzM=";
+=======
+    hash = "sha256-xGQGodhDHrXIfCJ/Igv8TunsLo38FRRgnR1el+VKWGM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoBuildFlags = [ "--package=ruff" ];
 
+<<<<<<< HEAD
   cargoHash = "sha256-db45h6I5tCcPMbPGa/dV3eJ9CxCwnGShmHdg92AUhv0=";
+=======
+  cargoHash = "sha256-xbYWTuSvC1iqCNF+kIHKuQEjtdv+Z7DlL/4KUAXNcW0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -75,6 +87,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {

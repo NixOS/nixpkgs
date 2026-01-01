@@ -37,7 +37,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Proof checker for unSAT proofs";
     longDescription = ''
       DRAT-trim is a satisfiability proof checking and trimming
@@ -56,8 +60,14 @@ stdenv.mkDerivation {
       up the checking process.
     '';
     homepage = "https://www.cs.utexas.edu/~marijn/drat-trim/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kini ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ kini ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

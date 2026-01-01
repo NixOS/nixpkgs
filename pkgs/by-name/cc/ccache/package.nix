@@ -22,7 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
+<<<<<<< HEAD
   version = "4.12.2";
+=======
+  version = "4.12.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -41,7 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
+<<<<<<< HEAD
     hash = "sha256-oWzVCrNgYtOeN4+KJmIynT3jiFZfxrsLkoIm0lK3MBo=";
+=======
+    hash = "sha256-EfX5cLb23VpRbImXTfOTS+dHq6UTd6ecuPWdmz4nLDs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -171,19 +179,32 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";
     changelog = "https://ccache.dev/releasenotes.html#_ccache_${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       kira-bruneau
       r-burns
     ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      kira-bruneau
+      r-burns
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ccache";
   };
 })

@@ -24,11 +24,19 @@ buildGoModule rec {
     "-X=github.com/davrodpin/mole/cmd.version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI application to create SSH tunnels";
     homepage = "https://github.com/davrodpin/mole";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "CLI application to create SSH tunnels";
+    homepage = "https://github.com/davrodpin/mole";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # build fails with go > 1.17
     mainProgram = "mole";
   };

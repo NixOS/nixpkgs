@@ -394,11 +394,14 @@ in
         The backend used to setup virtual network firewall rules.
       '';
     };
+<<<<<<< HEAD
 
     dbus = {
       enable = mkEnableOption "exposing libvirtd APIs over D-Bus";
       package = mkPackageOption pkgs "libvirt-dbus" { };
     };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   ###### implementation
@@ -421,7 +424,11 @@ in
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e: "allow ${e}") cfg.allowedBridges;
       systemPackages = with pkgs; [
+<<<<<<< HEAD
         netcat
+=======
+        libressl.nc
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         config.networking.firewall.package
         cfg.package
         cfg.qemu.package
@@ -431,6 +438,7 @@ in
 
     boot.kernelModules = [ "tun" ];
 
+<<<<<<< HEAD
     users = lib.mkMerge [
       {
         # libvirtd runs qemu as this user and group by default
@@ -453,6 +461,17 @@ in
         groups.libvirtdbus = { };
       })
     ];
+=======
+    users.groups.libvirtd.gid = config.ids.gids.libvirtd;
+
+    # libvirtd runs qemu as this user and group by default
+    users.extraGroups.qemu-libvirtd.gid = config.ids.gids.qemu-libvirtd;
+    users.extraUsers.qemu-libvirtd = {
+      uid = config.ids.uids.qemu-libvirtd;
+      isNormalUser = false;
+      group = "qemu-libvirtd";
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     security.wrappers.qemu-bridge-helper = {
       setuid = true;
@@ -467,7 +486,11 @@ in
 
     services.firewalld.packages = [ cfg.package ];
 
+<<<<<<< HEAD
     systemd.packages = [ cfg.package ] ++ lib.optional cfg.dbus.enable cfg.dbus.package;
+=======
+    systemd.packages = [ cfg.package ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     systemd.services.libvirtd-config = {
       description = "Libvirt Virtual Machine Management Daemon - configuration";
@@ -647,7 +670,10 @@ in
       (mkIf cfg.nss.enable (mkOrder 430 [ "libvirt" ]))
       (mkIf cfg.nss.enableGuest (mkOrder 432 [ "libvirt_guest" ]))
     ];
+<<<<<<< HEAD
 
     services.dbus.packages = lib.optional cfg.dbus.enable cfg.dbus.package;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

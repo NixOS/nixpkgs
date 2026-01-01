@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/cuetag.sh $out/bin/cuetag
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Set of utilities for working with cue files and toc files";
     homepage = "https://github.com/svend/cuetools";
@@ -45,5 +46,16 @@ stdenv.mkDerivation rec {
       jcumming
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Set of utilities for working with cue files and toc files";
+    homepage = "https://github.com/svend/cuetools";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      codyopel
+      jcumming
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

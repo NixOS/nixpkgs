@@ -18,10 +18,18 @@ buildPythonPackage rec {
   # No tests in PyPI tarball
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "QR code generator written purely in Python with SVG, EPS, PNG and terminal output";
     homepage = "https://github.com/mnooner256/pyqrcode";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "QR code generator written purely in Python with SVG, EPS, PNG and terminal output";
+    homepage = "https://github.com/mnooner256/pyqrcode";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

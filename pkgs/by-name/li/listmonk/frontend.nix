@@ -27,9 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+<<<<<<< HEAD
     mkdir -p $out/admin
     cp -R dist/* $out/admin
     cp node_modules/altcha/dist/altcha.umd.cjs $out/altcha.umd.js
+=======
+    mkdir $out
+    cp -R dist/* $out
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   inherit meta;

@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "teamcity" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python unit test reporting to TeamCity";
     homepage = "https://github.com/JetBrains/teamcity-messages";
     changelog = "https://github.com/JetBrains/teamcity-messages/releases/tag/v${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python unit test reporting to TeamCity";
+    homepage = "https://github.com/JetBrains/teamcity-messages";
+    changelog = "https://github.com/JetBrains/teamcity-messages/releases/tag/v${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

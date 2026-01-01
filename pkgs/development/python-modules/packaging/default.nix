@@ -48,17 +48,30 @@ let
       doCheck = true;
     });
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       changelog = "https://github.com/pypa/packaging/blob/${version}/CHANGELOG.rst";
       description = "Core utilities for Python packages";
       downloadPage = "https://github.com/pypa/packaging";
       homepage = "https://packaging.pypa.io/";
+<<<<<<< HEAD
       license = with lib.licenses; [
         bsd2
         asl20
       ];
       maintainers = with lib.maintainers; [ bennofs ];
       teams = [ lib.teams.python ];
+=======
+      license = with licenses; [
+        bsd2
+        asl20
+      ];
+      maintainers = with maintainers; [ bennofs ];
+      teams = [ teams.python ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

@@ -35,6 +35,7 @@ buildDunePackage rec {
     stdio
   ];
 
+<<<<<<< HEAD
   meta = {
     branch = "5.0";
     inherit (src.meta) homepage;
@@ -43,6 +44,16 @@ buildDunePackage rec {
     maintainers = [
       lib.maintainers.vbgl
       lib.maintainers.mt-caret
+=======
+  meta = with lib; {
+    branch = "5.0";
+    inherit (src.meta) homepage;
+    description = "OCaml image processing library";
+    license = licenses.lgpl2;
+    maintainers = [
+      maintainers.vbgl
+      maintainers.mt-caret
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

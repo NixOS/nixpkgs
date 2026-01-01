@@ -5,7 +5,10 @@
   fetchFromGitHub,
   buildNpmPackage,
   nix-update-script,
+<<<<<<< HEAD
   nodejs_22,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   electron,
   makeWrapper,
   copyDesktopItems,
@@ -21,22 +24,34 @@
 
 buildNpmPackage rec {
   pname = "bruno";
+<<<<<<< HEAD
   version = "2.15.1";
+=======
+  version = "2.14.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-REK3rJ+Svf6bLIfLwizlLa3rIBgnhQHbhzTTe8VPoc4=";
+=======
+    hash = "sha256-YJosHQ2NQAXijPj+6OQJ7zTAOXGNPBqRrhBYQ8moLQ8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
+<<<<<<< HEAD
   nodejs = nodejs_22;
 
   npmDepsHash = "sha256-CXXXyDaaoAoZhUo1YNP3PUEGzlmIaDnA+JhrCqBY1H4=";
+=======
+  npmDepsHash = "sha256-w/LcSiRi4iHEu3gzitqtwfmdyyPIO2ZsLa9bhvEqkRQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [

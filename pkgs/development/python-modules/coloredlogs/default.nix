@@ -62,11 +62,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "coloredlogs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Colored stream handler for Python's logging module";
     mainProgram = "coloredlogs";
     homepage = "https://github.com/xolox/python-coloredlogs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
+=======
+  meta = with lib; {
+    description = "Colored stream handler for Python's logging module";
+    mainProgram = "coloredlogs";
+    homepage = "https://github.com/xolox/python-coloredlogs";
+    license = licenses.mit;
+    maintainers = with maintainers; [ eyjhb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

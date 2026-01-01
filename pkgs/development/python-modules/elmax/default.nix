@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elmax" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API client for the Elmax Cloud services";
     mainProgram = "poetry-template";
     homepage = "https://github.com/home-assistant-ecosystem/python-elmax";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API client for the Elmax Cloud services";
+    mainProgram = "poetry-template";
+    homepage = "https://github.com/home-assistant-ecosystem/python-elmax";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

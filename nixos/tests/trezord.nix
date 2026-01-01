@@ -1,8 +1,13 @@
 { pkgs, ... }:
 {
   name = "trezord";
+<<<<<<< HEAD
   meta = {
     maintainers = with pkgs.lib.maintainers; [
+=======
+  meta = with pkgs.lib; {
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mmahut
       _1000101
     ];

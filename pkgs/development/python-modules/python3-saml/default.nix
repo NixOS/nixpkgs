@@ -62,11 +62,20 @@ buildPythonPackage rec {
     "OneLogin_Saml2_Logout_Request_Test"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "OneLogin's SAML Python Toolkit";
     homepage = "https://github.com/onelogin/python3-saml";
     changelog = "https://github.com/SAML-Toolkits/python3-saml/blob/v${version}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zhaofengli ];
+=======
+  meta = with lib; {
+    description = "OneLogin's SAML Python Toolkit";
+    homepage = "https://github.com/onelogin/python3-saml";
+    changelog = "https://github.com/SAML-Toolkits/python3-saml/blob/v${version}/changelog.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zhaofengli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

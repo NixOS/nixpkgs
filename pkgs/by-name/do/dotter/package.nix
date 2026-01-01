@@ -37,11 +37,19 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Dotfile manager and templater written in Rust";
     homepage = "https://github.com/SuperCuber/dotter";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ linsui ];
+=======
+  meta = with lib; {
+    description = "Dotfile manager and templater written in Rust";
+    homepage = "https://github.com/SuperCuber/dotter";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ linsui ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dotter";
   };
 }

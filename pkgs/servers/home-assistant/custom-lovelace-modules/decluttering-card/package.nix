@@ -26,6 +26,7 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Declutter your lovelace configuration with the help of this card";
     homepage = "https://github.com/custom-cards/decluttering-card";
@@ -33,5 +34,14 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ k900 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Declutter your lovelace configuration with the help of this card";
+    homepage = "https://github.com/custom-cards/decluttering-card";
+    changelog = "https://github.com/custom-cards/decluttering-card/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ k900 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

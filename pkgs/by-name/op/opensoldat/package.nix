@@ -40,10 +40,17 @@ let
       install -Dm644 play-regular.ttf -t $out/share/opensoldat
     '';
 
+<<<<<<< HEAD
     meta = {
       description = "Opensoldat's base game content";
       license = lib.licenses.cc-by-40;
       platforms = lib.platforms.all;
+=======
+    meta = with lib; {
+      description = "Opensoldat's base game content";
+      license = licenses.cc-by-40;
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       inherit (src.meta) homepage;
     };
   };
@@ -106,6 +113,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Unique 2D (side-view) multiplayer action game";
     license = [
@@ -114,6 +122,16 @@ stdenv.mkDerivation rec {
     ];
     inherit (src.meta) homepage;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Unique 2D (side-view) multiplayer action game";
+    license = [
+      licenses.mit
+      base.meta.license
+    ];
+    inherit (src.meta) homepage;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"

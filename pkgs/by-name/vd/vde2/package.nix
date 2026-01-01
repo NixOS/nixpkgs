@@ -26,10 +26,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   # Fix build with gcc15
   # https://github.com/virtualsquare/vde-2/commit/fedcb99c5f44c397f459ed0951a8fba4f4effb73
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
@@ -41,10 +44,18 @@ stdenv.mkDerivation rec {
     wolfssl
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/virtualsquare/vde-2";
     description = "Virtual Distributed Ethernet, an Ethernet compliant virtual network";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/virtualsquare/vde-2";
+    description = "Virtual Distributed Ethernet, an Ethernet compliant virtual network";
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

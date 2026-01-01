@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyisy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to talk to ISY994 from UDI";
     homepage = "https://github.com/automicus/PyISY";
     changelog = "https://github.com/automicus/PyISY/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Python module to talk to ISY994 from UDI";
+    homepage = "https://github.com/automicus/PyISY";
+    changelog = "https://github.com/automicus/PyISY/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

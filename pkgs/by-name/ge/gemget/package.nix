@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-l8UwkFCCNUB5zyhlyu8YC++MhmcR6midnElCgdj50OU=";
 
+<<<<<<< HEAD
   meta = {
     description = "Command line downloader for the Gemini protocol";
     homepage = "https://github.com/makeworld-the-better-one/gemget";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amfl ];
+=======
+  meta = with lib; {
+    description = "Command line downloader for the Gemini protocol";
+    homepage = "https://github.com/makeworld-the-better-one/gemget";
+    license = licenses.mit;
+    maintainers = with maintainers; [ amfl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gemget";
   };
 }

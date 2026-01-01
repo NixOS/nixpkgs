@@ -39,5 +39,9 @@ buildGoModule rec {
     homepage = "https://github.com/doitintl/kube-no-trouble";
     license = lib.licenses.mit;
     mainProgram = "kubent";
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ peterromfeldhk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

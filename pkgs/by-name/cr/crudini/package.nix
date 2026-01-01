@@ -50,11 +50,19 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for manipulating ini files";
     homepage = "https://www.pixelbeat.org/programs/crudini/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Utility for manipulating ini files";
+    homepage = "https://www.pixelbeat.org/programs/crudini/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "crudini";
   };
 }

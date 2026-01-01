@@ -22,12 +22,21 @@ stdenv.mkDerivation rec {
     cp esptool $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "ESP8266/ESP32 build helper tool";
     homepage = "https://github.com/igrr/esptool-ck";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.dezgeg ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "ESP8266/ESP32 build helper tool";
+    homepage = "https://github.com/igrr/esptool-ck";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.dezgeg ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "esptool";
   };
 }

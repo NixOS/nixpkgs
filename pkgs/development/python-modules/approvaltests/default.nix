@@ -20,13 +20,18 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
+<<<<<<< HEAD
   version = "16.2.1";
+=======
+  version = "15.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-gu9Wa52yekUmFg1zlVtLSN18hUuqVOUCN7krUh0m1m0=";
   };
 
@@ -37,6 +42,16 @@ buildPythonPackage rec {
       --replace-fail "from setup_utils" "from setup.setup_utils"
 
     patchShebangs internal_documentation/scripts
+=======
+    hash = "sha256-cOaL8u5q9kx+yLB0e/ALnGYYGF5v50wsIIF1UUTPe1Y=";
+  };
+
+  postPatch = ''
+    echo 'version_number = "${version}"' > version.py
+    mv .github approvaltests approval_utilities tests setup
+    cd setup
+    rm setup.cfg
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   build-system = [ setuptools ];

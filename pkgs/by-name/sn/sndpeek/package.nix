@@ -45,7 +45,11 @@ stdenv.mkDerivation rec {
     mv sndpeek $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Real-time 3D animated audio display/playback";
     longDescription = ''
       sndpeek is just what it sounds (and looks) like:
@@ -62,8 +66,13 @@ stdenv.mkDerivation rec {
         * part of the sndtools distribution.
     '';
     homepage = "https://soundlab.cs.princeton.edu/software/sndpeek/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.laikq ];
+=======
+    license = licenses.gpl2;
+    maintainers = [ maintainers.laikq ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sndpeek";
   };
 }

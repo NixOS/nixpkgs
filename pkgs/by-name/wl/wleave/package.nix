@@ -73,6 +73,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Wayland-native logout script written in GTK4";
     homepage = "https://github.com/AMNatty/wleave";
@@ -80,5 +81,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wleave";
     maintainers = with lib.maintainers; [ ludovicopiero ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Wayland-native logout script written in GTK4";
+    homepage = "https://github.com/AMNatty/wleave";
+    license = licenses.mit;
+    mainProgram = "wleave";
+    maintainers = with maintainers; [ ludovicopiero ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

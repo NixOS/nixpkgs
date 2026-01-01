@@ -10,9 +10,15 @@
     sha256 = "sha256-G/CEzNVkwJl8CIFmSjtVEOX1bDqnnnO9hJR3VjLQf3k=";
   };
   # scintillua
+<<<<<<< HEAD
   "scintillua_6.6.zip" = {
     url = "https://github.com/orbitalquark/scintillua/archive/scintillua_6.6.zip";
     sha256 = "sha256-rFza9/ISeet3GsEi9mCM6mUl9mptBfOKWbxMyYKQvGA=";
+=======
+  "scintillua_6.5.zip" = {
+    url = "https://github.com/orbitalquark/scintillua/archive/scintillua_6.5.zip";
+    sha256 = "sha256-mXE4wcEenEf7vgUNyPBPzwu5vSiupbDub656+jlLP68=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   # lua
   "lua-5.4.8.tar.gz" = {
@@ -50,8 +56,14 @@
     sha256 = "sha256-IbFow4rbIvS0g5HYGT28OSfx8uZ4wgWNaUSim2Ssxsk=";
   };
   # singleapp
+<<<<<<< HEAD
   "v3.5.3.zip" = {
     url = "https://github.com/itay-grudev/SingleApplication/archive/refs/tags/v3.5.3.zip";
     sha256 = "sha256-7Ipook2pdDl2aDcKWp0f4oG/y9c5DtGxRkKSFjTxiB8=";
+=======
+  "v3.4.0.zip" = {
+    url = "https://github.com/itay-grudev/SingleApplication/archive/refs/tags/v3.4.0.zip";
+    sha256 = "sha256-FwyzM+R9ALpGH9u2RXab4Sqi4Q+p3Qs+8EdfhjPGcXY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

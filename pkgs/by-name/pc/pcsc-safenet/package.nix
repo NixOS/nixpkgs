@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     done;
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://safenet.gemalto.com/multi-factor-authentication/security-applications/authentication-client-token-management";
     description = "Safenet Authentication Client";
@@ -98,5 +99,14 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ wldhx ];
+=======
+  meta = with lib; {
+    homepage = "https://safenet.gemalto.com/multi-factor-authentication/security-applications/authentication-client-token-management";
+    description = "Safenet Authentication Client";
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ wldhx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

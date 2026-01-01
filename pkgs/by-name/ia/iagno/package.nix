@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "iagno"; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/iagno";
     description = "Computer version of the game Reversi, more popularly called Othello";
@@ -74,5 +75,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/iagno";
+    description = "Computer version of the game Reversi, more popularly called Othello";
+    mainProgram = "iagno";
+    teams = [ teams.gnome ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

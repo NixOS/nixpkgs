@@ -47,11 +47,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Math font with Unicode math support based on FiraSans and FiraGO";
     homepage = "https://github.com/firamath/firamath";
     license = lib.licenses.ofl;
     maintainers = [ lib.maintainers.loicreynier ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Math font with Unicode math support based on FiraSans and FiraGO";
+    homepage = "https://github.com/firamath/firamath";
+    license = licenses.ofl;
+    maintainers = [ maintainers.loicreynier ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

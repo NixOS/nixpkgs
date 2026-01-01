@@ -42,10 +42,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iterative_telemetry" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Common library to send usage telemetry";
     homepage = "https://github.com/iterative/iterative-telemetry";
     changelog = "https://github.com/iterative/iterative-telemetry/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Common library to send usage telemetry";
+    homepage = "https://github.com/iterative/iterative-telemetry";
+    changelog = "https://github.com/iterative/iterative-telemetry/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ melling ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

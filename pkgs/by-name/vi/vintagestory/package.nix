@@ -5,6 +5,10 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+<<<<<<< HEAD
+=======
+  xorg,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gtk2,
   sqlite,
   openal,
@@ -16,6 +20,7 @@
   pipewire,
   libpulseaudio,
   dotnet-runtime_8,
+<<<<<<< HEAD
   x11Support ? true,
   xorg ? null,
   waylandSupport ? false,
@@ -35,6 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
     hash = "sha256-LkiL/8W9MKpmJxtK+s5JvqhOza0BLap1SsaDvbLYR0c=";
+=======
+}:
+
+stdenv.mkDerivation rec {
+  pname = "vintagestory";
+  version = "1.21.5";
+
+  src = fetchurl {
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
+    hash = "sha256-dG1D2Buqht+bRyxx2ie34Z+U1bdKgi5R3w29BG/a5jg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -42,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
+<<<<<<< HEAD
   runtimeLibs = [
     gtk2
     sqlite
@@ -63,6 +80,27 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     libxkbcommon
   ];
+=======
+  runtimeLibs = lib.makeLibraryPath (
+    [
+      gtk2
+      sqlite
+      openal
+      cairo
+      libGLU
+      SDL2
+      freealut
+      libglvnd
+      pipewire
+      libpulseaudio
+    ]
+    ++ (with xorg; [
+      libX11
+      libXi
+      libXcursor
+    ])
+  );
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   desktopItems = [
     (makeDesktopItem {
@@ -96,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   preFixup =
     let
       runtimeLibs' = lib.strings.makeLibraryPath finalAttrs.runtimeLibs;
@@ -119,6 +158,24 @@ stdenv.mkDerivation (finalAttrs: {
         ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
       done
     '';
+=======
+  preFixup = ''
+    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory \
+      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --set-default mesa_glthread true \
+      --add-flags $out/share/vintagestory/Vintagestory.dll
+
+    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory-server \
+      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --set-default mesa_glthread true \
+      --add-flags $out/share/vintagestory/VintagestoryServer.dll
+
+    find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
+      local filename="$(basename -- "$file")"
+      ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
+    done
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "In-development indie sandbox game about innovation and exploration";
@@ -134,4 +191,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "vintagestory";
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

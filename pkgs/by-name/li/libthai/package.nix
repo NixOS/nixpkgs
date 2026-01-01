@@ -35,12 +35,21 @@ stdenv.mkDerivation rec {
     installManPage man/man3/*.3
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://linux.thai.net/projects/libthai/";
     description = "Set of Thai language support routines";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ crertel ];
+=======
+  meta = with lib; {
+    homepage = "https://linux.thai.net/projects/libthai/";
+    description = "Set of Thai language support routines";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ crertel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "libthai" ];
   };
 }

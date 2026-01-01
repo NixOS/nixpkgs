@@ -32,12 +32,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
+<<<<<<< HEAD
   meta = {
     description = "Finite State Machine structured as a tree";
     homepage = "https://git.sr.ht/~stacyharper/bonsai";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ colinsane ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Finite State Machine structured as a tree";
+    homepage = "https://git.sr.ht/~stacyharper/bonsai";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ colinsane ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bonsaictl";
   };
 })

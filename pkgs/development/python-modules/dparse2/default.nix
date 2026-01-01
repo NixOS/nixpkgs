@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dparse2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to parse Python dependency files";
     homepage = "https://github.com/nexB/dparse2";
     changelog = "https://github.com/nexB/dparse2/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to parse Python dependency files";
+    homepage = "https://github.com/nexB/dparse2";
+    changelog = "https://github.com/nexB/dparse2/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

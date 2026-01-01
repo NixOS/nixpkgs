@@ -17,7 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-D29pmt97DYfpYa9EwK+IlggR3zQFGzOy/Ky01UGI3tg=";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Like watch -d but for JSON";
     longDescription = ''
       jsonwatch is a command line utility with which you can track
@@ -28,8 +32,13 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/dbohdan/jsonwatch";
     changelog = "https://github.com/dbohdan/jsonwatch/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jsonwatch";
   };
 }

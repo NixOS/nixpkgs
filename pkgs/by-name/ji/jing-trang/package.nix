@@ -54,16 +54,29 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "ant test";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "RELAX NG validator in Java";
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
     homepage = "https://www.thaiopensource.com/relaxng/trang.html";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+    ];
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

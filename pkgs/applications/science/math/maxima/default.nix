@@ -108,10 +108,17 @@ stdenv.mkDerivation (finalAttrs: {
     inherit lisp-compiler;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Computer algebra system";
     homepage = "http://maxima.sourceforge.net";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Computer algebra system";
+    homepage = "http://maxima.sourceforge.net";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       Maxima is a fairly complete computer algebra system written in
@@ -119,7 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
       DOE-MACSYMA and licensed under the GPL. Its abilities include
       symbolic integration, 3D plotting, and an ODE solver.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ doronbehar ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jceb/srandrd";
     description = "Simple randr daemon";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.utdemir ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jceb/srandrd";
+    description = "Simple randr daemon";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.utdemir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "srandrd";
   };
 

@@ -39,15 +39,25 @@ stdenv.mkDerivation rec {
     rm -r "$out"/share
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://libthreadar.sourceforge.net/";
     description = "C++ library that provides several classes to manipulate threads";
     longDescription = ''
       Libthreadar is a C++ library providing a small set of C++ classes to manipulate
       threads in a very simple and efficient way from your C++ code.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ izorkin ];
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ izorkin ];
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

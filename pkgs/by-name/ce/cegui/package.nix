@@ -59,11 +59,20 @@ stdenv.mkDerivation {
     hardcodeZeroVersion = true;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://cegui.org.uk/";
     description = "C++ Library for creating GUIs";
     mainProgram = "CEGUISampleFramework-0.9999";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://cegui.org.uk/";
+    description = "C++ Library for creating GUIs";
+    mainProgram = "CEGUISampleFramework-0.9999";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

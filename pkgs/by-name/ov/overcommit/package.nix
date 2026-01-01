@@ -27,6 +27,7 @@ bundlerApp {
     updateScript = bundlerUpdateScript "overcommit";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to manage and configure Git hooks";
     homepage = "https://github.com/sds/overcommit";
@@ -37,5 +38,18 @@ bundlerApp {
       anthonyroussel
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Tool to manage and configure Git hooks";
+    homepage = "https://github.com/sds/overcommit";
+    changelog = "https://github.com/sds/overcommit/blob/main/CHANGELOG.md";
+    license = licenses.mit;
+    mainProgram = "overcommit";
+    maintainers = with maintainers; [
+      Br1ght0ne
+      anthonyroussel
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

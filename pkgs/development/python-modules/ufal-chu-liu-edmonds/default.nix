@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ufal.chu_liu_edmonds" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bindings to Chu-Liu-Edmonds algorithm from TurboParser";
     homepage = "https://github.com/ufal/chu_liu_edmonds";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ vizid ];
+=======
+  meta = with lib; {
+    description = "Bindings to Chu-Liu-Edmonds algorithm from TurboParser";
+    homepage = "https://github.com/ufal/chu_liu_edmonds";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ vizid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

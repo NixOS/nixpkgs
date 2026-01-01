@@ -8,6 +8,7 @@
 }:
 
 let
+<<<<<<< HEAD
   openShiftVersion = "4.20.5";
   okdVersion = "4.20.0-okd-scos.11";
   microshiftVersion = "4.20.0";
@@ -18,6 +19,18 @@ in
 buildGoModule (finalAttrs: {
   pname = "crc";
   version = "2.57.0";
+=======
+  openShiftVersion = "4.20.1";
+  okdVersion = "4.20.0-okd-scos.7";
+  microshiftVersion = "4.20.0";
+  writeKey = "$(MODULEPATH)/pkg/crc/segment.WriteKey=cvpHsNcmGCJqVzf6YxrSnVlwFSAZaYtp";
+  gitCommit = "cb4c9175d15c1fae26734da75806f8d436b6799a";
+  gitHash = "sha256-QdsknUcc9ugpwiyJerxUuf70vtLMXhc3Pz+f2+sPceI=";
+in
+buildGoModule (finalAttrs: {
+  pname = "crc";
+  version = "2.56.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "crc-org";

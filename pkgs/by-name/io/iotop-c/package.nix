@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     mv $out/share/man/man8/{iotop,iotop-c}.8
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Iotop identifies processes that use high amount of input/output requests on your machine";
     homepage = "https://github.com/Tomas-M/iotop";
@@ -38,5 +39,14 @@ stdenv.mkDerivation rec {
     mainProgram = "iotop-c";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Iotop identifies processes that use high amount of input/output requests on your machine";
+    homepage = "https://github.com/Tomas-M/iotop";
+    maintainers = [ maintainers.arezvov ];
+    mainProgram = "iotop-c";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

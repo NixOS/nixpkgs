@@ -23,6 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycryptodome_test_vectors" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Test vectors for PyCryptodome cryptographic library";
     homepage = "https://www.pycryptodome.org/";
@@ -31,5 +32,15 @@ buildPythonPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Test vectors for PyCryptodome cryptographic library";
+    homepage = "https://www.pycryptodome.org/";
+    license = with licenses; [
+      bsd2 # and
+      asl20
+    ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -8,18 +8,30 @@
   nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
+<<<<<<< HEAD
   pname = "nm-file-secret-agent";
   version = "1.2.0";
+=======
+  name = "nm-file-secret-agent";
+  version = "1.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "lilly";
     repo = "nm-file-secret-agent";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-exU+9fN2Wt2+0lQoZS4TFPhCcoDPWEIZldRO9LKux3U=";
   };
 
   cargoHash = "sha256-jxeEubl1uXmnapvP2OV4jCQWoavAVPbSPL1C3fFtJlE=";
+=======
+    hash = "sha256-FZef9qMJeQkoLvCHcsGMqr0riC98WVXntQtbt76Iev4=";
+  };
+
+  cargoHash = "sha256-HYyL0r9YrDL22uQdypJQ7Xep9Uqt4b16bhl0D9kRByU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [ dbus ];
   nativeBuildInputs = [ pkg-config ];
 

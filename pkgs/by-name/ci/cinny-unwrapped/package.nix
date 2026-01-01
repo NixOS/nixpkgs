@@ -6,7 +6,10 @@
   python3,
   pkg-config,
   pixman,
+<<<<<<< HEAD
   nodejs_22,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cairo,
   pango,
   stdenv,
@@ -23,8 +26,11 @@ buildNpmPackage rec {
     hash = "sha256-RPFEquxMRnNW+L6azcDmrIKXG27DAF2PxDmSB3ErOHk=";
   };
 
+<<<<<<< HEAD
   nodejs = nodejs_22;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   npmDepsHash = "sha256-h4Ipmmo0Jf6/rzCAKtLLCYrUi1anVKZSgy/kcEKDQJg=";
 
   nativeBuildInputs = [

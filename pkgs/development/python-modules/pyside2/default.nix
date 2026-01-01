@@ -102,12 +102,21 @@ stdenv.mkDerivation rec {
     cp -r PySide2.egg-info $out/${python.sitePackages}/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "LGPL-licensed Python bindings for Qt";
     license = lib.licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "LGPL-licensed Python bindings for Qt";
+    license = licenses.lgpl21;
+    homepage = "https://wiki.qt.io/Qt_for_Python";
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

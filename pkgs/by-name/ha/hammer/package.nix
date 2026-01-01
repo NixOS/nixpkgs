@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ glib ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Bit-oriented parser combinator library";
     longDescription = ''
       Hammer is a parsing library. Like many modern parsing libraries, it
@@ -36,7 +40,12 @@ stdenv.mkDerivation rec {
       executables.
     '';
     homepage = "https://gitlab.special-circumstanc.es/hammer/hammer";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ azahi ];
+=======
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ azahi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,10 +39,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "FuzzyTM" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Fuzzy Topic Models";
     homepage = "https://github.com/ERijck/FuzzyTM";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Fuzzy Topic Models";
+    homepage = "https://github.com/ERijck/FuzzyTM";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

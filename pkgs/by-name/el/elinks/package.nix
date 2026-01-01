@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enablePython "--with-python"
   ++ lib.optional enablePerl "--with-perl";
 
+<<<<<<< HEAD
   meta = {
     description = "Full-featured text-mode web browser";
     mainProgram = "elinks";
@@ -93,6 +94,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Full-featured text-mode web browser";
+    mainProgram = "elinks";
+    homepage = "https://github.com/rkd77/elinks";
+    license = licenses.gpl2;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       iblech
     ];
   };

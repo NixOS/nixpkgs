@@ -96,12 +96,22 @@ stdenv.mkDerivation rec {
     update-source-version mc "$new_version"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "File Manager and User Shell for the GNU Project, known as Midnight Commander";
     downloadPage = "https://ftp.osuosl.org/pub/midnightcommander/";
     homepage = "https://midnight-commander.org";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "File Manager and User Shell for the GNU Project, known as Midnight Commander";
+    downloadPage = "https://ftp.osuosl.org/pub/midnightcommander/";
+    homepage = "https://midnight-commander.org";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sander ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mc";
   };
 }

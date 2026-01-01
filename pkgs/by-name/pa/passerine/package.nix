@@ -17,11 +17,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-PCSwhq4VXd/Hvvcfd2gZskXVD106Zw5PVCgMdlapWRs=";
 
+<<<<<<< HEAD
   meta = {
     description = "Small extensible programming language designed for concise expression with little code";
     mainProgram = "passerine";
     homepage = "https://www.passerine.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
+=======
+  meta = with lib; {
+    description = "Small extensible programming language designed for concise expression with little code";
+    mainProgram = "passerine";
+    homepage = "https://www.passerine.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

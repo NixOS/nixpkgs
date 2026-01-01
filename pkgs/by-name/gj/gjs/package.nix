@@ -95,9 +95,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     xvfb-run
+<<<<<<< HEAD
   ];
 
   checkInputs = testDeps;
+=======
+  ]
+  ++ testDeps;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   propagatedBuildInputs = [
     glib
@@ -105,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+<<<<<<< HEAD
     (lib.mesonBool "skip_gtk_tests" (!finalAttrs.finalPackage.doCheck))
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
     "-Dprofiler=disabled"
@@ -113,8 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   strictDeps = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
     substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
@@ -173,12 +184,21 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "JavaScript bindings for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "gjs";
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "JavaScript bindings for GNOME";
+    homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
+    license = licenses.lgpl2Plus;
+    mainProgram = "gjs";
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (gobject-introspection.meta) platforms badPlatforms;
   };
 })

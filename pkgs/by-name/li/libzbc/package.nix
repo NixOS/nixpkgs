@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional guiSupport "--enable-gui";
 
+<<<<<<< HEAD
   meta = {
     description = "ZBC device manipulation library";
     homepage = "https://github.com/westerndigitalcorporation/libzbc";
@@ -39,5 +40,16 @@ stdenv.mkDerivation rec {
       lgpl3Plus
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "ZBC device manipulation library";
+    homepage = "https://github.com/westerndigitalcorporation/libzbc";
+    maintainers = [ ];
+    license = with licenses; [
+      bsd2
+      lgpl3Plus
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

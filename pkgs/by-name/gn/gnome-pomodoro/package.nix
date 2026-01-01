@@ -24,13 +24,21 @@
 }:
 stdenv.mkDerivation rec {
   pname = "gnome-pomodoro";
+<<<<<<< HEAD
   version = "0.28.1";
+=======
+  version = "0.28.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "gnome-pomodoro";
     repo = "gnome-pomodoro";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-1G0Sv6uR4rE+/TZqEM57mCdBaXoJNpC0cznY4pnPEa4=";
+=======
+    hash = "sha256-cVuBJ1Rwh/mjlFKKRJkKmdtDHdWNc6uiEE3ywCesirU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -74,7 +82,11 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
     mainProgram = "gnome-pomodoro";
@@ -82,11 +94,20 @@ stdenv.mkDerivation rec {
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       aleksana
       herschenglime
     ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [
+      aleksana
+      herschenglime
+    ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

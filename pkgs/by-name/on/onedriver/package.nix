@@ -66,7 +66,11 @@ buildGoModule {
       --replace "/usr/bin/fusermount" "${wrapperDir}/fusermount"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Network filesystem for Linux";
     longDescription = ''
       onedriver is a network filesystem that gives your computer direct access to your files on Microsoft OneDrive.
@@ -75,8 +79,14 @@ buildGoModule {
       your local computer.
     '';
     inherit (src.meta) homepage;
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.massimogengarelli ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.massimogengarelli ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

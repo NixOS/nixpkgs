@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
     "--with-ssl=${openssl.dev}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Optional component for use with Apache Tomcat that allows Tomcat to use certain native resources for performance, compatibility, etc";
     homepage = "https://tomcat.apache.org/native-doc/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aanderse ];
+=======
+  meta = with lib; {
+    description = "Optional component for use with Apache Tomcat that allows Tomcat to use certain native resources for performance, compatibility, etc";
+    homepage = "https://tomcat.apache.org/native-doc/";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ aanderse ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

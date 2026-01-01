@@ -25,12 +25,21 @@
     sha256 = "0plmwx1i23c9nzzg6zxz2xi0y92la97mak9hg6h3c6d8kxvajb5c";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "libyaml bindings for Gerbil";
     homepage = "https://github.com/mighty-gerbils/gerbil-libyaml";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
+=======
+  meta = with lib; {
+    description = "libyaml bindings for Gerbil";
+    homepage = "https://github.com/mighty-gerbils/gerbil-libyaml";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fare ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # "-L${libyaml}/lib"

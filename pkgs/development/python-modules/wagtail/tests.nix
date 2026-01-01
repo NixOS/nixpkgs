@@ -11,7 +11,10 @@
   python-dateutil,
   python,
   pytz,
+<<<<<<< HEAD
   responses,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   wagtail,
   wagtail-factories,
 }:
@@ -35,7 +38,10 @@ buildPythonPackage {
     msrest
     python-dateutil
     pytz
+<<<<<<< HEAD
     responses
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     wagtail
     wagtail-factories
   ];

@@ -32,6 +32,7 @@ buildPythonApplication rec {
   ];
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/JonnyHaystack/i3-resurrect";
     description = "Simple but flexible solution to saving and restoring i3 workspaces";
@@ -39,5 +40,14 @@ buildPythonApplication rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ magnetophon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/JonnyHaystack/i3-resurrect";
+    description = "Simple but flexible solution to saving and restoring i3 workspaces";
+    mainProgram = "i3-resurrect";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ magnetophon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

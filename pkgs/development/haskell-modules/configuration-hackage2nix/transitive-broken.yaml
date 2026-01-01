@@ -53,11 +53,18 @@ dont-distribute-packages:
  - age
  - agentx
  - aip
+<<<<<<< HEAD
+=======
+ - airgql
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - alg
  - algebra-checkers
  - algebra-driven-design
  - algebra-sql
+<<<<<<< HEAD
  - algebraic-graph-duoids
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - algolia
  - AlgoRhythm
  - algorithmic-composition-additional
@@ -74,6 +81,10 @@ dont-distribute-packages:
  - alto
  - amazon-emailer-client-snap
  - amby
+<<<<<<< HEAD
+=======
+ - ampersand
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - analyze-client
  - anansi-hscolour
  - anatomy
@@ -129,7 +140,10 @@ dont-distribute-packages:
  - array-forth
  - arraylist
  - arx
+<<<<<<< HEAD
  - arxiv-client-cli
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - ascii
  - ascii-cows
  - ascii-numbers
@@ -187,7 +201,10 @@ dont-distribute-packages:
  - aws-sign4
  - aws-sns
  - axiom
+<<<<<<< HEAD
  - axiomatic-classes
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - azimuth-hs
  - aztecs-sdl-image
  - aztecs-sdl-text
@@ -552,7 +569,10 @@ dont-distribute-packages:
  - concrete-haskell
  - concrete-haskell-autogen
  - concurrency-benchmarks
+<<<<<<< HEAD
  - ConcurrentUtils
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - Condor
  - condor
  - conductive-hsc3
@@ -585,7 +605,10 @@ dont-distribute-packages:
  - containers-accelerate
  - content-store
  - control
+<<<<<<< HEAD
  - control-invariants
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - control-monad-attempt
  - control-monad-exception
  - control-monad-exception-monadsfd
@@ -628,6 +651,10 @@ dont-distribute-packages:
  - crf-chain2-tiers
  - criu-rpc
  - cron-compat
+<<<<<<< HEAD
+=======
+ - crucible-llvm
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - crux
  - crux-llvm
  - crypto-classical
@@ -681,8 +708,11 @@ dont-distribute-packages:
  - datadog-tracing
  - datafix
  - dataflow
+<<<<<<< HEAD
  - dataframe-hasktorch
  - dataframe-persistent
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - datasets
  - date-conversions
  - dbjava
@@ -815,8 +845,11 @@ dont-distribute-packages:
  - DSTM
  - dtd
  - duckdb-simple
+<<<<<<< HEAD
  - duoidal-transformers
  - duoids-hedgehog
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - Dust
  - Dust-crypto
  - Dust-tools
@@ -875,7 +908,10 @@ dont-distribute-packages:
  - error-message
  - errors-ext
  - ersatz-toysat
+<<<<<<< HEAD
  - ersatz-viz
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - esotericbot
  - EsounD
  - esqueleto-postgis
@@ -903,6 +939,10 @@ dont-distribute-packages:
  - eventful-sql-common
  - eventful-sqlite
  - eventful-test-helpers
+<<<<<<< HEAD
+=======
+ - eventlog-live-otelcol
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - EventSocket
  - eventsource-geteventstore-store
  - eventsource-store-specs
@@ -916,7 +956,10 @@ dont-distribute-packages:
  - exference
  - exist
  - exist-instances
+<<<<<<< HEAD
  - existential
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - expand
  - expat-enumerator
  - expiring-containers
@@ -1119,7 +1162,10 @@ dont-distribute-packages:
  - GenussFold
  - geodetic
  - geolite-csv
+<<<<<<< HEAD
  - geomancy-layout
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - getemx
  - ghc-debugger
  - ghc-dump-util
@@ -1204,6 +1250,16 @@ dont-distribute-packages:
  - GPipe-TextureLoad
  - gps
  - gps2htmlReport
+<<<<<<< HEAD
+=======
+ - gpu-vulkan
+ - gpu-vulkan-khr-surface
+ - gpu-vulkan-khr-surface-glfw
+ - gpu-vulkan-khr-swapchain
+ - gpu-vulkan-middle-khr-surface
+ - gpu-vulkan-middle-khr-surface-glfw
+ - gpu-vulkan-middle-khr-swapchain
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - GPX
  - grab-form
  - graflog
@@ -1214,6 +1270,10 @@ dont-distribute-packages:
  - grapefruit-records
  - grapefruit-ui
  - grapefruit-ui-gtk
+<<<<<<< HEAD
+=======
+ - grapesy
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - grapesy-etcd
  - graph-rewriting-cl
  - graph-rewriting-gl
@@ -1794,7 +1854,10 @@ dont-distribute-packages:
  - ifscs
  - ige-mac-integration
  - igrf
+<<<<<<< HEAD
  - ihaskell-dataframe
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - ihaskell-rlangqq
  - ihaskell-symtegration
  - ihttp
@@ -1990,6 +2053,10 @@ dont-distribute-packages:
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
+<<<<<<< HEAD
+=======
+ - kvitable
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - laborantin-hs
  - labsat
  - labyrinth
@@ -2400,6 +2467,10 @@ dont-distribute-packages:
  - nakadi-client
  - named-servant-client
  - named-servant-server
+<<<<<<< HEAD
+=======
+ - named-text
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - nanq
  - NaperianNetCDF
  - national-australia-bank
@@ -2411,6 +2482,11 @@ dont-distribute-packages:
  - nero-wai
  - nero-warp
  - nested-routes
+<<<<<<< HEAD
+=======
+ - net-mqtt-lens
+ - net-mqtt-rpc
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - net-spider-cli
  - net-spider-pangraph
  - net-spider-rpl
@@ -2792,6 +2868,10 @@ dont-distribute-packages:
  - puzzle-draw-cmdline
  - pvd
  - qd-vec
+<<<<<<< HEAD
+=======
+ - qhs
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - qhull
  - qnap-decrypt
  - qr-repa
@@ -3280,6 +3360,11 @@ dont-distribute-packages:
  - snowflake-server
  - snumber
  - Snusmumrik
+<<<<<<< HEAD
+=======
+ - soap-openssl
+ - soap-tls
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - SoccerFun
  - SoccerFunGL
  - sock2stream
@@ -3452,6 +3537,10 @@ dont-distribute-packages:
  - tasty-jenkins-xml
  - tasty-laws
  - tasty-lens
+<<<<<<< HEAD
+=======
+ - tasty-sugar
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
  - TastyTLT
  - tateti-tateti
  - Taxonomy

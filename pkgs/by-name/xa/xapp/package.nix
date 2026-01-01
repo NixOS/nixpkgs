@@ -24,7 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xapp";
+<<<<<<< HEAD
   version = "3.2.1";
+=======
+  version = "3.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -35,7 +39,11 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = "xapp";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-Uc3vMcWVzT0N9FCDxxI2e4yk1fg6FJiC7XXpY80mV0c=";
+=======
+    hash = "sha256-jO1FyJfAg/kZExAS6gT0u15ans8cDsXfBE5V+w2fQXU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Recommended by upstream, which enables the build of xapp-debug.
@@ -100,11 +108,20 @@ stdenv.mkDerivation rec {
     wrapGApp $out/lib/xapps/xapp-sn-watcher
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/xapp";
     description = "Cross-desktop libraries and common resources";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/xapp";
+    description = "Cross-desktop libraries and common resources";
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

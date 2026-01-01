@@ -18,7 +18,10 @@
   udevCheckHook,
   withUtils ? true,
   withGUI ? true,
+<<<<<<< HEAD
   withBPF ? true,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   alsa-lib,
   libGLU,
   qt6Packages,
@@ -63,11 +66,21 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gconv" stdenv.hostPlatform.isGnu)
     (lib.mesonEnable "qv4l2" withQt)
     (lib.mesonEnable "qvidcap" withQt)
+<<<<<<< HEAD
     (lib.mesonEnable "bpf" withBPF)
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (lib.mesonOption "udevdir" "${placeholder "out"}/lib/udev")
   ]
   ++ lib.optionals stdenv.hostPlatform.isGnu [
     (lib.mesonOption "gconvsysdir" "${glibc.out}/lib/gconv")
+<<<<<<< HEAD
+=======
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # BPF support fail to cross compile, unable to find `linux/lirc.h`
+    (lib.mesonOption "bpf" "disabled")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postFixup = ''
@@ -76,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+<<<<<<< HEAD
+=======
+    clang
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     doxygen
     meson
     ninja
@@ -83,11 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     udevCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.optional withBPF clang
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optional withQt qt6Packages.wrapQtAppsHook;
 
   buildInputs = [
     json_c
+<<<<<<< HEAD
     udev
   ]
   ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
@@ -95,6 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
     libbpf
     libelf
   ]
+=======
+    libbpf
+    libelf
+    udev
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optionals withQt [
     alsa-lib
     qt6Packages.qt5compat
@@ -120,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
@@ -133,5 +162,20 @@ stdenv.mkDerivation (finalAttrs: {
       yarny
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
+    homepage = "https://linuxtv.org/projects.php";
+    changelog = "https://git.linuxtv.org/v4l-utils.git/plain/ChangeLog?h=v4l-utils-${finalAttrs.version}";
+    license = with licenses; [
+      lgpl21Plus
+      gpl2Plus
+    ];
+    maintainers = with maintainers; [
+      codyopel
+      yarny
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

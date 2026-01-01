@@ -40,10 +40,17 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   meta = {
     description = "Prometheus service discovery for Equinix Metal";
     homepage = "https://github.com/packethost/prometheus-packet-sd";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Prometheus service discovery for Equinix Metal";
+    homepage = "https://github.com/packethost/prometheus-packet-sd";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "prometheus-packet-sd";
     # The last successful Darwin Hydra build was in 2024

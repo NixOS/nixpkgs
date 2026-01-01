@@ -5,11 +5,16 @@
   ezjsonm,
   menhir,
   menhirLib,
+<<<<<<< HEAD
   ounit2,
+=======
+  ounit,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildDunePackage rec {
   pname = "mustache";
+<<<<<<< HEAD
   version = "3.3.0";
   src = fetchFromGitHub {
     owner = "rgrinberg";
@@ -26,6 +31,23 @@ buildDunePackage rec {
     ezjsonm
     ounit2
   ];
+=======
+  version = "3.1.0";
+  duneVersion = "3";
+  src = fetchFromGitHub {
+    owner = "rgrinberg";
+    repo = "ocaml-mustache";
+    rev = "v${version}";
+    sha256 = "19v8rk8d8lkfm2rmhdawfgadji6wa267ir5dprh4w9l1sfj8a1py";
+  };
+
+  nativeBuildInputs = [ menhir ];
+  buildInputs = [ ezjsonm ];
+  propagatedBuildInputs = [ menhirLib ];
+
+  doCheck = true;
+  checkInputs = [ ounit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Mustache logic-less templates in OCaml";

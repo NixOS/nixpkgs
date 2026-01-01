@@ -72,6 +72,7 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else production;
 
   production = generic {
+<<<<<<< HEAD
     version = "580.119.02";
     sha256_64bit = "sha256-gCD139PuiK7no4mQ0MPSr+VHUemhcLqerdfqZwE47Nc=";
     sha256_aarch64 = "sha256-eYcYVD5XaNbp4kPue8fa/zUgrt2vHdjn6DQMYDl0uQs=";
@@ -96,16 +97,70 @@ rec {
     openSha256 = "sha256-ft8FEnBotC9Bl+o4vQA1rWFuRe7gviD/j1B8t0MRL/o=";
     settingsSha256 = "sha256-wVf1hku1l5OACiBeIePUMeZTWDQ4ueNvIk6BsW/RmF4=";
     persistencedSha256 = "sha256-nHzD32EN77PG75hH9W8ArjKNY/7KY6kPKSAhxAWcuS4=";
+=======
+    version = if stdenv.hostPlatform.system == "aarch64-linux" then "580.95.05" else "580.105.08";
+    sha256_64bit =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-hJ7w746EK5gGss3p8RwTA9VPGpp2lGfk5dlhsv4Rgqc="
+      else
+        "sha256-2cboGIZy8+t03QTPpp3VhHn6HQFiyMKMjRdiV2MpNHU=";
+    sha256_aarch64 =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-zLRCbpiik2fGDa+d80wqV3ZV1U1b4lRjzNQJsLLlICk="
+      else
+        null;
+    openSha256 =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-RFwDGQOi9jVngVONCOB5m/IYKZIeGEle7h0+0yGnBEI="
+      else
+        "sha256-FGmMt3ShQrw4q6wsk8DSvm96ie5yELoDFYinSlGZcwQ=";
+    settingsSha256 =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-F2wmUEaRrpR1Vz0TQSwVK4Fv13f3J9NJLtBe4UP2f14="
+      else
+        "sha256-YvzWO1U3am4Nt5cQ+b5IJ23yeWx5ud1HCu1U0KoojLY=";
+    persistencedSha256 =
+      if stdenv.hostPlatform.system == "aarch64-linux" then
+        "sha256-QCwxXQfG/Pa7jSTBB0xD3lsIofcerAWWAHKvWjWGQtg="
+      else
+        "sha256-qh8pKGxUjEimCgwH7q91IV7wdPyV5v5dc5/K/IcbruI=";
+  };
+
+  latest = selectHighestVersion production (generic {
+    version = "575.64.05";
+    sha256_64bit = "sha256-hfK1D5EiYcGRegss9+H5dDr/0Aj9wPIJ9NVWP3dNUC0=";
+    sha256_aarch64 = "sha256-GRE9VEEosbY7TL4HPFoyo0Ac5jgBHsZg9sBKJ4BLhsA=";
+    openSha256 = "sha256-mcbMVEyRxNyRrohgwWNylu45vIqF+flKHnmt47R//KU=";
+    settingsSha256 = "sha256-o2zUnYFUQjHOcCrB0w/4L6xI1hVUXLAWgG2Y26BowBE=";
+    persistencedSha256 = "sha256-2g5z7Pu8u2EiAh5givP5Q1Y4zk4Cbb06W37rf768NFU=";
+  });
+
+  beta = selectHighestVersion latest (generic {
+    version = "580.65.06";
+    sha256_64bit = "sha256-BLEIZ69YXnZc+/3POe1fS9ESN1vrqwFy6qGHxqpQJP8=";
+    sha256_aarch64 = "sha256-4CrNwNINSlQapQJr/dsbm0/GvGSuOwT/nLnIknAM+cQ=";
+    openSha256 = "sha256-BKe6LQ1ZSrHUOSoV6UCksUE0+TIa0WcCHZv4lagfIgA=";
+    settingsSha256 = "sha256-9PWmj9qG/Ms8Ol5vLQD3Dlhuw4iaFtVHNC0hSyMCU24=";
+    persistencedSha256 = "sha256-ETRfj2/kPbKYX1NzE0dGr/ulMuzbICIpceXdCRDkAxA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   });
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
+<<<<<<< HEAD
     version = "580.94.13";
     persistencedVersion = "580.95.05";
     settingsVersion = "580.95.05";
     sha256_64bit = "sha256-Hg9LOxG1n2cupWUIi/miGf67y/vvzQEsOtni8KzGx40=";
     openSha256 = "sha256-vDXx6cH/02TAaM7pWrJdTFw65GmydRMmyIYFeUAzHFg=";
+=======
+    version = "580.94.11";
+    persistencedVersion = "580.95.05";
+    settingsVersion = "580.95.05";
+    sha256_64bit = "sha256-zcyK5mz8XubxdjdNbTJvaIHW1ehyV4jKZ8kNByKNDQU=";
+    openSha256 = "sha256-Eb6RJo4u08lWp1cs8WBThPH7r90Pj6MPtUYI5N3rOEI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     settingsSha256 = "sha256-F2wmUEaRrpR1Vz0TQSwVK4Fv13f3J9NJLtBe4UP2f14=";
     persistencedSha256 = "sha256-QCwxXQfG/Pa7jSTBB0xD3lsIofcerAWWAHKvWjWGQtg=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";

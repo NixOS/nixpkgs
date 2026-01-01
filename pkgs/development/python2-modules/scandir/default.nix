@@ -21,10 +21,17 @@ buildPythonPackage rec {
 
   checkPhase = "${python.interpreter} test/run_tests.py";
 
+<<<<<<< HEAD
   meta = {
     description = "Better directory iterator and faster os.walk()";
     homepage = "https://github.com/benhoyt/scandir";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Better directory iterator and faster os.walk()";
+    homepage = "https://github.com/benhoyt/scandir";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

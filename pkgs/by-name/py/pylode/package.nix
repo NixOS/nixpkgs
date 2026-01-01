@@ -39,12 +39,21 @@ python3.pkgs.buildPythonApplication rec {
     "pylode"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "OWL ontology documentation tool using Python and templating, based on LODE";
     homepage = "https://github.com/RDFLib/pyLODE";
     # Next release will move to BSD3
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ koslambrou ];
+=======
+  meta = with lib; {
+    description = "OWL ontology documentation tool using Python and templating, based on LODE";
+    homepage = "https://github.com/RDFLib/pyLODE";
+    # Next release will move to BSD3
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ koslambrou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pylode";
   };
 }

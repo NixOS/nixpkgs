@@ -12,13 +12,21 @@
 # Broken since https://github.com/NixOS/nixpkgs/pull/354627, temporarily disactivated
 # let
 #   # version of veriT that works with SMTCoq
+<<<<<<< HEAD
 #   veriT' = veriT.overrideAttrs {
+=======
+#   veriT' = veriT.overrideAttrs (oA: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 #     src = fetchurl {
 #       url = "https://www.lri.fr/~keller/Documents-recherche/Smtcoq/veriT9f48a98.tar.gz";
 #       sha256 = "sha256-Pe46PxQVHWwWwx5Ei4Bl95A0otCiXZuUZ2nXuZPYnhY=";
 #     };
 #     meta.broken = false;
+<<<<<<< HEAD
 #   };
+=======
+#   });
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 # in
 
 mkCoqDerivation {
@@ -92,10 +100,18 @@ mkCoqDerivation {
   # This is meant to ease future troubleshooting of cvc5 build failures
   passthru = { inherit cvc5; };
 
+<<<<<<< HEAD
   meta = {
     description = "Communication between Coq and SAT/SMT solvers";
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.cecill-b;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Communication between Coq and SAT/SMT solvers";
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.cecill-b;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

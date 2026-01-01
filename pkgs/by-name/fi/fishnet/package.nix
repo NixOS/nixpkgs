@@ -52,6 +52,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
@@ -78,11 +82,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     });
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed Stockfish analysis for lichess.org";
     homepage = "https://github.com/lichess-org/fishnet";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Distributed Stockfish analysis for lichess.org";
+    homepage = "https://github.com/lichess-org/fishnet";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tu-maurice
       thibaultd
     ];

@@ -32,6 +32,10 @@ let
   };
 in
 {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   options = {
     services.zammad = {
       enable = lib.mkEnableOption "Zammad, a web-based, open source user support/ticketing solution";
@@ -69,6 +73,15 @@ in
         description = "Host address.";
       };
 
+<<<<<<< HEAD
+=======
+      openPorts = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Whether to open firewall ports for Zammad";
+      };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       port = lib.mkOption {
         type = lib.types.port;
         default = 3000;
@@ -170,6 +183,7 @@ in
         };
       };
 
+<<<<<<< HEAD
       nginx = {
         configure = lib.mkOption {
           type = lib.types.bool;
@@ -183,6 +197,8 @@ in
         };
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       secretKeyBaseFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -209,6 +225,7 @@ in
     };
   };
 
+<<<<<<< HEAD
   imports = [
     (lib.mkRemovedOptionModule [
       "services"
@@ -235,6 +252,9 @@ in
       '')
     ];
 
+=======
+  config = lib.mkIf cfg.enable {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     services.zammad.database.settings = {
       production = lib.mapAttrs (_: v: lib.mkDefault v) (filterNull {
         adapter = "postgresql";
@@ -248,6 +268,14 @@ in
       });
     };
 
+<<<<<<< HEAD
+=======
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openPorts [
+      config.services.zammad.port
+      config.services.zammad.websocketPort
+    ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     users.users.${cfg.user} = {
       group = "${cfg.group}";
       isSystemUser = true;
@@ -271,6 +299,7 @@ in
       }
     ];
 
+<<<<<<< HEAD
     services = {
       nginx = lib.mkIf cfg.nginx.configure {
         enable = true;
@@ -321,6 +350,23 @@ in
           enable = true;
           port = cfg.redis.port;
         };
+=======
+    services.postgresql = lib.optionalAttrs (cfg.database.createLocally) {
+      enable = true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensureDBOwnership = true;
+        }
+      ];
+    };
+
+    services.redis = lib.optionalAttrs cfg.redis.createLocally {
+      servers."${cfg.redis.name}" = {
+        enable = true;
+        port = cfg.redis.port;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 
@@ -334,13 +380,21 @@ in
         "network.target"
         "systemd-tmpfiles-setup.service"
       ]
+<<<<<<< HEAD
       ++ lib.optionals cfg.database.createLocally [
+=======
+      ++ lib.optionals (cfg.database.createLocally) [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "postgresql.target"
       ]
       ++ lib.optionals cfg.redis.createLocally [
         "redis-${cfg.redis.name}.service"
       ];
+<<<<<<< HEAD
       requires = lib.optionals cfg.database.createLocally [
+=======
+      requires = lib.optionals (cfg.database.createLocally) [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "postgresql.target"
       ];
       description = "Zammad web";
@@ -368,7 +422,11 @@ in
         # cleanup state directory from module before refactoring in
         # https://github.com/NixOS/nixpkgs/pull/277456
         if [[ -e ${cfg.dataDir}/node_modules ]]; then
+<<<<<<< HEAD
           rm -rf ${cfg.dataDir}/!("tmp"|"config"|"log"|"state_dir_migrated"|"db_seeded"|"storage")
+=======
+          rm -rf ${cfg.dataDir}/!("tmp"|"config"|"log"|"state_dir_migrated"|"db_seeded")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           rm -rf ${cfg.dataDir}/config/!("database.yml"|"secrets.yml")
           # state directory cleanup required --> zammad was already installed --> do not seed db
           echo true > ${cfg.dataDir}/db_seeded
@@ -392,9 +450,14 @@ in
     systemd.tmpfiles.rules = [
       "d ${cfg.dataDir}                               0750 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/config                        0750 ${cfg.user} ${cfg.group} - -"
+<<<<<<< HEAD
       "d ${cfg.dataDir}/log                           0750 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/storage                       0750 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/tmp                           0750 ${cfg.user} ${cfg.group} - -"
+=======
+      "d ${cfg.dataDir}/tmp                           0750 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/log                           0750 ${cfg.user} ${cfg.group} - -"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       "f ${cfg.dataDir}/config/secrets.yml            0640 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/config/database.yml           0640 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/db_seeded                     0640 ${cfg.user} ${cfg.group} - -"

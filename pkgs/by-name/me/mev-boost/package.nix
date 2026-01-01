@@ -16,6 +16,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-FpkQp/PgmZ9+swQYI984j87ODbT0kpanBkHfJK86FWA=";
 
+<<<<<<< HEAD
   meta = {
     description = "Ethereum block-building middleware";
     homepage = "https://github.com/flashbots/mev-boost";
@@ -23,5 +24,14 @@ buildGoModule rec {
     mainProgram = "mev-boost";
     maintainers = with lib.maintainers; [ ekimber ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Ethereum block-building middleware";
+    homepage = "https://github.com/flashbots/mev-boost";
+    license = licenses.mit;
+    mainProgram = "mev-boost";
+    maintainers = with maintainers; [ ekimber ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

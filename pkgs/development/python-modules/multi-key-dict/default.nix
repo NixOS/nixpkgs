@@ -23,9 +23,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "multi_key_dict" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multi_key_dict";
     homepage = "https://github.com/formiaczek/multi_key_dict";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Multi_key_dict";
+    homepage = "https://github.com/formiaczek/multi_key_dict";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

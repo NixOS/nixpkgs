@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+<<<<<<< HEAD
   fetchFromGitHub,
   fetchpatch,
   setuptools,
@@ -9,6 +10,14 @@
   pyyaml,
   six,
   urllib3,
+=======
+  fetchPypi,
+  pytest-httpbin,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  six,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   yarl,
   wrapt,
 }:
@@ -16,6 +25,7 @@
 buildPythonPackage rec {
   pname = "vcrpy";
   version = "7.0.0";
+<<<<<<< HEAD
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -41,6 +51,22 @@ buildPythonPackage rec {
     urllib3
     wrapt
     yarl
+=======
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-F2ORrQQl7d4WgMWyBzjqPcf7lCUgpI0pk0SAUJhrOlA=";
+  };
+
+  propagatedBuildInputs = [
+    pyyaml
+    six
+    yarl
+    wrapt
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [
@@ -59,11 +85,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vcr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Automatically mock your HTTP interactions to simplify and speed up testing";
     homepage = "https://github.com/kevin1024/vcrpy";
     changelog = "https://github.com/kevin1024/vcrpy/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Automatically mock your HTTP interactions to simplify and speed up testing";
+    homepage = "https://github.com/kevin1024/vcrpy";
+    changelog = "https://github.com/kevin1024/vcrpy/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

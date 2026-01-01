@@ -19,14 +19,24 @@ buildPecl rec {
   # from incompatible pointer type [-Wincompatible-pointer-types
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "PHP extension for Pinba";
     longDescription = ''
       Pinba is a MySQL storage engine that acts as a realtime monitoring and
       statistics server for PHP using MySQL as a read-only interface.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
     homepage = "http://pinba.org/";
     teams = [ lib.teams.php ];
+=======
+    license = licenses.lgpl2Plus;
+    homepage = "http://pinba.org/";
+    teams = [ teams.php ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

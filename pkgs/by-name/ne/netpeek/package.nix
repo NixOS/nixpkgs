@@ -15,14 +15,22 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "netpeek";
+<<<<<<< HEAD
   version = "0.2.6";
+=======
+  version = "0.2.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "ZingyTomato";
     repo = "NetPeek";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-SFY/bUUS4AOniOGjngH/fUHrYiq+dMWxHYvoSkhfnkA=";
+=======
+    hash = "sha256-mouXMFYhCBEUTyPfuaw570ZC40TJuprldiSiP0Il0KA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

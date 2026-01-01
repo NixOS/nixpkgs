@@ -3,7 +3,10 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+<<<<<<< HEAD
   nixosTests,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,12 +26,16 @@ rustPlatform.buildRustPackage rec {
   # > error: doctest failed, to rerun pass `-p komodo_client --doc`
   doCheck = false;
 
+<<<<<<< HEAD
   passthru = {
     updateScript = nix-update-script { };
     tests = {
       inherit (nixosTests) komodo-periphery;
     };
   };
+=======
+  passthru.updateScript = nix-update-script { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Tool to build and deploy software on many servers";

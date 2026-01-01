@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "RISC-V Assembler and Runtime Simulator";
     mainProgram = "rars";
@@ -36,5 +37,15 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ athas ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "RISC-V Assembler and Runtime Simulator";
+    mainProgram = "rars";
+    homepage = "https://github.com/TheThirdOne/rars";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ athas ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

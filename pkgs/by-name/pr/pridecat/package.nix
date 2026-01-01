@@ -18,11 +18,19 @@ stdenv.mkDerivation {
   # fixes the install path in the Makefile
   patches = [ ./fix_install.patch ];
 
+<<<<<<< HEAD
   meta = {
     description = "Like cat, but more colorful";
     homepage = "https://github.com/lunasorcery/pridecat";
     license = lib.licenses.cc-by-nc-sa-40;
     maintainers = with lib.maintainers; [ lunarequest ];
+=======
+  meta = with lib; {
+    description = "Like cat, but more colorful";
+    homepage = "https://github.com/lunasorcery/pridecat";
+    license = licenses.cc-by-nc-sa-40;
+    maintainers = with maintainers; [ lunarequest ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pridecat";
   };
 }

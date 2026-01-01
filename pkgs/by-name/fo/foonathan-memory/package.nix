@@ -46,7 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/lib/foonathan_memory
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://memory.foonathan.net/";
     changelog = "https://github.com/foonathan/memory/releases/tag/${finalAttrs.src.rev}";
     description = "STL compatible C++ memory allocator library";
@@ -64,8 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
       trying to change the STL, it works with the current implementation.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ panicgh ];
     platforms = with lib.platforms; unix ++ windows;
+=======
+    license = licenses.zlib;
+    maintainers = with maintainers; [ panicgh ];
+    platforms = with platforms; unix ++ windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -19,10 +19,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ifaddr" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pydron/ifaddr";
     description = "Enumerates all IP addresses on all network adapters of the system";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pydron/ifaddr";
+    description = "Enumerates all IP addresses on all network adapters of the system";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

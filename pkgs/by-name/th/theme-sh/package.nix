@@ -38,11 +38,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Script which lets you set your $terminal theme";
     homepage = "https://github.com/lemnos/theme.sh";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Script which lets you set your $terminal theme";
+    homepage = "https://github.com/lemnos/theme.sh";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "theme.sh";
   };

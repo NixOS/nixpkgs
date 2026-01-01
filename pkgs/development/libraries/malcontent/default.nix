@@ -103,7 +103,11 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # We need to install Polkit & AccountsService data files in `out`
     # but `buildEnv` only uses `bin` when both `bin` and `out` are present.
     outputsToInstall = [
@@ -115,8 +119,13 @@ stdenv.mkDerivation rec {
     description = "Parental controls library";
     mainProgram = "malcontent-client";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ jtojnar ];
+=======
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (polkit.meta) platforms badPlatforms;
   };
 }

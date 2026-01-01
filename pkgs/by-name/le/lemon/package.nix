@@ -35,7 +35,11 @@ stdenv.mkDerivation {
     install -Dvm644 ${srcs.lempar} $out/bin/lempar.c
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "LALR(1) parser generator";
     mainProgram = "lemon";
     longDescription = ''
@@ -45,7 +49,12 @@ stdenv.mkDerivation {
       programs "yacc" and "bison", but is not compatible with either.
     '';
     homepage = "http://www.hwaci.com/sw/lemon/";
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.publicDomain;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -40,11 +40,19 @@ buildPythonPackage rec {
     "etelemetry.config"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight python client to communicate with the etelemetry server";
     homepage = "https://github.com/sensein/etelemetry-client";
     changelog = "https://github.com/sensein/etelemetry-client/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Lightweight python client to communicate with the etelemetry server";
+    homepage = "https://github.com/sensein/etelemetry-client";
+    changelog = "https://github.com/sensein/etelemetry-client/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

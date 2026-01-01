@@ -17,11 +17,20 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ docutils ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rst converter to ansi-decorated console output";
     mainProgram = "rst2ansi";
     homepage = "https://github.com/Snaipe/python-rst-to-ansi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vojta001 ];
+=======
+  meta = with lib; {
+    description = "Rst converter to ansi-decorated console output";
+    mainProgram = "rst2ansi";
+    homepage = "https://github.com/Snaipe/python-rst-to-ansi";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vojta001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

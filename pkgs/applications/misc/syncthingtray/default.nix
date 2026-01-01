@@ -38,14 +38,22 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+<<<<<<< HEAD
   version = "2.0.5";
+=======
+  version = "2.0.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-a2pYQCpcF4nIr2HaU+29umiTdXN2P//+a9SZ7pG55lo=";
+=======
+    hash = "sha256-vvbzXwujOIk3g/SvNM3JGkt956RN9VR0Pcx5nzg1IU0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -113,12 +121,21 @@ stdenv.mkDerivation (finalAttrs: {
     "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Martchus/syncthingtray";
     description = "Tray application and Dolphin/Plasma integration for Syncthing";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Martchus/syncthingtray";
+    description = "Tray application and Dolphin/Plasma integration for Syncthing";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ doronbehar ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "syncthingtray";
   };
 })

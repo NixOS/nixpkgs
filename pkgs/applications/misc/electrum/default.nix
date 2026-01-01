@@ -155,7 +155,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = callPackage ./update.nix { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
@@ -166,9 +170,15 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://electrum.org/";
     downloadPage = "https://electrum.org/#download";
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       joachifm
       np
       prusnak

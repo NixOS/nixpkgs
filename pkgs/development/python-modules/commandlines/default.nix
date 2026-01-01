@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for command line argument parsing";
     homepage = "https://github.com/chrissimpkins/commandlines";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python library for command line argument parsing";
+    homepage = "https://github.com/chrissimpkins/commandlines";
+    license = licenses.mit;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

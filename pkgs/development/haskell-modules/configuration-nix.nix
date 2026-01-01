@@ -1551,6 +1551,7 @@ builtins.intersectAttrs super {
     };
   }) (enableSeparateBinOutput super.cabal2nix-unstable);
 
+<<<<<<< HEAD
   # Cabal doesn't allow us to properly specify the test dependency
   # on nix-instantiate(1). Even though we're just evaluating pure code,
   # it absolutely wants to write to disk.
@@ -1563,6 +1564,8 @@ builtins.intersectAttrs super {
     '';
   }) super.language-nix-unstable;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
 
@@ -1906,7 +1909,11 @@ builtins.intersectAttrs super {
     addBuildDepend
       # Overrides for tailwindcss copied from:
       # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
+<<<<<<< HEAD
       (pkgs.tailwindcss.overrideAttrs (old: {
+=======
+      (pkgs.tailwindcss.overrideAttrs (oa: {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         plugins = [
           pkgs.nodePackages."@tailwindcss/aspect-ratio"
           pkgs.nodePackages."@tailwindcss/forms"
@@ -1914,10 +1921,17 @@ builtins.intersectAttrs super {
           pkgs.nodePackages."@tailwindcss/typography"
         ];
         # Added a shim for the `tailwindcss` CLI entry point
+<<<<<<< HEAD
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
         postInstall = (old.postInstall or "") + ''
           nodePath=""
           for p in "$out" "${pkgs.postcss}" $plugins; do
+=======
+        nativeBuildInputs = (oa.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
+        postInstall = (oa.postInstall or "") + ''
+          nodePath=""
+          for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
           done
           makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"
@@ -2141,6 +2155,7 @@ builtins.intersectAttrs super {
   cpython = doJailbreak super.cpython;
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
+<<<<<<< HEAD
 
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
@@ -2169,3 +2184,6 @@ builtins.intersectAttrs super {
       }
     )
 )
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

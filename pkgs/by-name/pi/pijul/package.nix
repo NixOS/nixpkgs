@@ -44,11 +44,19 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/pijul completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed version control system";
     homepage = "https://pijul.org";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Distributed version control system";
+    homepage = "https://pijul.org";
+    license = with licenses; [ gpl2Plus ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gal_bolle
       dywedir
       fabianhjr

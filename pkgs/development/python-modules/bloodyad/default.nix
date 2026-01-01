@@ -22,14 +22,22 @@
 
 buildPythonPackage rec {
   pname = "bloodyad";
+<<<<<<< HEAD
   version = "2.5.1";
+=======
+  version = "2.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-qz7jhFBkJdIDnnGOz4SvDI/YcSXdP7B1FPKxaGRJRWE=";
+=======
+    hash = "sha256-WKD8R1pH1dIAxMIM2SLPV+AoFi3z1O96U8XK2QyVYxQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [ "cryptography" ];

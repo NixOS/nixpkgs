@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Image viewer and editor written using the Enlightenment Foundation Libraries";
     mainProgram = "ephoto";
@@ -37,5 +38,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.enlightenment ];
+=======
+  meta = with lib; {
+    description = "Image viewer and editor written using the Enlightenment Foundation Libraries";
+    mainProgram = "ephoto";
+    homepage = "https://www.smhouston.us/ephoto/";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    teams = [ teams.enlightenment ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

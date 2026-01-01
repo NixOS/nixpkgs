@@ -37,10 +37,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonschema_specifications" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Support files exposing JSON from the JSON Schema specifications";
     homepage = "https://github.com/python-jsonschema/jsonschema-specifications";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Support files exposing JSON from the JSON Schema specifications";
+    homepage = "https://github.com/python-jsonschema/jsonschema-specifications";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

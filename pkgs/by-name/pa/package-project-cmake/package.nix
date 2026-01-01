@@ -28,7 +28,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/TheLartians/PackageProject.cmake";
     description = "CMake script for packaging C/C++ projects";
     longDescription = ''
@@ -39,8 +43,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       to get things working. This small script should simplify the CMake
       packaging process into a single, easy-to-use command.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

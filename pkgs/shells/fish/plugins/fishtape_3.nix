@@ -20,10 +20,18 @@ buildFishPlugin rec {
     fishtape tests/*.fish
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "100% pure-Fish test runner";
     homepage = "https://github.com/jorgebucaran/fishtape";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ euxane ];
+=======
+  meta = with lib; {
+    description = "100% pure-Fish test runner";
+    homepage = "https://github.com/jorgebucaran/fishtape";
+    license = licenses.mit;
+    maintainers = with maintainers; [ euxane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

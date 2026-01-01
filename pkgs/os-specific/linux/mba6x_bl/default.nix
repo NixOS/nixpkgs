@@ -27,11 +27,20 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "MacBook Air 6,1 and 6,2 (mid 2013) backlight driver";
     homepage = "https://github.com/patjak/mba6x_bl";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.simonvandel ];
+=======
+  meta = with lib; {
+    description = "MacBook Air 6,1 and 6,2 (mid 2013) backlight driver";
+    homepage = "https://github.com/patjak/mba6x_bl";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.simonvandel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

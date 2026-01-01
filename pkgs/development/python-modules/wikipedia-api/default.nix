@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wikipediaapi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for Wikipedia";
     homepage = "https://github.com/martin-majlis/Wikipedia-API";
     changelog = "https://github.com/martin-majlis/Wikipedia-API/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for Wikipedia";
+    homepage = "https://github.com/martin-majlis/Wikipedia-API";
+    changelog = "https://github.com/martin-majlis/Wikipedia-API/blob/${src.tag}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

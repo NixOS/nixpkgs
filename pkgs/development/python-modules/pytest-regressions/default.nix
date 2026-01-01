@@ -58,7 +58,11 @@ buildPythonPackage rec {
     pandas
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
@@ -76,7 +80,11 @@ buildPythonPackage rec {
     "pytest_regressions.plugin"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/ESSS/pytest-regressions/blob/${src.tag}/CHANGELOG.rst";
     description = "Pytest fixtures to write regression tests";
     longDescription = ''
@@ -86,7 +94,11 @@ buildPythonPackage rec {
       that future runs produce the same data.
     '';
     homepage = "https://github.com/ESSS/pytest-regressions";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

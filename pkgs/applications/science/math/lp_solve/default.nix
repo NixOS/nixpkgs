@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mixed Integer Linear Programming (MILP) solver";
     mainProgram = "lp_solve";
@@ -80,5 +81,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ smironov ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Mixed Integer Linear Programming (MILP) solver";
+    mainProgram = "lp_solve";
+    homepage = "https://lpsolve.sourceforge.net";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ smironov ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

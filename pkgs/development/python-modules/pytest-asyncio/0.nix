@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_asyncio" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for testing asyncio code with pytest";
     homepage = "https://github.com/pytest-dev/pytest-asyncio";
     changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/${src.tag}/docs/reference/changelog.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Library for testing asyncio code with pytest";
+    homepage = "https://github.com/pytest-dev/pytest-asyncio";
+    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/${src.tag}/docs/reference/changelog.rst";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

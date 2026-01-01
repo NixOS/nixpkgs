@@ -73,11 +73,20 @@ stdenv.mkDerivation rec {
     rm -r "$out"/share/dar
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://dar.linux.free.fr";
     description = "Disk ARchiver, allows backing up files into indexed archives";
     maintainers = with lib.maintainers; [ izorkin ];
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://dar.linux.free.fr";
+    description = "Disk ARchiver, allows backing up files into indexed archives";
+    maintainers = with maintainers; [ izorkin ];
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -87,7 +87,11 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Collection of common network programs";
 
     longDescription = ''
@@ -98,10 +102,17 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/inetutils/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     /**
       The `logger` binary from `util-linux` is preferred over `inetutils`.

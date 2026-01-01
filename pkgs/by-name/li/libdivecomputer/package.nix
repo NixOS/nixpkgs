@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.libdivecomputer.org";
     description = "Cross-platform and open source library for communication with dive computers from various manufacturers";
@@ -22,5 +23,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.mguentner ];
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.libdivecomputer.org";
+    description = "Cross-platform and open source library for communication with dive computers from various manufacturers";
+    mainProgram = "dctool";
+    maintainers = [ maintainers.mguentner ];
+    license = licenses.lgpl21;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

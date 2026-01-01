@@ -52,10 +52,18 @@ buildPythonPackage rec {
     "test_zeroconf"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for the control of Rabbit Air air purifiers";
     homepage = "https://github.com/rabbit-air/python-rabbitair";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for the control of Rabbit Air air purifiers";
+    homepage = "https://github.com/rabbit-air/python-rabbitair";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

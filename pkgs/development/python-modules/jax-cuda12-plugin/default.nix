@@ -39,31 +39,52 @@ let
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp311";
+<<<<<<< HEAD
       hash = "sha256-CwozBM5+SUrNjZxZNJDBEqMs22AQ/hr8WE2eQf2GMWc=";
+=======
+      hash = "sha256-R5ykONVVAk2sjdEFg3Hvv49HmBmnCuohPz8wN+zpnXQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp311";
+<<<<<<< HEAD
       hash = "sha256-cNMyIkhK1cN1uPg1e3wjysuET27Pw5Vn+N1H/eboeFg=";
+=======
+      hash = "sha256-szg73AufYmDZrcTKDR9ovyQRWN/mnXJrJnsGgTgup6c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
+<<<<<<< HEAD
       hash = "sha256-IBZYYbPT5m67LA9jpUfR1e4X6kSsO+cVPHkIycqMiPM=";
+=======
+      hash = "sha256-tgvwu9okzsb6cRcL1pthM1nwGjdtjgn+NL9n7MmjFk8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp312";
+<<<<<<< HEAD
       hash = "sha256-QD1eB3MbXNrDvZ+z9Ei9hIAGLLLAq2HqKtI/zQplR5o=";
+=======
+      hash = "sha256-OFAB9W+FKVnwYa4VrRV8OcxEccjR0lRN/D+AVoSsIhM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
+<<<<<<< HEAD
       hash = "sha256-gsZ5i+Zr+MdzOGkY5MjlzYEZdT87+zyku8RoGCg3UMY=";
+=======
+      hash = "sha256-c0LIgQzJR9548oxyh6MLLiAbD1FXhUPdJVNpK3mkmUI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp313";
+<<<<<<< HEAD
       hash = "sha256-Y3OH3DQIzSBFYmaFAvnpX3bG7d4KbS5I8FUWLcKuvw0=";
     };
     "3.14-x86_64-linux" = getSrcFromPypi {
@@ -75,6 +96,9 @@ let
       platform = "manylinux_2_27_aarch64";
       dist = "cp314";
       hash = "sha256-WMUUc/xiLgMTgDWYX3QYM1ZNcKS9WiF49htizaoy/5Q=";
+=======
+      hash = "sha256-2nwPLvHGl/mt5Rpxz60hHiv/JUB6aFXd3eNywBkPxGg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

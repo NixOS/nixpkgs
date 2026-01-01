@@ -38,7 +38,11 @@ buildPythonPackage rec {
     "test/test_spell_check.py"
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [ "colcon_cd" ];
+=======
+  pythonImportCheck = [ "colcon_cd" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "A shell function for colcon-core to change the current working directory.";

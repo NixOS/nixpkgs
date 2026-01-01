@@ -10,21 +10,32 @@
   openssl,
   pkg-config,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook3,
   nix-update-script,
 }:
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
   version = "2.1.0";
+=======
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "wealthfolio";
+  version = "1.2.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "afadil";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-pLiSidcuRTcykHDgW2pw+h0t/42g6u3LlioSEDA0lIo=";
   };
 
@@ -33,6 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm = pnpm_9;
     fetcherVersion = 1;
     hash = "sha256-TcoyNIVb/aDgXIsNDvzTMfsewmefU9ck+uSHv/tbH/k=";
+=======
+    hash = "sha256-bp8BxJp/Ga9Frqyvl76Fh9AfSEKv3W+P1ND9zqeMXhg=";
+  };
+
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetcherVersion = 1;
+    hash = "sha256-imExQiPl6sjYD//p788dGYEn+DRs9H8l9sGmCdl5Cic=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoRoot = "src-tauri";
@@ -45,7 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
+<<<<<<< HEAD
     hash = "sha256-R6lU4BPFlFxQqxmP5EWQsYwe1QGIlKVhp/iNiD9pKQo=";
+=======
+    hash = "sha256-CiEtxZn+kqYqS0sx9SLPvIkOTq2La48gQp+xx9z5BJs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -54,8 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
     nodejs
     pkg-config
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rustPlatform.cargoSetupHook
     wrapGAppsHook3
   ];

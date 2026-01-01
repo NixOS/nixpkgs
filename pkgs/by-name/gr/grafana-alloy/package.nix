@@ -13,8 +13,11 @@
   nix-update-script,
   installShellFiles,
   testers,
+<<<<<<< HEAD
   lld,
   useLLD ? stdenv.hostPlatform.isArmv7,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildGoModule (finalAttrs: {
@@ -36,10 +39,14 @@ buildGoModule (finalAttrs: {
     yarn
     nodejs
     installShellFiles
+<<<<<<< HEAD
   ]
   ++ lib.optionals useLLD [ lld ];
 
   env = lib.optionalAttrs useLLD { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
+=======
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags =
     let
@@ -142,6 +149,7 @@ buildGoModule (finalAttrs: {
     offlineCache = finalAttrs.yarnOfflineCache;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source OpenTelemetry Collector distribution with built-in Prometheus pipelines and support for metrics, logs, traces, and profiles";
     mainProgram = "alloy";
@@ -149,6 +157,15 @@ buildGoModule (finalAttrs: {
     homepage = "https://grafana.com/oss/alloy";
     changelog = "https://github.com/grafana/alloy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Open source OpenTelemetry Collector distribution with built-in Prometheus pipelines and support for metrics, logs, traces, and profiles";
+    mainProgram = "alloy";
+    license = licenses.asl20;
+    homepage = "https://grafana.com/oss/alloy";
+    changelog = "https://github.com/grafana/alloy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       azahi
       flokli
       hbjydev

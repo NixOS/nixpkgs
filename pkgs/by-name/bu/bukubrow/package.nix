@@ -54,10 +54,17 @@ rustPlatform.buildRustPackage rec {
     install -Dm0644 chrome.json $out/etc/chromium/native-messaging-hosts/com.samhh.bukubrow.json
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "WebExtension for Buku, a command-line bookmark manager";
     homepage = "https://github.com/SamHH/bukubrow-host";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "WebExtension for Buku, a command-line bookmark manager";
+    homepage = "https://github.com/SamHH/bukubrow-host";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "bukubrow";
   };

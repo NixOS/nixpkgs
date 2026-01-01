@@ -27,12 +27,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://spacenav.sourceforge.net/";
     description = "Example application to test the spacenavd driver";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sohalt ];
+=======
+  meta = with lib; {
+    homepage = "https://spacenav.sourceforge.net/";
+    description = "Example application to test the spacenavd driver";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sohalt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "spacenav-cube-example";
   };
 }

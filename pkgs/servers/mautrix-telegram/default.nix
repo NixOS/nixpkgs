@@ -80,12 +80,21 @@ python.pkgs.buildPythonPackage rec {
   # has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mautrix/telegram";
     description = "Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mautrix/telegram";
+    description = "Matrix-Telegram hybrid puppeting/relaybot bridge";
+    license = licenses.agpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nyanloutre
       ma27
       nickcao

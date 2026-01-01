@@ -26,11 +26,20 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
   checkPhase = "python iwlib/_iwlib_build.py; pytest -v";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/nhoad/python-iwlib";
     description = "Python interface for the Wireless Tools utility collection";
     changelog = "https://github.com/nhoad/python-iwlib#change-history";
     maintainers = with lib.maintainers; [ jcspeegs ];
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/nhoad/python-iwlib";
+    description = "Python interface for the Wireless Tools utility collection";
+    changelog = "https://github.com/nhoad/python-iwlib#change-history";
+    maintainers = with maintainers; [ jcspeegs ];
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

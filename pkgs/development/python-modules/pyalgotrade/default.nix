@@ -43,9 +43,16 @@ buildPythonPackage rec {
   # no tests in PyPI tarball
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python Algorithmic Trading";
     homepage = "http://gbeced.github.io/pyalgotrade/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python Algorithmic Trading";
+    homepage = "http://gbeced.github.io/pyalgotrade/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

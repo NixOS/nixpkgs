@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
     cp et-status.sh $out/bin/et-status
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal libnotify-based (egg) timer";
     homepage = "https://github.com/oxzi/et";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+  meta = with lib; {
+    description = "Minimal libnotify-based (egg) timer";
+    homepage = "https://github.com/oxzi/et";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

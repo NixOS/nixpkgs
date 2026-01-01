@@ -35,11 +35,19 @@ let
     }
     .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
+<<<<<<< HEAD
   meta = {
     description = "Simple and Convenient Messaging App for VK";
     homepage = "https://vk.com/messenger";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    description = "Simple and Convenient Messaging App for VK";
+    homepage = "https://vk.com/messenger";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = [
       "i686-linux"

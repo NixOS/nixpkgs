@@ -45,10 +45,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diskcache" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Disk and file backed persistent cache";
+    homepage = "http://www.grantjenks.com/docs/diskcache/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

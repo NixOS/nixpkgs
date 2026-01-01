@@ -267,13 +267,22 @@ let
       };
       passthru.llvmPackages = llvmPackages;
 
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         inherit (binary.meta) platforms;
         description = "Compiled language with Ruby like syntax and type inference";
         mainProgram = "crystal";
         homepage = "https://crystal-lang.org/";
+<<<<<<< HEAD
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
+=======
+        license = licenses.asl20;
+        maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           david50407
           manveru
           peterhoeg

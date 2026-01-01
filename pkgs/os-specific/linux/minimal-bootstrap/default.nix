@@ -123,7 +123,11 @@ lib.makeScope
         tinycc = tinycc-mes;
       };
 
+<<<<<<< HEAD
       gnumake = callPackage ./gnumake { tinycc = tinycc-bootstrappable; };
+=======
+      gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       gnumake-musl = callPackage ./gnumake/musl.nix {
         bash = bash_2_05;
@@ -141,7 +145,11 @@ lib.makeScope
       };
       gnused-mes = callPackage ./gnused/mes.nix {
         bash = bash_2_05;
+<<<<<<< HEAD
         tinycc = tinycc-bootstrappable;
+=======
+        tinycc = tinycc-mes;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
       gnutar = callPackage ./gnutar/mes.nix {
@@ -165,7 +173,11 @@ lib.makeScope
 
       gzip = callPackage ./gzip {
         bash = bash_2_05;
+<<<<<<< HEAD
         tinycc = tinycc-bootstrappable;
+=======
+        tinycc = tinycc-mes;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         gnused = gnused-mes;
       };
 
@@ -183,6 +195,7 @@ lib.makeScope
       mes = callPackage ./mes { };
       mes-libc = callPackage ./mes/libc.nix { };
 
+<<<<<<< HEAD
       musl11-intermediate = callPackage ./musl/1.1.nix {
         bash = bash_2_05;
         tinycc = tinycc-mes;
@@ -191,6 +204,11 @@ lib.makeScope
       musl11 = callPackage ./musl/1.1.nix {
         bash = bash_2_05;
         tinycc = tinycc-musl-intermediate;
+=======
+      musl11 = callPackage ./musl/1.1.nix {
+        bash = bash_2_05;
+        tinycc = tinycc-mes;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         gnused = gnused-mes;
       };
 
@@ -210,6 +228,7 @@ lib.makeScope
 
       tinycc-bootstrappable = lib.recurseIntoAttrs (callPackage ./tinycc/bootstrappable.nix { });
       tinycc-mes = lib.recurseIntoAttrs (callPackage ./tinycc/mes.nix { });
+<<<<<<< HEAD
       tinycc-musl-intermediate = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
@@ -217,11 +236,16 @@ lib.makeScope
           tinycc = tinycc-mes;
         }
       );
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tinycc-musl = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
           musl = musl11;
+<<<<<<< HEAD
           tinycc = tinycc-musl-intermediate;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         }
       );
 

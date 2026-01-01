@@ -3,6 +3,10 @@
   stdenv,
 
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   cmake,
   ninja,
@@ -138,7 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./char_traits.patch
 
     # <https://github.com/facebook/folly/issues/2171>
+<<<<<<< HEAD
     ./folly-fix-glog-0.7.patch
+=======
+    (fetchpatch {
+      name = "folly-fix-glog-0.7.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-cmake-find-glog.patch?h=folly&id=4b68f47338d4b20111e3ffa1291433120bb899f0";
+      hash = "sha256-QGNpS5UNEm+0PW9+agwUVILzpK9t020KXDGyP03OAwE=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Fix a GCC‐incompatible use of a private trait.
     #

@@ -53,7 +53,11 @@ buildPythonPackage rec {
     which
     yosys
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "edalize" ];
 
@@ -99,12 +103,21 @@ buildPythonPackage rec {
     "tests/test_xsim.py"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Abstraction library for interfacing EDA tools";
     mainProgram = "el_docker";
     homepage = "https://github.com/olofk/edalize";
     changelog = "https://github.com/olofk/edalize/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ astro ];
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

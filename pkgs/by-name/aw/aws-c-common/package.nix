@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "AWS SDK for C common core";
     homepage = "https://github.com/awslabs/aws-c-common";
@@ -60,6 +61,17 @@ stdenv.mkDerivation rec {
     # https://github.com/awslabs/aws-c-common/issues/1175
     badPlatforms = lib.platforms.bigEndian;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "AWS SDK for C common core";
+    homepage = "https://github.com/awslabs/aws-c-common";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    # https://github.com/awslabs/aws-c-common/issues/1175
+    badPlatforms = platforms.bigEndian;
+    maintainers = with maintainers; [
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       r-burns
     ];
   };

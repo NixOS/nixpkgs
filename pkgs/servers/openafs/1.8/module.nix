@@ -43,6 +43,7 @@ stdenv.mkDerivation {
       url = "https://github.com/openafs/openafs/commit/eb6753d93b930ad7d65772a9751117f6969a5e92.patch";
       hash = "sha256-97/MdG9DrHEtOKCRLCTgl6ZEtqLUsaNs9LcAzcyrTF4=";
     })
+<<<<<<< HEAD
     # Linux: mount_nodev removed, use new mount API
     (fetchpatch {
       url = "https://gerrit.openafs.org/changes/16646/revisions/93db75395149e1f0dbdc3a0572f58449dd9da98d/patch";
@@ -61,6 +62,8 @@ stdenv.mkDerivation {
       decode = "base64 -d";
       hash = "sha256-5T4hOge3U5uk3NSFxocYEjgfXU1Se5FkQk2rCRZDlfU=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeBuildInputs = [
@@ -107,12 +110,21 @@ stdenv.mkDerivation {
     xz -f ${modDestDir}/libafs.ko
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open AFS client kernel module";
     homepage = "https://www.openafs.org";
     license = lib.licenses.ipl10;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Open AFS client kernel module";
+    homepage = "https://www.openafs.org";
+    license = licenses.ipl10;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       andersk
       spacefrogg
     ];

@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://apps.gnome.org/SystemMonitor/";
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
@@ -82,5 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://apps.gnome.org/SystemMonitor/";
+    description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
+    mainProgram = "gnome-system-monitor";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -52,12 +52,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "INTERLIS Compiler";
     longDescription = ''
       Checks the syntactical correctness of an INTERLIS data model.
     '';
     homepage = "https://www.interlis.ch/downloads/ili2c";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
@@ -66,6 +71,16 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ das-g ];
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
+=======
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+    ];
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ das-g ];
+    teams = [ teams.geospatial ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ili2c";
   };
 })

@@ -30,11 +30,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Private shortlink service for tailnets";
     homepage = "https://github.com/tailscale/golink";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Private shortlink service for tailnets";
+    homepage = "https://github.com/tailscale/golink";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "golink";
   };
 }

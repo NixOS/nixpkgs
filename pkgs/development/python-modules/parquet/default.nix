@@ -55,12 +55,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "parquet" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of the parquet columnar file format";
     homepage = "https://github.com/jcrobak/parquet-python";
     changelog = "https://github.com/jcrobak/parquet-python/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python implementation of the parquet columnar file format";
+    homepage = "https://github.com/jcrobak/parquet-python";
+    changelog = "https://github.com/jcrobak/parquet-python/releases/tag/${src.tag}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "parquet";
   };
 }

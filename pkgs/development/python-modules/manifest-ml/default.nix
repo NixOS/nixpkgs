@@ -85,7 +85,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -114,11 +118,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "manifest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Manifest for Prompting Foundation Models";
     homepage = "https://github.com/HazyResearch/manifest";
     changelog = "https://github.com/HazyResearch/manifest/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Manifest for Prompting Foundation Models";
+    homepage = "https://github.com/HazyResearch/manifest";
+    changelog = "https://github.com/HazyResearch/manifest/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

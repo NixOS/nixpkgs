@@ -364,13 +364,21 @@
 
 buildPythonPackage rec {
   pname = "types-aiobotocore";
+<<<<<<< HEAD
   version = "3.0.0";
+=======
+  version = "2.25.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_aiobotocore";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-i5mMof92tnZ72hgKk7C1D8j24V5HzcmYZ6XvRMnXM1Q=";
+=======
+    hash = "sha256-ayRYrBwJmd4LpKHc+/O8DVx8ouoMcvZzKr5n0I6/AkA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -1107,10 +1115,18 @@ buildPythonPackage rec {
   # Package has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Type annotations for aiobotocore generated with mypy-boto3-builder";
     homepage = "https://pypi.org/project/types-aiobotocore/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Type annotations for aiobotocore generated with mypy-boto3-builder";
+    homepage = "https://pypi.org/project/types-aiobotocore/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

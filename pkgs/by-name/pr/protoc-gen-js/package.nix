@@ -44,6 +44,7 @@ buildBazelPackage rec {
     install -Dm755 bazel-bin/generator/protoc-gen-js $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Protobuf plugin for generating JavaScript code";
     mainProgram = "protoc-gen-js";
@@ -54,6 +55,18 @@ buildBazelPackage rec {
       bsd3
     ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];
+=======
+  meta = with lib; {
+    description = "Protobuf plugin for generating JavaScript code";
+    mainProgram = "protoc-gen-js";
+    homepage = "https://github.com/protocolbuffers/protobuf-javascript";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = with licenses; [
+      asl20
+      bsd3
+    ];
+    sourceProvenance = [ sourceTypes.fromSource ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -26,11 +26,19 @@ buildGoModule rec {
   # Tests require a socket connection to be created.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pldubouilh/gossa";
     description = "Fast and simple multimedia fileserver";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dsymbol ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pldubouilh/gossa";
+    description = "Fast and simple multimedia fileserver";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dsymbol ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gossa";
   };
 }

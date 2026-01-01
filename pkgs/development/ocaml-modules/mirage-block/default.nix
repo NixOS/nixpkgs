@@ -24,10 +24,18 @@ buildDunePackage rec {
     fmt
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Block signatures and implementations for MirageOS";
     homepage = "https://github.com/mirage/mirage-block";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    description = "Block signatures and implementations for MirageOS";
+    homepage = "https://github.com/mirage/mirage-block";
+    license = licenses.isc;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

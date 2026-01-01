@@ -22,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin; # usual dynamic linker issues
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://elastix.dev";
     description = "Image registration toolkit based on ITK";
@@ -30,5 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "elastix";
     platforms = lib.platforms.x86_64; # libitkpng linker issues with ITK 5.1
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://elastix.dev";
+    description = "Image registration toolkit based on ITK";
+    changelog = "https://github.com/SuperElastix/elastix/releases/tag/${finalAttrs.version}";
+    maintainers = with maintainers; [ bcdarwin ];
+    mainProgram = "elastix";
+    platforms = platforms.x86_64; # libitkpng linker issues with ITK 5.1
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -50,12 +50,21 @@ stdenv.mkDerivation rec {
     musl = buildPackages.pkgsMusl.socat;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for bidirectional data transfer between two independent data channels";
     homepage = "http://www.dest-unreach.org/socat/";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ ryan4yin ];
+=======
+  meta = with lib; {
+    description = "Utility for bidirectional data transfer between two independent data channels";
+    homepage = "http://www.dest-unreach.org/socat/";
+    platforms = platforms.unix;
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ ryan4yin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "socat";
   };
 }

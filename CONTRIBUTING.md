@@ -340,7 +340,11 @@ For other pull requests, please see [I opened a PR, how do I get it merged?](#i-
 In case the PR is stuck waiting for the author to apply a trivial change and the author allowed members to modify the PR, consider applying it yourself.
 You should pay extra attention to make sure the addition doesn't go against the idea of the original PR and would not be opposed by the author.
 
+<<<<<<< HEAD
 Please see the [`nixpkgs-committers` repository](https://github.com/NixOS/nixpkgs-committers) for information on how to proceed to be granted this level of access.
+=======
+Please see the discussion in [GitHub nixpkgs issue #321665](https://github.com/NixOS/nixpkgs/issues/321665) for information on how to proceed to be granted this level of access.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 As a maintainer, when you leave the Nix community, please create an issue or post on [Discourse](https://discourse.nixos.org) with references to the packages and modules you maintained, so they can be taken over by other contributors.
 
@@ -659,13 +663,21 @@ If you have any problems with formatting, please ping the [formatting team](http
   Do
 
   ```nix
+<<<<<<< HEAD
   { tag = version; }
+=======
+  { rev = version; }
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ```
 
   instead of
 
   ```nix
+<<<<<<< HEAD
   { tag = "${version}"; }
+=======
+  { rev = "${version}"; }
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ```
 
 - Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.

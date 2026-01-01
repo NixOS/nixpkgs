@@ -65,6 +65,10 @@ vimUtils.buildVimPlugin {
     description = "Interactive database client for neovim";
     homepage = "https://github.com/kndndrj/nvim-dbee";
     changelog = "https://github.com/kndndrj/nvim-dbee/releases/tag/v${version}";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ PerchunPak ];
+=======
+    maintainers = with lib.maintainers; [ perchun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

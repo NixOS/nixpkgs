@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easily create polkit authentication agents by using commands";
     homepage = "https://github.com/OmarCastro/cmd-polkit";
@@ -45,5 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ daru-san ];
     mainProgram = "cmd-polkit-agent";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Easily create polkit authentication agents by using commands";
+    homepage = "https://github.com/OmarCastro/cmd-polkit";
+    changelog = "https://github.com/OmarCastro/cmd-polkit/blob/${finalAttrs.src.rev}/CHANGELOG";
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ daru-san ];
+    mainProgram = "cmd-polkit-agent";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

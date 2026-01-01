@@ -121,7 +121,10 @@ in
         apply-refact = addBuildDepend self.data-default-class super.apply-refact;
         floskell = doJailbreak super.floskell;
         fourmolu = dontCheck (doJailbreak self.fourmolu_0_15_0_0);
+<<<<<<< HEAD
         ghcide = super.ghcide;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         haskell-language-server = addBuildDepends [
           self.retrie
           self.floskell
@@ -129,7 +132,10 @@ in
         ] super.haskell-language-server;
         hls-plugin-api = super.hls-plugin-api;
         hlint = self.hlint_3_8;
+<<<<<<< HEAD
         lsp-types = super.lsp-types;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ormolu = self.ormolu_0_7_4_0;
         retrie = doJailbreak (unmarkBroken super.retrie);
         stylish-haskell = self.stylish-haskell_0_14_6_0;
@@ -138,11 +144,17 @@ in
     apply-refact
     floskell
     fourmolu
+<<<<<<< HEAD
     ghcide
     haskell-language-server
     hls-plugin-api
     hlint
     lsp-types
+=======
+    haskell-language-server
+    hls-plugin-api
+    hlint
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ormolu
     retrie
     stylish-haskell

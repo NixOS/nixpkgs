@@ -5,19 +5,30 @@
   meson,
   ninja,
   nix-update-script,
+<<<<<<< HEAD
   pkgsBuildBuild,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "janet";
+<<<<<<< HEAD
   version = "1.40.1";
+=======
+  version = "1.39.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = "janet";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-BV5hVg85QgN8DXiMF2kA3IQNuvWjcsyciiuQP5+c+7c=";
+=======
+    hash = "sha256-Hd8DueT9f7vmK0QFJdRx7FgZ8BYh5prQyM++5Yb6tg4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -30,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "'test/suite-ev.janet'," ""
   '';
 
+<<<<<<< HEAD
   depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     meson
     ninja
@@ -65,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Janet programming language";
     mainProgram = "janet";
@@ -74,5 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
       peterhoeg
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Janet programming language";
+    mainProgram = "janet";
+    homepage = "https://janet-lang.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      peterhoeg
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

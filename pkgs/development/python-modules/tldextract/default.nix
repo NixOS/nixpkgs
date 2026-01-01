@@ -50,7 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tldextract" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python module to accurately separate the TLD from the domain of an URL";
     longDescription = ''
       tldextract accurately separates the gTLD or ccTLD (generic or country code top-level domain)
@@ -58,8 +62,13 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/john-kurkowski/tldextract";
     changelog = "https://github.com/john-kurkowski/tldextract/blob/${src.tag}/CHANGELOG.md";
+<<<<<<< HEAD
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tldextract";
   };
 }

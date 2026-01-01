@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Libraries and tools for building screenshots in a high-performance image format";
     mainProgram = "sss_code";
@@ -45,5 +46,16 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ krovuxdev ];
+=======
+  meta = with lib; {
+    description = "Libraries and tools for building screenshots in a high-performance image format";
+    mainProgram = "sss_code";
+    homepage = "https://github.com/SergioRibera/sss";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ krovuxdev ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

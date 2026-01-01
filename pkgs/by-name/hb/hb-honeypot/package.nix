@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Script that listens on TCP port 443 and responds with completely bogus SSL heartbeat responses";
     mainProgram = "hb-honeypot";
@@ -35,5 +36,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Script that listens on TCP port 443 and responds with completely bogus SSL heartbeat responses";
+    mainProgram = "hb-honeypot";
+    homepage = "https://github.com/D3vil0p3r/hb-honeypot";
+    maintainers = with maintainers; [ d3vil0p3r ];
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

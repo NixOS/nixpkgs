@@ -43,12 +43,21 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small and lightweight IEEE802.11 wireless LAN analyzer with a text interface";
     homepage = "https://github.com/br101/horst";
     maintainers = [ lib.maintainers.fpletz ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Small and lightweight IEEE802.11 wireless LAN analyzer with a text interface";
+    homepage = "https://github.com/br101/horst";
+    maintainers = [ maintainers.fpletz ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "horst";
   };
 }

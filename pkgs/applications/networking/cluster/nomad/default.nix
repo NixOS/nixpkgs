@@ -2,7 +2,10 @@
   lib,
   buildGoModule,
   buildGo124Module,
+<<<<<<< HEAD
   buildGo125Module,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   nixosTests,
   installShellFiles,
@@ -41,6 +44,15 @@ let
           inherit hash;
         };
 
+<<<<<<< HEAD
+=======
+        # Nomad requires Go 1.24.6, but nixpkgs doesn't have it in unstable yet.
+        postPatch = ''
+          substituteInPlace go.mod \
+            --replace-warn "go 1.24.6" "go 1.24.5"
+        '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         nativeBuildInputs = [ installShellFiles ];
 
         ldflags = [
@@ -59,12 +71,20 @@ let
           installShellCompletion nomad.bash
         '';
 
+<<<<<<< HEAD
         meta = {
+=======
+        meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           homepage = "https://developer.hashicorp.com/nomad";
           description = "Distributed, Highly Available, Datacenter-Aware Scheduler";
           mainProgram = "nomad";
           inherit license;
+<<<<<<< HEAD
           maintainers = with lib.maintainers; [
+=======
+          maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             rushmorem
             techknowlogick
             cottand
@@ -83,6 +103,7 @@ rec {
 
   nomad = nomad_1_10;
 
+<<<<<<< HEAD
   nomad_1_11 = generic {
     buildGoModule = buildGo125Module;
     version = "1.11.0";
@@ -95,6 +116,8 @@ rec {
     '';
   };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nomad_1_10 = generic {
     buildGoModule = buildGo124Module;
     version = "1.10.5";

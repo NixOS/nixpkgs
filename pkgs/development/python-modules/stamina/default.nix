@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stamina" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Production-grade retries for Python";
     homepage = "https://github.com/hynek/stamina";
     changelog = "https://github.com/hynek/stamina/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Production-grade retries for Python";
+    homepage = "https://github.com/hynek/stamina";
+    changelog = "https://github.com/hynek/stamina/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

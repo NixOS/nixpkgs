@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     cp bam "$out/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Yet another build manager";
     mainProgram = "bam";
@@ -43,6 +44,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     license = lib.licenses.zlib;
+=======
+  meta = with lib; {
+    description = "Yet another build manager";
+    mainProgram = "bam";
+    maintainers = with maintainers; [
+      raskin
+    ];
+    platforms = platforms.linux;
+    license = licenses.zlib;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "http://matricks.github.com/bam/";
   };
 }

@@ -30,12 +30,21 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast and extensible Markdown parser";
     mainProgram = "mistletoe";
     homepage = "https://github.com/miyuchina/mistletoe";
     changelog = "https://github.com/miyuchina/mistletoe/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eadwu ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ eadwu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

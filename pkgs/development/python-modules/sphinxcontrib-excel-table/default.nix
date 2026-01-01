@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx excel-table extension";
     homepage = "https://github.com/hackerain/sphinxcontrib-excel-table";
     maintainers = with lib.maintainers; [ raboof ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Sphinx excel-table extension";
+    homepage = "https://github.com/hackerain/sphinxcontrib-excel-table";
+    maintainers = with maintainers; [ raboof ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

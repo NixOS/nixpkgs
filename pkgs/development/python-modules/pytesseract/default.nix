@@ -44,9 +44,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pypi.org/project/pytesseract/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://pypi.org/project/pytesseract/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python wrapper for Google Tesseract";
     mainProgram = "pytesseract";
     maintainers = [ ];

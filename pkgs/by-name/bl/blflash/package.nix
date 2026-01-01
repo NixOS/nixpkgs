@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9CTq/NFhc/pJ3CyvhidQxbWx5iHFbOZDPm3g7cz6uRU=";
 
+<<<<<<< HEAD
   meta = {
     description = "Bl602 serial flasher written in Rust";
     homepage = "https://github.com/spacemeowx2/blflash";
@@ -25,6 +26,16 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ _0x4A6F ];
+=======
+  meta = with lib; {
+    description = "Bl602 serial flasher written in Rust";
+    homepage = "https://github.com/spacemeowx2/blflash";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [ _0x4A6F ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "blflash";
   };
 }

@@ -6,7 +6,10 @@
   which,
   fetchzip,
   fetchurl,
+<<<<<<< HEAD
   dune,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }@args:
 
 let
@@ -191,7 +194,11 @@ stdenv.mkDerivation (
       nativeBuildInputs =
         args.overrideNativeBuildInputs or (
           [ which ]
+<<<<<<< HEAD
           ++ optional useDune dune
+=======
+          ++ optional useDune coq.ocamlPackages.dune_3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ++ optionals (useDune || mlPlugin) [
             coq.ocamlPackages.ocaml
             coq.ocamlPackages.findlib

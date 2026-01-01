@@ -30,10 +30,18 @@ melpaBuild {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/syohex/emacs-lua";
     description = "Lua engine from Emacs Lisp";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nagy ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/syohex/emacs-lua";
+    description = "Lua engine from Emacs Lisp";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ nagy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

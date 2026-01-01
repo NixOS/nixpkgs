@@ -60,6 +60,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       modules (written in Java or Scala) or through an external subprocesses.
     '';
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      scalavision
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zenithal
     ];
     platforms = [

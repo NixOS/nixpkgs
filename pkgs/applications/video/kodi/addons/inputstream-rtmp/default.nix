@@ -26,11 +26,20 @@ buildKodiBinaryAddon rec {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/xbmc/inputstream.rtmp/";
     description = "Client for RTMP streams";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/xbmc/inputstream.rtmp/";
+    description = "Client for RTMP streams";
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

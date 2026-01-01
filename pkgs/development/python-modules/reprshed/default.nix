@@ -18,10 +18,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "reprshed" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mentalisttraceur/python-reprshed";
     description = "Toolshed for writing great __repr__ methods quickly and easily";
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ netali ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mentalisttraceur/python-reprshed";
+    description = "Toolshed for writing great __repr__ methods quickly and easily";
+    license = licenses.bsd0;
+    maintainers = with maintainers; [ netali ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

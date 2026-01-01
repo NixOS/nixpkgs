@@ -47,11 +47,19 @@ buildPythonPackage rec {
     "test/test_xlib_display.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/python-xlib/python-xlib/releases/tag/${version}";
     description = "Fully functional X client library for Python programs";
     homepage = "https://github.com/python-xlib/python-xlib";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/python-xlib/python-xlib/releases/tag/${version}";
+    description = "Fully functional X client library for Python programs";
+    homepage = "https://github.com/python-xlib/python-xlib";
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

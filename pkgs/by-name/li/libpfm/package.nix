@@ -38,7 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional stdenv.hostPlatform.isMinGW windows.libgnurx;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Helper library to program the performance monitoring events";
     longDescription = ''
       This package provides a library, called libpfm4 which is used to
@@ -46,11 +50,20 @@ stdenv.mkDerivation (finalAttrs: {
       events such as those provided by the Performance Monitoring Unit
       (PMU) of modern processors.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
       pierron
       t4ccer
     ];
     platforms = lib.platforms.linux ++ lib.platforms.windows;
+=======
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      pierron
+      t4ccer
+    ];
+    platforms = platforms.linux ++ platforms.windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

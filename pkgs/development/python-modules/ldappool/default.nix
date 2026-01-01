@@ -44,10 +44,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ldappool" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple connector pool for python-ldap";
     homepage = "https://opendev.org/openstack/ldappool/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Simple connector pool for python-ldap";
+    homepage = "https://opendev.org/openstack/ldappool/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mpl11
       lgpl21Plus
       gpl2Plus

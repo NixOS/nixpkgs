@@ -33,12 +33,22 @@ stdenv.mkDerivation {
     sed -i -e '159d;161d;472d;473d;474d;475d' source/eventlists/key_list.cpp
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jgeumlek/MoltenGamepad";
     description = "Flexible Linux input device translator, geared for gamepads";
     mainProgram = "moltengamepad";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jgeumlek/MoltenGamepad";
+    description = "Flexible Linux input device translator, geared for gamepads";
+    mainProgram = "moltengamepad";
+    license = licenses.mit;
+    maintainers = [ maintainers.ebzzry ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

@@ -21,21 +21,33 @@ stdenv.mkDerivation {
   # https://github.com/YukiWorkshop/IODash/pull/2
   patches = [ ./0001-Add-cmake-install-directives.patch ];
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/YukiWorkshop/IODash";
     description = "Lightweight C++ I/O library for POSIX operation systems";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jappie ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/YukiWorkshop/IODash";
+    description = "Lightweight C++ I/O library for POSIX operation systems";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jappie ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

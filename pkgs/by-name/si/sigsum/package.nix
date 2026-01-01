@@ -8,7 +8,11 @@
 
 buildGoModule (finalAttrs: {
   pname = "sigsum";
+<<<<<<< HEAD
   version = "0.13.1";
+=======
+  version = "0.12.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     domain = "git.glasklar.is";
@@ -16,7 +20,11 @@ buildGoModule (finalAttrs: {
     owner = "core";
     repo = "sigsum-go";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-GQ8ENsMc9vrAG23wHDPcWVadRVov3XOgR5WxnXtg94A=";
+=======
+    hash = "sha256-SFEKbPOAU2cpsc9oLiX3Lhv/AvYNPNiLjjjGteHOtpg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -24,7 +32,11 @@ buildGoModule (finalAttrs: {
       --replace-fail "info.Main.Version" '"${finalAttrs.version}"'
   '';
 
+<<<<<<< HEAD
   vendorHash = "sha256-SWNvBEIV25G9lp95DsftFKa48iGUgBQ4RdplJ5D1xUg=";
+=======
+  vendorHash = "sha256-2v9NShhmHr0O5FH49tDSPUK1lT2tmhJkrZaVTwrL3cY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"
@@ -35,6 +47,10 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/sigsum-key";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

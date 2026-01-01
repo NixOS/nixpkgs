@@ -27,11 +27,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open source sans-serif typeface";
     homepage = "https://github.com/vmware/clarity-city";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ sagikazarmark ];
+=======
+  meta = with lib; {
+    description = "Open source sans-serif typeface";
+    homepage = "https://github.com/vmware/clarity-city";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ sagikazarmark ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

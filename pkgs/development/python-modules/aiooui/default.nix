@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiooui" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Async OUI lookups";
     homepage = "https://github.com/Bluetooth-Devices/aiooui";
     changelog = "https://github.com/Bluetooth-Devices/aiooui/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Async OUI lookups";
+    homepage = "https://github.com/Bluetooth-Devices/aiooui";
+    changelog = "https://github.com/Bluetooth-Devices/aiooui/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

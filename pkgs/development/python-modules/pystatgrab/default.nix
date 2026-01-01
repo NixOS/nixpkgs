@@ -38,13 +38,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "statgrab" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python bindings for libstatgrab";
     homepage = "https://github.com/libstatgrab/pystatgrab";
     changelog = "https://github.com/libstatgrab/pystatgrab/blob/PYSTATGRAB_${
       lib.replaceStrings [ "." ] [ "_" ] version
     }/NEWS";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

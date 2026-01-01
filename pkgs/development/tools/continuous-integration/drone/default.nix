@@ -25,6 +25,7 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Continuous Integration platform built on container technology";
     mainProgram = "drone-server";
@@ -34,5 +35,16 @@ buildGoModule rec {
       techknowlogick
     ];
     license = with lib.licenses; if enableUnfree then unfreeRedistributable else asl20;
+=======
+  meta = with lib; {
+    description = "Continuous Integration platform built on container technology";
+    mainProgram = "drone-server";
+    homepage = "https://github.com/harness/drone";
+    maintainers = with maintainers; [
+      vdemeester
+      techknowlogick
+    ];
+    license = with licenses; if enableUnfree then unfreeRedistributable else asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

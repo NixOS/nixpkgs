@@ -94,11 +94,19 @@ let
       inherit plugins withPlugins;
     };
 
+<<<<<<< HEAD
     meta = {
       description = "Autoscaling daemon for Nomad";
       mainProgram = "nomad-autoscaler";
       homepage = "https://github.com/hashicorp/nomad-autoscaler";
       license = lib.licenses.mpl20;
+=======
+    meta = with lib; {
+      description = "Autoscaling daemon for Nomad";
+      mainProgram = "nomad-autoscaler";
+      homepage = "https://github.com/hashicorp/nomad-autoscaler";
+      license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maintainers = [ ];
     };
   };

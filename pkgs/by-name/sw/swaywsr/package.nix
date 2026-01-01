@@ -25,7 +25,11 @@ rustPlatform.buildRustPackage {
   # has not tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Automatically change sway workspace names based on their contents";
     mainProgram = "swaywsr";
     longDescription = ''
@@ -34,7 +38,12 @@ rustPlatform.buildRustPackage {
       window property for each window in a workspace.
     '';
     homepage = "https://github.com/pedroscaff/swaywsr";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sebbadk ];
+=======
+    license = licenses.mit;
+    maintainers = [ maintainers.sebbadk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

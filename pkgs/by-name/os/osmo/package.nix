@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     libgringotts
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Handy personal organizer";
     mainProgram = "osmo";
@@ -47,5 +48,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "Handy personal organizer";
+    mainProgram = "osmo";
+    homepage = "https://clayo.org/osmo/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

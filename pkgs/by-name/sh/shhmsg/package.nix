@@ -19,10 +19,18 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTBASEDIR=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for displaying messages";
     homepage = "https://shh.thathost.com/pub-unix/";
     license = lib.licenses.artistic1;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Library for displaying messages";
+    homepage = "https://shh.thathost.com/pub-unix/";
+    license = licenses.artistic1;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

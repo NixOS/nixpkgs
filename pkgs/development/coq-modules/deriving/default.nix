@@ -48,10 +48,17 @@ mkCoqDerivation {
 
   mlPlugin = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Generic instances of MathComp classes";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "Generic instances of MathComp classes";
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

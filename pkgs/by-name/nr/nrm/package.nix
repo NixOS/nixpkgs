@@ -3,8 +3,11 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm,
   makeBinaryWrapper,
   nix-update-script,
@@ -23,12 +26,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
     makeBinaryWrapper
   ];
 
   pnpmDeps = fetchPnpmDeps {
+=======
+    pnpm.configHook
+    makeBinaryWrapper
+  ];
+
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
     hash = "sha256-PENYS5xO2LwT3+TGl/wU2r0ALEj/JQfbkpf/0MJs0uw=";

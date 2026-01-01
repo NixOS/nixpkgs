@@ -34,10 +34,18 @@ buildDunePackage rec {
     theora
   ]; # ocamlsdl is blocked in nixpkgs from building for ocaml >= 4.06
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/savonet/ocaml-mm";
     description = "High-level library to create and manipulate multimedia streams";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ dandellion ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/savonet/ocaml-mm";
+    description = "High-level library to create and manipulate multimedia streams";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ dandellion ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

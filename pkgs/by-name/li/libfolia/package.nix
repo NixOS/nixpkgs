@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C++ API for FoLiA documents; an XML-based linguistic annotation format";
     mainProgram = "folialint";
@@ -62,6 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ roberth ];
+=======
+  meta = with lib; {
+    description = "C++ API for FoLiA documents; an XML-based linguistic annotation format";
+    mainProgram = "folialint";
+    homepage = "https://proycon.github.io/folia/";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ roberth ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       A high-level C++ API to read, manipulate, and create FoLiA documents. FoLiA is an XML-based annotation format, suitable for the representation of linguistically annotated language resources. FoLiA’s intended use is as a format for storing and/or exchanging language resources, including corpora.

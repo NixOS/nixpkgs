@@ -30,11 +30,20 @@ buildGoModule rec {
     wrapProgram "$out/bin/diskrsync" --argv0 diskrsync --prefix PATH : ${openssh}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Rsync for block devices and disk images";
     mainProgram = "diskrsync";
     homepage = "https://github.com/dop251/diskrsync";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Rsync for block devices and disk images";
+    mainProgram = "diskrsync";
+    homepage = "https://github.com/dop251/diskrsync";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

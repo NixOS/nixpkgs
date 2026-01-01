@@ -39,12 +39,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ropper" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Show information about files in different file formats";
     homepage = "https://scoding.de/ropper/";
     changelog = "https://github.com/sashs/Ropper/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bennofs ];
+=======
+  meta = with lib; {
+    description = "Show information about files in different file formats";
+    homepage = "https://scoding.de/ropper/";
+    changelog = "https://github.com/sashs/Ropper/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bennofs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ropper";
   };
 }

@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-h9Zj3zmQ0Xpili5Pl6CXh1L0bb2uL1//B79I4/ron08=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/m00qek/swaynag-battery";
     description = "Shows a message when your battery is discharging";
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/m00qek/swaynag-battery";
+    description = "Shows a message when your battery is discharging";
+    maintainers = [ ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "swaynag-battery";
   };
 }

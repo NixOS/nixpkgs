@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libprojectm";
+<<<<<<< HEAD
   version = "4.1.6";
+=======
+  version = "4.1.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "projectm";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-IUVll+nRvIAOxrb16gWb9OpKzMRRuj28j/v+LvaLY5Y=";
+=======
+    hash = "sha256-QkA0PprGWaHgN+BfOjEtfCeeQAdzZczjdzzIdSD4CKI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 

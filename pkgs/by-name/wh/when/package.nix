@@ -34,6 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Extremely simple personal calendar program";
     homepage = "https://www.lightandmatter.com/when/when.html";
@@ -41,5 +42,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "when";
     maintainers = with lib.maintainers; [ vonixxx ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Extremely simple personal calendar program";
+    homepage = "https://www.lightandmatter.com/when/when.html";
+    license = licenses.gpl2Only;
+    mainProgram = "when";
+    maintainers = with maintainers; [ vonixxx ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

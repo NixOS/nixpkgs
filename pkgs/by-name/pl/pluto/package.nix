@@ -25,12 +25,22 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true; # for tests
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/FairwindsOps/pluto";
     description = "Find deprecated Kubernetes apiVersions";
     mainProgram = "pluto";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/FairwindsOps/pluto";
+    description = "Find deprecated Kubernetes apiVersions";
+    mainProgram = "pluto";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      peterromfeldhk
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kashw2
     ];
   };

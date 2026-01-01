@@ -25,11 +25,19 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = lib.optionalString nrxAlias "ln -s $out/bin/nr{r,x}";
 
+<<<<<<< HEAD
   meta = {
     description = "Minimal, blazing fast npm scripts runner";
     homepage = "https://github.com/ryanccn/nrr";
     maintainers = with lib.maintainers; [ ryanccn ];
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Minimal, blazing fast npm scripts runner";
+    homepage = "https://github.com/ryanccn/nrr";
+    maintainers = with maintainers; [ ryanccn ];
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nrr";
   };
 }

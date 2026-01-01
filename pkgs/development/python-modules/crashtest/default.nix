@@ -22,10 +22,17 @@ buildPythonPackage rec {
     "crashtest.inspector"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sdispater/crashtest";
     description = "Manage Python errors with ease";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sdispater/crashtest";
+    description = "Manage Python errors with ease";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

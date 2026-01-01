@@ -62,12 +62,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mss" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Cross-platform multiple screenshots module";
     mainProgram = "mss";
     homepage = "https://github.com/BoboTiG/python-mss";
     changelog = "https://github.com/BoboTiG/python-mss/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ austinbutler ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ austinbutler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # ajpy doesn't have tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "AJP package crafting library";
     homepage = "https://github.com/hypn0s/AJPy/";
     license = lib.licenses.lgpl2;
+=======
+  meta = with lib; {
+    description = "AJP package crafting library";
+    homepage = "https://github.com/hypn0s/AJPy/";
+    license = licenses.lgpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
   doCheck = false; # Cannot find unit-test module from guile-lib
   nativeCheckInputs = [ guile-lib ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.nongnu.org/guile-cairo/";
     description = "Cairo bindings for GNU Guile";
     longDescription = ''
@@ -44,7 +48,11 @@ stdenv.mkDerivation rec {
       maintained graphics library with all of the benefits of Scheme: memory
       management, exceptions, macros, and a dynamic programming environment.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
+=======
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };

@@ -37,11 +37,21 @@ crystal.buildCrystalPackage rec {
       --prefix PATH : "${lib.makeBinPath [ jq ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Performant, and portable jq wrapper";
     mainProgram = "oq";
     homepage = "https://blacksmoke16.github.io/oq/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Performant, and portable jq wrapper";
+    mainProgram = "oq";
+    homepage = "https://blacksmoke16.github.io/oq/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Br1ght0ne ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

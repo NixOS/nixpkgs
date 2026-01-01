@@ -28,7 +28,11 @@ buildGoModule rec {
 
   doCheck = false; # fails on go 1.17
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Autocompletion daemon for the Go programming language";
     mainProgram = "gocode-gomod";
     longDescription = ''
@@ -44,8 +48,13 @@ buildGoModule rec {
       noticeable.
     '';
     homepage = "https://github.com/stamblerre/gocode";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kalbasit
       rvolosatovs
     ];

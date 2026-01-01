@@ -22,7 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Navigation and insight in Go";
     mainProgram = "motion";
     longDescription = ''
@@ -35,8 +39,14 @@ buildGoModule rec {
       with any editor. It's currently work in progress and open to change.
     '';
     homepage = "https://github.com/fatih/motion";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ kalbasit ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ kalbasit ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

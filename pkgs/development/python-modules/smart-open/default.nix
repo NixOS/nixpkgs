@@ -70,7 +70,11 @@ buildPythonPackage rec {
     responses
   ]
   ++ moto.optional-dependencies.server
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   enabledTestPaths = [ "tests" ];
 
@@ -82,10 +86,18 @@ buildPythonPackage rec {
     "test_seek_from_start"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/piskvorky/smart_open";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
+    description = "Library for efficient streaming of very large file";
+    homepage = "https://github.com/piskvorky/smart_open";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

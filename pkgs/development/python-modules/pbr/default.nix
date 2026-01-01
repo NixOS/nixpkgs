@@ -33,11 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pbr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Build Reasonableness";
     mainProgram = "pbr";
     homepage = "https://github.com/openstack/pbr";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Python Build Reasonableness";
+    mainProgram = "pbr";
+    homepage = "https://github.com/openstack/pbr";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

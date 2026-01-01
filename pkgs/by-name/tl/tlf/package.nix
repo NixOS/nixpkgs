@@ -61,7 +61,11 @@ stdenv.mkDerivation rec {
     ln -s ${ncurses5.out}/lib/libtinfo.so.5 $out/lib/libtinfo.so.5
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Advanced ham radio logging and contest program";
     longDescription = ''
       TLF is a curses based console mode general logging and contest program for
@@ -72,8 +76,14 @@ stdenv.mkDerivation rec {
       contests, general QSO and DXpedition mode.
     '';
     homepage = "https://tlf.github.io/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

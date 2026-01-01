@@ -47,14 +47,25 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "C++ interface to the GLib library";
 
     homepage = "https://gtkmm.org/";
 
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
 
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.lgpl2Plus;
+
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

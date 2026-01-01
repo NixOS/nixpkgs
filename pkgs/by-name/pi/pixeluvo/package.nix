@@ -49,11 +49,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Beautifully Designed Image and Photo Editor for Windows and Linux";
     homepage = "http://www.pixeluvo.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+=======
+  meta = with lib; {
+    description = "Beautifully Designed Image and Photo Editor for Windows and Linux";
+    homepage = "http://www.pixeluvo.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
     mainProgram = "pixeluvo";

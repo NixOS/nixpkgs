@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/post_install.py
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://virt-manager.org/";
     description = "Viewer for remote virtual machines";
@@ -111,6 +112,17 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    homepage = "https://virt-manager.org/";
+    description = "Viewer for remote virtual machines";
+    maintainers = with maintainers; [
+      raskin
+      atemu
+    ];
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "virt-viewer";
   };
   passthru = {

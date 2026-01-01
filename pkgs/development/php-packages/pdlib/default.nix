@@ -22,9 +22,15 @@ buildPecl {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ (dlib.override { guiSupport = true; }) ];
 
+<<<<<<< HEAD
   meta = {
     description = "PHP extension for Dlib";
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    description = "PHP extension for Dlib";
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/goodspb/pdlib";
     teams = [ lib.teams.php ];
   };

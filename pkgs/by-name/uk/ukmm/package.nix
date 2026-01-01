@@ -91,6 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "New mod manager for The Legend of Zelda: Breath of the Wild";
     homepage = "https://github.com/NiceneNerd/ukmm";
@@ -98,6 +99,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "New mod manager for The Legend of Zelda: Breath of the Wild";
+    homepage = "https://github.com/NiceneNerd/ukmm";
+    changelog = "https://github.com/NiceneNerd/ukmm/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "ukmm";
   };

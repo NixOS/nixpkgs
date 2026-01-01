@@ -6,11 +6,22 @@
   makeWrapper,
   stdenv,
   versionCheckHook,
+<<<<<<< HEAD
   pnpmConfigHook,
 }:
 stdenv.mkDerivation rec {
   pname = "immich-cli";
   version = "2.2.105";
+=======
+}:
+
+let
+  inherit (immich) pnpm;
+in
+stdenv.mkDerivation rec {
+  pname = "immich-cli";
+  version = "2.2.103";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit (immich) src pnpmDeps;
 
   postPatch = ''
@@ -23,8 +34,13 @@ stdenv.mkDerivation rec {
     jq
     makeWrapper
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     immich.pnpm
+=======
+    pnpm
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildPhase = ''

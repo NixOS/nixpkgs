@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/if HAVE_X11/,/endif/d' misc/Makefile.am
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "VNC server connected to a real X11 screen";
     homepage = "https://github.com/LibVNC/x11vnc/";
@@ -63,6 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
+=======
+  meta = with lib; {
+    description = "VNC server connected to a real X11 screen";
+    homepage = "https://github.com/LibVNC/x11vnc/";
+    changelog = "https://github.com/LibVNC/x11vnc/releases/tag/${finalAttrs.version}";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ OPNA2608 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "x11vnc";
   };
 })

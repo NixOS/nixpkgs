@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mock" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rolling backport of unittest.mock for all Pythons";
     homepage = "https://github.com/testing-cabal/mock";
     changelog = "https://github.com/testing-cabal/mock/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Rolling backport of unittest.mock for all Pythons";
+    homepage = "https://github.com/testing-cabal/mock";
+    changelog = "https://github.com/testing-cabal/mock/blob/${version}/CHANGELOG.rst";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

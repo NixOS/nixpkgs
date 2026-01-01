@@ -57,15 +57,26 @@ stdenv.mkDerivation {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "System76 Pop GTK+ Theme";
     homepage = "https://github.com/pop-os/gtk-theme";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "System76 Pop GTK+ Theme";
+    homepage = "https://github.com/pop-os/gtk-theme";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3
       lgpl21
       cc-by-sa-40
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

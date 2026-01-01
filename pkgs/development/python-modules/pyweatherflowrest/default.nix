@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyweatherflowrest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to get data from WeatherFlow Weather Stations";
     homepage = "https://github.com/briis/pyweatherflowrest";
     changelog = "https://github.com/briis/pyweatherflowrest/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to get data from WeatherFlow Weather Stations";
+    homepage = "https://github.com/briis/pyweatherflowrest";
+    changelog = "https://github.com/briis/pyweatherflowrest/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

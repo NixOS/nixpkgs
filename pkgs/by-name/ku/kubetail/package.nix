@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
     installShellCompletion completion/kubetail.{bash,fish,zsh}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Bash script to tail Kubernetes logs from multiple pods at the same time";
     mainProgram = "kubetail";
     longDescription = ''
@@ -39,11 +43,20 @@ stdenv.mkDerivation rec {
       -f " but for multiple pods.
     '';
     homepage = "https://github.com/johanhaleby/kubetail";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalbasit
       qjoly
     ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      kalbasit
+      qjoly
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

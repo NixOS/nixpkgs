@@ -32,11 +32,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Gtk theme inspired by the NextStep look";
     homepage = "http://www.vide.memoire.free.fr/pages/onestepback";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Gtk theme inspired by the NextStep look";
+    homepage = "http://www.vide.memoire.free.fr/pages/onestepback";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

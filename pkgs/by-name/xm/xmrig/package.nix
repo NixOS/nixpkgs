@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/245534
   hardeningDisable = [ "fortify" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
@@ -67,5 +68,14 @@ stdenv.mkDerivation rec {
     mainProgram = "xmrig";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ kim0 ];
+=======
+  meta = with lib; {
+    description = "Monero (XMR) CPU miner";
+    homepage = "https://github.com/xmrig/xmrig";
+    license = licenses.gpl3Plus;
+    mainProgram = "xmrig";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ kim0 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

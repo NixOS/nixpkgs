@@ -20,12 +20,22 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
 
   meta = {
     homepage = "https://github.com/volatilityfoundation/dwarf2json";
     description = "Convert ELF/DWARF symbol and type information into vol3's intermediate JSON";
     license = lib.licenses.vol-sl;
     maintainers = with lib.maintainers; [
+=======
+  versionCheckProgramArg = "--version";
+
+  meta = with lib; {
+    homepage = "https://github.com/volatilityfoundation/dwarf2json";
+    description = "Convert ELF/DWARF symbol and type information into vol3's intermediate JSON";
+    license = licenses.vol-sl;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       arkivm
       asauzeau
     ];

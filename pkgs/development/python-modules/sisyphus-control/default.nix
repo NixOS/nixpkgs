@@ -48,11 +48,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sisyphus_control" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Control your Sisyphus Kinetic Art Table";
     homepage = "https://github.com/jkeljo/sisyphus-control";
     changelog = "https://github.com/jkeljo/sisyphus-control/blob/${src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Control your Sisyphus Kinetic Art Table";
+    homepage = "https://github.com/jkeljo/sisyphus-control";
+    changelog = "https://github.com/jkeljo/sisyphus-control/blob/${src.rev}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

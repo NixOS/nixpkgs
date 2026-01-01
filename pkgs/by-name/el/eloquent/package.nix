@@ -28,14 +28,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eloquent";
+<<<<<<< HEAD
   version = "1.4";
+=======
+  version = "1.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Eloquent";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-wY/blD399GhEOdnQf/uVLHSmYUZTO1ZnL6+oOAhVqFA=";
+=======
+    hash = "sha256-+XAiRB5dRq2A2XP9ZdmIfxLjhCXb72TXRxnLnOprNT4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

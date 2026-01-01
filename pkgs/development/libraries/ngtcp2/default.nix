@@ -14,11 +14,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ngtcp2";
+<<<<<<< HEAD
   version = "1.18.0";
 
   src = fetchurl {
     url = "https://github.com/ngtcp2/ngtcp2/releases/download/v${finalAttrs.version}/ngtcp2-${finalAttrs.version}.tar.bz2";
     hash = "sha256-E7r7bFCdv2pw2WBaLIkuE/WuuTZnOZWHeKhXvHDOH6c=";
+=======
+  version = "1.17.0";
+
+  src = fetchurl {
+    url = "https://github.com/ngtcp2/ngtcp2/releases/download/v${finalAttrs.version}/ngtcp2-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-j8hYGdFp5il4pODbNlVILOdJUafqsMdmc3tXoxQY2mE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -39,10 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # The examples try to link against `ngtcp2_crypto_ossl` and `ngtcp2` libraries.
     # This works in the dynamic case where the targets have the same name, but not here where they're suffixed with `_static`.
+<<<<<<< HEAD
     # Also, the examples depend on Linux-specific APIs, so we avoid them on FreeBSD/Cygwin too.
     (lib.cmakeBool "ENABLE_LIB_ONLY" (
       stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isCygwin
     ))
+=======
+    # Also, the examples depend on Linux-specific APIs, so we avoid them on FreeBSD too.
+    (lib.cmakeBool "ENABLE_LIB_ONLY" (stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isFreeBSD))
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (lib.cmakeBool "ENABLE_SHARED_LIB" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "ENABLE_STATIC_LIB" stdenv.hostPlatform.isStatic)
   ];

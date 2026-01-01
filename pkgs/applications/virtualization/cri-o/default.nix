@@ -17,13 +17,21 @@
 
 buildGoModule rec {
   pname = "cri-o";
+<<<<<<< HEAD
   version = "1.34.3";
+=======
+  version = "1.34.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-2Avq1EzK+i+16yoPM7j6IlavDi2oUS5A1hOIdzVThEQ=";
+=======
+    hash = "sha256-StvHYzWe/LKgA9NQByfti/xAiHMRuRSF8QVsVcw/A+g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   vendorHash = null;
 
@@ -77,14 +85,24 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) cri-o; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://cri-o.io";
     description = ''
       Open Container Initiative-based implementation of the
       Kubernetes Container Runtime Interface
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.asl20;
+    teams = [ teams.podman ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

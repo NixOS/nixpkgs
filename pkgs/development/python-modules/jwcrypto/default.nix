@@ -34,11 +34,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jwcrypto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of JOSE Web standards";
     homepage = "https://github.com/latchset/jwcrypto";
     changelog = "https://github.com/latchset/jwcrypto/releases/tag/v${version}";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Implementation of JOSE Web standards";
+    homepage = "https://github.com/latchset/jwcrypto";
+    changelog = "https://github.com/latchset/jwcrypto/releases/tag/v${version}";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

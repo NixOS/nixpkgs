@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
+<<<<<<< HEAD
   env = {
     # needed for internal protobuf c wrapper library
     PROTOC = "${protobuf}/bin/protoc";
@@ -37,6 +38,13 @@ rustPlatform.buildRustPackage rec {
 
     OPENSSL_NO_VENDOR = 1;
   };
+=======
+  # needed for internal protobuf c wrapper library
+  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC_INCLUDE = "${protobuf}/include";
+
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # disable tests because they require postgres and redis to be running
   doCheck = false;

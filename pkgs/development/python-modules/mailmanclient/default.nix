@@ -26,11 +26,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mailmanclient" ];
 
+<<<<<<< HEAD
   meta = {
     description = "REST client for driving Mailman 3";
     homepage = "https://www.gnu.org/software/mailman/";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ qyliss ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "REST client for driving Mailman 3";
+    homepage = "https://www.gnu.org/software/mailman/";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ qyliss ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

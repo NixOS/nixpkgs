@@ -35,12 +35,20 @@ buildGoModule rec {
       --zsh <($out/bin/tyson completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "TypeScript as a configuration language";
     mainProgram = "tyson";
     homepage = "https://github.com/jetify-com/tyson";
     changelog = "https://github.com/jetify-com/tyson/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

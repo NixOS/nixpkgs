@@ -26,7 +26,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "0.21.2";
+=======
+  version = "0.20.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 buildPythonPackage rec {
   pname = "swcgeom";
@@ -37,7 +41,11 @@ buildPythonPackage rec {
     owner = "yzx9";
     repo = "swcgeom";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-A6N6i7GESMIhG81xXDsNXiM0yBXWGhcdELll79F3Evk=";
+=======
+    hash = "sha256-XMpDzjKwj9DQTT/LC0tcBcqO5yetP5JNQbTOGkHv9TM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

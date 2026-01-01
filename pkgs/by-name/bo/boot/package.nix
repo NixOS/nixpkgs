@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ jdk ];
 
+<<<<<<< HEAD
   meta = {
     description = "Build tooling for Clojure";
     mainProgram = "boot";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.epl10;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ ragge ];
+=======
+  meta = with lib; {
+    description = "Build tooling for Clojure";
+    mainProgram = "boot";
+    homepage = "https://boot-clj.github.io/";
+    license = licenses.epl10;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ ragge ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

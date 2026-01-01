@@ -32,11 +32,20 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "EPUB generator for librevenge";
     homepage = "https://sourceforge.net/projects/libepubgen/";
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "EPUB generator for librevenge";
+    homepage = "https://sourceforge.net/projects/libepubgen/";
+    license = licenses.mpl20;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

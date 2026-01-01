@@ -32,10 +32,17 @@ buildPythonApplication rec {
     "APC_Temp_fetch"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unified temperature fetcher interface to several UPS network adapters";
     homepage = "https://github.com/YZITE/APC_Temp_fetch";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Unified temperature fetcher interface to several UPS network adapters";
+    homepage = "https://github.com/YZITE/APC_Temp_fetch";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

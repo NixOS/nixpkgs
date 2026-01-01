@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     mkdir m4
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Command Line Interface Tool for XMPP";
     mainProgram = "xmppc";
@@ -45,5 +46,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.jugendhacker ];
+=======
+  meta = with lib; {
+    description = "Command Line Interface Tool for XMPP";
+    mainProgram = "xmppc";
+    homepage = "https://codeberg.org/Anoxinon_e.V./xmppc";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.jugendhacker ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

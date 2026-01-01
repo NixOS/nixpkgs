@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
+<<<<<<< HEAD
   env = {
     NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       "-framework"
@@ -47,6 +48,17 @@ rustPlatform.buildRustPackage rec {
 
   PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
 
+=======
+  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    "-framework"
+    "AppKit"
+  ];
+
+  PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
+
+  OPENSSL_NO_VENDOR = true;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   useNextest = true;
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
@@ -56,6 +68,7 @@ rustPlatform.buildRustPackage rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+<<<<<<< HEAD
 
   passthru.updateScript = nix-update-script { };
 
@@ -65,5 +78,17 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/boxdot/gurk-rs";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ devhell ];
+=======
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = with lib; {
+    description = "Signal Messenger client for terminal";
+    mainProgram = "gurk";
+    homepage = "https://github.com/boxdot/gurk-rs";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ devhell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

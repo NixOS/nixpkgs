@@ -18,7 +18,10 @@
   python-manilaclient,
   python-mistralclient,
   python-neutronclient,
+<<<<<<< HEAD
   python-octaviaclient,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python-openstackclient,
   python-watcherclient,
   python-zaqarclient,
@@ -90,7 +93,10 @@ buildPythonPackage rec {
       python-manilaclient
       python-mistralclient
       python-neutronclient
+<<<<<<< HEAD
       python-octaviaclient
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       python-watcherclient
       python-zaqarclient
       python-zunclient
@@ -104,11 +110,20 @@ buildPythonPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "OpenStack Command-line Client";
     mainProgram = "openstack";
     homepage = "https://github.com/openstack/python-openstackclient";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "OpenStack Command-line Client";
+    mainProgram = "openstack";
+    homepage = "https://github.com/openstack/python-openstackclient";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

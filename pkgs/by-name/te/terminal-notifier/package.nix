@@ -30,10 +30,18 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/terminal-notifier
   '';
 
+<<<<<<< HEAD
   meta = {
     maintainers = [ ];
     homepage = "https://github.com/julienXX/terminal-notifier";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    maintainers = [ ];
+    homepage = "https://github.com/julienXX/terminal-notifier";
+    license = licenses.mit;
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

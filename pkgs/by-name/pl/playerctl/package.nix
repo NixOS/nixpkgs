@@ -44,12 +44,21 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "gtk-doc" withDocs)
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line utility and library for controlling media players that implement MPRIS";
     homepage = "https://github.com/acrisci/playerctl";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ puffnfresh ];
+=======
+  meta = with lib; {
+    description = "Command-line utility and library for controlling media players that implement MPRIS";
+    homepage = "https://github.com/acrisci/playerctl";
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ puffnfresh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "playerctl";
   };

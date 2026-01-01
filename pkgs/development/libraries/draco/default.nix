@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
     homepage = "https://google.github.io/draco/";
@@ -74,5 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jansol ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
+    homepage = "https://google.github.io/draco/";
+    changelog = "https://github.com/google/draco/releases/tag/${finalAttrs.version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jansol ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

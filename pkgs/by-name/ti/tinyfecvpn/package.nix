@@ -32,11 +32,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/wangyu-/tinyfecVPN";
     description = "VPN Designed for Lossy Links, with Build-in Forward Error Correction(FEC) Support";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/wangyu-/tinyfecVPN";
+    description = "VPN Designed for Lossy Links, with Build-in Forward Error Correction(FEC) Support";
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "tinyvpn";
   };

@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ndms2_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Keenetic NDMS 2.x and 3.x client";
     homepage = "https://github.com/foxel/python_ndms2_client";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Keenetic NDMS 2.x and 3.x client";
+    homepage = "https://github.com/foxel/python_ndms2_client";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

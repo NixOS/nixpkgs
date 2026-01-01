@@ -41,11 +41,20 @@ buildGoModule rec {
       --zsh <($out/bin/cliam completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cloud agnostic IAM permissions enumerator";
     mainProgram = "cliam";
     homepage = "https://github.com/securisec/cliam";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Cloud agnostic IAM permissions enumerator";
+    mainProgram = "cliam";
+    homepage = "https://github.com/securisec/cliam";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

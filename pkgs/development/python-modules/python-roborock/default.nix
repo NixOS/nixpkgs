@@ -23,14 +23,22 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
+<<<<<<< HEAD
   version = "4.1.1";
+=======
+  version = "3.8.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Wf9nJDcNOLIuIskiDyGYo4TwekQprW4o99oJLkaV5X4=";
+=======
+    hash = "sha256-ukFbD6RL6us3fSuTj52+PA5dkxeZNfxZCX/eeJL0aTc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [ "pycryptodome" ];
@@ -58,8 +66,11 @@ buildPythonPackage rec {
     syrupy
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonImportsCheck = [ "roborock" ];
 
   meta = {

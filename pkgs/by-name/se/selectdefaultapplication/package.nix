@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Very simple application that lets you define default applications on Linux in a sane way";
     mainProgram = "selectdefaultapplication";
@@ -41,5 +42,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ nsnelson ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Very simple application that lets you define default applications on Linux in a sane way";
+    mainProgram = "selectdefaultapplication";
+    homepage = "https://github.com/sandsmark/selectdefaultapplication";
+    maintainers = with maintainers; [ nsnelson ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
       "cmake_policy(SET CMP0043 NEW)"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Provides extra functionality for the Nitrokey Pro and Storage";
     mainProgram = "nitrokey-app";
     longDescription = ''
@@ -59,8 +63,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Nitrokey/nitrokey-app";
     changelog = "https://github.com/Nitrokey/nitrokey-app/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kaiha
       panicgh
     ];

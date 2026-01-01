@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Clone of the classic game 'Paradroid' on Commodore 64";
     mainProgram = "freedroid";
@@ -73,6 +74,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ iblech ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Clone of the classic game 'Paradroid' on Commodore 64";
+    mainProgram = "freedroid";
+    homepage = "https://github.com/ReinhardPrix/FreedroidClassic";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ iblech ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Builds but fails to render to the screen at runtime.
     broken = stdenv.hostPlatform.isDarwin;
   };

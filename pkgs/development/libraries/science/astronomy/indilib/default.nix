@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.indilib.org/";
     description = "Implementation of the INDI protocol for POSIX operating systems";
@@ -97,5 +98,18 @@ stdenv.mkDerivation (finalAttrs: {
       returntoreality
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.indilib.org/";
+    description = "Implementation of the INDI protocol for POSIX operating systems";
+    changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
+    license = licenses.lgpl2Plus;
+    mainProgram = "indiserver";
+    maintainers = with maintainers; [
+      sheepforce
+      returntoreality
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

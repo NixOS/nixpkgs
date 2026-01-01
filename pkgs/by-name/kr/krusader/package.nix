@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
     homepage = "http://www.krusader.org";
     description = "Norton/Total Commander clone for KDE";
     license = lib.licenses.gpl2Only;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "krusader";
   };
 }

@@ -17,8 +17,12 @@
   yices, # bsc uses a patched version of yices
   zlib,
   ghc,
+<<<<<<< HEAD
   gmp,
   gmp-static ? gmp.override { withStatic = true; },
+=======
+  gmp-static,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   iverilog,
   asciidoctor,
   texliveFull,

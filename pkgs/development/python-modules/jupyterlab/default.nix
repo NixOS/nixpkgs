@@ -26,14 +26,22 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab";
+<<<<<<< HEAD
   version = "4.5.0";
+=======
+  version = "4.4.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyterlab";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-3vKz79/19F4kZeTjHSChgwAsM8quzIVBmjiRekA/8vo=";
+=======
+    hash = "sha256-Joc8gtUJS8J2SLJqBV3f4bzmOje1grdgIMUkcwl9K44=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -48,7 +56,11 @@ buildPythonPackage rec {
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit src;
     sourceRoot = "${src.name}/jupyterlab/staging";
+<<<<<<< HEAD
     hash = "sha256-3Gvbsi/oi8lTRrCYut126zsksjSSWmfJCoRxDmjne1E=";
+=======
+    hash = "sha256-EwR1gVrEy7QV8DnJBPx1AlbWY10FFngpLXdAIKn1HI0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   preBuild = ''
@@ -89,10 +101,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyterlab" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/jupyterlab/jupyterlab/blob/${src.tag}/CHANGELOG.md";
     description = "Jupyter lab environment notebook server extension";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/jupyterlab/jupyterlab/blob/${src.tag}/CHANGELOG.md";
+    description = "Jupyter lab environment notebook server extension";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://jupyter.org/";
     teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-lab";

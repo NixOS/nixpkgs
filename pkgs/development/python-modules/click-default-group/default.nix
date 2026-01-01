@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_default_group" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Group to invoke a command without explicit subcommand name";
     homepage = "https://github.com/click-contrib/click-default-group";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jakewaksbaum ];
+=======
+  meta = with lib; {
+    description = "Group to invoke a command without explicit subcommand name";
+    homepage = "https://github.com/click-contrib/click-default-group";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jakewaksbaum ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

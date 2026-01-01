@@ -64,15 +64,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.tests.redmine = nixosTests.redmine;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.redmine.org/";
     changelog = "https://www.redmine.org/projects/redmine/wiki/changelog";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://www.redmine.org/";
+    changelog = "https://www.redmine.org/projects/redmine/wiki/changelog";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aanderse
       felixsinger
       megheaiulian
     ];
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
+=======
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

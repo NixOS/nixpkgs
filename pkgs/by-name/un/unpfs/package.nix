@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
     install -D -m 0444 ../../LICEN* -t "$out/share/doc/${pname}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "9P2000.L server implementation in Rust";
     homepage = "https://github.com/pfpacket/rust-9p";
@@ -34,6 +35,16 @@ rustPlatform.buildRustPackage rec {
 
     # macOS build fails: https://github.com/pfpacket/rust-9p/issues/7
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "9P2000.L server implementation in Rust";
+    homepage = "https://github.com/pfpacket/rust-9p";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ raskin ];
+
+    # macOS build fails: https://github.com/pfpacket/rust-9p/issues/7
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "unpfs";
   };
 }

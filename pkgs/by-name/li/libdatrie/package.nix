@@ -48,11 +48,19 @@ stdenv.mkDerivation rec {
     installManPage man/trietool.1
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://linux.thai.net/~thep/datrie/datrie.html";
     description = "This is an implementation of double-array structure for representing trie";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://linux.thai.net/~thep/datrie/datrie.html";
+    description = "This is an implementation of double-array structure for representing trie";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     pkgConfigModules = [ "datrie-0.2" ];
   };

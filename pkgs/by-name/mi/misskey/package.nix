@@ -6,8 +6,11 @@
   gitUpdater,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeWrapper,
   python3,
   bash,
@@ -16,6 +19,10 @@
   writeShellScript,
   xcbuild,
 }:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
   version = "2025.7.0";
@@ -34,22 +41,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     makeWrapper
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+<<<<<<< HEAD
     pnpm = pnpm_9;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 2;
     hash = "sha256-5yuM56sLDSo4M5PDl3gUZOdSexW1YjfYBR3BJMqNHzU=";
   };
@@ -124,6 +142,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
+<<<<<<< HEAD
+=======
+    inherit (finalAttrs) pnpmDeps;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     tests.misskey = nixosTests.misskey;
     updateScript = gitUpdater { };
   };

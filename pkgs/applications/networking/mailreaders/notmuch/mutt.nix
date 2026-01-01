@@ -45,6 +45,7 @@ stdenv.mkDerivation {
       --prefix PERL5LIB : $PERL5LIB
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mutt support for notmuch";
     mainProgram = "notmuch-mutt";
@@ -52,5 +53,14 @@ stdenv.mkDerivation {
     license = with lib.licenses; gpl3;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Mutt support for notmuch";
+    mainProgram = "notmuch-mutt";
+    homepage = "https://notmuchmail.org/";
+    license = with licenses; gpl3;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

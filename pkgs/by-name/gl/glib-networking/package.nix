@@ -90,12 +90,21 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Network-related giomodules for glib";
     homepage = "https://gitlab.gnome.org/GNOME/glib-networking";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Network-related giomodules for glib";
+    homepage = "https://gitlab.gnome.org/GNOME/glib-networking";
+    license = licenses.lgpl21Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # GIO shared modules are mandatory.
       lib.systems.inspect.platformPatterns.isStatic

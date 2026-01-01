@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mando" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Create Python CLI apps with little to no effort at all";
     homepage = "https://mando.readthedocs.org";
     changelog = "https://github.com/rubik/mando/blob/v${version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ t4ccer ];
+=======
+  meta = with lib; {
+    description = "Create Python CLI apps with little to no effort at all";
+    homepage = "https://mando.readthedocs.org";
+    changelog = "https://github.com/rubik/mando/blob/v${version}/CHANGELOG";
+    license = licenses.mit;
+    maintainers = with maintainers; [ t4ccer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

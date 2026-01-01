@@ -53,11 +53,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "API for interacting with the parts of fonts during the font development process";
     homepage = "https://github.com/robotools/fontParts";
     changelog = "https://github.com/robotools/fontParts/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "API for interacting with the parts of fonts during the font development process";
+    homepage = "https://github.com/robotools/fontParts";
+    changelog = "https://github.com/robotools/fontParts/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

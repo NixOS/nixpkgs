@@ -18,10 +18,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "simplekml" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package to generate KML";
     homepage = "https://simplekml.readthedocs.io/";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ rvolosatovs ];
+=======
+  meta = with lib; {
+    description = "Python package to generate KML";
+    homepage = "https://simplekml.readthedocs.io/";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ rvolosatovs ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

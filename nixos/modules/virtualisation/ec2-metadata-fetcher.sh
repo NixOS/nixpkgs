@@ -42,7 +42,11 @@ while [ $try -le 3 ]; do
 done
 
 if [ "$IMDS_TOKEN" == "" ]; then
+<<<<<<< HEAD
   echo "failed to fetch an IMDSv2 token."
+=======
+  echo "failed to fetch an IMDS2v token."
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 fi
 
 try=1

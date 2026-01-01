@@ -33,10 +33,18 @@ buildDunePackage {
     astring
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Progress bar library for OCaml";
     homepage = "https://github.com/CraigFe/progress";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "Progress bar library for OCaml";
+    homepage = "https://github.com/CraigFe/progress";
+    license = licenses.mit;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

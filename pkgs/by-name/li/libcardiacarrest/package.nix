@@ -36,8 +36,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta =
+<<<<<<< HEAD
 
     src.meta // {
+=======
+    with lib;
+    src.meta
+    // {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Trivial implementation of libpulse PulseAudio library API";
       longDescription = ''
         libcardiacarrest is a trivial implementation of libpulse
@@ -52,7 +58,11 @@ stdenv.mkDerivation rec {
         JACK).
       '';
       license = libpulseaudio.meta.license; # "same as PA headers"
+<<<<<<< HEAD
       maintainers = [ lib.maintainers.oxij ]; # also the author
+=======
+      maintainers = [ maintainers.oxij ]; # also the author
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
 }

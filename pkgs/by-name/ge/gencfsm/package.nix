@@ -67,13 +67,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.libertyzero.com/GEncfsM/";
     downloadPage = "https://launchpad.net/gencfsm/";
     description = "EncFS manager and mounter with GNOME3 integration";
     mainProgram = "gnome-encfs-manager";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.spacefrogg ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.spacefrogg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

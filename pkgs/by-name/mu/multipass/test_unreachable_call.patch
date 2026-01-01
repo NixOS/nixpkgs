@@ -1,0 +1,12 @@
+diff --git a/tests/test_common_callbacks.cpp b/tests/test_common_callbacks.cpp
+index ccae78e0..f9ab4423 100644
+--- a/tests/test_common_callbacks.cpp
++++ b/tests/test_common_callbacks.cpp
+@@ -73,6 +73,7 @@ struct TestLoggingSpinnerCallbacks : public TestSpinnerCallbacks, public WithPar
+         default:
+             assert(false && "shouldn't be here");
+         }
++        __builtin_unreachable();
+     }
+ };
+ 

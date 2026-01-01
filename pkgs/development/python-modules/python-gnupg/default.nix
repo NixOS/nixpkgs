@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gnupg" ];
 
+<<<<<<< HEAD
   meta = {
     description = "API for the GNU Privacy Guard (GnuPG)";
     homepage = "https://github.com/vsajip/python-gnupg";
     changelog = "https://github.com/vsajip/python-gnupg/releases/tag/${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "API for the GNU Privacy Guard (GnuPG)";
+    homepage = "https://github.com/vsajip/python-gnupg";
+    changelog = "https://github.com/vsajip/python-gnupg/releases/tag/${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

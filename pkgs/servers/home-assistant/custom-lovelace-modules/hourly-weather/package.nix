@@ -28,11 +28,20 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Hourly weather card for Home Assistant. Visualize upcoming weather conditions as a colored horizontal bar";
     homepage = "https://github.com/decompil3d/lovelace-hourly-weather";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Hourly weather card for Home Assistant. Visualize upcoming weather conditions as a colored horizontal bar";
+    homepage = "https://github.com/decompil3d/lovelace-hourly-weather";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthiasbeyer ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

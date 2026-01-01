@@ -22,10 +22,18 @@ buildFishPlugin rec {
       --replace-fail "(type -p wakatime)" "${lib.getExe wakatime-cli}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fish plugin for wakatime";
     homepage = "https://github.com/ik11235/wakatime.fish";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ocfox ];
+=======
+  meta = with lib; {
+    description = "Fish plugin for wakatime";
+    homepage = "https://github.com/ik11235/wakatime.fish";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ocfox ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

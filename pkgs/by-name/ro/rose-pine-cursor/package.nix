@@ -29,11 +29,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Soho vibes for Cursors";
     downloadPage = "https://github.com/rose-pine/cursor/releases";
     homepage = "https://rosepinetheme.com/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ aikooo7 ];
+=======
+  meta = with lib; {
+    description = "Soho vibes for Cursors";
+    downloadPage = "https://github.com/rose-pine/cursor/releases";
+    homepage = "https://rosepinetheme.com/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ aikooo7 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

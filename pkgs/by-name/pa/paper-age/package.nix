@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-FO69bmUhP6S3MRbVZllxmpn1GuM8fplciAka46Dz2Yg=";
 
+<<<<<<< HEAD
   meta = {
     description = "Easy and secure paper backups of secrets";
     homepage = "https://github.com/matiaskorhonen/paper-age";
     changelog = "https://github.com/matiaskorhonen/paper-age/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Easy and secure paper backups of secrets";
+    homepage = "https://github.com/matiaskorhonen/paper-age";
+    changelog = "https://github.com/matiaskorhonen/paper-age/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "paper-age";
   };

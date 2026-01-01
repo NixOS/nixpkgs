@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webtest_aiohttp" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/sloria/webtest-aiohttp/blob/${src.rev}/CHANGELOG.rst";
     description = "Provides integration of WebTest with aiohttp.web applications";
     homepage = "https://github.com/sloria/webtest-aiohttp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cript0nauta ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/sloria/webtest-aiohttp/blob/${src.rev}/CHANGELOG.rst";
+    description = "Provides integration of WebTest with aiohttp.web applications";
+    homepage = "https://github.com/sloria/webtest-aiohttp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cript0nauta ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -63,7 +63,11 @@ buildPythonPackage rec {
     pytestCheckHook
     redisTestHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # https://github.com/jazzband/django-redis/issues/777
   dontUsePytestXdist = true;
@@ -79,11 +83,20 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Full featured redis cache backend for Django";
     homepage = "https://github.com/jazzband/django-redis";
     changelog = "https://github.com/jazzband/django-redis/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Full featured redis cache backend for Django";
+    homepage = "https://github.com/jazzband/django-redis";
+    changelog = "https://github.com/jazzband/django-redis/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,11 +29,20 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Qt provides several classes for DBus communication";
     homepage = "https://github.com/nemomobile/qtdbusextended";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wineee ];
+=======
+  meta = with lib; {
+    description = "Qt provides several classes for DBus communication";
+    homepage = "https://github.com/nemomobile/qtdbusextended";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wineee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

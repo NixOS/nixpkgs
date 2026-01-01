@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Local DNS server to obtain the fastest website IP for the best Internet experience";
     longDescription = ''
       SmartDNS is a local DNS server. SmartDNS accepts DNS query requests from local clients, obtains DNS query results from multiple upstream DNS servers, and returns the fastest access results to clients.
@@ -45,9 +49,15 @@ stdenv.mkDerivation rec {
       Unlike dnsmasq's all-servers, smartdns returns the fastest access resolution.
     '';
     homepage = "https://github.com/pymumu/smartdns";
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.lexuge ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+    maintainers = [ maintainers.lexuge ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "smartdns";
   };
 }

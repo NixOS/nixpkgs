@@ -73,12 +73,21 @@ mkDerivation {
 
   dontPatchELF = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool to edit resource files (BRF)";
     mainProgram = "openBrf";
     homepage = "https://github.com/cfcohen/openbrf";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.free;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

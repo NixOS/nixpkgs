@@ -31,11 +31,19 @@ buildGo124Module (finalAttrs: {
 
   __darwinAllowLocalNetworking = true; # required for tests
 
+<<<<<<< HEAD
   meta = {
     description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
     homepage = "https://ipfscluster.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
+    homepage = "https://ipfscluster.io";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       Luflosi
       jglukasik
     ];

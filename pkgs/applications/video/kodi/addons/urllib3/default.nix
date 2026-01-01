@@ -23,10 +23,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://urllib3.readthedocs.io/en/latest/";
     description = "HTTP library with thread-safe connection pooling, file post, and more";
     license = lib.licenses.mit;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://urllib3.readthedocs.io/en/latest/";
+    description = "HTTP library with thread-safe connection pooling, file post, and more";
+    license = licenses.mit;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

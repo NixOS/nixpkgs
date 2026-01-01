@@ -19,11 +19,20 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
+<<<<<<< HEAD
   meta = {
     mainProgram = "surge";
     description = "CLI for the surge.sh CDN";
     homepage = "https://surge.sh";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MoritzBoehme ];
+=======
+  meta = with lib; {
+    mainProgram = "surge";
+    description = "CLI for the surge.sh CDN";
+    homepage = "https://surge.sh";
+    license = licenses.mit;
+    maintainers = with maintainers; [ MoritzBoehme ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -90,11 +90,20 @@ buildPythonPackage rec {
     "test_async_transport_httpbin"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Transport classes and utilities shared among Python Elastic client libraries";
     homepage = "https://github.com/elastic/elastic-transport-python";
     changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Transport classes and utilities shared among Python Elastic client libraries";
+    homepage = "https://github.com/elastic/elastic-transport-python";
+    changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

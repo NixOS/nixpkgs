@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pybalboa" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to communicate with a Balboa spa wifi adapter";
     homepage = "https://github.com/garbled1/pybalboa";
     changelog = "https://github.com/garbled1/pybalboa/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to communicate with a Balboa spa wifi adapter";
+    homepage = "https://github.com/garbled1/pybalboa";
+    changelog = "https://github.com/garbled1/pybalboa/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -18,11 +18,19 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.12";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ocaml.org/p/memprof-limits/latest";
     description = "Memory limits, allocation limits, and thread cancellation for OCaml";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ alizter ];
+=======
+  meta = with lib; {
+    homepage = "https://ocaml.org/p/memprof-limits/latest";
+    description = "Memory limits, allocation limits, and thread cancellation for OCaml";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ alizter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = !(lib.versionOlder ocaml.version "5.0.0");
   };
 }

@@ -40,11 +40,20 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) fcitx5;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "m17n support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-m17n";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ Technical27 ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "m17n support for Fcitx5";
+    homepage = "https://github.com/fcitx/fcitx5-m17n";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ Technical27 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

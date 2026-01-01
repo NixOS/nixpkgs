@@ -66,12 +66,21 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Compact, fast, general-purpose memory allocator";
     homepage = "https://github.com/microsoft/mimalloc";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Compact, fast, general-purpose memory allocator";
+    homepage = "https://github.com/microsoft/mimalloc";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kamadorueda
       thoughtpolice
     ];

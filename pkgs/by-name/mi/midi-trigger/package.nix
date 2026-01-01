@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
     mv midi-trigger.lv2 "$out/lib/lv2"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/unclechu/MIDI-Trigger";
     description = "LV2 plugin which generates MIDI notes by detected audio signal peaks";
     maintainers = with lib.maintainers; [ unclechu ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/unclechu/MIDI-Trigger";
+    description = "LV2 plugin which generates MIDI notes by detected audio signal peaks";
+    maintainers = with maintainers; [ unclechu ];
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

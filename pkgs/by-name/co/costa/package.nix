@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
     "-DSCALAPACK_ROOT=${scalapack}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed Communication-Optimal Shuffle and Transpose Algorithm";
     homepage = "https://github.com/eth-cscs/COSTA";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Distributed Communication-Optimal Shuffle and Transpose Algorithm";
+    homepage = "https://github.com/eth-cscs/COSTA";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

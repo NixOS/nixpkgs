@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "edge-tts";
+<<<<<<< HEAD
   version = "7.2.7";
+=======
+  version = "7.2.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rany2";
     repo = "edge-tts";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-KlQJ9U5RgifpqVKw5BrPwBFJYZHKibMUlyb3aX+4qf8=";
+=======
+    hash = "sha256-JnwfvSa60oEbSEyD6q88Ey6IyGOwVWO0T75VrUKZmos=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

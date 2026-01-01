@@ -39,10 +39,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Core package for using GraphQL in a custom server easily";
     homepage = "https://github.com/graphql-python/graphql-server-core";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "Core package for using GraphQL in a custom server easily";
+    homepage = "https://github.com/graphql-python/graphql-server-core";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

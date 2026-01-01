@@ -55,6 +55,7 @@ stdenv.mkDerivation {
       --replace "cc.find_library('rnnoise-nu',dirs: meson.current_source_dir() + '/rnnoise/.libs/',required : true)" "cc.find_library('rnnoise-nu', required : true)"
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Speech denoise lv2 plugin based on RNNoise library";
@@ -62,5 +63,14 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    description = "Speech denoise lv2 plugin based on RNNoise library";
+    homepage = "https://github.com/lucianodato/speech-denoiser";
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

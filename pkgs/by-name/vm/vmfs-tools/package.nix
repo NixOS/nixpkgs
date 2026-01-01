@@ -39,11 +39,19 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/vmfs-tools AUTHORS LICENSE README TODO
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "FUSE-based VMFS (vmware) file system tools";
     maintainers = with lib.maintainers; [ peterhoeg ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "FUSE-based VMFS (vmware) file system tools";
+    maintainers = with maintainers; [ peterhoeg ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (src.meta) homepage;
   };
 }

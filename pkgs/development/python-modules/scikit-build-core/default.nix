@@ -91,11 +91,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scikit_build_core" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
     changelog = "https://github.com/scikit-build/scikit-build-core/blob/${src.tag}/docs/about/changelog.md";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Next generation Python CMake adaptor and Python API for plugins";
+    homepage = "https://github.com/scikit-build/scikit-build-core";
+    changelog = "https://github.com/scikit-build/scikit-build-core/blob/${src.tag}/docs/about/changelog.md";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

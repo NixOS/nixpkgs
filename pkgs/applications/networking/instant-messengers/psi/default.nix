@@ -42,6 +42,7 @@ mkDerivation rec {
     hunspell
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://psi-im.org";
     description = "XMPP (Jabber) client";
@@ -49,5 +50,14 @@ mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://psi-im.org";
+    description = "XMPP (Jabber) client";
+    mainProgram = "psi";
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

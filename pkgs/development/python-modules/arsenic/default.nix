@@ -56,11 +56,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arsenic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "WebDriver implementation for asyncio and asyncio-compatible frameworks";
     homepage = "https://github.com/HENNGE/arsenic/";
     changelog = "https://github.com/HENNGE/arsenic/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "WebDriver implementation for asyncio and asyncio-compatible frameworks";
+    homepage = "https://github.com/HENNGE/arsenic/";
+    changelog = "https://github.com/HENNGE/arsenic/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -49,10 +49,18 @@ python3.pkgs.buildPythonApplication {
   # Only script available
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to track WiFi devices by signal strength";
     homepage = "https://github.com/90N45-d3v/dBmonster";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to track WiFi devices by signal strength";
+    homepage = "https://github.com/90N45-d3v/dBmonster";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -8,16 +8,27 @@
   cups,
   dbus,
   enscript,
+<<<<<<< HEAD
   versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "foomatic-filters";
   version = "4.0.17";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://www.openprinting.org/download/foomatic/foomatic-filters-${finalAttrs.version}.tar.gz";
     hash = "sha256-ouLlPlAlceiO65AQxFoNVGcfFXB+4QT1ycIrWep6M+M=";
+=======
+    url = "https://www.openprinting.org/download/foomatic/foomatic-filters-${version}.tar.gz";
+    sha256 = "1qrkgbm5jay2r7sh9qbyf0aiyrsl1mdc844hxf7fhw95a0zfbqm2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://salsa.debian.org/debian/foomatic-filters/raw/a3abbef2d2f8c7e62d2fe64f64afe294563fdf8f/debian/patches/0500-r7406_also_consider_the_back_tick_as_an_illegal_shell_escape_character.patch";
       sha256 = "055nwi3sjf578nk40bqsch3wx8m2h65hdih0wmxflb6l0hwkq4p4";
     })
+<<<<<<< HEAD
     # Fix build with gcc15
     #   process.h:31:45: note: expected 'int (*)(void)' but argument is of type 'int (*)(FILE *, FILE *, void *)'
     ./fix-incompatible-pointer-types.patch
@@ -42,6 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     substituteInPlace foomaticrip.c \
       --replace-fail /bin/bash ${stdenv.shell}
+=======
+  ];
+
+  preConfigure = ''
+    substituteInPlace foomaticrip.c --replace /bin/bash ${stdenv.shell}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   # Workaround build failure on -fno-common toolchains like upstream
@@ -57,9 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
     "CUPS_BACKENDS=$(out)/lib/cups/backend"
   ];
 
+<<<<<<< HEAD
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Foomatic printing filters";
     mainProgram = "foomatic-rip";
@@ -67,4 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

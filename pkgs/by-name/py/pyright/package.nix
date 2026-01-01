@@ -16,6 +16,7 @@ let
     hash = "sha256-TQrmA65CzXar++79DLRWINaMsjoqNFdvNlwDzAcqOjM=";
   };
 
+<<<<<<< HEAD
   patchedPackageJSON =
     runCommand "package.json"
       {
@@ -27,6 +28,14 @@ let
           | .scripts =  {  }
           ' ${src}/package.json > $out
       '';
+=======
+  patchedPackageJSON = runCommand "package.json" { } ''
+    ${jq}/bin/jq '
+      .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser"))
+      | .scripts =  {  }
+      ' ${src}/package.json > $out
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pyright-root = buildNpmPackage {
     pname = "pyright-root";

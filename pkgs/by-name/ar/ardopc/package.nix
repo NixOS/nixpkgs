@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "ARDOP (Amateur Radio Digital Open Protocol) TNC implementation by John Wiseman (GM8BPQ)";
     homepage = "https://github.com/hamarituc/ardop/ARDOPC";
@@ -48,5 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ oliver-koss ];
     mainProgram = "ardopc";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "ARDOP (Amateur Radio Digital Open Protocol) TNC implementation by John Wiseman (GM8BPQ)";
+    homepage = "https://github.com/hamarituc/ardop/ARDOPC";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ oliver-koss ];
+    mainProgram = "ardopc";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -37,8 +37,14 @@
     "persian-calendar@iamrezamousavi.gmail.com"
   ],
   "system-monitor": [
+<<<<<<< HEAD
     "System_Monitor@bghome.gmail.com",
     "system-monitor@axet.github.com",
     "system-monitor@gnome-shell-extensions.gcampax.github.com"
+=======
+    "system-monitor@gnome-shell-extensions.gcampax.github.com",
+    "System_Monitor@bghome.gmail.com",
+    "system-monitor@axet.github.com"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
 }

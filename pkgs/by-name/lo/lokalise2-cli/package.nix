@@ -23,11 +23,19 @@ buildGoModule rec {
     mv $out/bin/lokalise-cli-2-go $out/bin/lokalise2
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Translation platform for developers. Upload language files, translate, integrate via API";
     homepage = "https://lokalise.com";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ timstott ];
+=======
+  meta = with lib; {
+    description = "Translation platform for developers. Upload language files, translate, integrate via API";
+    homepage = "https://lokalise.com";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ timstott ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lokalise2";
   };
 }

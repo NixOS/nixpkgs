@@ -13,7 +13,10 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
 
   src = gemini-cli.overrideAttrs (oldAttrs: {
     pname = "gemini-cli-vscode-ide-companion-vsix";
+<<<<<<< HEAD
     name = "${finalAttrs.pname}-${finalAttrs.version}.vsix";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     installPhase = ''
       runHook preInstall
@@ -24,6 +27,17 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
     '';
   });
 
+<<<<<<< HEAD
+=======
+  unpackPhase = ''
+    runHook preUnpack
+
+    unzip $src
+
+    runHook postUnpack
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Enable Gemini CLI with direct access to your IDE workspace";
     homepage = "https://github.com/google-gemini/gemini-cli";

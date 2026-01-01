@@ -11,16 +11,27 @@
 
 buildGoModule rec {
   pname = "kcl";
+<<<<<<< HEAD
   version = "0.12.3";
+=======
+  version = "0.11.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-vOdL+It8wY+U0Jt68KPAxMe3th0muaCXlEkuEphCVVY=";
   };
 
   vendorHash = "sha256-NfRVgGtm8w/K0utb3/AlBfT71txpmJlOaFrdqGC8Dkg=";
+=======
+    hash = "sha256-fFT8sUxx1E6WdyiJ8DyTagGkVEQ7YZ2CCGL5tVxkAEI=";
+  };
+
+  vendorHash = "sha256-ohfNy3vOyJJuniQKEVFiDftffdHlEJejQ72TJEwNhIM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "cmd/kcl" ];
 
@@ -69,6 +80,10 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      peefy
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       selfuryon
     ];
     mainProgram = "kcl";

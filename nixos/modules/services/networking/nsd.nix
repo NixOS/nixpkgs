@@ -1047,4 +1047,9 @@ in
     };
 
   };
+<<<<<<< HEAD
+=======
+
+  meta.maintainers = with lib.maintainers; [ hrdinka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

@@ -90,12 +90,21 @@ buildGoModule {
     command = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Email and SMTP testing tool with API for developers";
     homepage = "https://github.com/axllent/mailpit";
     changelog = "https://github.com/axllent/mailpit/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ stephank ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Email and SMTP testing tool with API for developers";
+    homepage = "https://github.com/axllent/mailpit";
+    changelog = "https://github.com/axllent/mailpit/releases/tag/v${version}";
+    maintainers = with maintainers; [ stephank ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mailpit";
   };
 }

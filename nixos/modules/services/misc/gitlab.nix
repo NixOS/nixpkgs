@@ -22,7 +22,11 @@ let
     if config.services.postgresql.enable then
       config.services.postgresql.package
     else
+<<<<<<< HEAD
       pkgs.postgresql_16;
+=======
+      pkgs.postgresql_14;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";

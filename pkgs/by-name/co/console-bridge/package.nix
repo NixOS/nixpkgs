@@ -31,11 +31,20 @@ stdenv.mkDerivation rec {
     validatePkgConfig
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "ROS-independent package for logging that seamlessly pipes into rosconsole/rosout for ROS-dependent packages";
     homepage = "https://github.com/ros/console_bridge";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lopsided98 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "ROS-independent package for logging that seamlessly pipes into rosconsole/rosout for ROS-dependent packages";
+    homepage = "https://github.com/ros/console_bridge";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lopsided98 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

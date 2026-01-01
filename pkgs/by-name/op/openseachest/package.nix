@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   makeFlags = [ "--directory=Make/gcc" ];
+=======
+  makeFlags = [ "-C Make/gcc" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildFlags = [ "release" ];
 
   installPhase = ''
@@ -29,11 +33,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of command line diagnostic tools for storage devices";
     homepage = "https://github.com/Seagate/openSeaChest";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ justinas ];
     platforms = with lib.platforms; freebsd ++ linux;
+=======
+  meta = with lib; {
+    description = "Collection of command line diagnostic tools for storage devices";
+    homepage = "https://github.com/Seagate/openSeaChest";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ justinas ];
+    platforms = with platforms; freebsd ++ linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

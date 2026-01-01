@@ -43,11 +43,19 @@ buildPythonPackage rec {
     "pyVmomi"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python SDK for the VMware vSphere API that allows you to manage ESX, ESXi, and vCenter";
     homepage = "https://github.com/vmware/pyvmomi";
     changelog = "https://github.com/vmware/pyvmomi/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python SDK for the VMware vSphere API that allows you to manage ESX, ESXi, and vCenter";
+    homepage = "https://github.com/vmware/pyvmomi";
+    changelog = "https://github.com/vmware/pyvmomi/releases/tag/${src.tag}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

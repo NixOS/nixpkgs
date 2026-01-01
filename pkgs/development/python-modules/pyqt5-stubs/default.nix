@@ -56,10 +56,18 @@ buildPythonPackage rec {
     pyqtwebengine
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stubs for PyQt5";
     homepage = "https://github.com/python-qt-tools/PyQt5-stubs";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ _999eagle ];
+=======
+  meta = with lib; {
+    description = "Stubs for PyQt5";
+    homepage = "https://github.com/python-qt-tools/PyQt5-stubs";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ _999eagle ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

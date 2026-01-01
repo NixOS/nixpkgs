@@ -62,12 +62,21 @@ stdenv.mkDerivation rec {
     "--with-readline=${readline.dev}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Viewer for info files";
     homepage = "https://github.com/baszoetekouw/pinfo";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Viewer for info files";
+    homepage = "https://github.com/baszoetekouw/pinfo";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pinfo";
   };
 }

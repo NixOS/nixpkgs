@@ -65,8 +65,11 @@ buildPythonPackage rec {
   ];
 
   meta = {
+<<<<<<< HEAD
     # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
     broken = true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Set of tools for scikit-learn";
     homepage = "https://github.com/scikit-learn-contrib/scikit-learn-extra";
     license = lib.licenses.bsd3;

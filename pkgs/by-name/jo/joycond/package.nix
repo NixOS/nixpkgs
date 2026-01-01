@@ -49,6 +49,7 @@ stdenv.mkDerivation {
       "/bin/setfacl"  "${acl}/bin/setfacl"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/DanielOgorchock/joycond";
     description = "Userspace daemon to combine joy-cons from the hid-nintendo kernel driver";
@@ -56,5 +57,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/DanielOgorchock/joycond";
+    description = "Userspace daemon to combine joy-cons from the hid-nintendo kernel driver";
+    mainProgram = "joycond";
+    license = licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

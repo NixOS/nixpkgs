@@ -53,11 +53,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "restfly" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python RESTfly API Library Framework";
     homepage = "https://github.com/stevemcgrath/restfly";
     changelog = "https://github.com/librestfly/restfly/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python RESTfly API Library Framework";
+    homepage = "https://github.com/stevemcgrath/restfly";
+    changelog = "https://github.com/librestfly/restfly/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

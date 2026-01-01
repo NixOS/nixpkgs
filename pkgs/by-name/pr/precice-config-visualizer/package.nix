@@ -25,11 +25,19 @@ python3Packages.buildPythonApplication {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/precice/config-visualizer";
     description = "Small python tool for visualizing the preCICE xml configuration";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/precice/config-visualizer";
+    description = "Small python tool for visualizing the preCICE xml configuration";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ Scriptkiddi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "precice-config-visualizer";
   };
 }

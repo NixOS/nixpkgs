@@ -25,7 +25,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ucarp; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Userspace implementation of CARP";
     longDescription = ''
       UCARP allows a couple of hosts to share common virtual IP addresses in
@@ -36,13 +40,21 @@ stdenv.mkDerivation rec {
       Warning: This package has not received any upstream updates for a long
       time and can be considered as unmaintained.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       isc
       bsdOriginal
       bsd2
       gpl2Plus
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ucarp";
   };
 }

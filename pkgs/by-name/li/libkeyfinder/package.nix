@@ -26,10 +26,18 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Musical key detection for digital audio (C++ library)";
     homepage = "https://mixxxdj.github.io/libkeyfinder/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Musical key detection for digital audio (C++ library)";
+    homepage = "https://mixxxdj.github.io/libkeyfinder/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

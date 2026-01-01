@@ -32,10 +32,17 @@ buildNpmPackage rec {
     version = testers.testVersion { package = quicktype; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Generate types and converters from JSON, Schema, and GraphQL";
     homepage = "https://quicktype.io/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Generate types and converters from JSON, Schema, and GraphQL";
+    homepage = "https://quicktype.io/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "quicktype";
   };

@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "telegraph" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Telegraph API wrapper";
     homepage = "https://github.com/python273/telegraph";
     changelog = "https://github.com/python273/telegraph/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gp2112 ];
+=======
+  meta = with lib; {
+    description = "Telegraph API wrapper";
+    homepage = "https://github.com/python273/telegraph";
+    changelog = "https://github.com/python273/telegraph/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gp2112 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

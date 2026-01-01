@@ -49,6 +49,7 @@ let
     or you can set the following nixpkgs config option:
     `config.dyalog.acceptLicense = true;`
   '';
+<<<<<<< HEAD
 
   inherit (stdenv.hostPlatform) system isAarch;
 
@@ -92,6 +93,20 @@ stdenv.mkDerivation (finalAttrs: {
     assert !acceptLicense -> throw licenseDisclaimer;
     assert htmlRendererSupport && isAarch -> throw htmlRendererNotOnAarch;
     finalAttrs.passthru.sources.${system};
+=======
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "dyalog";
+  version = "19.0.50027";
+  shortVersion = lib.versions.majorMinor finalAttrs.version;
+
+  src =
+    assert !acceptLicense -> throw licenseDisclaimer;
+    fetchurl {
+      url = "https://download.dyalog.com/download.php?file=${finalAttrs.shortVersion}/linux_64_${finalAttrs.version}_unicode.x86_64.deb";
+      hash = "sha256-3uB102Hr0dmqAZj2ezLhsAdBotY24PWJfE7g5wSmKMA=";
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [ "out" ] ++ lib.optional enableDocs "doc";
 
@@ -130,7 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp aplkeys.sh default.dse dyalog dyalogc dyalog.rt dyalog.dcfg.template dyalog.ver.dcfg.template languagebar.json mapl StartupSession.aplf ${dyalogHome}
 
     mkdir ${dyalogHome}/lib
+<<<<<<< HEAD
     cp lib/{conga36_64.so,dyalog64.so,libconga36ssl64.so} ${dyalogHome}/lib
+=======
+    cp lib/{conga35_64.so,dyalog64.so,libconga35ssl64.so} ${dyalogHome}/lib
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Only keep the most useful workspaces
     mkdir ${dyalogHome}/ws
@@ -142,11 +161,19 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString htmlRendererSupport ''
     cp -r locales ${dyalogHome}
     cp libcef.so libEGL.so libGLESv2.so libvk_swiftshader.so libvulkan.so.1 ${dyalogHome}
+<<<<<<< HEAD
     cp chrome-sandbox icudtl.dat v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
     cp lib/htmlrenderer.so ${dyalogHome}/lib
   ''
   + lib.optionalString sqaplSupport ''
     cp lib/cxdya66u64u.so ${dyalogHome}/lib
+=======
+    cp chrome-sandbox icudtl.dat snapshot_blob.bin v8_context_snapshot.bin vk_swiftshader_icd.json *.pak ${dyalogHome}
+    cp lib/htmlrenderer.so ${dyalogHome}/lib
+  ''
+  + lib.optionalString sqaplSupport ''
+    cp lib/cxdya65u64u.so ${dyalogHome}/lib
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cp ws/sqapl.dws ${dyalogHome}/ws
     cp odbc.ini.sample sqapl.err sqapl.ini ${dyalogHome}
   ''
@@ -201,7 +228,11 @@ stdenv.mkDerivation (finalAttrs: {
       tomasajt
       markus1189
     ];
+<<<<<<< HEAD
     platforms = lib.attrNames finalAttrs.passthru.sources;
+=======
+    platforms = [ "x86_64-linux" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

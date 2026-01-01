@@ -6,10 +6,13 @@
   distrobox,
   podman,
   writableTmpDirAsHomeHook,
+<<<<<<< HEAD
   curl,
   jq,
   common-updater-scripts,
   writeShellScript,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildGoModule rec {
@@ -80,6 +83,7 @@ buildGoModule rec {
       --zsh <($out/bin/apx completion zsh)
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = writeShellScript "update-apx" ''
     set -euo pipefail
         PATH=${
@@ -100,6 +104,8 @@ buildGoModule rec {
     nix-update apx
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Vanilla OS package manager";
     longDescription = ''
@@ -118,7 +124,10 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       dit7ya
       chewblacka
+<<<<<<< HEAD
       masrlinu
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "apx";
   };

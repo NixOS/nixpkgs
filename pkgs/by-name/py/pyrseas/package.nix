@@ -13,7 +13,11 @@ let
     src = fetchFromGitHub {
       owner = "perseas";
       repo = "pgdbconn";
+<<<<<<< HEAD
       tag = "v${version}";
+=======
+      rev = "v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sha256 = "09r4idk5kmqi3yig7ip61r6js8blnmac5n4q32cdcbp1rcwzdn6z";
     };
 
@@ -36,7 +40,11 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "perseas";
     repo = "Pyrseas";
+<<<<<<< HEAD
     tag = "v${version}";
+=======
+    rev = version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "sha256-+MxnxvbLMxK1Ak+qKpKe3GHbzzC+XHO0eR7rl4ON9H4=";
   };
 

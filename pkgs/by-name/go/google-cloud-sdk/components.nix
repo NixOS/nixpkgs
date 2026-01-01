@@ -6,8 +6,11 @@
   autoPatchelfHook,
   python3,
   libxcrypt-legacy,
+<<<<<<< HEAD
   tcl-8_6,
   tclPackages,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -179,8 +182,11 @@ let
       ];
       buildInputs = [
         libxcrypt-legacy
+<<<<<<< HEAD
         tcl-8_6
         tclPackages.tk
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
       passthru = {
         dependencies = filterForSystem dependencies;

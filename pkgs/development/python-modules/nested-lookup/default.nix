@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nested_lookup" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python functions for working with deeply nested documents (lists and dicts)";
     homepage = "https://github.com/russellballestrini/nested-lookup";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ tboerger ];
+=======
+  meta = with lib; {
+    description = "Python functions for working with deeply nested documents (lists and dicts)";
+    homepage = "https://github.com/russellballestrini/nested-lookup";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ tboerger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

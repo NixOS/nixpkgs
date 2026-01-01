@@ -51,10 +51,18 @@ buildPythonPackage rec {
     "esphome_dashboard"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "ESPHome dashboard";
     homepage = "https://esphome.io/";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "ESPHome dashboard";
+    homepage = "https://esphome.io/";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,13 +24,23 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ wayland ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "Keep Wayland clipboard even after programs close";
     homepage = "https://github.com/Linus789/wl-clip-persist";
     inherit (wayland.meta) platforms;
+<<<<<<< HEAD
     license = lib.licenses.mit;
     mainProgram = "wl-clip-persist";
     maintainers = with lib.maintainers; [ name-snrl ];
+=======
+    license = licenses.mit;
+    mainProgram = "wl-clip-persist";
+    maintainers = with maintainers; [ name-snrl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

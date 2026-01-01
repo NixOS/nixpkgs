@@ -28,11 +28,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-65jk8UlXZgQoxuwRcGlMnI4e+LpCJuP2TaqK+Kn4GnQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Vendor-neutral implementation of RFC-0125's datatype and synthesis tooling";
     homepage = "https://git.lix.systems/lix-community/bootspec";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raitobezarius ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Vendor-neutral implementation of RFC-0125's datatype and synthesis tooling";
+    homepage = "https://git.lix.systems/lix-community/bootspec";
+    license = licenses.mit;
+    maintainers = [ lib.maintainers.raitobezarius ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

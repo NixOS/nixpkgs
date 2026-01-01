@@ -45,8 +45,11 @@ self: super: {
   stm = null;
   system-cxx-std-lib = null;
   template-haskell = null;
+<<<<<<< HEAD
   template-haskell-lift = null;
   template-haskell-quasiquoter = null;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   terminfo = null;
   text = null;
   time = null;

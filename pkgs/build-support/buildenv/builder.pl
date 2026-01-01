@@ -74,7 +74,11 @@ sub findFiles;
 
 sub findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     opendir DIR, "$target" or die "cannot open `$target': $!";
+<<<<<<< HEAD
     my @names = readdir DIR;
+=======
+    my @names = readdir DIR or die;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     closedir DIR;
 
     foreach my $name (@names) {

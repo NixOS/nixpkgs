@@ -10,7 +10,10 @@
   awscli2,
   bubblewrap,
   curl,
+<<<<<<< HEAD
   dune,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ffmpeg,
   yt-dlp,
   runtimePackages ? [
@@ -79,7 +82,11 @@ stdenv.mkDerivation {
     pkg-config
     which
     ocamlPackages.ocaml
+<<<<<<< HEAD
     dune
+=======
+    ocamlPackages.dune_3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ocamlPackages.findlib
     ocamlPackages.menhir
   ];

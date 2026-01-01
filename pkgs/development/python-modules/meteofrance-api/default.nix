@@ -54,12 +54,21 @@ buildPythonPackage rec {
     "test_workflow"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to access information from the Meteo-France API";
     homepage = "https://github.com/hacf-fr/meteofrance-api";
     changelog = "https://github.com/hacf-fr/meteofrance-api/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to access information from the Meteo-France API";
+    homepage = "https://github.com/hacf-fr/meteofrance-api";
+    changelog = "https://github.com/hacf-fr/meteofrance-api/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "meteofrance-api";
   };
 }

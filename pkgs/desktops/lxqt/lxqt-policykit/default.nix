@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lxqt/lxqt-policykit";
     description = "LXQt PolicyKit agent";
@@ -57,5 +58,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-policykit";
+    description = "LXQt PolicyKit agent";
+    mainProgram = "lxqt-policykit-agent";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -15,7 +15,10 @@
   pyyaml,
   tenacity,
   typing-extensions,
+<<<<<<< HEAD
   uuid-utils,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # tests
   blockbuster,
@@ -37,14 +40,22 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
+<<<<<<< HEAD
   version = "1.2.5";
+=======
+  version = "1.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
+<<<<<<< HEAD
     hash = "sha256-gHIJO5O9AxtROdDuo2UhdkW6p3+4dOJaO6iKelA26gE=";
+=======
+    hash = "sha256-uDMex+2wvvNvdFSTHjShsrJeeMymOMKCmfS+AyMMH6c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -59,7 +70,10 @@ buildPythonPackage rec {
     pyyaml
     tenacity
     typing-extensions
+<<<<<<< HEAD
     uuid-utils
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   pythonImportsCheck = [ "langchain_core" ];

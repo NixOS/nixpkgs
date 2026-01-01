@@ -48,9 +48,16 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pyunit extension for dependency injection";
     homepage = "https://github.com/testing-cabal/testscenarios";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Pyunit extension for dependency injection";
+    homepage = "https://github.com/testing-cabal/testscenarios";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

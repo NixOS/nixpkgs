@@ -65,6 +65,7 @@ buildGoModule rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple daemon providing dynamic fan speed control based on temperature sensors";
     mainProgram = "fan2go";
@@ -72,5 +73,14 @@ buildGoModule rec {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ mtoohey ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Simple daemon providing dynamic fan speed control based on temperature sensors";
+    mainProgram = "fan2go";
+    homepage = "https://github.com/markusressel/fan2go";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ mtoohey ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "qtads";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -155,14 +155,25 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Open source multimedia framework, designed for television broadcasting";
+    homepage = "https://www.mltframework.org/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl21Plus
       gpl2Plus
     ];
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

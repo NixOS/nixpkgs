@@ -91,15 +91,25 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/glava
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       OpenGL audio spectrum visualizer
     '';
     mainProgram = "glava";
     homepage = "https://github.com/wacossusca34/glava";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       eadwu
     ];
   };

@@ -23,10 +23,18 @@ buildPythonPackage rec {
     protobuf
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tgalal/python-axolotl";
     description = "Python port of libaxolotl-android";
     maintainers = [ ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tgalal/python-axolotl";
+    description = "Python port of libaxolotl-android";
+    maintainers = [ ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

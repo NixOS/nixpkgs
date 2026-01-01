@@ -45,13 +45,23 @@ stdenv.mkDerivation (finalAttrs: {
     privacy_networkd = nixosTests.networking.networkd.privacy;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://www.litech.org/radvd/";
     changelog = "https://github.com/radvd-project/radvd/blob/${finalAttrs.src.rev}/CHANGES";
     description = "IPv6 Router Advertisement Daemon";
     downloadPage = "https://github.com/radvd-project/radvd";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ fpletz ];
+=======
+    platforms = platforms.linux;
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ fpletz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

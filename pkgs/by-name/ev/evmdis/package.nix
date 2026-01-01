@@ -23,11 +23,20 @@ buildGoModule {
 
   ldflags = [ "-s" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Arachnid/evmdis";
     description = "Ethereum EVM disassembler";
     mainProgram = "evmdis";
     license = [ lib.licenses.asl20 ];
     maintainers = with lib.maintainers; [ asymmetric ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Arachnid/evmdis";
+    description = "Ethereum EVM disassembler";
+    mainProgram = "evmdis";
+    license = [ licenses.asl20 ];
+    maintainers = with maintainers; [ asymmetric ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

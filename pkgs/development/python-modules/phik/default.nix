@@ -65,7 +65,11 @@ buildPythonPackage rec {
     "test_phik_calculation"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Phi_K correlation analyzer library";
     longDescription = ''
       Phi_K is a new and practical correlation coefficient based on several refinements to
@@ -73,7 +77,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://phik.readthedocs.io/";
     changelog = "https://github.com/KaveIO/PhiK/blob/${src.tag}/CHANGES.rst";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ melsigl ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ melsigl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

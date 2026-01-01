@@ -4,7 +4,10 @@
   click,
   coloredlogs,
   construct,
+<<<<<<< HEAD
   construct-typing,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cryptography,
   daemonize,
   developer-disk-image,
@@ -48,14 +51,22 @@
 
 buildPythonPackage rec {
   pname = "pymobiledevice3";
+<<<<<<< HEAD
   version = "6.2.0";
+=======
+  version = "6.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pymobiledevice3";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Sc02p2zZb/CPYFU+lz6fe1UZgWhdJYH2/pSJ5gVE0iY=";
+=======
+    hash = "sha256-l6QS8xwcnjrBzbkQkkCyn+teD5J6AKAQuLoVsIzLlSE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -68,7 +79,10 @@ buildPythonPackage rec {
     click
     coloredlogs
     construct
+<<<<<<< HEAD
     construct-typing
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cryptography
     daemonize
     developer-disk-image

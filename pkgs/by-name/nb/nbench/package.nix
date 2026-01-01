@@ -33,10 +33,17 @@ stdenv.mkDerivation rec {
     cp NNET.DAT $out
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.math.utah.edu/~mayer/linux/bmark.html";
     description = "Synthetic computing benchmark program";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.math.utah.edu/~mayer/linux/bmark.html";
+    description = "Synthetic computing benchmark program";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ bennofs ];
     mainProgram = "nbench";
   };

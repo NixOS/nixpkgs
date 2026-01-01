@@ -63,11 +63,20 @@ buildPythonPackage rec {
     "enaml.workbench"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Declarative User Interfaces for Python";
     homepage = "https://github.com/nucleic/enaml";
     changelog = "https://github.com/nucleic/enaml/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ raboof ];
+=======
+  meta = with lib; {
+    description = "Declarative User Interfaces for Python";
+    homepage = "https://github.com/nucleic/enaml";
+    changelog = "https://github.com/nucleic/enaml/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ raboof ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

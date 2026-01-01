@@ -3,7 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+  pythonAtLeast,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonOlder,
   replaceVars,
 
@@ -43,7 +47,11 @@
 
 buildPythonPackage rec {
   pname = "django";
+<<<<<<< HEAD
   version = "5.2.9";
+=======
+  version = "5.2.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,7 +60,11 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-9URe8hB15WP92AU1YgGGFfZhVxn59gfBRrORZ04L+F0=";
+=======
+    hash = "sha256-ruzQ3CUNqHa0RmxCDBVXbtetkMvz+G/D4/LB/2aBc8I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -63,6 +75,7 @@ buildPythonPackage rec {
     ./django_5_tests_pythonpath.patch
     # disable test that expects timezone issues
     ./django_5_disable_failing_tests.patch
+<<<<<<< HEAD
 
     # 3.14.1/3.13.10 comapt
     (fetchpatch {
@@ -75,6 +88,8 @@ buildPythonPackage rec {
       url = "https://github.com/django/django/commit/9cc231e8243091519f5d627cd02ee40bbb853ced.patch";
       hash = "sha256-/aimmqxurMCCntraxOtybEq8qNgZgQWLD5Gxs/3pkIU=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./django_5_set_geos_gdal_lib.patch {
@@ -118,7 +133,11 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     # make sure the installed library gets imported
@@ -146,11 +165,20 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
+    description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
+    homepage = "https://www.djangoproject.com";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

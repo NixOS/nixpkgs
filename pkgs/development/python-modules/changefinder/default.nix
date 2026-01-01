@@ -38,10 +38,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "changefinder" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Online Change-Point Detection library based on ChangeFinder algorithm";
     homepage = "https://github.com/shunsukeaihara/changefinder";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raitobezarius ];
+=======
+  meta = with lib; {
+    description = "Online Change-Point Detection library based on ChangeFinder algorithm";
+    homepage = "https://github.com/shunsukeaihara/changefinder";
+    license = licenses.mit;
+    maintainers = with maintainers; [ raitobezarius ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

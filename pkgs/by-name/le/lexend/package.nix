@@ -27,11 +27,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.lexend.com";
     description = "Variable font family designed to aid in reading proficiency";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fufexan ];
+=======
+  meta = with lib; {
+    homepage = "https://www.lexend.com";
+    description = "Variable font family designed to aid in reading proficiency";
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ fufexan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

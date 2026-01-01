@@ -73,20 +73,32 @@ stdenv.mkDerivation (finalAttrs: {
   # Nixpkgs! :)
   TCL_CONFIG = "${tcl}/lib/";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://openmsx.org";
     description = "MSX emulator that aims for perfection";
     longDescription = ''
       OpenMSX is an emulator for the MSX home computer system. Its goal is
       to emulate all aspects of the MSX with 100% accuracy.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd2
       boost
       gpl2Plus
     ];
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "openmsx";
   };
 })

@@ -57,6 +57,7 @@ mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source Sega Saturn emulator";
     mainProgram = "yabause";
@@ -64,5 +65,14 @@ mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Open-source Sega Saturn emulator";
+    mainProgram = "yabause";
+    homepage = "https://yabause.org/";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

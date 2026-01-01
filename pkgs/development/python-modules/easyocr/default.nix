@@ -76,12 +76,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "easyocr" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Ready-to-use OCR with 80+ supported languages and all popular writing scripts";
     mainProgram = "easyocr";
     homepage = "https://github.com/JaidedAI/EasyOCR";
     changelog = "https://github.com/JaidedAI/EasyOCR/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

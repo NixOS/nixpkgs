@@ -155,7 +155,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "High-level web crawling and web scraping framework";
     mainProgram = "scrapy";
     longDescription = ''
@@ -165,7 +169,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://scrapy.org/";
     changelog = "https://github.com/scrapy/scrapy/raw/${src.tag}/docs/news.rst";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ vinnymeller ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ vinnymeller ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

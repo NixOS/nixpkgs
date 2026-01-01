@@ -101,7 +101,11 @@ in
 
     environment.xfce.excludePackages = mkOption {
       default = [ ];
+<<<<<<< HEAD
       example = literalExpression "[ pkgs.xfce4-volumed-pulse ]";
+=======
+      example = literalExpression "[ pkgs.xfce.xfce4-volumed-pulse ]";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       type = types.listOf types.package;
       description = "Which packages XFCE should exclude from the default environment";
     };
@@ -118,7 +122,11 @@ in
         adwaita-icon-theme
         hicolor-icon-theme
         tango-icon-theme
+<<<<<<< HEAD
         xfce4-icon-theme
+=======
+        xfce.xfce4-icon-theme
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         desktop-file-utils
         shared-mime-info # for update-mime-database
@@ -129,6 +137,7 @@ in
         # Needed by Xfce's xinitrc script
         xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
 
+<<<<<<< HEAD
         xfce4-exo
         garcon
         libxfce4ui
@@ -147,12 +156,33 @@ in
       # TODO: NetworkManager doesn't belong here
       ++ lib.optional config.networking.networkmanager.enable networkmanagerapplet
       ++ lib.optional config.powerManagement.enable xfce4-power-manager
+=======
+        xfce.exo
+        xfce.garcon
+        xfce.libxfce4ui
+
+        xfce.mousepad
+        xfce.parole
+        xfce.ristretto
+        xfce.xfce4-appfinder
+        xfce.xfce4-notifyd
+        xfce.xfce4-screenshooter
+        xfce.xfce4-session
+        xfce.xfce4-settings
+        xfce.xfce4-taskmanager
+        xfce.xfce4-terminal
+      ]
+      # TODO: NetworkManager doesn't belong here
+      ++ lib.optional config.networking.networkmanager.enable networkmanagerapplet
+      ++ lib.optional config.powerManagement.enable xfce.xfce4-power-manager
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ++ lib.optionals (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         pavucontrol
         # volume up/down keys support:
         # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
         # but can only be used with xfce4-panel, so for no-desktop usage we still include
         # xfce4-volumed-pulse
+<<<<<<< HEAD
         (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
       ]
       ++ lib.optionals cfg.enableXfwm [
@@ -164,6 +194,19 @@ in
         xfdesktop
       ]
       ++ lib.optional cfg.enableScreensaver xfce4-screensaver
+=======
+        (if cfg.noDesktop then xfce.xfce4-volumed-pulse else xfce.xfce4-pulseaudio-plugin)
+      ]
+      ++ lib.optionals cfg.enableXfwm [
+        xfce.xfwm4
+        xfce.xfwm4-themes
+      ]
+      ++ lib.optionals (!cfg.noDesktop) [
+        xfce.xfce4-panel
+        xfce.xfdesktop
+      ]
+      ++ lib.optional cfg.enableScreensaver xfce.xfce4-screensaver
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ) excludePackages;
 
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
@@ -188,7 +231,11 @@ in
         desktopNames = [ "XFCE" ];
         bgSupport = !cfg.noDesktop;
         start = ''
+<<<<<<< HEAD
           ${pkgs.runtimeShell} ${pkgs.xfce4-session.xinitrc} &
+=======
+          ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           waitPID=$!
         '';
       }
@@ -238,12 +285,17 @@ in
     programs.zsh.vteIntegration = mkDefault true;
 
     # Systemd services
+<<<<<<< HEAD
     systemd.packages = utils.removePackagesByName (with pkgs; [
+=======
+    systemd.packages = utils.removePackagesByName (with pkgs.xfce; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       xfce4-notifyd
     ]) excludePackages;
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
 
+<<<<<<< HEAD
     xdg.portal.enable = mkDefault true;
     xdg.portal.extraPortals = utils.removePackagesByName (
       with pkgs;
@@ -256,5 +308,8 @@ in
       ]
     ) excludePackages;
     xdg.portal.configPackages = mkDefault [ pkgs.xfce4-session ];
+=======
+    xdg.portal.configPackages = mkDefault [ pkgs.xfce.xfce4-session ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

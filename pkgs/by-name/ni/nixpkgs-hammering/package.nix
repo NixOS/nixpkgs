@@ -41,6 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/jtojnar/nixpkgs-hammering";
     license = lib.licenses.mit;
     mainProgram = "nixpkgs-hammer";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ iamanaws ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

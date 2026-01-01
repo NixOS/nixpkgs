@@ -136,7 +136,11 @@ python3Packages.buildPythonApplication rec {
     "unidecode"
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = lib.concatAttrValues optional-dependencies;
+=======
+  nativeCheckInputs = lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "calibreweb" ];
 

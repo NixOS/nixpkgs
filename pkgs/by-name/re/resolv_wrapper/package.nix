@@ -20,10 +20,18 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper for the user, group and hosts NSS API";
     homepage = "https://git.samba.org/?p=uid_wrapper.git;a=summary;";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Wrapper for the user, group and hosts NSS API";
+    homepage = "https://git.samba.org/?p=uid_wrapper.git;a=summary;";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

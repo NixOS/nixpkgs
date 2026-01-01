@@ -30,10 +30,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pytest_watch" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/joeyespo/pytest-watch";
     description = "Local continuous test runner with pytest and watchdog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dmvianna ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/joeyespo/pytest-watch";
+    description = "Local continuous test runner with pytest and watchdog";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dmvianna ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

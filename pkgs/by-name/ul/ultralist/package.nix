@@ -17,11 +17,19 @@ buildGoModule rec {
 
   vendorHash = null;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple GTD-style todo list for the command line";
     homepage = "https://ultralist.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uvnikita ];
+=======
+  meta = with lib; {
+    description = "Simple GTD-style todo list for the command line";
+    homepage = "https://ultralist.io";
+    license = licenses.mit;
+    maintainers = with maintainers; [ uvnikita ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ultralist";
   };
 }

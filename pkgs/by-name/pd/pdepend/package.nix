@@ -17,10 +17,18 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
+<<<<<<< HEAD
   vendorHash = "sha256-IowPh4CymahgfbnvLS2QWu8e+TXya9AszTK+mlR/DTY=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+=======
+  vendorHash = "sha256-uK+nJFXDVPYFbosAUxqu+mmNsD7AnZ18NnIN9FYAaPQ=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     changelog = "https://github.com/pdepend/pdepend/releases/tag/${finalAttrs.version}";

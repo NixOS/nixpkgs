@@ -25,11 +25,20 @@ buildPythonPackage rec {
     dahlia
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/samarium-lang/samarium/blob/${src.rev}/CHANGELOG.md";
     description = "Samarium Programming Language";
     license = lib.licenses.mit;
     homepage = "https://samarium-lang.github.io/Samarium";
     maintainers = with lib.maintainers; [ sigmanificient ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/samarium-lang/samarium/blob/${src.rev}/CHANGELOG.md";
+    description = "Samarium Programming Language";
+    license = licenses.mit;
+    homepage = "https://samarium-lang.github.io/Samarium";
+    maintainers = with maintainers; [ sigmanificient ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

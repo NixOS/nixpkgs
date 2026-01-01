@@ -2,7 +2,10 @@
   stdenv,
   lib,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   vala,
   meson,
   ninja,
@@ -38,6 +41,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-nBkX5KYff+u3h4Sc42znF/znBsNGiAuZHQVtVNrbysw=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with gpgme 2.0+
     # https://gitlab.gnome.org/GNOME/seahorse/-/merge_requests/248
@@ -48,6 +52,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     meson
     ninja
@@ -116,6 +122,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/seahorse";
     description = "Application for managing encryption keys and passwords in the GnomeKeyring";
@@ -123,5 +130,14 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/seahorse";
+    description = "Application for managing encryption keys and passwords in the GnomeKeyring";
+    mainProgram = "seahorse";
+    teams = [ teams.gnome ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

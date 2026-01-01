@@ -11,13 +11,21 @@
 # https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
 stdenv.mkDerivation (finalAttrs: {
   pname = "oneDNN";
+<<<<<<< HEAD
   version = "3.10.2";
+=======
+  version = "3.10.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneDNN";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-/e57voLBNun/2koTF3sEb0Z/nDjCwq9NJVk7TaTSvMY=";
+=======
+    hash = "sha256-v1A9bOjcveTg97RBI2Y/gikoeQKYN8ZfFrqJmD3lVys=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -47,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "oneAPI Deep Neural Network Library (oneDNN)";
     homepage = "https://01.org/oneDNN";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 })

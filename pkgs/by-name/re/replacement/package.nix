@@ -31,7 +31,11 @@ python3Packages.buildPythonApplication rec {
     sh
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/siriobalmelli/replacement";
     description = "Tool to execute yaml templates and output text";
     mainProgram = "replacement";
@@ -47,7 +51,12 @@ python3Packages.buildPythonApplication rec {
       This tool is useful in generating configuration files,
       static websites and the like.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siriobalmelli ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ siriobalmelli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

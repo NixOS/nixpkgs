@@ -25,11 +25,20 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Unix manual pages for R6RS and R7RS";
     homepage = "https://github.com/schemedoc/manpages";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Unix manual pages for R6RS and R7RS";
+    homepage = "https://github.com/schemedoc/manpages";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

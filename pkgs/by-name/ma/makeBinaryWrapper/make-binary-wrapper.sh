@@ -89,7 +89,11 @@ makeDocumentedCWrapper() {
 # ARGS: same as makeWrapper
 makeCWrapper() {
     local argv0 inherit_argv0 n params cmd main flags executable length
+<<<<<<< HEAD
     local uses_sep_surround_check uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
+=======
+    local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     local flagsBefore=() flagsAfter=()
     executable=$(escapeStringLiteral "$1")
     params=("$@")
@@ -122,11 +126,17 @@ makeCWrapper() {
             --prefix)
                 cmd=$(setEnvPrefix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
                 main="$main$cmd"$'\n'
+<<<<<<< HEAD
                 uses_sep_surround_check=1
                 uses_prefix=1
                 uses_asprintf=1
                 uses_stdio=1
                 uses_string=1
+=======
+                uses_prefix=1
+                uses_asprintf=1
+                uses_stdio=1
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
@@ -135,11 +145,17 @@ makeCWrapper() {
             --suffix)
                 cmd=$(setEnvSuffix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
                 main="$main$cmd"$'\n'
+<<<<<<< HEAD
                 uses_sep_surround_check=1
                 uses_suffix=1
                 uses_asprintf=1
                 uses_stdio=1
                 uses_string=1
+=======
+                uses_suffix=1
+                uses_asprintf=1
+                uses_stdio=1
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
@@ -212,7 +228,10 @@ makeCWrapper() {
     [ -z "$uses_stdio" ]    || printf '%s\n' "#include <stdio.h>"
     [ -z "$uses_string" ]   || printf '%s\n' "#include <string.h>"
     [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)"
+<<<<<<< HEAD
     [ -z "$uses_sep_surround_check" ] || printf '\n%s\n' "$(setSepSurroundCheck)"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     [ -z "$uses_prefix" ] || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ] || printf '\n%s\n' "$(setEnvSuffixFn)"
     [ -z "$resolve_argv0" ] || printf '\n%s\n' "$(resolveArgv0Fn)"
@@ -323,6 +342,7 @@ assertValidEnvName() {
     esac
 }
 
+<<<<<<< HEAD
 setSepSurroundCheck() {
     printf '%s' "\
 int is_surrounded_by_sep(char *env, char *ptr, unsigned long len, char *sep) {
@@ -376,6 +396,20 @@ void set_env_prefix(char *env, char *sep, char *prefix) {
   } else {
     assert_success(setenv(env, prefix, 1));
   }
+=======
+setEnvPrefixFn() {
+    printf '%s' "\
+void set_env_prefix(char *env, char *sep, char *prefix) {
+    char *existing = getenv(env);
+    if (existing) {
+        char *val;
+        assert_success(asprintf(&val, \"%s%s%s\", prefix, sep, existing));
+        assert_success(setenv(env, val, 1));
+        free(val);
+    } else {
+        assert_success(setenv(env, prefix, 1));
+    }
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }
 "
 }
@@ -383,6 +417,7 @@ void set_env_prefix(char *env, char *sep, char *prefix) {
 setEnvSuffixFn() {
     printf '%s' "\
 void set_env_suffix(char *env, char *sep, char *suffix) {
+<<<<<<< HEAD
   char *existing_env = getenv(env);
   if (existing_env) {
     char *val;
@@ -409,6 +444,17 @@ void set_env_suffix(char *env, char *sep, char *suffix) {
   } else {
     assert_success(setenv(env, suffix, 1));
   }
+=======
+    char *existing = getenv(env);
+    if (existing) {
+        char *val;
+        assert_success(asprintf(&val, \"%s%s%s\", existing, sep, suffix));
+        assert_success(setenv(env, val, 1));
+        free(val);
+    } else {
+        assert_success(setenv(env, suffix, 1));
+    }
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }
 "
 }

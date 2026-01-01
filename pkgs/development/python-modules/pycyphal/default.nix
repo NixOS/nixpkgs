@@ -56,7 +56,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -93,14 +97,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycyphal" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Full-featured implementation of the Cyphal protocol stack in Python";
     longDescription = ''
       Cyphal is an open technology for real-time intravehicular distributed computing and communication based on modern networking standards (Ethernet, CAN FD, etc.).
     '';
     homepage = "https://opencyphal.org/";
     changelog = "https://github.com/OpenCyphal/pycyphal/blob/${version}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     teams = [ lib.teams.ororatech ];
+=======
+    license = licenses.mit;
+    teams = [ teams.ororatech ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "riprova" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/h2non/riprova";
     description = "Small and versatile library to retry failed operations using different backoff strategies";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmilata ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/h2non/riprova";
+    description = "Small and versatile library to retry failed operations using different backoff strategies";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmilata ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

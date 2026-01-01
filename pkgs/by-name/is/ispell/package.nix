@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = "-std=gnu17"; # Doesn't compile with C23
 
   meta = {
@@ -45,5 +46,12 @@ stdenv.mkDerivation rec {
     homepage = "https://www.cs.hmc.edu/~geoff/ispell.html";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Interactive spell-checking program for Unix";
+    homepage = "https://www.cs.hmc.edu/~geoff/ispell.html";
+    license = licenses.free;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

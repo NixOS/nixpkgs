@@ -31,12 +31,21 @@ stdenv.mkDerivation rec {
     done;
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Attempts to prevent you from accidentally shutting down or rebooting machines";
     homepage = "https://salsa.debian.org/debian/molly-guard";
     license = lib.licenses.artistic2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ DerTim1 ];
+=======
+  meta = with lib; {
+    description = "Attempts to prevent you from accidentally shutting down or rebooting machines";
+    homepage = "https://salsa.debian.org/debian/molly-guard";
+    license = licenses.artistic2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ DerTim1 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     priority = -10;
   };
 }

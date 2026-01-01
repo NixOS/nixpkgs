@@ -83,11 +83,20 @@ mkDerivation rec {
   # pdmlprotocol.h:23:25: fatal error: protocol.pb.h: No such file or directory
   enableParallelBuilding = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Packet traffic generator and analyzer";
     homepage = "https://ostinato.org/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ rick68 ];
     platforms = with lib.platforms; linux ++ darwin ++ cygwin;
+=======
+  meta = with lib; {
+    description = "Packet traffic generator and analyzer";
+    homepage = "https://ostinato.org/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ rick68 ];
+    platforms = with platforms; linux ++ darwin ++ cygwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

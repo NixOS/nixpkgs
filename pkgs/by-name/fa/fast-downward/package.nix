@@ -68,12 +68,21 @@ stdenv.mkDerivation rec {
       --replace 'args.build = "release"' "args.build = \"$out/libexec/fast-downward\""
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Domain-independent planning system";
     mainProgram = "fast-downward";
     homepage = "https://www.fast-downward.org/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Domain-independent planning system";
+    mainProgram = "fast-downward";
+    homepage = "https://www.fast-downward.org/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

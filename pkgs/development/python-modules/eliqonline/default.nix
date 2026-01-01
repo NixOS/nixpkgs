@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eliqonline" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client to the Eliq Online API";
     mainProgram = "eliqonline";
     homepage = "https://github.com/molobrakos/eliqonline";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client to the Eliq Online API";
+    mainProgram = "eliqonline";
+    homepage = "https://github.com/molobrakos/eliqonline";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

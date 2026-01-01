@@ -48,11 +48,20 @@ stdenv.mkDerivation rec {
       --replace-fail "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Remote protein homology detection suite";
     homepage = "https://github.com/soedinglab/hh-suite";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ natsukium ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Remote protein homology detection suite";
+    homepage = "https://github.com/soedinglab/hh-suite";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ natsukium ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-daHhCr55RzIHooGXBK831SYD1b8NPEDD6mtDut6nuaQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Batch rename utility for developers";
     homepage = "https://github.com/yaa110/nomino";
     changelog = "https://github.com/yaa110/nomino/releases/tag/${src.rev}";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Batch rename utility for developers";
+    homepage = "https://github.com/yaa110/nomino";
+    changelog = "https://github.com/yaa110/nomino/releases/tag/${src.rev}";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit # or
       asl20
     ];

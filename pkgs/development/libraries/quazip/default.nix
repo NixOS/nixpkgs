@@ -34,10 +34,18 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provides access to ZIP archives from Qt programs";
     license = lib.licenses.lgpl21Plus;
     homepage = "https://stachenov.github.io/quazip/"; # Migrated from http://quazip.sourceforge.net/
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "Provides access to ZIP archives from Qt programs";
+    license = licenses.lgpl21Plus;
+    homepage = "https://stachenov.github.io/quazip/"; # Migrated from http://quazip.sourceforge.net/
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

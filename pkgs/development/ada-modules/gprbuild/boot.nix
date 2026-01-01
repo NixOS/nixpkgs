@@ -89,11 +89,20 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-language extensible build tool";
     homepage = "https://github.com/AdaCore/gprbuild";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Multi-language extensible build tool";
+    homepage = "https://github.com/AdaCore/gprbuild";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.sternenseemann ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

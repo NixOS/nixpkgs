@@ -46,11 +46,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "X cursor theme inspired by Materia design";
     homepage = "https://github.com/vinceliuice/Vimix-cursors";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ambroisie ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "X cursor theme inspired by Materia design";
+    homepage = "https://github.com/vinceliuice/Vimix-cursors";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ambroisie ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

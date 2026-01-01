@@ -56,11 +56,19 @@ stdenv.mkDerivation {
     cp ${desktopItem}/share/applications/*.desktop $out/share/applications
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit description;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ cizra ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    inherit description;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ cizra ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/tome2/tome2";
   };
 }

@@ -91,7 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/skylot/jadx/releases/tag/v${finalAttrs.version}";
     description = "Dex to Java decompiler";
     homepage = "https://github.com/skylot/jadx";
@@ -99,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
@@ -107,5 +112,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "jadx-gui";
     maintainers = with lib.maintainers; [ emilytrau ];
+=======
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # deps
+    ];
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    mainProgram = "jadx-gui";
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

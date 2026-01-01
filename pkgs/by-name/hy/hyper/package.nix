@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
   passthru.tests.test = nixosTests.terminal-emulators.hyper;
 
   dontPatchELF = true;
+<<<<<<< HEAD
   meta = {
     description = "Terminal built on web technologies";
     homepage = "https://hyper.is/";
@@ -116,6 +117,17 @@ stdenv.mkDerivation rec {
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Terminal built on web technologies";
+    homepage = "https://hyper.is/";
+    maintainers = with maintainers; [
+      puffnfresh
+      fabiangd
+    ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "hyper";
     broken = true; # Error: 'node-pty' failed to load

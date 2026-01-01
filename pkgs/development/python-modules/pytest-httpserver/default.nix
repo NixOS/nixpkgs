@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_httpserver" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP server for pytest to test HTTP clients";
     homepage = "https://www.github.com/csernazs/pytest-httpserver";
     changelog = "https://github.com/csernazs/pytest-httpserver/blob/${src.tag}/CHANGES.rst";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "HTTP server for pytest to test HTTP clients";
+    homepage = "https://www.github.com/csernazs/pytest-httpserver";
+    changelog = "https://github.com/csernazs/pytest-httpserver/blob/${src.tag}/CHANGES.rst";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

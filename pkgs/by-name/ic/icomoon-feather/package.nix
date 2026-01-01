@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/adi1090x/polybar-themes/tree/master/fonts/panels";
     description = "Icomoon feather font";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/adi1090x/polybar-themes/tree/master/fonts/panels";
+    description = "Icomoon feather font";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ luftmensch-luftmensch ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

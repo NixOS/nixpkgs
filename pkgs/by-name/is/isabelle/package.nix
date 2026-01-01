@@ -228,7 +228,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Generic proof assistant";
 
     longDescription = ''
@@ -237,6 +241,7 @@ stdenv.mkDerivation (finalAttrs: {
       formulas in a logical calculus.
     '';
     homepage = "https://isabelle.in.tum.de/";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # source bundles binary dependencies
@@ -247,6 +252,18 @@ stdenv.mkDerivation (finalAttrs: {
       lib.maintainers.jvanbruegge
     ];
     platforms = lib.platforms.unix;
+=======
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode # source bundles binary dependencies
+    ];
+    license = licenses.bsd3;
+    maintainers = [
+      maintainers.jwiegley
+      maintainers.jvanbruegge
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru.withComponents =

@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wwj2hlngi8qn2pisvhyfxxs8gyqjlgrrv5lz91w8ly54dlzvs9j";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch2 {
       url = "https://github.com/crigler/dtach/commit/6d80909a8c0fd19717010a3c76fec560f988ca48.patch?full_index=1";
@@ -21,6 +25,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   installPhase = ''
     mkdir -p $out/bin
     cp dtach $out/bin/dtach

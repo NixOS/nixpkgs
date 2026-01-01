@@ -26,11 +26,19 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : ${lib.makeBinPath [ typst ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Hot reloading for your typst files";
     homepage = "https://github.com/ItsEthra/typst-live";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Hot reloading for your typst files";
+    homepage = "https://github.com/ItsEthra/typst-live";
+    license = licenses.mit;
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "typst-live";
   };
 }

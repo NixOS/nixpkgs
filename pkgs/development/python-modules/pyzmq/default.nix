@@ -85,10 +85,17 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Python bindings for ØMQ";
+    homepage = "https://pyzmq.readthedocs.io/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd3 # or
       lgpl3Only
     ];

@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/{Applications/qalculate-qt.app/Contents/MacOS,bin}/qalculate-qt
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
@@ -53,5 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "qalculate-qt";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Ultimate desktop calculator";
+    homepage = "http://qalculate.github.io";
+    maintainers = [ ];
+    license = licenses.gpl2Plus;
+    mainProgram = "qalculate-qt";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

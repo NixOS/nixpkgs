@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Boring crypto that simply works";
     homepage = "https://monocypher.org";
@@ -26,5 +27,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+  meta = with lib; {
+    description = "Boring crypto that simply works";
+    homepage = "https://monocypher.org";
+    license = with licenses; [
+      bsd2
+      cc0
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

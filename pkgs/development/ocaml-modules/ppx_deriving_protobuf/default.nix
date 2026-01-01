@@ -26,10 +26,18 @@ buildDunePackage rec {
   ];
   propagatedBuildInputs = [ ppx_deriving ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ocaml-ppx/ppx_deriving_protobuf";
     description = "Protocol Buffers codec generator for OCaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vyorkin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ocaml-ppx/ppx_deriving_protobuf";
+    description = "Protocol Buffers codec generator for OCaml";
+    license = licenses.mit;
+    maintainers = [ maintainers.vyorkin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

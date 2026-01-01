@@ -54,6 +54,7 @@ in
     # scion programs hardcode path to dispatcher in /run/shm, and is not
     # configurable at runtime upstream plans to obsolete the dispatcher in
     # favor of an SCMP daemon, at which point this can be removed.
+<<<<<<< HEAD
     systemd.services.scion-dispatcher-prepare = {
       serviceConfig = {
         Type = "oneshot";
@@ -64,6 +65,11 @@ in
       wantedBy = [ config.systemd.services.scion-dispatcher.name ];
       before = [ config.systemd.services.scion-dispatcher.name ];
     };
+=======
+    system.activationScripts.scion-dispatcher = ''
+      ln -sf /dev/shm /run/shm
+    '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     systemd.services.scion-dispatcher = {
       description = "SCION Dispatcher";

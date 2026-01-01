@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Software networking with isolation for Tart";
     homepage = "https://github.com/cirruslabs/softnet";
@@ -31,5 +32,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Source build will be possible after darwin SDK 12.0 bump
     # https://github.com/NixOS/nixpkgs/pull/229210
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "Software networking with isolation for Tart";
+    homepage = "https://github.com/cirruslabs/softnet";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = [ "aarch64-darwin" ];
+    # Source build will be possible after darwin SDK 12.0 bump
+    # https://github.com/NixOS/nixpkgs/pull/229210
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

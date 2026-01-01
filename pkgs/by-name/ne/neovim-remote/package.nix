@@ -47,12 +47,21 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "nvr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool that helps controlling nvim processes from a terminal";
     homepage = "https://github.com/mhinz/neovim-remote/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ edanaher ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Tool that helps controlling nvim processes from a terminal";
+    homepage = "https://github.com/mhinz/neovim-remote/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ edanaher ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nvr";
   };
 }

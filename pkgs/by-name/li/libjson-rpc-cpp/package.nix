@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C++ framework for json-rpc (json remote procedure call)";
     mainProgram = "jsonrpcstub";
@@ -109,5 +110,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ robertrichter ];
+=======
+  meta = with lib; {
+    description = "C++ framework for json-rpc (json remote procedure call)";
+    mainProgram = "jsonrpcstub";
+    homepage = "https://github.com/cinemast/libjson-rpc-cpp";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ robertrichter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

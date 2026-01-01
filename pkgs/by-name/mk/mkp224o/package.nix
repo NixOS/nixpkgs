@@ -70,11 +70,19 @@ stdenv.mkDerivation rec {
       ''
     ) variants;
 
+<<<<<<< HEAD
   meta = {
     description = "Vanity address generator for tor onion v3 (ed25519) hidden services";
     homepage = "http://cathug2kyi4ilneggumrenayhuhsvrgn6qv2y47bgeet42iivkpynqad.onion/";
     license = lib.licenses.cc0;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Vanity address generator for tor onion v3 (ed25519) hidden services";
+    homepage = "http://cathug2kyi4ilneggumrenayhuhsvrgn6qv2y47bgeet42iivkpynqad.onion/";
+    license = licenses.cc0;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

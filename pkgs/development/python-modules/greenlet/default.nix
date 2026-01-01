@@ -55,11 +55,19 @@ let
       doCheck = true;
     });
 
+<<<<<<< HEAD
     meta = {
       changelog = "https://github.com/python-greenlet/greenlet/blob/${version}/CHANGES.rst";
       homepage = "https://github.com/python-greenlet/greenlet";
       description = "Module for lightweight in-process concurrent programming";
       license = with lib.licenses; [
+=======
+    meta = with lib; {
+      changelog = "https://github.com/python-greenlet/greenlet/blob/${version}/CHANGES.rst";
+      homepage = "https://github.com/python-greenlet/greenlet";
+      description = "Module for lightweight in-process concurrent programming";
+      license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
         mit
       ];

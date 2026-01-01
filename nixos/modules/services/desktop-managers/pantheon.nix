@@ -43,8 +43,11 @@ in
         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
 
+<<<<<<< HEAD
       parental-controls.enable = mkEnableOption "Pantheon parental controls daemon";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       apps.enable = mkEnableOption "Pantheon default applications";
 
     };
@@ -164,7 +167,10 @@ in
       ];
       services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
+<<<<<<< HEAD
       services.pantheon.parental-controls.enable = mkDefault true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
@@ -363,6 +369,7 @@ in
       ];
     })
 
+<<<<<<< HEAD
     (mkIf serviceCfg.parental-controls.enable {
       services.malcontent.enable = mkDefault true;
 
@@ -372,5 +379,7 @@ in
 
       systemd.packages = [ pkgs.pantheon.switchboard-plug-parental-controls ];
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 }

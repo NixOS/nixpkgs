@@ -31,11 +31,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ijson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Iterative JSON parser with a standard Python iterator interface";
     homepage = "https://github.com/ICRAR/ijson";
     changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Iterative JSON parser with a standard Python iterator interface";
+    homepage = "https://github.com/ICRAR/ijson";
+    changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

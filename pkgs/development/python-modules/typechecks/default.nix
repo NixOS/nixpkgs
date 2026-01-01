@@ -20,10 +20,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "typechecks" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Type checking helpers for Python";
     homepage = "https://github.com/openvax/typechecks";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
+=======
+  meta = with lib; {
+    description = "Type checking helpers for Python";
+    homepage = "https://github.com/openvax/typechecks";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ samuela ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

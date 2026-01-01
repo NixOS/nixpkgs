@@ -2,7 +2,11 @@
   lib,
   nix-update-script,
   buildNpmPackage,
+<<<<<<< HEAD
   fetchFromGitea,
+=======
+  fetchFromGitHub,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs_22,
   kwin,
   kpackage,
@@ -12,11 +16,18 @@ buildNpmPackage (finalAttrs: {
   pname = "krohnkite";
   version = "0.9.9.2";
 
+<<<<<<< HEAD
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "anametologin";
     repo = "Krohnkite";
     rev = finalAttrs.version;
+=======
+  src = fetchFromGitHub {
+    owner = "anametologin";
+    repo = "krohnkite";
+    tag = finalAttrs.version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-gulKg23BeWL270B2omRYJIuAHIsKu1cBVpimgButM9I=";
   };
 
@@ -57,8 +68,13 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Dynamic Tiling Extension for KWin 6";
+<<<<<<< HEAD
     homepage = "https://codeberg.org/anametologin/Krohnkite";
     changelog = "https://codeberg.org/anametologin/Krohnkite/releases/tag/${finalAttrs.version}";
+=======
+    homepage = "https://github.com/anametologin/krohnkite";
+    changelog = "https://github.com/anametologin/krohnkite/releases/tag/${finalAttrs.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ben9986

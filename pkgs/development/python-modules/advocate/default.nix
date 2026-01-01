@@ -38,10 +38,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "advocate" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/JordanMilne/Advocate";
     description = "SSRF-preventing wrapper around Python's requests library";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pborzenkov ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/JordanMilne/Advocate";
+    description = "SSRF-preventing wrapper around Python's requests library";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ pborzenkov ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

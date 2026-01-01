@@ -34,11 +34,19 @@ rustPlatform.buildRustPackage rec {
     LIBGIT2_NO_VENDOR = 1;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to find potential unused enabled feature flags and prune them";
     homepage = "https://github.com/timonpost/cargo-unused-features";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool to find potential unused enabled feature flags and prune them";
+    homepage = "https://github.com/timonpost/cargo-unused-features";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       matthiasbeyer
     ];
     mainProgram = "unused-features";

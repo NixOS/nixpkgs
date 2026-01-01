@@ -24,10 +24,18 @@ buildGoModule {
 
   passthru.tests.basic = nixosTests.molly-brown;
 
+<<<<<<< HEAD
   meta = {
     description = "Full-featured Gemini server";
     mainProgram = "molly-brown";
     homepage = "https://tildegit.org/solderpunk/molly-brown";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Full-featured Gemini server";
+    mainProgram = "molly-brown";
+    homepage = "https://tildegit.org/solderpunk/molly-brown";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

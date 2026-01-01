@@ -36,11 +36,20 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ tk ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Vectorized 3D PostScript processor with analytical hidden line/surface removal";
     license = lib.licenses.unfree;
     homepage = "https://geant4.kek.jp/~tanaka/DAWN/About_DAWN.html";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Vectorized 3D PostScript processor with analytical hidden line/surface removal";
+    license = licenses.unfree;
+    homepage = "https://geant4.kek.jp/~tanaka/DAWN/About_DAWN.html";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

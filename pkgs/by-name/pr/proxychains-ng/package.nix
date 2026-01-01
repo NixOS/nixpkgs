@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "install-zsh-completion"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Preloader which hooks calls to sockets in dynamically linked programs and redirects it through one or more socks/http proxies";
     homepage = "https://github.com/rofl0r/proxychains-ng";
@@ -47,6 +48,17 @@ stdenv.mkDerivation rec {
       usertam
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Preloader which hooks calls to sockets in dynamically linked programs and redirects it through one or more socks/http proxies";
+    homepage = "https://github.com/rofl0r/proxychains-ng";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      zenithal
+      usertam
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "proxychains4";
   };
 }

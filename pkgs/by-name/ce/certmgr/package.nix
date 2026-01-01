@@ -25,6 +25,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) certmgr; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://cfssl.org/";
     description = "Cloudflare's automated certificate management using a CFSSL CA";
@@ -32,6 +33,15 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://cfssl.org/";
+    description = "Cloudflare's automated certificate management using a CFSSL CA";
+    mainProgram = "certmgr";
+    platforms = platforms.linux;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       johanot
       srhb
     ];

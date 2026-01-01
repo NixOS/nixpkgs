@@ -29,9 +29,16 @@ stdenv.mkDerivation rec {
     "MEDIASTREAMER_CFLAGS=-I${linphonePackages.mediastreamer2}/include"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mediastreamer plugin for the iLBC audio codec";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
+=======
+  meta = with lib; {
+    description = "Mediastreamer plugin for the iLBC audio codec";
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -14,14 +14,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hatch";
+<<<<<<< HEAD
   version = "1.16.1";
+=======
+  version = "1.14.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     tag = "hatch-v${version}";
+<<<<<<< HEAD
     hash = "sha256-HreVb+RZzQV3p9TaoHDZLHBQFifyH+hocP01u5yU+ms=";
+=======
+    hash = "sha256-LrfPDgpb9AQsaiYVb2MNdOfoIBbStZMKmESCbVhfn+s=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
@@ -33,6 +41,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonRemoveDeps = [ "uv" ];
 
+<<<<<<< HEAD
   dependencies =
     with python3Packages;
     [
@@ -55,12 +64,34 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optionals (pythonOlder "3.14") [
       backports-zstd
     ];
+=======
+  dependencies = with python3Packages; [
+    click
+    hatchling
+    httpx
+    hyperlink
+    keyring
+    packaging
+    pexpect
+    platformdirs
+    rich
+    shellingham
+    tomli-w
+    tomlkit
+    userpath
+    virtualenv
+    zstandard
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeCheckInputs =
     with python3Packages;
     [
       binary
+<<<<<<< HEAD
       flit-core
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       git
       pytestCheckHook
       pytest-mock
@@ -76,6 +107,11 @@ python3Packages.buildPythonApplication rec {
       darwin.ps
     ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabledTests = [
     # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
     "test_default"
@@ -127,6 +163,7 @@ python3Packages.buildPythonApplication rec {
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 
   disabledTestPaths = [
+<<<<<<< HEAD
     # httpx.ConnectError: [Errno -3] Temporary failure in name resolution
     "tests/workspaces/test_config.py"
 
@@ -144,6 +181,12 @@ python3Packages.buildPythonApplication rec {
     # some issue with the version of `binary`
     "tests/dep/test_sync.py::test_dependency_not_found"
     "tests/dep/test_sync.py::test_marker_unmet"
+=======
+    # ModuleNotFoundError: No module named 'hatchling.licenses.parse'
+    # https://github.com/pypa/hatch/issues/1850
+    "tests/backend/licenses/test_parse.py"
+    "tests/backend/licenses/test_supported.py"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # AssertionError on the version metadata
     # https://github.com/pypa/hatch/issues/1877

@@ -51,11 +51,20 @@ stdenv.mkDerivation rec {
       "'$out/lib/rofi'"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Do live calculations in rofi";
     homepage = "https://github.com/svenstaro/rofi-calc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ albakham ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    description = "Do live calculations in rofi";
+    homepage = "https://github.com/svenstaro/rofi-calc";
+    license = licenses.mit;
+    maintainers = with maintainers; [ albakham ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

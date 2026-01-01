@@ -10,17 +10,29 @@
 }:
 buildGoModule rec {
   pname = "aws-vault";
+<<<<<<< HEAD
   version = "7.8.6";
+=======
+  version = "7.7.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ByteNess";
     repo = "aws-vault";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-nULl68DMTqrVXlPmJlp7M3EZ+MiGR9FsWKIRaa2i91I=";
   };
 
   proxyVendor = true;
   vendorHash = "sha256-tuOrD2NjcjmjosI1bW2F7xEwGLNOMDNxFpEfODF9FHs=";
+=======
+    hash = "sha256-W/rEce6utwpDToW7amDM4JyiGUt8WcITemReEXLOd+E=";
+  };
+
+  proxyVendor = true;
+  vendorHash = "sha256-4B6dGokRObOkV1r1pw8lR+zFEZPZhMLj+Fj48bRkME4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     installShellFiles
@@ -55,12 +67,21 @@ buildGoModule rec {
     $out/bin/aws-vault --version 2>&1 | grep ${version} > /dev/null
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Vault for securely storing and accessing AWS credentials in development environments";
     mainProgram = "aws-vault";
     homepage = "https://github.com/ByteNess/aws-vault";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Vault for securely storing and accessing AWS credentials in development environments";
+    mainProgram = "aws-vault";
+    homepage = "https://github.com/ByteNess/aws-vault";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zimbatm
       er0k
     ];

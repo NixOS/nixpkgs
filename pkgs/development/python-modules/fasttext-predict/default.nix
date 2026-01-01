@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fasttext" ];
 
+<<<<<<< HEAD
   meta = {
     description = "fasttext with wheels and no external dependency, but only the predict method (<1MB)";
     homepage = "https://github.com/searxng/fasttext-predict/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "fasttext with wheels and no external dependency, but only the predict method (<1MB)";
+    homepage = "https://github.com/searxng/fasttext-predict/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

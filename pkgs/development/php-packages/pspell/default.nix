@@ -23,10 +23,18 @@ buildPecl {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "PHP extension for checking the spelling of a word";
     homepage = "https://pecl.php.net/package/pspell";
     license = lib.licenses.php301;
     teams = [ lib.teams.php ];
+=======
+  meta = with lib; {
+    description = "PHP extension for checking the spelling of a word";
+    homepage = "https://pecl.php.net/package/pspell";
+    license = licenses.php301;
+    teams = [ teams.php ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

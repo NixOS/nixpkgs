@@ -17,13 +17,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
+<<<<<<< HEAD
   version = "9.7.1";
+=======
+  version = "9.7.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
+<<<<<<< HEAD
     tag = finalAttrs.version;
     hash = "sha256-xXtqbLPS2Hu9gC06b72HDjnNRh4m0ism97hP8FFYOMo=";
+=======
+    rev = finalAttrs.version;
+    hash = "sha256-Vdznj9WGuws1p+owDNHlVERjOM3fS1+RBtqe01q500E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -81,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/OSGeo/PROJ/blob/${finalAttrs.src.tag}/NEWS.md";
     description = "Cartographic Projections Library";
@@ -89,5 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ dotlambda ];
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/OSGeo/PROJ/blob/${finalAttrs.src.rev}/NEWS.md";
+    description = "Cartographic Projections Library";
+    homepage = "https://proj.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+    teams = [ teams.geospatial ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

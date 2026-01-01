@@ -31,13 +31,21 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
+<<<<<<< HEAD
   version = "3.8.4";
+=======
+  version = "3.8.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-qNz7BAvi3dTNg6Bz2cfqaYGKFJlM4C+y/GARsQRRYsY=";
+=======
+    hash = "sha256-s7duwuNFyYq8obTS3qc6JewJ9f8LJhItlEx8wxnMgwk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -126,7 +134,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://libarchive.org";
     description = "Multi-format archive and compression library";
     longDescription = ''
@@ -136,9 +148,15 @@ stdenv.mkDerivation (finalAttrs: {
       tools that use the libarchive library.
     '';
     changelog = "https://github.com/libarchive/libarchive/releases/tag/v${finalAttrs.version}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jcumming ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jcumming ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (acl.meta) badPlatforms;
   };
 

@@ -43,10 +43,17 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "ONC RPC portmapper";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "ONC RPC portmapper";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://linux-nfs.org/";
     maintainers = [ ];
     longDescription = ''

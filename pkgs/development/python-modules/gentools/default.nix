@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gentools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for generators, generator functions, and generator-based coroutines";
     homepage = "https://gentools.readthedocs.io/";
     changelog = "https://github.com/ariebovenberg/gentools/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tools for generators, generator functions, and generator-based coroutines";
+    homepage = "https://gentools.readthedocs.io/";
+    changelog = "https://github.com/ariebovenberg/gentools/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

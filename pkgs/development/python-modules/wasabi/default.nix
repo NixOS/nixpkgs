@@ -34,11 +34,19 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight console printing and formatting toolkit";
     homepage = "https://github.com/ines/wasabi";
     changelog = "https://github.com/ines/wasabi/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Lightweight console printing and formatting toolkit";
+    homepage = "https://github.com/ines/wasabi";
+    changelog = "https://github.com/ines/wasabi/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

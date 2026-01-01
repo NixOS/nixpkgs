@@ -31,10 +31,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rtmidi_python" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for RtMidi";
     homepage = "https://github.com/superquadratic/rtmidi-python";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python wrapper for RtMidi";
+    homepage = "https://github.com/superquadratic/rtmidi-python";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

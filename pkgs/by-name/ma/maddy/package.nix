@@ -64,10 +64,18 @@ buildGoModule rec {
 
   passthru.tests.nixos = nixosTests.maddy;
 
+<<<<<<< HEAD
   meta = {
     description = "Composable all-in-one mail server";
     homepage = "https://maddy.email";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Composable all-in-one mail server";
+    homepage = "https://maddy.email";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

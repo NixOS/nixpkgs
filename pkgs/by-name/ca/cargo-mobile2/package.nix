@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Rust on mobile made easy";
     homepage = "https://tauri.app/";
@@ -55,5 +56,15 @@ rustPlatform.buildRustPackage {
       mit
     ];
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Rust on mobile made easy";
+    homepage = "https://tauri.app/";
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

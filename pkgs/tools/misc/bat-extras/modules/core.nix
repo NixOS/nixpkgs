@@ -80,7 +80,11 @@ stdenv.mkDerivation {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       bbigras
+<<<<<<< HEAD
       PerchunPak
+=======
+      perchun
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = lib.platforms.all;
   };

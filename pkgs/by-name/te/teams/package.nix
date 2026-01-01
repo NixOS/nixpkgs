@@ -15,6 +15,7 @@ let
   hashes = {
     darwin = "sha256-p9tAvOJxoIO0d8z0qdfc4sokUNfaYKq2NtBHKOWYBM4=";
   };
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Teams";
     homepage = "https://teams.microsoft.com";
@@ -22,6 +23,15 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ tricktron ];
+=======
+  meta = with lib; {
+    description = "Microsoft Teams";
+    homepage = "https://teams.microsoft.com";
+    downloadPage = "https://teams.microsoft.com/downloads";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ tricktron ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-darwin"
       "aarch64-darwin"

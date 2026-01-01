@@ -41,11 +41,20 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Open source STUN server and client";
     homepage = "https://www.stunprotocol.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mattchrist ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Open source STUN server and client";
+    homepage = "https://www.stunprotocol.org/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ mattchrist ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

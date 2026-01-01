@@ -60,11 +60,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "WKTUtils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of tools for handling WKTs";
     homepage = "https://github.com/asfadmin/Discovery-WKTUtils";
     changelog = "https://github.com/asfadmin/Discovery-WKTUtils/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Collection of tools for handling WKTs";
+    homepage = "https://github.com/asfadmin/Discovery-WKTUtils";
+    changelog = "https://github.com/asfadmin/Discovery-WKTUtils/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

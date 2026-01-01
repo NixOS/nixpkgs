@@ -6,7 +6,10 @@
   git,
   scriv,
   testers,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-fBqL5jUdA2kuXnV4Te6g2PEbLJD5G+GLD7OjdVVbUl4=";
   };
 
+<<<<<<< HEAD
   patches = [
     # fix tests by removing deprecated Click parameter from fixture
     (fetchpatch {
@@ -27,6 +31,8 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies =

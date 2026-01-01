@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "declarative_requirements" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/s0undt3ch/setuptools-declarative-requirements";
     description = "Declarative setuptools Config Requirements Files Support";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.austinbutler ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/s0undt3ch/setuptools-declarative-requirements";
+    description = "Declarative setuptools Config Requirements Files Support";
+    license = licenses.asl20;
+    maintainers = [ maintainers.austinbutler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,13 +36,23 @@ stdenv.mkDerivation (finalAttrs: {
     curl
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/cyanreg/cyanrip";
     changelog = "https://github.com/cyanreg/cyanrip/releases/tag/${finalAttrs.src.rev}";
     description = "Bule-ish CD ripper";
     mainProgram = "cyanrip";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.zane ];
+=======
+    license = licenses.lgpl21Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.zane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

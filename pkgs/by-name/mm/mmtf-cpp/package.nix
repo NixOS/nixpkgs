@@ -31,11 +31,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail msgpackc msgpack-cxx
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Library of exchange-correlation functionals with arbitrary-order derivatives";
     homepage = "https://github.com/rcsb/mmtf-cpp";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Library of exchange-correlation functionals with arbitrary-order derivatives";
+    homepage = "https://github.com/rcsb/mmtf-cpp";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -318,6 +318,7 @@ in
     inherit info;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
@@ -327,6 +328,17 @@ in
     mainProgram = "electron";
     hydraPlatforms =
       lib.optionals (!(lib.hasInfix "alpha" info.version) && !(lib.hasInfix "beta" info.version))
+=======
+  meta = with lib; {
+    description = "Cross platform desktop application shell";
+    homepage = "https://github.com/electron/electron";
+    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    teams = [ teams.electron ];
+    mainProgram = "electron";
+    hydraPlatforms =
+      lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version))
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         [
           "aarch64-linux"
           "x86_64-linux"

@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withLua "-DWITH_LUA=ON"
   ++ lib.optional withPython "-DWITH_PYTHON=ON";
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/TeXworks/texworks/blob/${src.rev}/NEWS";
     description = "Simple TeX front-end program inspired by TeXShop";
@@ -56,6 +57,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = with lib.platforms; linux;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/TeXworks/texworks/blob/${src.rev}/NEWS";
+    description = "Simple TeX front-end program inspired by TeXShop";
+    homepage = "http://www.tug.org/texworks/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "texworks";
   };
 }

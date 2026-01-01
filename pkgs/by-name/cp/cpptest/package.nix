@@ -13,11 +13,20 @@ stdenv.mkDerivation rec {
     sha256 = "0lpy3f2fjx1srh02myanlp6zfi497whlldcrnij39ghfhm0arcnm";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://cpptest.sourceforge.net/";
     description = "Simple C++ unit testing framework";
     maintainers = with lib.maintainers; [ bosu ];
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "http://cpptest.sourceforge.net/";
+    description = "Simple C++ unit testing framework";
+    maintainers = with maintainers; [ bosu ];
+    license = lib.licenses.lgpl3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

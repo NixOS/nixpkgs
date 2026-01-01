@@ -61,11 +61,19 @@ mkDerivation {
     glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Virtual keyboard";
     mainProgram = "maliit-keyboard";
     homepage = "http://maliit.github.io/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Virtual keyboard";
+    mainProgram = "maliit-keyboard";
+    homepage = "http://maliit.github.io/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl3Only
       bsd3
       cc-by-30

@@ -63,11 +63,19 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/${pname} NEWS README
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "FUSE module to mount ISO filesystem images";
     homepage = "https://sourceforge.net/projects/fuseiso";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "FUSE module to mount ISO filesystem images";
+    homepage = "https://sourceforge.net/projects/fuseiso";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fuseiso";
   };
 }

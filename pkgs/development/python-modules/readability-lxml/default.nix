@@ -44,10 +44,18 @@ buildPythonPackage rec {
     "test_many_repeated_spaces"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast python port of arc90's readability tool";
     homepage = "https://github.com/buriy/python-readability";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siraben ];
+=======
+  meta = with lib; {
+    description = "Fast python port of arc90's readability tool";
+    homepage = "https://github.com/buriy/python-readability";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ siraben ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.test = nixosTests.terminal-emulators.tilix;
 
+<<<<<<< HEAD
   meta = {
     description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";
     homepage = "https://gnunn1.github.io/tilix-web";
@@ -76,6 +77,17 @@ stdenv.mkDerivation (finalAttrs: {
       jtbx
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";
+    homepage = "https://gnunn1.github.io/tilix-web";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
+      midchildan
+      jtbx
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tilix";
   };
 })

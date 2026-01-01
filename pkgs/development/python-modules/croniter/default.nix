@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "croniter" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to iterate over datetime object with cron like format";
     homepage = "https://github.com/kiorky/croniter";
     changelog = "https://github.com/kiorky/croniter/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Library to iterate over datetime object with cron like format";
+    homepage = "https://github.com/kiorky/croniter";
+    changelog = "https://github.com/kiorky/croniter/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

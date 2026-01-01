@@ -67,9 +67,13 @@ buildPythonPackage rec {
     requirements-parser
   ];
 
+<<<<<<< HEAD
   meta = {
     # not updated to django 5.x
     broken = lib.versionAtLeast django.version "5";
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Content management platform built using the Django framework";
     mainProgram = "mezzanine-project";
     longDescription = ''
@@ -89,8 +93,14 @@ buildPythonPackage rec {
     '';
     homepage = "http://mezzanine.jupo.org/";
     downloadPage = "https://github.com/stephenmcd/mezzanine/releases";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ prikhi ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ prikhi ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -26,11 +26,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "schedule" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python job scheduling for humans";
     homepage = "https://github.com/dbader/schedule";
     changelog = "https://github.com/dbader/schedule/blob/${version}/HISTORY.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python job scheduling for humans";
+    homepage = "https://github.com/dbader/schedule";
+    changelog = "https://github.com/dbader/schedule/blob/${version}/HISTORY.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

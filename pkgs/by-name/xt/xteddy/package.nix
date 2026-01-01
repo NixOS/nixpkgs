@@ -51,11 +51,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/xteddy --chdir "$out/share/images/"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cuddly teddy bear for your X desktop";
     homepage = "https://weber.itn.liu.se/~stegu/xteddy/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.xaverdh ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Cuddly teddy bear for your X desktop";
+    homepage = "https://weber.itn.liu.se/~stegu/xteddy/";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.xaverdh ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

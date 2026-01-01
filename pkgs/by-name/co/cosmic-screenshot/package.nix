@@ -11,14 +11,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-screenshot";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "1.0.0-beta.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-screenshot";
     tag = "epoch-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-mGkYUMVEMY4nWJ9H33tqRSd7cZUvsT0tqXKsnMbjP04=";
+=======
+    hash = "sha256-LaKopOd7HuDvXfE9zudoudCxGYfMkpru/PISzIrEARo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoHash = "sha256-O8fFeg1TkKCg+QbTnNjsH52xln4+ophh/BW/b4zQs9o=";
@@ -48,21 +56,37 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cosmic-autologin-noxwayland
         ;
     };
+<<<<<<< HEAD
 
     updateScript = nix-update-script {
       extraArgs = [
+=======
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "--version-regex"
         "epoch-(.*)"
       ];
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pop-os/cosmic-screenshot";
     description = "Screenshot tool for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pop-os/cosmic-screenshot";
+    description = "Screenshot tool for the COSMIC Desktop Environment";
+    license = licenses.gpl3Only;
+    teams = [ teams.cosmic ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cosmic-screenshot";
   };
 })

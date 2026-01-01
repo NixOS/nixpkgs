@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpx_oauth" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Async OAuth client using HTTPX";
     homepage = "https://github.com/frankie567/httpx-oauth";
     changelog = "https://github.com/frankie567/httpx-oauth/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Async OAuth client using HTTPX";
+    homepage = "https://github.com/frankie567/httpx-oauth";
+    changelog = "https://github.com/frankie567/httpx-oauth/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

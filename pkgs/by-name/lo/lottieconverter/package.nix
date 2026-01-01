@@ -37,12 +37,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sot-tech/LottieConverter/";
     description = "Lottie converter utility";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sot-tech/LottieConverter/";
+    description = "Lottie converter utility";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       CRTified
       nickcao
     ];

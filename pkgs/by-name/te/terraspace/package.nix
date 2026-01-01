@@ -30,6 +30,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = bundlerUpdateScript "terraspace";
 
+<<<<<<< HEAD
   meta = {
     description = "Terraform framework that provides an organized structure, and keeps your code DRY";
     mainProgram = "terraspace";
@@ -37,5 +38,14 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     platforms = ruby.meta.platforms;
     maintainers = with lib.maintainers; [ mislavzanic ];
+=======
+  meta = with lib; {
+    description = "Terraform framework that provides an organized structure, and keeps your code DRY";
+    mainProgram = "terraspace";
+    homepage = "https://github.com/boltops-tools/terraspace";
+    license = licenses.asl20;
+    platforms = ruby.meta.platforms;
+    maintainers = with maintainers; [ mislavzanic ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

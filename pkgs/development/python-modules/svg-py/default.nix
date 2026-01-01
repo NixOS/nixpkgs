@@ -33,11 +33,20 @@ buildPythonPackage rec {
     "tests/test_attributes.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Type-safe Python library to generate SVG files";
     homepage = "https://github.com/orsinium-labs/svg.py";
     changelog = "https://github.com/orsinium-labs/svg.py/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Type-safe Python library to generate SVG files";
+    homepage = "https://github.com/orsinium-labs/svg.py";
+    changelog = "https://github.com/orsinium-labs/svg.py/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

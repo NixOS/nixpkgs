@@ -30,7 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "boltons" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Constructs, recipes, and snippets extending the Python standard library";
     longDescription = ''
       Boltons is a set of over 200 BSD-licensed, pure-Python utilities
@@ -49,7 +53,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mahmoud/boltons";
     changelog = "https://github.com/mahmoud/boltons/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ twey ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ twey ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

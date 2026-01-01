@@ -44,6 +44,7 @@ stdenv.mkDerivation (oldAttrs: {
     "-DDBUS_SYSTEM_POLICY_INSTALL_DIR=${placeholder "out"}/share/dbus-1/system.d"
   ];
 
+<<<<<<< HEAD
   env.PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   meta = {
@@ -53,5 +54,16 @@ stdenv.mkDerivation (oldAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
+=======
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+
+  meta = with lib; {
+    description = "Unofficial userspace driver for HID++ Logitech devices";
+    mainProgram = "logid";
+    homepage = "https://github.com/PixlOne/logiops";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

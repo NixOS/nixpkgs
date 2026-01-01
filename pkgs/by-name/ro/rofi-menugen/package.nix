@@ -29,10 +29,18 @@ stdenv.mkDerivation {
     cp menugenbase $out/bin/rofi-menugenbase
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generates menu based applications using rofi";
     homepage = "https://github.com/octotep/menugen";
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Generates menu based applications using rofi";
+    homepage = "https://github.com/octotep/menugen";
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

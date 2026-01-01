@@ -65,12 +65,21 @@ buildPythonPackage rec {
     "test_auto_report"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/banesullivan/scooby/releases/tag/v${version}";
     description = "Lightweight tool for reporting Python package versions and hardware resources";
     mainProgram = "scooby";
     homepage = "https://github.com/banesullivan/scooby";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ wegank ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

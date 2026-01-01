@@ -33,10 +33,18 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python YouTube Lounge API";
     homepage = "https://github.com/FabioGNR/pyytlounge";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.lukegb ];
+=======
+  meta = with lib; {
+    description = "Python YouTube Lounge API";
+    homepage = "https://github.com/FabioGNR/pyytlounge";
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.lukegb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

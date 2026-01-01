@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "winsspi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for ACL/ACE/Security descriptor manipulation";
     homepage = "https://github.com/skelsec/winsspi";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for ACL/ACE/Security descriptor manipulation";
+    homepage = "https://github.com/skelsec/winsspi";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

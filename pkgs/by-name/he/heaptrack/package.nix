@@ -59,6 +59,7 @@ stdenv.mkDerivation {
       $out/bin/heaptrack_gui
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Heap memory profiler for Linux";
     homepage = "https://github.com/KDE/heaptrack";
@@ -66,5 +67,14 @@ stdenv.mkDerivation {
     mainProgram = "heaptrack_gui";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Heap memory profiler for Linux";
+    homepage = "https://github.com/KDE/heaptrack";
+    license = licenses.lgpl21Plus;
+    mainProgram = "heaptrack_gui";
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

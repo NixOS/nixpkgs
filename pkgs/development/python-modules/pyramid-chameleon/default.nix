@@ -43,10 +43,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyramid_chameleon" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Chameleon template compiler for pyramid";
     homepage = "https://github.com/Pylons/pyramid_chameleon";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    description = "Chameleon template compiler for pyramid";
+    homepage = "https://github.com/Pylons/pyramid_chameleon";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

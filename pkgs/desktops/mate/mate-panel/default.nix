@@ -29,7 +29,11 @@
   gitUpdater,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "mate-panel";
   version = "1.28.7";
   outputs = [
@@ -40,7 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-panel";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
+=======
+    tag = "v${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
     hash = "sha256-8GS6JY5kS2YKscItAo8dzudgkZeG51JsSBUj0EfLiZQ=";
   };
@@ -103,15 +111,29 @@ stdenv.mkDerivation (finalAttrs: {
     odd-unstable = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "MATE panel";
+    homepage = "https://github.com/mate-desktop/mate-panel";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       lgpl2Plus
       fdl11Plus
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
 })
+=======
+    platforms = platforms.unix;
+    teams = [ teams.mate ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -1,7 +1,14 @@
 {
   lib,
+<<<<<<< HEAD
   perlPackages,
   fetchFromGitHub,
+=======
+  stdenv,
+  perlPackages,
+  fetchFromGitHub,
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -25,6 +32,14 @@ perlPackages.buildPerlPackage rec {
     LWP
   ];
 
+<<<<<<< HEAD
+=======
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/pgtop
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "PostgreSQL clone of `mytop', which in turn is a `top' clone for MySQL";
     mainProgram = "pgtop";

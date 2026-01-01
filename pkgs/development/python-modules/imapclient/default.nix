@@ -31,11 +31,19 @@ buildPythonPackage rec {
     "imapclient.tls"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://imapclient.readthedocs.io";
     description = "Easy-to-use, Pythonic and complete IMAP client library";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://imapclient.readthedocs.io";
+    description = "Easy-to-use, Pythonic and complete IMAP client library";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       almac
       dotlambda
     ];

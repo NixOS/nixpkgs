@@ -47,10 +47,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pescea" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to Escea fireplaces";
     homepage = "https://github.com/lazdavila/pescea";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python interface to Escea fireplaces";
+    homepage = "https://github.com/lazdavila/pescea";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

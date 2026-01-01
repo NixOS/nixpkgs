@@ -21,10 +21,18 @@ buildPythonPackage rec {
     whoosh
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pythonhosted.org/ponywhoosh/";
     description = "Make your database over PonyORM searchable";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alexarice ];
+=======
+  meta = with lib; {
+    homepage = "https://pythonhosted.org/ponywhoosh/";
+    description = "Make your database over PonyORM searchable";
+    license = licenses.mit;
+    maintainers = with maintainers; [ alexarice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

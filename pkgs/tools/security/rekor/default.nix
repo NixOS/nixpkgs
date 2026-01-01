@@ -60,12 +60,21 @@ let
           --zsh <($out/bin/${pname} completion zsh)
       '';
 
+<<<<<<< HEAD
       meta = {
         inherit description;
         homepage = "https://github.com/sigstore/rekor";
         changelog = "https://github.com/sigstore/rekor/releases/tag/v${version}";
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
+=======
+      meta = with lib; {
+        inherit description;
+        homepage = "https://github.com/sigstore/rekor";
+        changelog = "https://github.com/sigstore/rekor/releases/tag/v${version}";
+        license = licenses.asl20;
+        maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           lesuisse
           jk
           developer-guy

@@ -50,11 +50,20 @@ buildPythonPackage rec {
     "test_properties_fail_2"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to read weather data from ZAMG Austria";
     homepage = "https://github.com/killer0071234/python-zamg";
     changelog = "https://github.com/killer0071234/python-zamg/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to read weather data from ZAMG Austria";
+    homepage = "https://github.com/killer0071234/python-zamg";
+    changelog = "https://github.com/killer0071234/python-zamg/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

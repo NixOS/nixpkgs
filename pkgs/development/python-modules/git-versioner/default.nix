@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "__version__" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Manage current / next version for project";
     homepage = "https://gitlab.com/alelec/__version__";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ slotThe ];
+=======
+  meta = with lib; {
+    description = "Manage current / next version for project";
+    homepage = "https://gitlab.com/alelec/__version__";
+    license = licenses.mit;
+    maintainers = with maintainers; [ slotThe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

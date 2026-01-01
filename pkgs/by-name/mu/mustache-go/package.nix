@@ -23,11 +23,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/cbroglie/mustache";
     description = "Mustache template language in Go";
     license = [ lib.licenses.mit ];
     maintainers = with lib.maintainers; [ Zimmi48 ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/cbroglie/mustache";
+    description = "Mustache template language in Go";
+    license = [ licenses.mit ];
+    maintainers = with maintainers; [ Zimmi48 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mustache";
   };
 }

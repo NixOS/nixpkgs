@@ -21,11 +21,19 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
+<<<<<<< HEAD
   meta = {
     description = "Provides a Virtual (SCSI) HBA";
     homepage = "https://cdemu.sourceforge.io/about/vhba/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Provides a Virtual (SCSI) HBA";
+    homepage = "https://cdemu.sourceforge.io/about/vhba/";
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ bendlas ];
   };
 }

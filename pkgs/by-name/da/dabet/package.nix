@@ -18,11 +18,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-2ixdugxgc6lyLd06BeXxlrSqpVGJJ9SkFKwnAsol7V4=";
 
+<<<<<<< HEAD
   meta = {
     description = "Print the duration between two times";
     homepage = "https://codeberg.org/annaaurora/dabet";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ annaaurora ];
+=======
+  meta = with lib; {
+    description = "Print the duration between two times";
+    homepage = "https://codeberg.org/annaaurora/dabet";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ annaaurora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dabet";
   };
 }

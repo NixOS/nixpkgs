@@ -27,12 +27,21 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ json_c ];
 
+<<<<<<< HEAD
   meta = {
     description = "Per-window keyboard layout for Sway";
     homepage = "https://github.com/artemsen/swaykbdd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ivankovnatsky ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Per-window keyboard layout for Sway";
+    homepage = "https://github.com/artemsen/swaykbdd";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ivankovnatsky ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "swaykbdd";
   };
 }

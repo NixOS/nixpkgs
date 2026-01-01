@@ -24,11 +24,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced, open source, hyperrealistic, multilingual typewriter font for a new decade";
     homepage = "https://ctrlcctrlv.github.io/TT2020";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Advanced, open source, hyperrealistic, multilingual typewriter font for a new decade";
+    homepage = "https://ctrlcctrlv.github.io/TT2020";
+    license = licenses.ofl;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

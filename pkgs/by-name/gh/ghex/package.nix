@@ -74,13 +74,23 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.gnome.org/GNOME/ghex";
     changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Hex editor for GNOME desktop environment";
     mainProgram = "ghex";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
+=======
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

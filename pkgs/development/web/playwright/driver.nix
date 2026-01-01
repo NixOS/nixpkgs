@@ -27,20 +27,32 @@ let
     }
     .${system} or throwSystem;
 
+<<<<<<< HEAD
   version = "1.56.1";
+=======
+  version = "1.54.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-39s1fb2tZZWWpZrs4/MAw4TdHkzEWj8YVoK39sj2UPE=";
+=======
+    hash = "sha256-xwyREgelHLkpbUXOZTppKK7L6dE4jx0d/lbDWSKGzTY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   babel-bundle = buildNpmPackage {
     pname = "babel-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/babel";
+<<<<<<< HEAD
     npmDepsHash = "sha256-ByCy4go8PM0ksDg+2DcJPyoKG7Z0uIqKM647ZQwYwAE=";
+=======
+    npmDepsHash = "sha256-sdl+rMCmuOmY1f7oSfGuAAFCiPCFzqkQtFCncL4o5LQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -92,7 +104,11 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}"; # update.sh depends on sourceRoot presence
+<<<<<<< HEAD
     npmDepsHash = "sha256-AOjiI6Db+WL4iTaY9XWH4tntBHM8SFP7/7S8RJZitlI=";
+=======
+    npmDepsHash = "sha256-4bsX8Q8V3CBpIsyqMYTzfERQQPY5zlPf7CoqR6UkUHU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     nativeBuildInputs = [
       cacert
@@ -122,6 +138,12 @@ let
 
       shopt -s extglob
 
+<<<<<<< HEAD
+=======
+      mkdir -p "$out/lib"
+      cp -r packages/playwright/node_modules "$out/lib/node_modules"
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mkdir -p "$out/lib/node_modules/playwright"
       cp -r packages/playwright/!(bundles|src|node_modules|.*) "$out/lib/node_modules/playwright"
 
@@ -146,6 +168,10 @@ let
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
         kalekseev
+<<<<<<< HEAD
+=======
+        marie
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
       inherit (nodejs.meta) platforms;
     };

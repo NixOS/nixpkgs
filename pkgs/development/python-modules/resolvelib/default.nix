@@ -28,11 +28,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "resolvelib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Resolve abstract dependencies into concrete ones";
     homepage = "https://github.com/sarugaku/resolvelib";
     changelog = "https://github.com/sarugaku/resolvelib/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Resolve abstract dependencies into concrete ones";
+    homepage = "https://github.com/sarugaku/resolvelib";
+    changelog = "https://github.com/sarugaku/resolvelib/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

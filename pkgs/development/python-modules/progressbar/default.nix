@@ -17,10 +17,17 @@ buildPythonPackage rec {
   # invalid command 'test'
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pypi.python.org/pypi/progressbar";
     description = "Text progressbar library for python";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://pypi.python.org/pypi/progressbar";
+    description = "Text progressbar library for python";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

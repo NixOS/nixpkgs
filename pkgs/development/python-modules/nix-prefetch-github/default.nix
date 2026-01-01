@@ -51,10 +51,18 @@ buildPythonPackage rec {
   # ignore tests which are impure
   DISABLED_TESTS = "network requires_nix_build";
 
+<<<<<<< HEAD
   meta = {
     description = "Prefetch sources from github";
     homepage = "https://github.com/seppeljordan/nix-prefetch-github";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ seppeljordan ];
+=======
+  meta = with lib; {
+    description = "Prefetch sources from github";
+    homepage = "https://github.com/seppeljordan/nix-prefetch-github";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ seppeljordan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

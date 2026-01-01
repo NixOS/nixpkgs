@@ -48,11 +48,20 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/mint-x-icons";
     description = "Mint/metal theme based on mintified versions of Clearlooks Revamp, Elementary and Faenza";
     license = lib.licenses.gpl3Plus; # from debian/copyright
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/mint-x-icons";
+    description = "Mint/metal theme based on mintified versions of Clearlooks Revamp, Elementary and Faenza";
+    license = licenses.gpl3Plus; # from debian/copyright
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

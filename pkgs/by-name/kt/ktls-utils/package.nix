@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "TLS handshake utilities for in-kernel TLS consumers";
     homepage = "https://github.com/oracle/ktls-utils";
@@ -57,5 +58,15 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "tlshd";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "TLS handshake utilities for in-kernel TLS consumers";
+    homepage = "https://github.com/oracle/ktls-utils";
+    changelog = "https://github.com/oracle/ktls-utils/blob/${src.rev}/NEWS";
+    license = licenses.gpl2Only;
+    maintainers = [ ];
+    mainProgram = "tlshd";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

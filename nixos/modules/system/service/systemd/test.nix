@@ -52,6 +52,7 @@ let
         };
       };
 
+<<<<<<< HEAD
       # Test that systemd.mainExecStart overrides process.argv
       # and allows systemd's specifier and variable substitution
       system.services.argv-with-subst = {
@@ -91,6 +92,8 @@ let
             config.systemd.lib.escapeSystemdExecArgs config.process.argv + " --systemd-unit %n";
         };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       # irrelevant stuff
       system.stateVersion = "25.05";
       fileSystems."/".device = "/test/dummy";
@@ -122,6 +125,7 @@ runCommand "test-modular-service-systemd-units"
       grep    'ExecStart="${hello}/bin/hello" "--greeting" ".*database.*"' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
       grep -F 'RestartSec=42' ${toplevel}/etc/systemd/system/bar-db.service >/dev/null
 
+<<<<<<< HEAD
       # Test that systemd.mainExecStart overrides process.argv
       # Note: %n and $HOME are NOT escaped, allowing systemd to substitute them
       grep -F 'ExecStart=/bin/sh -c "echo %n and ''${HOME}"' ${toplevel}/etc/systemd/system/argv-with-subst.service >/dev/null
@@ -134,6 +138,8 @@ runCommand "test-modular-service-systemd-units"
       # The base command should be escaped ($1 -> $$1, m%n -> m%%n), but the appended --systemd-unit %n should not be
       grep -F 'ExecStart="${hello}/bin/hello" "--greeting" "Fun $$1 fact, remainder is often expressed as m%%n" --systemd-unit %n' ${toplevel}/etc/systemd/system/argv-extended.service >/dev/null
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       [[ ! -e ${toplevel}/etc/systemd/system/foo.socket ]]
       [[ ! -e ${toplevel}/etc/systemd/system/bar.socket ]]
       [[ ! -e ${toplevel}/etc/systemd/system/bar-db.socket ]]

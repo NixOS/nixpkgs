@@ -27,10 +27,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dsifford/yarn-completion/";
     description = "Bash completion for Yarn";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DamienCassou ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dsifford/yarn-completion/";
+    description = "Bash completion for Yarn";
+    license = licenses.mit;
+    maintainers = with maintainers; [ DamienCassou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

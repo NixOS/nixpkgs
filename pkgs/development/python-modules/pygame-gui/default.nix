@@ -70,11 +70,19 @@ buildPythonPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "GUI system for pygame";
+    homepage = "https://github.com/MyreMylar/pygame_gui";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       emilytrau
       pbsds
     ];

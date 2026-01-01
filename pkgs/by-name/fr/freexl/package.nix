@@ -31,16 +31,29 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Library to extract valid data from within an Excel (.xls) spreadsheet";
     homepage = "https://www.gaia-gis.it/fossil/freexl";
     # They allow any of these
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Library to extract valid data from within an Excel (.xls) spreadsheet";
+    homepage = "https://www.gaia-gis.it/fossil/freexl";
+    # They allow any of these
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       lgpl21Plus
       mpl11
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
+=======
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sikmir ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

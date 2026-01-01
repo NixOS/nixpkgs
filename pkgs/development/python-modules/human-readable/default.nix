@@ -23,10 +23,18 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to make data intended for machines, readable to humans";
     homepage = "https://github.com/staticdev/human-readable";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mkg20001 ];
+=======
+  meta = with lib; {
+    description = "Library to make data intended for machines, readable to humans";
+    homepage = "https://github.com/staticdev/human-readable";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mkg20001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xmind" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to create mindmaps";
     homepage = "https://github.com/zhuifengshen/xmind";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to create mindmaps";
+    homepage = "https://github.com/zhuifengshen/xmind";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

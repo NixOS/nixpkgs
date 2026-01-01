@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "exif" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read and modify image EXIF metadata using Python";
     homepage = "https://gitlab.com/TNThieding/exif";
     changelog = "https://gitlab.com/TNThieding/exif/-/blob/v${version}/docs/release_notes.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dnr ];
+=======
+  meta = with lib; {
+    description = "Read and modify image EXIF metadata using Python";
+    homepage = "https://gitlab.com/TNThieding/exif";
+    changelog = "https://gitlab.com/TNThieding/exif/-/blob/v${version}/docs/release_notes.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dnr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

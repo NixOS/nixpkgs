@@ -4,13 +4,20 @@
   rustPlatform,
   installShellFiles,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nix-update-script,
   buildPackages,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh-unwrapped";
+<<<<<<< HEAD
   version = "4.2.0"; # Did you remove the patch below (and this comment)?
+=======
+  version = "4.2.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -19,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-6n5SVO8zsdVTD691lri7ZcO4zpqYFU8GIvjI6dbxkA8=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       url = "https://github.com/nix-community/nh/commit/8bf323483166797a204579a43ed8810113eb128c.patch";
@@ -26,6 +34,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -64,9 +74,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nh";
     maintainers = with lib.maintainers; [
       NotAShelf
+<<<<<<< HEAD
       mdaniels5757
       viperML
       midischwarz12
+=======
+      viperML
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 })

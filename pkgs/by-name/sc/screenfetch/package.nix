@@ -70,7 +70,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${path}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fetches system/theme information in terminal for Linux desktop screenshots";
     longDescription = ''
       screenFetch is a "Bash Screenshot Information Tool". This handy Bash
@@ -82,10 +86,17 @@ stdenv.mkDerivation rec {
       screenshot upon displaying info, and even customizing the screenshot
       command! This script is very easy to add to and can easily be extended.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     homepage = "https://github.com/KittyKatt/screenFetch";
     maintainers = with lib.maintainers; [ relrod ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3;
+    homepage = "https://github.com/KittyKatt/screenFetch";
+    maintainers = with maintainers; [ relrod ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "screenfetch";
   };
 }

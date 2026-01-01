@@ -27,10 +27,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slpp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple lua-python parser";
     homepage = "https://github.com/SirAnthony/slpp";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple lua-python parser";
+    homepage = "https://github.com/SirAnthony/slpp";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

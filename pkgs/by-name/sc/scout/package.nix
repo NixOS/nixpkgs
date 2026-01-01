@@ -17,6 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-reoE3WNgulREwxoeGFEN1QONZ2q1LHmQF7+iGx0SGTY=";
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight URL fuzzer and spider: Discover a web server's undisclosed files, directories and VHOSTs";
     mainProgram = "scout";
@@ -24,5 +25,14 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ totoroot ];
+=======
+  meta = with lib; {
+    description = "Lightweight URL fuzzer and spider: Discover a web server's undisclosed files, directories and VHOSTs";
+    mainProgram = "scout";
+    homepage = "https://github.com/liamg/scout";
+    platforms = platforms.unix;
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ totoroot ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) deconz; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Manage Zigbee network with ConBee, ConBee II or RaspBee hardware";
     homepage = "https://www.dresden-elektronik.com/wireless/software/deconz.html";
@@ -93,6 +94,15 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Manage Zigbee network with ConBee, ConBee II or RaspBee hardware";
+    homepage = "https://www.dresden-elektronik.com/wireless/software/deconz.html";
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "deCONZ";
   };
 }

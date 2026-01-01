@@ -22,12 +22,21 @@ rustPlatform.buildRustPackage rec {
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cargo subcommand for configuring Cargo profile for best performance";
     homepage = "https://github.com/kobzol/cargo-wizard";
     changelog = "https://github.com/kobzol/cargo-wizard/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
+=======
+  meta = with lib; {
+    description = "Cargo subcommand for configuring Cargo profile for best performance";
+    homepage = "https://github.com/kobzol/cargo-wizard";
+    changelog = "https://github.com/kobzol/cargo-wizard/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kranzes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cargo-wizard";
   };
 }

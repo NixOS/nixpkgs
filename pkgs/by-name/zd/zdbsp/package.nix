@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     install -Dm755 zdbsp $out/bin/zdbsp
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://zdoom.org/wiki/ZDBSP";
     description = "ZDoom's internal node builder for DOOM maps";
@@ -43,5 +44,17 @@ stdenv.mkDerivation rec {
       siraben
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://zdoom.org/wiki/ZDBSP";
+    description = "ZDoom's internal node builder for DOOM maps";
+    mainProgram = "zdbsp";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      lassulus
+      siraben
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

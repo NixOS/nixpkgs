@@ -117,11 +117,19 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) upnp;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://miniupnp.tuxfamily.org/";
     description = "Daemon that implements the UPnP Internet Gateway Device (IGD) specification";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://miniupnp.tuxfamily.org/";
+    description = "Daemon that implements the UPnP Internet Gateway Device (IGD) specification";
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "miniupnpd";
   };
 }

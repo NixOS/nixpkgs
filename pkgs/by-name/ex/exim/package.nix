@@ -39,11 +39,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "exim";
+<<<<<<< HEAD
   version = "4.99.1";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
     hash = "sha256-6ulnvUml+HmTO4xuyIwwR1ocZkYjITXzfwW1XbxONEc=";
+=======
+  version = "4.99";
+
+  src = fetchurl {
+    url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
+    hash = "sha256-XfOLBC/6mpyNMbILyEgVWAcONhsG9ldghiKmKjJ63Lo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   enableParallelBuilding = true;

@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/wangp/bower";
     description = "Curses terminal client for the Notmuch email system";
@@ -59,5 +60,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jgart ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/wangp/bower";
+    description = "Curses terminal client for the Notmuch email system";
+    mainProgram = "bower";
+    maintainers = with maintainers; [ jgart ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,12 +31,20 @@ buildPythonPackage rec {
     installManPage man/jello.1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "CLI tool to filter JSON and JSON Lines data with Python syntax";
     mainProgram = "jello";
     homepage = "https://github.com/kellyjonbrazil/jello";
     changelog = "https://github.com/kellyjonbrazil/jello/blob/${src.tag}/CHANGELOG";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

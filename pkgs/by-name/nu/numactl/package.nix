@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   # building ~5% slower until reboot. Ugh!
   doCheck = false; # never ever!
 
+<<<<<<< HEAD
   meta = {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
     homepage = "https://github.com/numactl/numactl";
@@ -50,5 +51,15 @@ stdenv.mkDerivation rec {
       lgpl21
     ]; # libnuma is lgpl21
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Library and tools for non-uniform memory access (NUMA) machines";
+    homepage = "https://github.com/numactl/numactl";
+    license = with licenses; [
+      gpl2Only
+      lgpl21
+    ]; # libnuma is lgpl21
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

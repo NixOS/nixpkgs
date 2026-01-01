@@ -47,12 +47,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "courlan" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Clean, filter and sample URLs to optimize data collection";
     homepage = "https://github.com/adbar/courlan";
     changelog = "https://github.com/adbar/courlan/blob/v${version}/HISTORY.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jokatzke ];
+=======
+  meta = with lib; {
+    description = "Clean, filter and sample URLs to optimize data collection";
+    homepage = "https://github.com/adbar/courlan";
+    changelog = "https://github.com/adbar/courlan/blob/v${version}/HISTORY.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jokatzke ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "courlan";
   };
 }

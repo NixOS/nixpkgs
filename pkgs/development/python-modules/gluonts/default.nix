@@ -3,9 +3,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
 
   # build-system
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   setuptools,
 
   # dependencies
@@ -26,7 +29,10 @@
   matplotlib,
   pyarrow,
   statsmodels,
+<<<<<<< HEAD
   writableTmpDirAsHomeHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   which,
 }:
 
@@ -42,6 +48,7 @@ buildPythonPackage rec {
     hash = "sha256-h0+RYgGMz0gPchiKGIu0/NGcWBky5AWNTJKzoupn/iQ=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fixes _pickle.UnpicklingError: Weights only load failed.
     # https://github.com/awslabs/gluonts/pull/3269
@@ -52,6 +59,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [
     setuptools
   ];
@@ -97,11 +106,19 @@ buildPythonPackage rec {
     matplotlib
     pyarrow
     statsmodels
+<<<<<<< HEAD
     writableTmpDirAsHomeHook
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     which
   ]
   ++ optional-dependencies.torch;
 
+<<<<<<< HEAD
+=======
+  preCheck = ''export HOME=$(mktemp -d)'';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   disabledTestPaths = [
     # requires `cpflows`, not in Nixpkgs
     "test/torch/model"

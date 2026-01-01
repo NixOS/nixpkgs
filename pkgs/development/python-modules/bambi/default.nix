@@ -91,10 +91,16 @@ buildPythonPackage rec {
     "test_model_without_intercept"
     "test_non_distributional_model"
     "test_normal_with_splines"
+<<<<<<< HEAD
     "test_predict_new_groups"
     "test_predict_new_groups_fail"
     "test_predict_offset"
     "test_same_variable_conditional_and_group"
+=======
+    "test_predict_new_groups_fail"
+    "test_predict_new_groups"
+    "test_predict_offset"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "test_set_alias_warnings"
     "test_subplot_kwargs"
     "test_transforms"
@@ -114,6 +120,11 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+<<<<<<< HEAD
+=======
+    # bayeux-ml is not available
+    "tests/test_alternative_samplers.py"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Tests require network access
     "tests/test_interpret.py"
     "tests/test_interpret_messages.py"

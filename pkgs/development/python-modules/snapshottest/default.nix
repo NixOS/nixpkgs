@@ -34,10 +34,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snapshottest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Snapshot testing for pytest, unittest, Django, and Nose";
     homepage = "https://github.com/syrusakbary/snapshottest";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Snapshot testing for pytest, unittest, Django, and Nose";
+    homepage = "https://github.com/syrusakbary/snapshottest";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

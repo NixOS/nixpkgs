@@ -28,11 +28,19 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Ebook to self-contained-HTML converter";
     homepage = "https://unbook.ludios.org";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ jmbaur ];
+=======
+  meta = with lib; {
+    description = "Ebook to self-contained-HTML converter";
+    homepage = "https://unbook.ludios.org";
+    license = licenses.cc0;
+    maintainers = with maintainers; [ jmbaur ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "unbook";
   };
 }

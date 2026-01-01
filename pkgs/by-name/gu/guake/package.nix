@@ -94,6 +94,7 @@ python311Packages.buildPythonApplication rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.guake;
 
+<<<<<<< HEAD
   meta = {
     description = "Drop-down terminal for GNOME";
     homepage = "http://guake-project.org";
@@ -103,5 +104,16 @@ python311Packages.buildPythonApplication rec {
       lib.maintainers.heywoodlh
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Drop-down terminal for GNOME";
+    homepage = "http://guake-project.org";
+    license = licenses.gpl2Plus;
+    maintainers = [
+      maintainers.msteen
+      maintainers.heywoodlh
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

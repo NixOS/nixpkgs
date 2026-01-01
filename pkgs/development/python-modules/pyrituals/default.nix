@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrituals" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper for the Rituals Perfume Genie API";
     homepage = "https://github.com/milanmeu/pyrituals";
     changelog = "https://github.com/milanmeu/pyrituals/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python wrapper for the Rituals Perfume Genie API";
+    homepage = "https://github.com/milanmeu/pyrituals";
+    changelog = "https://github.com/milanmeu/pyrituals/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

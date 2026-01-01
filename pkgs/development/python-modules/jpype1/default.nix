@@ -55,6 +55,7 @@ buildPythonPackage rec {
     "jpype.types"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/originell/jpype/";
     sourceProvenance = with lib.sourceTypes; [
@@ -62,6 +63,15 @@ buildPythonPackage rec {
       binaryBytecode
     ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/originell/jpype/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python to Java bridge";
   };
 }

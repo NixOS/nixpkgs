@@ -21,10 +21,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pywink" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of the Wink API";
     homepage = "https://github.com/python-wink/python-wink";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python implementation of the Wink API";
+    homepage = "https://github.com/python-wink/python-wink";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

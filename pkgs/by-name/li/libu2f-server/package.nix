@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     file
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://developers.yubico.com/libu2f-server/";
     description = "C library that implements the server-side of the U2F protocol";
@@ -53,5 +54,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ philandstuff ];
+=======
+  meta = with lib; {
+    homepage = "https://developers.yubico.com/libu2f-server/";
+    description = "C library that implements the server-side of the U2F protocol";
+    mainProgram = "u2f-server";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ philandstuff ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

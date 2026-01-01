@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/enigma --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Puzzle game inspired by Oxyd on the Atari ST and Rock'n'Roll on the Amiga";
     mainProgram = "enigma";
@@ -77,6 +78,18 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ iblech ];
+=======
+  meta = with lib; {
+    description = "Puzzle game inspired by Oxyd on the Atari ST and Rock'n'Roll on the Amiga";
+    mainProgram = "enigma";
+    license = with licenses; [
+      gpl2
+      free
+    ]; # source + bundles libs + art
+    platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [ iblech ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.nongnu.org/enigma/";
   };
 })

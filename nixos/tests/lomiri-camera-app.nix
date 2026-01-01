@@ -244,12 +244,20 @@ in
             machine.send_key("alt-f10")
             machine.sleep(5)
             machine.wait_for_text("${feedLabel}")
+<<<<<<< HEAD
             machine.succeed("xdotool mousemove 510 720 click 1") # open up QR decode result
+=======
+            machine.succeed("xdotool mousemove 510 670 click 1") # open up QR decode result
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
             # OCR is struggling to recognise the text. Click the clipboard button, check what got copied
             machine.sleep(5)
             machine.screenshot("lomiri-barcode_decode")
+<<<<<<< HEAD
             machine.succeed("xdotool mousemove 540 640 click 1")
+=======
+            machine.succeed("xdotool mousemove 540 590 click 1")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             machine.wait_until_succeeds("env DISPLAY=:0 xclip -selection clipboard -o | grep -q '${feedQrContent}'")
       '';
     }

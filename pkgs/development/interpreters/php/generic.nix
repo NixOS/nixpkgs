@@ -410,6 +410,7 @@ let
             };
           };
 
+<<<<<<< HEAD
           meta = {
             description = "HTML-embedded scripting language";
             homepage = "https://www.php.net/";
@@ -417,6 +418,15 @@ let
             mainProgram = "php";
             teams = [ lib.teams.php ];
             platforms = lib.platforms.all;
+=======
+          meta = with lib; {
+            description = "HTML-embedded scripting language";
+            homepage = "https://www.php.net/";
+            license = licenses.php301;
+            mainProgram = "php";
+            teams = [ teams.php ];
+            platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             outputsToInstall = [
               "out"
               "dev"

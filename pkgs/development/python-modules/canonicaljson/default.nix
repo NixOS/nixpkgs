@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "canonicaljson" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Encodes objects and arrays as RFC 7159 JSON";
     homepage = "https://github.com/matrix-org/python-canonicaljson";
     changelog = "https://github.com/matrix-org/python-canonicaljson/blob/v${version}/CHANGES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Encodes objects and arrays as RFC 7159 JSON";
+    homepage = "https://github.com/matrix-org/python-canonicaljson";
+    changelog = "https://github.com/matrix-org/python-canonicaljson/blob/v${version}/CHANGES.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

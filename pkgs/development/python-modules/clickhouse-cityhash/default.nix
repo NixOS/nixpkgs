@@ -38,10 +38,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clickhouse_cityhash" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python-bindings for CityHash, a fast non-cryptographic hash algorithm";
     homepage = "https://github.com/xzkostyan/python-cityhash";
     license = lib.licenses.upl;
     maintainers = with lib.maintainers; [ breakds ];
+=======
+  meta = with lib; {
+    description = "Python-bindings for CityHash, a fast non-cryptographic hash algorithm";
+    homepage = "https://github.com/xzkostyan/python-cityhash";
+    license = licenses.upl;
+    maintainers = with maintainers; [ breakds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

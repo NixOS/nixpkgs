@@ -65,12 +65,21 @@ stdenv.mkDerivation rec {
     cp ./uiohook_tests $test/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C library to provide global keyboard and mouse hooks from userland";
     homepage = "https://github.com/kwhat/libuiohook";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ anoa ];
+=======
+  meta = with lib; {
+    description = "C library to provide global keyboard and mouse hooks from userland";
+    homepage = "https://github.com/kwhat/libuiohook";
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ anoa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   passthru.tests.libuiohook = nixosTests.libuiohook;

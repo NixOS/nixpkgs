@@ -55,7 +55,11 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Disable tests that require network
   disabledTestPaths = [ "tests/test_convert.py" ];
@@ -67,11 +71,19 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "prance" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
     homepage = "https://github.com/RonnyPfannschmidt/prance";
     changelog = "https://github.com/RonnyPfannschmidt/prance/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
+    homepage = "https://github.com/RonnyPfannschmidt/prance";
+    changelog = "https://github.com/RonnyPfannschmidt/prance/blob/${src.rev}/CHANGES.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "prance";
   };

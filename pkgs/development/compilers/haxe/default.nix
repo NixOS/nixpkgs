@@ -4,7 +4,10 @@
   fetchFromGitHub,
   coreutils,
   ocaml-ng,
+<<<<<<< HEAD
   dune,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   zlib,
   pcre,
   pcre2,
@@ -24,6 +27,10 @@ let
         ptmap
         camlp5
         sha
+<<<<<<< HEAD
+=======
+        dune_3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         luv
         extlib
       ]
@@ -37,6 +44,10 @@ let
         ptmap
         camlp5
         sha
+<<<<<<< HEAD
+=======
+        dune_3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         luv
         extlib-1-7-7
       ];
@@ -60,7 +71,10 @@ let
       buildInputs = [
         zlib
         neko
+<<<<<<< HEAD
         dune
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ]
       ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
       ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
@@ -134,20 +148,36 @@ let
         popd > /dev/null
       '';
 
+<<<<<<< HEAD
       meta = {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
         license = with lib.licenses; [
+=======
+      meta = with lib; {
+        description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
+        homepage = "https://haxe.org";
+        license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           gpl2Plus
           mit
         ]; # based on upstream opam file
         maintainers = [
+<<<<<<< HEAD
           lib.maintainers.marcweber
           lib.maintainers.locallycompact
           lib.maintainers.logo
           lib.maintainers.bwkam
         ];
         platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+          maintainers.marcweber
+          maintainers.locallycompact
+          maintainers.logo
+          maintainers.bwkam
+        ];
+        platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in

@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beancount_black" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Opinioned code formatter for Beancount";
     mainProgram = "bean-black";
     homepage = "https://github.com/LaunchPlatform/beancount-black/";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ambroisie ];
+=======
+  meta = with lib; {
+    description = "Opinioned code formatter for Beancount";
+    mainProgram = "bean-black";
+    homepage = "https://github.com/LaunchPlatform/beancount-black/";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ ambroisie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

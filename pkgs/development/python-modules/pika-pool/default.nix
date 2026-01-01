@@ -24,9 +24,15 @@ buildPythonPackage rec {
   doCheck = false;
 
   dependencies = [ pika ];
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bninja/pika-pool";
     license = lib.licenses.bsdOriginal;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bninja/pika-pool";
+    license = licenses.bsdOriginal;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Pools for pikas";
   };
 }

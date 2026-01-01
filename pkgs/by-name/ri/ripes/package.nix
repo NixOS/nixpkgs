@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical processor simulator and assembly editor for the RISC-V ISA";
     homepage = "https://github.com/mortbopet/Ripes";
@@ -71,5 +72,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "Ripes";
     maintainers = with lib.maintainers; [ wineee ];
+=======
+  meta = with lib; {
+    description = "Graphical processor simulator and assembly editor for the RISC-V ISA";
+    homepage = "https://github.com/mortbopet/Ripes";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    mainProgram = "Ripes";
+    maintainers = with maintainers; [ wineee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

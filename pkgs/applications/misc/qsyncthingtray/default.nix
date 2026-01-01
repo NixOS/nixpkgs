@@ -74,7 +74,11 @@ mkDerivation rec {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/sieren/QSyncthingTray/";
     description = "Traybar Application for Syncthing written in C++";
     longDescription = ''
@@ -82,12 +86,21 @@ mkDerivation rec {
       Currently supports macOS, Windows and Linux.
       Written in C++ with Qt.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [
       zraexy
       peterhoeg
     ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [
+      zraexy
+      peterhoeg
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = !preferNative || stdenv.hostPlatform.isDarwin;
   };
 }

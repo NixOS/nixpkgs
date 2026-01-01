@@ -23,11 +23,19 @@ python3Packages.buildPythonPackage rec {
     requests
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert any LCSC components (including EasyEDA) to KiCad library";
     homepage = "https://github.com/uPesy/easyeda2kicad.py";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ChocolateLoverRaj ];
+=======
+  meta = with lib; {
+    description = "Convert any LCSC components (including EasyEDA) to KiCad library";
+    homepage = "https://github.com/uPesy/easyeda2kicad.py";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ ChocolateLoverRaj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "easyeda2kicad";
   };
 }

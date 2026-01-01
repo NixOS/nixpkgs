@@ -69,7 +69,11 @@ maven.buildMavenPackage rec {
       --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command-line utility for managing applets and keys on Java Cards";
     longDescription = ''
       This command-line utility can be used to manage applets and keys
@@ -79,11 +83,20 @@ maven.buildMavenPackage rec {
       If you run NixOS, it can be enabled with `services.pcscd.enable = true;`.
     '';
     homepage = "https://github.com/martinpaljak/GlobalPlatformPro";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
     license = with lib.licenses; [ lgpl3 ];
+=======
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # deps
+    ];
+    license = with licenses; [ lgpl3 ];
+    maintainers = with maintainers; [ ekleog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gp";
   };
 }

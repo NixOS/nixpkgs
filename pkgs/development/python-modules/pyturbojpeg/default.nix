@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "turbojpeg" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/lilohuang/PyTurboJPEG/releases/tag/${src.tag}";
     description = "Python wrapper of libjpeg-turbo for decoding and encoding JPEG image";
     homepage = "https://github.com/lilohuang/PyTurboJPEG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/lilohuang/PyTurboJPEG/releases/tag/${src.tag}";
+    description = "Python wrapper of libjpeg-turbo for decoding and encoding JPEG image";
+    homepage = "https://github.com/lilohuang/PyTurboJPEG";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

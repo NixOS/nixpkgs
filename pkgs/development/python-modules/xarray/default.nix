@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
   pythonOlder,
 
   # build-system
@@ -34,20 +35,40 @@
   # tests
   pytest-asyncio,
   pytestCheckHook,
+=======
+  numpy,
+  packaging,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
+<<<<<<< HEAD
   version = "2025.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
+=======
+  version = "2025.07.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "xarray";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-7MTZ/0BbJb3mg2FHvtsV+v4TsgoxD0Tpco7J4DgT/hY=";
+=======
+    hash = "sha256-UvBRGYZFkjxUYT+S4By+7xQZW6h0usQ26iFeJvWcxo0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -66,6 +87,7 @@ buildPythonPackage rec {
     pandas
   ];
 
+<<<<<<< HEAD
   optional-dependencies = lib.fix (self: {
     accel = [
       bottleneck
@@ -98,6 +120,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+=======
+  nativeCheckInputs = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pytestCheckHook
   ];
 

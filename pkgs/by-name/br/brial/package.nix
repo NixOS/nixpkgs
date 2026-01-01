@@ -38,11 +38,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/BRiAl/BRiAl";
     description = "Legacy version of PolyBoRi maintained by sagemath developers";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/BRiAl/BRiAl";
+    description = "Legacy version of PolyBoRi maintained by sagemath developers";
+    license = licenses.gpl2Plus;
+    teams = [ teams.sage ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

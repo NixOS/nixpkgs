@@ -47,12 +47,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textile" ];
 
+<<<<<<< HEAD
   meta = {
     description = "MOdule for generating web text";
     homepage = "https://github.com/textile/python-textile";
     changelog = "https://github.com/textile/python-textile/blob/${version}/CHANGELOG.textile";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "MOdule for generating web text";
+    homepage = "https://github.com/textile/python-textile";
+    changelog = "https://github.com/textile/python-textile/blob/${version}/CHANGELOG.textile";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pytextile";
   };
 }

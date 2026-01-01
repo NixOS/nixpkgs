@@ -33,10 +33,17 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/imgurbash2
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Shell script that uploads images to imgur";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Shell script that uploads images to imgur";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     homepage = "https://github.com/ram-on/imgurbash2";
     mainProgram = "imgurbash2";

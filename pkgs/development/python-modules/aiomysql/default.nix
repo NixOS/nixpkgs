@@ -36,10 +36,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiomysql" ];
 
+<<<<<<< HEAD
   meta = {
     description = "MySQL driver for asyncio";
     homepage = "https://github.com/aio-libs/aiomysql";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "MySQL driver for asyncio";
+    homepage = "https://github.com/aio-libs/aiomysql";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

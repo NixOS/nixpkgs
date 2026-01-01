@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pfzy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python port of the fzy fuzzy string matching algorithm";
     homepage = "https://github.com/kazhala/pfzy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python port of the fzy fuzzy string matching algorithm";
+    homepage = "https://github.com/kazhala/pfzy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

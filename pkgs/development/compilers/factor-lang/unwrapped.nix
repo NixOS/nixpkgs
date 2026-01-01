@@ -84,7 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://factorcode.org/";
     description = "Concatenative, stack-based programming language";
     longDescription = ''
@@ -100,8 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
       on all platforms. Full source code for the Factor project is available
       under a BSD license.
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       vrthra
       spacefrogg
     ];

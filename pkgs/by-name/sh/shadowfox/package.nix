@@ -35,10 +35,17 @@ buildGoModule rec {
     "-X main.tag=v${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Universal dark theme for Firefox while adhering to the modern design principles set by Mozilla";
     homepage = "https://overdodactyl.github.io/ShadowFox/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Universal dark theme for Firefox while adhering to the modern design principles set by Mozilla";
+    homepage = "https://overdodactyl.github.io/ShadowFox/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "shadowfox-updater";
   };

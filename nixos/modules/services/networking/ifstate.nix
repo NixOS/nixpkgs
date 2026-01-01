@@ -106,7 +106,11 @@ in
       settings = lib.mkOption {
         inherit (settingsFormat) type;
         default = { };
+<<<<<<< HEAD
         description = "Content of IfState's configuration file. See <https://ifstate.net/2.2/schema/> for details.";
+=======
+        description = "Content of IfState's configuration file. See <https://ifstate.net/2.0/schema/> for details.";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 
@@ -131,19 +135,28 @@ in
       settings = lib.mkOption {
         inherit (settingsFormat) type;
         default = { };
+<<<<<<< HEAD
         description = "Content of IfState's initrd configuration file. See <https://ifstate.net/2.2/schema/> for details.";
+=======
+        description = "Content of IfState's initrd configuration file. See <https://ifstate.net/2.0/schema/> for details.";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
       cleanupSettings = lib.mkOption {
         inherit (settingsFormat) type;
         # required by json schema
         default.interfaces = { };
+<<<<<<< HEAD
         description = "Content of IfState's initrd cleanup configuration file. See <https://ifstate.net/2.0/schema/> for details. This configuration gets applied before systemd switches to stage two. The goal is to deconfigurate the whole network in order to prevent access to services, before the firewall is configured. The stage two IfState configuration will start after the firewall is configured.";
+=======
+        description = "Content of IfState's initrd cleanup configuration file. See <https://ifstate.net/2.0/schema/> for details. This configuration gets applied before systemd switches to stage two. The goas is to deconfigurate the whole network in order to prevent access to services, before the firewall is configured. The stage two IfState configuration will start after the firewall is configured.";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
   };
 
   config = lib.mkMerge [
+<<<<<<< HEAD
     (lib.mkIf (cfg.enable || initrdCfg.enable) {
       # sane defaults to not let IfState work against the kernel
       boot.extraModprobeConfig = ''
@@ -152,6 +165,8 @@ in
         options ifb numifbs=0
       '';
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     (lib.mkIf cfg.enable {
       assertions = [
         {
@@ -166,6 +181,16 @@ in
 
       networking.useDHCP = lib.mkDefault false;
 
+<<<<<<< HEAD
+=======
+      # sane defaults to not let IfState work against the kernel
+      boot.extraModprobeConfig = ''
+        options bonding max_bonds=0
+        options dummy numdummies=0
+        options ifb numifbs=0
+      '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       environment = {
         # ifstatecli command should be available to use user, there are other useful subcommands like check or show
         systemPackages = [ cfg.package ];

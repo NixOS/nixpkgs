@@ -40,11 +40,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "miauth" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Authenticate and interact with Xiaomi devices over BLE";
     homepage = "https://github.com/dnandha/miauth";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Authenticate and interact with Xiaomi devices over BLE";
+    homepage = "https://github.com/dnandha/miauth";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "miauth";
   };
 }

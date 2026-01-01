@@ -6,14 +6,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commix";
+<<<<<<< HEAD
   version = "4.1";
+=======
+  version = "4.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commixproject";
     repo = "commix";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-X2AJIE/Uk6w5bcgCELfmy9+Nzoma96yBva9Aj+sKE3k=";
+=======
+    hash = "sha256-AikhXMacsJ7AZyKWcmu+ngs9KeiwQE60cpM2CV8ej1Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

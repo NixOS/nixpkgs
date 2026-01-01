@@ -27,10 +27,17 @@ buildPythonPackage rec {
   # at least guarantee the module can be imported
   pythonImportsCheck = [ "plexauth" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jjlawren/python-plexauth/";
     description = "Handles the authorization flow to obtain tokens from Plex.tv via external redirection";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jjlawren/python-plexauth/";
+    description = "Handles the authorization flow to obtain tokens from Plex.tv via external redirection";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

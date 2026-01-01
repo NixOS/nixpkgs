@@ -48,11 +48,20 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://icculus.org/smpeg/";
     description = "SDL2 MPEG Player Library";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://icculus.org/smpeg/";
+    description = "SDL2 MPEG Player Library";
+    license = licenses.lgpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

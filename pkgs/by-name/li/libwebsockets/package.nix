@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebsockets";
+<<<<<<< HEAD
   version = "4.4.1";
+=======
+  version = "4.3.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "warmcat";
     repo = "libwebsockets";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Xvcnfvm9UCNXm3G3tVe7jExE3fwpzYuz8wllvINymeI=";
+=======
+    hash = "sha256-KOAhIVn4G5u0A1TE75Xv7iYO3/i8foqWYecH0kJHdBM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -35,6 +43,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
+=======
+  # Updating to 4.4.1 would bring some errors, and the patch doesn't apply cleanly
+  # https://github.com/warmcat/libwebsockets/commit/47efb8c1c2371fa309f85a32984e99b2cc1d614a
+  postPatch = ''
+    for f in $(find . -name CMakeLists.txt); do
+      sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i "$f"
+    done
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   outputs = [
     "out"
     "dev"
@@ -54,8 +73,11 @@ stdenv.mkDerivation rec {
     "-DLWS_WITH_SOCKS5=ON"
     "-DDISABLE_WERROR=ON"
     "-DLWS_BUILD_HASH=no_hash"
+<<<<<<< HEAD
     # TODO(Mindavi): figure out why linking has broken for test apps between 4.3.5 and 4.4.1.
     "-DLWS_WITHOUT_TESTAPPS=ON"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DLWS_WITHOUT_TESTAPPS=ON"
   ++ lib.optional withExternalPoll "-DLWS_WITH_EXTERNAL_POLL=ON"
@@ -83,7 +105,11 @@ stdenv.mkDerivation rec {
   # $out/share/libwebsockets-test-server/plugins/libprotocol_*.so refers to crtbeginS.o
   disallowedReferences = [ stdenv.cc.cc ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Light, portable C library for websockets";
     longDescription = ''
       Libwebsockets is a lightweight pure C library built to
@@ -93,13 +119,22 @@ stdenv.mkDerivation rec {
     homepage = "https://libwebsockets.org/";
     # Relicensed from LGPLv2.1+ to MIT with 4.0. Licensing situation
     # is tricky, see https://github.com/warmcat/libwebsockets/blob/main/LICENSE
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       publicDomain
       bsd3
       asl20
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ mindavi ];
     platforms = lib.platforms.all;
+=======
+    maintainers = with maintainers; [ mindavi ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

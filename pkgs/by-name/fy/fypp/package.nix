@@ -18,11 +18,20 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ python3.pkgs.setuptools ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python powered Fortran preprocessor";
     mainProgram = "fypp";
     homepage = "https://github.com/aradi/fypp";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Python powered Fortran preprocessor";
+    mainProgram = "fypp";
+    homepage = "https://github.com/aradi/fypp";
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

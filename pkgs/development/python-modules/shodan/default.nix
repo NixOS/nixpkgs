@@ -37,13 +37,22 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "shodan" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python library and command-line utility for Shodan";
     mainProgram = "shodan";
     homepage = "https://github.com/achillean/shodan-python";
     changelog = "https://github.com/achillean/shodan-python/blob/${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fab
       lihop
     ];

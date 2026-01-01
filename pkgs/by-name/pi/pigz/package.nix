@@ -37,12 +37,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.zlib.net/pigz/";
     description = "Parallel implementation of gzip for multi-core machines";
     mainProgram = "pigz";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.zlib;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -45,6 +45,10 @@ buildPythonPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rncp";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Cryptography-based networking stack for wide-area networks";

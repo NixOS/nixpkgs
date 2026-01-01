@@ -55,11 +55,20 @@ python3.pkgs.buildPythonPackage rec {
     glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Extension for nautilus, which adds an context-entry for opening other terminal-emulators then `gnome-terminal`";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ stunkymonkey ];
     homepage = "https://github.com/Stunkymonkey/nautilus-open-any-terminal";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Extension for nautilus, which adds an context-entry for opening other terminal-emulators then `gnome-terminal`";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ stunkymonkey ];
+    homepage = "https://github.com/Stunkymonkey/nautilus-open-any-terminal";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

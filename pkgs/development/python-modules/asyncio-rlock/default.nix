@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asyncio_rlock" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Rlock like in threading module but for asyncio";
     homepage = "https://gitlab.com/heckad/asyncio_rlock";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Rlock like in threading module but for asyncio";
+    homepage = "https://gitlab.com/heckad/asyncio_rlock";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

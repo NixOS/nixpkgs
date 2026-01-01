@@ -75,6 +75,7 @@ buildPythonPackage rec {
     # Chains will be drawn sequentially. If you are running MCMC in CPU, consider using `numpyro.set_host_device_count(2)` at the beginning of your program.
     # You can double-check how many devices are available in your system using `jax.local_device_count()`.
     "-Wignore::UserWarning"
+<<<<<<< HEAD
 
     # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
     "-Wignore::FutureWarning"
@@ -86,6 +87,11 @@ buildPythonPackage rec {
     # This is an error starting from Flax version 0.12.0.
     "test_random_nnx_module_mcmc_sequence_param"
 
+=======
+  ];
+
+  disabledTests = [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # AssertionError, assert GLOBAL["count"] == 4 (assert 5 == 4)
     "test_mcmc_parallel_chain"
 

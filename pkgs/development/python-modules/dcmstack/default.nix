@@ -43,10 +43,18 @@ buildPythonPackage {
     "test/test_cli.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "DICOM to Nifti conversion preserving metadata";
     homepage = "https://github.com/moloney/dcmstack";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+=======
+  meta = with lib; {
+    description = "DICOM to Nifti conversion preserving metadata";
+    homepage = "https://github.com/moloney/dcmstack";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

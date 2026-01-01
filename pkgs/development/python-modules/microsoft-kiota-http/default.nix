@@ -54,11 +54,20 @@ buildPythonPackage rec {
     rev-prefix = "microsoft-kiota-http-v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP request adapter implementation for Kiota clients for Python";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/http/httpx";
     changelog = "https://github.com/microsoft/kiota-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "HTTP request adapter implementation for Kiota clients for Python";
+    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/http/httpx";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

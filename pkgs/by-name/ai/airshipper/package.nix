@@ -129,11 +129,20 @@ rustPlatform.buildRustPackage {
     "airshipper"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Provides automatic updates for the voxel RPG Veloren";
     mainProgram = "airshipper";
     homepage = "https://www.veloren.net";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ yusdacra ];
+=======
+  meta = with lib; {
+    description = "Provides automatic updates for the voxel RPG Veloren";
+    mainProgram = "airshipper";
+    homepage = "https://www.veloren.net";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ yusdacra ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

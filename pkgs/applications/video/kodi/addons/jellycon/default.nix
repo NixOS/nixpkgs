@@ -53,7 +53,11 @@ buildKodiAddon rec {
     websocket
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/jellyfin/jellycon";
     description = "Lightweight Kodi add-on for Jellyfin";
     longDescription = ''
@@ -61,7 +65,12 @@ buildKodiAddon rec {
       files directly from your Jellyfin server within the Kodi interface. It can
       easily switch between multiple user accounts at will.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.kodi ];
+=======
+    license = licenses.gpl2Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

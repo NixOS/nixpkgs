@@ -23,6 +23,7 @@ stdenv.mkDerivation {
     install -D devmem2 "$out/bin/devmem2"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple program to read/write from/to any location in memory";
     mainProgram = "devmem2";
@@ -30,5 +31,14 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Simple program to read/write from/to any location in memory";
+    mainProgram = "devmem2";
+    homepage = "http://lartmaker.nl/lartware/port/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

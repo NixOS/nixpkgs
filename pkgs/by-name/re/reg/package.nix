@@ -33,11 +33,19 @@ buildGoModule rec {
   vendorHash = null;
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Docker registry v2 command line client and repo listing generator with security checks";
     homepage = "https://github.com/genuinetools/reg";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ereslibre ];
+=======
+  meta = with lib; {
+    description = "Docker registry v2 command line client and repo listing generator with security checks";
+    homepage = "https://github.com/genuinetools/reg";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ereslibre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "reg";
   };
 }

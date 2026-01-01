@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://libusb.info/";
     description = "Cross-platform user-mode USB device library";
     mainProgram = "libusb-config";
@@ -47,7 +51,12 @@ stdenv.mkDerivation rec {
       libusb is a cross-platform user-mode library that provides access to USB devices.
       The current API is of 1.0 version (libusb-1.0 API), this library is a wrapper exposing the legacy API.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -55,11 +55,19 @@ stdenv.mkDerivation rec {
     "install.bin"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mail processing and filtering utility";
     homepage = "https://github.com/BuGlessRB/procmail/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Mail processing and filtering utility";
+    homepage = "https://github.com/BuGlessRB/procmail/";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

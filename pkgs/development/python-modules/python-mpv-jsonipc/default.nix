@@ -32,10 +32,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_mpv_jsonipc" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/iwalton3/python-mpv-jsonipc";
     description = "Python API to MPV using JSON IPC";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/iwalton3/python-mpv-jsonipc";
+    description = "Python API to MPV using JSON IPC";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

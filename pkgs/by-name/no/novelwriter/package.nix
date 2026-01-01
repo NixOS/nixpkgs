@@ -7,7 +7,11 @@
   nix-update-script,
 }:
 let
+<<<<<<< HEAD
   version = "2.8";
+=======
+  version = "2.7.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 python3.pkgs.buildPythonApplication {
   pname = "novelwriter";
@@ -18,7 +22,11 @@ python3.pkgs.buildPythonApplication {
     owner = "vkbo";
     repo = "novelWriter";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-6OIDsmPVbpU90bbj4O2CO5YXNtz0bCrG2ygruxsl9Ec=";
+=======
+    hash = "sha256-qCbtQwV+dU/ypnb5UruTsXas9XUqlJweaxnfqTHsT+I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];

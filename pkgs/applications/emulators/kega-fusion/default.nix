@@ -99,12 +99,21 @@ stdenv.mkDerivation {
     chmod +x "$out/bin/kega-fusion"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Sega SG1000, SC3000, SF7000, Master System, Game Gear, Genesis/Megadrive, SVP, Pico, SegaCD/MegaCD and 32X emulator";
     homepage = "https://www.carpeludum.com/kega-fusion/";
     maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
+=======
+  meta = with lib; {
+    description = "Sega SG1000, SC3000, SF7000, Master System, Game Gear, Genesis/Megadrive, SVP, Pico, SegaCD/MegaCD and 32X emulator";
+    homepage = "https://www.carpeludum.com/kega-fusion/";
+    maintainers = [ ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfreeRedistributable;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "i686-linux" ];
     mainProgram = "kega-fusion";
   };

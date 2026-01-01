@@ -23,10 +23,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/romanvm/kodi.six";
     description = "Wrappers around Kodi Python API for seamless Python 2/3 compatibility";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/romanvm/kodi.six";
+    description = "Wrappers around Kodi Python API for seamless Python 2/3 compatibility";
+    license = licenses.gpl3Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

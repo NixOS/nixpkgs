@@ -38,8 +38,11 @@ let
     };
   */
 
+<<<<<<< HEAD
   inherit (pkgs) lib;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
     inherit pkgs licenseAccepted;
@@ -50,6 +53,7 @@ let
     includeSystemImages = false;
     includeEmulator = false;
 
+<<<<<<< HEAD
     platformVersions = [
       "UpsideDownCake"
       "36"
@@ -58,6 +62,8 @@ let
       "CANARY"
     ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Accepting more licenses declaratively:
     extraLicenses = [
       # Already accepted for you with the global accept_license = true or
@@ -78,9 +84,13 @@ let
   androidComposition = androidEnv.composeAndroidPackages sdkArgs;
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
+<<<<<<< HEAD
   latestSdkVersion = lib.foldl' (
     s: x: if lib.strings.compareVersions (toString x) s > 0 then toString x else s
   ) "0" androidComposition.platformVersions;
+=======
+  latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   jdk = pkgs.jdk;
 in
 pkgs.mkShell {
@@ -107,6 +117,10 @@ pkgs.mkShell {
   '';
 
   passthru.tests = {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     shell-without-emulator-sdkmanager-packages-test =
       pkgs.runCommand "shell-without-emulator-sdkmanager-packages-test"
         {
@@ -122,7 +136,11 @@ pkgs.mkShell {
 
           packages=(
             "build-tools" "cmdline-tools" \
+<<<<<<< HEAD
             "platform-tools" "platforms;android-${toString latestSdkVersion}"
+=======
+            "platform-tools" "platforms;android-${toString latestSdk}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           )
 
           for package in "''${packages[@]}"; do

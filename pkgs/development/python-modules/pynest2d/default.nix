@@ -41,10 +41,18 @@ buildPythonPackage rec {
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for libnest2d";
     homepage = "https://github.com/Ultimaker/pynest2d";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Python bindings for libnest2d";
+    homepage = "https://github.com/Ultimaker/pynest2d";
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

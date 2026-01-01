@@ -14,9 +14,16 @@ buildPythonPackage rec {
     hash = "sha256-GQko+ZUa9ulKH4Tu/K7XkcKAl90VK4jpiJBr4wBFH9I=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Create sentinel and singleton objects";
     homepage = "https://github.com/eddieantonio/sentinel";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Create sentinel and singleton objects";
+    homepage = "https://github.com/eddieantonio/sentinel";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -106,11 +106,19 @@ mkDerivation rec {
     wrapQtApp $out/bin/spuce_window_plot
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pothos data-flow framework";
     homepage = "https://github.com/pothosware/PothosCore/wiki";
     license = lib.licenses.boost;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Pothos data-flow framework";
+    homepage = "https://github.com/pothosware/PothosCore/wiki";
+    license = licenses.boost;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

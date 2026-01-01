@@ -39,6 +39,7 @@ appimageTools.wrapType2 {
 
   extraPkgs = pkgs: [ pkgs.procps ];
 
+<<<<<<< HEAD
   meta = {
     description = "Workspace Simplifier - a cross-platform application organizing web services into Workspaces similar to browser profiles";
     homepage = "https://rambox.app";
@@ -46,5 +47,14 @@ appimageTools.wrapType2 {
     maintainers = with lib.maintainers; [ nazarewk ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "Workspace Simplifier - a cross-platform application organizing web services into Workspaces similar to browser profiles";
+    homepage = "https://rambox.app";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ nazarewk ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

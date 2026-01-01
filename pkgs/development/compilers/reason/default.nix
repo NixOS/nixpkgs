@@ -18,8 +18,13 @@ let
   param =
     if lib.versionAtLeast ppxlib.version "0.36" then
       {
+<<<<<<< HEAD
         version = "3.17.2";
         hash = "sha256-f0CHAW6MOToT1Xt3N2d7wdvxaXj9Q8GTVNTXmnlMjEc=";
+=======
+        version = "3.17.0";
+        hash = "sha256-gsiBnOn9IVt+fixlAeY456kE6+E6taHY6sJnnYz4pes=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
     else
       {
@@ -62,11 +67,19 @@ buildDunePackage rec {
     hello = callPackage ./tests/hello { };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://reasonml.github.io/";
     downloadPage = "https://github.com/reasonml/reason";
     description = "User-friendly programming language built on OCaml";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://reasonml.github.io/";
+    downloadPage = "https://github.com/reasonml/reason";
+    description = "User-friendly programming language built on OCaml";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -22,10 +22,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xdg" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://freedesktop.org/wiki/Software/pyxdg";
     description = "Contains implementations of freedesktop.org standards";
     license = lib.licenses.lgpl2;
+=======
+  meta = with lib; {
+    homepage = "http://freedesktop.org/wiki/Software/pyxdg";
+    description = "Contains implementations of freedesktop.org standards";
+    license = licenses.lgpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

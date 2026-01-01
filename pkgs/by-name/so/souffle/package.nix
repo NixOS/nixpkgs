@@ -97,15 +97,27 @@ stdenv.mkDerivation rec {
 
   passthru.tests = callPackage ./tests.nix { };
 
+<<<<<<< HEAD
   meta = {
     description = "Translator of declarative Datalog programs into the C++ language";
     homepage = "https://souffle-lang.github.io/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Translator of declarative Datalog programs into the C++ language";
+    homepage = "https://souffle-lang.github.io/";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
       wchresta
       markusscherer
     ];
+<<<<<<< HEAD
     license = lib.licenses.upl;
+=======
+    license = licenses.upl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

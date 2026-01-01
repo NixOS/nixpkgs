@@ -80,6 +80,7 @@ maven.buildMavenPackage rec {
         --add-flags "-jar $out/share/jugglinglab/JugglingLab.jar"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Program to visualize different juggling pattens";
     homepage = "https://jugglinglab.org/";
@@ -90,5 +91,17 @@ maven.buildMavenPackage rec {
       tomasajt
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Program to visualize different juggling pattens";
+    homepage = "https://jugglinglab.org/";
+    license = licenses.gpl2Only;
+    mainProgram = "jugglinglab";
+    maintainers = with maintainers; [
+      wnklmnn
+      tomasajt
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

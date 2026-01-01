@@ -56,12 +56,21 @@ stdenv.mkDerivation rec {
     libsForQt5.qttools
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interactive post-processing tool for scanned pages";
     homepage = "https://github.com/trufanov-nok/scantailor";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ unclamped ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Interactive post-processing tool for scanned pages";
+    homepage = "https://github.com/trufanov-nok/scantailor";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ unclamped ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "scantailor-universal-cli";
   };
 }

@@ -83,12 +83,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Space Nerds In Space, a multi-player spaceship bridge simulator";
     homepage = "https://smcameron.github.io/space-nerds-in-space/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ pentane ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Space Nerds In Space, a multi-player spaceship bridge simulator";
+    homepage = "https://smcameron.github.io/space-nerds-in-space/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ pentane ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "snis_launcher";
   };
 })

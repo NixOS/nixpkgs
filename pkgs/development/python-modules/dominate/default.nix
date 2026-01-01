@@ -31,11 +31,19 @@ buildPythonPackage rec {
     "tests/test_svg.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for creating and manipulating HTML documents using an elegant DOM API";
     homepage = "https://github.com/Knio/dominate/";
     changelog = "https://github.com/Knio/dominate/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Library for creating and manipulating HTML documents using an elegant DOM API";
+    homepage = "https://github.com/Knio/dominate/";
+    changelog = "https://github.com/Knio/dominate/releases/tag/${version}";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

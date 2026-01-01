@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of AMD-specific device-side language runtime libraries";
     homepage = "https://github.com/ROCm/ROCm-Device-Libs";
@@ -70,5 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Set of AMD-specific device-side language runtime libraries";
+    homepage = "https://github.com/ROCm/ROCm-Device-Libs";
+    license = licenses.ncsa;
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "laces" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Django components that know how to render themselves";
     homepage = "https://github.com/tbrlpld/laces";
     changelog = "https://github.com/tbrlpld/laces/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sephi ];
+=======
+  meta = with lib; {
+    description = "Django components that know how to render themselves";
+    homepage = "https://github.com/tbrlpld/laces";
+    changelog = "https://github.com/tbrlpld/laces/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ sephi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

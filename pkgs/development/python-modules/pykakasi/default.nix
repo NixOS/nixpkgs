@@ -50,12 +50,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykakasi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
     homepage = "https://codeberg.org/miurahr/pykakasi";
     changelog = "https://codeberg.org/miurahr/pykakasi/src/tag/v${version}/CHANGELOG.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
+    homepage = "https://codeberg.org/miurahr/pykakasi";
+    changelog = "https://codeberg.org/miurahr/pykakasi/src/tag/v${version}/CHANGELOG.rst";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kakasi";
   };
 }

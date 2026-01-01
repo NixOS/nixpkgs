@@ -7,13 +7,21 @@
 
 buildGoModule rec {
   pname = "buildkit";
+<<<<<<< HEAD
   version = "0.26.3";
+=======
+  version = "0.26.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "moby";
     repo = "buildkit";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-2Utxan85hHmyt+7anfbjFxBHhKzmZb7k9K025vA76Ys=";
+=======
+    hash = "sha256-AMsql+b5yUnkw6KkJte2qjN+MadJn06/0HohXP4N47c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = null;

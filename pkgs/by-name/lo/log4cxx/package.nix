@@ -15,11 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "log4cxx";
+<<<<<<< HEAD
   version = "1.6.0";
 
   src = fetchurl {
     url = "mirror://apache/logging/log4cxx/${version}/apache-${pname}-${version}.tar.gz";
     hash = "sha256-R9doxXZcVyHPJ9Ug+H7ycikboPTg0yHHJzXVrshwGKc=";
+=======
+  version = "1.5.0";
+
+  src = fetchurl {
+    url = "mirror://apache/logging/log4cxx/${version}/apache-${pname}-${version}.tar.gz";
+    hash = "sha256-qiP0fDFkqiz4SMIli0tLw3Lnlk1KPtR8K0pKkVxd+jc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

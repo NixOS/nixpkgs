@@ -67,11 +67,20 @@ buildPythonPackage rec {
     "podman/tests/unit/test_utils.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for Podman's RESTful API";
     homepage = "https://github.com/containers/podman-py";
     changelog = "https://github.com/containers/podman-py/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python bindings for Podman's RESTful API";
+    homepage = "https://github.com/containers/podman-py";
+    changelog = "https://github.com/containers/podman-py/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

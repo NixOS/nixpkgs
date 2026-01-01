@@ -57,18 +57,31 @@ buildPythonPackage rec {
     pytest-trio
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "hypercorn" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
     homepage = "https://github.com/pgjones/hypercorn";
     description = "ASGI web server inspired by Gunicorn";
     mainProgram = "hypercorn";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dgliwka ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ dgliwka ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

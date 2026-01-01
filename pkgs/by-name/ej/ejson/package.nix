@@ -22,11 +22,20 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small library to manage encrypted secrets using asymmetric encryption";
     mainProgram = "ejson";
     license = lib.licenses.mit;
     homepage = "https://github.com/Shopify/ejson";
     maintainers = [ lib.maintainers.manveru ];
+=======
+  meta = with lib; {
+    description = "Small library to manage encrypted secrets using asymmetric encryption";
+    mainProgram = "ejson";
+    license = licenses.mit;
+    homepage = "https://github.com/Shopify/ejson";
+    maintainers = [ maintainers.manveru ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

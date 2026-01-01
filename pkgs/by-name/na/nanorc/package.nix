@@ -60,6 +60,10 @@ stdenv.mkDerivation rec {
     description = "Improved Nano Syntax Highlighting Files";
     homepage = "https://github.com/scopatz/nanorc";
     license = lib.licenses.gpl3;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ nequissimus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 }

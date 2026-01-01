@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homepluscontrol" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python API to interact with the Legrand Eliot Home and Control";
     homepage = "https://github.com/chemaaa/homepluscontrol";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python API to interact with the Legrand Eliot Home and Control";
+    homepage = "https://github.com/chemaaa/homepluscontrol";
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

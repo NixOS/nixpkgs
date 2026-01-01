@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_test_utils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest utilities for tests";
     homepage = "https://github.com/iterative/pytest-test-utils";
     changelog = "https://github.com/iterative/pytest-test-utils/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Pytest utilities for tests";
+    homepage = "https://github.com/iterative/pytest-test-utils";
+    changelog = "https://github.com/iterative/pytest-test-utils/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,10 +29,17 @@ buildPythonPackage rec {
     rfc3987
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure python rfc3986 validator";
     homepage = "https://github.com/naimetti/rfc3986-validator";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pure python rfc3986 validator";
+    homepage = "https://github.com/naimetti/rfc3986-validator";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

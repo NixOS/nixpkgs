@@ -17,10 +17,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ghickman/linode";
     description = "Thin python wrapper around Linode's API";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ghickman/linode";
+    description = "Thin python wrapper around Linode's API";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

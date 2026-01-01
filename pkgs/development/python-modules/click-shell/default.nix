@@ -33,7 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_shell" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Extension to click that easily turns your click app into a shell utility";
     longDescription = ''
       This is an extension to click that easily turns your click app into a
@@ -43,7 +47,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/clarkperkins/click-shell";
     changelog = "https://github.com/clarkperkins/click-shell/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ binsky ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ binsky ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

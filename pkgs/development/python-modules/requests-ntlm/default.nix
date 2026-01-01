@@ -33,6 +33,7 @@ buildPythonPackage rec {
   # Tests require networking
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP NTLM authentication support for python-requests";
     homepage = "https://github.com/requests/requests-ntlm";
@@ -40,5 +41,14 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ elasticdog ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "HTTP NTLM authentication support for python-requests";
+    homepage = "https://github.com/requests/requests-ntlm";
+    changelog = "https://github.com/requests/requests-ntlm/releases/tag/v${version}";
+    license = licenses.isc;
+    maintainers = with maintainers; [ elasticdog ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

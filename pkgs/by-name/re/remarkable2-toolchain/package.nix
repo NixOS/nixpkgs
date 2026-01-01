@@ -33,12 +33,21 @@ stdenv.mkDerivation rec {
     ENVCLEANED=1 $src -y -d $out
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Toolchain for cross-compiling to reMarkable 2 tablets";
     homepage = "https://remarkable.engineering/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tadfisher ];
+=======
+  meta = with lib; {
+    description = "Toolchain for cross-compiling to reMarkable 2 tablets";
+    homepage = "https://remarkable.engineering/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ tadfisher ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

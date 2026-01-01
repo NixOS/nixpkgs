@@ -34,11 +34,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "quantities" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Quantities is designed to handle arithmetic and conversions of physical quantities";
     homepage = "https://python-quantities.readthedocs.io/";
     changelog = "https://github.com/python-quantities/python-quantities/blob/v${version}/CHANGES.txt";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Quantities is designed to handle arithmetic and conversions of physical quantities";
+    homepage = "https://python-quantities.readthedocs.io/";
+    changelog = "https://github.com/python-quantities/python-quantities/blob/v${version}/CHANGES.txt";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

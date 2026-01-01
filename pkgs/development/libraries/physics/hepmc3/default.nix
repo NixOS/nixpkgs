@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
 
   pythonImportsCheck = [ "pyHepMC3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation";
     mainProgram = "HepMC3-config";
@@ -66,5 +67,14 @@ stdenv.mkDerivation rec {
     homepage = "http://hepmc.web.cern.ch/hepmc/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation";
+    mainProgram = "HepMC3-config";
+    license = licenses.gpl3;
+    homepage = "http://hepmc.web.cern.ch/hepmc/";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

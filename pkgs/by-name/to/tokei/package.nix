@@ -12,13 +12,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tokei";
+<<<<<<< HEAD
   version = "14.0.0";
+=======
+  version = "13.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
     repo = "tokei";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-BpQ+Aurx2CkFRcozUTbmLLAg7v3NkgKXm5y0TiQCfHw=";
+=======
+    hash = "sha256-7VyjNqwyqJhTTnaiijwXxHzWzk6GbxvQJPjIf250Kfc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -29,7 +37,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   cargoHash = "sha256-x1Oi+B6DpbsCqnX0Lp5LsmoVHNvdibwj/IEgFvhepqY=";
+=======
+  cargoHash = "sha256-aCSz4BwSk+h+LLOPoBHy2lOmLeZI35o3qXSCE0UmEBY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
@@ -39,6 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [ "all" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

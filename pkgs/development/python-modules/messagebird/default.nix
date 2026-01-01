@@ -42,10 +42,18 @@ buildPythonPackage rec {
     "tests/test_request_validator.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Client for MessageBird's REST API";
     homepage = "https://github.com/messagebird/python-rest-api";
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Client for MessageBird's REST API";
+    homepage = "https://github.com/messagebird/python-rest-api";
+    license = with licenses; [ bsd2 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

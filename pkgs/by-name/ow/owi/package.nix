@@ -11,18 +11,32 @@
 }:
 
 let
+<<<<<<< HEAD
   ocamlPackages = ocaml-ng.ocamlPackages_5_3;
 in
 ocamlPackages.buildDunePackage {
   pname = "owi";
   version = "0.2-unstable-2025-12-22";
+=======
+  ocamlPackages = ocaml-ng.ocamlPackages_5_2;
+in
+ocamlPackages.buildDunePackage {
+  pname = "owi";
+  version = "0.2-unstable-2025-11-25";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "owi";
+<<<<<<< HEAD
     rev = "014840cd9d87c912577822b171407bf7453373f0";
     fetchSubmodules = true;
     hash = "sha256-Mjd2XyPmAsonCcV98L8p9S0yYlJV8OEg2TPjZhzVBj8=";
+=======
+    rev = "23fb234334310ae8b4ba3c4a2def6a9fed7508fd";
+    fetchSubmodules = true;
+    hash = "sha256-I74mjs4GozMlUr+ezt22J6+cs8GDcNZkPC42W0kvGnI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = with ocamlPackages; [
@@ -42,11 +56,23 @@ ocamlPackages.buildDunePackage {
     bos
     cmdliner
     digestif
+<<<<<<< HEAD
     dune-build-info
     dune-site
     menhirLib
     ocaml_intrinsics
     ocamlgraph
+=======
+    dolmen_type
+    dune-build-info
+    dune-site
+    hc
+    integers
+    menhirLib
+    ocaml_intrinsics
+    ocamlgraph
+    patricia-tree
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     prelude
     processor
     scfg
@@ -57,6 +83,10 @@ ocamlPackages.buildDunePackage {
     xmlm
     yojson
     z3
+<<<<<<< HEAD
+=======
+    zarith
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postInstall = ''
@@ -83,10 +113,14 @@ ocamlPackages.buildDunePackage {
     homepage = "https://ocamlpro.github.io/owi/";
     downloadPage = "https://github.com/OCamlPro/owi";
     license = lib.licenses.agpl3Plus;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       ethancedwards8
       redianthus
     ];
+=======
+    maintainers = [ lib.maintainers.ethancedwards8 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     teams = with lib.teams; [ ngi ];
     mainProgram = "owi";
     badPlatforms = lib.platforms.darwin;

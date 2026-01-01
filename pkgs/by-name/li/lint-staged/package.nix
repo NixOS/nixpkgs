@@ -30,14 +30,23 @@ buildNpmPackage rec {
 
   passthru.tests.version = testers.testVersion { package = lint-staged; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Run linters on git staged files";
     longDescription = ''
       Run linters against staged git files and don't let 💩 slip into your code base!
     '';
     homepage = src.meta.homepage;
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DamienCassou ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ DamienCassou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lint-staged";
   };
 }

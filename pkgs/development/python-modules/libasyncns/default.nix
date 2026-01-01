@@ -30,10 +30,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libasyncns" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Libasyncns-python is a python binding for the asynchronous name service query library";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.mic92 ];
+=======
+  meta = with lib; {
+    description = "Libasyncns-python is a python binding for the asynchronous name service query library";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.mic92 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://launchpad.net/libasyncns-python";
   };
 }

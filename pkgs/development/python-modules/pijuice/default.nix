@@ -61,11 +61,20 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Library and resources for PiJuice HAT for Raspberry Pi";
     mainProgram = "pijuice_cli";
     homepage = "https://github.com/PiSupply/PiJuice";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ hexagonal-sun ];
+=======
+  meta = with lib; {
+    description = "Library and resources for PiJuice HAT for Raspberry Pi";
+    mainProgram = "pijuice_cli";
+    homepage = "https://github.com/PiSupply/PiJuice";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ hexagonal-sun ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

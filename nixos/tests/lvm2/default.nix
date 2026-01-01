@@ -4,11 +4,18 @@
   pkgs ? import ../../.. { inherit system config; },
   lib ? pkgs.lib,
   kernelVersionsToTest ? [
+<<<<<<< HEAD
+=======
+    "5.4"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "5.10"
     "5.15"
     "6.1"
     "6.6"
+<<<<<<< HEAD
     "6.12"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "latest"
   ],
 }:

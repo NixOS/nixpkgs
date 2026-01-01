@@ -29,11 +29,19 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pretix_banktool" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Automatic bank data upload tool for pretix (with FinTS client)";
     homepage = "https://github.com/pretix/pretix-banktool";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Automatic bank data upload tool for pretix (with FinTS client)";
+    homepage = "https://github.com/pretix/pretix-banktool";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pretix-banktool";
   };
 }

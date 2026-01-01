@@ -25,11 +25,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
+<<<<<<< HEAD
   version = "1.25.5";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
     hash = "sha256-IqX9CpHvzSihsFNxBrmVmygEth9Zw3WLUejlQpwalU8=";
+=======
+  version = "1.25.4";
+
+  src = fetchurl {
+    url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
+    hash = "sha256-FgBDt/F7bWC1A2lDaRf9qNUDRkC6Oa4kMca5WoicyYw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;
@@ -171,6 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
     description = "Go Programming language";
@@ -179,6 +188,15 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.golang ];
     platforms =
       lib.platforms.darwin ++ lib.platforms.linux ++ lib.platforms.wasi ++ lib.platforms.freebsd;
+=======
+  meta = with lib; {
+    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
+    description = "Go Programming language";
+    homepage = "https://go.dev/";
+    license = licenses.bsd3;
+    teams = [ teams.golang ];
+    platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # Support for big-endian POWER < 8 was dropped in 1.9, but POWER8 users have less of a reason to run in big-endian mode than pre-POWER8 ones
       # So non-LE ppc64 is effectively unsupported, and Go SIGILLs on affordable ppc64 hardware

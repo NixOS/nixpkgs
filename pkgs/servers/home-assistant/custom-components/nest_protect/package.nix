@@ -18,11 +18,20 @@ buildHomeAssistantComponent rec {
   # AttributeError: 'async_generator' object has no attribute 'data'
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/iMicknl/ha-nest-protect/releases/tag/v${version}";
     description = "Nest Protect integration for Home Assistant";
     homepage = "https://github.com/iMicknl/ha-nest-protect";
     maintainers = with lib.maintainers; [ jamiemagee ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/iMicknl/ha-nest-protect/releases/tag/v${version}";
+    description = "Nest Protect integration for Home Assistant";
+    homepage = "https://github.com/iMicknl/ha-nest-protect";
+    maintainers = with maintainers; [ jamiemagee ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -5,7 +5,10 @@
   stdenv,
   versionCheckHook,
   nix-update-script,
+<<<<<<< HEAD
   rust-jemalloc-sys,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,8 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-TTg5Cky1exlvJokIw1IFGbPq4eJe2xSAPsGgI7BU+Jw=";
 
+<<<<<<< HEAD
   buildInputs = [ rust-jemalloc-sys ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   env = lib.optionalAttrs stdenv.hostPlatform.isStatic { RUSTFLAGS = "-C relocation-model=static"; };
 
   # skip flaky tests
@@ -30,6 +36,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/difft";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

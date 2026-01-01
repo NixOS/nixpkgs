@@ -59,11 +59,20 @@ buildPythonPackage rec {
 
   passthru.skipBulkUpdate = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with the Reolink IP camera API";
     homepage = "https://github.com/fwestenberg/reolink";
     changelog = "https://github.com/fwestenberg/reolink/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with the Reolink IP camera API";
+    homepage = "https://github.com/fwestenberg/reolink";
+    changelog = "https://github.com/fwestenberg/reolink/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

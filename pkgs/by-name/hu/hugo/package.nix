@@ -11,16 +11,27 @@
 
 buildGoModule (finalAttrs: {
   pname = "hugo";
+<<<<<<< HEAD
   version = "0.153.3";
+=======
+  version = "0.152.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-EJYBIElh1akj8/cYzd/5hUNJtmFK/BxgWTg5jo2/xS4=";
   };
 
   vendorHash = "sha256-cTrqnZdRCLthZCpXqbfIS1quySyB2lWxbxP/4k2nASQ=";
+=======
+    hash = "sha256-nSWeCRhbaEgr54VDstBKnouUeWR1JjLXEqtYUcEMdyQ=";
+  };
+
+  vendorHash = "sha256-3cIz3SWV/3vYhCgFEGAa+mOaUCzsJurkI2rPtVANE38=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   checkFlags =
     let
@@ -81,6 +92,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "hugo";
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      Br1ght0ne
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       Frostman
       savtrip
     ];

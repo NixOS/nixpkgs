@@ -50,10 +50,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to the libmagic file type identification library";
     homepage = "https://github.com/ahupp/python-magic";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Python interface to the libmagic file type identification library";
+    homepage = "https://github.com/ahupp/python-magic";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -30,11 +30,19 @@ buildNpmPackage rec {
       --set PUPPETEER_EXECUTABLE_PATH ${chromium}/bin/chromium
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pandoc filter for creating diagrams in mermaid syntax blocks in markdown docs";
     homepage = "https://github.com/raghur/mermaid-filter";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ners ];
+=======
+  meta = with lib; {
+    description = "Pandoc filter for creating diagrams in mermaid syntax blocks in markdown docs";
+    homepage = "https://github.com/raghur/mermaid-filter";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ners ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = chromium.meta.platforms;
     mainProgram = "mermaid-filter";
   };

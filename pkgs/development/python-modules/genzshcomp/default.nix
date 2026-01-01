@@ -17,10 +17,18 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools ];
 
+<<<<<<< HEAD
   meta = {
     description = "Automatically generated zsh completion function for Python's option parser modules";
     mainProgram = "genzshcomp";
     homepage = "https://bitbucket.org/hhatto/genzshcomp/";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    description = "Automatically generated zsh completion function for Python's option parser modules";
+    mainProgram = "genzshcomp";
+    homepage = "https://bitbucket.org/hhatto/genzshcomp/";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

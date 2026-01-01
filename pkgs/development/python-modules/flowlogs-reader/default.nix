@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flowlogs_reader" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";
     mainProgram = "flowlogs_reader";
     homepage = "https://github.com/obsrvbl/flowlogs-reader";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cransom ];
+=======
+  meta = with lib; {
+    description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";
+    mainProgram = "flowlogs_reader";
+    homepage = "https://github.com/obsrvbl/flowlogs-reader";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cransom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,12 +30,21 @@ python3Packages.buildPythonApplication rec {
     git-filter-repo
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
     license = lib.licenses.gpl2Only;
     description = "Helper utility to work with patches made available via a public-inbox archive";
     mainProgram = "b4";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
+    license = licenses.gpl2Only;
+    description = "Helper utility to work with patches made available via a public-inbox archive";
+    mainProgram = "b4";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jb55
       qyliss
       mfrw

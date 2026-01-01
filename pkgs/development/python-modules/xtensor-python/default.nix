@@ -43,6 +43,10 @@ toPythonModule (
       homepage = "https://github.com/xtensor-stack/xtensor-python";
       description = "Python bindings for the xtensor C++ multi-dimensional array library";
       license = lib.licenses.bsd3;
+<<<<<<< HEAD
+=======
+      maintainers = with lib.maintainers; [ lsix ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   })
 )

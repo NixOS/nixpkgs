@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mdformat plugin format Nix code blocks with alejandra";
     homepage = "https://github.com/aldoborrero/mdformat-nix-alejandra";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aldoborrero ];
+=======
+  meta = with lib; {
+    description = "Mdformat plugin format Nix code blocks with alejandra";
+    homepage = "https://github.com/aldoborrero/mdformat-nix-alejandra";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aldoborrero ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

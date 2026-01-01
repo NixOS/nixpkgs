@@ -42,10 +42,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "testbook" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Unit testing framework extension for testing code in Jupyter Notebooks";
     homepage = "https://testbook.readthedocs.io/";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ djacu ];
+=======
+  meta = with lib; {
+    description = "Unit testing framework extension for testing code in Jupyter Notebooks";
+    homepage = "https://testbook.readthedocs.io/";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ djacu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

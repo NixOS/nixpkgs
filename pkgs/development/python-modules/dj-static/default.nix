@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Serve production static files with Django";
     homepage = "https://github.com/heroku-python/dj-static";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Serve production static files with Django";
+    homepage = "https://github.com/heroku-python/dj-static";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -78,12 +78,21 @@ python.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Remote voice satellite using Wyoming protocol";
     homepage = "https://github.com/rhasspy/wyoming-satellite";
     changelog = "https://github.com/rhasspy/wyoming-satellite/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Remote voice satellite using Wyoming protocol";
+    homepage = "https://github.com/rhasspy/wyoming-satellite";
+    changelog = "https://github.com/rhasspy/wyoming-satellite/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wyoming-satellite";
   };
 }

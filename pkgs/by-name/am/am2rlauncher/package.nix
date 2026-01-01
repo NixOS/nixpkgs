@@ -115,7 +115,11 @@ buildDotnetModule {
     mv $out/bin/AM2RLauncher.Gtk $out/bin/AM2RLauncher
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # webkitgtk_4_0 was removed
     broken = true;
     homepage = "https://github.com/AM2R-Community-Developers/AM2RLauncher";
@@ -125,9 +129,16 @@ buildDotnetModule {
       AM2R-Community-Updates, creating APKs for Android use, as well as Mods for
       AM2R.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nsnelson ];
     mainProgram = "AM2RLauncher";
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nsnelson ];
+    mainProgram = "AM2RLauncher";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

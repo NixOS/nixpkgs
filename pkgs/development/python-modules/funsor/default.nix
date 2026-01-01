@@ -3,7 +3,10 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # build-system
   setuptools,
@@ -44,6 +47,7 @@ buildPythonPackage rec {
     hash = "sha256-Prj1saT0yoPAP8rDE0ipBEpR3QMk4PS12VSJlxc22p8=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Compatibility with torch >= 2.5 (arg_constraints is now a property)
     (fetchpatch {
@@ -52,6 +56,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = [

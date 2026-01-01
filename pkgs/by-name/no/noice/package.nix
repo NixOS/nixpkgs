@@ -34,11 +34,19 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Small ncurses-based file browser";
     homepage = "https://git.2f30.org/noice/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Small ncurses-based file browser";
+    homepage = "https://git.2f30.org/noice/";
+    license = licenses.bsd2;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "noice";
   };

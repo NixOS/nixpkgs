@@ -27,11 +27,20 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to detect bad power supply on Raspberry Pi";
     homepage = "https://github.com/shenxn/rpi-bad-power";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Python library to detect bad power supply on Raspberry Pi";
+    homepage = "https://github.com/shenxn/rpi-bad-power";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

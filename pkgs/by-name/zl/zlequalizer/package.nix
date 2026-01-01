@@ -29,13 +29,21 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "zlequalizer";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ZL-Audio";
     repo = "ZLEqualizer";
     tag = "${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-ix3UcTs9CEJ2TCJLdpvZOaoB0wgNDrvSQhZzer8yMRw=";
+=======
+    hash = "sha256-9TmvjBXTrvR0+qnGDFhCczanxiry3d43QVn/pJLUREY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -87,8 +95,11 @@ clangStdenv.mkDerivation (finalAttrs: {
       if clangStdenv.hostPlatform.isAarch64 then "neon64" else "sse2;avx;avx2"
     ))
     (lib.cmakeBool "ZL_JUCE_COPY_PLUGIN" false)
+<<<<<<< HEAD
     # set the version for in the settings screen.
     (lib.cmakeFeature "FOOBAR_VERSION" "${finalAttrs.version}")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   installPhase = ''

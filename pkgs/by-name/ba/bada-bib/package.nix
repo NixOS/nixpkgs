@@ -72,11 +72,20 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/RogerCrocker/BadaBib";
     description = "Simple BibTeX Viewer and Editor";
     mainProgram = "badabib";
     maintainers = [ lib.maintainers.Cogitri ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/RogerCrocker/BadaBib";
+    description = "Simple BibTeX Viewer and Editor";
+    mainProgram = "badabib";
+    maintainers = [ maintainers.Cogitri ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

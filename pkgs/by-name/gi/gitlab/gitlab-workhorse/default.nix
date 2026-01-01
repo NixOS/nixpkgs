@@ -10,7 +10,11 @@ in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
+<<<<<<< HEAD
   version = "18.6.2";
+=======
+  version = "18.6.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
@@ -28,10 +32,18 @@ buildGoModule rec {
   doCheck = false;
   prodyVendor = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.gitlab.com/";
     platforms = lib.platforms.linux;
     teams = [ lib.teams.gitlab ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "http://www.gitlab.com/";
+    platforms = platforms.linux;
+    teams = [ teams.gitlab ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -69,10 +69,18 @@ stdenv.mkDerivation (finalAttrs: {
     make check -w
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
     homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
+    homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
+    platforms = platforms.unix;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

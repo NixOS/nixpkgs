@@ -26,11 +26,19 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/schlomo/automirror";
     description = "Automatic Display Mirror";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/schlomo/automirror";
+    description = "Automatic Display Mirror";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "automirror";
   };
 }

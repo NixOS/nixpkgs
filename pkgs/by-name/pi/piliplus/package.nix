@@ -1,7 +1,11 @@
 {
   lib,
   fetchFromGitHub,
+<<<<<<< HEAD
   flutter338,
+=======
+  flutter335,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeDesktopItem,
   copyDesktopItems,
   alsa-lib,
@@ -13,11 +17,18 @@
 let
   srcInfo = lib.importJSON ./src-info.json;
   description = "Third-party Bilibili client developed in Flutter";
+<<<<<<< HEAD
   version = "1.1.5.1";
 in
 flutter338.buildFlutterApplication {
   pname = "piliplus";
   inherit version;
+=======
+in
+flutter335.buildFlutterApplication {
+  pname = "piliplus";
+  inherit (srcInfo) version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "bggRGjQaUbCoE";
@@ -44,7 +55,11 @@ flutter338.buildFlutterApplication {
     cat <<EOL > lib/build_config.dart
     class BuildConfig {
       static const int versionCode = ${toString srcInfo.revCount};
+<<<<<<< HEAD
       static const String versionName = '${version}';
+=======
+      static const String versionName = '${srcInfo.version}';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       static const int buildTime = ${toString srcInfo.commitDate};
       static const String commitHash = '${srcInfo.rev}';
@@ -86,7 +101,11 @@ flutter338.buildFlutterApplication {
   meta = {
     inherit description;
     homepage = "https://github.com/bggRGjQaUbCoE/PiliPlus";
+<<<<<<< HEAD
     changelog = "https://github.com/bggRGjQaUbCoE/PiliPlus/releases/tag/${version}";
+=======
+    changelog = "https://github.com/bggRGjQaUbCoE/PiliPlus/releases/tag/${srcInfo.version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ulysseszhan ];
     platforms = lib.platforms.linux;

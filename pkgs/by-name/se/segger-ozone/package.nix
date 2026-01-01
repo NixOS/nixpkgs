@@ -3,7 +3,10 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+<<<<<<< HEAD
   copyDesktopItems,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fontconfig,
   freetype,
   libICE,
@@ -13,6 +16,7 @@
   libXfixes,
   libXrandr,
   libXrender,
+<<<<<<< HEAD
   makeDesktopItem,
 }:
 
@@ -31,6 +35,37 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     copyDesktopItems
   ];
+=======
+}:
+
+stdenv.mkDerivation rec {
+  pname = "segger-ozone";
+  version =
+    {
+      x86_64-linux = "3.38c";
+      i686-linux = "3.36";
+    }
+    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+
+  src =
+    {
+      x86_64-linux = fetchurl {
+        url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
+          builtins.replaceStrings [ "." ] [ "" ] version
+        }_x86_64.tgz";
+        hash = "sha256-GYiFP3aK+dqpZuoJlTxJbTboYtWY9WACbxB11TctsQE=";
+      };
+      i686-linux = fetchurl {
+        url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
+          builtins.replaceStrings [ "." ] [ "" ] version
+        }_i386.tgz";
+        hash = "sha256-u2HGOsv46BRlmqiusZD9iakLx5T530DqauNDY3YTiDY=";
+      };
+    }
+    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs = [
     fontconfig
@@ -45,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
+<<<<<<< HEAD
   desktopItems = [
     (makeDesktopItem {
       categories = [
@@ -74,6 +110,15 @@ stdenv.mkDerivation (finalAttrs: {
     cp --recursive . $out/libexec/segger-ozone
     ln -s $out/libexec/segger-ozone/Ozone $out/bin/Ozone
     install -D --mode=0644 Ozone.png $out/share/icons/hicolor/256x256/apps/Ozone.png
+=======
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    mv Lib lib
+    mv * $out
+    ln -s $out/Ozone $out/bin
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     runHook postInstall
   '';
@@ -104,6 +149,15 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.bmilanov ];
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" ];
   };
 })
+=======
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

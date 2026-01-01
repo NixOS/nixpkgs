@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "browser_cookie3" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Loads cookies from your browser into a cookiejar object";
     homepage = "https://github.com/borisbabic/browser_cookie3";
     changelog = "https://github.com/borisbabic/browser_cookie3/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ borisbabic ];
+=======
+  meta = with lib; {
+    description = "Loads cookies from your browser into a cookiejar object";
+    homepage = "https://github.com/borisbabic/browser_cookie3";
+    changelog = "https://github.com/borisbabic/browser_cookie3/blob/master/CHANGELOG.md";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ borisbabic ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

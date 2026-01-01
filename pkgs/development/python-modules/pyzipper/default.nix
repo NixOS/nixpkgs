@@ -49,11 +49,20 @@ buildPythonPackage rec {
     "test_CleanImport"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python zipfile extensions";
     homepage = "https://github.com/danifus/pyzipper";
     changelog = "https://github.com/danifus/pyzipper/blob/v${version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python zipfile extensions";
+    homepage = "https://github.com/danifus/pyzipper";
+    changelog = "https://github.com/danifus/pyzipper/blob/v${version}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

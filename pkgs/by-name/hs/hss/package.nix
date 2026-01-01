@@ -27,14 +27,24 @@ buildRubyGem rec {
         "'${openssh}/bin/ssh'"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       A SSH helper that uses regex and fancy expansion to dynamically manage SSH shortcuts.
     '';
     homepage = "https://github.com/akerl/hss";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nixy ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ nixy ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hss";
   };
 }

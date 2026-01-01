@@ -23,11 +23,20 @@ stdenv.mkDerivation rec {
       --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fast and Reliable ARQ Protocol";
     homepage = "https://github.com/skywind3000/kcp";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Fast and Reliable ARQ Protocol";
+    homepage = "https://github.com/skywind3000/kcp";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

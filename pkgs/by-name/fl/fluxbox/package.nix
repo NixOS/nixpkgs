@@ -56,7 +56,11 @@ stdenv.mkDerivation rec {
       --subst-var-by PREFIX "$out"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Full-featured, light-resource X window manager";
     longDescription = ''
       Fluxbox is a X window manager based on Blackbox 0.61.1 window
@@ -66,9 +70,15 @@ stdenv.mkDerivation rec {
       under MIT license.
     '';
     homepage = "https://fluxbox.org/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }
 # Many thanks Jack Ryan from Nix-dev mailing list!

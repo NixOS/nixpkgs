@@ -71,10 +71,17 @@ buildPythonPackage rec {
     "test_stream_download"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Friend to fetch your data files";
     homepage = "https://github.com/fatiando/pooch";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Friend to fetch your data files";
+    homepage = "https://github.com/fatiando/pooch";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

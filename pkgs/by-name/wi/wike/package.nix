@@ -20,14 +20,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wike";
+<<<<<<< HEAD
   version = "3.2.0";
+=======
+  version = "3.1.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = false; # built with meson
 
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-4J23dUK844ZYQp9LAvaQgN2cnGaPt7eWGOFSAe7WRH8=";
+=======
+    hash = "sha256-+N9yhzIErFc0z/2JqEtit02GZKqo11viGCLoyQxtxBU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -58,9 +66,14 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+<<<<<<< HEAD
   '';
   postFixup = ''
     wrapPythonProgramsIn "$out/share/wike" "$out $pythonPath"
+=======
+
+    patchShebangs --update $out/share/wike/wike-sp
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru = {
@@ -69,7 +82,11 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Wikipedia Reader for the GNOME Desktop";
+<<<<<<< HEAD
     homepage = "https://hugolabe.github.io/Wike";
+=======
+    homepage = "https://github.com/hugolabe/Wike";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ samalws ];

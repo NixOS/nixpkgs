@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proton" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Proton client module";
     homepage = "https://github.com/ProtonMail/proton-python-client";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Python Proton client module";
+    homepage = "https://github.com/ProtonMail/proton-python-client";
+    license = licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

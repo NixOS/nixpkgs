@@ -53,7 +53,11 @@ stdenv.mkDerivation rec {
     cp -R -t $out/share/redeclipse/data/ data/*
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "First person arena shooter, featuring parkour, impulse boosts, and more";
     longDescription = ''
       Red Eclipse is a fun-filled new take on the first person arena shooter,
@@ -62,12 +66,21 @@ stdenv.mkDerivation rec {
       environments.
     '';
     homepage = "https://www.redeclipse.net";
+<<<<<<< HEAD
     license = with lib.licenses; [
       lib.licenses.zlib
       cc-by-sa-30
     ];
     maintainers = with lib.maintainers; [ lambda-11235 ];
     platforms = lib.platforms.linux;
+=======
+    license = with licenses; [
+      licenses.zlib
+      cc-by-sa-30
+    ];
+    maintainers = with maintainers; [ lambda-11235 ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hydraPlatforms = [ ];
   };
 }

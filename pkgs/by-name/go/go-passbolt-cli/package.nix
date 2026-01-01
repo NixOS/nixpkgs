@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "go-passbolt-cli";
+<<<<<<< HEAD
   version = "0.4.1";
+=======
+  version = "0.3.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "passbolt";
     repo = "go-passbolt-cli";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-EytU20jdrfXwuoofp8OAphX9jjUoFpKva75PBDIFDD8=";
   };
 
   vendorHash = "sha256-HbwGF9ZTwWdJf7XnUKnS1n58GSaPTRlblXAmtKQoooU=";
+=======
+    hash = "sha256-BtMPOmp9dbi/HoNigEeGWIYXRh1/gorV8ycrtWw9I8s=";
+  };
+
+  vendorHash = "sha256-wGSrhW7OsSjHlSKLkOf2AYIxU1m2lM1WGUsy16qxBwA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-X=main.version=${version}"
@@ -47,6 +58,7 @@ buildGoModule rec {
     cd $tmpDir && mkdir man && $out/bin/passbolt gendoc --type man && installManPage man/*
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool to interact with Passbolt, an open source password manager for teams";
     homepage = "https://github.com/passbolt/go-passbolt-cli";
@@ -54,5 +66,14 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ pbek ];
     mainProgram = "passbolt";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "CLI tool to interact with Passbolt, an open source password manager for teams";
+    homepage = "https://github.com/passbolt/go-passbolt-cli";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbek ];
+    mainProgram = "passbolt";
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

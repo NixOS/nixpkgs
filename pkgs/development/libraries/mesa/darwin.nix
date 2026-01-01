@@ -25,6 +25,14 @@ stdenv.mkDerivation {
     meta
     ;
 
+<<<<<<< HEAD
+=======
+  patches = [
+    # Backport of https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/38429
+    ./fix-darwin-build.patch
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   outputs = [
     "out"
     "dev"

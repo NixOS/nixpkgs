@@ -41,11 +41,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     xz
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Install a rustc master toolchain usable from rustup";
     mainProgram = "rustup-toolchain-install-master";
     homepage = "https://github.com/kennytm/rustup-toolchain-install-master";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Install a rustc master toolchain usable from rustup";
+    mainProgram = "rustup-toolchain-install-master";
+    homepage = "https://github.com/kennytm/rustup-toolchain-install-master";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

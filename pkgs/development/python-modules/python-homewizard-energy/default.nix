@@ -61,11 +61,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homewizard_energy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to communicate with HomeWizard Energy devices";
     homepage = "https://github.com/homewizard/python-homewizard-energy";
     changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to communicate with HomeWizard Energy devices";
+    homepage = "https://github.com/homewizard/python-homewizard-energy";
+    changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

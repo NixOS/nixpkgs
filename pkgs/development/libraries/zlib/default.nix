@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
     };
 
+<<<<<<< HEAD
   postPatch =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace configure \
@@ -54,6 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace win32/zlib.def \
         --replace-fail 'gzopen_w' ""
     '';
+=======
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure \
+      --replace '/usr/bin/libtool' '${stdenv.cc.targetPrefix}ar' \
+      --replace 'AR="libtool"' 'AR="${stdenv.cc.targetPrefix}ar"' \
+      --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+  '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   strictDeps = true;
   outputs = [
@@ -64,7 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
+<<<<<<< HEAD
   dontConfigure = (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin);
+=======
+  dontConfigure = stdenv.hostPlatform.isMinGW;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     export CHOST=${stdenv.hostPlatform.config}
@@ -117,9 +130,13 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # As zlib takes part in the stdenv building, we don't want references
       # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+<<<<<<< HEAD
       NIX_CFLAGS_COMPILE = toString (
         [ "-static-libgcc" ] ++ lib.optional stdenv.hostPlatform.isCygwin "-DHAVE_UNISTD_H"
       );
+=======
+      NIX_CFLAGS_COMPILE = "-static-libgcc";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
       # lld 16 enables --no-undefined-version by default
@@ -133,7 +150,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
   configurePlatforms = [ ];
 
+<<<<<<< HEAD
   installFlags = lib.optionals (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) [
+=======
+  installFlags = lib.optionals stdenv.hostPlatform.isMinGW [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "BINARY_PATH=$(out)/bin"
     "INCLUDE_PATH=$(dev)/include"
     "LIBRARY_PATH=$(out)/lib"
@@ -145,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
   ]
+<<<<<<< HEAD
   ++ lib.optionals (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) [
     "-f"
     "win32/Makefile.gcc"
@@ -153,6 +175,12 @@ stdenv.mkDerivation (finalAttrs: {
     "SHAREDLIB=cygz.dll"
     "IMPLIB=libz.dll.a"
   ]
+=======
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    "-f"
+    "win32/Makefile.gcc"
+  ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optionals shared [
     # Note that as of writing (zlib 1.2.11), this flag only has an effect
     # for Windows as it is specific to `win32/Makefile.gcc`.
@@ -165,11 +193,19 @@ stdenv.mkDerivation (finalAttrs: {
     inherit minizip;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";
     license = lib.licenses.zlib;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://zlib.net";
+    description = "Lossless data-compression library";
+    license = licenses.zlib;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [ "zlib" ];
   };
 })

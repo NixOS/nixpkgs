@@ -21,11 +21,19 @@ buildPythonApplication rec {
     pygments
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Vimwiki markdown plugin";
     homepage = "https://github.com/WnP/vimwiki_markdown";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ seqizz ];
+=======
+  meta = with lib; {
+    description = "Vimwiki markdown plugin";
+    homepage = "https://github.com/WnP/vimwiki_markdown";
+    license = licenses.mit;
+    maintainers = with maintainers; [ seqizz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vimwiki_markdown";
   };
 }

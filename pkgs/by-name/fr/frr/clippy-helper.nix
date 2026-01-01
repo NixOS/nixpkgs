@@ -47,7 +47,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://frrouting.org/";
     description = "FRR routing daemon suite: CLI helper tool clippy";
     longDescription = ''
@@ -55,11 +59,20 @@ stdenv.mkDerivation {
       to support cross-compiling, because it needs to be compiled with the build system toolchain
       and not the target host one.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
     maintainers = with lib.maintainers; [ thillux ];
     platforms = lib.platforms.unix;
+=======
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
+    maintainers = with maintainers; [ thillux ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

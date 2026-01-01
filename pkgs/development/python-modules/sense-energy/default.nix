@@ -51,11 +51,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sense_energy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "API for the Sense Energy Monitor";
     homepage = "https://github.com/scottbonline/sense";
     changelog = "https://github.com/scottbonline/sense/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "API for the Sense Energy Monitor";
+    homepage = "https://github.com/scottbonline/sense";
+    changelog = "https://github.com/scottbonline/sense/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

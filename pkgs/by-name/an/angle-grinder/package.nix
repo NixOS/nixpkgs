@@ -22,11 +22,19 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Slice and dice logs on the command line";
     homepage = "https://github.com/rcoh/angle-grinder";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bbigras ];
+=======
+  meta = with lib; {
+    description = "Slice and dice logs on the command line";
+    homepage = "https://github.com/rcoh/angle-grinder";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bbigras ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "agrind";
   };
 }

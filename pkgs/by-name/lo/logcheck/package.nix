@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
     "SHAREDIR=share/logtail/detectrotate"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Mails anomalies in the system logfiles to the administrator";
     longDescription = ''
       Mails anomalies in the system logfiles to the administrator.
@@ -48,6 +52,10 @@ stdenv.mkDerivation rec {
       Logcheck was part of the Abacus Project of security tools, but this version has been rewritten.
     '';
     homepage = "https://salsa.debian.org/debian/logcheck";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
+=======
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

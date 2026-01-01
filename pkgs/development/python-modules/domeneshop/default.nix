@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "domeneshop" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/domeneshop/python-domeneshop/releases/tag/v${version}";
     description = "Python library for working with the Domeneshop API";
     homepage = "https://api.domeneshop.no/docs/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/domeneshop/python-domeneshop/releases/tag/v${version}";
+    description = "Python library for working with the Domeneshop API";
+    homepage = "https://api.domeneshop.no/docs/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

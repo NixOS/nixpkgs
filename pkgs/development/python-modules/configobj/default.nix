@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "configobj" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Config file reading, writing and validation";
     homepage = "https://github.com/DiffSK/configobj";
     changelog = "https://github.com/DiffSK/configobj/blob/v${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Config file reading, writing and validation";
+    homepage = "https://github.com/DiffSK/configobj";
+    changelog = "https://github.com/DiffSK/configobj/blob/v${version}/CHANGES.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

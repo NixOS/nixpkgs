@@ -26,10 +26,18 @@ buildDunePackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     inherit (src.meta) homepage;
     description = "OCaml implementation of the Npy format spec";
     maintainers = [ lib.maintainers.bcdarwin ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    inherit (src.meta) homepage;
+    description = "OCaml implementation of the Npy format spec";
+    maintainers = [ maintainers.bcdarwin ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

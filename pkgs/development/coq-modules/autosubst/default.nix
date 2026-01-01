@@ -33,6 +33,7 @@ mkCoqDerivation {
     stdlib
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.ps.uni-saarland.de/autosubst/";
     description = "Automation for de Bruijn syntax and substitution in Coq";
@@ -41,5 +42,15 @@ mkCoqDerivation {
       jwiegley
     ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://www.ps.uni-saarland.de/autosubst/";
+    description = "Automation for de Bruijn syntax and substitution in Coq";
+    maintainers = with maintainers; [
+      siraben
+      jwiegley
+    ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

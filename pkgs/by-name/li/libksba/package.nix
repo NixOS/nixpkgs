@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     rmdir --ignore-fail-on-non-empty $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
@@ -43,5 +44,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
     license = lib.licenses.lgpl3;
+=======
+  meta = with lib; {
+    homepage = "https://www.gnupg.org";
+    description = "CMS and X.509 access library";
+    mainProgram = "ksba-config";
+    platforms = platforms.all;
+    maintainers = [ ];
+    license = licenses.lgpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

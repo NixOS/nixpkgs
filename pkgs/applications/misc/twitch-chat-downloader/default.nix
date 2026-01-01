@@ -39,11 +39,20 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "tcd" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Twitch Chat Downloader";
     mainProgram = "tcd";
     homepage = "https://github.com/TheDrHax/Twitch-Chat-Downloader";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ assistant ];
+=======
+  meta = with lib; {
+    description = "Twitch Chat Downloader";
+    mainProgram = "tcd";
+    homepage = "https://github.com/TheDrHax/Twitch-Chat-Downloader";
+    license = licenses.mit;
+    maintainers = with maintainers; [ assistant ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

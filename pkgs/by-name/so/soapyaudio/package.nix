@@ -54,11 +54,20 @@ stdenv.mkDerivation rec {
     "-DUSE_HAMLIB=ON"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/pothosware/SoapyAudio";
     description = "SoapySDR plugin for amateur radio and audio devices";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ numinit ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/pothosware/SoapyAudio";
+    description = "SoapySDR plugin for amateur radio and audio devices";
+    license = licenses.mit;
+    maintainers = with maintainers; [ numinit ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

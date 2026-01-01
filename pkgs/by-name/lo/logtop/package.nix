@@ -31,17 +31,28 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr ""
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Displays a real-time count of strings received from stdin";
     longDescription = ''
       logtop displays a real-time count of strings received from stdin.
       It can be useful in some cases, like getting the IP flooding your
       server or the top buzzing article of your blog
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     homepage = "https://github.com/JulienPalard/logtop";
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.starcraft66 ];
+=======
+    license = licenses.bsd2;
+    homepage = "https://github.com/JulienPalard/logtop";
+    platforms = platforms.unix;
+    maintainers = [ maintainers.starcraft66 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "logtop";
   };
 }

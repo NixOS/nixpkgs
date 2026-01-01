@@ -71,10 +71,18 @@ rustPlatform.buildRustPackage rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/systemd/zram-generator";
     license = lib.licenses.mit;
     description = "Systemd unit generator for zram devices";
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/systemd/zram-generator";
+    license = licenses.mit;
+    description = "Systemd unit generator for zram devices";
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

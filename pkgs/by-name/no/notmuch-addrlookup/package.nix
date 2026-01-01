@@ -29,12 +29,21 @@ stdenv.mkDerivation {
 
   installPhase = "install -D notmuch-addrlookup $out/bin/notmuch-addrlookup";
 
+<<<<<<< HEAD
   meta = {
     description = "Address lookup tool for Notmuch in C";
     homepage = "https://github.com/aperezdc/notmuch-addrlookup-c";
     maintainers = with lib.maintainers; [ mog ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Address lookup tool for Notmuch in C";
+    homepage = "https://github.com/aperezdc/notmuch-addrlookup-c";
+    maintainers = with maintainers; [ mog ];
+    platforms = platforms.unix;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "notmuch-addrlookup";
   };
 }

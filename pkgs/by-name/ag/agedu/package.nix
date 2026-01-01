@@ -25,7 +25,11 @@ stdenv.mkDerivation {
     halibut
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Unix utility for tracking down wasted disk space";
     longDescription = ''
       Most Unix file systems, in their default mode, helpfully record when a
@@ -39,9 +43,15 @@ stdenv.mkDerivation {
       you haven't used them since a long time.
     '';
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/agedu/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ symphorien ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ symphorien ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "agedu";
   };
 }

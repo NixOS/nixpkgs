@@ -1,7 +1,11 @@
 {
   stdenv,
   lib,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchurl,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meson,
   ninja,
   pkg-config,
@@ -10,12 +14,16 @@
   libspectre,
   gettext,
   desktop-file-utils,
+<<<<<<< HEAD
   appstream,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   appstream-glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-ps";
+<<<<<<< HEAD
   version = "0.2.9";
 
   src = fetchFromGitHub {
@@ -23,6 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "zathura-ps";
     tag = finalAttrs.version;
     hash = "sha256-YQtMfHhPAe8LtJfcw8LRGe5LvtPY7DjYKFaWOYlveeI=";
+=======
+  version = "0.2.8";
+
+  src = fetchurl {
+    url = "https://pwmt.org/projects/zathura-ps/download/zathura-ps-${finalAttrs.version}.tar.xz";
+    hash = "sha256-B8pZT3J3+YdtADgEhBg0PqKWQCjpPJD5Vp7/NqiTLko=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -31,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     desktop-file-utils
+<<<<<<< HEAD
     appstream
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     appstream-glib
   ];
 

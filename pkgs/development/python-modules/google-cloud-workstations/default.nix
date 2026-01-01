@@ -47,11 +47,20 @@ buildPythonPackage rec {
     "google.cloud.workstations_v1beta"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Client for Cloud Workstations";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-workstations";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-workstations-v${version}/packages/google-cloud-workstations/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python Client for Cloud Workstations";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-workstations";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-workstations-v${version}/packages/google-cloud-workstations/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

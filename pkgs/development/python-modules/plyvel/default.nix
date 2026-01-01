@@ -22,10 +22,18 @@ buildPythonPackage rec {
   # no tests for python2
   doCheck = isPy3k;
 
+<<<<<<< HEAD
   meta = {
     description = "Fast and feature-rich Python interface to LevelDB";
     platforms = lib.platforms.unix;
     homepage = "https://github.com/wbolster/plyvel";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Fast and feature-rich Python interface to LevelDB";
+    platforms = platforms.unix;
+    homepage = "https://github.com/wbolster/plyvel";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

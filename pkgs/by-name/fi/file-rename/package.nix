@@ -28,10 +28,17 @@ perlPackages.buildPerlPackage {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Perl extension for renaming multiple files";
     license = lib.licenses.artistic1;
     maintainers = with lib.maintainers; [ peterhoeg ];
+=======
+  meta = with lib; {
+    description = "Perl extension for renaming multiple files";
+    license = licenses.artistic1;
+    maintainers = with maintainers; [ peterhoeg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rename";
   };
 }

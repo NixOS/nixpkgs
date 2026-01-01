@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyspcwebgw" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for the SPC Web Gateway REST API";
     homepage = "https://github.com/mbrrg/pyspcwebgw";
     changelog = "https://github.com/pyspcwebgw/pyspcwebgw/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for the SPC Web Gateway REST API";
+    homepage = "https://github.com/mbrrg/pyspcwebgw";
+    changelog = "https://github.com/pyspcwebgw/pyspcwebgw/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

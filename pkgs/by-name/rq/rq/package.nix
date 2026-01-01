@@ -35,6 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {
@@ -46,5 +50,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "rq";
     homepage = "https://github.com/dflemstr/rq";
     license = with lib.licenses; [ asl20 ];
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

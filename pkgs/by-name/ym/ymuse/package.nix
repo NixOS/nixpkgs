@@ -64,6 +64,7 @@ buildGoModule rec {
   # IDK how to deal with tests that open up display.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://yktoo.com/en/software/ymuse/";
     description = "GTK client for Music Player Daemon (MPD)";
@@ -71,5 +72,14 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "ymuse";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://yktoo.com/en/software/ymuse/";
+    description = "GTK client for Music Player Daemon (MPD)";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ foo-dogsquared ];
+    mainProgram = "ymuse";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

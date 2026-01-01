@@ -48,11 +48,20 @@ buildPythonPackage rec {
     "tests/test__version.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for the Honeywell Lyric Platform";
     homepage = "https://github.com/timmo001/aiolyric";
     changelog = "https://github.com/timmo001/aiolyric/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for the Honeywell Lyric Platform";
+    homepage = "https://github.com/timmo001/aiolyric";
+    changelog = "https://github.com/timmo001/aiolyric/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

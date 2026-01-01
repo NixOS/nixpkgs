@@ -59,10 +59,18 @@ stdenv.mkDerivation {
     mkdir -p $out/bin $out/man
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://bellard.org/qemacs/";
     description = "Very small but powerful UNIX editor";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iblech ];
+=======
+  meta = with lib; {
+    homepage = "https://bellard.org/qemacs/";
+    description = "Very small but powerful UNIX editor";
+    license = licenses.mit;
+    maintainers = with maintainers; [ iblech ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

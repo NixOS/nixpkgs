@@ -22,11 +22,20 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for importing go packages into gx";
     mainProgram = "gx-go";
     homepage = "https://github.com/whyrusleeping/gx-go";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zimbatm ];
+=======
+  meta = with lib; {
+    description = "Tool for importing go packages into gx";
+    mainProgram = "gx-go";
+    homepage = "https://github.com/whyrusleeping/gx-go";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zimbatm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

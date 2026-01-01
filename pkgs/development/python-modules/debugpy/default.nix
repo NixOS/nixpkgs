@@ -25,13 +25,18 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
+<<<<<<< HEAD
   version = "1.8.19";
+=======
+  version = "1.8.17";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
+<<<<<<< HEAD
 
     # Upstream uses .gitattributes to inject information about the revision
     # hash and the refname into `src/debugpy/_version.py`, see:
@@ -46,6 +51,17 @@ buildPythonPackage rec {
   };
 
   patches = [
+=======
+    hash = "sha256-U9WeWAX0qDusWcMsFaI1ct4YKlGQEHUYlKZfRiYhma0=";
+  };
+
+  patches = [
+    # Use nixpkgs version instead of versioneer
+    (replaceVars ./hardcode-version.patch {
+      inherit version;
+    })
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Fix importing debugpy in:
     # - test_nodebug[module-launch(externalTerminal)]
     # - test_nodebug[module-launch(integratedTerminal)]
@@ -79,6 +95,7 @@ buildPythonPackage rec {
   # Derived from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
   preBuild = ''
     (
+<<<<<<< HEAD
       set -x
       cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
       $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
@@ -94,6 +111,22 @@ buildPythonPackage rec {
       }
     )
   '';
+=======
+        set -x
+        cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
+        $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
+          {
+            "x86_64-linux" = "-shared -o attach_linux_amd64.so";
+            "i686-linux" = "-shared -o attach_linux_x86.so";
+            "aarch64-linux" = "-shared -o attach_linux_arm64.so";
+            "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
+            "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
+            "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach.dylib";
+          }
+          .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+        }
+      )'';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   build-system = [ setuptools ];
 

@@ -58,11 +58,20 @@ stdenv.mkDerivation rec {
     rev-prefix = "libtraceevent-";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Linux kernel trace event library";
     homepage = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/";
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wentasah ];
+=======
+  meta = with lib; {
+    description = "Linux kernel trace event library";
+    homepage = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/";
+    license = licenses.lgpl21Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wentasah ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

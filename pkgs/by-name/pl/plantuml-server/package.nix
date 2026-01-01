@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) plantuml-server;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Web application to generate UML diagrams on-the-fly";
     homepage = "https://plantuml.com/";
@@ -32,6 +33,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Web application to generate UML diagrams on-the-fly";
+    homepage = "https://plantuml.com/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       truh
       anthonyroussel
     ];

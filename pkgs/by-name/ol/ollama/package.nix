@@ -57,7 +57,11 @@ let
 
   rocmRequested = shouldEnable "rocm" config.rocmSupport;
   cudaRequested = shouldEnable "cuda" config.cudaSupport;
+<<<<<<< HEAD
   vulkanRequested = acceleration == "vulkan";
+=======
+  vulkanRequested = shouldEnable "vulkan" false;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   enableRocm = rocmRequested && stdenv.hostPlatform.isLinux;
   enableCuda = cudaRequested && stdenv.hostPlatform.isLinux;
@@ -138,16 +142,27 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
+<<<<<<< HEAD
   version = "0.13.5";
+=======
+  version = "0.13.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-4K1+GE96Uu5w1otSiP69vNDJ03tFvr78VluIEHMzFGQ=";
   };
 
   vendorHash = "sha256-NM0vtue0MFrAJCjmpYJ/rPEDWBxWCzBrWDb0MVOhY+Q=";
+=======
+    hash = "sha256-VhBPYf/beWkeFCdBTC2UpxqQUgEX8TCkbiWBPg8gDb4=";
+  };
+
+  vendorHash = "sha256-rKRRcwmon/3K2bN7iQaMap5yNYKMCZ7P0M1C2hv4IlQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env =
     lib.optionalAttrs enableRocm {
@@ -187,12 +202,15 @@ goBuild (finalAttrs: {
   postPatch = ''
     substituteInPlace version/version.go \
       --replace-fail 0.0.0 '${finalAttrs.version}'
+<<<<<<< HEAD
     rm -r app
   ''
   # disable tests that fail in sandbox due to Metal init failure
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm ml/backend/ggml/ggml_test.go
     rm ml/nn/pooling/pooling_test.go
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   overrideModAttrs = (
@@ -269,6 +287,10 @@ goBuild (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckKeepEnvironment = "HOME";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     tests = {

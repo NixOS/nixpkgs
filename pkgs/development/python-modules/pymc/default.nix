@@ -18,20 +18,31 @@
   scipy,
   threadpoolctl,
   typing-extensions,
+<<<<<<< HEAD
 
   writableTmpDirAsHomeHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "pymc";
+<<<<<<< HEAD
   version = "5.27.0";
+=======
+  version = "5.26.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-wBeWydrHrF+wNZnqWa2k8tCaUvjcoiSrmY85LUhrQds=";
+=======
+    hash = "sha256-j1v8MzAFfOmkN7pDcF91dS5Xprls8qfTQHWdaFUO4GU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [
@@ -52,6 +63,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     # Arviz (imported by pymc) wants to write a stamp file to the homedir at import time.
     # Without $HOME being writable, `pythonImportsCheck` fails.
@@ -59,6 +71,8 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # The test suite is computationally intensive and test failures are not
   # indicative for package usability hence tests are disabled by default.
   doCheck = false;
@@ -72,6 +86,10 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nidabdella
+<<<<<<< HEAD
+=======
+      ferrine
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

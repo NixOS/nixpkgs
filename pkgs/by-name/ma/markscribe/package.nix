@@ -22,12 +22,20 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Your personal markdown scribe with template-engine and Git(Hub) & RSS powers";
     mainProgram = "markscribe";
     homepage = "https://github.com/muesli/markscribe";
     changelog = "https://github.com/muesli/markscribe/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

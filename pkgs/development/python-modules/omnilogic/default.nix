@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "omnilogic" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface for the Hayward Omnilogic pool control system";
     homepage = "https://github.com/djtimca/omnilogic-api";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python interface for the Hayward Omnilogic pool control system";
+    homepage = "https://github.com/djtimca/omnilogic-api";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

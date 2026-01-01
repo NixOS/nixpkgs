@@ -99,6 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/jarun/nnn/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nnn";
   };
 })

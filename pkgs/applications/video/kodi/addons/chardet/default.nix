@@ -22,10 +22,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Freso/script.module.chardet";
     description = "Universal encoding detector";
     license = lib.licenses.lgpl2Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Freso/script.module.chardet";
+    description = "Universal encoding detector";
+    license = licenses.lgpl2Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

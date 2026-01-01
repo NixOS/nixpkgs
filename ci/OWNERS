@@ -115,9 +115,15 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
 # NixOS Render Docs
+<<<<<<< HEAD
 /pkgs/by-name/ni/nixos-render-docs @GetPsyched @hsjobeki
 /doc/redirects.json                @GetPsyched
 /nixos/doc/manual/redirects.json   @GetPsyched
+=======
+/pkgs/by-name/ni/nixos-render-docs @fricklerhandwerk @GetPsyched @hsjobeki
+/doc/redirects.json                @fricklerhandwerk @GetPsyched @hsjobeki
+/nixos/doc/manual/redirects.json   @fricklerhandwerk @GetPsyched @hsjobeki
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
@@ -206,9 +212,15 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @wolfgangwalther
 
 # Perl
+<<<<<<< HEAD
 /pkgs/development/interpreters/perl @stigtsp @marcusramberg
 /pkgs/top-level/perl-packages.nix   @stigtsp @marcusramberg
 /pkgs/development/perl-modules      @stigtsp @marcusramberg
+=======
+/pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @marcusramberg
+/pkgs/development/perl-modules      @stigtsp @zakame @marcusramberg
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 # R
 /pkgs/applications/science/math/R   @jbedo
@@ -245,7 +257,11 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/applications/networking/browsers/firefox/update.nix
 /pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
 /pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
+<<<<<<< HEAD
 /pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz
+=======
+/pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz @LordGrimmauld
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
 /nixos/tests/chromium.nix @emilylange @networkException
 
@@ -262,7 +278,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/java-packages.nix @NixOS/java
 
 # Jetbrains
+<<<<<<< HEAD
 /pkgs/applications/editors/jetbrains @leona-ya @theCapypara
+=======
+/pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 # Licenses
 /lib/licenses.nix @alyssais @emilazy @jopejoe1
@@ -372,10 +392,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # LuaPackages
 /pkgs/development/lua-modules         @NixOS/lua
 
+<<<<<<< HEAD
 # mpvScripts
 /pkgs/by-name/mp/mpv/scripts     @uninsane
 /pkgs/by-name/mp/mpv/scripts.nix @uninsane
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 # Neovim
 /pkgs/applications/editors/neovim      @NixOS/neovim
 
@@ -386,12 +409,21 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/vscode/extensions
 
 # PHP interpreter, packages, extensions, tests and documentation
+<<<<<<< HEAD
 /doc/languages-frameworks/php.section.md          @aanderse @ma27 @talyz
 /nixos/tests/php                                  @aanderse @ma27 @talyz
 /pkgs/build-support/php/build-pecl.nix            @aanderse @ma27 @talyz
 /pkgs/development/interpreters/php       @jtojnar @aanderse @ma27 @talyz
 /pkgs/development/php-packages                    @aanderse @ma27 @talyz
 /pkgs/top-level/php-packages.nix         @jtojnar @aanderse @ma27 @talyz
+=======
+/doc/languages-frameworks/php.section.md          @aanderse @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @aanderse @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @globin @ma27 @talyz
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 # Docker tools
 /pkgs/build-support/docker                       @roberth @jhol
@@ -439,7 +471,10 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/build-support/node/fetch-npm-deps         @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
 /pkgs/development/tools/pnpm                    @Scrumplex @gepbird
+<<<<<<< HEAD
 /pkgs/build-support/node/fetch-pnpm-deps        @Scrumplex @gepbird
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid

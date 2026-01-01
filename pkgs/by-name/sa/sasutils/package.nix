@@ -26,10 +26,18 @@ python3Packages.buildPythonApplication rec {
     installManPage doc/man/man1/*.1
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/stanford-rc/sasutils";
     description = "Set of command-line tools to ease the administration of Serial Attached SCSI (SAS) fabrics";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aij ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/stanford-rc/sasutils";
+    description = "Set of command-line tools to ease the administration of Serial Attached SCSI (SAS) fabrics";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aij ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

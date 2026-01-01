@@ -95,11 +95,19 @@ buildPythonPackage rec {
     "test_verify_with_time"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper around the OpenSSL library";
     homepage = "https://github.com/pyca/pyopenssl";
     changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python wrapper around the OpenSSL library";
+    homepage = "https://github.com/pyca/pyopenssl";
+    changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

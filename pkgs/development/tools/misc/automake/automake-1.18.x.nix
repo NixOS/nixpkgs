@@ -36,16 +36,28 @@ stdenv.mkDerivation rec {
   # "fixed" path in generated files!
   dontPatchShebangs = true;
 
+<<<<<<< HEAD
   meta = {
     branch = "1.18";
     homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    branch = "1.18";
+    homepage = "https://www.gnu.org/software/automake/";
+    description = "GNU standard-compliant makefile generator";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       GNU Automake is a tool for automatically generating
       `Makefile.in' files compliant with the GNU Coding
       Standards.  Automake requires the use of Autoconf.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

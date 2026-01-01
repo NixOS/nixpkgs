@@ -195,7 +195,11 @@ stdenv.mkDerivation (finalAttrs: {
     withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/Ghidra_${finalAttrs.version}_build/Ghidra/Configurations/Public_Release/src/global/docs/ChangeHistory.html";
     description = "Software reverse engineering (SRE) suite of tools";
     mainProgram = "ghidra";
@@ -206,12 +210,21 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # deps
+    ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       roblabla
       vringar
     ];

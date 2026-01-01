@@ -42,12 +42,21 @@ stdenv.mkDerivation {
     ppp
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SSTP client for Linux";
     homepage = "https://sstp-client.sourceforge.net/";
     platforms = lib.platforms.linux;
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "SSTP client for Linux";
+    homepage = "https://sstp-client.sourceforge.net/";
+    platforms = platforms.linux;
+    maintainers = [ ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sstpc";
   };
 }

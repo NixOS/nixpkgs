@@ -38,11 +38,20 @@ buildPythonPackage rec {
     jinja2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple tool for integrating Starlette and WTForms";
     changelog = "https://github.com/muicss/starlette-wtf/blob/v${version}/CHANGELOG.md";
     homepage = "https://github.com/muicss/starlette-wtf";
     license = lib.licenses.mit;
     teams = [ lib.teams.wdz ];
+=======
+  meta = with lib; {
+    description = "Simple tool for integrating Starlette and WTForms";
+    changelog = "https://github.com/muicss/starlette-wtf/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/muicss/starlette-wtf";
+    license = licenses.mit;
+    teams = [ teams.wdz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

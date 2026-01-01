@@ -66,9 +66,15 @@
     mathcomp-word
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SSProve: A Foundational Framework for Modular Cryptographic Proofs in Coq";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "SSProve: A Foundational Framework for Modular Cryptographic Proofs in Coq";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [
       {
         name = "Sebastian Ertel";

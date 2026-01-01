@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Fast DEFLATE/zlib/gzip compressor and decompressor";
     license = lib.licenses.mit;
@@ -44,6 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ebiggers/libdeflate/blob/v${finalAttrs.version}/NEWS.md";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fast DEFLATE/zlib/gzip compressor and decompressor";
+    license = licenses.mit;
+    homepage = "https://github.com/ebiggers/libdeflate";
+    changelog = "https://github.com/ebiggers/libdeflate/blob/v${finalAttrs.version}/NEWS.md";
+    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with maintainers; [
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kaction
     ];
     pkgConfigModules = [ "libdeflate" ];

@@ -11,14 +11,22 @@
 
 buildPythonPackage rec {
   pname = "nvidia-ml-py";
+<<<<<<< HEAD
   version = "13.590.44";
+=======
+  version = "13.580.82";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "nvidia_ml_py";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-s1jHYUsP3upLlfBG8ckBI7/iXRSKuTuxwAJIuDRwM3M=";
+=======
+    hash = "sha256-DAKIBdxToOKmmF6oAYiBl3Zawu+PHJ4pp78NNhal78c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [

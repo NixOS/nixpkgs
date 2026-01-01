@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lzo" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the LZO data compression library";
     homepage = "https://github.com/jd-boyd/python-lzo";
     changelog = "https://github.com/jd-boyd/python-lzo/releases/tag/v${version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ jbedo ];
+=======
+  meta = with lib; {
+    description = "Python bindings for the LZO data compression library";
+    homepage = "https://github.com/jd-boyd/python-lzo";
+    changelog = "https://github.com/jd-boyd/python-lzo/releases/tag/v${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ jbedo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

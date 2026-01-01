@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "goveelights" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for interacting with the Govee API";
     homepage = "https://github.com/arcanearronax/govee_lights";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for interacting with the Govee API";
+    homepage = "https://github.com/arcanearronax/govee_lights";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

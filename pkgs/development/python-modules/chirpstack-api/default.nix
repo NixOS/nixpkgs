@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "chirpstack_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ChirpStack gRPC API message and service wrappers for Python";
     homepage = "https://github.com/brocaar/chirpstack-api";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "ChirpStack gRPC API message and service wrappers for Python";
+    homepage = "https://github.com/brocaar/chirpstack-api";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

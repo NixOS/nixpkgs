@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Input method development support for xcb";
     homepage = "https://github.com/fcitx/xcb-imdkit";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Input method development support for xcb";
+    homepage = "https://github.com/fcitx/xcb-imdkit";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ poscat ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -51,11 +51,19 @@ buildPythonPackage rec {
     "myst_nb.sphinx_ext"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jupyter Notebook Sphinx reader built on top of the MyST markdown parser";
     homepage = "https://github.com/executablebooks/MyST-NB";
     changelog = "https://github.com/executablebooks/MyST-NB/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Jupyter Notebook Sphinx reader built on top of the MyST markdown parser";
+    homepage = "https://github.com/executablebooks/MyST-NB";
+    changelog = "https://github.com/executablebooks/MyST-NB/raw/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

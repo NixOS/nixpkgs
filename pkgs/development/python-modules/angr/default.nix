@@ -106,10 +106,18 @@ buildPythonPackage rec {
     "archinfo"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Powerful and user-friendly binary analysis platform";
+    homepage = "https://angr.io/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

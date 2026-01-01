@@ -52,11 +52,19 @@ buildPythonPackage rec {
     "tests/test_opts.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/gotcha/ipdb";
     description = "IPython-enabled pdb";
     mainProgram = "ipdb3";
     license = lib.licenses.bsd0;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/gotcha/ipdb";
+    description = "IPython-enabled pdb";
+    mainProgram = "ipdb3";
+    license = licenses.bsd0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

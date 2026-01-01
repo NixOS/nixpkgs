@@ -98,10 +98,18 @@ mkCoqDerivation {
 
   mlPlugin = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://cl-informatik.uibk.ac.at/cek/coqhammer/";
     description = "Automation for Dependent Type Theory";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    homepage = "http://cl-informatik.uibk.ac.at/cek/coqhammer/";
+    description = "Automation for Dependent Type Theory";
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

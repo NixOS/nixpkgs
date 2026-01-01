@@ -15,7 +15,10 @@
   glib,
   dotconf,
   libsndfile,
+<<<<<<< HEAD
   runtimeShell,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   withLibao ? true,
   libao,
   withPulse ? false,
@@ -102,7 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
+<<<<<<< HEAD
     "--sysconfdir=/etc"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
@@ -129,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString withPico ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+<<<<<<< HEAD
     substituteInPlace src/modules/generic.c --replace-fail "/bin/bash" "${runtimeShell}"
   '';
 
@@ -136,6 +143,10 @@ stdenv.mkDerivation (finalAttrs: {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
+=======
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postInstall =
     if libsOnly then
       ''
@@ -148,17 +159,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description =
       "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
     homepage = "https://devel.freebsoft.org/speechd";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description =
+      "Common interface to speech synthesis" + lib.optionalString libsOnly " - client libraries only";
+    homepage = "https://devel.freebsoft.org/speechd";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       berce
       jtojnar
     ];
     # TODO: remove checks for `withPico` once PR #375450 is merged
+<<<<<<< HEAD
     platforms = if withAlsa || withPico then lib.platforms.linux else lib.platforms.unix;
+=======
+    platforms = if withAlsa || withPico then platforms.linux else platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "speech-dispatcher";
   };
 })

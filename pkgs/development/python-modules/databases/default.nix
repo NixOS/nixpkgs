@@ -54,11 +54,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "databases" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Async database support for Python";
     homepage = "https://github.com/encode/databases";
     changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Async database support for Python";
+    homepage = "https://github.com/encode/databases";
+    changelog = "https://github.com/encode/databases/releases/tag/${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

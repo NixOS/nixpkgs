@@ -22,10 +22,17 @@ buildPythonPackage {
   propagatedBuildInputs = [ colorama ];
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python 2.7 & 3.5+ runtime type-checker";
     homepage = "https://github.com/h2oai/typesentry";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python 2.7 & 3.5+ runtime type-checker";
+    homepage = "https://github.com/h2oai/typesentry";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

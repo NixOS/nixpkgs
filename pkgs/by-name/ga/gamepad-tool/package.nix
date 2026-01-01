@@ -42,12 +42,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple GUI tool to create/modify gamepad mappings for games that use SDL2 Game Controller API";
     homepage = "https://generalarcade.com/gamepadtool/";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ gador ];
+=======
+  meta = with lib; {
+    description = "Simple GUI tool to create/modify gamepad mappings for games that use SDL2 Game Controller API";
+    homepage = "https://generalarcade.com/gamepadtool/";
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ gador ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gamepad-tool";
   };
 })

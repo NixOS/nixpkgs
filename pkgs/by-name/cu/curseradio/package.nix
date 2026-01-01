@@ -37,11 +37,20 @@ python3Packages.buildPythonApplication {
   # No tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Command line radio player";
     mainProgram = "curseradio";
     homepage = "https://github.com/chronitis/curseradio";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.eyjhb ];
+=======
+  meta = with lib; {
+    description = "Command line radio player";
+    mainProgram = "curseradio";
+    homepage = "https://github.com/chronitis/curseradio";
+    license = licenses.mit;
+    maintainers = [ maintainers.eyjhb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

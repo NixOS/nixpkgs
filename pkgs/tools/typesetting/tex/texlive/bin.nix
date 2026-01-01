@@ -43,6 +43,10 @@
   woff2,
   xxHash,
   makeWrapper,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   useFixedHashes,
   asymptote,
   biber-ms,
@@ -176,7 +180,10 @@ let
       "--disable-texlive" # do not build the texlive (TeX Live scripts) package
       "--disable-linked-scripts" # do not install the linked scripts
       "-C" # use configure cache to speed up
+<<<<<<< HEAD
       "CFLAGS=-std=gnu17" # fix build with gcc15
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ]
     ++ withSystemLibs [
       # see "from TL tree" vs. "Using installed"  in configure output
@@ -350,17 +357,29 @@ rec {
 
     passthru = { inherit version buildInputs; };
 
+<<<<<<< HEAD
     meta = {
       description = "Basic binaries for TeX Live";
       homepage = "http://www.tug.org/texlive";
       license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [
+=======
+    meta = with lib; {
+      description = "Basic binaries for TeX Live";
+      homepage = "http://www.tug.org/texlive";
+      license = lib.licenses.gpl2Plus;
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         veprbl
         lovek323
         raskin
         jwiegley
       ];
+<<<<<<< HEAD
       platforms = lib.platforms.all;
+=======
+      platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 
@@ -557,10 +576,17 @@ rec {
         ninja
       ];
 
+<<<<<<< HEAD
       meta = {
         description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
         homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
         license = lib.licenses.gpl2Plus;
+=======
+      meta = with lib; {
+        description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
+        homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
+        license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         maintainers = with lib.maintainers; [
           apfelkuchen6
           xworld21
@@ -585,6 +611,7 @@ rec {
       "--with-ttfautohint"
     ];
 
+<<<<<<< HEAD
     # GCC15 compataiblity patches
     patches = [
       (fetchpatch {
@@ -597,6 +624,8 @@ rec {
       })
     ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
     postPatch = ''
       substituteInPlace src/PDFHandler.cpp \
@@ -680,7 +709,11 @@ rec {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       homepage = "https://www.ctan.org/pkg/pygmentex";
       description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
       longDescription = ''
@@ -691,8 +724,13 @@ rec {
         software such as forum systems, wikis or other applications that need to
         prettify source code.
       '';
+<<<<<<< HEAD
       license = lib.licenses.lppl13c;
       maintainers = with lib.maintainers; [ romildo ];
+=======
+      license = licenses.lppl13c;
+      maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

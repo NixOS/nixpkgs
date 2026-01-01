@@ -44,12 +44,21 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
+<<<<<<< HEAD
   meta = {
     description = "Losslessly shrink any JPEG file";
     homepage = "https://github.com/kud/jpegrescan";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ ramkromberg ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Losslessly shrink any JPEG file";
+    homepage = "https://github.com/kud/jpegrescan";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ ramkromberg ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jpegrescan";
   };
 }

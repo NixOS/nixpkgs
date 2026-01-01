@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -D xxgdb.1 $out/share/man/man1/xxgdb.1
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Simple but powerful graphical interface to gdb";
@@ -63,5 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Simple but powerful graphical interface to gdb";
+    mainProgram = "xxgdb";
+    license = licenses.mit;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

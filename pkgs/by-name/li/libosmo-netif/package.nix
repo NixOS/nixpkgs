@@ -35,12 +35,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Osmocom network / socket interface library";
     homepage = "https://osmocom.org/projects/libosmo-netif/wiki";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Osmocom network / socket interface library";
+    homepage = "https://osmocom.org/projects/libosmo-netif/wiki";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       markuskowa
     ];
   };

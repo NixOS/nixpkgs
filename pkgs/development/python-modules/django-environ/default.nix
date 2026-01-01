@@ -29,11 +29,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "environ" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilize environment variables to configure your Django application";
     homepage = "https://github.com/joke2k/django-environ/";
     changelog = "https://github.com/joke2k/django-environ/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Utilize environment variables to configure your Django application";
+    homepage = "https://github.com/joke2k/django-environ/";
+    changelog = "https://github.com/joke2k/django-environ/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

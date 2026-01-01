@@ -36,10 +36,18 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test-python";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/encukou/py3c";
     description = "Python 2/3 compatibility layer for C extensions";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/encukou/py3c";
+    description = "Python 2/3 compatibility layer for C extensions";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -31,10 +31,18 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension which renders CMake documentation";
     homepage = "https://github.com/scikit-build/moderncmakedomain";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jhol ];
+=======
+  meta = with lib; {
+    description = "Sphinx extension which renders CMake documentation";
+    homepage = "https://github.com/scikit-build/moderncmakedomain";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ jhol ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

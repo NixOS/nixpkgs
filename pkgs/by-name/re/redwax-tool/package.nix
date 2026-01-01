@@ -51,7 +51,11 @@ stdenv.mkDerivation rec {
     "--with-bash-completion-dir=yes"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://redwax.eu/rt/";
     description = "Universal certificate conversion tool";
     mainProgram = "redwax-tool";
@@ -60,7 +64,12 @@ stdenv.mkDerivation rec {
       certificates and keys you're interested in, write those
       certificates and keys to the destinations of your choice.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ astro ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

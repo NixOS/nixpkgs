@@ -48,11 +48,19 @@ buildNpmPackage rec {
       --prefix PATH : "${lib.makeBinPath [ nodejs ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Opcua client with blessed (ncurses)";
     homepage = "https://github.com/node-opcua/opcua-commander";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jonboh ];
+=======
+  meta = with lib; {
+    description = "Opcua client with blessed (ncurses)";
+    homepage = "https://github.com/node-opcua/opcua-commander";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jonboh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "opcua-commander";
   };
 }

@@ -50,11 +50,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/lhapdf --prefix PYTHONPATH : "$(toPythonPath "$out")"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "General purpose interpolator, used for evaluating Parton Distribution Functions from discretised data files";
     license = lib.licenses.gpl3;
     homepage = "https://www.lhapdf.org";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "General purpose interpolator, used for evaluating Parton Distribution Functions from discretised data files";
+    license = licenses.gpl3;
+    homepage = "https://www.lhapdf.org";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

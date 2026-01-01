@@ -42,9 +42,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GNOME Shell TaskWarrior GUI";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "GNOME Shell TaskWarrior GUI";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     homepage = "https://github.com/cinatic/taskwhisperer";
   };

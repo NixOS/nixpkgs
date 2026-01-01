@@ -106,11 +106,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyatv" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
     changelog = "https://github.com/postlund/pyatv/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python client library for the Apple TV";
+    homepage = "https://github.com/postlund/pyatv";
+    changelog = "https://github.com/postlund/pyatv/blob/${src.tag}/CHANGES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

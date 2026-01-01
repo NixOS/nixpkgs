@@ -4,8 +4,11 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   installShellFiles,
   versionCheckHook,
   stdenv,
@@ -30,6 +33,7 @@ let
 
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_9
     ];
@@ -37,6 +41,13 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_9;
+=======
+      pnpm_9.configHook
+    ];
+
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit (finalAttrs) pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 1;
       hash = "sha256-QIfadS2gNPtH006O86EndY/Hx2ml2FoKfUXJF5qoluw=";
     };

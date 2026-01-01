@@ -34,11 +34,20 @@ stdenv.mkDerivation rec {
     python3
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bittorrent filesystem based on FUSE";
     homepage = "https://github.com/johang/btfs";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ rnhmjoj ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Bittorrent filesystem based on FUSE";
+    homepage = "https://github.com/johang/btfs";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ rnhmjoj ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

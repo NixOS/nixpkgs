@@ -106,6 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = [ "${placeholder "out"}/bin/protoc" ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   env = lib.optionalAttrs (lib.versions.major version == "29") {

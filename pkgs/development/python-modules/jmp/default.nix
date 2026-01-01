@@ -29,10 +29,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "This library implements support for mixed precision training in JAX";
     homepage = "https://github.com/deepmind/jmp";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
+=======
+  meta = with lib; {
+    description = "This library implements support for mixed precision training in JAX";
+    homepage = "https://github.com/deepmind/jmp";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ndl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

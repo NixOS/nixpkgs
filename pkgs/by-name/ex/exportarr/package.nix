@@ -34,12 +34,21 @@ buildGoModule rec {
     unset subPackages
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "AIO Prometheus Exporter for Sonarr, Radarr or Lidarr";
     mainProgram = "exportarr";
     homepage = "https://github.com/onedr0p/exportarr";
     changelog = "https://github.com/onedr0p/exportarr/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ azahi ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ azahi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

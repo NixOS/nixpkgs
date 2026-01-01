@@ -48,6 +48,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pynws" ];
@@ -58,5 +59,17 @@ buildPythonPackage rec {
     changelog = "https://github.com/MatthewFlamm/pynws/releases/tag/v${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "pynws" ];
+
+  meta = with lib; {
+    description = "Python library to retrieve data from NWS/NOAA";
+    homepage = "https://github.com/MatthewFlamm/pynws";
+    changelog = "https://github.com/MatthewFlamm/pynws/releases/tag/v${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

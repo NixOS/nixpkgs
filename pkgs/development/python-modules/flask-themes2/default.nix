@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easily theme your Flask app";
     homepage = "https://github.com/sysr-q/flask-themes2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ruby0b ];
+=======
+  meta = with lib; {
+    description = "Easily theme your Flask app";
+    homepage = "https://github.com/sysr-q/flask-themes2";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ruby0b ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

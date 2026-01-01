@@ -125,9 +125,12 @@ in
           "AF_INET"
           "AF_INET6"
           "AF_NETLINK"
+<<<<<<< HEAD
         ]
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
           "AF_UNIX"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -135,7 +138,10 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged @resources"
+<<<<<<< HEAD
           "mbind"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ]
         ++ lib.optionals useYTMusic [
           "@pkey"

@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Command line tool to adjust the RPATH or RUNPATH of ELF binaries";
     mainProgram = "chrpath";
     longDescription = ''
@@ -27,8 +31,14 @@ stdenv.mkDerivation rec {
       linker should look for the libraries needed for a program.
     '';
     homepage = "https://codeberg.org/pere/chrpath";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

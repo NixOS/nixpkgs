@@ -25,12 +25,21 @@ buildGoModule rec {
   # Some checks depend on looking up vcs root
   checkPhase = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Convert go coverage files to lcov format";
     mainProgram = "gcov2lcov";
     homepage = "https://github.com/jandelgado/gcov2lcov";
     changelog = "https://github.com/jandelgado/gcov2lcov/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ meain ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ meain ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -34,7 +34,11 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
+<<<<<<< HEAD
       version = "20.3";
+=======
+      version = "20.2.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       nativeBuildInputs = [
         appimageTools.appimage-exec
@@ -56,9 +60,15 @@ let
             outputHashAlgo = "sha256";
             outputHash =
               if studioVariant then
+<<<<<<< HEAD
                 "sha256-NaWnlFna/NaYNb4aaO++598mlpMsPFGL6nlXREBSAlI="
               else
                 "sha256-hVliyg6BBkY83INF7ZbO8myXX+FjC4RwgipfOH5cFAs=";
+=======
+                "sha256-5wt5bPJez3FiRzJrC8pzbfqa6BrYMsJJptXBC+ZwzlE="
+              else
+                "sha256-puw87PuynP2P5VfoJ+7aQATal07orQICPwx2oNgj1eQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -298,6 +308,7 @@ buildFHSEnv {
     });
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
@@ -308,6 +319,19 @@ buildFHSEnv {
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "Professional video editing, color, effects and audio post-processing";
+    homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      amarshall
+      orivej
+      XBagon
+    ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
   };
 }

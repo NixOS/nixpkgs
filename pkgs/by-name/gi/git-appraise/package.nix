@@ -22,11 +22,19 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed code review system for Git repos";
     homepage = "https://github.com/google/git-appraise";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ vdemeester ];
+=======
+  meta = with lib; {
+    description = "Distributed code review system for Git repos";
+    homepage = "https://github.com/google/git-appraise";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ vdemeester ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-appraise";
   };
 }

@@ -18,14 +18,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wiliwili";
+<<<<<<< HEAD
   version = "1.5.3";
+=======
+  version = "1.5.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "xfangfang";
     repo = "wiliwili";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-NPJ1PLO6eqm4rBn4t965S0lqzT+npfYLWN6FKYCpnlQ=";
+=======
+    hash = "sha256-lcHKbEYlOznu9WhWX7ZoOCnxr6h/AJCLbjLmc2ZZTbg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

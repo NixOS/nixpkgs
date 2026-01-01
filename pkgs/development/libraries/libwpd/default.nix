@@ -33,10 +33,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for importing and exporting WordPerfect documents";
     homepage = "https://libwpd.sourceforge.net/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for importing and exporting WordPerfect documents";
+    homepage = "https://libwpd.sourceforge.net/";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

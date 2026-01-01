@@ -43,12 +43,20 @@ buildPythonPackage rec {
   # ffsubsync, which is pinned at 0.1.5.
   passthru.skipBulkUpdate = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Audio Activity Detection tool that can process online data as well as audio files";
     mainProgram = "auditok";
     homepage = "https://github.com/amsehili/auditok/";
     changelog = "https://github.com/amsehili/auditok/blob/v${version}/CHANGELOG";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

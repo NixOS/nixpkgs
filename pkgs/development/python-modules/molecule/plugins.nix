@@ -34,10 +34,18 @@ buildPythonPackage rec {
   # Tests require container runtimes
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Collection on molecule plugins";
     homepage = "https://github.com/ansible-community/molecule-plugins";
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Collection on molecule plugins";
+    homepage = "https://github.com/ansible-community/molecule-plugins";
+    maintainers = with maintainers; [ dawidd6 ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

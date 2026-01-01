@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nextcloudmonitor" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/meichthys/nextcloud_monitor/blob/${src.tag}/README.md#change-log";
     description = "Python wrapper around nextcloud monitor api";
     homepage = "https://github.com/meichthys/nextcloud_monitor";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/meichthys/nextcloud_monitor/blob/${src.tag}/README.md#change-log";
+    description = "Python wrapper around nextcloud monitor api";
+    homepage = "https://github.com/meichthys/nextcloud_monitor";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

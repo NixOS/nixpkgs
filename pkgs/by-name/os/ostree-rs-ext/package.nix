@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage rec {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Rust library with higher level APIs on top of the core ostree API";
     homepage = "https://github.com/ostreedev/ostree-rs-ext";
@@ -84,6 +85,16 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Rust library with higher level APIs on top of the core ostree API";
+    homepage = "https://github.com/ostreedev/ostree-rs-ext";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ostree-ext-cli";
   };
 }

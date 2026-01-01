@@ -44,12 +44,21 @@ stdenv.mkDerivation {
                      "executable('gnome-monitor-config', src, install : true"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Program to help manage GNOME monitor configuration";
     homepage = "https://github.com/jadahl/gnome-monitor-config";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ aveltras ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Program to help manage GNOME monitor configuration";
+    homepage = "https://github.com/jadahl/gnome-monitor-config";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ aveltras ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gnome-monitor-config";
   };
 }

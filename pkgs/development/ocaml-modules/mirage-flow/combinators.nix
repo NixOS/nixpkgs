@@ -4,7 +4,11 @@
   lwt,
   logs,
   cstruct,
+<<<<<<< HEAD
   mirage-mtime,
+=======
+  mirage-clock,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildDunePackage {
@@ -12,11 +16,20 @@ buildDunePackage {
 
   inherit (mirage-flow) version src;
 
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   propagatedBuildInputs = [
     lwt
     logs
     cstruct
+<<<<<<< HEAD
     mirage-mtime
+=======
+    mirage-clock
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mirage-flow
   ];
 

@@ -17,12 +17,23 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
+<<<<<<< HEAD
   vendorHash = "sha256-iQRY9DY2AEHuP3KJKC9ei8xcXgMvzxvyFl/9FwtN+kE=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
+=======
+  vendorHash = "sha256-I4F6WDnWDEmLJFRGMS2QV62jaNAtZoTNQBoH3gT3OAw=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
+    broken = lib.versionOlder php.version "8.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";
     description = "Tool to automatically fix PHP coding standards issues";
     homepage = "https://cs.symfony.com/";

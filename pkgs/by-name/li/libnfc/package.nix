@@ -45,11 +45,20 @@ stdenv.mkDerivation rec {
     "sysconfdir=/etc"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Near Field Communication (NFC)";
     homepage = "https://github.com/nfc-tools/libnfc";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ offline ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library for Near Field Communication (NFC)";
+    homepage = "https://github.com/nfc-tools/libnfc";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ offline ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

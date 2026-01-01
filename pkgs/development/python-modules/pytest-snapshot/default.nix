@@ -36,10 +36,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_snapshot" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin to enable snapshot testing with pytest";
     homepage = "https://github.com/joseph-roitman/pytest-snapshot/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Plugin to enable snapshot testing with pytest";
+    homepage = "https://github.com/joseph-roitman/pytest-snapshot/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

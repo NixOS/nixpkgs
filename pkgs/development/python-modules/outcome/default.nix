@@ -31,5 +31,9 @@ buildPythonPackage rec {
       mit
       asl20
     ];
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ catern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

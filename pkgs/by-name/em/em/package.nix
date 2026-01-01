@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-ijMBkl7U1f9MTXgli9kUFB8ttMG6TMQnxfDMP9AblTQ=";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://pgas.freeshell.org/C/em/";
     description = "Editor for Mortals";
     longDescription = ''
@@ -23,9 +27,15 @@ stdenv.mkDerivation rec {
       interaction and increase its usefulness to users at fast vdu terminals
       (such as the ITT's at QMC).
     '';
+<<<<<<< HEAD
     license = lib.licenses.publicDomain;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.publicDomain;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "em";
   };
 }

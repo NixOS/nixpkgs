@@ -23,12 +23,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Log what files are accessed by any Linux process";
     homepage = "https://github.com/spieglt/whatfiles";
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Log what files are accessed by any Linux process";
+    homepage = "https://github.com/spieglt/whatfiles";
+    license = licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "whatfiles";
   };
 }

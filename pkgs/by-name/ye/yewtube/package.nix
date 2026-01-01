@@ -43,12 +43,21 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mps_youtube" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal based YouTube player and downloader, forked from mps-youtube";
     mainProgram = "yt";
     homepage = "https://github.com/mps-youtube/yewtube";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Terminal based YouTube player and downloader, forked from mps-youtube";
+    mainProgram = "yt";
+    homepage = "https://github.com/mps-youtube/yewtube";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fgaz
       koral
     ];

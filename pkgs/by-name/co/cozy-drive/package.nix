@@ -24,11 +24,19 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cozy Drive is a synchronization tool for your files and folders with Cozy Cloud";
     homepage = "https://cozy.io";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ simarra ];
+=======
+  meta = with lib; {
+    description = "Cozy Drive is a synchronization tool for your files and folders with Cozy Cloud";
+    homepage = "https://cozy.io";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ simarra ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "cozydrive";
   };

@@ -13,13 +13,18 @@
   kcapi-dgstapp ? true,
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "libkcapi";
   version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "libkcapi";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-xOI29cjhUGUeHLaYIrPA5ZwwCE9lBdZG6kaW0lo1uL8=";
   };
@@ -31,6 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     "selftests"
   ];
 
+=======
+    rev = "v${version}";
+    hash = "sha256-xOI29cjhUGUeHLaYIrPA5ZwwCE9lBdZG6kaW0lo1uL8=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ autoreconfHook ];
 
   # libkcapi looks also for a host c compiler when cross-compiling
@@ -40,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.stdenv.cc
   ];
 
+<<<<<<< HEAD
   strictDeps = true;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   enableParallelBuilding = true;
 
   configureFlags =
@@ -51,11 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional kcapi-encapp "--enable-kcapi-encapp"
     ++ lib.optional kcapi-dgstapp "--enable-kcapi-dgstapp";
 
+<<<<<<< HEAD
   postInstall = lib.optionalString kcapi-test ''
     mkdir -p $selftests/bin
     find $out -iname '*.sh' -exec mv {} $selftests/bin/ \;
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     homepage = "http://www.chronox.de/libkcapi.html";
     description = "Linux Kernel Crypto API User Space Interface Library";
@@ -69,4 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
       thillux
     ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

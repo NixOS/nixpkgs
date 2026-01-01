@@ -41,12 +41,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vulture" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Finds unused code in Python programs";
     homepage = "https://github.com/jendrikseipp/vulture";
     changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mcwitt ];
+=======
+  meta = with lib; {
+    description = "Finds unused code in Python programs";
+    homepage = "https://github.com/jendrikseipp/vulture";
+    changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mcwitt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vulture";
   };
 }

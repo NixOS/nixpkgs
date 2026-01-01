@@ -84,11 +84,20 @@ buildPythonPackage rec {
     "test_reorganize"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Reinforcement Learning / AI Bots in Card (Poker) Games - Blackjack, Leduc, Texas, DouDizhu, Mahjong, UNO";
     homepage = "https://github.com/datamllab/rlcard";
     changelog = "https://github.com/datamllab/rlcard/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    description = "Reinforcement Learning / AI Bots in Card (Poker) Games - Blackjack, Leduc, Texas, DouDizhu, Mahjong, UNO";
+    homepage = "https://github.com/datamllab/rlcard";
+    changelog = "https://github.com/datamllab/rlcard/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

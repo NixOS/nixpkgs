@@ -56,15 +56,26 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libqpdf.so $out/lib/libqpdf.so.21
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pantum universal driver";
     homepage = "https://global.pantum.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "Pantum universal driver";
+    homepage = "https://global.pantum.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.unfree;
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ deinferno ];
+=======
+    maintainers = with maintainers; [ deinferno ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

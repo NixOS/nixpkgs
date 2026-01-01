@@ -47,6 +47,7 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
     homepage = "https://github.com/google/adb-sync";
@@ -54,5 +55,14 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     hydraPlatforms = [ ];
     maintainers = with lib.maintainers; [ scolobb ];
+=======
+  meta = with lib; {
+    description = "Tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
+    homepage = "https://github.com/google/adb-sync";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    hydraPlatforms = [ ];
+    maintainers = with maintainers; [ scolobb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

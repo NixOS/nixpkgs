@@ -28,10 +28,18 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/kondo --completions zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Save disk space by cleaning unneeded files from software projects";
     homepage = "https://github.com/tbillington/kondo";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Save disk space by cleaning unneeded files from software projects";
+    homepage = "https://github.com/tbillington/kondo";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "kondo";
   };
 }

@@ -69,11 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '"$BUILDTYPE"/"$SHARED_LIB"' '${stdenv.hostPlatform.rust.cargoShortTarget}/"$BUILDTYPE"/"$SHARED_LIB"'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://crosvm.dev/book/appendix/rutabaga_gfx.html";
     description = "Cross-platform abstraction for GPU and display virtualization";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ qyliss ];
+=======
+  meta = with lib; {
+    homepage = "https://crosvm.dev/book/appendix/rutabaga_gfx.html";
+    description = "Cross-platform abstraction for GPU and display virtualization";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ qyliss ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       # src/generated/virgl_debug_callback_bindings.rs
       "aarch64-darwin"

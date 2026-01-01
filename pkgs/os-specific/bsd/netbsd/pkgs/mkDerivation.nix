@@ -91,12 +91,21 @@ lib.makeOverridable (
 
       strictDeps = true;
 
+<<<<<<< HEAD
       meta = {
         maintainers = with lib.maintainers; [
           qyliss
         ];
         platforms = lib.platforms.unix;
         license = lib.licenses.bsd2;
+=======
+      meta = with lib; {
+        maintainers = with maintainers; [
+          qyliss
+        ];
+        platforms = platforms.unix;
+        license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     }
     // lib.optionalAttrs stdenv'.hasCC {

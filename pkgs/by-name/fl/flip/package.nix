@@ -22,11 +22,19 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for visualizing and communicating the errors in rendered images";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ zmitchell ];
+=======
+  meta = with lib; {
+    description = "Tool for visualizing and communicating the errors in rendered images";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ zmitchell ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "flip";
   };
 }

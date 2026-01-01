@@ -10,16 +10,27 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
+<<<<<<< HEAD
   version = "2.67.1";
+=======
+  version = "2.62.10";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-IRgDCLAClF7Wwmhf1Ba6ulpyDZW3DSZSGj+oIptXImw=";
   };
 
   vendorHash = "sha256-CRUt2wjPCzIQ2/RDXvwJ5xW3KTJNYf/7Kzkhh4Z9NfI=";
+=======
+    hash = "sha256-rHu74DHbmy+/1mdsEvvND4bzVzVXfQoSXfJIzPYSq2s=";
+  };
+
+  vendorHash = "sha256-neUCgxE7NH6rRKrmjpkzwcCFxYxiqgu5/0b0e/833Ng=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"
@@ -53,11 +64,19 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for interacting with supabase";
     homepage = "https://github.com/supabase/cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "CLI for interacting with supabase";
+    homepage = "https://github.com/supabase/cli";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gerschtli
       kashw2
     ];

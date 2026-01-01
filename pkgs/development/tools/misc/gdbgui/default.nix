@@ -44,6 +44,7 @@ buildPythonApplication rec {
   # tests do not work without stdout/stdin
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Browser-based frontend for GDB";
     mainProgram = "gdbgui";
@@ -51,6 +52,15 @@ buildPythonApplication rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Browser-based frontend for GDB";
+    mainProgram = "gdbgui";
+    homepage = "https://www.gdbgui.com/";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       yrashk
       dump_stack
     ];

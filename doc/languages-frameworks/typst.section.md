@@ -22,7 +22,11 @@ Since **Typst Universe** does not provide a way to fetch a package with a specif
 ```nix
 typst.withPackages.override
   (old: {
+<<<<<<< HEAD
     typstPackages = old.typstPackages.overrideScope (
+=======
+    typstPackages = old.typstPackages.extend (
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       _: previous: {
         polylux_0_4_0 = previous.polylux_0_4_0.overrideAttrs (oldPolylux: {
           src = oldPolylux.src.overrideAttrs { outputHash = YourUpToDatePolyluxHash; };

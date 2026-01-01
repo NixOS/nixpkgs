@@ -39,11 +39,19 @@ python3'.pkgs.buildPythonApplication rec {
     ordered-set
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple pythonic programming language for Smart Contracts on Cardano";
     homepage = "https://opshin.dev";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aciceri ];
+=======
+  meta = with lib; {
+    description = "Simple pythonic programming language for Smart Contracts on Cardano";
+    homepage = "https://opshin.dev";
+    license = licenses.mit;
+    maintainers = with maintainers; [ aciceri ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "opshin";
   };
 }

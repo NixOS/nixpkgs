@@ -439,7 +439,11 @@ in
             index index.php;
           '';
           locations = {
+<<<<<<< HEAD
             "~ '\\.php$|^/update\\.php'" = {
+=======
+            "~ '\.php$|^/update.php'" = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               extraConfig = ''
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 fastcgi_pass unix:${config.services.phpfpm.pools."drupal-${hostName}".socket};
@@ -470,7 +474,11 @@ in
                 access_log off;
               '';
             };
+<<<<<<< HEAD
             "~ \\..*/.*\\.php$" = {
+=======
+            "~ \..*/.*\.php$" = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               extraConfig = ''
                 return 403;
               '';
@@ -480,7 +488,11 @@ in
                 return 403;
               '';
             };
+<<<<<<< HEAD
             "~ ^/sites/[^/]+/files/.*\\.php$" = {
+=======
+            "~ ^/sites/[^/]+/files/.*\.php$" = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               extraConfig = ''
                 deny all;
               '';
@@ -500,13 +512,21 @@ in
                 rewrite ^ /index.php;
               '';
             };
+<<<<<<< HEAD
             "~ /vendor/.*\\.php$" = {
+=======
+            "~ /vendor/.*\.php$" = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               extraConfig = ''
                 deny all;
                 return 404;
               '';
             };
+<<<<<<< HEAD
             "~* \\.(js|css|png|jpg|jpeg|gif|ico|svg)$" = {
+=======
+            "~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$" = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               extraConfig = ''
                 try_files $uri @rewrite;
                 expires max;
@@ -518,7 +538,11 @@ in
                 try_files $uri @rewrite;
               '';
             };
+<<<<<<< HEAD
             "~ ^(/[a-z\\-]+)?/system/files/" = {
+=======
+            "~ ^(/[a-z\-]+)?/system/files/" = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               extraConfig = ''
                 try_files $uri /index.php?$query_string;
               '';

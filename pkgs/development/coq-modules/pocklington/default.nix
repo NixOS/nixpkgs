@@ -22,10 +22,18 @@ mkCoqDerivation {
       }
     ] null;
 
+<<<<<<< HEAD
   meta = {
     description = "Pocklington's criterion for primality in Coq";
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Pocklington's criterion for primality in Coq";
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,10 +17,18 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python port of the YUI CSS compression algorithm";
     mainProgram = "cssmin";
     homepage = "https://github.com/zacharyvoase/cssmin";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python port of the YUI CSS compression algorithm";
+    mainProgram = "cssmin";
+    homepage = "https://github.com/zacharyvoase/cssmin";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -9,13 +9,21 @@
 }:
 let
   pname = "django-admin-sortable2";
+<<<<<<< HEAD
   version = "2.3";
+=======
+  version = "2.2.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "jrief";
     repo = "django-admin-sortable2";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-BhAhql4Ou+CyIo90eKDfm3GSD8DO6uT67/VgcPz13JQ=";
+=======
+    hash = "sha256-T5dppM/o305GCg5uU7re/FdjhXFUyiH/DO2JTVf6Xgg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   assets = buildNpmPackage {

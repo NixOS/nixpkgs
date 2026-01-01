@@ -105,6 +105,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath runtimeDependencies}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Basic indicator of the performance of a Unix-like system";
     homepage = "https://github.com/kdlucas/byte-unixbench";
@@ -112,5 +113,14 @@ stdenv.mkDerivation rec {
     mainProgram = "ubench";
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Basic indicator of the performance of a Unix-like system";
+    homepage = "https://github.com/kdlucas/byte-unixbench";
+    license = licenses.gpl2Plus;
+    mainProgram = "ubench";
+    maintainers = with maintainers; [ aleksana ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

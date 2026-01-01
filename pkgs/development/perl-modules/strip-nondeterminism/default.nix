@@ -7,6 +7,10 @@
   ArchiveZip,
   ArchiveCpio,
   SubOverride,
+<<<<<<< HEAD
+=======
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gitUpdater,
 }:
 
@@ -28,6 +32,10 @@ buildPerlPackage rec {
   };
 
   strictDeps = true;
+<<<<<<< HEAD
+=======
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ shortenPerlShebang ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [
     ArchiveZip
     ArchiveCpio
@@ -47,6 +55,12 @@ buildPerlPackage rec {
     # we don’t need the debhelper script
     rm $out/bin/dh_strip_nondeterminism
     rm $out/share/man/man1/dh_strip_nondeterminism.1
+<<<<<<< HEAD
+=======
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/strip-nondeterminism
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   installCheckPhase = ''
@@ -55,18 +69,32 @@ buildPerlPackage rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
+=======
+  # running shortenPerlShebang in postBuild results in non-functioning binary 'exec format error'
+  doCheck = !stdenv.hostPlatform.isDarwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {
     updateScript = gitUpdater { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Perl module for stripping bits of non-deterministic information";
     mainProgram = "strip-nondeterminism";
     homepage = "https://reproducible-builds.org/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Perl module for stripping bits of non-deterministic information";
+    mainProgram = "strip-nondeterminism";
+    homepage = "https://reproducible-builds.org/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pSub
       artturin
     ];

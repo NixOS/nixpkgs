@@ -20,8 +20,16 @@ fi
 if [ ! -e "$STEAMROOT/steamcmd.sh" ]; then
   mkdir -p "$STEAMROOT/linux32"
   # steamcmd.sh will replace these on first use
+<<<<<<< HEAD
   cd @out@/share/steamcmd
   find . -type f -exec install -Dm 755 "{}" "$STEAMROOT/{}" \;
 fi
 
 @steamRun@ "$STEAMROOT/steamcmd.sh" "$@"
+=======
+  cp @out@/share/steamcmd/steamcmd.sh "$STEAMROOT/."
+  cp @out@/share/steamcmd/linux32/* "$STEAMROOT/linux32/."
+fi
+
+@steamRun@/bin/steam-run "$STEAMROOT/steamcmd.sh" "$@"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

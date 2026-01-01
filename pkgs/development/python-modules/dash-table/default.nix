@@ -18,10 +18,18 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "First-Class Interactive DataTable for Dash";
     homepage = "https://dash.plot.ly/datatable";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antoinerg ];
+=======
+  meta = with lib; {
+    description = "First-Class Interactive DataTable for Dash";
+    homepage = "https://dash.plot.ly/datatable";
+    license = licenses.mit;
+    maintainers = [ maintainers.antoinerg ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

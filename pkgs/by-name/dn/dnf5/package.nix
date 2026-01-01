@@ -121,16 +121,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Next-generation RPM package management system";
     homepage = "https://github.com/rpm-software-management/dnf5";
     changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Next-generation RPM package management system";
+    homepage = "https://github.com/rpm-software-management/dnf5";
+    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [
       malt3
       katexochen
     ];
     mainProgram = "dnf5";
+<<<<<<< HEAD
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -25,11 +25,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jdatetime" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jalali datetime binding";
     homepage = "https://github.com/slashmili/python-jalali";
     changelog = "https://github.com/slashmili/python-jalali/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    description = "Jalali datetime binding";
+    homepage = "https://github.com/slashmili/python-jalali";
+    changelog = "https://github.com/slashmili/python-jalali/blob/v${version}/CHANGELOG.md";
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

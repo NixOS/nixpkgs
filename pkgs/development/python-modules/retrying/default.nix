@@ -28,10 +28,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "retrying" ];
 
+<<<<<<< HEAD
   meta = {
     description = "General-purpose retrying library";
     homepage = "https://github.com/rholder/retrying";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "General-purpose retrying library";
+    homepage = "https://github.com/rholder/retrying";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

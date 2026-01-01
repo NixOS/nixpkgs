@@ -38,6 +38,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Locate the current executable and running module/library";
     homepage = "https://github.com/gpakosz/whereami";
@@ -47,5 +48,16 @@ stdenv.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Locate the current executable and running module/library";
+    homepage = "https://github.com/gpakosz/whereami";
+    license = with licenses; [
+      mit
+      wtfpl
+    ];
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

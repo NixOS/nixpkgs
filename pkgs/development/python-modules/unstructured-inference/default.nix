@@ -27,14 +27,22 @@
 
 buildPythonPackage rec {
   pname = "unstructured-inference";
+<<<<<<< HEAD
   version = "1.1.4";
+=======
+  version = "1.1.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-inference";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-2yLBP2FNEn3tQV63qtlpz6mMjE4rsDr3JItYnpIU3iM=";
+=======
+    hash = "sha256-XoGjcF9xxqZ1fEtI+ifjwEqxNlDHdakZLo8xzFKK8ic=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];
@@ -95,12 +103,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unstructured_inference" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Hosted model inference code for layout parsing models";
     homepage = "https://github.com/Unstructured-IO/unstructured-inference";
     changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    description = "Hosted model inference code for layout parsing models";
+    homepage = "https://github.com/Unstructured-IO/unstructured-inference";
+    changelog = "https://github.com/Unstructured-IO/unstructured-inference/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

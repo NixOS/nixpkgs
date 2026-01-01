@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
     ln -s $out/$installDir/fsatrace $out/bin/fsatrace
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jacereda/fsatrace";
     description = "Filesystem access tracer";
     mainProgram = "fsatrace";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jacereda/fsatrace";
+    description = "Filesystem access tracer";
+    mainProgram = "fsatrace";
+    license = licenses.isc;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

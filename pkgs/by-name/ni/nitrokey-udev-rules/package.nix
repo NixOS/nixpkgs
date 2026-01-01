@@ -36,11 +36,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D 41-nitrokey.rules -t $out/etc/udev/rules.d
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "udev rules for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/nitrokey-udev-rules";
     license = [ lib.licenses.cc0 ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "udev rules for Nitrokey devices";
+    homepage = "https://github.com/Nitrokey/nitrokey-udev-rules";
+    license = [ licenses.cc0 ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       frogamic
       robinkrahl
     ];

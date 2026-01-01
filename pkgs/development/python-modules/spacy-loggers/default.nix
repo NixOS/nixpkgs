@@ -26,10 +26,18 @@ buildPythonPackage rec {
   # skipping the checks, because it requires a cycle dependency to spacy as well.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Logging utilities for spaCy";
     homepage = "https://github.com/explosion/spacy-loggers";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stunkymonkey ];
+=======
+  meta = with lib; {
+    description = "Logging utilities for spaCy";
+    homepage = "https://github.com/explosion/spacy-loggers";
+    license = licenses.mit;
+    maintainers = with maintainers; [ stunkymonkey ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

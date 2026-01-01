@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Mellin Evolution LibrAry";
     mainProgram = "mela-config";
@@ -27,5 +28,14 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vbertone/MELA";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
+=======
+  meta = with lib; {
+    description = "Mellin Evolution LibrAry";
+    mainProgram = "mela-config";
+    license = licenses.gpl3;
+    homepage = "https://github.com/vbertone/MELA";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

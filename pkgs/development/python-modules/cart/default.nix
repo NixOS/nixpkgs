@@ -29,12 +29,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cart" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python module for the CaRT Neutering format";
     mainProgram = "cart";
     homepage = "https://github.com/CybercentreCanada/cart";
     changelog = "https://github.com/CybercentreCanada/cart/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

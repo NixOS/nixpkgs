@@ -43,5 +43,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/coddingtonbear/python-measurement";
     changelog = "https://github.com/coddingtonbear/python-measurement/releases/tag/${version}";
     license = lib.licenses.mit;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ bhipple ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -64,10 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheck = true;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.nongnu.org/libunwind";
     description = "Portable and efficient API to determine the call-chain of a program";
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "https://www.nongnu.org/libunwind";
+    description = "Portable and efficient API to determine the call-chain of a program";
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "libunwind"
       "libunwind-coredump"
@@ -96,6 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "x86_64-solaris"
     ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

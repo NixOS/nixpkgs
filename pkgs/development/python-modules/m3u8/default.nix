@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "m3u8" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python m3u8 parser";
     homepage = "https://github.com/globocom/m3u8";
     changelog = "https://github.com/globocom/m3u8/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
+=======
+  meta = with lib; {
+    description = "Python m3u8 parser";
+    homepage = "https://github.com/globocom/m3u8";
+    changelog = "https://github.com/globocom/m3u8/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Scriptkiddi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

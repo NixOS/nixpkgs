@@ -32,10 +32,18 @@ buildNpmPackage rec {
 
   passthru.tests = { inherit (nixosTests) fluidd; };
 
+<<<<<<< HEAD
   meta = {
     description = "Klipper web interface";
     homepage = "https://docs.fluidd.xyz";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ zhaofengli ];
+=======
+  meta = with lib; {
+    description = "Klipper web interface";
+    homepage = "https://docs.fluidd.xyz";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ zhaofengli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

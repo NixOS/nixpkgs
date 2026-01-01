@@ -21,11 +21,20 @@ buildGoModule rec {
     mv $out/bin/src $out/bin/$pname
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for user enumeration and password bruteforce";
     mainProgram = "gomapenum";
     homepage = "https://github.com/nodauf/GoMapEnum";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tools for user enumeration and password bruteforce";
+    mainProgram = "gomapenum";
+    homepage = "https://github.com/nodauf/GoMapEnum";
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

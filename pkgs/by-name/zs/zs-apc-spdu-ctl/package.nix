@@ -31,11 +31,19 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin/fping "${fping}/bin/fping"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "APC SPDU control utility";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "APC SPDU control utility";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "zs-apc-spdu-ctl";
   };
 }

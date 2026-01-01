@@ -14,9 +14,16 @@ buildPythonPackage rec {
     sha256 = "16z10sm78jd7ca3jbkgc3q5i8a8q7y1h21q1li21yy3rlhbhrrns";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Take version numbers from version control";
     homepage = "https://github.com/habnabit/vcversioner";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Take version numbers from version control";
+    homepage = "https://github.com/habnabit/vcversioner";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

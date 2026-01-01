@@ -26,11 +26,20 @@ buildKodiBinaryAddon rec {
   ];
 
   propagatedBuildInputs = [ glm ];
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/xbmc/visualization.fishbmc";
     description = "FishBMC visualization for kodi";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/xbmc/visualization.fishbmc";
+    description = "FishBMC visualization for kodi";
+    platforms = platforms.all;
+    license = licenses.gpl2Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

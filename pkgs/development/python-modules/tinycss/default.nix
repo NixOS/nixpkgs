@@ -43,11 +43,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tinycss" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Complete yet simple CSS parser for Python";
     homepage = "https://tinycss.readthedocs.io";
     changelog = "https://github.com/Kozea/tinycss/releases/tag/v${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Complete yet simple CSS parser for Python";
+    homepage = "https://tinycss.readthedocs.io";
+    changelog = "https://github.com/Kozea/tinycss/releases/tag/v${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -14,10 +14,17 @@
 
 stdenv.mkDerivation rec {
   pname = "pahole";
+<<<<<<< HEAD
   version = "1.31";
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot/pahole-${version}.tar.gz";
     hash = "sha256-Afy0SysuDbTOa8H3m4hexy12Rmuv2NZL2wHfO4JtKL0=";
+=======
+  version = "1.30";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot/pahole-${version}.tar.gz";
+    hash = "sha256-JF4KnI05uOlPuunJuetX/fX3ZRT6TDXdjCNG9/ufkgI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -44,6 +51,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) bpf;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/";
     description = "Shows, manipulates, and pretty-prints debugging information in DWARF, CTF, and BTF formats";
@@ -51,6 +59,15 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://git.kernel.org/pub/scm/devel/pahole/pahole.git/";
+    description = "Shows, manipulates, and pretty-prints debugging information in DWARF, CTF, and BTF formats";
+    license = licenses.gpl2Only;
+
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bosu
       martinetd
     ];

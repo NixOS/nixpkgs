@@ -36,11 +36,20 @@ buildDunePackage rec {
     ounit2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Xen Vchan implementation";
     homepage = "https://github.com/mirage/ocaml-vchan";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
     teams = [ lib.teams.xen ];
+=======
+  meta = with lib; {
+    description = "Xen Vchan implementation";
+    homepage = "https://github.com/mirage/ocaml-vchan";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+    teams = [ teams.xen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

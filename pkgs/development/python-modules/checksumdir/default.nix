@@ -25,10 +25,18 @@ buildPythonPackage rec {
   doCheck = false; # Package does not contain tests
   pythonImportsCheck = [ "checksumdir" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple package to compute a single deterministic hash of the file contents of a directory";
     homepage = "https://github.com/to-mc/checksumdir";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  meta = with lib; {
+    description = "Simple package to compute a single deterministic hash of the file contents of a directory";
+    homepage = "https://github.com/to-mc/checksumdir";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

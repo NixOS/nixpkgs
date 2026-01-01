@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage {
         }
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "General purpose application launcher for X and wayland inspired by rofi/wofi and alfred";
     homepage = "https://github.com/onagre-launcher/onagre";
@@ -70,6 +71,17 @@ rustPlatform.buildRustPackage {
       lib.maintainers.ilya-epifanov
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "General purpose application launcher for X and wayland inspired by rofi/wofi and alfred";
+    homepage = "https://github.com/onagre-launcher/onagre";
+    license = licenses.mit;
+    maintainers = [
+      maintainers.jfvillablanca
+      maintainers.ilya-epifanov
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "onagre";
   };
 }

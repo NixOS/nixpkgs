@@ -13,16 +13,27 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vsce";
+<<<<<<< HEAD
   version = "3.7.1";
+=======
+  version = "3.7.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-7Urn3MlcvJragFvbPYOurUCIOyqYQsEqg5IKbFwcHBo=";
   };
 
   npmDepsHash = "sha256-lJDCeOqSYZCI9o9RsFSviQKkxgcv8XGps3ecy55r7E4=";
+=======
+    hash = "sha256-dNSO+PoUNQUtvS6NZJ/InOYqI4vav+WNg6kCA+CaWL8=";
+  };
+
+  npmDepsHash = "sha256-rqwb1bz/OFHzL8GgqMZtuqYkeST5qlFybDRSFOx7LtU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postPatch = ''
     substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
@@ -40,6 +51,10 @@ buildNpmPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     updateScript = nix-update-script {

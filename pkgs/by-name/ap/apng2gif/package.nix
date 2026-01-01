@@ -32,11 +32,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://apng2gif.sourceforge.net/";
     description = "Simple program that converts APNG files to animated GIF format";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://apng2gif.sourceforge.net/";
+    description = "Simple program that converts APNG files to animated GIF format";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

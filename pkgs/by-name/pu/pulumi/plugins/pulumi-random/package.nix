@@ -15,12 +15,21 @@ mkPulumiPackage rec {
     "-X github.com/pulumi/${repo}/provider/v4/pkg/version.Version=v${version}"
   ];
   __darwinAllowLocalNetworking = true;
+<<<<<<< HEAD
   meta = {
     description = "Pulumi provider that safely enables randomness for resources";
     mainProgram = "pulumi-resource-random";
     homepage = "https://github.com/pulumi/pulumi-random";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Pulumi provider that safely enables randomness for resources";
+    mainProgram = "pulumi-resource-random";
+    homepage = "https://github.com/pulumi/pulumi-random";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       veehaitch
     ];
   };

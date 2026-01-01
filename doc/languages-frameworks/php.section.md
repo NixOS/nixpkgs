@@ -307,7 +307,11 @@ stdenvNoCC.mkDerivation (
     src = fetchFromGitHub {
       owner = "git-owner";
       repo = "git-repo";
+<<<<<<< HEAD
       tag = finalAttrs.version;
+=======
+      rev = finalAttrs.version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       hash = "sha256-VcQRSss2dssfkJ+iUb5qT+FJ10GHiFDzySigcmuVI+8=";
     };
   in

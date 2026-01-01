@@ -27,6 +27,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Aeolus synthesizer instrument definitions";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html";
@@ -34,6 +35,16 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       nico202
+=======
+  meta = with lib; {
+    description = "Aeolus synthesizer instrument definitions";
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html";
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      nico202
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

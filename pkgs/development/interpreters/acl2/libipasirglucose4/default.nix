@@ -38,10 +38,18 @@ stdenv.mkDerivation rec {
     install -D ${libname} $out/lib/${libname}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Shared library providing IPASIR interface to the Glucose SAT solver";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ kini ];
+=======
+  meta = with lib; {
+    description = "Shared library providing IPASIR interface to the Glucose SAT solver";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ kini ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

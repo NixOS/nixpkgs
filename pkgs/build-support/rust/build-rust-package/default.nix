@@ -89,6 +89,7 @@ lib.extendMkDerivation {
       "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"
       true;
     {
+<<<<<<< HEAD
       env =
         let
           isDarwinDebug = stdenv.hostPlatform.isDarwin && buildType == "debug";
@@ -103,6 +104,19 @@ lib.extendMkDerivation {
             + interpolateString (args.RUSTFLAGS or "");
         }
         // args.env or { };
+=======
+      env = {
+        PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
+        RUST_LOG = logLevel;
+        RUSTFLAGS =
+          lib.optionalString (
+            stdenv.hostPlatform.isDarwin && buildType == "debug"
+          ) "-C split-debuginfo=packed "
+          # Workaround the existing RUSTFLAGS specified as a list.
+          + interpolateString (args.RUSTFLAGS or "");
+      }
+      // args.env or { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       cargoDeps =
         if cargoVendorDir != null then

@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://tinkerpop.apache.org/";
     description = "Console of the Apache TinkerPop graph computing framework";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.lewo ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://tinkerpop.apache.org/";
+    description = "Console of the Apache TinkerPop graph computing framework";
+    license = licenses.asl20;
+    maintainers = [ maintainers.lewo ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gremlin-console";
   };
 }

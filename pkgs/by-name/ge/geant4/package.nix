@@ -137,7 +137,11 @@ stdenv.mkDerivation rec {
     source $out/nix-support/setup-hook
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Toolkit for the simulation of the passage of particles through matter";
     longDescription = ''
       Geant4 is a toolkit for the simulation of the passage of particles through matter.
@@ -145,11 +149,20 @@ stdenv.mkDerivation rec {
       The two main reference papers for Geant4 are published in Nuclear Instruments and Methods in Physics Research A 506 (2003) 250-303, and IEEE Transactions on Nuclear Science 53 No. 1 (2006) 270-278.
     '';
     homepage = "https://www.geant4.org";
+<<<<<<< HEAD
     license = lib.licenses.g4sl;
     maintainers = with lib.maintainers; [
       omnipotententity
       veprbl
     ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.g4sl;
+    maintainers = with maintainers; [
+      omnipotententity
+      veprbl
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

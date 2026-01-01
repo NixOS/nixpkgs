@@ -60,7 +60,11 @@ python3Packages.buildPythonApplication rec {
     nixos-test = nixosTests.zeronet-conservancy;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fork/continuation of the ZeroNet project";
     mainProgram = "zeronet";
     longDescription = ''
@@ -70,7 +74,12 @@ python3Packages.buildPythonApplication rec {
       while gradually switching to a better designed network.
     '';
     homepage = "https://github.com/zeronet-conservancy/zeronet-conservancy";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

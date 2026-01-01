@@ -31,11 +31,19 @@ buildGoModule rec {
 
   subPackages = [ "cmd/prototool" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/uber/prototool";
     description = "Your Swiss Army Knife for Protocol Buffers";
     mainProgram = "prototool";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

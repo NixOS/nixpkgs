@@ -26,10 +26,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "DataModelDict" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";
     homepage = "https://github.com/usnistgov/DataModelDict/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";
+    homepage = "https://github.com/usnistgov/DataModelDict/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

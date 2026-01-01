@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "validate_email" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Verify if an email address is valid and really exists";
     homepage = "https://github.com/syrusakbary/validate_email";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ mmahut ];
+=======
+  meta = with lib; {
+    description = "Verify if an email address is valid and really exists";
+    homepage = "https://github.com/syrusakbary/validate_email";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

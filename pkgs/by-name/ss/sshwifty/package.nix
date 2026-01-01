@@ -1,5 +1,6 @@
 {
   lib,
+<<<<<<< HEAD
   buildGoModule,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -12,11 +13,25 @@
 buildGoModule (finalAttrs: {
   pname = "sshwifty";
   version = "0.4.2-beta-release";
+=======
+  buildGo125Module,
+  buildNpmPackage,
+  fetchFromGitHub,
+  versionCheckHook,
+  nixosTests,
+  nix-update-script,
+  go_1_25,
+}:
+buildGo125Module (finalAttrs: {
+  pname = "sshwifty";
+  version = "0.4.1-beta-release";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "nirui";
     repo = "sshwifty";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-nx485HB0JqexcSdwhgbhoAwpK3Cg7tkgDrV3NM93pXk=";
   };
 
@@ -42,6 +57,33 @@ buildGoModule (finalAttrs: {
     npm run generate
   '';
 
+=======
+    hash = "sha256-Kg5aE4lkzSedo+VJgdsfO5XTKupsPU2DhZNdNhEQ/Q4=";
+  };
+
+  sshwifty-ui = buildNpmPackage {
+    pname = "sshwifty-ui";
+    inherit (finalAttrs) version src;
+
+    npmDepsHash = "sha256-vX3CtjwjzcxxIPYG6QXsPybyBRow1YdS9pHr961P1HA=";
+
+    npmBuildScript = "generate";
+
+    postInstall = ''
+      cp -r application/controller/{static_pages,static_pages.go} \
+        $out/lib/node_modules/sshwifty-ui/application/controller
+    '';
+
+    nativeBuildInputs = [ go_1_25 ];
+  };
+
+  postPatch = ''
+    cp -r ${finalAttrs.sshwifty-ui}/lib/node_modules/sshwifty-ui/* .
+  '';
+
+  vendorHash = "sha256-/SLUC0xM195QfKgX9te8UP1bbzRbKF+Npyugi19JijY=";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ldflags = [
     "-s"
     "-X github.com/nirui/sshwifty/application.version=${finalAttrs.version}"
@@ -60,6 +102,11 @@ buildGoModule (finalAttrs: {
       extraArgs = [
         "--version=unstable"
         "--version-regex=^([0-9.]+(?!.+-prebuild).+$)"
+<<<<<<< HEAD
+=======
+        "--subpackage"
+        "sshwifty-ui"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     };
   };

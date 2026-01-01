@@ -55,12 +55,21 @@ rustPlatform.buildRustPackage rec {
     install -D etc/jay-portals.conf $out/share/xdg-desktop-portal/jay-portals.conf
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Wayland compositor written in Rust";
     homepage = "https://github.com/mahkoh/jay";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Wayland compositor written in Rust";
+    homepage = "https://github.com/mahkoh/jay";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jay";
   };
 }

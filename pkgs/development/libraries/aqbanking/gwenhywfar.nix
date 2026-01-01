@@ -86,11 +86,20 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "OS abstraction functions used by aqbanking and related tools";
     homepage = "https://www.aquamaniac.de/rdm/projects/gwenhywfar";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "OS abstraction functions used by aqbanking and related tools";
+    homepage = "https://www.aquamaniac.de/rdm/projects/gwenhywfar";
+    license = licenses.lgpl21Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

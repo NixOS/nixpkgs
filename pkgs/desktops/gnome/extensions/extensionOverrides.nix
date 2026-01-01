@@ -2,13 +2,19 @@
   lib,
   fetchFromGitLab,
   cpio,
+<<<<<<< HEAD
   cups,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ddcutil,
   easyeffects,
   gjs,
   glib,
   gnome-menus,
+<<<<<<< HEAD
   gtk3,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nautilus,
   gobject-introspection,
   hddtemp,
@@ -85,6 +91,7 @@ lib.trivial.pipe super [
     '';
   }))
 
+<<<<<<< HEAD
   (patchExtension "ding@rastersoft.com" (old: {
     nativeBuildInputs = [ wrapGAppsHook3 ];
     patches = [
@@ -99,6 +106,8 @@ lib.trivial.pipe super [
     ];
   }))
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   (patchExtension "display-brightness-ddcutil@themightydeity.github.com" (old: {
     # Make glib-compile-schemas available
     nativeBuildInputs = [ glib ];
@@ -185,6 +194,7 @@ lib.trivial.pipe super [
     }
   ))
 
+<<<<<<< HEAD
   (patchExtension "printers@linux-man.org" (old: {
     patches = [
       (replaceVars ./extensionOverridesPatches/printers_at_linux-man.org.patch {
@@ -193,6 +203,8 @@ lib.trivial.pipe super [
     ];
   }))
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
     patches = [
       (replaceVars

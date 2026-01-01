@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiojellyfin" ];
 
+<<<<<<< HEAD
   meta = {
     description = "";
     homepage = "https://github.com/Jc2k/aiojellyfin";
     changelog = "https://github.com/Jc2k/aiojellyfin/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "";
+    homepage = "https://github.com/Jc2k/aiojellyfin";
+    changelog = "https://github.com/Jc2k/aiojellyfin/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

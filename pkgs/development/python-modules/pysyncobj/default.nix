@@ -27,12 +27,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysyncobj" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for replicating your class";
     homepage = "https://github.com/bakwc/PySyncObj";
     changelog = "https://github.com/bakwc/PySyncObj/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for replicating your class";
+    homepage = "https://github.com/bakwc/PySyncObj";
+    changelog = "https://github.com/bakwc/PySyncObj/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "syncobj_admin";
   };
 }

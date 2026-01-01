@@ -15,7 +15,10 @@
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pipewire,
   qt6Packages,
+<<<<<<< HEAD
   wayland,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   enableWideVine ? false,
   widevine-cdm,
   # can cause issues on some graphics chips
@@ -27,6 +30,7 @@ let
   isQt6 = lib.versions.major qt6Packages.qtbase.version == "6";
   pdfjs =
     let
+<<<<<<< HEAD
       version = "5.4.394";
     in
     fetchzip {
@@ -36,6 +40,17 @@ let
     };
 
   version = "3.6.3";
+=======
+      version = "5.4.296";
+    in
+    fetchzip {
+      url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
+      hash = "sha256-UQ7sYOh7s95mfzH2ZbfDyEvUZiXr7MI3u0WY8WNHWv4=";
+      stripRoot = false;
+    };
+
+  version = "3.6.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 
 python3.pkgs.buildPythonApplication {
@@ -45,7 +60,11 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-bb4oieYevWMAOuQLMZ4egfMG6SToMWxnla5IhAIcL68=";
+=======
+    hash = "sha256-9b31UPJzmsGCXmCAIb+8XMEjKnvFIEO0MozWluHYbZA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # Needs tox
@@ -105,11 +124,14 @@ python3.pkgs.buildPythonApplication {
   ''
   + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
+<<<<<<< HEAD
   ''
   + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform wayland) ''
     substituteInPlace qutebrowser/misc/wmname.py \
       --replace-fail '_load_library("wayland-client")' \
                      'ctypes.CDLL("${lib.getLib wayland}/lib/libwayland-client${stdenv.hostPlatform.extensions.sharedLibrary}")'
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   installPhase = ''
@@ -168,7 +190,13 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "qutebrowser";
     platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
       rnhmjoj
+=======
+      jagajaga
+      rnhmjoj
+      ebzzry
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       dotlambda
     ];
   };

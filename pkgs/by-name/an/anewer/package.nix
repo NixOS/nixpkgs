@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ojgm5LTOOhnGS7tUD1UUktviivp68u0c06gIJNhEO1E=";
 
+<<<<<<< HEAD
   meta = {
     description = "Append lines from stdin to a file if they don't already exist in the file";
     mainProgram = "anewer";
     homepage = "https://github.com/ysf/anewer";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Append lines from stdin to a file if they don't already exist in the file";
+    mainProgram = "anewer";
+    homepage = "https://github.com/ysf/anewer";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

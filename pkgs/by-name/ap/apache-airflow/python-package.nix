@@ -331,11 +331,20 @@ buildPythonPackage rec {
   # triggering the 'example_bash_operator' and 'example_bash_operator' DAGs and
   # see if they report success.
 
+<<<<<<< HEAD
   meta = {
     description = "Programmatically author, schedule and monitor data pipelines";
     homepage = "https://airflow.apache.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Programmatically author, schedule and monitor data pipelines";
+    homepage = "https://airflow.apache.org/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      bhipple
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gbpdt
       ingenieroariel
     ];

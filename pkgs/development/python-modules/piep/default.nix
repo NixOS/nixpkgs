@@ -25,11 +25,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Bringing the power of python to stream editing";
     homepage = "https://github.com/timbertson/piep";
     maintainers = with lib.maintainers; [ timbertson ];
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Bringing the power of python to stream editing";
+    homepage = "https://github.com/timbertson/piep";
+    maintainers = with maintainers; [ timbertson ];
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "piep";
   };
 }

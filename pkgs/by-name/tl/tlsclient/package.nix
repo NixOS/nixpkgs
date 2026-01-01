@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "tlsclient command line utility";
     longDescription = "unix port of 9front's tlsclient(1) and rcpu(1)";
@@ -39,5 +40,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ moody ];
     mainProgram = "tlsclient";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "tlsclient command line utility";
+    longDescription = "unix port of 9front's tlsclient(1) and rcpu(1)";
+    homepage = "https://git.sr.ht/~moody/tlsclient";
+    license = licenses.mit;
+    maintainers = with maintainers; [ moody ];
+    mainProgram = "tlsclient";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

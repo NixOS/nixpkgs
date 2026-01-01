@@ -60,7 +60,11 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Keyboard-based web browser with Emacs/conkeror heritage";
     mainProgram = "webmacs";
     longDescription = ''
@@ -73,9 +77,15 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://webmacs.readthedocs.io/en/latest/";
     changelog = "https://github.com/parkouss/webmacs/blob/master/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jacg ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ jacg ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

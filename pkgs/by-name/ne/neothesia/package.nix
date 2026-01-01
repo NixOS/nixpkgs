@@ -2,7 +2,11 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
+<<<<<<< HEAD
   ffmpeg_7,
+=======
+  ffmpeg,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pkg-config,
   alsa-lib,
   wayland,
@@ -27,7 +31,11 @@ rustPlatform.buildRustPackage {
   inherit src version;
 
   buildInputs = [
+<<<<<<< HEAD
     ffmpeg_7
+=======
+    ffmpeg
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     alsa-lib
   ];
 

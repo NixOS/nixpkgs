@@ -66,11 +66,20 @@ stdenv.mkDerivation rec {
       --replace-fail "@INSTALL_PROGRAM@ -s" "@INSTALL_PROGRAM@"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.conserver.com/";
     description = "Application that allows multiple users to watch a serial console at the same time";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sarcasticadmin ];
+=======
+  meta = with lib; {
+    homepage = "https://www.conserver.com/";
+    description = "Application that allows multiple users to watch a serial console at the same time";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ sarcasticadmin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

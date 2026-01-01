@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "release": "10.0.1",
   "channel": "10.0",
   "tag": "v10.0.101",
@@ -8,4 +9,15 @@
   "sourceRepository": "https://github.com/dotnet/dotnet",
   "sourceVersion": "fad253f51b461736dfd3cd9c15977bb7493becef",
   "officialBuildId": "20251119.5"
+=======
+  "release": "10.0.0",
+  "channel": "10.0",
+  "tag": "v10.0.100",
+  "sdkVersion": "10.0.100",
+  "runtimeVersion": "10.0.0",
+  "aspNetCoreVersion": "10.0.0",
+  "sourceRepository": "https://github.com/dotnet/dotnet",
+  "sourceVersion": "b0f34d51fccc69fd334253924abd8d6853fad7aa",
+  "officialBuildId": "20251023.11"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

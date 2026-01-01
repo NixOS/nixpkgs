@@ -59,7 +59,11 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath '${lib.getLib build2}/lib' "''${!outputBin}/bin/bpkg"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Build2 package dependency manager";
     mainProgram = "bpkg";
     # https://build2.org/bpkg/doc/bpkg.xhtml
@@ -69,8 +73,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://build2.org/";
     changelog = "https://git.build2.org/cgit/bpkg/tree/NEWS";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ r-burns ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ r-burns ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

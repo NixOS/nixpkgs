@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation rec {
   pname = "switchfin";
+<<<<<<< HEAD
   version = "0.8.2";
+=======
+  version = "0.7.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "dragonflylee";
     repo = "switchfin";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-D41joed/ZjZLSNjQC9WVWrPOi8v/RHopf0MQrbmGyeg=";
+=======
+    hash = "sha256-swNwaZg6W5Ox08poc3gC3MOsIHv08/Q9BOMwD9FNf3g=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 

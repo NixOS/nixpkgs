@@ -26,11 +26,20 @@ stdenv.mkDerivation {
     cp xmpp-receipts.so $out/lib/pidgin/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://devel.kondorgulasch.de/pidgin-xmpp-receipts/";
     description = "Message delivery receipts (XEP-0184) Pidgin plugin";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    homepage = "http://devel.kondorgulasch.de/pidgin-xmpp-receipts/";
+    description = "Message delivery receipts (XEP-0184) Pidgin plugin";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

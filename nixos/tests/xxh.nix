@@ -33,8 +33,13 @@ let
 in
 {
   name = "xxh";
+<<<<<<< HEAD
   meta = {
     maintainers = [ ];
+=======
+  meta = with lib.maintainers; {
+    maintainers = [ lom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nodes = {

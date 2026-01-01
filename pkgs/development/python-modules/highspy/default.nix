@@ -36,10 +36,18 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Linear optimization software";
     homepage = "https://github.com/ERGO-Code/HiGHS";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ renesat ];
+=======
+  meta = with lib; {
+    description = "Linear optimization software";
+    homepage = "https://github.com/ERGO-Code/HiGHS";
+    license = licenses.mit;
+    maintainers = with maintainers; [ renesat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -50,11 +50,20 @@ stdenv.mkDerivation rec {
       --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Suite of MPI-based tools to manage large datasets";
     homepage = "https://hpc.github.io/mpifileutils";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.markuskowa ];
+=======
+  meta = with lib; {
+    description = "Suite of MPI-based tools to manage large datasets";
+    homepage = "https://hpc.github.io/mpifileutils";
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

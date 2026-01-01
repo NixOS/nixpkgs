@@ -55,6 +55,7 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Dive into a file's history to find root cause";
     homepage = "https://github.com/gitext-rs/git-dive";
@@ -64,6 +65,17 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+  meta = with lib; {
+    description = "Dive into a file's history to find root cause";
+    homepage = "https://github.com/gitext-rs/git-dive";
+    changelog = "https://github.com/gitext-rs/git-dive/blob/${src.rev}/CHANGELOG.md";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "git-dive";
   };
 }

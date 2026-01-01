@@ -38,12 +38,21 @@ stdenv.mkDerivation rec {
     "ETCDIR=${placeholder "out"}/etc"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://imwheel.sourceforge.net/";
     description = "Mouse wheel configuration tool for XFree86/Xorg";
     maintainers = with lib.maintainers; [ jhillyerd ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    homepage = "https://imwheel.sourceforge.net/";
+    description = "Mouse wheel configuration tool for XFree86/Xorg";
+    maintainers = with maintainers; [ jhillyerd ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "imwheel";
   };
 }

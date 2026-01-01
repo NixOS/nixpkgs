@@ -39,10 +39,18 @@ buildPythonPackage {
     "test_getPublicSuffix"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sort-friendly URI Reordering Transform (SURT) python module";
     homepage = "https://github.com/internetarchive/surt";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    description = "Sort-friendly URI Reordering Transform (SURT) python module";
+    homepage = "https://github.com/internetarchive/surt";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

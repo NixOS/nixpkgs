@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-UEo/CSRg1hS/BIEQTEgqfwwz1LAMDdjKwV8bDyspX7o=";
 
+<<<<<<< HEAD
   meta = {
     description = "MozillaVPN configuration manager giving Linux, macOS users (among others), access to MozillaVPN";
     homepage = "https://github.com/NilsIrl/MozWire";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "MozillaVPN configuration manager giving Linux, macOS users (among others), access to MozillaVPN";
+    homepage = "https://github.com/NilsIrl/MozWire";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       siraben
       nilsirl
     ];

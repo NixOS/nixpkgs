@@ -47,10 +47,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mongoengine" ];
 
+<<<<<<< HEAD
   meta = {
     description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB";
     homepage = "http://mongoengine.org/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB";
+    homepage = "http://mongoengine.org/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -38,11 +38,19 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://lib.filezilla-project.org/";
     description = "Modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    homepage = "https://lib.filezilla-project.org/";
+    description = "Modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

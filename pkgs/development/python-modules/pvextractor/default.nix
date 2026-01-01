@@ -55,10 +55,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pvextractor" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://pvextractor.readthedocs.io";
     description = "Position-velocity diagram extractor";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ifurther ];
+=======
+  meta = with lib; {
+    homepage = "http://pvextractor.readthedocs.io";
+    description = "Position-velocity diagram extractor";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ifurther ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

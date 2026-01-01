@@ -22,10 +22,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://dev.mysql.com/doc/connector-python/en/index.html";
     description = "MySQL Connector/Python";
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "http://dev.mysql.com/doc/connector-python/en/index.html";
+    description = "MySQL Connector/Python";
+    license = licenses.gpl2Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

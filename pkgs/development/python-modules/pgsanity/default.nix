@@ -27,7 +27,11 @@ buildPythonPackage rec {
   # To find "ecpg"
   nativeBuildInputs = [ (lib.getDev postgresql) ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/markdrago/pgsanity";
     description = "Checks the syntax of Postgresql SQL files";
     mainProgram = "pgsanity";
@@ -38,7 +42,12 @@ buildPythonPackage rec {
       run it through ecpg and
       let ecpg report on the syntax errors of the SQL.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nalbyuites ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ nalbyuites ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

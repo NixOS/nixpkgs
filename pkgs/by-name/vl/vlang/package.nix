@@ -115,6 +115,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
@@ -124,5 +125,16 @@ stdenv.mkDerivation {
     ];
     mainProgram = "v";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://vlang.io/";
+    description = "Simple, fast, safe, compiled language for developing maintainable software";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      delta231
+    ];
+    mainProgram = "v";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

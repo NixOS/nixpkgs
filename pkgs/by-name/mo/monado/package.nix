@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchFromGitLab,
+<<<<<<< HEAD
+=======
+  fetchpatch2,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   writeText,
   bluez,
   cjson,
@@ -35,6 +39,10 @@
   nix-update-script,
   onnxruntime,
   opencv4,
+<<<<<<< HEAD
+=======
+  openhmd,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   openvr,
   orc,
   pcre2,
@@ -64,16 +72,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
+<<<<<<< HEAD
   version = "25.1.0";
+=======
+  version = "25.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-hUSm76PV+FhvzhiYMUbGcNDQMK1TZCPYh1PNADJmdSU=";
   };
 
+=======
+    hash = "sha256-VxTxvw+ftqlh3qF5qWxpK1OJsRowkRXu0xEH2bDckUA=";
+  };
+
+  patches = [
+    # Remove with v26
+    (fetchpatch2 {
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/2a6932d46dad9aa957205e8a47ec2baa33041076.patch";
+      hash = "sha256-CZMbGgx7mEDcjcoRJHDZ5P6BecFW8CB4fpzxQ9bpAvE=";
+    })
+  ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     doxygen
@@ -116,6 +142,10 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     onnxruntime
     opencv4
+<<<<<<< HEAD
+=======
+    openhmd
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     openvr
     orc
     pcre2

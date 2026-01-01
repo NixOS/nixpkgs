@@ -93,7 +93,11 @@
   pytestCheckHook,
 }:
 let
+<<<<<<< HEAD
   version = "9.3.0";
+=======
+  version = "9.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   agent = [
     mcpadapt
     smolagents
@@ -241,7 +245,11 @@ let
     owner = "neuml";
     repo = "txtai";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-dKZiyExKAIO1fEQSkmkTX0eqKgsKSurZWFWkeeiOBIE=";
+=======
+    hash = "sha256-5wr9fTfLVwGksD/+wbw4CktSznDi/xI/WfZBG3+BNYc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 buildPythonPackage {

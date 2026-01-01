@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dicttoxml2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Converts a Python dictionary or other native data type into a valid XML string";
     homepage = "https://pypi.org/project/dicttoxml2/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Converts a Python dictionary or other native data type into a valid XML string";
+    homepage = "https://pypi.org/project/dicttoxml2/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

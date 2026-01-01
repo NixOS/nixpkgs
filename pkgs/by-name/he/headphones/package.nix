@@ -35,9 +35,15 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automatic music downloader for SABnzbd";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Automatic music downloader for SABnzbd";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/rembo10/headphones";
     maintainers = with lib.maintainers; [ rembo10 ];
     mainProgram = "headphones";

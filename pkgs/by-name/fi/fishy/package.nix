@@ -21,12 +21,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-F4zbalop1PEb381DctUIzdm3v71b6M/hnuw9BuIEkBU=";
 
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
   passthru.updateScript = nix-update-script { };
 

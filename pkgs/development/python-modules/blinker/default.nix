@@ -30,11 +30,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/pallets-eco/blinker/releases/tag/${version}";
     description = "Fast Python in-process signal/event dispatching system";
     homepage = "https://github.com/pallets-eco/blinker/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/pallets-eco/blinker/releases/tag/${version}";
+    description = "Fast Python in-process signal/event dispatching system";
+    homepage = "https://github.com/pallets-eco/blinker/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

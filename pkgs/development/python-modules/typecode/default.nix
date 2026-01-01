@@ -70,11 +70,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typecode" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Comprehensive filetype and mimetype detection using libmagic and Pygments";
     homepage = "https://github.com/aboutcode-org/typecode";
     changelog = "https://github.com/aboutcode-org/typecode/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Comprehensive filetype and mimetype detection using libmagic and Pygments";
+    homepage = "https://github.com/aboutcode-org/typecode";
+    changelog = "https://github.com/aboutcode-org/typecode/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

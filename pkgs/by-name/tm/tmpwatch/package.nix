@@ -16,12 +16,21 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-fuser=${psmisc}/bin/fuser" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pagure.io/tmpwatch";
     description = "Recursively searches through specified directories and removes files which have not been accessed in a specified period of time";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ vlstill ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://pagure.io/tmpwatch";
+    description = "Recursively searches through specified directories and removes files which have not been accessed in a specified period of time";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ vlstill ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tmpwatch";
   };
 }

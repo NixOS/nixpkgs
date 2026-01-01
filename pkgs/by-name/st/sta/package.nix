@@ -39,7 +39,11 @@ stdenv.mkDerivation {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple statistics from the command line interface (CLI), fast";
     longDescription = ''
       This is a lightweight, fast tool for calculating basic descriptive
@@ -48,10 +52,17 @@ stdenv.mkDerivation {
       in C++, allowing for faster computation of statistics given larger
       non-trivial data sets.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     homepage = "https://github.com/simonccarter/sta";
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    homepage = "https://github.com/simonccarter/sta";
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sta";
   };
 }

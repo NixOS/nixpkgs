@@ -135,7 +135,11 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
+<<<<<<< HEAD
   version = "0.14.4";
+=======
+  version = "0.14.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"
@@ -147,13 +151,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-MZyYHMq6gFJkVxlrmeXUjOmRYsQBHj0848cnF+7mtbU=";
+=======
+    hash = "sha256-mIq8Fo6KoxAo1cL2NQHnSMPgzUWl1eNJUujdaerGjFA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "gst-plugins-rs-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-T+fdu+Oe07Uf1YoRGYl2DMb1QgdSZVLwcOqH4bBNGXU=";
+=======
+    hash = "sha256-Z1mqpVL2SES1v0flykOwoDX2/apZHxg7eI5If4BsP4o=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;
@@ -227,10 +239,13 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_CACHE_HOME=$(mktemp -d)
   '';
 
+<<<<<<< HEAD
   postInstall = ''
     install -Dm444 -t ''${!outputDev}/lib/pkgconfig gst*.pc
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck =
     (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;
   installCheckPhase = ''
@@ -250,17 +265,29 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GStreamer plugins written in Rust";
     mainProgram = "gst-webrtc-signalling-server";
     homepage = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "GStreamer plugins written in Rust";
+    mainProgram = "gst-webrtc-signalling-server";
+    homepage = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mpl20
       asl20
       mit
       lgpl21Plus
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

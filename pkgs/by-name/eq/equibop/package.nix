@@ -13,8 +13,11 @@
   libpulseaudio,
   autoPatchelfHook,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nodejs,
   nix-update-script,
   withTTS ? true,
@@ -31,22 +34,33 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wvg06YSQOZvP/NHl3WPfnI9F0+KN0cJ2CBwaZD8Xpfk=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm_10.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+<<<<<<< HEAD
     pnpm = pnpm_10;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-HQxQIMbj2xsxD1jwj/itfAW6KHxX81Eu60ouzxQDu44=";
   };
 
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_10
+=======
+    pnpm_10.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # XXX: Equibop *does not* ship venmic as a prebuilt node module. The package
     # seems to build with or without this hook, but I (NotAShelf) don't have the
     # time to test the consequences of removing this hook. Please open a pull
@@ -133,6 +147,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
+<<<<<<< HEAD
+=======
+    inherit (finalAttrs) pnpmDeps;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     updateScript = nix-update-script { };
   };
 

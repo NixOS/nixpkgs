@@ -290,8 +290,11 @@ in
       };
     };
   };
+<<<<<<< HEAD
 
   meta.maintainers = with lib.maintainers; [
     felixsinger
   ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

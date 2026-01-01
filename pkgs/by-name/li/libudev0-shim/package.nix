@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
     ln -s "$name" "$out/lib/libudev.so.0"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Shim to preserve libudev.so.0 compatibility";
     homepage = "https://github.com/archlinux/libudev0-shim";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
+=======
+  meta = with lib; {
+    description = "Shim to preserve libudev.so.0 compatibility";
+    homepage = "https://github.com/archlinux/libudev0-shim";
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

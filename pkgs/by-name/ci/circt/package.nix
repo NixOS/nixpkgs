@@ -9,6 +9,7 @@
   ninja,
   lit,
   z3,
+<<<<<<< HEAD
   sv-lang,
   fmt,
   boost,
@@ -19,6 +20,10 @@
 
   # sv-lang (slang) build is broken on darwin
   enableSlangFrontend ? stdenv.hostPlatform.isLinux,
+=======
+  gitUpdater,
+  callPackage,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -27,12 +32,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
+<<<<<<< HEAD
   version = "1.138.0";
+=======
+  version = "1.131.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
+<<<<<<< HEAD
     hash = "sha256-yx6sk6FO7MHNuRFBMhOXTSjtDQ0B6XyhGHb4uHSXx/8=";
+=======
+    hash = "sha256-im+w6vYsLdJ/i88mG/anFjPYgE1HfvJIemLEse0pzco=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -44,6 +57,7 @@ stdenv.mkDerivation rec {
     git
     pythonEnv
     z3
+<<<<<<< HEAD
     versionCheckHook
   ];
   buildInputs = [
@@ -66,6 +80,18 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lit}/bin/.lit-wrapped")
     (lib.cmakeBool "CIRCT_SLANG_FRONTEND_ENABLED" enableSlangFrontend)
     (lib.cmakeBool "CIRCT_SLANG_BUILD_FROM_SOURCE" false)
+=======
+  ];
+  buildInputs = [ circt-llvm ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DMLIR_DIR=${circt-llvm.dev}/lib/cmake/mlir"
+
+    # LLVM_EXTERNAL_LIT is executed by python3, the wrapped bash script will not work
+    "-DLLVM_EXTERNAL_LIT=${lit}/bin/.lit-wrapped"
+    "-DCIRCT_LLHD_SIM_ENABLED=OFF"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # cannot use lib.optionalString as it creates an empty string, disabling all tests
@@ -96,7 +122,10 @@ stdenv.mkDerivation rec {
           "CIRCT :: circt-reduce/.*\\.mlir"
           "CIRCT :: circt-test/basic.mlir"
           "CIRCT :: firld/.*\\.mlir"
+<<<<<<< HEAD
           "CIRCT :: Tools/domaintool/clock-spec-json.mlir"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ]
         ++ [
           # Temporarily disable for bump: https://github.com/llvm/circt/issues/8000
@@ -109,11 +138,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tools/circt-test
+<<<<<<< HEAD
 
     substituteInPlace \
       lib/Tools/circt-verilog-lsp-server/VerilogServerImpl/CMakeLists.txt \
       lib/Conversion/ImportVerilog/CMakeLists.txt \
       --replace-fail "slang_slang" "slang::slang"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   preConfigure = ''
@@ -129,11 +161,15 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+<<<<<<< HEAD
   checkTarget = "check-circt check-circt-unit";
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/firtool";
   versionCheckProgramArg = "--version";
+=======
+  checkTarget = "check-circt check-circt-integration";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "out"

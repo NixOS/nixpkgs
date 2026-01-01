@@ -9,13 +9,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "geminicommit";
+<<<<<<< HEAD
   version = "0.6.1";
+=======
+  version = "0.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "tfkhdyt";
     repo = "geminicommit";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-PAL14mxeWYEDaFL/rniLN+FNDFE/T3t2+pAK4BGqcJY=";
+=======
+    hash = "sha256-PH9IYVlHZuXEzpRvT0luSZej1dFzUyxGzoQ+z79u5kU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-4aVUD16zhzWvgD90gttmoDRoKKb0dRgDdH1HMfgd3LU=";
@@ -29,8 +37,13 @@ buildGoModule (finalAttrs: {
       cmd = finalAttrs.meta.mainProgram;
       goDefaultCmd = finalAttrs.pname;
     in
+<<<<<<< HEAD
     # The official github released binary is renamed since v0.6.1,
     # see: https://github.com/tfkhdyt/geminicommit/releases/tag/v0.6.1
+=======
+    # The official github released binary is renamed since v0.6.0,
+    # see: https://github.com/tfkhdyt/geminicommit/releases/tag/v0.6.0
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Here we link the old name (which is also the `go build` default name)
     # for backward compatibility:
     ''

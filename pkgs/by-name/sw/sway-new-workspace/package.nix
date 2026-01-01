@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Gxqg0FqIU7e1oZ1inCe/xN3IXyQkMAt3yfbAfhfxy1o=";
 
+<<<<<<< HEAD
   meta = {
     description = "Command to create new Sway workpaces";
     homepage = "https://github.com/nzig/sway-new-workspace";
@@ -24,5 +25,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sway-new-workspace";
     maintainers = with lib.maintainers; [ bbenno ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Command to create new Sway workpaces";
+    homepage = "https://github.com/nzig/sway-new-workspace";
+    license = licenses.mit;
+    mainProgram = "sway-new-workspace";
+    maintainers = with maintainers; [ bbenno ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

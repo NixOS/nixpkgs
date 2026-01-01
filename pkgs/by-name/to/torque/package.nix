@@ -90,10 +90,17 @@ stdenv.mkDerivation {
     install -Dm755 torque.setup buildutils/pbs_mkdirs -t $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/adaptivecomputing/torque";
     description = "Resource management system for submitting and controlling jobs on supercomputers, clusters, and grids";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/adaptivecomputing/torque";
+    description = "Resource management system for submitting and controlling jobs on supercomputers, clusters, and grids";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.torque11;
   };
 }

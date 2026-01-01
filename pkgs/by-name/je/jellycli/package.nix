@@ -26,7 +26,11 @@ buildGoModule rec {
 
   buildInputs = [ alsa-lib ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Jellyfin terminal client";
     longDescription = ''
@@ -34,8 +38,13 @@ buildGoModule rec {
       Subsonic comptabile servers (API >= 1.16), e.g., Navidrome.
     '';
     homepage = "https://github.com/tryffel/jellycli";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jellycli";
   };
 }

@@ -11,14 +11,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vorta";
+<<<<<<< HEAD
   version = "0.11.0";
+=======
+  version = "0.10.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-/60KVJGKNz3aouv5jzubFlz+AxPEbRDSv4ZO9MEi3V0=";
+=======
+    hash = "sha256-VhM782mFWITA0VlKw0sBIu/UxUqlFLgq5XVdCpQggCw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -68,6 +76,10 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck =
     let

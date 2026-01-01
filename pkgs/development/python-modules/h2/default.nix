@@ -43,11 +43,19 @@ buildPythonPackage rec {
     "h2.config"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/python-hyper/h2/blob/${src.tag}/CHANGELOG.rst";
     description = "HTTP/2 State-Machine based protocol implementation";
     homepage = "https://github.com/python-hyper/h2";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/python-hyper/h2/blob/${src.tag}/CHANGELOG.rst";
+    description = "HTTP/2 State-Machine based protocol implementation";
+    homepage = "https://github.com/python-hyper/h2";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

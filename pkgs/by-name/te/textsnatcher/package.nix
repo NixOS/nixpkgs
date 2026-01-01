@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Copy Text from Images with ease, Perform OCR operations in seconds";
     homepage = "https://textsnatcher.rf.gd/";
@@ -63,5 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "com.github.rajsolai.textsnatcher";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Copy Text from Images with ease, Perform OCR operations in seconds";
+    homepage = "https://textsnatcher.rf.gd/";
+    changelog = "https://github.com/RajSolai/TextSnatcher/releases/tag/v${finalAttrs.version}";
+    license = licenses.gpl3Only;
+    mainProgram = "com.github.rajsolai.textsnatcher";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

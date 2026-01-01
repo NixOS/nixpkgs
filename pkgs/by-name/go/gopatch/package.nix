@@ -35,12 +35,20 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Refactoring and code transformation tool for Go";
     mainProgram = "gopatch";
     homepage = "https://github.com/uber-go/gopatch";
     changelog = "https://github.com/uber-go/gopatch/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

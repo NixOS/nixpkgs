@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "arc4" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ARCFOUR (RC4) cipher implementation";
     homepage = "https://github.com/manicmaniac/arc4";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "ARCFOUR (RC4) cipher implementation";
+    homepage = "https://github.com/manicmaniac/arc4";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

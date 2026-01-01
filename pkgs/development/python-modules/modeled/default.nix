@@ -33,12 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "modeled" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken =
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "Universal data modeling for Python";
     homepage = "https://github.com/modeled/modeled";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Only;
+=======
+    license = licenses.lgpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

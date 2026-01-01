@@ -151,7 +151,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://ossia.io/score/about.html";
     description = "Sequencer for audio-visual artists";
     longDescription = ''
@@ -159,9 +163,15 @@ clangStdenv.mkDerivation (finalAttrs: {
       the creation of interactive shows, museum installations, intermedia
       digital artworks, interactive music and more in an intuitive user interface.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jcelerier
       minijackson
     ];

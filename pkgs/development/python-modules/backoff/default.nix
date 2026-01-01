@@ -20,11 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-g8bYGJ6Kw6y3BUnuoP1IAye5CL0geH5l7pTb3xxq7jI=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/litl/backoff/pull/220
     ./python314-compat.patch
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
@@ -35,10 +38,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "backoff" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Function decoration for backoff and retry";
     homepage = "https://github.com/litl/backoff";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ chkno ];
+=======
+  meta = with lib; {
+    description = "Function decoration for backoff and retry";
+    homepage = "https://github.com/litl/backoff";
+    license = licenses.mit;
+    maintainers = with maintainers; [ chkno ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

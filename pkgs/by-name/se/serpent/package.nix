@@ -27,7 +27,11 @@ stdenv.mkDerivation {
     mv serpent $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Compiler for the Serpent language for Ethereum";
     mainProgram = "serpent";
     longDescription = ''
@@ -40,8 +44,14 @@ stdenv.mkDerivation {
       features for contract programming.
     '';
     homepage = "https://github.com/ethereum/wiki/wiki/Serpent";
+<<<<<<< HEAD
     license = with lib.licenses; [ wtfpl ];
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+    license = with licenses; [ wtfpl ];
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

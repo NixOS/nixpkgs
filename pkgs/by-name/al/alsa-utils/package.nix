@@ -14,7 +14,11 @@
   procps,
   tree,
   which,
+<<<<<<< HEAD
   fftwFloat,
+=======
+  fftw,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pipewire,
   withPipewireLib ? true,
   symlinkJoin,
@@ -48,7 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     ncurses
     libsamplerate
+<<<<<<< HEAD
     fftwFloat
+=======
+    fftw
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   configureFlags = [

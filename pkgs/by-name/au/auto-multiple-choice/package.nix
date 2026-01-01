@@ -145,7 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkgs = [ finalAttrs.finalPackage ];
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Create and manage multiple choice questionnaires with automated marking";
     mainProgram = "auto-multiple-choice";
     longDescription = ''
@@ -174,8 +178,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.auto-multiple-choice.net/";
     changelog = "https://gitlab.com/jojo_boulix/auto-multiple-choice/-/blob/master/ChangeLog";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.thblt ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.thblt ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -26,11 +26,19 @@ stdenv.mkDerivation rec {
     "-DINSTALL_DOCUMENTATION=ON"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Ferdi265/pipectl";
     license = lib.licenses.gpl3;
     description = "Simple named pipe management utility";
     maintainers = with lib.maintainers; [ synthetica ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Ferdi265/pipectl";
+    license = licenses.gpl3;
+    description = "Simple named pipe management utility";
+    maintainers = with maintainers; [ synthetica ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pipectl";
   };
 }

@@ -44,6 +44,10 @@ crystal.buildCrystalPackage rec {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/ameba-ls";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Crystal language server powered by Ameba linter";

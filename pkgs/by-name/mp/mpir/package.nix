@@ -41,10 +41,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/wbhart/mpir/commit/4ff3b770cbf86e29b75d12c13e8b854c74bccc5a.patch";
       hash = "sha256-dCB2+1IYTGzHUQkDUF4gqvR1xoMPEYVPLGE+EP2wLL4=";
     })
+<<<<<<< HEAD
     (fetchpatch {
       url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/a67361db03777a80446ffa8e512f26edb299268f/community/mpir/gcc15.patch";
       hash = "sha256-8RqMHYqDowHytgBd4RsGEOLkk+spYS+iqWQL2kzGAtI=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   configureFlags = [ "--enable-cxx" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-fat" ];

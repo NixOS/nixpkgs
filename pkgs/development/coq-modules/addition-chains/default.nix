@@ -41,7 +41,11 @@ mkCoqDerivation {
 
   useDune = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Exponentiation algorithms following addition chains";
     longDescription = ''
       Addition chains are algorithms for computations of the p-th
@@ -49,8 +53,14 @@ mkCoqDerivation {
       possible. We present a few implementations of addition chains,
       with proofs of their correctness.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ Zimmi48 ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ Zimmi48 ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

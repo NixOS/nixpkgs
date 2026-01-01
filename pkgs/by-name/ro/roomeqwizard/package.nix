@@ -113,11 +113,20 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.roomeqwizard.com/";
     license = lib.licenses.unfree;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://www.roomeqwizard.com/";
+    license = licenses.unfree;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       zaninime
     ];
     description = "Room Acoustics Software";

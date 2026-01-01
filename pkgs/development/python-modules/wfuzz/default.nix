@@ -82,7 +82,11 @@ buildPythonPackage rec {
     cp -R -T "wordlist" "$out/share/wordlists/wfuzz"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/xmendez/wfuzz/releases/tag/v${version}";
     description = "Web content fuzzer to facilitate web applications assessments";
     longDescription = ''
@@ -91,7 +95,12 @@ buildPythonPackage rec {
       web application vulnerabilities.
     '';
     homepage = "https://wfuzz.readthedocs.io";
+<<<<<<< HEAD
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ pamplemousse ];
+=======
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ pamplemousse ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

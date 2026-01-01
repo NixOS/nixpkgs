@@ -20,8 +20,13 @@ let
   };
 
   # Thanks to the live-bootstrap project!
+<<<<<<< HEAD
   # See https://github.com/fosslinux/live-bootstrap/blob/c0494d9af84b9e8c3e76e34c6e898978013a3b39/steps/bash-2.05b/pass1.kaem
   liveBootstrap = "https://github.com/fosslinux/live-bootstrap/raw/c0494d9af84b9e8c3e76e34c6e898978013a3b39/steps/bash-2.05b";
+=======
+  # See https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/bash-2.05b/bash-2.05b.kaem
+  liveBootstrap = "https://github.com/fosslinux/live-bootstrap/raw/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/bash-2.05b";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   main_mk = fetchurl {
     url = "${liveBootstrap}/mk/main.mk";
@@ -30,7 +35,11 @@ let
 
   common_mk = fetchurl {
     url = "${liveBootstrap}/mk/common.mk";
+<<<<<<< HEAD
     sha256 = "sha256-9BzUJPz6Vx+r69i2SQlqRTH9ihgLaUp1JSYGlTbWWu8=";
+=======
+    sha256 = "09rigxxf85p2ybnq248sai1gdx95yykc8jmwi4yjx389zh09mcr8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   builtins_mk = fetchurl {
@@ -125,12 +134,21 @@ kaem.runCommand "${pname}-${version}"
         mkdir ''${out}
       '';
 
+<<<<<<< HEAD
     meta = {
       description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
       homepage = "https://www.gnu.org/software/bash";
       license = lib.licenses.gpl3Plus;
       teams = [ lib.teams.minimal-bootstrap ];
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      description = "GNU Bourne-Again Shell, the de facto standard shell on Linux";
+      homepage = "https://www.gnu.org/software/bash";
+      license = licenses.gpl3Plus;
+      teams = [ teams.minimal-bootstrap ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "preprocess_cancellation" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Klipper GCode Preprocessor for Object Cancellation";
     homepage = "https://github.com/kageurufu/cancelobject-preprocessor";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ zhaofengli ];
+=======
+  meta = with lib; {
+    description = "Klipper GCode Preprocessor for Object Cancellation";
+    homepage = "https://github.com/kageurufu/cancelobject-preprocessor";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ zhaofengli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

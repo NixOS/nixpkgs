@@ -26,8 +26,11 @@ lib.fix (
             [1] 72a14ea563a3f5bf85db659349a533fe75a8b0ce
             [2] f931bc81d63f5cfda55ac73d754c87b3fd63b291
           */
+<<<<<<< HEAD
           # https://gitlab.com/mailman/hyperkitty/-/merge_requests/681
           django = super.django_4;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
           django-allauth = super.django-allauth.overrideAttrs (
             new:

@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
 
   inherit monoDLLFixer;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.gnome.org/Archive/hyena";
     description = "C# library which contains a hodge-podge of random stuff";
     longDescription = ''
@@ -43,8 +47,14 @@ stdenv.mkDerivation rec {
       a smart job/task scheduler, a user-query/search parser, and much more. It's particularly
       useful for Gtk# applications, though only the Hyena.Gui assembly requires Gtk#.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ obadz ];
     license = lib.licenses.mit;
+=======
+    platforms = platforms.all;
+    maintainers = with maintainers; [ obadz ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

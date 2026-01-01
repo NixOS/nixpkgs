@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C++11 header-only message digest library";
     homepage = "https://github.com/kerukuro/digestpp";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ ambroisie ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "C++11 header-only message digest library";
+    homepage = "https://github.com/kerukuro/digestpp";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ ambroisie ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

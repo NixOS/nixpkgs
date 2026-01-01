@@ -73,11 +73,20 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "rainbowstream" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Streaming command-line twitter client";
     mainProgram = "rainbowstream";
     homepage = "https://github.com/orakaro/rainbowstream";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "Streaming command-line twitter client";
+    mainProgram = "rainbowstream";
+    homepage = "https://github.com/orakaro/rainbowstream";
+    license = licenses.mit;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

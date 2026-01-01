@@ -28,10 +28,17 @@ buildPythonPackage rec {
     pytest tests
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Click params for command line interfaces to GeoJSON";
     homepage = "https://github.com/mapbox/cligj";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Click params for command line interfaces to GeoJSON";
+    homepage = "https://github.com/mapbox/cligj";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

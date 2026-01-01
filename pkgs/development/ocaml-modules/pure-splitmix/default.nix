@@ -17,10 +17,18 @@ buildDunePackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Lysxia/pure-splitmix";
     description = "Purely functional splittable PRNG";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Lysxia/pure-splitmix";
+    description = "Purely functional splittable PRNG";
+    license = licenses.mit;
+    maintainers = [ maintainers.ulrikstrid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

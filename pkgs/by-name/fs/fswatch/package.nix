@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform file change monitor with multiple backends";
     mainProgram = "fswatch";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "Cross-platform file change monitor with multiple backends";
+    mainProgram = "fswatch";
+    homepage = "https://github.com/emcrisostomo/fswatch";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

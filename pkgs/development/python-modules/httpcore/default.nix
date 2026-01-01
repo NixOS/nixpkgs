@@ -8,6 +8,11 @@
   hatch-fancy-pypi-readme,
   h11,
   h2,
+<<<<<<< HEAD
+=======
+  pproxy,
+  pytest-asyncio,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytest-httpbin,
   pytest-trio,
   pytestCheckHook,
@@ -52,11 +57,20 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+<<<<<<< HEAD
+=======
+    pproxy
+    pytest-asyncio
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pytest-httpbin
     pytest-trio
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "httpcore" ];
 
@@ -66,11 +80,20 @@ buildPythonPackage rec {
     inherit httpx httpx-socks respx;
   };
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
     description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
+    description = "Minimal low-level HTTP client";
+    homepage = "https://github.com/encode/httpcore";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

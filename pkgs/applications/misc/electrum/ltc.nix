@@ -174,7 +174,11 @@ python3.pkgs.buildPythonApplication {
     $out/bin/electrum-ltc help >/dev/null
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Lightweight Litecoin Client";
     mainProgram = "electrum-ltc";
     longDescription = ''
@@ -184,8 +188,14 @@ python3.pkgs.buildPythonApplication {
       your litecoins to theft or hardware failure.
     '';
     homepage = "https://electrum-ltc.org/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ bbjubjub ];
+=======
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ bbjubjub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

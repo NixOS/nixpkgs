@@ -76,13 +76,23 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "XMPP and SMS messaging via libpurple and ModemManager";
     mainProgram = "chatty";
     homepage = "https://gitlab.gnome.org/World/Chatty";
     changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${finalAttrs.src.tag}/NEWS";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -113,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.mysql.com/";
     description = "World's most popular open source database";
@@ -120,5 +121,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.mysql.com/";
+    description = "World's most popular open source database";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [
+      orivej
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

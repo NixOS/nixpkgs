@@ -53,11 +53,19 @@ python3Packages.buildPythonApplication {
   # package has no tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Chrome extension and python server that allows you to play videos in webpages with MPV instead";
     homepage = "https://github.com/Thann/play-with-mpv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dawidsowa ];
+=======
+  meta = with lib; {
+    description = "Chrome extension and python server that allows you to play videos in webpages with MPV instead";
+    homepage = "https://github.com/Thann/play-with-mpv";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dawidsowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "play-with-mpv";
   };
 }

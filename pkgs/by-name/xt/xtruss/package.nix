@@ -20,11 +20,19 @@ stdenv.mkDerivation rec {
     halibut
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Easy-to-use X protocol tracing program";
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss";
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+  meta = with lib; {
+    description = "Easy-to-use X protocol tracing program";
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/xtruss";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dtzWill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xtruss";
   };
 }

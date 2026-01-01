@@ -21,6 +21,7 @@ let
   pname = "dockutil";
   version = "3.1.3";
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for managing dock items";
     homepage = "https://github.com/kcrawford/dockutil";
@@ -28,6 +29,15 @@ let
     maintainers = with lib.maintainers; [ tboerger ];
     mainProgram = "dockutil";
     platforms = lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Tool for managing dock items";
+    homepage = "https://github.com/kcrawford/dockutil";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ tboerger ];
+    mainProgram = "dockutil";
+    platforms = platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildFromSource = swiftPackages.stdenv.mkDerivation (finalAttrs: {

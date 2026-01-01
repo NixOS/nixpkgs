@@ -26,11 +26,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colored" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Simple library for color and formatting to terminal";
     homepage = "https://gitlab.com/dslackw/colored";
     changelog = "https://gitlab.com/dslackw/colored/-/raw/${version}/CHANGES.md";
     maintainers = [ ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

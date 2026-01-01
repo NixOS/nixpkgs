@@ -33,6 +33,10 @@ in
       squalus
       dwrege
       fpletz
+<<<<<<< HEAD
+=======
+      grimmauld
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;

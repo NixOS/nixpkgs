@@ -17,11 +17,19 @@ buildGoModule {
 
   vendorHash = "sha256-zmOtwx2+mBHDua9Z+G+MnxWaBzoqBPymwEcl+4oKs3M=";
 
+<<<<<<< HEAD
   meta = {
     description = "Gemini proxy to access the Small Web";
     homepage = "https://github.com/LukeEmmet/duckling-proxy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
+=======
+  meta = with lib; {
+    description = "Gemini proxy to access the Small Web";
+    homepage = "https://github.com/LukeEmmet/duckling-proxy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kaction ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "duckling-proxy";
   };
 }

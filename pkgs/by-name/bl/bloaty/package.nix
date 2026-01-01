@@ -48,7 +48,11 @@ stdenv.mkDerivation {
     substituteInPlace CMakeLists.txt \
       --replace "find_package(Python COMPONENTS Interpreter)" "" \
       --replace "if(Python_FOUND AND LIT_EXECUTABLE" "if(LIT_EXECUTABLE" \
+<<<<<<< HEAD
       --replace "COMMAND \''${Python_EXECUTABLE} \''${LIT_EXECUTABLE}" "COMMAND \''${LIT_EXECUTABLE}"
+=======
+      --replace "COMMAND \''\${Python_EXECUTABLE} \''\${LIT_EXECUTABLE}" "COMMAND \''\${LIT_EXECUTABLE}"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # wasm test fail. Possibly due to LLVM version < 17. See https://github.com/google/bloaty/pull/354
     rm -rf tests/wasm
   '';

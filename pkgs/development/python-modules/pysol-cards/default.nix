@@ -22,11 +22,20 @@ buildPythonPackage rec {
     random2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generates Solitaire deals";
     mainProgram = "pysol_cards";
     homepage = "https://github.com/shlomif/pysol_cards";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mwolfe ];
+=======
+  meta = with lib; {
+    description = "Generates Solitaire deals";
+    mainProgram = "pysol_cards";
+    homepage = "https://github.com/shlomif/pysol_cards";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mwolfe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

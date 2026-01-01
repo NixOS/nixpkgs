@@ -9,12 +9,26 @@
 }:
 let
   pname = "models-dev";
+<<<<<<< HEAD
   version = "0-unstable-2025-12-29";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
     rev = "53afc6aefb7b7f777c7b708098e7dbf83bd3797a";
     hash = "sha256-I79MLfT9rCJK7LOfJNN23wM9/lJsVL+fw3hBUPykIxM=";
+=======
+  version = "0-unstable-2025-11-28";
+  src = fetchFromGitHub {
+    owner = "sst";
+    repo = "models.dev";
+    rev = "48358b91b776d0bd34cbbc4c70e7ac5ce827b916";
+    hash = "sha256-Pvtc32s/p19Pg8JACSEmxj6Ldc5vl8ZOXiPbJ3ZAUqQ=";
+    postFetch = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      # NOTE: Normalize case-sensitive directory names that cause issues on case-insensitive filesystems
+      cp -r "$out/providers/poe/models/openai"/* "$out/providers/poe/models/openAi/"
+      rm -rf "$out/providers/poe/models/openai"
+    '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   node_modules = stdenvNoCC.mkDerivation {

@@ -135,12 +135,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Lean and efficient Python implementation for microcontrollers and constrained systems";
     homepage = "https://micropython.org";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Lean and efficient Python implementation for microcontrollers and constrained systems";
+    homepage = "https://micropython.org";
+    platforms = platforms.unix;
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       prusnak
       sgo
     ];

@@ -22,11 +22,20 @@ buildGoModule rec {
     rm test/e2e_test.go
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/kubernetes-sigs/metrics-server";
     description = "Kubernetes container resource metrics collector";
     mainProgram = "metrics-server";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eskytthe ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/kubernetes-sigs/metrics-server";
+    description = "Kubernetes container resource metrics collector";
+    mainProgram = "metrics-server";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ eskytthe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

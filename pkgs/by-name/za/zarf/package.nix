@@ -60,12 +60,21 @@ buildGoModule rec {
         --zsh  <($out/bin/zarf completion zsh)
     '';
 
+<<<<<<< HEAD
   meta = {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
     mainProgram = "zarf";
     homepage = "https://zarf.dev";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
+    mainProgram = "zarf";
+    homepage = "https://zarf.dev";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ragingpastry
     ];
   };

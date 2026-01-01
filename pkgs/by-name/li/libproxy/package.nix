@@ -128,11 +128,19 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library that provides automatic proxy configuration management";
     homepage = "https://libproxy.github.io/libproxy/";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Library that provides automatic proxy configuration management";
+    homepage = "https://libproxy.github.io/libproxy/";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # Mandatory libpxbackend-1.0 shared library.
       lib.systems.inspect.platformPatterns.isStatic

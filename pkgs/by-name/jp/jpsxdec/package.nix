@@ -65,7 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/m35/jpsxdec/blob/${finalAttrs.src.rev}/jpsxdec/doc/CHANGES.txt";
     description = "Cross-platform PlayStation 1 audio and video converter";
     homepage = "https://jpsxdec.blogspot.com/";
@@ -74,7 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
       free = true;
     };
     mainProgram = "jpsxdec";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ zane ];
     platforms = lib.platforms.all;
+=======
+    maintainers = with maintainers; [ zane ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

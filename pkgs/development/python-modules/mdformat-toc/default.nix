@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_toc" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mdformat plugin to generate a table of contents";
     homepage = "https://github.com/hukkin/mdformat-toc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Mdformat plugin to generate a table of contents";
+    homepage = "https://github.com/hukkin/mdformat-toc";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       aldoborrero
       polarmutex
     ];

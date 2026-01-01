@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${git}/bin"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ingydotnet/git-subrepo";
     description = "Git submodule alternative";
@@ -52,5 +53,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ryantrinkle ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ingydotnet/git-subrepo";
+    description = "Git submodule alternative";
+    mainProgram = "git-subrepo";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ryantrinkle ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -204,7 +204,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.palemoon.org/";
     description = "Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
@@ -220,15 +224,24 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${finalAttrs.version}_Release";
     license = [
+<<<<<<< HEAD
       lib.licenses.mpl20
+=======
+      licenses.mpl20
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       {
         fullName = "Pale Moon Redistribution License";
         url = "https://www.palemoon.org/redist.shtml";
         # TODO free, redistributable? Has strict limitations on what modifications may be done & shipped by packagers
       }
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ OPNA2608 ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+    maintainers = with maintainers; [ OPNA2608 ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "palemoon";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];

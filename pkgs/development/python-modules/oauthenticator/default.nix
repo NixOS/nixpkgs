@@ -58,7 +58,11 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
@@ -78,11 +82,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oauthenticator" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Authenticate JupyterHub users with common OAuth providers";
     homepage = "https://github.com/jupyterhub/oauthenticator";
     changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Authenticate JupyterHub users with common OAuth providers";
+    homepage = "https://github.com/jupyterhub/oauthenticator";
+    changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

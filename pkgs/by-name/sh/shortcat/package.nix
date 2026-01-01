@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     cp -R . $out/Applications/Shortcat.app
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Manipulate macOS masterfully, minus the mouse";
     homepage = "https://shortcat.app/";
@@ -29,5 +30,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ t-monaghan ];
     license = lib.licenses.unfreeRedistributable;
+=======
+  meta = with lib; {
+    description = "Manipulate macOS masterfully, minus the mouse";
+    homepage = "https://shortcat.app/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [ t-monaghan ];
+    license = licenses.unfreeRedistributable;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

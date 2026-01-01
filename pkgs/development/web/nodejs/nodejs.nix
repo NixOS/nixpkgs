@@ -550,6 +550,7 @@ let
         inherit majorVersion;
       };
 
+<<<<<<< HEAD
       meta = {
         description = "Event-driven I/O framework for the V8 JavaScript engine";
         homepage = "https://nodejs.org";
@@ -562,11 +563,24 @@ let
             lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.freebsd
           ) lib.platforms.littleEndian)
           ++ [ "s390x-linux" ];
+=======
+      meta = with lib; {
+        description = "Event-driven I/O framework for the V8 JavaScript engine";
+        homepage = "https://nodejs.org";
+        changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
+        license = licenses.mit;
+        maintainers = with maintainers; [ aduh95 ];
+        platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         # This broken condition is likely too conservative. Feel free to loosen it if it works.
         broken =
           !canExecute && !canEmulate && (stdenv.buildPlatform.parsed.cpu != stdenv.hostPlatform.parsed.cpu);
         mainProgram = "node";
+<<<<<<< HEAD
         knownVulnerabilities = lib.optional (lib.versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+=======
+        knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
       passthru.python = python; # to ensure nodeEnv uses the same version

@@ -108,6 +108,7 @@ stdenvNoCC.mkDerivation {
     runHook postFixup
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://parsec.app/";
     changelog = "https://parsec.app/changelog";
@@ -118,6 +119,18 @@ stdenvNoCC.mkDerivation {
       pabloaul
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://parsec.app/";
+    changelog = "https://parsec.app/changelog";
+    description = "Remote streaming service client";
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      arcnmx
+      pabloaul
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "parsecd";
   };
 }

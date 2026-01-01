@@ -90,6 +90,10 @@ buildPythonPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/cxfreeze";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preCheck = ''
     rm -rf cx_Freeze

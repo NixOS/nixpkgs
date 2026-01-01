@@ -40,11 +40,20 @@ stdenv.mkDerivation rec {
 
   checkFlags = [ "test" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Inotify shim for macOS and BSD";
     homepage = "https://github.com/libinotify-kqueue/libinotify-kqueue";
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = with lib.platforms; darwin ++ freebsd ++ netbsd ++ openbsd;
+=======
+  meta = with lib; {
+    description = "Inotify shim for macOS and BSD";
+    homepage = "https://github.com/libinotify-kqueue/libinotify-kqueue";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = with platforms; darwin ++ freebsd ++ netbsd ++ openbsd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

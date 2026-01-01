@@ -78,11 +78,20 @@ stdenv.mkDerivation rec {
     moveToOutput lib/${python3.libPrefix} "$py"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Service which logs the users’s activities and events";
     homepage = "https://zeitgeist.freedesktop.org/";
     teams = [ lib.teams.freedesktop ];
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Service which logs the users’s activities and events";
+    homepage = "https://zeitgeist.freedesktop.org/";
+    teams = [ teams.freedesktop ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

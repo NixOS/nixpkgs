@@ -30,11 +30,20 @@ stdenv.mkDerivation rec {
   ];
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple toolset for broadcasting live audio using RTP/UDP and Opus";
     homepage = "http://www.pogo.org.uk/~mark/trx/";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.hansjoergschurr ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Simple toolset for broadcasting live audio using RTP/UDP and Opus";
+    homepage = "http://www.pogo.org.uk/~mark/trx/";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.hansjoergschurr ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

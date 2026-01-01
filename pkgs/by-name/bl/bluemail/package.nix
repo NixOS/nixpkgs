@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
       ''${gappsWrapperArgs[@]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross platform email and calendar app, with AI features and a modern design";
     homepage = "https://bluemail.me";
@@ -122,6 +123,15 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     # Vendored copy of Electron.
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "Cross platform email and calendar app, with AI features and a modern design";
+    homepage = "https://bluemail.me";
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    # Vendored copy of Electron.
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "bluemail";
   };

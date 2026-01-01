@@ -156,6 +156,7 @@ rec {
     let
       # Creates a functor with the same arguments as f
       mirrorArgs = mirrorFunctionArgs f;
+<<<<<<< HEAD
       # Recover overrider and additional attributes for f
       # When f is a callable attribute set,
       # it may contain its own `f.override` and additional attributes.
@@ -175,6 +176,10 @@ rec {
       decorate = f': recoverMetadata (mirrorArgs f');
     in
     decorate (
+=======
+    in
+    mirrorArgs (
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       origArgs:
       let
         result = f origArgs;
@@ -340,7 +345,11 @@ rec {
       abort "lib.customisation.callPackageWith: ${error}";
 
   /**
+<<<<<<< HEAD
     Like `callPackage`, but for a function that returns an attribute
+=======
+    Like callPackage, but for a function that returns an attribute
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     set of derivations. The override function is added to the
     individual attributes.
 
@@ -682,7 +691,11 @@ rec {
     };
 
   /**
+<<<<<<< HEAD
     Like `makeScope`, but aims to support cross compilation. It's still ugly, but
+=======
+    Like makeScope, but aims to support cross compilation. It's still ugly, but
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hopefully it helps a little bit.
 
     # Type
@@ -792,7 +805,11 @@ rec {
         `excludeFunctionArgNames` is useful for argument deprecation while avoiding ellipses.
 
       `extendDrvArgs` (required)
+<<<<<<< HEAD
       : An extension (overlay) of the argument set, like the one taken by [`overrideAttrs`](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
+=======
+      : An extension (overlay) of the argument set, like the one taken by [overrideAttrs](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       `inheritFunctionArgs` (default to `true`)
       : Whether to inherit `__functionArgs` from the base build helper.

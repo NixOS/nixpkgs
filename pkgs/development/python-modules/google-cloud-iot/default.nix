@@ -59,11 +59,19 @@ buildPythonPackage rec {
     "google.cloud.iot_v1"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Cloud IoT API API client library";
     homepage = "https://github.com/googleapis/python-iot";
     changelog = "https://github.com/googleapis/python-iot/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Cloud IoT API API client library";
+    homepage = "https://github.com/googleapis/python-iot";
+    changelog = "https://github.com/googleapis/python-iot/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

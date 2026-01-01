@@ -84,11 +84,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Silky smooth profiling for the Django Framework";
     homepage = "https://github.com/jazzband/django-silk";
     changelog = "https://github.com/jazzband/django-silk/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    description = "Silky smooth profiling for the Django Framework";
+    homepage = "https://github.com/jazzband/django-silk";
+    changelog = "https://github.com/jazzband/django-silk/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

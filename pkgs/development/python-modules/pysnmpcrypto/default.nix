@@ -37,11 +37,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysnmpcrypto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Strong crypto support for Python SNMP library";
     homepage = "https://github.com/lextudio/pysnmpcrypto";
     changelog = "https://github.com/lextudio/pysnmpcrypto/blob/${version}/CHANGES.txt";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Strong crypto support for Python SNMP library";
+    homepage = "https://github.com/lextudio/pysnmpcrypto";
+    changelog = "https://github.com/lextudio/pysnmpcrypto/blob/${version}/CHANGES.txt";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

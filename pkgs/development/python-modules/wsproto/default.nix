@@ -24,10 +24,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wsproto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python, pure state-machine WebSocket implementation";
     homepage = "https://github.com/python-hyper/wsproto/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pure Python, pure state-machine WebSocket implementation";
+    homepage = "https://github.com/python-hyper/wsproto/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

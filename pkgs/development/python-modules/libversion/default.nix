@@ -40,10 +40,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libversion" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for libversion, which provides fast, powerful and correct generic version string comparison algorithm";
     homepage = "https://github.com/repology/py-libversion";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ryantm ];
+=======
+  meta = with lib; {
+    description = "Python bindings for libversion, which provides fast, powerful and correct generic version string comparison algorithm";
+    homepage = "https://github.com/repology/py-libversion";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ryantm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

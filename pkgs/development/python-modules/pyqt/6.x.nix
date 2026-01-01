@@ -21,7 +21,10 @@
   withPrintSupport ? true,
   withSerialPort ? false,
   cups,
+<<<<<<< HEAD
   withSpeech ? true,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
@@ -106,8 +109,12 @@ buildPythonPackage rec {
     ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
+<<<<<<< HEAD
     ++ lib.optional withSerialPort qtserialport
     ++ lib.optional withSpeech qtspeech;
+=======
+    ++ lib.optional withSerialPort qtserialport;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildInputs =
     with qt6Packages;
@@ -123,8 +130,12 @@ buildPythonPackage rec {
     ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
+<<<<<<< HEAD
     ++ lib.optional withSerialPort qtserialport
     ++ lib.optional withSpeech qtspeech;
+=======
+    ++ lib.optional withSerialPort qtserialport;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   propagatedBuildInputs =
     # ld: library not found for -lcups
@@ -153,6 +164,7 @@ buildPythonPackage rec {
   ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
   # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
   ++ lib.optional withLocation "PyQt6.QtPositioning"
+<<<<<<< HEAD
   ++ lib.optional withSerialPort "PyQt6.QtSerialPort"
   ++ lib.optional withSpeech "PyQt6.QtTextToSpeech";
 
@@ -164,5 +176,17 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     inherit (mesa.meta) platforms;
     maintainers = with lib.maintainers; [ LunNova ];
+=======
+  ++ lib.optional withSerialPort "PyQt6.QtSerialPort";
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
+
+  meta = with lib; {
+    description = "Python bindings for Qt6";
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl3Only;
+    inherit (mesa.meta) platforms;
+    maintainers = with maintainers; [ LunNova ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,16 +28,26 @@ let
         runHook postInstall
       '';
 
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = "Font Awesome - OTF font";
         longDescription = ''
           Font Awesome gives you scalable vector icons that can instantly be customized.
           This package includes only the OTF font. For full CSS etc. see the project website.
         '';
         homepage = "https://fontawesome.com/";
+<<<<<<< HEAD
         license = lib.licenses.ofl;
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [
+=======
+        license = licenses.ofl;
+        platforms = platforms.all;
+        maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           abaldeau
           johnazoidberg
         ];

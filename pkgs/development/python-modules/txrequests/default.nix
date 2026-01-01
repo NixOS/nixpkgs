@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asynchronous Python HTTP for Humans";
     homepage = "https://github.com/tardyp/txrequests";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Asynchronous Python HTTP for Humans";
+    homepage = "https://github.com/tardyp/txrequests";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

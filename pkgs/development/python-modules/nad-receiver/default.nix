@@ -20,7 +20,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joopert";
     repo = "nad_receiver";
+<<<<<<< HEAD
     tag = version;
+=======
+    rev = version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     hash = "sha256-jRMk/yMA48ei+g/33+mMYwfwixaKTMYcU/z/VOoJbvY=";
   };
 
@@ -32,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nad_receiver" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface for NAD receivers";
     homepage = "https://github.com/joopert/nad_receiver";
     changelog = "https://github.com/joopert/nad_receiver/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python interface for NAD receivers";
+    homepage = "https://github.com/joopert/nad_receiver";
+    changelog = "https://github.com/joopert/nad_receiver/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

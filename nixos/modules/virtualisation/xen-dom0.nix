@@ -720,6 +720,18 @@ in
         "xen-blkback"
         "xen-netback"
         "xen-pciback"
+<<<<<<< HEAD
+=======
+        "evtchn"
+        "gntdev"
+        "netbk"
+        "blkbk"
+        "xen-scsibk"
+        "usbbk"
+        "pciback"
+        "xen-acpi-processor"
+        "blktap2"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "tun"
         "netxen_nic"
         "xen_wdt"
@@ -898,6 +910,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             PIDFile = cfg.qemu.pidFile;
+<<<<<<< HEAD
             overrideStrategy = "asDropin";
             ExecStart = [
               ""
@@ -909,6 +922,15 @@ in
                 ${cfg.qemu.pidFile}
               ''
             ];
+=======
+            ExecStart = ''
+              ${cfg.qemu.package}/${cfg.qemu.package.qemu-system-i386} \
+              -xen-domid 0 -xen-attach -name dom0 -nographic -M xenpv \
+              -daemonize -monitor /dev/null -serial /dev/null -parallel \
+              /dev/null -nodefaults -no-user-config -pidfile \
+              ${cfg.qemu.pidFile}
+            '';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           };
         };
 

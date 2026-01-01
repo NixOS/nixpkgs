@@ -44,11 +44,20 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/netbox-community/pynetbox/releases/tag/v${version}";
     description = "API client library for Netbox";
     homepage = "https://github.com/netbox-community/pynetbox";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/netbox-community/pynetbox/releases/tag/v${version}";
+    description = "API client library for Netbox";
+    homepage = "https://github.com/netbox-community/pynetbox";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

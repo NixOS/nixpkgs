@@ -31,11 +31,20 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pew" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/berdario/pew";
     description = "Tools to manage multiple virtualenvs written in pure python";
     mainProgram = "pew";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/berdario/pew";
+    description = "Tools to manage multiple virtualenvs written in pure python";
+    mainProgram = "pew";
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -68,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Uploader for Wikimedia Commons";
     homepage = "https://commons.wikimedia.org/wiki/Commons:Pattypan";
@@ -76,6 +77,16 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ fee1-dead ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    description = "Uploader for Wikimedia Commons";
+    homepage = "https://commons.wikimedia.org/wiki/Commons:Pattypan";
+    license = licenses.mit;
+    mainProgram = "pattypan";
+    maintainers = with maintainers; [ fee1-dead ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];

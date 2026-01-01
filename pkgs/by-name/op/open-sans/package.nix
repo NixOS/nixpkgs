@@ -25,15 +25,25 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Open Sans fonts";
     longDescription = ''
       Open Sans is a humanist sans serif typeface designed by Steve Matteson,
       Type Director of Ascender Corp.
     '';
     homepage = "https://www.opensans.com";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     teams = [ lib.teams.pantheon ];
+=======
+    license = licenses.asl20;
+    platforms = platforms.all;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

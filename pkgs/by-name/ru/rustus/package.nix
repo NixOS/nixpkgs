@@ -24,12 +24,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-df92+gp/DtdHwPxJF89zKHjmVWzfrjnD8wAlrPRyyxk=";
 
+<<<<<<< HEAD
   env = {
     OPENSSL_NO_VENDOR = 1;
 
     # needed to dynamically link rdkafka
     CARGO_FEATURE_DYNAMIC_LINKING = 1;
   };
+=======
+  env.OPENSSL_NO_VENDOR = 1;
+
+  # needed to dynamically link rdkafka
+  CARGO_FEATURE_DYNAMIC_LINKING = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config

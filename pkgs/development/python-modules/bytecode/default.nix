@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bytecode" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/vstinner/bytecode";
     description = "Python module to generate and modify bytecode";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raboof ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/vstinner/bytecode";
+    description = "Python module to generate and modify bytecode";
+    license = licenses.mit;
+    maintainers = with maintainers; [ raboof ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

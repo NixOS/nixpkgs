@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     "SigDigger.pro"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Qt-based digital signal analyzer, using Suscan core and Sigutils DSP library";
     mainProgram = "SigDigger";
@@ -57,6 +58,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Qt-based digital signal analyzer, using Suscan core and Sigutils DSP library";
+    mainProgram = "SigDigger";
+    homepage = "https://github.com/BatchDrake/SigDigger";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       polygon
       oxapentane
     ];

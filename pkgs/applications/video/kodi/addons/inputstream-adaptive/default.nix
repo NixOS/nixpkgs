@@ -23,13 +23,21 @@ in
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
+<<<<<<< HEAD
   version = "21.5.18";
+=======
+  version = "21.5.13";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
     tag = "${version}-${rel}";
+<<<<<<< HEAD
     hash = "sha256-JJaB0HlDLv5CFDE75sXW1e+vCc1BrqzZT6HyBa0LVso=";
+=======
+    hash = "sha256-XcRg0FtoN7SXRVEBWM9gIlLOMGT3x64s9WD12UJdblw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   extraCMakeFlags = [
@@ -59,11 +67,20 @@ buildKodiBinaryAddon rec {
       ${lib.optionalString stdenv.hostPlatform.isAarch64 "ln -s $out/lib/addons/${n}/libcdm_aarch64_loader.so $out/${addonDir}/${n}/libcdm_aarch64_loader.so"}
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/xbmc/inputstream.adaptive";
     description = "Kodi inputstream addon for several manifest types";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/xbmc/inputstream.adaptive";
+    description = "Kodi inputstream addon for several manifest types";
+    platforms = platforms.all;
+    license = licenses.gpl2Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

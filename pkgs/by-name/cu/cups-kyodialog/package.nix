@@ -112,12 +112,21 @@ stdenv.mkDerivation rec {
       --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${pname}/icons/appicon_H.png
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CUPS drivers for several Kyocera printers";
     homepage = "https://www.kyoceradocumentsolutions.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.steveej ];
+=======
+  meta = with lib; {
+    description = "CUPS drivers for several Kyocera printers";
+    homepage = "https://www.kyoceradocumentsolutions.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.steveej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

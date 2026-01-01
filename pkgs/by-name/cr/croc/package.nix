@@ -51,7 +51,11 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Easily and securely send things from one computer to another";
     longDescription = ''
       Croc is a command line tool written in Go that allows any two computers to
@@ -67,8 +71,13 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/schollz/croc";
     changelog = "https://github.com/schollz/croc/releases/tag/v${finalAttrs.version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       equirosa
       SuperSandro2000
       ryan4yin

@@ -18,7 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-5W0GbKz18rQ+3TjNanzV4H4LE/7TLZ+8/FbGHffE2RY=";
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
+=======
+  passthru.update-script = nix-update-script { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Nushell plugin to work with semver versions";
@@ -27,5 +31,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ koffydrop ];
     mainProgram = "nu_plugin_semver";
+<<<<<<< HEAD
+=======
+    platforms = lib.platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

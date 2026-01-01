@@ -41,10 +41,18 @@ buildPythonPackage rec {
     }
     // lib.optionalAttrs (gfal2-util != null) gfal2-util.tests or { };
   };
+<<<<<<< HEAD
   meta = {
     description = "Python binding for gfal2";
     homepage = "https://github.com/cern-fts/gfal2-python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ShamrockLee ];
+=======
+  meta = with lib; {
+    description = "Python binding for gfal2";
+    homepage = "https://github.com/cern-fts/gfal2-python";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ShamrockLee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

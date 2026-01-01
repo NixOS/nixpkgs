@@ -54,6 +54,7 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal web radio client";
     mainProgram = "radioboat";
@@ -61,5 +62,14 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
+=======
+  meta = with lib; {
+    description = "Terminal web radio client";
+    mainProgram = "radioboat";
+    homepage = "https://github.com/slashformotion/radioboat";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ zendo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

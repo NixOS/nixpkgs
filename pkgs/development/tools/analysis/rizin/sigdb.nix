@@ -28,10 +28,17 @@ stdenvNoCC.mkDerivation rec {
     mv installdir $out/share/rizin/sigdb
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Rizin FLIRT Signature Database";
     homepage = src.meta.homepage;
     license = lib.licenses.lgpl3;
+=======
+  meta = with lib; {
+    description = "Rizin FLIRT Signature Database";
+    homepage = src.meta.homepage;
+    license = licenses.lgpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [ chayleaf ];
   };
 }

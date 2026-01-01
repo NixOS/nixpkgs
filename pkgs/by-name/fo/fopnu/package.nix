@@ -42,11 +42,19 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "P2P file sharing system";
     homepage = "https://fopnu.com";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+=======
+  meta = with lib; {
+    description = "P2P file sharing system";
+    homepage = "https://fopnu.com";
+    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fopnu";
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];

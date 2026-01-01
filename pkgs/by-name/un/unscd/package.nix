@@ -72,12 +72,21 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://busybox.net/~vda/unscd/";
     description = "Less buggy replacement for the glibc name service cache daemon";
     mainProgram = "nscd";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://busybox.net/~vda/unscd/";
+    description = "Less buggy replacement for the glibc name service cache daemon";
+    mainProgram = "nscd";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -36,12 +36,21 @@ stdenv.mkDerivation rec {
   # gettext >= 0.25 and autoconf (2.72 at the time of writing).
   env.ACLOCAL = "aclocal -I ${gettext}/share/gettext/m4";
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight volume control that sits in your systray";
     homepage = "https://nullwise.com/pages/volumeicon/volumeicon.html";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bobvanderlinden ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Lightweight volume control that sits in your systray";
+    homepage = "https://nullwise.com/pages/volumeicon/volumeicon.html";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bobvanderlinden ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "volumeicon";
   };
 }

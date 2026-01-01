@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scdoc";
+<<<<<<< HEAD
   version = "1.11.4";
+=======
+  version = "1.11.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "scdoc";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-gldCHzLigeLKDFDcE3TYrNOEWoSt/uYIg9aTg6wwW54=";
+=======
+    hash = "sha256-MbLDhLn/JY6OcdOz9/mIPAQRp5TZ6IKuQ/FQ/R3wjGc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -22,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "LDFLAGS+=-static" "LDFLAGS+="
+  '';
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ]

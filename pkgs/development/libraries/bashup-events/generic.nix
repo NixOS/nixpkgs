@@ -75,13 +75,23 @@ resholve.mkDerivation {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit branch;
     description = "Event listener/callback API for creating extensible bash programs";
     mainProgram = "bashup.events";
     homepage = "https://github.com/bashup/events";
+<<<<<<< HEAD
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ abathur ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.cc0;
+    maintainers = with maintainers; [ abathur ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

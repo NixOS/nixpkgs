@@ -22,12 +22,21 @@ buildGoModule rec {
     mv $out/bin/cli $out/bin/wprecon
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "WordPress vulnerability recognition tool";
     homepage = "https://github.com/blackbinn/wprecon";
     # License Zero Noncommercial Public License 2.0.1
     # https://github.com/blackbinn/wprecon/blob/master/LICENSE
+<<<<<<< HEAD
     license = with lib.licenses; [ unfree ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+    license = with licenses; [ unfree ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

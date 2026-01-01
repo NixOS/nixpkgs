@@ -123,11 +123,20 @@ stdenv.mkDerivation rec {
     export TEST_FLAGS="1500 50 16"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Eigenvalue Solvers for Petaflop-Applications";
     homepage = "https://elpa.mpcdf.mpg.de/";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.markuskowa ];
+=======
+  meta = with lib; {
+    description = "Eigenvalue Solvers for Petaflop-Applications";
+    homepage = "https://elpa.mpcdf.mpg.de/";
+    license = licenses.lgpl3Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

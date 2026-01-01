@@ -54,13 +54,22 @@ mkCoqDerivation {
 
   useDuneifVersion = lib.versions.isGe "9.0";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "General topology in Coq";
     longDescription = ''
       This library develops some of the basic concepts and results of
       general topology in Coq.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ siraben ];
     license = lib.licenses.lgpl21Plus;
+=======
+    maintainers = with maintainers; [ siraben ];
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

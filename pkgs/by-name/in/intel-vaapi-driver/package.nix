@@ -69,9 +69,15 @@ stdenv.mkDerivation {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://01.org/linuxmedia";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://01.org/linuxmedia";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "VA-API user mode driver for Intel GEN Graphics family";
     longDescription = ''
       This VA-API video driver backend provides a bridge to the GEN GPUs through
@@ -87,6 +93,10 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "i686-linux"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

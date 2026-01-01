@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyedimax" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interfacing with the Edimax smart plugs";
     homepage = "https://github.com/andreipop2005/pyedimax";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for interfacing with the Edimax smart plugs";
+    homepage = "https://github.com/andreipop2005/pyedimax";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

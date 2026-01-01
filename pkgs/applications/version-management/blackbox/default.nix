@@ -55,11 +55,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Safely store secrets in a VCS repo";
     homepage = "https://github.com/StackExchange/blackbox";
     maintainers = [ ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Safely store secrets in a VCS repo";
+    homepage = "https://github.com/StackExchange/blackbox";
+    maintainers = [ ];
+    license = licenses.mit;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

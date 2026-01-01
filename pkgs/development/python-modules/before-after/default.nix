@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "before_after" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sugar over the Mock library to help test race conditions";
     homepage = "https://github.com/c-oreills/before_after";
     maintainers = [ ];
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Sugar over the Mock library to help test race conditions";
+    homepage = "https://github.com/c-oreills/before_after";
+    maintainers = [ ];
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

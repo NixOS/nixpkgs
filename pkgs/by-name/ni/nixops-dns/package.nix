@@ -22,12 +22,21 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/museoa/nixops-dns";
     description = "DNS server for resolving NixOps machines";
     mainProgram = "nixops-dns";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/museoa/nixops-dns";
+    description = "DNS server for resolving NixOps machines";
+    mainProgram = "nixops-dns";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kamilchm
       sorki
     ];

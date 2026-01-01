@@ -37,11 +37,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Snowball Stemming Algorithms";
     homepage = "https://snowballstem.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Snowball Stemming Algorithms";
+    homepage = "https://snowballstem.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -94,7 +94,11 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ]
   ++ fsspec.optional-dependencies.github
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pytestFlags = [ "--test-images=file://${test_images}" ];
 

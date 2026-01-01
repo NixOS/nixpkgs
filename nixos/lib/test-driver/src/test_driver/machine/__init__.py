@@ -292,18 +292,24 @@ class Machine:
         return self.booted and self.connected
 
     def log(self, msg: str) -> None:
+<<<<<<< HEAD
         """
         Log a message to console.
         """
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         self.logger.log(msg, {"machine": self.name})
 
     def log_serial(self, msg: str) -> None:
         self.logger.log_serial(msg, self.name)
 
     def nested(self, msg: str, attrs: dict[str, str] = {}) -> _GeneratorContextManager:
+<<<<<<< HEAD
         """
         Get nested logger, optionally with extra attributes.
         """
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         my_attrs = {"machine": self.name}
         my_attrs.update(attrs)
         return self.logger.nested(msg, my_attrs)
@@ -363,9 +369,12 @@ class Machine:
             retry(check_active, timeout)
 
     def get_unit_info(self, unit: str, user: str | None = None) -> dict[str, str]:
+<<<<<<< HEAD
         """
         Get a dictionary of systemd unit properties, as obtained via `systemctl show`.
         """
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
         if status != 0:
             raise RequestedAssertionFailed(
@@ -393,9 +402,12 @@ class Machine:
         property: str,
         user: str | None = None,
     ) -> str:
+<<<<<<< HEAD
         """
         Get the string value of a single systemd unit property
         """
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         status, lines = self.systemctl(
             f'--no-pager show "{unit}" --property="{property}"',
             user,
@@ -443,9 +455,12 @@ class Machine:
         return self.execute(f"systemctl {q}")
 
     def require_unit_state(self, unit: str, require_state: str = "active") -> None:
+<<<<<<< HEAD
         """
         Assert that the current state of a unit has a specific value. The default state is "active".
         """
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         with self.nested(
             f"checking if unit '{unit}' has reached state '{require_state}'"
         ):
@@ -663,10 +678,13 @@ class Machine:
             return output
 
     def wait_for_shutdown(self) -> None:
+<<<<<<< HEAD
         """
         Wait for the VM to power off. This does *not* initiate a shutdown;
         that's usually done via `shutdown()`.
         """
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         if not self.booted:
             return
 
@@ -706,9 +724,12 @@ class Machine:
                 raise TimeoutError
 
     def get_tty_text(self, tty: str) -> str:
+<<<<<<< HEAD
         """
         Get the output printed to a given TTY.
         """
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         status, output = self.execute(
             f"fold -w$(stty -F /dev/tty{tty} size | awk '{{print $2}}') /dev/vcs{tty}"
         )
@@ -807,6 +828,7 @@ class Machine:
             retry(port_is_closed, timeout)
 
     def start_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
+<<<<<<< HEAD
         """
         Start systemd service.
         """
@@ -823,6 +845,17 @@ class Machine:
         Wait for a connection to the guest root shell
         """
 
+=======
+        return self.systemctl(f"start {jobname}", user)
+
+    def stop_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
+        return self.systemctl(f"stop {jobname}", user)
+
+    def wait_for_job(self, jobname: str) -> None:
+        self.wait_for_unit(jobname)
+
+    def connect(self) -> None:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         def shell_ready(timeout_secs: int) -> bool:
             """We sent some data from the backdoor service running on the guest
             to indicate that the backdoor shell is ready.

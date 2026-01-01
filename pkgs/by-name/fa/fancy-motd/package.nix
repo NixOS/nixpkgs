@@ -54,12 +54,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Fancy, colorful MOTD written in bash. Server status at a glance";
     homepage = "https://github.com/bcyran/fancy-motd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rhoriguchi ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Fancy, colorful MOTD written in bash. Server status at a glance";
+    homepage = "https://github.com/bcyran/fancy-motd";
+    license = licenses.mit;
+    maintainers = with maintainers; [ rhoriguchi ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "motd";
   };
 }

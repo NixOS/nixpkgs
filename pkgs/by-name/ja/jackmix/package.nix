@@ -48,11 +48,20 @@ stdenv.mkDerivation (finalAttrs: {
     install -D jackmix/jackmix $out/bin/jackmix
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Matrix-Mixer for the Jack-Audio-connection-Kit";
     mainProgram = "jackmix";
     homepage = "https://github.com/kampfschlaefer/jackmix";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Matrix-Mixer for the Jack-Audio-connection-Kit";
+    mainProgram = "jackmix";
+    homepage = "https://github.com/kampfschlaefer/jackmix";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

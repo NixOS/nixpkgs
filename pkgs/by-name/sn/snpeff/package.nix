@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/snpsift $out/bin/snpSift
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Genetic variant annotation and effect prediction toolbox";
     license = lib.licenses.lgpl3;
@@ -45,6 +46,15 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Genetic variant annotation and effect prediction toolbox";
+    license = licenses.lgpl3;
+    homepage = "https://snpeff.sourceforge.net/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    maintainers = with maintainers; [ jbedo ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }

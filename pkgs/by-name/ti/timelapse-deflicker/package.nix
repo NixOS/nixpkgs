@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     ClassMethodMaker
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple script to deflicker images taken for timelapses";
     mainProgram = "timelapse-deflicker";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ valeriangalliat ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple script to deflicker images taken for timelapses";
+    mainProgram = "timelapse-deflicker";
+    homepage = "https://github.com/cyberang3l/timelapse-deflicker";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ valeriangalliat ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

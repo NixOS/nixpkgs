@@ -38,14 +38,22 @@
 
 buildPythonPackage rec {
   pname = "brax";
+<<<<<<< HEAD
   version = "0.14.0";
+=======
+  version = "0.13.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-CkRXEYtlP8IhEZ7lVnpxlwiyLdICAfILwHfRUfuub08=";
+=======
+    hash = "sha256-mSFbFzSrfAvAE6y7atUeucUkpp/20KP70j5xPm/xvB0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [

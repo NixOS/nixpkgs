@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "defusedxml" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/tiran/defusedxml/blob/v${version}/CHANGES.txt";
     description = "Python module to defuse XML issues";
     homepage = "https://github.com/tiran/defusedxml";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/tiran/defusedxml/blob/v${version}/CHANGES.txt";
+    description = "Python module to defuse XML issues";
+    homepage = "https://github.com/tiran/defusedxml";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

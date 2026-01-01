@@ -33,12 +33,21 @@ stdenv.mkDerivation {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Run command on mailbox change";
     homepage = "https://github.com/zsugabubus/mbidled";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ laalsaas ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Run command on mailbox change";
+    homepage = "https://github.com/zsugabubus/mbidled";
+    license = licenses.unlicense;
+    maintainers = with maintainers; [ laalsaas ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mbidled";
   };
 }

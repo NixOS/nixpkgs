@@ -54,12 +54,21 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/linja --prefix PATH : $out/bin:${ninja}/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Automatic and interactive theorem prover (version with HoTT support)";
     homepage = "http://leanprover.github.io";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Automatic and interactive theorem prover (version with HoTT support)";
+    homepage = "http://leanprover.github.io";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       thoughtpolice
     ];
     broken = stdenv.hostPlatform.isAarch64;

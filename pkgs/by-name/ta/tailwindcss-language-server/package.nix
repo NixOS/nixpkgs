@@ -4,10 +4,16 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
 }:
+=======
+  nix-update-script,
+}:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenv.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
   version = "0.14.28";
@@ -19,21 +25,32 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jds6Wq4rcR4wXonZ1v9JITiEc4gflT0sTc3KUSBCMFc=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm_9.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       pnpmWorkspaces
       ;
+<<<<<<< HEAD
     pnpm = pnpm_9;
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-1F4DeqJWJs3L1hDzNn7PJr9sSBv2TcN8QfV8/pwAKuU=";
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [

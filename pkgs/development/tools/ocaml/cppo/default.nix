@@ -11,15 +11,24 @@
 let
   pname = "cppo";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "C preprocessor for OCaml";
     mainProgram = "cppo";
     longDescription = ''
       Cppo is an equivalent of the C preprocessor targeted at the OCaml language and its variants.
     '';
     homepage = "https://github.com/ocaml-community/${pname}";
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.bsd3;
+=======
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 in
@@ -49,7 +58,12 @@ else
   in
 
   stdenv.mkDerivation {
+<<<<<<< HEAD
     inherit pname version;
+=======
+
+    name = "${pname}-${version}";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     src = fetchFromGitHub {
       owner = "mjambon";

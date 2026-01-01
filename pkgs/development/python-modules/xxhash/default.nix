@@ -22,11 +22,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xxhash" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Binding for xxHash";
     homepage = "https://github.com/ifduyue/python-xxhash";
     changelog = "https://github.com/ifduyue/python-xxhash/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ teh ];
+=======
+  meta = with lib; {
+    description = "Python Binding for xxHash";
+    homepage = "https://github.com/ifduyue/python-xxhash";
+    changelog = "https://github.com/ifduyue/python-xxhash/blob/v${version}/CHANGELOG.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ teh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

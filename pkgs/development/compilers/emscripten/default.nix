@@ -12,6 +12,7 @@
   makeWrapper,
   replaceVars,
   buildNpmPackage,
+<<<<<<< HEAD
   nix-update-script,
   emscripten,
 }:
@@ -23,6 +24,14 @@ in
 stdenv.mkDerivation rec {
   pname = "emscripten";
   version = "4.0.22";
+=======
+  emscripten,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "emscripten";
+  version = "4.0.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -38,7 +47,11 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
+<<<<<<< HEAD
     npmDepsHash = "sha256-2baHlyXdFF7JIY+FxpgHhe5NEqzjHpTSS/NhvM0ARZc=";
+=======
+    npmDepsHash = "sha256-Pos7pSboTIpGKtlBm56hJPYb1lDydmUwW1urHetFfeQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     dontBuild = true;
 
@@ -51,7 +64,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
+<<<<<<< HEAD
     hash = "sha256-tC+7zo5RnIo91SFzzwyU7qHFXf4TDcczf3mO4ObfsVE=";
+=======
+    hash = "sha256-MwCUilfyum1yJb6nHEViYiYWufXlz2+krHZmXw2NAck=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rev = version;
   };
 
@@ -72,6 +89,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+<<<<<<< HEAD
         runHook preBuild
 
         # Make Python scripts executable so patchShebangs will patch their shebangs
@@ -200,6 +218,93 @@ stdenv.mkDerivation rec {
     fi
 
         runHook postInstall
+=======
+    runHook preBuild
+
+    patchShebangs .
+
+    # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 22/EXPECTED_LLVM_VERSION = 21.1/g" tools/shared.py
+
+    # fixes cmake support
+    sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
+
+    sed -i "/^def check_sanity/a\\  return" tools/shared.py
+
+    echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
+    echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
+    echo "NODE_JS = '${nodejs}/bin/node'" >> .emscripten
+    echo "JS_ENGINES = [NODE_JS]" >> .emscripten
+    echo "CLOSURE_COMPILER = ['${closurecompiler}/bin/closure-compiler']" >> .emscripten
+    echo "JAVA = '${jre}/bin/java'" >> .emscripten
+    # to make the test(s) below work
+    # echo "SPIDERMONKEY_ENGINE = []" >> .emscripten
+    echo "BINARYEN_ROOT = '${binaryen}'" >> .emscripten
+
+    # make emconfigure/emcmake use the correct (wrapped) binaries
+    sed -i "s|^EMCC =.*|EMCC='$out/bin/emcc'|" tools/shared.py
+    sed -i "s|^EMXX =.*|EMXX='$out/bin/em++'|" tools/shared.py
+    sed -i "s|^EMAR =.*|EMAR='$out/bin/emar'|" tools/shared.py
+    sed -i "s|^EMRANLIB =.*|EMRANLIB='$out/bin/emranlib'|" tools/shared.py
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    appdir=$out/share/emscripten
+    mkdir -p $appdir
+    cp -r . $appdir
+    chmod -R +w $appdir
+
+    mkdir -p $appdir/node_modules/.bin
+    cp -r ${nodeModules}/* $appdir/node_modules
+    cp -r ${nodeModules}/* $appdir/node_modules/.bin
+
+    cp ${./locate_cache.sh} $appdir/locate_cache.sh
+    chmod +x $appdir/locate_cache.sh
+
+    export EM_CACHE=$out/share/emscripten/cache
+
+    mkdir -p $out/bin
+    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
+      makeWrapper $appdir/$b $out/bin/$b \
+        --set NODE_PATH ${nodeModules} \
+        --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
+        --set PYTHON ${python3}/bin/python \
+        --run "source $appdir/locate_cache.sh"
+    done
+
+    # precompile libc (etc.) in all variants:
+    pushd $TMPDIR
+    echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
+    for LTO in -flto ""; do
+      for BIND in "" "--bind"; do
+        # starting with emscripten 3.1.32+,
+        # if pthreads and relocatable are both used,
+        # _emscripten_thread_exit_joinable must be exported
+        # (see https://github.com/emscripten-core/emscripten/pull/18376)
+        # TODO: get library cache to build with both enabled and function exported
+        $out/bin/emcc $LTO $BIND test.c
+        $out/bin/emcc $LTO $BIND -s RELOCATABLE test.c
+        # starting with emscripten 3.1.48+,
+        # to use pthreads, _emscripten_check_mailbox must be exported
+        # (see https://github.com/emscripten-core/emscripten/pull/20604)
+        # TODO: get library cache to build with pthreads at all
+        # $out/bin/emcc $LTO $BIND -s USE_PTHREADS test.c
+      done
+    done
+    popd
+
+    export PYTHON=${python3}/bin/python
+    export NODE_PATH=${nodeModules}
+    pushd $appdir
+    python test/runner.py test_hello_world
+    popd
+
+    runHook postInstall
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru = {
@@ -207,6 +312,7 @@ stdenv.mkDerivation rec {
     # when building the javascript backend.
     targetPrefix = "em";
     bintools = emscripten;
+<<<<<<< HEAD
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
@@ -220,10 +326,23 @@ stdenv.mkDerivation rec {
     description = "LLVM-to-JavaScript Compiler";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/emscripten-core/emscripten";
+    description = "LLVM-to-JavaScript Compiler";
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       qknight
       raitobezarius
       willcohen
     ];
+<<<<<<< HEAD
     license = lib.licenses.ncsa;
+=======
+    license = licenses.ncsa;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

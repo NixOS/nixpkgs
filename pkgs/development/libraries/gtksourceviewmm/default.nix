@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
     gtksourceview3
   ];
 
+<<<<<<< HEAD
   meta = {
     platforms = lib.platforms.unix;
     homepage = "https://gitlab.gnome.org/GNOME/gtksourceviewmm";
     description = "C++ wrapper for gtksourceview";
     license = lib.licenses.lgpl2;
     maintainers = [ lib.maintainers.juliendehos ];
+=======
+  meta = with lib; {
+    platforms = platforms.unix;
+    homepage = "https://gitlab.gnome.org/GNOME/gtksourceviewmm";
+    description = "C++ wrapper for gtksourceview";
+    license = licenses.lgpl2;
+    maintainers = [ maintainers.juliendehos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

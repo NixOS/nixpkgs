@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.nano-editor.org/";
     description = "Small, user-friendly console text editor";
@@ -108,6 +109,18 @@ stdenv.mkDerivation rec {
       sigmasquadron
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://www.nano-editor.org/";
+    description = "Small, user-friendly console text editor";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      joachifm
+      nequissimus
+      sigmasquadron
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nano";
   };
 }

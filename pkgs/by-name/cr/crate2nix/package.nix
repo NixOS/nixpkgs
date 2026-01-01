@@ -49,7 +49,11 @@ rustPlatform.buildRustPackage rec {
       done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Nix build file generator for Rust crates";
     mainProgram = "crate2nix";
     longDescription = ''
@@ -58,8 +62,13 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/nix-community/crate2nix";
     changelog = "https://nix-community.github.io/crate2nix/90_reference/90_changelog";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kolloch
       cole-h
       kranzes

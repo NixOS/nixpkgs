@@ -20,11 +20,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/loov/goda";
     description = "Go Dependency Analysis toolkit";
     maintainers = with lib.maintainers; [ michaeladler ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/loov/goda";
+    description = "Go Dependency Analysis toolkit";
+    maintainers = with maintainers; [ michaeladler ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "goda";
   };
 }

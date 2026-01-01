@@ -39,10 +39,19 @@ eggDerivation rec {
     z3
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.kitten-technologies.co.uk/project/ugarit/";
     description = "Backup/archival system based around content-addressible storage";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.kitten-technologies.co.uk/project/ugarit/";
+    description = "Backup/archival system based around content-addressible storage";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.ebzzry ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

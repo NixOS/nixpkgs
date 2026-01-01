@@ -24,6 +24,7 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Find in Go repeated strings that could be replaced by a constant";
     mainProgram = "goconst";
@@ -31,5 +32,14 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kalbasit ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Find in Go repeated strings that could be replaced by a constant";
+    mainProgram = "goconst";
+    homepage = "https://github.com/jgautheron/goconst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kalbasit ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

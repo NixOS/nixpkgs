@@ -41,11 +41,20 @@ stdenv.mkDerivation rec {
   # make: *** [Makefile:157: install-util] Error 1
   enableParallelInstalling = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Scheme 9 From Empty Space, an interpreter for R4RS Scheme";
     homepage = "http://www.t3x.org/s9fes/index.html";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ siraben ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Scheme 9 From Empty Space, an interpreter for R4RS Scheme";
+    homepage = "http://www.t3x.org/s9fes/index.html";
+    license = licenses.publicDomain;
+    maintainers = with maintainers; [ siraben ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

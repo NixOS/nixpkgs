@@ -42,10 +42,17 @@ buildPythonPackage rec {
     "test_validation_invalid"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/fischerfredl/flask-expects-json";
     description = "Decorator for REST endpoints in flask. Validate JSON request data";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/fischerfredl/flask-expects-json";
+    description = "Decorator for REST endpoints in flask. Validate JSON request data";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

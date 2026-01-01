@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/benmcollins/libjwt";
     description = "JWT C Library";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ pnotequalnp ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/benmcollins/libjwt";
+    description = "JWT C Library";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ pnotequalnp ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

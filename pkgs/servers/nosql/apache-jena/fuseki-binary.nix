@@ -39,12 +39,21 @@ stdenv.mkDerivation rec {
       basic-test = pkgs.callPackage ./fuseki-test.nix { };
     };
   };
+<<<<<<< HEAD
   meta = {
     description = "SPARQL server";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    description = "SPARQL server";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       binaryBytecode
       binaryNativeCode
     ];

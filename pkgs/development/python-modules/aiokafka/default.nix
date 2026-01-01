@@ -56,11 +56,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiokafka" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Kafka integration with asyncio";
     homepage = "https://aiokafka.readthedocs.org";
     changelog = "https://github.com/aio-libs/aiokafka/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Kafka integration with asyncio";
+    homepage = "https://aiokafka.readthedocs.org";
+    changelog = "https://github.com/aio-libs/aiokafka/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

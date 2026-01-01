@@ -37,11 +37,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the Precision Time Protocol (PTP) according to IEEE standard 1588 for Linux";
     homepage = "https://linuxptp.nwtime.org";
     maintainers = [ lib.maintainers.markuskowa ];
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Implementation of the Precision Time Protocol (PTP) according to IEEE standard 1588 for Linux";
+    homepage = "https://linuxptp.nwtime.org";
+    maintainers = [ maintainers.markuskowa ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

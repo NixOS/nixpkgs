@@ -34,8 +34,12 @@
   withGudev ? false, # experimental
   libmtp,
   withMtp ? false, # experimental
+<<<<<<< HEAD
   libxfce4ui,
   xfce4-dev-tools,
+=======
+  xfce,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   withXfce4ui ? false,
   totem-pl-parser,
   withTotemPlParser ? false,
@@ -60,7 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     intltool
     pkg-config
+<<<<<<< HEAD
     xfce4-dev-tools
+=======
+    xfce.xfce4-dev-tools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     desktop-file-utils
     installShellFiles
     libsForQt5.wrapQtAppsHook
@@ -97,7 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withGlyr glyr
     ++ lib.optional withLibsoup libsoup_2_4
     ++ lib.optional withMtp libmtp
+<<<<<<< HEAD
     ++ lib.optional withXfce4ui libxfce4ui
+=======
+    ++ lib.optional withXfce4ui xfce.libxfce4ui
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ lib.optional withTotemPlParser totem-pl-parser
   # ++ lib.optional withGrilo grilo
   # ++ lib.optional withRygel rygel
@@ -120,7 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pragha";
     homepage = "https://pragha-music-player.github.io/";
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ mbaeten ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
   };
 })

@@ -30,11 +30,20 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "boilerpy3" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jmriebold/BoilerPy3";
     description = "Python port of Boilerpipe library";
     changelog = "https://github.com/jmriebold/BoilerPy3/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jmriebold/BoilerPy3";
+    description = "Python port of Boilerpipe library";
+    changelog = "https://github.com/jmriebold/BoilerPy3/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

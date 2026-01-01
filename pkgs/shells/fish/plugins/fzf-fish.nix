@@ -57,12 +57,21 @@ buildFishPlugin rec {
       ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
   );
 
+<<<<<<< HEAD
   meta = {
     description = "Augment your fish command line with fzf key bindings";
     homepage = "https://github.com/PatrickF1/fzf.fish";
     changelog = "https://github.com/PatrickF1/fzf.fish/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Augment your fish command line with fzf key bindings";
+    homepage = "https://github.com/PatrickF1/fzf.fish";
+    changelog = "https://github.com/PatrickF1/fzf.fish/releases/tag/${src.rev}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       euxane
       natsukium
     ];

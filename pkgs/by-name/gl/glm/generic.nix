@@ -54,7 +54,11 @@ stdenv.mkDerivation rec {
     cp -v ../doc/manual.pdf $doc/share/doc/glm
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "OpenGL Mathematics library for C++";
     longDescription = ''
       OpenGL Mathematics (GLM) is a header only C++ mathematics library for
@@ -62,11 +66,20 @@ stdenv.mkDerivation rec {
       specification and released under the MIT license.
     '';
     homepage = "https://github.com/g-truc/glm";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     # https://github.com/g-truc/glm/issues/897 indicates that packing isn't implemented properly on non-LE.
     # Patch from https://github.com/g-truc/glm/pull/1001 currently relies on Linux-only header.
     broken = !stdenv.hostPlatform.isLittleEndian && !stdenv.hostPlatform.isLinux;
     maintainers = with lib.maintainers; [ smancill ];
+=======
+    license = licenses.mit;
+    platforms = platforms.unix;
+    # https://github.com/g-truc/glm/issues/897 indicates that packing isn't implemented properly on non-LE.
+    # Patch from https://github.com/g-truc/glm/pull/1001 currently relies on Linux-only header.
+    broken = !stdenv.hostPlatform.isLittleEndian && !stdenv.hostPlatform.isLinux;
+    maintainers = with maintainers; [ smancill ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

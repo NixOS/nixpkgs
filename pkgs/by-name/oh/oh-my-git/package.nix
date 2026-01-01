@@ -125,6 +125,7 @@ stdenv.mkDerivation rec {
     udev
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ohmygit.org/";
     description = "Interactive Git learning game";
@@ -132,5 +133,14 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ blueOak100 ];
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ jojosch ];
+=======
+  meta = with lib; {
+    homepage = "https://ohmygit.org/";
+    description = "Interactive Git learning game";
+    mainProgram = "oh-my-git";
+    license = with licenses; [ blueOak100 ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ jojosch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

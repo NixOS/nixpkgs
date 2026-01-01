@@ -21,7 +21,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Weather Icons";
     longDescription = ''
       Weather Icons is the only icon font and CSS with 222 weather themed icons,
@@ -29,8 +33,14 @@ stdenvNoCC.mkDerivation rec {
       quality weather, maritime, and meteorological based icons!
     '';
     homepage = "https://erikflowers.github.io/weather-icons/";
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pnelson ];
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pnelson ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

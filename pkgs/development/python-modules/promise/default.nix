@@ -55,11 +55,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "promise" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Ultra-performant Promise implementation in Python";
     homepage = "https://github.com/syrusakbary/promise";
     changelog = "https://github.com/syrusakbary/promise/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "Ultra-performant Promise implementation in Python";
+    homepage = "https://github.com/syrusakbary/promise";
+    changelog = "https://github.com/syrusakbary/promise/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

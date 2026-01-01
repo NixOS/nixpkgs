@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   bison,
   boost,
   callPackage,
@@ -20,6 +21,44 @@
 
 let
   columnar = callPackage ./columnar.nix { };
+=======
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  flex,
+  pkg-config,
+  boost,
+  icu,
+  libstemmer,
+  mariadb-connector-c,
+  re2,
+  nlohmann_json,
+  testers,
+  manticoresearch,
+}:
+
+let
+  columnar = stdenv.mkDerivation (finalAttrs: {
+    pname = "columnar";
+    version = "c21-s10"; # see NEED_COLUMNAR_API/NEED_SECONDARY_API in Manticore's cmake/GetColumnar.cmake
+    src = fetchFromGitHub {
+      owner = "manticoresoftware";
+      repo = "columnar";
+      rev = finalAttrs.version;
+      hash = "sha256-TGFGFfoyHnPSr2U/9dpqFLUN3Dt2jDQrTF/xxDY4pdE=";
+    };
+    nativeBuildInputs = [ cmake ];
+    cmakeFlags = [ "-DAPI_ONLY=ON" ];
+    meta = {
+      description = "Column-oriented storage and secondary indexing library";
+      homepage = "https://github.com/manticoresoftware/columnar/";
+      license = lib.licenses.asl20;
+      platforms = lib.platforms.all;
+    };
+  });
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   uni-algo = stdenv.mkDerivation (finalAttrs: {
     pname = "uni-algo";
     version = "0.7.2";
@@ -37,6 +76,7 @@ let
       platforms = lib.platforms.all;
     };
   });
+<<<<<<< HEAD
   cctz = stdenv.mkDerivation {
     pname = "manticore-cctz";
     version = "0-unstable-2024-05-08";
@@ -85,12 +125,22 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "manticoresearch";
   version = "15.1.0";
+=======
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "manticoresearch";
+  version = "6.2.12";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "manticoresoftware";
     repo = "manticoresearch";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-ESiM2D11o1QnctDzL7WQ+usad7nvs0YSPOpZzSfYv4Y=";
+=======
+    hash = "sha256-UD/r7rlJ5mR3wg4doKT/nTwTWzlulngUjOPNEjmykB8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -102,54 +152,80 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+<<<<<<< HEAD
     cctz
     columnar.dev
     croaring
+=======
+    columnar
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     icu.dev
     libstemmer
     mariadb-connector-c
     nlohmann_json
     uni-algo
     re2
+<<<<<<< HEAD
     xxhash
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''
     sed -i 's/set ( Boost_USE_STATIC_LIBS ON )/set ( Boost_USE_STATIC_LIBS OFF )/' src/CMakeLists.txt
 
+<<<<<<< HEAD
     # Skip jieba, it requires a bunch of additional dependencies
     sed -i '/with_get ( jieba /d' CMakeLists.txt
 
     # Fill in a version number for the VERNUMBERS macro
     sed -i 's/0\.0\.0/${finalAttrs.version}/' src/sphinxversion.h.in
+=======
+    # supply our own packages rather than letting manticore download dependencies during build
+    sed -i 's/^with_get/with_menu/' CMakeLists.txt
+    sed -i 's/get_dep \( nlohmann_json .* \)/find_package(nlohmann_json)/' CMakeLists.txt
+    sed -i 's/get_dep \( uni-algo .* \)/find_package(uni-algo)/' CMakeLists.txt
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   cmakeFlags = [
     "-DWITH_GALERA=0"
+<<<<<<< HEAD
     "-DWITH_ICU=1"
     # Supply our own packages rather than letting manticore download dependencies during build
     "-DWITH_ICU_FORCE_STATIC=OFF"
     "-DWITH_RE2_FORCE_STATIC=OFF"
     "-DWITH_STEMMER_FORCE_STATIC=OFF"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "-DWITH_MYSQL=1"
     "-DMYSQL_INCLUDE_DIR=${mariadb-connector-c.dev}/include/mariadb"
     "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
     "-DCONFDIR=${placeholder "out"}/etc"
     "-DLOGDIR=/var/lib/manticoresearch/log"
     "-DRUNDIR=/var/run/manticoresearch"
+<<<<<<< HEAD
     "-DDISTR=nixpkgs"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postFixup = ''
     mkdir -p $out/lib/systemd/system
     cp ${finalAttrs.src}/dist/deb/manticore.service.in $out/lib/systemd/system/manticore.service
     substituteInPlace $out/lib/systemd/system/manticore.service \
+<<<<<<< HEAD
       --replace-fail "@CMAKE_INSTALL_FULL_RUNSTATEDIR@" "/var/lib/manticore" \
       --replace-fail "@CMAKE_INSTALL_FULL_BINDIR@" "$out/bin" \
       --replace-fail "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
 
     mkdir $out/share/manticore/modules
     cp ${columnar}/share/manticore/modules/* $out/share/manticore/modules
+=======
+      --replace "@CMAKE_INSTALL_FULL_RUNSTATEDIR@" "/var/lib/manticore" \
+      --replace "@CMAKE_INSTALL_FULL_BINDIR@" "$out/bin" \
+      --replace "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -158,6 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
     command = "searchd --version";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Easy to use open source fast database for search";
     homepage = "https://manticoresearch.com";
@@ -166,5 +243,15 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "searchd";
     maintainers = [ lib.maintainers.jdelStrother ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Easy to use open source fast database for search";
+    homepage = "https://manticoresearch.com";
+    changelog = "https://github.com/manticoresoftware/manticoresearch/releases/tag/${finalAttrs.version}";
+    license = licenses.gpl2;
+    mainProgram = "searchd";
+    maintainers = [ maintainers.jdelStrother ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

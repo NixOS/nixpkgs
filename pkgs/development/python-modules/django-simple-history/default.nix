@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simple_history" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to store Django model state on every create/update/delete";
     homepage = "https://github.com/jazzband/django-simple-history/";
     changelog = "https://github.com/jazzband/django-simple-history/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ derdennisop ];
+=======
+  meta = with lib; {
+    description = "Module to store Django model state on every create/update/delete";
+    homepage = "https://github.com/jazzband/django-simple-history/";
+    changelog = "https://github.com/jazzband/django-simple-history/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ derdennisop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

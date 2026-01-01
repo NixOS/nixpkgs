@@ -29,10 +29,18 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pure python implementation of the XMODEM protocol";
     maintainers = with lib.maintainers; [ emantor ];
     homepage = "https://github.com/tehmaze/xmodem";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pure python implementation of the XMODEM protocol";
+    maintainers = with maintainers; [ emantor ];
+    homepage = "https://github.com/tehmaze/xmodem";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

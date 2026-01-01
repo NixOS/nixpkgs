@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mockssh" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python mock SSH server for testing purposes";
     homepage = "https://github.com/carletes/mock-ssh-server";
     changelog = "https://github.com/carletes/mock-ssh-server/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python mock SSH server for testing purposes";
+    homepage = "https://github.com/carletes/mock-ssh-server";
+    changelog = "https://github.com/carletes/mock-ssh-server/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

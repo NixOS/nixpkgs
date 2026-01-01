@@ -1,5 +1,9 @@
 # This is a modified version of stage0-posix/x86/mescc-tools-full-kaem.kaem
+<<<<<<< HEAD
 # https://github.com/oriansj/stage0-posix-x86/blob/3b9c2bb6d4155e4f2e5f642b5e0f59255dfc5934/mescc-tools-full-kaem.kaem
+=======
+# https://github.com/oriansj/stage0-posix-x86/blob/56e6b8df3e95f4bc04f8b420a4cd8c82c70b9efa/mescc-tools-full-kaem.kaem
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 # - Paths to build inputs have been changed for nix
 
 # Mes --- Maxwell Equations of Software
@@ -51,12 +55,18 @@ ${M2} --architecture ${m2libcArch} \
   -f ${m2libc}/stddef.h \
   -f ${m2libc}/${m2libcArch}/linux/fcntl.c \
   -f ${m2libc}/fcntl.c \
+<<<<<<< HEAD
   -f ${m2libc}/sys/utsname.h \
   -f ${m2libc}/${m2libcArch}/linux/unistd.c \
   -f ${m2libc}/${m2libcArch}/linux/sys/stat.c \
   -f ${m2libc}/ctype.c \
   -f ${m2libc}/stdlib.c \
   -f ${m2libc}/stdarg.h \
+=======
+  -f ${m2libc}/${m2libcArch}/linux/unistd.c \
+  -f ${m2libc}/${m2libcArch}/linux/sys/stat.c \
+  -f ${m2libc}/stdlib.c \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   -f ${m2libc}/stdio.h \
   -f ${m2libc}/stdio.c \
   -f ${m2libc}/string.c \
@@ -98,11 +108,16 @@ ${M2} --architecture ${m2libcArch} \
 	-f ${m2libc}/stddef.h \
 	-f ${m2libc}/${m2libcArch}/linux/fcntl.c \
 	-f ${m2libc}/fcntl.c \
+<<<<<<< HEAD
 	-f ${m2libc}/sys/utsname.h \
 	-f ${m2libc}/${m2libcArch}/linux/unistd.c \
 	-f ${m2libc}/ctype.c \
 	-f ${m2libc}/stdlib.c \
 	-f ${m2libc}/stdarg.h \
+=======
+	-f ${m2libc}/${m2libcArch}/linux/unistd.c \
+	-f ${m2libc}/stdlib.c \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 	-f ${m2libc}/stdio.h \
 	-f ${m2libc}/stdio.c \
 	-f ${m2libc}/bootstrappable.c \
@@ -139,6 +154,7 @@ ${hex2} --architecture ${m2libcArch} \
 ${M2} --architecture ${m2libcArch} \
 	-f ${m2libc}/sys/types.h \
 	-f ${m2libc}/stddef.h \
+<<<<<<< HEAD
 	-f ${m2libc}/sys/utsname.h \
 	-f ${m2libc}/${m2libcArch}/linux/unistd.c \
 	-f ${m2libc}/${m2libcArch}/linux/fcntl.c \
@@ -146,6 +162,12 @@ ${M2} --architecture ${m2libcArch} \
 	-f ${m2libc}/ctype.c \
 	-f ${m2libc}/stdlib.c \
 	-f ${m2libc}/stdarg.h \
+=======
+	-f ${m2libc}/${m2libcArch}/linux/unistd.c \
+	-f ${m2libc}/${m2libcArch}/linux/fcntl.c \
+	-f ${m2libc}/fcntl.c \
+	-f ${m2libc}/stdlib.c \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 	-f ${m2libc}/stdio.h \
 	-f ${m2libc}/stdio.c \
 	-f ${m2libc}/bootstrappable.c \
@@ -177,6 +199,7 @@ ${hex2} --architecture ${m2libcArch} \
 ${M2} --architecture ${m2libcArch} \
 	-f ${m2libc}/sys/types.h \
 	-f ${m2libc}/stddef.h \
+<<<<<<< HEAD
 	-f ${m2libc}/sys/utsname.h \
 	-f ${m2libc}/${m2libcArch}/linux/unistd.c \
 	-f ${m2libc}/${m2libcArch}/linux/fcntl.c \
@@ -184,6 +207,12 @@ ${M2} --architecture ${m2libcArch} \
 	-f ${m2libc}/ctype.c \
 	-f ${m2libc}/stdlib.c \
 	-f ${m2libc}/stdarg.h \
+=======
+	-f ${m2libc}/${m2libcArch}/linux/unistd.c \
+	-f ${m2libc}/${m2libcArch}/linux/fcntl.c \
+	-f ${m2libc}/fcntl.c \
+	-f ${m2libc}/stdlib.c \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 	-f ${m2libc}/stdio.h \
 	-f ${m2libc}/stdio.c \
 	-f ${m2libc}/bootstrappable.c \
@@ -192,7 +221,10 @@ ${M2} --architecture ${m2libcArch} \
 	-f ${src}/M2-Planet/cc_reader.c \
 	-f ${src}/M2-Planet/cc_strings.c \
 	-f ${src}/M2-Planet/cc_types.c \
+<<<<<<< HEAD
 	-f ${src}/M2-Planet/cc_emit.c \
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 	-f ${src}/M2-Planet/cc_core.c \
 	-f ${src}/M2-Planet/cc_macro.c \
 	-f ${src}/M2-Planet/cc.c \

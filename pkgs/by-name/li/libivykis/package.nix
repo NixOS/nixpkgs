@@ -27,14 +27,24 @@ stdenv.mkDerivation rec {
     protobufc
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://libivykis.sourceforge.net/";
     description = ''
       A thin wrapper over various OS'es implementation of I/O readiness
       notification facilities
     '';
+<<<<<<< HEAD
     license = lib.licenses.zlib;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.zlib;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

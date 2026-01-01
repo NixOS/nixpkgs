@@ -25,11 +25,19 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Flow state reader in the terminal";
     homepage = "https://github.com/thatvegandev/fsrx";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MoritzBoehme ];
+=======
+  meta = with lib; {
+    description = "Flow state reader in the terminal";
+    homepage = "https://github.com/thatvegandev/fsrx";
+    license = licenses.mit;
+    maintainers = with maintainers; [ MoritzBoehme ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "fsrx";
   };
 }

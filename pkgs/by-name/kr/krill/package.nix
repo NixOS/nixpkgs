@@ -24,7 +24,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   # Needed to get openssl-sys to use pkgconfig.
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # disable failing tests on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

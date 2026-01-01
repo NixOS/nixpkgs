@@ -36,11 +36,19 @@ buildGoModule rec {
     $out/bin/rancher | grep ${version} > /dev/null
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool for interacting with your Rancher Server";
     mainProgram = "rancher";
     homepage = "https://github.com/rancher/cli";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "CLI tool for interacting with your Rancher Server";
+    mainProgram = "rancher";
+    homepage = "https://github.com/rancher/cli";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

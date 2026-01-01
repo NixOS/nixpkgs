@@ -20,10 +20,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "spinners" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Spinners for the Terminal";
     homepage = "https://github.com/manrajgrover/py-spinners";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urbas ];
+=======
+  meta = with lib; {
+    description = "Spinners for the Terminal";
+    homepage = "https://github.com/manrajgrover/py-spinners";
+    license = licenses.mit;
+    maintainers = with maintainers; [ urbas ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -64,7 +64,10 @@ symlinkJoin {
 
   buildInputs = [
     kdePackages.qtbase
+<<<<<<< HEAD
     kdePackages.qtimageformats
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     kdePackages.qtsvg
   ]
   ++ lib.optional (

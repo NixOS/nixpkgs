@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Script to run daily, weekly and monthly backups for your MySQL database";
     mainProgram = "automysqlbackup";
@@ -49,5 +50,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.aanderse ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Script to run daily, weekly and monthly backups for your MySQL database";
+    mainProgram = "automysqlbackup";
+    homepage = "https://github.com/sixhop/AutoMySQLBackup";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.aanderse ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

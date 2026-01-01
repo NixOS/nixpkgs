@@ -16,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "kornia-rs";
+<<<<<<< HEAD
   version = "0.1.10";
+=======
+  version = "0.1.9";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kornia";
     repo = "kornia-rs";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-rC5NqyQah3D4tGLefS4cSIXA3+gQ0+4RNcXOcEYxryg=";
+=======
+    hash = "sha256-0Id1Iyd/xyqSqFvg/TXnlX1DgMUWuMS9KbtDXduwU+Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

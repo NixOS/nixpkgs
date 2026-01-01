@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "EFL simple text editor";
     mainProgram = "ecrire";
@@ -37,5 +38,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.enlightenment ];
+=======
+  meta = with lib; {
+    description = "EFL simple text editor";
+    mainProgram = "ecrire";
+    homepage = "https://www.enlightenment.org/";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    teams = [ teams.enlightenment ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

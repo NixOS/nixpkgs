@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Point cloud organization for massive datasets";
     homepage = "https://entwine.io/";
@@ -43,6 +44,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Point cloud organization for massive datasets";
+    homepage = "https://entwine.io/";
+    license = licenses.lgpl2Only;
+    maintainers = with maintainers; [ matthewcroughan ];
+    teams = [ teams.geospatial ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "entwine";
   };
 }

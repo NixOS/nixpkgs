@@ -10,7 +10,10 @@
   xdg-user-dirs,
   keybinder3,
   libnotify,
+<<<<<<< HEAD
   gst_all_1,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
@@ -18,11 +21,19 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
+<<<<<<< HEAD
         hash = "sha256-87mauW50ccOaPyK04O4I7+0bsvxVrdFxhi/Muc53wDY=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
         hash = "sha256-a1WhOQ8NU3/aGAdaw8o3y7ckRdBsNgLZZ2nOrMsQdOA=";
+=======
+        hash = "sha256-HXBRWQfdhlKmOOULdRELrGcxVVhKV+PvgtRHW1yU6+I=";
+      };
+      x86_64-darwin = {
+        urlSuffix = "macos-universal.zip";
+        hash = "sha256-Mv4HfG93+NpbMAhDwcXZ260APL+sbYM6C+DqGZr6ogU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -31,7 +42,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
+<<<<<<< HEAD
   version = "0.10.6";
+=======
+  version = "0.10.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -49,8 +64,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     gtk3
     keybinder3
     libnotify
+<<<<<<< HEAD
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   dontBuild = true;
@@ -104,6 +122,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
@@ -112,6 +131,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Open-source alternative to Notion";
+    homepage = "https://www.appflowy.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.agpl3Only;
+    changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
+    maintainers = with maintainers; [ darkonion0 ];
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "appflowy";
   };
 })

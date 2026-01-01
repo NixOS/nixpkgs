@@ -32,6 +32,11 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "NetBIOS scanner written in Rust";
     homepage = "https://github.com/jonkgrimes/nbtscanner";

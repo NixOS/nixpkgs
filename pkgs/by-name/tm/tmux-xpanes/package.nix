@@ -32,11 +32,20 @@ stdenv.mkDerivation rec {
     install -m 644 man/*.1 $out/share/man/man1/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "tmux-based terminal divider";
     homepage = "https://github.com/greymd/tmux-xpanes";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ monsieurp ];
+=======
+  meta = with lib; {
+    description = "tmux-based terminal divider";
+    homepage = "https://github.com/greymd/tmux-xpanes";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ monsieurp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

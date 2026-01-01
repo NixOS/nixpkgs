@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "vncdotool" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command line VNC client and Python library";
     homepage = "https://github.com/sibson/vncdotool";
@@ -50,5 +51,15 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ elitak ];
     mainProgram = "vncdo";
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "Command line VNC client and Python library";
+    homepage = "https://github.com/sibson/vncdotool";
+    changelog = "https://github.com/sibson/vncdotool/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ elitak ];
+    mainProgram = "vncdo";
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

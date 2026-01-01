@@ -112,16 +112,29 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin && withDemoAgent;
     description = "Geolocation framework and some data providers";
     homepage = "https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home";
     changelog = "https://gitlab.freedesktop.org/geoclue/geoclue/-/blob/${finalAttrs.version}/NEWS";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       raskin
       mimame
     ];
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.lgpl2Plus;
+=======
+    maintainers = with maintainers; [
+      raskin
+      mimame
+    ];
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.lgpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

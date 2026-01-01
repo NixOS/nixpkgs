@@ -8,13 +8,21 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "4.4.0";
+=======
+  version = "4.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "libre";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "re";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-z/rDpjq483f3xFxZmf6neIQTls0xhn70JrWMlQatasw=";
+=======
+    sha256 = "sha256-IOC6TRgxScLBCarECuUAfRoRweh5Q22JKsOUu9l7zWI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [

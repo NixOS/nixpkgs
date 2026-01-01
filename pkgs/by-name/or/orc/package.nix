@@ -66,17 +66,29 @@ stdenv.mkDerivation (finalAttrs: {
     qt6-qtmultimedia = qt6.qtmultimedia;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
     changelog = "https://gitlab.freedesktop.org/gstreamer/orc/-/blob/${finalAttrs.version}/RELEASE";
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
+<<<<<<< HEAD
     license = with lib.licenses; [
       bsd3
       bsd2
     ];
     platforms = lib.platforms.unix;
+=======
+    license = with licenses; [
+      bsd3
+      bsd2
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

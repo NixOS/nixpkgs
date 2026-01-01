@@ -29,10 +29,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "oyaml" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Drop-in replacement for PyYAML which preserves dict ordering";
     homepage = "https://github.com/wimglenn/oyaml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "Drop-in replacement for PyYAML which preserves dict ordering";
+    homepage = "https://github.com/wimglenn/oyaml";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

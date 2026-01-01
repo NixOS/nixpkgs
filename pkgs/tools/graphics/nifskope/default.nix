@@ -78,12 +78,21 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/niftools/nifskope";
     description = "Tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/niftools/nifskope";
+    description = "Tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
+    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "NifSkope";
   };
 }

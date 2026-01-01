@@ -51,11 +51,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypitoken" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for generating and manipulating PyPI tokens";
     homepage = "https://pypitoken.readthedocs.io/";
     changelog = "https://github.com/ewjoachim/pypitoken/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for generating and manipulating PyPI tokens";
+    homepage = "https://pypitoken.readthedocs.io/";
+    changelog = "https://github.com/ewjoachim/pypitoken/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

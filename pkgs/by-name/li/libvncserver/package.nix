@@ -78,11 +78,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = enableShared;
 
+<<<<<<< HEAD
   meta = {
     description = "VNC server library";
     homepage = "https://libvnc.github.io/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "VNC server library";
+    homepage = "https://libvnc.github.io/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

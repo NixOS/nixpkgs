@@ -6,7 +6,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "0.17.85";
+=======
+  version = "0.17.84";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 in
 buildGoModule {
   pname = "gqlgen";
@@ -16,10 +20,17 @@ buildGoModule {
     owner = "99designs";
     repo = "gqlgen";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-U2qbOjWUE1MfrMJTVaB59Osax8B6CKMlk6uqGioVgBk=";
   };
 
   vendorHash = "sha256-9rBdr1fP5LKioz2c6lAZEdcDnG2JL2CO1VXK5+MwGEs=";
+=======
+    hash = "sha256-5Bz9iJJfDqzhuQbIbcpqCKTrSy4v8jpmjm8R1nn17R4=";
+  };
+
+  vendorHash = "sha256-1837pdV4pnwHjogdZqzBR2Ab3gZNW2stvbwvd6MQoBc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "." ];
 

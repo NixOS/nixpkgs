@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
       --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/n0la/rcon";
     description = "Source RCON client for command line";
     maintainers = with lib.maintainers; [ f4814n ];
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/n0la/rcon";
+    description = "Source RCON client for command line";
+    maintainers = with maintainers; [ f4814n ];
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rcon";
   };
 }

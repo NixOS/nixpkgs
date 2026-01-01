@@ -14,11 +14,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Gf4W7ACyyVSCXV2RmpAfrE7Xircjk34Llk2j58cWXtU=";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dominikwilkowski/cfonts";
     description = "Silly little command line tool for sexy ANSI fonts in the console";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ leifhelm ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dominikwilkowski/cfonts";
+    description = "Silly little command line tool for sexy ANSI fonts in the console";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ leifhelm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cfonts";
   };
 }

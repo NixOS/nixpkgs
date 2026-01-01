@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Ky39RpLoYks4xDiheSsrUj3l/ZrGcY+y5IuDZ28pH/c=";
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to wipe drives in a secure way";
     homepage = "https://github.com/kostassoid/lethe";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Tool to wipe drives in a secure way";
+    homepage = "https://github.com/kostassoid/lethe";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lethe";
   };
 }

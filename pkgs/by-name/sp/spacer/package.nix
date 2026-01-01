@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-sFsERAvR99BZm7SmaL/5cmCrwVZIKGRiFYcBtSryFaw=";
 
+<<<<<<< HEAD
   meta = {
     description = "CLI tool to insert spacers when command output stops";
     homepage = "https://github.com/samwho/spacer";
     changelog = "https://github.com/samwho/spacer/releases/tag/${src.rev}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "CLI tool to insert spacers when command output stops";
+    homepage = "https://github.com/samwho/spacer";
+    changelog = "https://github.com/samwho/spacer/releases/tag/${src.rev}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "spacer";
   };

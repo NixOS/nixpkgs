@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
     cp ./genann.{h,c} $out/include
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/codeplea/genann";
     description = "Simple neural network library in ANSI C";
     license = lib.licenses.zlib;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/codeplea/genann";
+    description = "Simple neural network library in ANSI C";
+    license = licenses.zlib;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

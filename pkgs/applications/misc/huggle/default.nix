@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Anti-vandalism tool for use on MediaWiki-based projects";
     mainProgram = "huggle";
@@ -70,5 +71,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.fee1-dead ];
     platforms = lib.platforms.x86_64;
+=======
+  meta = with lib; {
+    description = "Anti-vandalism tool for use on MediaWiki-based projects";
+    mainProgram = "huggle";
+    homepage = "https://github.com/huggle/huggle3-qt-lx";
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.fee1-dead ];
+    platforms = platforms.x86_64;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -55,12 +55,21 @@ perl.pkgs.toPerlModule (
       mv $out/lib/perl/5* $out/${perl.libPrefix}
     '';
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://oss.oetiker.ch/rrdtool/";
       description = "High performance logging in Round Robin Databases";
       license = lib.licenses.gpl2Only;
       platforms = lib.platforms.linux ++ lib.platforms.darwin;
       maintainers = with lib.maintainers; [ pSub ];
+=======
+    meta = with lib; {
+      homepage = "https://oss.oetiker.ch/rrdtool/";
+      description = "High performance logging in Round Robin Databases";
+      license = licenses.gpl2Only;
+      platforms = platforms.linux ++ platforms.darwin;
+      maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
 )

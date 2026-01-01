@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.alsa-project.org/";
     description = "ALSA topology configuration files";
 
@@ -33,8 +37,14 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.roastiek ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+=======
+    license = licenses.bsd3;
+    maintainers = [ maintainers.roastiek ];
+    platforms = platforms.linux ++ platforms.freebsd;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

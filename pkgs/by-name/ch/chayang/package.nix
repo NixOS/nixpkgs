@@ -39,16 +39,28 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Gradually dim the screen on Wayland";
     homepage = "https://git.sr.ht/~emersion/chayang/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Gradually dim the screen on Wayland";
+    homepage = "https://git.sr.ht/~emersion/chayang/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       Gradually dim the screen on Wayland.
       Can be used to implement a grace period before locking the session.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ mxkrsv ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ mxkrsv ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "chayang";
   };
 })

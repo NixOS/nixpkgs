@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   # Requires files, that are not installed.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "API for the Polarizable Continuum Model";
     mainProgram = "run_pcm";
@@ -62,5 +63,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "API for the Polarizable Continuum Model";
+    mainProgram = "run_pcm";
+    homepage = "https://pcmsolver.readthedocs.io/en/stable/";
+    license = licenses.lgpl3Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

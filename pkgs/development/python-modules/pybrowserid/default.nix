@@ -37,10 +37,17 @@ buildPythonPackage rec {
     mock
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for the BrowserID Protocol";
     homepage = "https://github.com/mozilla/PyBrowserID";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "Python library for the BrowserID Protocol";
+    homepage = "https://github.com/mozilla/PyBrowserID";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

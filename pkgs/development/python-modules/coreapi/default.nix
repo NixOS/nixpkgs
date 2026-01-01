@@ -40,10 +40,17 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Python client library for Core API";
     homepage = "https://github.com/core-api/python-client";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python client library for Core API";
+    homepage = "https://github.com/core-api/python-client";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

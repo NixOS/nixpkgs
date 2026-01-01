@@ -5,7 +5,10 @@
   binwalk,
   swift,
   yara,
+<<<<<<< HEAD
   useSwift ? false,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildGhidraScripts {
@@ -21,6 +24,7 @@ buildGhidraScripts {
 
   postPatch = ''
     # Replace subprocesses with store versions
+<<<<<<< HEAD
     substituteInPlace binwalk.py --replace-fail 'subprocess.call(["binwalk"' 'subprocess.call(["${lib.getExe binwalk}"'
     substituteInPlace yara.py --replace-fail 'subprocess.check_output(["yara"' 'subprocess.check_output(["${lib.getExe yara}"'
     substituteInPlace YaraSearch.py --replace-fail '"yara "' '"${lib.getExe yara} "'
@@ -40,6 +44,18 @@ buildGhidraScripts {
     description = "Scripts for the Ghidra software reverse engineering suite";
     homepage = "https://github.com/ghidraninja/ghidra_scripts";
     license = with lib.licenses; [
+=======
+    substituteInPlace binwalk.py --replace-fail 'subprocess.call(["binwalk"' 'subprocess.call(["${binwalk}/bin/binwalk"'
+    substituteInPlace swift_demangler.py --replace-fail '"swift"' '"${swift}/bin/swift"'
+    substituteInPlace yara.py --replace-fail 'subprocess.check_output(["yara"' 'subprocess.check_output(["${yara}/bin/yara"'
+    substituteInPlace YaraSearch.py --replace-fail '"yara "' '"${yara}/bin/yara "'
+  '';
+
+  meta = with lib; {
+    description = "Scripts for the Ghidra software reverse engineering suite";
+    homepage = "https://github.com/ghidraninja/ghidra_scripts";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Only
       gpl2Only
     ];

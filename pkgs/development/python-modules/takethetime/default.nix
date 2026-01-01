@@ -23,10 +23,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "takethetime" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple time taking library using context managers";
     homepage = "https://github.com/ErikBjare/TakeTheTime";
     maintainers = with lib.maintainers; [ huantian ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Simple time taking library using context managers";
+    homepage = "https://github.com/ErikBjare/TakeTheTime";
+    maintainers = with maintainers; [ huantian ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

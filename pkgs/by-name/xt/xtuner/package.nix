@@ -51,12 +51,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/brummer10/XTuner";
     description = "Tuner for Jack Audio Connection Kit";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/brummer10/XTuner";
+    description = "Tuner for Jack Audio Connection Kit";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xtuner";
   };
 }

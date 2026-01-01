@@ -41,10 +41,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "FastText + Bloom embeddings for compact, full-coverage vectors with spaCy";
     homepage = "https://github.com/explosion/floret";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
+=======
+  meta = with lib; {
+    description = "FastText + Bloom embeddings for compact, full-coverage vectors with spaCy";
+    homepage = "https://github.com/explosion/floret";
+    license = licenses.mit;
+    maintainers = with maintainers; [ GaetanLepage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,12 +43,21 @@ stdenv.mkDerivation rec {
     cd ./source/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
     description = "JACK and ALSA Audio Analyser";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
+    description = "JACK and ALSA Audio Analyser";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jaaa";
   };
 }

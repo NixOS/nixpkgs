@@ -43,6 +43,7 @@ buildPythonApplication rec {
 
   dontWrapPythonPrograms = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/CxxTest/cxxtest";
     description = "Unit testing framework for C++";
@@ -50,5 +51,14 @@ buildPythonApplication rec {
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ juliendehos ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/CxxTest/cxxtest";
+    description = "Unit testing framework for C++";
+    mainProgram = "cxxtestgen";
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ juliendehos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

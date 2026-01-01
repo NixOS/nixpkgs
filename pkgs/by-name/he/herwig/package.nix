@@ -58,12 +58,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-purpose particle physics event generator";
     homepage = "https://herwig.hepforge.org/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ veprbl ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Multi-purpose particle physics event generator";
+    homepage = "https://herwig.hepforge.org/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ veprbl ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }

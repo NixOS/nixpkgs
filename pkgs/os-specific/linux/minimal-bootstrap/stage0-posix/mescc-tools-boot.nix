@@ -57,11 +57,19 @@ rec {
         args
         ;
 
+<<<<<<< HEAD
       meta = {
         description = "Collection of tools written for use in bootstrapping";
         homepage = "https://github.com/oriansj/stage0-posix";
         license = lib.licenses.gpl3Plus;
         teams = [ lib.teams.minimal-bootstrap ];
+=======
+      meta = with lib; {
+        description = "Collection of tools written for use in bootstrapping";
+        homepage = "https://github.com/oriansj/stage0-posix";
+        license = licenses.gpl3Plus;
+        teams = [ teams.minimal-bootstrap ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         inherit platforms;
       };
     };
@@ -159,7 +167,10 @@ rec {
     "${src}/M2-Planet/cc_reader.c"
     "${src}/M2-Planet/cc_strings.c"
     "${src}/M2-Planet/cc_types.c"
+<<<<<<< HEAD
     "${src}/M2-Planet/cc_emit.c"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "${src}/M2-Planet/cc_core.c"
     "${src}/M2-Planet/cc_macro.c"
     "${src}/M2-Planet/cc.c"
@@ -299,8 +310,11 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+<<<<<<< HEAD
     "${m2libc}/sys/utsname.h"
     "-f"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
     "${m2libc}/${m2libcArch}/linux/fcntl.c"
@@ -309,12 +323,17 @@ rec {
     "-f"
     "${m2libc}/${m2libcArch}/linux/sys/stat.c"
     "-f"
+<<<<<<< HEAD
     "${m2libc}/ctype.c"
     "-f"
     "${m2libc}/stdlib.c"
     "-f"
     "${m2libc}/stdarg.h"
     "-f"
+=======
+    "${m2libc}/stdlib.c"
+    "-f"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "${m2libc}/stdio.h"
     "-f"
     "${m2libc}/stdio.c"
@@ -386,20 +405,28 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+<<<<<<< HEAD
     "${m2libc}/sys/utsname.h"
     "-f"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "${m2libc}/${m2libcArch}/linux/fcntl.c"
     "-f"
     "${m2libc}/fcntl.c"
     "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
+<<<<<<< HEAD
     "${m2libc}/stdarg.h"
     "-f"
     "${m2libc}/string.c"
     "-f"
     "${m2libc}/ctype.c"
     "-f"
+=======
+    "${m2libc}/string.c"
+    "-f"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "${m2libc}/stdlib.c"
     "-f"
     "${m2libc}/stdio.h"
@@ -469,8 +496,11 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+<<<<<<< HEAD
     "${m2libc}/sys/utsname.h"
     "-f"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
     "${m2libc}/${m2libcArch}/linux/fcntl.c"
@@ -479,12 +509,17 @@ rec {
     "-f"
     "${m2libc}/${m2libcArch}/linux/sys/stat.c"
     "-f"
+<<<<<<< HEAD
     "${m2libc}/ctype.c"
     "-f"
     "${m2libc}/stdlib.c"
     "-f"
     "${m2libc}/stdarg.h"
     "-f"
+=======
+    "${m2libc}/stdlib.c"
+    "-f"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "${m2libc}/stdio.h"
     "-f"
     "${m2libc}/stdio.c"
@@ -556,7 +591,11 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+<<<<<<< HEAD
     "${m2libc}/sys/utsname.h"
+=======
+    "${m2libc}/string.c"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
@@ -564,6 +603,7 @@ rec {
     "-f"
     "${m2libc}/fcntl.c"
     "-f"
+<<<<<<< HEAD
     "${m2libc}/ctype.c"
     "-f"
     "${m2libc}/stdlib.c"
@@ -572,6 +612,10 @@ rec {
     "-f"
     "${m2libc}/stdarg.h"
     "-f"
+=======
+    "${m2libc}/stdlib.c"
+    "-f"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "${m2libc}/stdio.h"
     "-f"
     "${m2libc}/stdio.c"

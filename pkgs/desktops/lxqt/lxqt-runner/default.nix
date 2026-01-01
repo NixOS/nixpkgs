@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/lxqt/lxqt-runner";
     description = "Tool used to launch programs quickly by typing their names";
@@ -61,5 +62,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.lxqt ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-runner";
+    description = "Tool used to launch programs quickly by typing their names";
+    mainProgram = "lxqt-runner";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    teams = [ teams.lxqt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

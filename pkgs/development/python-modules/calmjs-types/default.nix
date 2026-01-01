@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "calmjs.types" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Types for the calmjs framework";
     homepage = "https://github.com/calmjs/calmjs.types";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Types for the calmjs framework";
+    homepage = "https://github.com/calmjs/calmjs.types";
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

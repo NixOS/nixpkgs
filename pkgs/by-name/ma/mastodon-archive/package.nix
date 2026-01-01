@@ -31,11 +31,20 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mastodon_archive" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utility for backing up your Mastodon content";
     mainProgram = "mastodon-archive";
     homepage = "https://alexschroeder.ch/software/Mastodon_Archive";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ julm ];
+=======
+  meta = with lib; {
+    description = "Utility for backing up your Mastodon content";
+    mainProgram = "mastodon-archive";
+    homepage = "https://alexschroeder.ch/software/Mastodon_Archive";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ julm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

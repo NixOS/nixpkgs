@@ -33,11 +33,20 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ curl ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/tohojo/http-getter";
     description = "Simple getter for HTTP URLs using cURL";
     mainProgram = "http-getter";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/tohojo/http-getter";
+    description = "Simple getter for HTTP URLs using cURL";
+    mainProgram = "http-getter";
+    platforms = platforms.unix;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

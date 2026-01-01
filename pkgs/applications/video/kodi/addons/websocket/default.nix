@@ -28,10 +28,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/websocket-client/websocket-client";
     description = "WebSocket client for Python";
     license = lib.licenses.lgpl2Only;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/websocket-client/websocket-client";
+    description = "WebSocket client for Python";
+    license = licenses.lgpl2Only;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

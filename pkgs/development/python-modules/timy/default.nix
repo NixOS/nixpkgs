@@ -21,10 +21,18 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Minimalist measurement of python code time";
     homepage = "https://github.com/ramonsaraiva/timy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flandweber ];
+=======
+  meta = with lib; {
+    description = "Minimalist measurement of python code time";
+    homepage = "https://github.com/ramonsaraiva/timy";
+    license = licenses.mit;
+    maintainers = with maintainers; [ flandweber ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

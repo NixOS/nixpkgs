@@ -11,13 +11,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dpp";
+<<<<<<< HEAD
   version = "10.1.4";
+=======
+  version = "10.1.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "brainboxdotcc";
     repo = "DPP";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-+H9mU+3j54iRR0Nhz1WxxIwGs+BRgAFX6tIiy33v/Vo=";
+=======
+    hash = "sha256-G2v0xMYj89AK5PklQl7i0/YuVTtpBYSM3EaMJrmYdME=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

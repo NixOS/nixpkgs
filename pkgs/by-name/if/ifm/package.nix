@@ -1,13 +1,18 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   fetchFromSourcehut,
+=======
+  fetchzip,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoreconfHook,
   bison,
   flex,
   help2man,
   perl,
   tk,
+<<<<<<< HEAD
   python3,
 }:
 
@@ -20,6 +25,17 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "ifm";
     tag = finalAttrs.version;
     hash = "sha256-RA0F8hccVJTq/F4l27CwhxynTqVuLJaYBiUfd/UfvPc=";
+=======
+}:
+
+stdenv.mkDerivation {
+  pname = "ifm";
+  version = "2015-11-08";
+
+  src = fetchzip {
+    url = "https://bitbucket.org/zondo/ifm/get/dca0774e4d3a.zip";
+    sha256 = "14af21qjd5jvsscm6vxpsdrnipdr33g6niagzmykrhyfhwcbjahi";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -27,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
     help2man
+<<<<<<< HEAD
     python3
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -42,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = false; # ifm-scan.l:16:10: fatal error: ifm-parse.h: No such file or directory
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://bitbucket.org/zondo/ifm";
     description = "Interactive fiction mapper";
@@ -50,3 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
   };
 })
+=======
+  meta = with lib; {
+    homepage = "https://bitbucket.org/zondo/ifm";
+    description = "Interactive fiction mapper";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ orivej ];
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

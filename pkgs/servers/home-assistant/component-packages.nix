@@ -2,7 +2,11 @@
 # Do not edit!
 
 {
+<<<<<<< HEAD
   version = "2025.12.5";
+=======
+  version = "2025.11.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -116,10 +120,13 @@
       ps: with ps; [
         pyairnow
       ];
+<<<<<<< HEAD
     "airobot" =
       ps: with ps; [
         pyairobotrest
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "airos" =
       ps: with ps; [
         airos
@@ -273,10 +280,13 @@
       ps: with ps; [
         anel-pwrctrl-homeassistant
       ];
+<<<<<<< HEAD
     "anglian_water" =
       ps: with ps; [
         pyanglianwater
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "anova" =
       ps: with ps; [
         anova-wifi
@@ -547,10 +557,13 @@
       ps: with ps; [
         azure-storage-blob
       ];
+<<<<<<< HEAD
     "backblaze_b2" =
       ps: with ps; [
         b2sdk
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "backup" =
       ps: with ps; [
         aiohasupervisor
@@ -730,6 +743,14 @@
         pyspeex-noise
         zeroconf
       ];
+<<<<<<< HEAD
+=======
+    "bluetooth_tracker" =
+      ps: with ps; [
+        bt-proximity
+        pybluez
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "bmw_connected_drive" =
       ps:
       with ps;
@@ -851,7 +872,10 @@
       ps: with ps; [
         caldav
         icalendar
+<<<<<<< HEAD
         vobject
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     "calendar" =
       ps: with ps; [
@@ -1034,9 +1058,12 @@
       ps: with ps; [
         pycoolmasternet-async
       ];
+<<<<<<< HEAD
     "cosori" =
       ps: with ps; [
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "counter" =
       ps: with ps; [
       ];
@@ -1065,6 +1092,13 @@
         crownstone-uart
         pyserial
       ];
+<<<<<<< HEAD
+=======
+    "cups" =
+      ps: with ps; [
+        pycups
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "currencylayer" =
       ps: with ps; [
       ];
@@ -1110,6 +1144,13 @@
       ps: with ps; [
         pydeconz
       ];
+<<<<<<< HEAD
+=======
+    "decora" =
+      ps: with ps; [
+        bluepy
+      ]; # missing inputs: decora
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "decora_wifi" =
       ps: with ps; [
         decora-wifi
@@ -1254,6 +1295,17 @@
       ps: with ps; [
         pydiscovergy
       ];
+<<<<<<< HEAD
+=======
+    "dlib_face_detect" =
+      ps: with ps; [
+        face-recognition
+      ];
+    "dlib_face_identify" =
+      ps: with ps; [
+        face-recognition
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "dlink" =
       ps: with ps; [
         pyw215
@@ -1273,6 +1325,13 @@
       ps: with ps; [
         aiodns
       ];
+<<<<<<< HEAD
+=======
+    "dominos" =
+      ps: with ps; [
+        pizzapi
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "doods" =
       ps: with ps; [
         pillow
@@ -1416,6 +1475,16 @@
       ps: with ps; [
         aioecowitt
       ];
+<<<<<<< HEAD
+=======
+    "eddystone_temperature" =
+      ps:
+      with ps;
+      [
+        beacontools
+      ]
+      ++ beacontools.optional-dependencies.scan;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "edimax" =
       ps: with ps; [
         pyedimax
@@ -1526,10 +1595,13 @@
         psutil-home-assistant
         sqlalchemy
       ];
+<<<<<<< HEAD
     "energyid" =
       ps: with ps; [
         energyid-webhooks
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "energyzero" =
       ps: with ps; [
         energyzero
@@ -1632,10 +1704,13 @@
         pyspeex-noise
         zeroconf
       ];
+<<<<<<< HEAD
     "essent" =
       ps: with ps; [
         essent-dynamic-pricing
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "etherscan" =
       ps: with ps; [
         python-etherscan-api
@@ -1835,6 +1910,13 @@
       ps: with ps; [
         pyflic
       ];
+<<<<<<< HEAD
+=======
+    "flick_electric" =
+      ps: with ps; [
+        pyflick
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "flipr" =
       ps: with ps; [
         flipr-api
@@ -2099,9 +2181,12 @@
         ical
         oauth2client
       ];
+<<<<<<< HEAD
     "google_air_quality" =
       ps: with ps; [
       ]; # missing inputs: google_air_quality_api
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "google_assistant" =
       ps: with ps; [
         aiohasupervisor
@@ -2166,10 +2251,13 @@
       ps: with ps; [
         google-maps-routing
       ];
+<<<<<<< HEAD
     "google_weather" =
       ps: with ps; [
         python-google-weather-api
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "google_wifi" =
       ps: with ps; [
       ];
@@ -2235,6 +2323,12 @@
       ps: with ps; [
         growattserver
       ];
+<<<<<<< HEAD
+=======
+    "gstreamer" =
+      ps: with ps; [
+      ]; # missing inputs: gstreamer-player
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "gtfs" =
       ps: with ps; [
         pygtfs
@@ -2247,9 +2341,12 @@
       ps: with ps; [
         habiticalib
       ];
+<<<<<<< HEAD
     "hanna" =
       ps: with ps; [
       ]; # missing inputs: hanna-cloud
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "hardkernel" =
       ps: with ps; [
         aiohasupervisor
@@ -2496,12 +2593,17 @@
     "huawei_lte" =
       ps: with ps; [
         huawei-lte-api
+<<<<<<< HEAD
+=======
+        stringcase
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         url-normalize
       ];
     "hue" =
       ps: with ps; [
         aiohue
       ];
+<<<<<<< HEAD
     "hue_ble" =
       ps: with ps; [
         aioesphomeapi
@@ -2529,6 +2631,8 @@
         pyspeex-noise
         zeroconf
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "huisbaasje" =
       ps: with ps; [
         energyflip-client
@@ -3033,6 +3137,12 @@
     "kentuckypower" =
       ps: with ps; [
       ];
+<<<<<<< HEAD
+=======
+    "keyboard" =
+      ps: with ps; [
+      ]; # missing inputs: pyuserinput
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "keyboard_remote" =
       ps: with ps; [
         asyncinotify
@@ -3148,9 +3258,12 @@
       ps: with ps; [
         pykwb
       ];
+<<<<<<< HEAD
     "labs" =
       ps: with ps; [
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "lacrosse" =
       ps: with ps; [
         pylacrosse
@@ -3381,6 +3494,12 @@
     "linx" =
       ps: with ps; [
       ];
+<<<<<<< HEAD
+=======
+    "lirc" =
+      ps: with ps; [
+      ]; # missing inputs: python-lirc
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "litejet" =
       ps: with ps; [
         pylitejet
@@ -3530,7 +3649,10 @@
       ];
     "matrix" =
       ps: with ps; [
+<<<<<<< HEAD
         aiofiles
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         matrix-nio
         pillow
       ];
@@ -4105,7 +4227,10 @@
       ];
     "nintendo_parental_controls" =
       ps: with ps; [
+<<<<<<< HEAD
         pynintendoauth
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         pynintendoparental
       ];
     "nissan_leaf" =
@@ -4507,6 +4632,13 @@
       ps: with ps; [
         panasonic-viera
       ];
+<<<<<<< HEAD
+=======
+    "pandora" =
+      ps: with ps; [
+        pexpect
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "panel_custom" =
       ps: with ps; [
         home-assistant-frontend
@@ -5164,6 +5296,12 @@
       ps: with ps; [
         rova
       ];
+<<<<<<< HEAD
+=======
+    "rpi_camera" =
+      ps: with ps; [
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "rpi_power" =
       ps: with ps; [
         rpi-bad-power
@@ -5263,9 +5401,12 @@
       ps: with ps; [
         satel-integra
       ];
+<<<<<<< HEAD
     "saunum" =
       ps: with ps; [
       ]; # missing inputs: pysaunum
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "scene" =
       ps: with ps; [
       ];
@@ -5431,7 +5572,11 @@
       ];
     "senz" =
       ps: with ps; [
+<<<<<<< HEAD
         pysenz
+=======
+        aiosenz
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     "serial" =
       ps: with ps; [
@@ -5562,7 +5707,10 @@
       ];
     "slack" =
       ps: with ps; [
+<<<<<<< HEAD
         aiofiles
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         slack-sdk
       ];
     "sleep_as_android" =
@@ -5632,6 +5780,13 @@
       ps: with ps; [
         pysmlight
       ];
+<<<<<<< HEAD
+=======
+    "sms" =
+      ps: with ps; [
+        python-gammu
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "smtp" =
       ps: with ps; [
       ];
@@ -5642,6 +5797,14 @@
       ps: with ps; [
         snapcast
       ];
+<<<<<<< HEAD
+=======
+    "snips" =
+      ps: with ps; [
+        aiohasupervisor
+        paho-mqtt
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "snmp" =
       ps: with ps; [
         pysnmp
@@ -5684,6 +5847,10 @@
         psutil-home-assistant
         solaredge-web
         sqlalchemy
+<<<<<<< HEAD
+=======
+        stringcase
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     "solaredge_local" =
       ps: with ps; [
@@ -5719,7 +5886,10 @@
     "sonos" =
       ps: with ps; [
         async-upnp-client
+<<<<<<< HEAD
         defusedxml
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ifaddr
         plexapi
         plexauth
@@ -6063,6 +6233,16 @@
     "template" =
       ps: with ps; [
       ];
+<<<<<<< HEAD
+=======
+    "tensorflow" =
+      ps: with ps; [
+        numpy
+        pillow
+        pycocotools
+        tensorflow
+      ]; # missing inputs: tf-models-official
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "tesla_fleet" =
       ps: with ps; [
         tesla-fleet-api
@@ -6318,6 +6498,10 @@
     "traccar" =
       ps: with ps; [
         pytraccar
+<<<<<<< HEAD
+=======
+        stringcase
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     "traccar_server" =
       ps: with ps; [
@@ -6516,9 +6700,12 @@
     "vacuum" =
       ps: with ps; [
       ];
+<<<<<<< HEAD
     "vagner_pool" =
       ps: with ps; [
       ];
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "vallox" =
       ps: with ps; [
         vallox-websocket-api
@@ -6578,6 +6765,7 @@
       ps: with ps; [
         pyvicare
       ];
+<<<<<<< HEAD
     "victron_ble" =
       ps: with ps; [
         aioesphomeapi
@@ -6604,6 +6792,8 @@
         pyspeex-noise
         zeroconf
       ]; # missing inputs: victron-ble-ha-parser
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "victron_remote_monitoring" =
       ps: with ps; [
         victron-vrm
@@ -6832,7 +7022,11 @@
       ];
     "xbox" =
       ps: with ps; [
+<<<<<<< HEAD
         python-xbox
+=======
+        xbox-webapi
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
     "xeoma" =
       ps: with ps; [
@@ -6909,6 +7103,12 @@
         yalexs
         yalexs-ble
       ];
+<<<<<<< HEAD
+=======
+    "yale_home" =
+      ps: with ps; [
+      ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "yale_smart_alarm" =
       ps: with ps; [
         yalesmartalarmclient
@@ -7086,7 +7286,10 @@
     "airgradient"
     "airly"
     "airnow"
+<<<<<<< HEAD
     "airobot"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "airos"
     "airq"
     "airthings"
@@ -7112,7 +7315,10 @@
     "android_ip_webcam"
     "androidtv"
     "androidtv_remote"
+<<<<<<< HEAD
     "anglian_water"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "anova"
     "anthemav"
     "anthropic"
@@ -7150,7 +7356,10 @@
     "azure_devops"
     "azure_event_hub"
     "azure_storage"
+<<<<<<< HEAD
     "backblaze_b2"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "backup"
     "baf"
     "balboa"
@@ -7203,7 +7412,10 @@
     "command_line"
     "compensation"
     "compit"
+<<<<<<< HEAD
     "concord232"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "config"
     "configurator"
     "control4"
@@ -7214,6 +7426,10 @@
     "cover"
     "cpuspeed"
     "crownstone"
+<<<<<<< HEAD
+=======
+    "cups"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "cync"
     "daikin"
     "datadog"
@@ -7240,6 +7456,11 @@
     "directv"
     "discord"
     "discovergy"
+<<<<<<< HEAD
+=======
+    "dlib_face_detect"
+    "dlib_face_identify"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "dlink"
     "dlna_dmr"
     "dlna_dms"
@@ -7265,6 +7486,10 @@
     "econet"
     "ecovacs"
     "ecowitt"
+<<<<<<< HEAD
+=======
+    "eddystone_temperature"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "edl21"
     "efergy"
     "eheimdigital"
@@ -7285,7 +7510,10 @@
     "emulated_roku"
     "energenie_power_sockets"
     "energy"
+<<<<<<< HEAD
     "energyid"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "energyzero"
     "enigma2"
     "enocean"
@@ -7297,7 +7525,10 @@
     "eq3btsmart"
     "escea"
     "esphome"
+<<<<<<< HEAD
     "essent"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "eufylife_ble"
     "event"
     "everlights"
@@ -7326,6 +7557,10 @@
     "fjaraskupan"
     "flexit_bacnet"
     "flic"
+<<<<<<< HEAD
+=======
+    "flick_electric"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "flipr"
     "flo"
     "flume"
@@ -7383,7 +7618,10 @@
     "google_tasks"
     "google_translate"
     "google_travel_time"
+<<<<<<< HEAD
     "google_weather"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "google_wifi"
     "govee_ble"
     "govee_light_local"
@@ -7431,7 +7669,10 @@
     "http"
     "huawei_lte"
     "hue"
+<<<<<<< HEAD
     "hue_ble"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "huisbaasje"
     "humidifier"
     "hunterdouglas_powerview"
@@ -7509,7 +7750,10 @@
     "kostal_plenticore"
     "kraken"
     "kulersky"
+<<<<<<< HEAD
     "labs"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "lacrosse_view"
     "lamarzocco"
     "lametric"
@@ -7712,6 +7956,10 @@
     "p1_monitor"
     "palazzetti"
     "panasonic_viera"
+<<<<<<< HEAD
+=======
+    "pandora"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "panel_custom"
     "paperless_ngx"
     "peblar"
@@ -7871,8 +8119,15 @@
     "smarty"
     "smhi"
     "smlight"
+<<<<<<< HEAD
     "smtp"
     "snapcast"
+=======
+    "sms"
+    "smtp"
+    "snapcast"
+    "snips"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "snmp"
     "snoo"
     "snooz"

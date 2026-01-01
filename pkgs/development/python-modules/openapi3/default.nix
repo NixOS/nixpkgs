@@ -53,11 +53,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openapi3" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/Dorthu/openapi3/releases/tag/${version}";
     description = "Python3 OpenAPI 3 Spec Parser";
     homepage = "https://github.com/Dorthu/openapi3";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ techknowlogick ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/Dorthu/openapi3/releases/tag/${version}";
+    description = "Python3 OpenAPI 3 Spec Parser";
+    homepage = "https://github.com/Dorthu/openapi3";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ techknowlogick ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

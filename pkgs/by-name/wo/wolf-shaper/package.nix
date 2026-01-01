@@ -55,11 +55,19 @@ stdenv.mkDerivation rec {
     cp -r bin/wolf-shaper        $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://wolf-plugins.github.io/wolf-shaper/";
     description = "Waveshaper plugin with spline-based graph editor";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.magnetophon ];
+=======
+  meta = with lib; {
+    homepage = "https://wolf-plugins.github.io/wolf-shaper/";
+    description = "Waveshaper plugin with spline-based graph editor";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.magnetophon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

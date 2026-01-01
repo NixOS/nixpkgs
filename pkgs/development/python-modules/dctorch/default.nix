@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "Fast discrete cosine transforms for pytorch";
     homepage = "https://pypi.org/project/dctorch/";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    description = "Fast discrete cosine transforms for pytorch";
+    homepage = "https://pypi.org/project/dctorch/";
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

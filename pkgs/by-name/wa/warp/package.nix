@@ -89,6 +89,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       dotlambda
+<<<<<<< HEAD
+=======
+      foo-dogsquared
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.all;

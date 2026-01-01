@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "napari_plugin_engine" ];
 
+<<<<<<< HEAD
   meta = {
     description = "First generation napari plugin engine";
     homepage = "https://github.com/napari/napari-plugin-engine";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
+=======
+  meta = with lib; {
+    description = "First generation napari plugin engine";
+    homepage = "https://github.com/napari/napari-plugin-engine";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SomeoneSerge ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

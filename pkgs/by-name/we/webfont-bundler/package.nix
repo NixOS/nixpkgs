@@ -68,15 +68,26 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Create @font-face kits easily";
     longDescription = "Webfont Bundler is a simple utility that allows you to generate woff, woff2 and the necessary CSS boilerplate from non-web font formats (otf and ttf).";
     changelog = "https://github.com/rafaelmardojai/webfont-kit-generator/releases/tag/${finalAttrs.version}";
     mainProgram = "webfontkitgenerator";
     homepage = "https://apps.gnome.org/WebfontKitGenerator/";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ benediktbroich ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ benediktbroich ];
+    teams = [ teams.gnome-circle ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

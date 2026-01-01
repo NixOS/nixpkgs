@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libsForQt5.qtbase ];
 
+<<<<<<< HEAD
   meta = {
     description = "Punch clock to track time spent on projects";
     mainProgram = "kapow";
@@ -31,5 +32,14 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Punch clock to track time spent on projects";
+    mainProgram = "kapow";
+    homepage = "https://gottcode.org/kapow/";
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

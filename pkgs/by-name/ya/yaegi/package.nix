@@ -37,12 +37,20 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Go interpreter";
     mainProgram = "yaegi";
     homepage = "https://github.com/traefik/yaegi";
     changelog = "https://github.com/traefik/yaegi/releases/tag/${src.rev}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
+=======
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;

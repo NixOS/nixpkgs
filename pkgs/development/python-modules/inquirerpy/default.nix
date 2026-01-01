@@ -42,11 +42,20 @@ buildPythonPackage rec {
     "tests/base/test_list.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python port of Inquirer.js";
     homepage = "https://github.com/kazhala/InquirerPy";
     changelog = "https://github.com/kazhala/InquirerPy/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python port of Inquirer.js";
+    homepage = "https://github.com/kazhala/InquirerPy";
+    changelog = "https://github.com/kazhala/InquirerPy/blob/${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

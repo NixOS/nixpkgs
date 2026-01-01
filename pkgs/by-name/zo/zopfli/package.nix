@@ -44,7 +44,11 @@ stdenv.mkDerivation rec {
     cp $src/src/zopfli/*.h $dev/include/
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (src.meta) homepage;
     description = "Very good, but slow, deflate or zlib compression";
     longDescription = ''
@@ -54,10 +58,17 @@ stdenv.mkDerivation rec {
       This library can only compress, not decompress. Existing zlib or
       deflate libraries can decompress the data.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
     mainProgram = "zopfli";
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.unix;
+    license = licenses.asl20;
+    mainProgram = "zopfli";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bobvanderlinden
       edef
     ];

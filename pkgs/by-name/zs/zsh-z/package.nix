@@ -23,11 +23,20 @@ stdenvNoCC.mkDerivation {
     cp _zshz zsh-z.plugin.zsh $out/share/zsh-z
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Jump quickly to directories that you have visited frequently in the past, or recently";
     homepage = "https://github.com/agkozak/zsh-z";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.evalexpr ];
+=======
+  meta = with lib; {
+    description = "Jump quickly to directories that you have visited frequently in the past, or recently";
+    homepage = "https://github.com/agkozak/zsh-z";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.evalexpr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

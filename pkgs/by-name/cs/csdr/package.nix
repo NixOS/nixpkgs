@@ -51,11 +51,19 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/jketterl/csdr";
     description = "Simple DSP library and command-line tool for Software Defined Radio";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/jketterl/csdr";
+    description = "Simple DSP library and command-line tool for Software Defined Radio";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

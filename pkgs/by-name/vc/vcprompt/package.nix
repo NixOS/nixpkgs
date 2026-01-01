@@ -29,12 +29,21 @@ stdenv.mkDerivation {
     "PREFIX=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Program that prints barebones information about the current working directory for various version control systems";
     homepage = "https://github.com/powerman/vcprompt";
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Program that prints barebones information about the current working directory for various version control systems";
+    homepage = "https://github.com/powerman/vcprompt";
+    maintainers = [ ];
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vcprompt";
   };
 }

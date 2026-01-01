@@ -31,13 +31,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flaresolverr";
+<<<<<<< HEAD
   version = "3.4.6";
+=======
+  version = "3.4.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "FlareSolverr";
     repo = "FlareSolverr";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-DeFp76VwMGBAWOsI3S3jm1qNbPw554zJZfE7hotUedY=";
+=======
+    hash = "sha256-5insO3XfIN9vGuPIeVBcLhsYPCO29mR41MFtIy8jeXE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -65,11 +73,19 @@ stdenv.mkDerivation (finalAttrs: {
     tests.smoke-test = nixosTests.flaresolverr;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Proxy server to bypass Cloudflare protection";
     homepage = "https://github.com/FlareSolverr/FlareSolverr";
     changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Proxy server to bypass Cloudflare protection";
+    homepage = "https://github.com/FlareSolverr/FlareSolverr";
+    changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "flaresolverr";
     maintainers = [ ];
     inherit (undetected-chromedriver.meta) platforms;

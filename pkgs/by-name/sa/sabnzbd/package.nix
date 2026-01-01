@@ -104,11 +104,19 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Usenet NZB downloader, par2 repairer and auto extracting server";
     homepage = "https://sabnzbd.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Usenet NZB downloader, par2 repairer and auto extracting server";
+    homepage = "https://sabnzbd.org";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = with lib.maintainers; [
       jojosch
       adamcstephens

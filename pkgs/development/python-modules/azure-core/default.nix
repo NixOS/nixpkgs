@@ -64,7 +64,11 @@ buildPythonPackage rec {
     pytestCheckHook
     trio
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # test server needs to be available
   preCheck = ''
@@ -109,11 +113,19 @@ buildPythonPackage rec {
     "tests/test_tracing_live.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Core Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

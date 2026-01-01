@@ -29,12 +29,21 @@ buildGoModule rec {
 
   buildInputs = [ bash ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wayland clipboard manager";
     homepage = "https://github.com/sentriz/cliphist";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Wayland clipboard manager";
+    homepage = "https://github.com/sentriz/cliphist";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cliphist";
   };
 }

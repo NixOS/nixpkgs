@@ -48,12 +48,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yark" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Module for YouTube archiving";
     mainProgram = "yark";
     homepage = "https://github.com/Owez/yark";
     changelog = "https://github.com/Owez/yark/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

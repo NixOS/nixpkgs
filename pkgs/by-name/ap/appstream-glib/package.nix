@@ -91,11 +91,19 @@ stdenv.mkDerivation rec {
     moveToOutput "share/installed-tests" "$installedTests"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Objects and helper methods to read and write AppStream metadata";
     homepage = "https://people.freedesktop.org/~hughsient/appstream-glib/";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Objects and helper methods to read and write AppStream metadata";
+    homepage = "https://people.freedesktop.org/~hughsient/appstream-glib/";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

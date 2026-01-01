@@ -2,7 +2,11 @@
   lib,
   pkgs,
   buildPythonPackage,
+<<<<<<< HEAD
   fetchFromGitHub,
+=======
+  fetchFromGitea,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   replaceVars,
   colord,
   setuptools,
@@ -25,9 +29,14 @@ buildPythonPackage rec {
   version = "0.6.1";
   pyproject = true;
 
+<<<<<<< HEAD
   # gitlab.mister-muffin.de produces a 500 error on 0.6.1
   # when upgrading, switch src attribute back to gitlab if fixed.
   src = fetchFromGitHub {
+=======
+  src = fetchFromGitea {
+    domain = "gitlab.mister-muffin.de";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     owner = "josch";
     repo = "img2pdf";
     tag = version;

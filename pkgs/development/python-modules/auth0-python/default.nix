@@ -65,11 +65,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "auth0" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
     changelog = "https://github.com/auth0/auth0-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Auth0 Python SDK";
+    homepage = "https://github.com/auth0/auth0-python";
+    changelog = "https://github.com/auth0/auth0-python/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

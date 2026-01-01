@@ -10,7 +10,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "apkg";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "0.7.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "pyproject";
 
   src = fetchFromGitLab {
@@ -18,7 +22,11 @@ python3Packages.buildPythonApplication rec {
     owner = "packaging";
     repo = "apkg";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-UQHiG6clAt+pmc0MTCkO4NIzr8TZmJ6Yd/T0YTkBxv0=";
+=======
+    hash = "sha256-YiuJVwwLnka2KUh0xNPkcBuMSQHMyMzgoipiDzZvDI4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -62,12 +70,21 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Upstream packaging automation tool";
     homepage = "https://pkg.labs.nic.cz/pages/apkg";
     license = lib.licenses.gpl3Plus;
     maintainers = [
       lib.maintainers.vcunat # close to upstream
+=======
+  meta = with lib; {
+    description = "Upstream packaging automation tool";
+    homepage = "https://pkg.labs.nic.cz/pages/apkg";
+    license = licenses.gpl3Plus;
+    maintainers = [
+      maintainers.vcunat # close to upstream
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "apkg";
   };

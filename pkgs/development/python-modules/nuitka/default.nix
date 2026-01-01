@@ -46,9 +46,15 @@ buildPythonPackage rec {
   # Requires CPython
   disabled = isPyPy;
 
+<<<<<<< HEAD
   meta = {
     description = "Python compiler with full language support and CPython compatibility";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python compiler with full language support and CPython compatibility";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://nuitka.net/";
     # never built on darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;

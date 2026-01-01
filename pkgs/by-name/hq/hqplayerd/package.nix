@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
     rygel = rygel-hqplayerd;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.signalyst.com/custom.html";
     description = "High-end upsampling multichannel software embedded HD-audio player";
@@ -117,5 +118,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ lovesegfault ];
+=======
+  meta = with lib; {
+    homepage = "https://www.signalyst.com/custom.html";
+    description = "High-end upsampling multichannel software embedded HD-audio player";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ lovesegfault ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

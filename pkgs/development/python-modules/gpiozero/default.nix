@@ -61,6 +61,7 @@ buildPythonPackage rec {
     "test_spi_hardware_write"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple interface to GPIO devices with Raspberry Pi";
     homepage = "https://github.com/gpiozero/gpiozero";
@@ -68,5 +69,14 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Simple interface to GPIO devices with Raspberry Pi";
+    homepage = "https://github.com/gpiozero/gpiozero";
+    changelog = "https://github.com/gpiozero/gpiozero/blob/v${version}/docs/changelog.rst";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

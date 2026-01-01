@@ -6,13 +6,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "storj-uplink";
+<<<<<<< HEAD
   version = "1.142.7";
+=======
+  version = "1.142.4";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "storj";
     repo = "storj";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Y0pnketYzKC7xzndIceFk7dwyUwSjMzvvJF1EqSSD7s=";
+=======
+    hash = "sha256-TMHIbzcUNwzKIz9wN27sbf/XFvL+VYF9dLEpRc0cZYA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   subPackages = [ "cmd/uplink" ];

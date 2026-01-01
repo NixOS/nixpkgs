@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "WebSocket support for Flask";
     homepage = "https://github.com/miguelgrinberg/flask-sock/";
     changelog = "https://github.com/miguelgrinberg/flask-sock/blob/main/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fmhoeger ];
+=======
+  meta = with lib; {
+    description = "WebSocket support for Flask";
+    homepage = "https://github.com/miguelgrinberg/flask-sock/";
+    changelog = "https://github.com/miguelgrinberg/flask-sock/blob/main/CHANGES.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fmhoeger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

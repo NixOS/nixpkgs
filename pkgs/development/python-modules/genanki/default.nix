@@ -40,10 +40,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "genanki" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generate Anki decks programmatically";
     homepage = "https://github.com/kerrickstaley/genanki";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teto ];
+=======
+  meta = with lib; {
+    description = "Generate Anki decks programmatically";
+    homepage = "https://github.com/kerrickstaley/genanki";
+    license = licenses.mit;
+    maintainers = with maintainers; [ teto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

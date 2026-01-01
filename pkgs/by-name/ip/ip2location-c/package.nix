@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
   # databases are available, downloading them for just 1 test seems excessive):
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Library to look up locations of host names and IP addresses";
     mainProgram = "ip2location";
     longDescription = ''
@@ -36,11 +40,19 @@ stdenv.mkDerivation rec {
       any IP address or host name in the IP2Location databases.
     '';
     homepage = "https://www.ip2location.com/developers/c";
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl3Plus
       lgpl3Plus
     ];
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

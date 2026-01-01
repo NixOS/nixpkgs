@@ -4,7 +4,10 @@
   callPackage,
   kaem,
   mescc-tools,
+<<<<<<< HEAD
   buildPlatform,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 # Maintenance note:
@@ -14,15 +17,24 @@
 
 let
   pname = "mes";
+<<<<<<< HEAD
   version = "0.27.1";
 
   src = fetchurl {
     url = "mirror://gnu/mes/mes-${version}.tar.gz";
     hash = "sha256-GDpA6kfqSfih470bnRLmdjdNZNY7x557wa59Zz398l0=";
+=======
+  version = "0.25";
+
+  src = fetchurl {
+    url = "mirror://gnu/mes/mes-${version}.tar.gz";
+    hash = "sha256-MlJQs1Z+2SA7pwFhyDWvAQeec+vtl7S1u3fKUAuCiUA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nyacc = callPackage ./nyacc.nix { inherit nyacc; };
 
+<<<<<<< HEAD
   intptr =
     {
       i686-linux = "int";
@@ -59,6 +71,14 @@ let
 
   sources = (import ./sources.nix).${arch}.linux.mescc;
 
+=======
+  config_h = builtins.toFile "config.h" ''
+    #undef SYSTEM_LIBC
+    #define MES_VERSION "${version}"
+  '';
+
+  sources = (import ./sources.nix).x86.linux.mescc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   inherit (sources)
     libc_mini_SOURCES
     libmescc_SOURCES
@@ -68,6 +88,7 @@ let
 
   # add symlink() to libc+tcc so we can use it in ln-boot
   libc_tcc_SOURCES = sources.libc_tcc_SOURCES ++ [ "lib/linux/symlink.c" ];
+<<<<<<< HEAD
   setjmp_x86_64 = ./setjmp_x86_64.c;
 
   meta = {
@@ -79,6 +100,15 @@ let
       "i686-linux"
       "x86_64-linux"
     ];
+=======
+
+  meta = with lib; {
+    description = "Scheme interpreter and C compiler for bootstrapping";
+    homepage = "https://www.gnu.org/software/mes";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = [ "i686-linux" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   srcPost =
@@ -103,6 +133,7 @@ let
 
         cp ${config_h} include/mes/config.h
 
+<<<<<<< HEAD
         # rax is used to indicate the syscall; we need to inform the assembler that rax should not be used to
         # pass the exit code as it would be overwritten
         exit_c=lib/linux/x86_64-mes-gcc/_exit.c
@@ -188,6 +219,11 @@ let
         cp include/linux/${arch}/kernel-stat.h include/arch/kernel-stat.h
         cp include/linux/${arch}/signal.h include/arch/signal.h
         cp include/linux/${arch}/syscall.h include/arch/syscall.h
+=======
+        mkdir include/arch
+        cp include/linux/x86/syscall.h include/arch/syscall.h
+        cp include/linux/x86/kernel-stat.h include/arch/kernel-stat.h
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         # Remove pregenerated files
         rm mes/module/mes/psyntax.pp mes/module/mes/psyntax.pp.header
@@ -198,9 +234,15 @@ let
 
         # Remove environment impurities
         __GUILE_LOAD_PATH="\"''${MES_PREFIX}/mes/module:''${MES_PREFIX}/module:${nyacc.guilePath}\""
+<<<<<<< HEAD
         guile_module_scm=mes/module/mes/guile-module.mes
         guile_mes=mes/module/mes/guile.mes
         replace --file ''${guile_module_scm} --output ''${guile_module_scm} --match-on "(getenv \"GUILE_LOAD_PATH\")" --replace-with ''${__GUILE_LOAD_PATH}
+=======
+        boot0_scm=mes/module/mes/boot-0.scm
+        guile_mes=mes/module/mes/guile.mes
+        replace --file ''${boot0_scm} --output ''${boot0_scm} --match-on "(getenv \"GUILE_LOAD_PATH\")" --replace-with ''${__GUILE_LOAD_PATH}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         replace --file ''${guile_mes} --output ''${guile_mes} --match-on "(getenv \"GUILE_LOAD_PATH\")" --replace-with ''${__GUILE_LOAD_PATH}
 
         module_mescc_scm=module/mescc/mescc.scm
@@ -226,13 +268,21 @@ let
         replace --file ''${mescc_in} --output ''${mescc_in} --match-on "(getenv \"libdir\")" --replace-with "\"''${MES_PREFIX}/lib\""
         replace --file ''${mescc_in} --output ''${mescc_in} --match-on @prefix@ --replace-with ''${MES_PREFIX}
         replace --file ''${mescc_in} --output ''${mescc_in} --match-on @VERSION@ --replace-with ${version}
+<<<<<<< HEAD
         replace --file ''${mescc_in} --output ''${mescc_in} --match-on @mes_cpu@ --replace-with ${arch}
+=======
+        replace --file ''${mescc_in} --output ''${mescc_in} --match-on @mes_cpu@ --replace-with x86
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         replace --file ''${mescc_in} --output ''${mescc_in} --match-on @mes_kernel@ --replace-with linux
         mkdir -p ''${bin}/bin
         cp ''${mescc_in} ''${bin}/bin/mescc.scm
 
         # Build mes-m2
+<<<<<<< HEAD
         kaem --verbose --strict --file kaem.${arch}
+=======
+        kaem --verbose --strict --file kaem.x86
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         cp bin/mes-m2 ''${bin}/bin/mes-m2
         chmod 555 ''${bin}/bin/mes-m2
       '';
@@ -244,12 +294,20 @@ let
     "-e"
     "main"
     "${srcPost.bin}/bin/mescc.scm"
+<<<<<<< HEAD
+=======
+    "--"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "-D"
     "HAVE_CONFIG_H=1"
     "-I"
     "${srcPrefix}/include"
     "-I"
+<<<<<<< HEAD
     "${srcPrefix}/include/linux/${arch}"
+=======
+    "${srcPrefix}/include/linux/x86"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   CC = toString ([ cc ] ++ ccArgs);
@@ -264,7 +322,11 @@ let
       ${CC} -c ${srcPrefix}/${source}
     '';
 
+<<<<<<< HEAD
   crt1 = compile "/lib/linux/${arch}-mes-mescc/crt1.c";
+=======
+  crt1 = compile "/lib/linux/x86-mes-mescc/crt1.c";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   getRes = suffix: res: "${res}/${res.name}${suffix}";
 
@@ -313,6 +375,7 @@ let
         LIBDIR=''${out}/lib
         mkdir -p ''${out} ''${LIBDIR}
 
+<<<<<<< HEAD
         mkdir -p ''${LIBDIR}/${arch}-mes
 
         # crt1.o
@@ -334,6 +397,29 @@ let
         # libc+tcc.a
         cp ${libc_tcc}/lib/libc+tcc.a ''${LIBDIR}/${arch}-mes
         cp ${libc_tcc}/lib/libc+tcc.s ''${LIBDIR}/${arch}-mes
+=======
+        mkdir -p ''${LIBDIR}/x86-mes
+
+        # crt1.o
+        cp ${crt1}/crt1.o ''${LIBDIR}/x86-mes
+        cp ${crt1}/crt1.s ''${LIBDIR}/x86-mes
+
+        # libc-mini.a
+        cp ${libc-mini}/lib/libc-mini.a ''${LIBDIR}/x86-mes
+        cp ${libc-mini}/lib/libc-mini.s ''${LIBDIR}/x86-mes
+
+        # libmescc.a
+        cp ${libmescc}/lib/libmescc.a ''${LIBDIR}/x86-mes
+        cp ${libmescc}/lib/libmescc.s ''${LIBDIR}/x86-mes
+
+        # libc.a
+        cp ${libc}/lib/libc.a ''${LIBDIR}/x86-mes
+        cp ${libc}/lib/libc.s ''${LIBDIR}/x86-mes
+
+        # libc+tcc.a
+        cp ${libc_tcc}/lib/libc+tcc.a ''${LIBDIR}/x86-mes
+        cp ${libc_tcc}/lib/libc+tcc.s ''${LIBDIR}/x86-mes
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       '';
 
   # Build mes itself
@@ -361,7 +447,11 @@ let
           -lmescc \
           -nostdlib \
           -o ''${out}/bin/mes \
+<<<<<<< HEAD
           ${libs}/lib/${arch}-mes/crt1.o \
+=======
+          ${libs}/lib/x86-mes/crt1.o \
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ${lib.concatMapStringsSep " " (getRes ".o") (map compile mes_SOURCES)}
       '';
 in

@@ -8,13 +8,21 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.8.3";
+=======
+  version = "1.8.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ze0hoTR3e3Wrgtv2FlM81faXmij61NEcPLzO4WDXIak=";
+=======
+    hash = "sha256-KezASQIqyu4GsKaGAhge7gEYMe57GMgzjXlAbmyDI3Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   metaCommon = {
@@ -29,7 +37,11 @@ let
     inherit version src;
     pname = "libgopeed";
 
+<<<<<<< HEAD
     vendorHash = "sha256-rIj4T+NEqWla6/+ofosTwagL4/VMovDp1NEYMuzbOrQ=";
+=======
+    vendorHash = "sha256-x9M9zwS5FhsIyGGBi0szWHMfLXCFVgqv8bfSxhHZT2Y=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     buildPhase = ''
       runHook preBuild

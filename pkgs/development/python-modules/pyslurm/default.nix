@@ -37,10 +37,19 @@ buildPythonPackage rec {
   # Test cases need /etc/slurm/slurm.conf and require a working slurm installation
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/PySlurm/pyslurm";
     description = "Python bindings to Slurm";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/PySlurm/pyslurm";
+    description = "Python bindings to Slurm";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ bhipple ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

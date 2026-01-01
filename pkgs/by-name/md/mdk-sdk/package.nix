@@ -83,7 +83,11 @@ stdenv.mkDerivation rec {
     description = "Multimedia development kit";
     homepage = "https://github.com/wang-bin/mdk-sdk";
     license = lib.licenses.unfree;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = with lib.maintainers; [ orivej ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

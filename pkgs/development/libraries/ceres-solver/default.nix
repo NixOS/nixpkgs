@@ -57,11 +57,20 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+<<<<<<< HEAD
   meta = {
     description = "C++ library for modeling and solving large, complicated optimization problems";
     license = lib.licenses.bsd3;
     homepage = "http://ceres-solver.org";
     maintainers = with lib.maintainers; [ giogadi ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C++ library for modeling and solving large, complicated optimization problems";
+    license = licenses.bsd3;
+    homepage = "http://ceres-solver.org";
+    maintainers = with maintainers; [ giogadi ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

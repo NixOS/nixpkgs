@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     wxGTK32
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Berkeley Logo interpreter";
     homepage = "https://github.com/jrincayc/ucblogo-code";
@@ -41,5 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "ucblogo-code";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Berkeley Logo interpreter";
+    homepage = "https://github.com/jrincayc/ucblogo-code";
+    changelog = "https://github.com/jrincayc/ucblogo-code/blob/${finalAttrs.src.rev}/changes.txt";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ matthewcroughan ];
+    mainProgram = "ucblogo-code";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

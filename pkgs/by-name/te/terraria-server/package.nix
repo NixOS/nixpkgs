@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://terraria.org";
     description = "Dedicated server for Terraria, a 2D action-adventure sandbox";
@@ -45,6 +46,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     mainProgram = "TerrariaServer";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://terraria.org";
+    description = "Dedicated server for Terraria, a 2D action-adventure sandbox";
+    platforms = [ "x86_64-linux" ];
+    license = licenses.unfree;
+    mainProgram = "TerrariaServer";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ncfavier
       tomasajt
     ];

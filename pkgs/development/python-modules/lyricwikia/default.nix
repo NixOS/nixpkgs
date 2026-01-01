@@ -47,12 +47,21 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "LyricWikia API for song lyrics";
     mainProgram = "lyrics";
     homepage = "https://github.com/enricobacis/lyricwikia";
     changelog = "https://github.com/enricobacis/lyricwikia/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kmein ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ kmein ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

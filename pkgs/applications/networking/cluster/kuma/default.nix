@@ -17,14 +17,22 @@
 
 buildGoModule rec {
   inherit pname;
+<<<<<<< HEAD
   version = "2.12.3";
+=======
+  version = "2.12.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   tags = lib.optionals enableGateway [ "gateway" ];
 
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-C/q3fCcMMnqjXeoO/t/YOKHLq8HDNfF+x75nCcjwwvE=";
+=======
+    hash = "sha256-9s89fiBFIP6azB1SDCZkTlQWAQ2C6htQXRMvyWrNch0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   vendorHash = "sha256-KgZYKopW+FOdwBIGxa2RLiEbefZ/1vAhcsWtcYhgdFs=";
@@ -71,5 +79,9 @@ buildGoModule rec {
     homepage = "https://kuma.io/";
     changelog = "https://github.com/kumahq/kuma/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ zbioe ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

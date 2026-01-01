@@ -13,6 +13,7 @@ in
     enable = lib.mkEnableOption "xscreensaver user service";
 
     package = lib.mkPackageOption pkgs "xscreensaver" { };
+<<<<<<< HEAD
 
     hooks = lib.mkOption {
       type = with lib.types; attrsOf lines;
@@ -29,6 +30,8 @@ in
         };
       '';
     };
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   config = lib.mkIf cfg.enable {
@@ -41,6 +44,7 @@ in
       source = "${pkgs.xscreensaver}/libexec/xscreensaver/xscreensaver-auth";
     };
 
+<<<<<<< HEAD
     systemd.user.services = {
       xscreensaver = {
         enable = true;
@@ -83,6 +87,16 @@ in
             done
           '';
       };
+=======
+    systemd.user.services.xscreensaver = {
+      enable = true;
+      description = "XScreenSaver";
+      after = [ "graphical-session-pre.target" ];
+      partOf = [ "graphical-session.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      path = [ cfg.package ];
+      serviceConfig.ExecStart = "${cfg.package}/bin/xscreensaver -no-splash";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 

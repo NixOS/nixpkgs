@@ -29,19 +29,40 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
+<<<<<<< HEAD
   version = "2.6.3";
+=======
+  version = "2.5.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
+<<<<<<< HEAD
     hash = "sha256-qJ5ZIGfUqV/ayZVABbrcOBGa6xFLZ53WGuBz8JsXvOw=";
   };
 
   cargoHash = "sha256-DNwuybqdHQtosQwtVgbds4gu0YCXY3tnX2IqXhhyfs8=";
 
   patches = [
+=======
+    hash = "sha256-Ppw2fyfFvSmGO+FcEvclkOU7LATOqkYH3wErBdKgWJY=";
+  };
+
+  cargoHash = "sha256-EN87p8wX5QAzf3cWfX8I/+XzYRc9rA5EWj996iUpSPg=";
+
+  patches = [
+    # Patch out the remote upgrade (deno update) check.
+    # Not a blocker in the build sandbox, since implementation and tests are
+    # considerately written for no external networking, but removing brings
+    # in-line with common nixpkgs practice.
+    ./patches/0000-remove-deno-upgrade-check.patch
+    # Patch out the upgrade sub-command since that wouldn't correctly upgrade
+    # deno from nixpkgs.
+    ./patches/0001-remove-deno-upgrade.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ./patches/0002-tests-replace-hardcoded-paths.patch
     ./patches/0003-tests-linux-no-chown.patch
     ./patches/0004-tests-darwin-fixes.patch
@@ -77,12 +98,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildFlags = [ "--package=cli" ];
 
+<<<<<<< HEAD
   # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "__vendored_zlib_ng"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
@@ -167,6 +191,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Use of VSOCK, might not be available on all platforms
     "--skip=js_unit_tests::serve_test"
     "--skip=js_unit_tests::fetch_test"
+<<<<<<< HEAD
 
     # We disable the upgrade feature on purpose
     "--skip=upgrade::upgrade_prompt"
@@ -177,6 +202,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # sqlite extension tests are in a separate Cargo crate and therefore are not handled by the nixpkgs Cargo tooling
     "--skip=sqlite_extension_test"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Expects specific shared libraries from macOS to be linked
@@ -237,7 +264,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit librusty_v8;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://deno.land/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${finalAttrs.version}";
     description = "Secure runtime for JavaScript and TypeScript";
@@ -250,9 +281,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Among other things, Deno is a great replacement for utility scripts that may have been historically written with
       bash or python.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     mainProgram = "deno";
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.mit;
+    mainProgram = "deno";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jk
       ofalvai
     ];

@@ -204,6 +204,7 @@ let
       };
     };
 
+<<<<<<< HEAD
     meta = {
       description = "Open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
@@ -213,6 +214,17 @@ let
         lucasew
       ];
       platforms = lib.platforms.linux;
+=======
+    meta = with lib; {
+      description = "Open source RDP server";
+      homepage = "https://github.com/neutrinolabs/xrdp";
+      license = licenses.asl20;
+      maintainers = with maintainers; [
+        chvp
+        lucasew
+      ];
+      platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

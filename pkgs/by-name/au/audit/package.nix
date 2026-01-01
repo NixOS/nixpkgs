@@ -87,7 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-legacy-actions"
     "--with-arm"
     "--with-aarch64"
+<<<<<<< HEAD
     "--with-riscv"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "--with-io_uring"
     # allows putting audit files in /run/audit, which removes the requirement
     # to wait for tmpfiles to set up the /var/run -> /run symlink

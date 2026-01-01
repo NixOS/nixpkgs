@@ -44,12 +44,21 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) pict-rs; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
     description = "Simple image hosting service";
     mainProgram = "pict-rs";
     homepage = "https://git.asonix.dog/asonix/pict-rs";
+<<<<<<< HEAD
     license = with lib.licenses; [ agpl3Plus ];
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+    license = with licenses; [ agpl3Plus ];
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

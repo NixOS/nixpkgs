@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     make -C test
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://urlan.sourceforge.net/boron/";
     description = "Scripting language and C library useful for building DSLs";
@@ -48,5 +49,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mausch ];
+=======
+  meta = with lib; {
+    homepage = "https://urlan.sourceforge.net/boron/";
+    description = "Scripting language and C library useful for building DSLs";
+    mainProgram = "boron";
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mausch ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

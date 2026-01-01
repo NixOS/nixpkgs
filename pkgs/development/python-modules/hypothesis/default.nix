@@ -24,7 +24,11 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
+<<<<<<< HEAD
   version = "6.145.1";
+=======
+  version = "6.136.9";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +37,11 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     tag = "hypothesis-python-${version}";
+<<<<<<< HEAD
     hash = "sha256-xyUR3yY2tmF4LGhZRUlv6fdcfVyVWwukodA0WIW0bXU=";
+=======
+    hash = "sha256-Q1wxIJwAYKZ0x6c85CJSGgcdKw9a3xFw8YpJROElSNU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -147,8 +155,13 @@ buildPythonPackage rec {
       # Forge look and feel of multi-output derivation as best as we can.
       #
       # Using 'outputs = [ "doc" ];' breaks a lot of assumptions.
+<<<<<<< HEAD
       pname = "${pname}-doc";
       inherit src version;
+=======
+      name = "${pname}-${version}-doc";
+      inherit src pname version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       postInstallSphinx = ''
         mv $out/share/doc/* $out/share/doc/python$pythonVersion-$pname-$version

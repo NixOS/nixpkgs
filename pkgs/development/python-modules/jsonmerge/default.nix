@@ -21,11 +21,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Merge a series of JSON documents";
     homepage = "https://github.com/avian2/jsonmerge";
     changelog = "https://github.com/avian2/jsonmerge/blob/jsonmerge-${version}/ChangeLog";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Merge a series of JSON documents";
+    homepage = "https://github.com/avian2/jsonmerge";
+    changelog = "https://github.com/avian2/jsonmerge/blob/jsonmerge-${version}/ChangeLog";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

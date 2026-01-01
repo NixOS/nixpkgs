@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Reimplementation of the 1997 Bullfrog business sim Theme Hospital";
     mainProgram = "corsix-th";
@@ -87,5 +88,17 @@ stdenv.mkDerivation (finalAttrs: {
       matteopacini
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Reimplementation of the 1997 Bullfrog business sim Theme Hospital";
+    mainProgram = "corsix-th";
+    homepage = "https://corsixth.com/";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      hughobrien
+      matteopacini
+    ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

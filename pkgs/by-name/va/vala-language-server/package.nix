@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     vala
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Code Intelligence for Vala & Genie";
     mainProgram = "vala-language-server";
@@ -56,5 +57,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ andreasfelix ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Code Intelligence for Vala & Genie";
+    mainProgram = "vala-language-server";
+    homepage = "https://github.com/vala-lang/vala-language-server";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ andreasfelix ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -43,11 +43,20 @@ rustPlatform.buildRustPackage rec {
 
   useNextest = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Graphical client for plain-text protocols written in Rust with GTK. It currently supports the Gemini, Gopher and Finger protocols";
     mainProgram = "castor";
     homepage = "https://sr.ht/~julienxx/Castor";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    description = "Graphical client for plain-text protocols written in Rust with GTK. It currently supports the Gemini, Gopher and Finger protocols";
+    mainProgram = "castor";
+    homepage = "https://sr.ht/~julienxx/Castor";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

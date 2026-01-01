@@ -81,7 +81,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Program to help prevent Repetitive Strain Injury";
     mainProgram = "workrave";
     longDescription = ''
@@ -91,8 +95,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.workrave.org/";
     downloadPage = "https://github.com/rcaelers/workrave/releases";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ prikhi ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ prikhi ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

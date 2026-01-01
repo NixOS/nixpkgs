@@ -35,15 +35,26 @@ stdenv.mkDerivation rec {
     qtwebengine
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/graphia.x86_64-darwin
     broken =
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "Visualisation tool for the creation and analysis of graphs";
     homepage = "https://graphia.app";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     mainProgram = "Graphia";
     maintainers = [ lib.maintainers.bgamari ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl3Only;
+    mainProgram = "Graphia";
+    maintainers = [ maintainers.bgamari ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

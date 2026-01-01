@@ -52,11 +52,20 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "ChaCha20Poly1305 that is reuseable for asyncio";
     homepage = "https://github.com/bdraco/chacha20poly1305-reuseable";
     changelog = "https://github.com/bdraco/chacha20poly1305-reuseable/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "ChaCha20Poly1305 that is reuseable for asyncio";
+    homepage = "https://github.com/bdraco/chacha20poly1305-reuseable";
+    changelog = "https://github.com/bdraco/chacha20poly1305-reuseable/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/pkgdiff --prefix PATH : ${lib.makeBinPath [ wdiff ]}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for visualizing changes in Linux software packages";
     homepage = "https://lvc.github.io/pkgdiff/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ sweber ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Tool for visualizing changes in Linux software packages";
+    homepage = "https://lvc.github.io/pkgdiff/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ sweber ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pkgdiff";
   };
 }

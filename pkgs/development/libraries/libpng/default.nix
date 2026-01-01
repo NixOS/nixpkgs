@@ -20,11 +20,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpng" + whenPatched "-apng";
+<<<<<<< HEAD
   version = "1.6.52";
 
   src = fetchurl {
     url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
     hash = "sha256-Nr1yYijsk6O2wi/bSelKZ7FvL+mzm3i3y2V3KWZmHMw=";
+=======
+  version = "1.6.50";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/libpng/libpng-${finalAttrs.version}.tar.xz";
+    hash = "sha256-TfOWUYYgp6o2UUQ+h9Gyhi5OiMrRNai5NCPgFwYjIwc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
   postPatch =
     whenPatched "gunzip < ${patch_src} | patch -Np1"
@@ -50,17 +58,30 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description =
       "Official reference implementation for the PNG file format" + whenPatched " with animation patch";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     changelog = "https://github.com/pnggroup/libpng/blob/v${finalAttrs.version}/CHANGES";
+<<<<<<< HEAD
     license = lib.licenses.libpng2;
+=======
+    license = licenses.libpng2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "libpng"
       "libpng16"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ vcunat ];
+=======
+    platforms = platforms.all;
+    maintainers = with maintainers; [ vcunat ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

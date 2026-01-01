@@ -43,7 +43,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Remote TextMate 2 implemented as shell script";
     longDescription = ''
       TextMate 2 has a nice feature where it is possible to edit
@@ -52,9 +56,15 @@ stdenv.mkDerivation rec {
       This is a rmate implementation in shell!
     '';
     homepage = "https://github.com/aurora/rmate";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rmate";
   };
 }

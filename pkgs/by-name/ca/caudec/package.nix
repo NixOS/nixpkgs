@@ -48,10 +48,18 @@ stdenv.mkDerivation rec {
       done
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://caudec.cocatre.net/";
     description = "Multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "https://caudec.cocatre.net/";
+    description = "Multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
+    license = licenses.gpl3;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

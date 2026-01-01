@@ -42,10 +42,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylibsshext" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings to client functionality of libssh specific to Ansible use case";
     homepage = "https://github.com/ansible/pylibssh";
     changelog = "https://github.com/ansible/pylibssh/releases/tag/v${version}";
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "Python bindings to client functionality of libssh specific to Ansible use case";
+    homepage = "https://github.com/ansible/pylibssh";
+    changelog = "https://github.com/ansible/pylibssh/releases/tag/v${version}";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ geluk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

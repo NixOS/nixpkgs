@@ -63,7 +63,11 @@ buildPythonPackage rec {
     responses
     typing-extensions
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTestPaths = [
     # missing google-auth-stubs
@@ -76,11 +80,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "social_core" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
     changelog = "https://github.com/python-social-auth/social-core/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Module for social authentication/registration mechanisms";
+    homepage = "https://github.com/python-social-auth/social-core";
+    changelog = "https://github.com/python-social-auth/social-core/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

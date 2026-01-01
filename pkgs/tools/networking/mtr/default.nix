@@ -49,17 +49,31 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Network diagnostics tool";
     homepage = "https://www.bitwizard.nl/mtr/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       koral
+=======
+  meta = with lib; {
+    description = "Network diagnostics tool";
+    homepage = "https://www.bitwizard.nl/mtr/";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+      koral
+      orivej
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       raskin
       globin
       ryan4yin
     ];
     mainProgram = "mtr";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

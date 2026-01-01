@@ -24,11 +24,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nodesemver" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/podhmo/python-node-semver/blob/${version}/CHANGES.txt";
     description = "Port of node-semver";
     homepage = "https://github.com/podhmo/python-semver";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/podhmo/python-node-semver/blob/${version}/CHANGES.txt";
+    description = "Port of node-semver";
+    homepage = "https://github.com/podhmo/python-semver";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

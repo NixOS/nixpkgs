@@ -28,10 +28,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiwisolver" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of the Cassowary constraint solver";
     homepage = "https://github.com/nucleic/kiwi";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Implementation of the Cassowary constraint solver";
+    homepage = "https://github.com/nucleic/kiwi";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

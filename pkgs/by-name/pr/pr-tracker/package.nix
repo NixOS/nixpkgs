@@ -8,6 +8,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pr-tracker";
+<<<<<<< HEAD
   version = "1.10.0";
 
   src = fetchzip {
@@ -16,6 +17,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-gD2J3yp2ICNU9bQSXp2ks5GV+vL76t278WwiWCsAT8k=";
+=======
+  version = "1.9.0";
+
+  src = fetchzip {
+    url = "https://git.qyliss.net/pr-tracker/snapshot/pr-tracker-${version}.tar.xz";
+    hash = "sha256-8ZA+FjTO/8GdzYFskz8G0ihxtddsiZ9W44cXbExllZE=";
+  };
+
+  cargoHash = "sha256-dFyJX2X+bR3h/opAETTJpvy1vDAmBYQ/gq4ywVRnWaM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

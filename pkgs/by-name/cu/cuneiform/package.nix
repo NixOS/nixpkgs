@@ -59,12 +59,21 @@ stdenv.mkDerivation (finalAttrs: {
     command = "cuneiform";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-language OCR system";
     homepage = "https://launchpad.net/cuneiform-linux";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.raskin ];
+=======
+  meta = with lib; {
+    description = "Multi-language OCR system";
+    homepage = "https://launchpad.net/cuneiform-linux";
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cuneiform";
   };
 })

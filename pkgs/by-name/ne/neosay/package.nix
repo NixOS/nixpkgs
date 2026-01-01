@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pipe stdin to matrix";
     mainProgram = "neosay";
     homepage = "https://github.com/donuts-are-good/neosay";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Pipe stdin to matrix";
+    mainProgram = "neosay";
+    homepage = "https://github.com/donuts-are-good/neosay";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

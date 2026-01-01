@@ -22,9 +22,16 @@ buildDunePackage {
     rm -r vendor/csexp
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Private libraries of Dune";
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Private libraries of Dune";
+    maintainers = [ ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

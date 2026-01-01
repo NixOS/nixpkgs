@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "usb_devices" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for for mapping, describing, and resetting USB devices";
     homepage = "https://github.com/Bluetooth-Devices/usb-devices";
     changelog = "https://github.com/Bluetooth-Devices/usb-devices/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for for mapping, describing, and resetting USB devices";
+    homepage = "https://github.com/Bluetooth-Devices/usb-devices";
+    changelog = "https://github.com/Bluetooth-Devices/usb-devices/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

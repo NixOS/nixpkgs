@@ -25,7 +25,11 @@ buildDunePackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.eff-lang.org";
     description = "Functional programming language based on algebraic effects and their handlers";
     mainProgram = "eff";
@@ -35,7 +39,12 @@ buildDunePackage rec {
       handlers, you can simply implement transactions, redirections,
       backtracking, multi-threading, and much more...
     '';
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.jirkamarsik ];
+=======
+    license = licenses.bsd2;
+    maintainers = [ maintainers.jirkamarsik ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

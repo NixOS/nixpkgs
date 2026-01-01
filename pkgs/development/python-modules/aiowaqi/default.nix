@@ -53,11 +53,20 @@ buildPythonPackage rec {
 
   pytestFlags = [ "--snapshot-update" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with the WAQI API";
     homepage = "https://github.com/joostlek/python-waqi";
     changelog = "https://github.com/joostlek/python-waqi/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with the WAQI API";
+    homepage = "https://github.com/joostlek/python-waqi";
+    changelog = "https://github.com/joostlek/python-waqi/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

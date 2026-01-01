@@ -68,6 +68,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [ normalcea ];
     mainProgram = "y-cruncher";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = [ "x86_64-linux" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

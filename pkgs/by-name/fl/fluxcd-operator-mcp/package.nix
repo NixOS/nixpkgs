@@ -9,16 +9,27 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "fluxcd-operator-mcp";
+<<<<<<< HEAD
   version = "0.38.1";
+=======
+  version = "0.29.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "controlplaneio-fluxcd";
     repo = "fluxcd-operator";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-thSUS3OQecOSaC6e5o1yRuI7FAyy/wZEvp+tIdJrtSo=";
   };
 
   vendorHash = "sha256-Z5oKy9u/aqxoEiyDJWBBoUS5WJYWcfh77kK5wyl/pdc=";
+=======
+    hash = "sha256-yV8aGmY2mUAu0urIi7d1pIjhJasRX17hpmvFEQm4YpY=";
+  };
+
+  vendorHash = "sha256-zCzMNlpBBUS2P2aywFDUp/RSl+HlfQe+L8a1+vVYbgY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   ldflags = [
     "-s"
@@ -32,6 +43,10 @@ buildGoModule (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/flux-operator-mcp";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   env.CGO_ENABLED = 0;

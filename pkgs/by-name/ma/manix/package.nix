@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6KkZg8MXQIewhwdLE8NiqllJifa0uvebU1/MqeE/bdI=";
 
+<<<<<<< HEAD
   meta = {
     description = "Fast CLI documentation searcher for Nix";
     homepage = "https://github.com/nix-community/manix";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fast CLI documentation searcher for Nix";
+    homepage = "https://github.com/nix-community/manix";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lecoqjacob
     ];
     mainProgram = "manix";

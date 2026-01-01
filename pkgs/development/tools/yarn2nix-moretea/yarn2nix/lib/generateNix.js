@@ -39,9 +39,15 @@ function prefetchgit(url, rev) {
       ["--rev", rev, url, "--fetch-submodules"],
       {
         stdio: ["ignore", "pipe", "ignore"],
+<<<<<<< HEAD
         timeout: 60000,
       },
     ),
+=======
+        timeout: 60000
+      }
+    )
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ).sha256;
 }
 
@@ -90,18 +96,31 @@ function parseIntegrity(maybeIntegrity, fallbackHash) {
     }
   }
 
+<<<<<<< HEAD
   const algo = integrities.pickAlgorithm();
   const hash = integrities[algo][0].digest;
+=======
+  algo = integrities.pickAlgorithm();
+  hash = integrities[algo][0].digest;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   return { algo, hash };
 }
 
 function fetchLockedDep(builtinFetchGit) {
+<<<<<<< HEAD
   return function (pkg) {
+=======
+  return function(pkg) {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     const { integrity, nameWithVersion, resolved } = pkg;
 
     if (!resolved) {
       console.error(
+<<<<<<< HEAD
         `yarn2nix: can't find "resolved" field for package ${nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`,
+=======
+        `yarn2nix: can't find "resolved" field for package ${nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       );
       return "";
     }
@@ -122,7 +141,11 @@ function fetchLockedDep(builtinFetchGit) {
         githubUrl,
         githubRev,
         branch || "master",
+<<<<<<< HEAD
         builtinFetchGit,
+=======
+        builtinFetchGit
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       );
     }
 
@@ -138,7 +161,11 @@ function fetchLockedDep(builtinFetchGit) {
         urlForGit,
         rev,
         branch || "master",
+<<<<<<< HEAD
         builtinFetchGit,
+=======
+        builtinFetchGit
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       );
     }
 
@@ -165,12 +192,20 @@ const HEAD = `
 function generateNix(pkgs, builtinFetchGit) {
   const nameWithVersionAndPackageNix = R.map(
     fetchLockedDep(builtinFetchGit),
+<<<<<<< HEAD
     pkgs,
+=======
+    pkgs
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   );
 
   const packagesDefinition = R.join(
     "\n",
+<<<<<<< HEAD
     R.values(nameWithVersionAndPackageNix),
+=======
+    R.values(nameWithVersionAndPackageNix)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   );
 
   return R.join("\n", [HEAD, packagesDefinition, "  ];", "}"]);

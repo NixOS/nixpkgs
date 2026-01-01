@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Track each task's time in a simple inobtrusive way";
     homepage = "https://github.com/lainsce/khronos";
@@ -55,6 +56,15 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Track each task's time in a simple inobtrusive way";
+    homepage = "https://github.com/lainsce/khronos";
+    maintainers = with maintainers; [ xiorcale ];
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "io.github.lainsce.Khronos";
   };
 }

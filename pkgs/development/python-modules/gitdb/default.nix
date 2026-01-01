@@ -44,11 +44,19 @@ buildPythonPackage rec {
     "test_stream_reading"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Git Object Database";
     homepage = "https://github.com/gitpython-developers/gitdb";
     changelog = "https://github.com/gitpython-developers/gitdb/releases/tag/${version}";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Git Object Database";
+    homepage = "https://github.com/gitpython-developers/gitdb";
+    changelog = "https://github.com/gitpython-developers/gitdb/releases/tag/${version}";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

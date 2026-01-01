@@ -29,10 +29,18 @@ buildPythonPackage rec {
     werkzeug
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Profile Tensorboard Plugin";
     homepage = "http://tensorflow.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
+=======
+  meta = with lib; {
+    description = "Profile Tensorboard Plugin";
+    homepage = "http://tensorflow.org";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ndl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

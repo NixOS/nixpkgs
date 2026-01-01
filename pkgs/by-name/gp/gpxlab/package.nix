@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
     ln -s $out/Applications/GPXLab.app/Contents/MacOS/GPXLab $out/bin/gpxlab
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/BourgeoisLab/GPXLab";
     description = "Program to show and manipulate GPS tracks";
     mainProgram = "gpxlab";
@@ -42,8 +46,14 @@ stdenv.mkDerivation rec {
       GPXLab is an application to display and manage GPS tracks
       previously recorded with a GPS tracker.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

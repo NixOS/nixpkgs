@@ -50,11 +50,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py_dormakaba_dkey" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to interact with a Dormakaba dkey lock";
     homepage = "https://github.com/emontnemery/py-dormakaba-dkey";
     changelog = "https://github.com/emontnemery/py-dormakaba-dkey/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to interact with a Dormakaba dkey lock";
+    homepage = "https://github.com/emontnemery/py-dormakaba-dkey";
+    changelog = "https://github.com/emontnemery/py-dormakaba-dkey/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

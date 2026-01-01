@@ -20,7 +20,11 @@ buildPythonPackage rec {
     owner = "hadiasghari";
     repo = "pyasn";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-7zpaxDe5qHUy/ekOJLxKawjaPQnByrOVj+m2bsUqfdg=";
+=======
+    hash = "sha256-R7Vi1Mn44Mg3HQLDk9O43MkXXwbLRr/jjVKSHJvgYj0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postInstall = ''
@@ -32,6 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyasn" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Offline IP address to Autonomous System Number lookup module";
     homepage = "https://github.com/hadiasghari/pyasn";
@@ -40,5 +45,15 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "Offline IP address to Autonomous System Number lookup module";
+    homepage = "https://github.com/hadiasghari/pyasn";
+    license = with licenses; [
+      bsdOriginal
+      mit
+    ];
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

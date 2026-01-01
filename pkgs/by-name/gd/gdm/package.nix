@@ -202,6 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Program that manages graphical display servers and handles graphical user logins";
     homepage = "https://gitlab.gnome.org/GNOME/gdm";
@@ -209,5 +210,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Program that manages graphical display servers and handles graphical user logins";
+    homepage = "https://gitlab.gnome.org/GNOME/gdm";
+    changelog = "https://gitlab.gnome.org/GNOME/gdm/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

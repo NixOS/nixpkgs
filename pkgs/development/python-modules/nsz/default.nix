@@ -35,12 +35,21 @@ buildPythonPackage rec {
   # dumped from a Nintendo Switch.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/nicoboss/nsz";
     description = "Homebrew compatible NSP/XCI compressor/decompressor";
     mainProgram = "nsz";
     changelog = "https://github.com/nicoboss/nsz/releases/tag/${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eyjhb ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ eyjhb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -19,14 +19,22 @@
 
 buildPythonPackage rec {
   pname = "pycrdt";
+<<<<<<< HEAD
   version = "0.12.44";
+=======
+  version = "0.12.43";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "pycrdt";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-7kfLi0am/rE4QwLdLCGDjfMhAjrKBPNH+3yPRoYxTtA=";
+=======
+    hash = "sha256-yMl+bLnREvuyVhMvR0TM+IKTPpJlgBCgE4M4NJp9k/M=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -62,7 +70,11 @@ buildPythonPackage rec {
   meta = {
     description = "CRDTs based on Yrs";
     homepage = "https://github.com/jupyter-server/pycrdt";
+<<<<<<< HEAD
     changelog = "https://github.com/jupyter-server/pycrdt/blob/${src.tag}/CHANGELOG.md";
+=======
+    changelog = "https://github.com/jupyter-server/pycrdt/blob/${version}/CHANGELOG.md";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = lib.licenses.mit;
     teams = [ lib.teams.jupyter ];
   };

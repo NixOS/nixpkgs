@@ -82,11 +82,19 @@ stdenv.mkDerivation rec {
   # Makefile.in let's just disable parallel build.
   enableParallelBuilding = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://developer-old.gnome.org/ORBit2/";
     description = "CORBA 2.4-compliant Object Request Broker";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ lovek323 ];
+=======
+  meta = with lib; {
+    homepage = "https://developer-old.gnome.org/ORBit2/";
+    description = "CORBA 2.4-compliant Object Request Broker";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ lovek323 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       ORBit2 is a CORBA 2.4-compliant Object Request Broker (ORB) featuring

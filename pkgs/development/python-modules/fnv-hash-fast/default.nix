@@ -41,11 +41,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Fast version of fnv1a";
     homepage = "https://github.com/bdraco/fnv-hash-fast";
     changelog = "https://github.com/bdraco/fnv-hash-fast/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Fast version of fnv1a";
+    homepage = "https://github.com/bdraco/fnv-hash-fast";
+    changelog = "https://github.com/bdraco/fnv-hash-fast/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

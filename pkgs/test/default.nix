@@ -219,7 +219,11 @@ in
     };
   };
 
+<<<<<<< HEAD
   pkgs-lib = recurseIntoAttrs (callPackage ../pkgs-lib/tests { });
+=======
+  pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
 

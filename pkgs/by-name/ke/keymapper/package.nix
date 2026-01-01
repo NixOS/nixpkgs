@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keymapper";
+<<<<<<< HEAD
   version = "5.3.1";
+=======
+  version = "5.1.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "keymapper";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-YKfKgsrjDrskLEoYCSRMYco7+7E/sgXFAMEwwm7rs7w=";
+=======
+    hash = "sha256-y1EVF3IwGzDy32ywo9LSzkQNki/HuKC40DySIme8nTc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # all the following must be in nativeBuildInputs
@@ -49,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "keymapper";
     maintainers = with lib.maintainers; [
       dit7ya
+<<<<<<< HEAD
+=======
+      spitulax
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     platforms = lib.platforms.linux;
   };

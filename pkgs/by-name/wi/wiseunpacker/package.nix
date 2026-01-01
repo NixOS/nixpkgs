@@ -32,10 +32,18 @@ buildDotnetModule {
 
   projectFile = "Test/Test.csproj";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mnadareski/WiseUnpacker/";
     description = "C# Wise installer unpacker based on HWUN and E_WISE ";
     maintainers = [ lib.maintainers.gigahawk ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mnadareski/WiseUnpacker/";
+    description = "C# Wise installer unpacker based on HWUN and E_WISE ";
+    maintainers = [ maintainers.gigahawk ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,11 +39,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frozendict" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for immutable dictionary";
     homepage = "https://github.com/Marco-Sulla/python-frozendict";
     changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+  meta = with lib; {
+    description = "Module for immutable dictionary";
+    homepage = "https://github.com/Marco-Sulla/python-frozendict";
+    changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -110,16 +110,29 @@ stdenv.mkDerivation rec {
     tagPrefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Klipper 3D printer firmware";
     mainProgram = "klippy";
     homepage = "https://github.com/KevinOConnor/klipper";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Klipper 3D printer firmware";
+    mainProgram = "klippy";
+    homepage = "https://github.com/KevinOConnor/klipper";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lovesegfault
       zhaofengli
       cab404
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
+=======
+    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

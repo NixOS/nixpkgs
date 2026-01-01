@@ -88,6 +88,7 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tweaks";
     description = "Tool to customize advanced GNOME 3 options";
@@ -95,5 +96,14 @@ python3Packages.buildPythonApplication rec {
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-tweaks";
+    description = "Tool to customize advanced GNOME 3 options";
+    mainProgram = "gnome-tweaks";
+    teams = [ teams.gnome ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

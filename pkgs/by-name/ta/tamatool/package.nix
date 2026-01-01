@@ -70,12 +70,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform Tamagotchi P1 explorer";
     homepage = "https://github.com/jcrona/tamatool";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Cross-platform Tamagotchi P1 explorer";
+    homepage = "https://github.com/jcrona/tamatool";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "tamatool";
   };
 })

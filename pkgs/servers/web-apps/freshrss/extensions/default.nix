@@ -9,12 +9,21 @@
 let
   buildFreshRssExtension = (callPackage ./freshrss-utils.nix { }).buildFreshRssExtension;
 
+<<<<<<< HEAD
   official_extensions_version = "unstable-2025-12-26";
   official_extensions_src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "Extensions";
     rev = "42c32bfd9af2d816933cf310e24d25888a8e167d";
     hash = "sha256-El488QK3xWQM01GsuyBizud6VghXsRDqiOblnMfjVxE=";
+=======
+  official_extensions_version = "unstable-2024-04-27";
+  official_extensions_src = fetchFromGitHub {
+    owner = "FreshRSS";
+    repo = "Extensions";
+    rev = "71de129744ba37fd4cf363b78445f5345bc6d0b7";
+    hash = "sha256-A+hOjbGNfhwTOAMeo08MUdqfWxxetzLz865oQQDsQlg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   baseExtensions =
@@ -107,6 +116,7 @@ let
         };
       };
 
+<<<<<<< HEAD
       unsafe-auto-login = buildFreshRssExtension {
         FreshRssExtUniqueId = "UnsafeAutologin";
         pname = "unsafe-auto-login";
@@ -121,6 +131,8 @@ let
         };
       };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       youtube = buildFreshRssExtension {
         FreshRssExtUniqueId = "YouTube";
         pname = "youtube";

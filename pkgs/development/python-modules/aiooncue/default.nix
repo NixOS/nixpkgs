@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiooncue" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with the Kohler Oncue API";
     homepage = "https://github.com/bdraco/aiooncue";
     changelog = "https://github.com/bdraco/aiooncue/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with the Kohler Oncue API";
+    homepage = "https://github.com/bdraco/aiooncue";
+    changelog = "https://github.com/bdraco/aiooncue/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

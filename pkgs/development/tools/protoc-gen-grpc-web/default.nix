@@ -49,13 +49,23 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/grpc/grpc-web";
     changelog = "https://github.com/grpc/grpc-web/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "gRPC web support for Google's protocol buffers";
     mainProgram = "protoc-gen-grpc-web";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jk ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jk ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -18,16 +18,26 @@ stdenv.mkDerivation (finalAttrs: {
     mv mnencode $out/bin
     mv mndecode $out/bin
   '';
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/singpolyma/mnemonicode";
     description = ''
       Routines which implement a method for encoding binary data into a sequence
       of words which can be spoken over the phone, for example, and converted
       back to data on the other side.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ kirillrdy ];
+=======
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ kirillrdy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mnencode";
   };
 })

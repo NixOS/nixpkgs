@@ -17,7 +17,11 @@ let
     ;
 in
 {
+<<<<<<< HEAD
   meta.maintainers = lib.teams.secshell.members;
+=======
+  meta.maintainers = with lib.maintainers; [ felbinger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   options.services.part-db = {
     enable = mkEnableOption "PartDB";
@@ -179,7 +183,11 @@ in
                 sendfile off;
               '';
             };
+<<<<<<< HEAD
             "~ \\.php$" = {
+=======
+            "~ \.php$" = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               extraConfig = ''
                 include ${config.services.nginx.package}/conf/fastcgi_params ;
                 fastcgi_param SCRIPT_FILENAME $request_filename;

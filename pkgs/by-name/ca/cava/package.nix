@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     echo ${version} > version
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Console-based Audio Visualizer for Alsa";
     homepage = "https://github.com/karlstav/cava";
@@ -74,6 +75,17 @@ stdenv.mkDerivation rec {
       mirrexagon
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Console-based Audio Visualizer for Alsa";
+    homepage = "https://github.com/karlstav/cava";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      offline
+      mirrexagon
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cava";
   };
 }

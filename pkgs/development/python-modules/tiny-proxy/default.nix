@@ -30,10 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tiny_proxy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "SOCKS5/SOCKS4/HTTP proxy server";
     homepage = "https://github.com/romis2012/tiny-proxy";
     changelog = "https://github.com/romis2012/tiny-proxy/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "SOCKS5/SOCKS4/HTTP proxy server";
+    homepage = "https://github.com/romis2012/tiny-proxy";
+    changelog = "https://github.com/romis2012/tiny-proxy/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ tjni ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

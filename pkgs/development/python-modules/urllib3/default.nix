@@ -9,6 +9,7 @@
   hatch-vcs,
 
   # optional-dependencies
+<<<<<<< HEAD
   backports-zstd,
   brotli,
   brotlicffi,
@@ -25,18 +26,37 @@
   quart-trio,
   tornado,
   trio,
+=======
+  brotli,
+  brotlicffi,
+  pysocks,
+  zstandard,
+
+  # tests
+  pytestCheckHook,
+  pytest-timeout,
+  tornado,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   trustme,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
+<<<<<<< HEAD
     version = "2.6.0";
+=======
+    version = "2.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
+<<<<<<< HEAD
       hash = "sha256-y5vO9aSzRdXaXRRdw+MINPWOgBiCjLxyTTC0y31NSfE=";
+=======
+      hash = "sha256-P8R3M8fkGdS8P2s9wrT4kLt0OQajDVa6Slv6S7/5J2A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     build-system = [
@@ -46,11 +66,16 @@ let
 
     postPatch = ''
       substituteInPlace pyproject.toml \
+<<<<<<< HEAD
         --replace-fail ', "setuptools-scm>=8,<10"' ""
+=======
+        --replace-fail ', "setuptools-scm>=8,<9"' ""
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     '';
 
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
+<<<<<<< HEAD
       h2 = [ h2 ];
       socks = [ pysocks ];
       zstd = [ backports-zstd ];
@@ -73,6 +98,19 @@ let
     disabledTestMarks = [
       "requires_network"
     ];
+=======
+      socks = [ pysocks ];
+      zstd = [ zstandard ];
+    };
+
+    nativeCheckInputs = [
+      pytest-timeout
+      pytestCheckHook
+      tornado
+      trustme
+    ]
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will
@@ -97,12 +135,21 @@ let
 
     pythonImportsCheck = [ "urllib3" ];
 
+<<<<<<< HEAD
     meta = {
       description = "Powerful, user-friendly HTTP client for Python";
       homepage = "https://github.com/urllib3/urllib3";
       changelog = "https://github.com/urllib3/urllib3/blob/${version}/CHANGES.rst";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ fab ];
+=======
+    meta = with lib; {
+      description = "Powerful, user-friendly HTTP client for Python";
+      homepage = "https://github.com/urllib3/urllib3";
+      changelog = "https://github.com/urllib3/urllib3/blob/${version}/CHANGES.rst";
+      license = licenses.mit;
+      maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

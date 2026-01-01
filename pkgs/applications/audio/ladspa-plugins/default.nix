@@ -50,11 +50,20 @@ stdenv.mkDerivation rec {
     cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://plugin.org.uk/";
     description = "LADSPA format audio plugins";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://plugin.org.uk/";
+    description = "LADSPA format audio plugins";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

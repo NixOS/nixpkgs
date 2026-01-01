@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Bnec98FEG2aWUa2IoBOLy0K6mqggcSwOBL3S5+0mSkU=";
 
+<<<<<<< HEAD
   meta = {
     description = "Simple terminal clock written in Rust";
     homepage = "https://github.com/valebes/rsClock";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ valebes ];
+=======
+  meta = with lib; {
+    description = "Simple terminal clock written in Rust";
+    homepage = "https://github.com/valebes/rsClock";
+    license = licenses.mit;
+    maintainers = with maintainers; [ valebes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rsclock";
   };
 }

@@ -75,9 +75,16 @@ stdenv.mkDerivation rec {
     networkManagerRuntimeDeps = [ openconnect ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "NetworkManager’s OpenConnect plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "NetworkManager’s OpenConnect plugin";
+    inherit (networkmanager.meta) maintainers teams platforms;
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

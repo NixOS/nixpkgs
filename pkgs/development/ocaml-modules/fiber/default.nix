@@ -27,10 +27,18 @@ buildDunePackage rec {
   # https://github.com/ocaml-dune/fiber/issues/27
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Structured concurrency library";
     homepage = "https://github.com/ocaml-dune/fiber";
     maintainers = [ ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Structured concurrency library";
+    homepage = "https://github.com/ocaml-dune/fiber";
+    maintainers = [ ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

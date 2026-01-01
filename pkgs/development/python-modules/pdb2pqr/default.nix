@@ -60,11 +60,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdb2pqr" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Software for determining titration states, adding missing atoms, and assigning charges/radii to biomolecules";
     homepage = "https://www.poissonboltzmann.org/";
     changelog = "https://github.com/Electrostatics/pdb2pqr/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ natsukium ];
+=======
+  meta = with lib; {
+    description = "Software for determining titration states, adding missing atoms, and assigning charges/radii to biomolecules";
+    homepage = "https://www.poissonboltzmann.org/";
+    changelog = "https://github.com/Electrostatics/pdb2pqr/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ natsukium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -44,11 +44,19 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Fork of handlr with support for regex";
     homepage = "https://github.com/Anomalocaridid/handlr-regex";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anomalocaris ];
+=======
+  meta = with lib; {
+    description = "Fork of handlr with support for regex";
+    homepage = "https://github.com/Anomalocaridid/handlr-regex";
+    license = licenses.mit;
+    maintainers = with maintainers; [ anomalocaris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "handlr";
   };
 }

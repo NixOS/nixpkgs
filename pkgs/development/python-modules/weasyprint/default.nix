@@ -76,6 +76,10 @@ buildPythonPackage rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   disabledTests = [
     # needs the Ahem font (fails on macOS)

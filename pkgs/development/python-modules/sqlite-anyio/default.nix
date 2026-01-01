@@ -34,11 +34,19 @@ buildPythonPackage rec {
     trio
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asynchronous client for SQLite using AnyIO";
     homepage = "https://github.com/davidbrochart/sqlite-anyio";
     changelog = "https://github.com/davidbrochart/sqlite-anyio/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Asynchronous client for SQLite using AnyIO";
+    homepage = "https://github.com/davidbrochart/sqlite-anyio";
+    changelog = "https://github.com/davidbrochart/sqlite-anyio/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

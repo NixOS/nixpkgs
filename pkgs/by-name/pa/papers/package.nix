@@ -168,7 +168,11 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.gnome.org/GNOME/papers";
     changelog = "https://gitlab.gnome.org/GNOME/papers/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME's document viewer";
@@ -180,9 +184,16 @@ stdenv.mkDerivation (finalAttrs: {
       on the GNOME Desktop with a more modern interface.
     '';
 
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "papers";
     teams = [ lib.teams.gnome ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    mainProgram = "papers";
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

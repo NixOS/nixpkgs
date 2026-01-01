@@ -20,10 +20,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psutil-stubs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Typing stubs for psutil";
     homepage = "https://github.com/python/typeshed";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Typing stubs for psutil";
+    homepage = "https://github.com/python/typeshed";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

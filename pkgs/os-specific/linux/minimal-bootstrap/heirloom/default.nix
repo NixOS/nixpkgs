@@ -93,10 +93,17 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
+<<<<<<< HEAD
     meta = {
       description = "Heirloom Toolchest is a collection of standard Unix utilities";
       homepage = "https://heirloom.sourceforge.net/tools.html";
       license = with lib.licenses; [
+=======
+    meta = with lib; {
+      description = "Heirloom Toolchest is a collection of standard Unix utilities";
+      homepage = "https://heirloom.sourceforge.net/tools.html";
+      license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         # All licenses according to LICENSE/
         zlib
         caldera
@@ -108,8 +115,13 @@ bash.runCommand "${pname}-${version}"
         lpl-102
         info-zip
       ];
+<<<<<<< HEAD
       teams = [ lib.teams.minimal-bootstrap ];
       platforms = lib.platforms.unix;
+=======
+      teams = [ teams.minimal-bootstrap ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''

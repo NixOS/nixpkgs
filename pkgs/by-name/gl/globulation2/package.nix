@@ -100,12 +100,21 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lboost_system";
 
+<<<<<<< HEAD
   meta = {
     description = "RTS without micromanagement";
     mainProgram = "glob2";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "RTS without micromanagement";
+    mainProgram = "glob2";
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
   passthru.updateInfo.downloadPage = "http://globulation2.org/wiki/Download_and_Install";

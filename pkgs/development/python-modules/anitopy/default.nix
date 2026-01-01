@@ -17,10 +17,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anitopy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for parsing anime video filenames";
     homepage = "https://github.com/igorcmoura/anitopy";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ passivelemon ];
+=======
+  meta = with lib; {
+    description = "Python library for parsing anime video filenames";
+    homepage = "https://github.com/igorcmoura/anitopy";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ passivelemon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

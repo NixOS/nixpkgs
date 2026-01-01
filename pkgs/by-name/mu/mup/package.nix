@@ -62,11 +62,20 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = false; # Undeclared dependencies + https://stackoverflow.com/a/19822767/1687334 for prolog.ps.
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.arkkra.com/";
     description = "Music typesetting program (ASCII to PostScript and MIDI)";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://www.arkkra.com/";
+    description = "Music typesetting program (ASCII to PostScript and MIDI)";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

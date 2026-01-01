@@ -71,6 +71,10 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       coffeeispower
+<<<<<<< HEAD
+=======
+      lom
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       w-lfchen
     ];
     mainProgram = "eww";

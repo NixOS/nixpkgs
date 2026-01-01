@@ -40,6 +40,7 @@ buildNpmPackage rec {
     chmod +x $out/bin/whitebophir
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Online collaborative whiteboard that is simple, free, easy to use and to deploy";
     license = lib.licenses.agpl3Plus;
@@ -47,5 +48,14 @@ buildNpmPackage rec {
     mainProgram = "whitebophir";
     maintainers = with lib.maintainers; [ iblech ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Online collaborative whiteboard that is simple, free, easy to use and to deploy";
+    license = licenses.agpl3Plus;
+    homepage = "https://github.com/lovasoa/whitebophir";
+    mainProgram = "whitebophir";
+    maintainers = with maintainers; [ iblech ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

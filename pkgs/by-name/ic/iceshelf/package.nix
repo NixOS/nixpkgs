@@ -32,10 +32,18 @@ python3.pkgs.buildPythonApplication {
     cp -rv modules $out/${python3.sitePackages}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple tool to allow storage of signed, encrypted, incremental backups using Amazon's Glacier storage";
     license = lib.licenses.lgpl2;
     homepage = "https://github.com/mrworf/iceshelf";
     maintainers = with lib.maintainers; [ mmahut ];
+=======
+  meta = with lib; {
+    description = "Simple tool to allow storage of signed, encrypted, incremental backups using Amazon's Glacier storage";
+    license = licenses.lgpl2;
+    homepage = "https://github.com/mrworf/iceshelf";
+    maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

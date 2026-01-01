@@ -59,7 +59,11 @@ python3.pkgs.buildPythonApplication rec {
   # no tests implemented
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/qmk/qmk_cli";
     description = "Program to help users work with QMK Firmware";
     longDescription = ''
@@ -76,8 +80,16 @@ python3.pkgs.buildPythonApplication rec {
         - qmk lint
       - ... and many more!
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      bhipple
+      ekleog
+    ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qmk";
   };
 }

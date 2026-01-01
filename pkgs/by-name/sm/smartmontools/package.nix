@@ -54,12 +54,21 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemdLibs) [ systemdLibs ];
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for monitoring the health of hard drives";
     homepage = "https://www.smartmontools.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ Frostman ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "Tools for monitoring the health of hard drives";
+    homepage = "https://www.smartmontools.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ Frostman ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "smartctl";
   };
 }

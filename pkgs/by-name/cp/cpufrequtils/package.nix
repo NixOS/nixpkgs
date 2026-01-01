@@ -32,10 +32,17 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools to display or change the CPU governor settings";
     homepage = "http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/cpufrequtils.html";
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "Tools to display or change the CPU governor settings";
+    homepage = "http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/cpufrequtils.html";
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "cpufreq-set";
   };

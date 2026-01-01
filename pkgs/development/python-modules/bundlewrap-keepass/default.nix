@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bwkeepass" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pypi.org/project/bundlewrap-keepass";
     description = "Use secrets from keepass in your BundleWrap repo";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    homepage = "https://pypi.org/project/bundlewrap-keepass";
+    description = "Use secrets from keepass in your BundleWrap repo";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

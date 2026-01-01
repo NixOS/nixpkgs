@@ -28,12 +28,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bincopy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Mangling of various file formats that conveys binary information (Motorola S-Record, Intel HEX, TI-TXT, ELF and binary files)";
     mainProgram = "bincopy";
     homepage = "https://github.com/eerimoq/bincopy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Mangling of various file formats that conveys binary information (Motorola S-Record, Intel HEX, TI-TXT, ELF and binary files)";
+    mainProgram = "bincopy";
+    homepage = "https://github.com/eerimoq/bincopy";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       frogamic
       sbruder
     ];

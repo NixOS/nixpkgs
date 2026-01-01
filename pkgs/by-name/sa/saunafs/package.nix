@@ -80,11 +80,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = nixosTests.saunafs;
 
+<<<<<<< HEAD
   meta = {
     description = "Distributed POSIX file system";
     homepage = "https://saunafs.com";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.markuskowa ];
+=======
+  meta = with lib; {
+    description = "Distributed POSIX file system";
+    homepage = "https://saunafs.com";
+    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+    maintainers = [ maintainers.markuskowa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

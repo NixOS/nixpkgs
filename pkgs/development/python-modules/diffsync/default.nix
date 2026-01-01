@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diffsync" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utility library for comparing and synchronizing different datasets";
     homepage = "https://github.com/networktocode/diffsync";
     changelog = "https://github.com/networktocode/diffsync/blob/${src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ clerie ];
+=======
+  meta = with lib; {
+    description = "Utility library for comparing and synchronizing different datasets";
+    homepage = "https://github.com/networktocode/diffsync";
+    changelog = "https://github.com/networktocode/diffsync/blob/${src.tag}/CHANGELOG.md";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ clerie ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

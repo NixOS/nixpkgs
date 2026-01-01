@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geocoder" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for geocoding";
     homepage = "https://pypi.org/project/geocoder/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for geocoding";
+    homepage = "https://pypi.org/project/geocoder/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

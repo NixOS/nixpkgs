@@ -58,11 +58,20 @@ stdenv.mkDerivation rec {
 
   preConfigure = copyPlugins;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://rime.im/";
     description = "Rime Input Method Engine, the core library";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ vonfry ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    homepage = "https://rime.im/";
+    description = "Rime Input Method Engine, the core library";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ vonfry ];
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

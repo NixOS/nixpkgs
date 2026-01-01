@@ -48,6 +48,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/netbox-community/netbox-napalm-plugin/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
     teams = with lib.teams; [ secshell ];
+=======
+    maintainers = with lib.maintainers; [ felbinger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

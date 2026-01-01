@@ -44,7 +44,11 @@ pypkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Wrapper for LaTeX and friends";
     longDescription = ''
       Rubber is a program whose purpose is to handle all tasks related
@@ -55,6 +59,7 @@ pypkgs.buildPythonApplication rec {
       produce PostScript documents is also included, as well as usage
       of pdfLaTeX to produce PDF documents.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     homepage = "https://gitlab.com/latex-rubber/rubber";
     maintainers = with lib.maintainers; [
@@ -62,6 +67,15 @@ pypkgs.buildPythonApplication rec {
       peterhoeg
     ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    homepage = "https://gitlab.com/latex-rubber/rubber";
+    maintainers = with maintainers; [
+      ttuegel
+      peterhoeg
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rubber";
   };
 }

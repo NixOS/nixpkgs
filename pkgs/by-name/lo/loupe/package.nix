@@ -113,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/loupe";
     changelog = "https://gitlab.gnome.org/GNOME/loupe/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
@@ -121,6 +122,16 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ jk ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/loupe";
+    changelog = "https://gitlab.gnome.org/GNOME/loupe/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    description = "Simple image viewer application written with GTK4 and Rust";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ jk ];
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "loupe";
   };
 })

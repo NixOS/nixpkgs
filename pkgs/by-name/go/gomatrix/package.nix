@@ -19,10 +19,17 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = ''Displays "The Matrix" in a terminal'';
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ skykanin ];
+=======
+  meta = with lib; {
+    description = ''Displays "The Matrix" in a terminal'';
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ skykanin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/GeertJohan/gomatrix";
     mainProgram = "gomatrix";
   };

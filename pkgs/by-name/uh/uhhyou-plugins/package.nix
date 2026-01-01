@@ -24,12 +24,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uhhyou-plugins";
+<<<<<<< HEAD
   version = "0.69.0";
+=======
+  version = "0.67.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "ryukau";
     repo = "VSTPlugins";
     rev = "UhhyouPlugins${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-s1HQD7ZWmqD1yux/IKG8oUt7UA0TrAuPEsVSOXFcIE4=";
+=======
+    hash = "sha256-8YGfcnWkOQwwq6m3510GPpZu6UbDmVi3K/dOGLrAnhM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 

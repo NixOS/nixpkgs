@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uonet_request_signer_hebe" ];
 
+<<<<<<< HEAD
   meta = {
     description = "UONET+ (hebe) request signer for Python";
     homepage = "https://github.com/wulkanowy/uonet-request-signer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "UONET+ (hebe) request signer for Python";
+    homepage = "https://github.com/wulkanowy/uonet-request-signer";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

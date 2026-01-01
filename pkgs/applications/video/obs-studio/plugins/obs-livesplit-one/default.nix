@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
     mv $out/lib/libobs_livesplit_one.so $out/lib/obs-plugins/obs-livesplit-one.so
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "OBS Studio plugin for adding LiveSplit One as a source";
     homepage = "https://github.com/LiveSplit/obs-livesplit-one";
@@ -43,6 +44,16 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = [ lib.maintainers.Bauke ];
+=======
+  meta = with lib; {
+    description = "OBS Studio plugin for adding LiveSplit One as a source";
+    homepage = "https://github.com/LiveSplit/obs-livesplit-one";
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = [ maintainers.Bauke ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

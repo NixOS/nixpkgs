@@ -36,7 +36,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://software.sil.org/scheherazade/";
     description = "Font designed in a similar style to traditional Naskh typefaces";
     longDescription = ''
@@ -57,7 +61,12 @@ stdenvNoCC.mkDerivation rec {
       font family, along with documentation.
     '';
     downloadPage = "https://software.sil.org/scheherazade/download/";
+<<<<<<< HEAD
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
+=======
+    license = licenses.ofl;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

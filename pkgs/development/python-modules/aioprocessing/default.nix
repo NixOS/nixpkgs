@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioprocessing" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library that integrates the multiprocessing module with asyncio";
     homepage = "https://github.com/dano/aioprocessing";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ uskudnik ];
+=======
+  meta = with lib; {
+    description = "Library that integrates the multiprocessing module with asyncio";
+    homepage = "https://github.com/dano/aioprocessing";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ uskudnik ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

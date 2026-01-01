@@ -28,7 +28,11 @@ versions into the Python environment.
 buildHomeAssistantComponent {
   # owner, domain, version
 
+<<<<<<< HEAD
   src = fetchFromGitHub {
+=======
+  src = fetchFromGithub {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # owner, repo, rev, hash
   };
 
@@ -36,7 +40,11 @@ buildHomeAssistantComponent {
     # python requirements, as specified in manifest.json
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # changelog, description, homepage, license, maintainers
   };
 }

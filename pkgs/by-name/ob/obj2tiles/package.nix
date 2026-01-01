@@ -19,6 +19,10 @@ buildDotnetModule (finalAttrs: {
   nugetDeps = ./deps.json;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/Obj2Tiles";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
   meta = {
     description = "Converts OBJ files to OGC 3D tiles by performing splitting, decimation and conversion";

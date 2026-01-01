@@ -70,16 +70,29 @@ stdenv.mkDerivation rec {
       --set FONTCONFIG_FILE $out/share/sView/fonts/fonts.conf
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Viewer for 3D stereoscopic videos and images";
     homepage = "https://www.sview.ru/en/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Viewer for 3D stereoscopic videos and images";
+    homepage = "https://www.sview.ru/en/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       cc-by-40
       gpl3Only
       asl20
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ mx2uller ];
     mainProgram = "sView";
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ mx2uller ];
+    mainProgram = "sView";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

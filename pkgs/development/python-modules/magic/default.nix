@@ -20,9 +20,16 @@ buildPythonPackage {
   # No test suite
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python wrapper around libmagic";
     homepage = "http://www.darwinsys.com/file/";
     license = lib.licenses.lgpl2;
+=======
+  meta = with lib; {
+    description = "Python wrapper around libmagic";
+    homepage = "http://www.darwinsys.com/file/";
+    license = licenses.lgpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

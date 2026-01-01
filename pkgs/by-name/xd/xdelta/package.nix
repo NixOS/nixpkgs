@@ -50,7 +50,11 @@ stdenv.mkDerivation rec {
     install -D -m644 xdelta3.1 $out/share/man/man1/xdelta3.1
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Binary differential compression in VCDIFF (RFC 3284) format";
     longDescription = ''
       xdelta is a command line program for delta encoding, which generates two
@@ -59,8 +63,14 @@ stdenv.mkDerivation rec {
     '';
     # The dedicated homepage pointed to a gambling website
     homepage = "https://github.com/jmacd/xdelta";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     mainProgram = "xdelta3";
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    mainProgram = "xdelta3";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

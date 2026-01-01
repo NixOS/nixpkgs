@@ -1,4 +1,13 @@
+<<<<<<< HEAD
 { hostPkgs, ... }:
+=======
+{
+  hostPkgs,
+  lib,
+  withNg,
+  ...
+}:
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 {
   name = "nixos-rebuild-target-host";
 
@@ -21,18 +30,34 @@
           connect-timeout = 1;
         };
 
+<<<<<<< HEAD
+=======
+        environment.systemPackages = [ pkgs.passh ];
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         system.includeBuildDependencies = true;
 
         virtualisation = {
           cores = 2;
+<<<<<<< HEAD
           memorySize = 3072;
+=======
+          memorySize = 2048;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
 
         system.build.privateKey = snakeOilPrivateKey;
         system.build.publicKey = snakeOilPublicKey;
+<<<<<<< HEAD
         system.switch.enable = true;
 
         services.getty.autologinUser = lib.mkForce "root";
+=======
+        # We don't switch on `deployer`, but we need it to have the dependencies
+        # available, to be picked up by system.includeBuildDependencies above.
+        system.rebuild.enableNg = withNg;
+        system.switch.enable = true;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
 
     target =
@@ -122,6 +147,7 @@
                 forceInstall = true;
               };
 
+<<<<<<< HEAD
               nixpkgs.overlays = [
                 (final: prev: {
                   # Set tmpdir inside nixos-rebuild-ng to test
@@ -129,6 +155,21 @@
                   nixos-rebuild-ng = prev.nixos-rebuild-ng.override { withTmpdir = "/tmp"; };
                 })
               ];
+=======
+              system.rebuild.enableNg = ${lib.boolToString withNg};
+
+              ${lib.optionalString withNg # nix
+                ''
+                  nixpkgs.overlays = [
+                    (final: prev: {
+                      # Set tmpdir inside nixos-rebuild-ng to test
+                      # "Deploy works with very long TMPDIR"
+                      nixos-rebuild-ng = prev.nixos-rebuild-ng.override { withTmpdir = "/tmp"; };
+                    })
+                  ];
+                ''
+              }
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
               # this will be asserted
               networking.hostName = "${hostname}";
@@ -167,12 +208,18 @@
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-2-deployed", f"{target_hostname=}"
 
+<<<<<<< HEAD
       with subtest("Deploy to bob@target with password-based sudo"):
         deployer.wait_for_unit("multi-user.target")
         deployer.send_chars("nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --ask-sudo-password\n")
         deployer.wait_until_tty_matches("1", "password for bob")
         deployer.send_chars("${nodes.target.users.users.bob.password}\n")
         deployer.wait_until_tty_matches("1", "Done. The new configuration is /nix/store/.*config-3-deployed")
+=======
+      with subtest("Deploy to bob@target with password based sudo"):
+        # TODO: investigate why --ask-sudo-password from nixos-rebuild-ng is not working here
+        deployer.succeed(r'${lib.optionalString withNg "NIX_SSHOPTS=-t "}passh -c 3 -C -p ${nodes.target.users.users.bob.password} -P "\[sudo\] password" nixos-rebuild switch -I nixos-config=/root/configuration-3.nix --target-host bob@target --sudo &>/dev/console')
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         target_hostname = deployer.succeed("ssh alice@target cat /etc/hostname").rstrip()
         assert target_hostname == "config-3-deployed", f"{target_hostname=}"
 

@@ -22,11 +22,19 @@ buildGoModule rec {
   # See: https://github.com/kayrus/gof5/blob/674485bdf5a0eb2ab57879a32a2cb4bab8d5d44c/pkg/client/http.go#L172-L174
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Open Source F5 BIG-IP VPN client";
     homepage = "https://github.com/kayrus/gof5";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ leixb ];
+=======
+  meta = with lib; {
+    description = "Open Source F5 BIG-IP VPN client";
+    homepage = "https://github.com/kayrus/gof5";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ leixb ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gof5";
   };
 }

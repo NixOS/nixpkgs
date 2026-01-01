@@ -21,10 +21,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ pname ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple recursive inotify watches for Python";
     homepage = "https://github.com/letorbi/inotifyrecursive";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ Flakebi ];
+=======
+  meta = with lib; {
+    description = "Simple recursive inotify watches for Python";
+    homepage = "https://github.com/letorbi/inotifyrecursive";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ Flakebi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

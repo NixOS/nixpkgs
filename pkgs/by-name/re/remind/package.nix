@@ -54,16 +54,28 @@ tcl.mkTclDerivation rec {
     ignoredVersions = "-BETA";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://dianne.skoll.ca/projects/remind/";
     description = "Sophisticated calendar and alarm program for the console";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://dianne.skoll.ca/projects/remind/";
+    description = "Sophisticated calendar and alarm program for the console";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       afh
       raskin
       kovirobi
     ];
     mainProgram = "remind";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

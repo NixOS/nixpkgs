@@ -29,11 +29,20 @@ stdenv.mkDerivation {
       --replace which ${which}/bin/which
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Start Linux programs with only selected syscalls enabled";
     homepage = "https://github.com/vi/syscall_limiter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Start Linux programs with only selected syscalls enabled";
+    homepage = "https://github.com/vi/syscall_limiter";
+    license = licenses.mit;
+    maintainers = with maintainers; [ obadz ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

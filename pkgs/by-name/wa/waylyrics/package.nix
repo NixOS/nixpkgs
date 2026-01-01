@@ -62,6 +62,7 @@ rustPlatform.buildRustPackage rec {
     popd
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Desktop lyrics with QQ and NetEase Music source";
     mainProgram = "waylyrics";
@@ -75,5 +76,20 @@ rustPlatform.buildRustPackage rec {
       aleksana
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Desktop lyrics with QQ and NetEase Music source";
+    mainProgram = "waylyrics";
+    homepage = "https://github.com/waylyrics/waylyrics";
+    license = with licenses; [
+      mit
+      cc-by-40
+    ];
+    maintainers = with maintainers; [
+      shadowrz
+      aleksana
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

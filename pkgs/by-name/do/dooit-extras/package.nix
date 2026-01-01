@@ -26,12 +26,21 @@ python3.pkgs.buildPythonPackage rec {
   passthru.updateScript = nix-update-script {
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Extra Utilities for Dooit";
     homepage = "https://github.com/dooit-org/dooit-extras";
     changelog = "https://github.com/dooit-org/dooit-extras/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Extra Utilities for Dooit";
+    homepage = "https://github.com/dooit-org/dooit-extras";
+    changelog = "https://github.com/dooit-org/dooit-extras/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kraanzu
     ];
   };

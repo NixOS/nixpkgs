@@ -29,12 +29,21 @@ stdenv.mkDerivation rec {
     install -Dm755 dethrace $out/bin/dethrace
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://twitter.com/dethrace_labs";
     description = "Reverse engineering the 1997 game Carmageddon";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ astro ];
+=======
+  meta = with lib; {
+    homepage = "https://twitter.com/dethrace_labs";
+    description = "Reverse engineering the 1997 game Carmageddon";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ astro ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dethrace";
   };
 }

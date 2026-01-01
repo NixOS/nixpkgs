@@ -28,6 +28,7 @@ stdenv.mkDerivation {
     protobuf
   ];
 
+<<<<<<< HEAD
   env = {
     PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
     PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
@@ -38,6 +39,16 @@ stdenv.mkDerivation {
     description = "Native Google Chat support for pidgin";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
+  PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
+
+  meta = with lib; {
+    homepage = "https://github.com/EionRobb/purple-googlechat";
+    description = "Native Google Chat support for pidgin";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
+<<<<<<< HEAD
   version = "2.5.1";
+=======
+  version = "2.5.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "dyne";
     repo = "frei0r";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-3gUWvO5izOrJt+XwcNBNiLfu+iMqo4nuPbx++TYzao0=";
+=======
+    hash = "sha256-JEQndfQOcSARGIPtMwteUqWqTLPEMcpF2F/xD1PsDEU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -41,11 +49,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://frei0r.dyne.org";
     description = "Minimalist, cross-platform, shared video plugins";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://frei0r.dyne.org";
+    description = "Minimalist, cross-platform, shared video plugins";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

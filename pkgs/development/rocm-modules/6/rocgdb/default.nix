@@ -107,11 +107,20 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "ROCm source-level debugger for Linux, based on GDB";
     homepage = "https://github.com/ROCm/ROCgdb";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "ROCm source-level debugger for Linux, based on GDB";
+    homepage = "https://github.com/ROCm/ROCgdb";
+    license = licenses.gpl3Plus;
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

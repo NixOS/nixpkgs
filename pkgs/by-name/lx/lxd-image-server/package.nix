@@ -53,12 +53,21 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.lxd-image-server = nixosTests.lxd-image-server;
 
+<<<<<<< HEAD
   meta = {
     description = "Creates and manages a simplestreams lxd image server on top of nginx";
     homepage = "https://github.com/Avature/lxd-image-server";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ mkg20001 ];
+=======
+  meta = with lib; {
+    description = "Creates and manages a simplestreams lxd image server on top of nginx";
+    homepage = "https://github.com/Avature/lxd-image-server";
+    license = licenses.asl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ mkg20001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lxd-image-server";
   };
 }

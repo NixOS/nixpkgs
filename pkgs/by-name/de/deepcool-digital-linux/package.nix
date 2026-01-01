@@ -28,6 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = false; # FIXME: version cmd returns 0.8.3, set to true when we switch to a stable version
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru.updateScript = nix-update-script { };
 

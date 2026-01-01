@@ -29,10 +29,17 @@ buildNpmPackage rec {
       --add-flags $out/lib/node_modules/lineselect/dist/cli.js
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Shell utility to interactively select lines from stdin";
     homepage = "https://github.com/chfritz/lineselect";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Shell utility to interactively select lines from stdin";
+    homepage = "https://github.com/chfritz/lineselect";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "lineselect";
   };

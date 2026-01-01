@@ -38,7 +38,11 @@
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(5)
+<<<<<<< HEAD
         machine.wait_for_text(r"(clock.ubports|City|Alarms|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)")
+=======
+        machine.wait_for_text(r"(clock.ubports|City|Alarms)")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         machine.screenshot("lomiri-clock_open")
 
     machine.succeed("pkill -f lomiri-clock-app")
@@ -48,7 +52,11 @@
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(5)
+<<<<<<< HEAD
         machine.wait_for_text(r"(Stadt|Weckzeiten|Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)")
+=======
+        machine.wait_for_text(r"(Stadt|Weckzeiten)")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         machine.screenshot("lomiri-clock_localised")
   '';
 }

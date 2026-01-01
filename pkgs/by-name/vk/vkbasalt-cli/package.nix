@@ -26,10 +26,17 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "vkbasalt.lib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line utility for vkBasalt";
     homepage = "https://gitlab.com/TheEvilSkeleton/vkbasalt-cli";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Command-line utility for vkBasalt";
+    homepage = "https://gitlab.com/TheEvilSkeleton/vkbasalt-cli";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lgpl3Only
       gpl3Only
     ];

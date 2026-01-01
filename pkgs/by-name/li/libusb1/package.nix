@@ -66,15 +66,25 @@ stdenv.mkDerivation rec {
     ln -s $out/examples/bin/fxload $out/sbin/fxload
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://libusb.info/";
     description = "Cross-platform user-mode USB device library";
     longDescription = ''
       libusb is a cross-platform user-mode library that provides access to USB devices.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
+=======
+    platforms = platforms.all;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       prusnak
       logger
     ];

@@ -73,13 +73,22 @@ buildPythonPackage rec {
     ${python.interpreter} bin/behave -f progress3 --stop --tags='~@xfail' issue.features/
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/behave/behave/blob/${src.tag}/CHANGES.rst";
     homepage = "https://github.com/behave/behave";
     description = "Behaviour-driven development, Python style";
     mainProgram = "behave";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       alunduil
       maxxk
     ];

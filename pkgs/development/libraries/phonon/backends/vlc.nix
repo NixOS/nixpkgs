@@ -40,12 +40,21 @@ stdenv.mkDerivation rec {
 
   cmakeBuildType = if debug then "Debug" else "Release";
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://community.kde.org/Phonon";
     # Dev repo is at https://invent.kde.org/libraries/phonon-vlc
     description = "GStreamer backend for Phonon";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://community.kde.org/Phonon";
+    # Dev repo is at https://invent.kde.org/libraries/phonon-vlc
+    description = "GStreamer backend for Phonon";
+    platforms = platforms.linux;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bsd3
       lgpl21Plus
     ];

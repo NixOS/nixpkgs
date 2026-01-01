@@ -14,9 +14,16 @@ buildPythonPackage {
     sha256 = "0avzqqcxl54karjmla9jbsyid98mva36lxahwmrsx5h40ys2ggxp";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/se-esss-litterbox/Pynac";
     description = "Python wrapper around the Dynac charged particle simulator";
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/se-esss-litterbox/Pynac";
+    description = "Python wrapper around the Dynac charged particle simulator";
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

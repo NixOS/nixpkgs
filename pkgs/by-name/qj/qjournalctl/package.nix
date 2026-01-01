@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qtbase
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Qt-based graphical user interface for systemd's journalctl command";
     mainProgram = "qjournalctl";
@@ -40,5 +41,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    description = "Qt-based graphical user interface for systemd's journalctl command";
+    mainProgram = "qjournalctl";
+    homepage = "https://github.com/pentix/qjournalctl";
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

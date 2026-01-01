@@ -181,6 +181,7 @@ buildPythonPackage rec {
     pytest-asyncio
     factory-boy
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
@@ -191,6 +192,18 @@ buildPythonPackage rec {
     changelog = "https://github.com/argilla-io/argilla/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
+
+  meta = with lib; {
+    description = "Open-source data curation platform for LLMs";
+    homepage = "https://github.com/argilla-io/argilla";
+    changelog = "https://github.com/argilla-io/argilla/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ happysalada ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "argilla";
   };
 }

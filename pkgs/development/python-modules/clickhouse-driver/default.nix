@@ -68,10 +68,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clickhouse_driver" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python driver with native interface for ClickHouse";
     homepage = "https://github.com/mymarilyn/clickhouse-driver";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ breakds ];
+=======
+  meta = with lib; {
+    description = "Python driver with native interface for ClickHouse";
+    homepage = "https://github.com/mymarilyn/clickhouse-driver";
+    license = licenses.mit;
+    maintainers = with maintainers; [ breakds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -166,12 +166,21 @@ stdenv.mkDerivation (finalAttrs: {
   # before we could run tests, so we make turn checkPhase into installCheckPhase
   installCheckTarget = "check";
 
+<<<<<<< HEAD
   meta = {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
     homepage = "https://github.com/tpm2-software/tpm2-tss";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
+    homepage = "https://github.com/tpm2-software/tpm2-tss";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       baloo
       scottstephens
     ];

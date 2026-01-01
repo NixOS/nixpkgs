@@ -223,7 +223,11 @@ let
         else if format != null then
           format
         else
+<<<<<<< HEAD
           throw "${name} does not configure a `format`. To build with setuptools as before, set `pyproject = true` and `build-system = [ setuptools ]`.";
+=======
+          throw "${name} does not configure a `format`. To build with setuptools as before, set `pyproject = true` and `build-system = [ setuptools ]`.`";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       withDistOutput = withDistOutput' format';
 
@@ -417,6 +421,11 @@ let
           dependencies
           optional-dependencies
           ;
+<<<<<<< HEAD
+=======
+      }
+      // {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         updateScript = nix-update-script { };
       }
       // attrs.passthru or { };

@@ -39,12 +39,20 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.settings
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = lib.versionOlder django.version "5.1";
     description = "Module for social authentication/registration mechanism";
     homepage = "https://github.com/python-social-auth/social-app-django";
     changelog = "https://github.com/python-social-auth/social-app-django/blob/${src.tag}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
+=======
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

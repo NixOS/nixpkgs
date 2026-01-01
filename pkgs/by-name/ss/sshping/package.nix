@@ -26,12 +26,21 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/sshping $out/bin/sshping
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/spook/sshping";
     description = "Measure character-echo latency and bandwidth for an interactive ssh session";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jqueiroz ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/spook/sshping";
+    description = "Measure character-echo latency and bandwidth for an interactive ssh session";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ jqueiroz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "sshping";
   };
 }

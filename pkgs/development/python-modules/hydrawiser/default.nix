@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hydrawiser" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for Hydrawise API";
     homepage = "https://github.com/ptcryan/hydrawiser";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for Hydrawise API";
+    homepage = "https://github.com/ptcryan/hydrawiser";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

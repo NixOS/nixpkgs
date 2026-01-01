@@ -70,11 +70,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yfinance" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to doiwnload Yahoo! Finance market data";
     homepage = "https://github.com/ranaroussi/yfinance";
     changelog = "https://github.com/ranaroussi/yfinance/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Module to doiwnload Yahoo! Finance market data";
+    homepage = "https://github.com/ranaroussi/yfinance";
+    changelog = "https://github.com/ranaroussi/yfinance/blob/${src.tag}/CHANGELOG.rst";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

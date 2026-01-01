@@ -119,11 +119,20 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [ ''--add-flags "--setopt=pluginpath=$out/${python.sitePackages}/dnf-plugins"'' ];
 
+<<<<<<< HEAD
   meta = {
     description = "Core plugins to use with DNF package manager";
     homepage = "https://github.com/rpm-software-management/dnf-plugins-core";
     changelog = "https://github.com/rpm-software-management/dnf-plugins-core/releases/tag/${version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ katexochen ];
+=======
+  meta = with lib; {
+    description = "Core plugins to use with DNF package manager";
+    homepage = "https://github.com/rpm-software-management/dnf-plugins-core";
+    changelog = "https://github.com/rpm-software-management/dnf-plugins-core/releases/tag/${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ katexochen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,7 +39,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Create plots quickly with gnuplot";
     longDescription = ''
       eplot ("easy gnuplot") is a ruby script which allows to pipe data easily
@@ -51,9 +55,15 @@ stdenv.mkDerivation {
       column").
     '';
     homepage = "https://perso.liris.cnrs.fr/christian.wolf/software/eplot/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       shamilton
     ];

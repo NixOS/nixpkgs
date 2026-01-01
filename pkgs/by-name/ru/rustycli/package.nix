@@ -24,6 +24,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pwnwriter/rustycli";
     changelog = "https://github.com/pwnwriter/rustycli/releases/tag/v${version}";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.matthiasbeyer ];
+=======
+    maintainers = [ ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

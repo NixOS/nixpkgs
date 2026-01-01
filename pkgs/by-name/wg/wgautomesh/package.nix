@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-Lshj8L880gGLi5xY1H/7twrL3YHolqloOfXeckGw/VE=";
 
+<<<<<<< HEAD
   meta = {
     description = "Simple utility to help connect wireguard nodes together in a full mesh topology";
     homepage = "https://git.deuxfleurs.fr/Deuxfleurs/wgautomesh";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.lx ];
+=======
+  meta = with lib; {
+    description = "Simple utility to help connect wireguard nodes together in a full mesh topology";
+    homepage = "https://git.deuxfleurs.fr/Deuxfleurs/wgautomesh";
+    license = licenses.agpl3Only;
+    maintainers = [ maintainers.lx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wgautomesh";
   };
 }

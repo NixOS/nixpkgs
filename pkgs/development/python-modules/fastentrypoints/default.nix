@@ -14,11 +14,20 @@ buildPythonPackage rec {
     sha256 = "02s1j8i2dzbpbwgq2a3fiqwm3cnmhii2qzc0k42l0rdxd4a4ya7z";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Makes entry_points specified in setup.py load more quickly";
     mainProgram = "fastep";
     homepage = "https://github.com/ninjaaron/fast-entry_points";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nixy ];
+=======
+  meta = with lib; {
+    description = "Makes entry_points specified in setup.py load more quickly";
+    mainProgram = "fastep";
+    homepage = "https://github.com/ninjaaron/fast-entry_points";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ nixy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

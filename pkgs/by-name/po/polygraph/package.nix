@@ -22,11 +22,19 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.web-polygraph.org";
     description = "Performance testing tool for caching proxies, origin server accelerators, L4/7 switches, content filters, and other Web intermediaries";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "http://www.web-polygraph.org";
+    description = "Performance testing tool for caching proxies, origin server accelerators, L4/7 switches, content filters, and other Web intermediaries";
+    platforms = platforms.linux;
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

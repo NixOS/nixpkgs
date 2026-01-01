@@ -44,11 +44,20 @@ buildGoModule rec {
 
   nativeBuildInputs = [ git ];
 
+<<<<<<< HEAD
   meta = {
     description = "CodeCrafters CLI to run tests";
     mainProgram = "codecrafters";
     homepage = "https://github.com/codecrafters-io/cli";
     maintainers = with lib.maintainers; [ builditluc ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "CodeCrafters CLI to run tests";
+    mainProgram = "codecrafters";
+    homepage = "https://github.com/codecrafters-io/cli";
+    maintainers = with maintainers; [ builditluc ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

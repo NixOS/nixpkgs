@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiomcache" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/aio-libs/aiomcache/blob/${src.rev}/CHANGES.rst";
     description = "Minimal asyncio memcached client";
     homepage = "https://github.com/aio-libs/aiomcache/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/aio-libs/aiomcache/blob/${src.rev}/CHANGES.rst";
+    description = "Minimal asyncio memcached client";
+    homepage = "https://github.com/aio-libs/aiomcache/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

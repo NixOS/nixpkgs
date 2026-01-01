@@ -17,13 +17,21 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
+<<<<<<< HEAD
   version = "1.5.8";
+=======
+  version = "1.5.7";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-fW0If34PTGE36KoZYPeKOMuNjaFz1JmSCaWIaSjB0gk=";
+=======
+    hash = "sha256-dJMGBFFfEpKO+5ku5Xsc95hGSmTenHGRjBTL7s1cv0c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -75,19 +83,34 @@ stdenv.mkDerivation rec {
     nuke-refs "$lib"/lib/bpf/*.o
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/xdp-project/xdp-tools";
     description = "Library and utilities for use with XDP";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/xdp-project/xdp-tools";
+    description = "Library and utilities for use with XDP";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Only
       lgpl21
       bsd2
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       tirex
       vcunat
       vifino
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

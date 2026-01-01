@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=rotate::test::fresh_file"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Transform Linux Audit logs for SIEM usage";
     homepage = "https://github.com/threathunters-io/laurel";
@@ -43,5 +44,14 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ emilylange ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Transform Linux Audit logs for SIEM usage";
+    homepage = "https://github.com/threathunters-io/laurel";
+    changelog = "https://github.com/threathunters-io/laurel/releases/tag/${src.tag}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ emilylange ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

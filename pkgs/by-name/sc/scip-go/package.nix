@@ -24,11 +24,19 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "SCIP (SCIP Code Intelligence Protocol) indexer for Golang";
     homepage = "https://github.com/sourcegraph/scip-go/tree/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ arikgrahl ];
+=======
+  meta = with lib; {
+    description = "SCIP (SCIP Code Intelligence Protocol) indexer for Golang";
+    homepage = "https://github.com/sourcegraph/scip-go/tree/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ arikgrahl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "scip-go";
   };
 }

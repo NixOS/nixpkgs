@@ -51,13 +51,22 @@ stdenv.mkDerivation rec {
     fftw
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://code.google.com/archive/p/musicip-libofa/";
     description = "Library Open Fingerprint Architecture";
     longDescription = ''
       LibOFA (Library Open Fingerprint Architecture) is an open-source audio
       fingerprint created and provided by MusicIP'';
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
+=======
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

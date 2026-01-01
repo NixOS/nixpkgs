@@ -8,8 +8,11 @@
 
   anki-quizlet-importer-extended = callPackage ./anki-quizlet-importer-extended { };
 
+<<<<<<< HEAD
   image-occlusion-enhanced = callPackage ./image-occlusion-enhanced { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   local-audio-yomichan = callPackage ./local-audio-yomichan { };
 
   passfail2 = callPackage ./passfail2 { };

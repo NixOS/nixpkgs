@@ -51,12 +51,21 @@ buildGoModule rec {
     mv $out/bin/cli $out/bin/bepass
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bepass-org/bepass";
     description = "Simple DPI bypass tool written in go";
     license = lib.licenses.mit;
     mainProgram = "bepass";
     maintainers = with lib.maintainers; [ oluceps ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bepass-org/bepass";
+    description = "Simple DPI bypass tool written in go";
+    license = licenses.mit;
+    mainProgram = "bepass";
+    maintainers = with maintainers; [ oluceps ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = enableGUI;
   };
 }

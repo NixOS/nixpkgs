@@ -24,15 +24,26 @@ stdenv.mkDerivation {
   ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibc.static ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/dropbox/lepton";
     description = "Tool to losslessly compress JPEGs";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/dropbox/lepton";
+    description = "Tool to losslessly compress JPEGs";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ artemist ];
+=======
+    maintainers = with maintainers; [ artemist ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     knownVulnerabilities = [ "CVE-2022-4104" ];
   };
 }

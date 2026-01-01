@@ -40,11 +40,20 @@ python3Packages.buildPythonApplication {
     extraArgs = [ "--version=branch" ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Render cgroups tree annotated by memory usage";
     homepage = "https://github.com/nbraud/memtree";
     maintainers = with lib.maintainers; [ nicoo ];
     mainProgram = "memtree";
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Render cgroups tree annotated by memory usage";
+    homepage = "https://github.com/nbraud/memtree";
+    maintainers = with maintainers; [ nicoo ];
+    mainProgram = "memtree";
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -107,7 +107,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Open Source implementation of advanced blockchain features extending the Bitcoin protocol";
     longDescription = ''
       The Elements blockchain platform is a collection of feature experiments and extensions to the
@@ -116,8 +120,14 @@ stdenv.mkDerivation rec {
       tokens.
     '';
     homepage = "https://www.github.com/ElementsProject/elements";
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ prusnak ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ prusnak ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,9 +17,16 @@ stdenv.mkDerivation rec {
     cp ./* $out
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://httpunit.sourceforge.net";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://httpunit.sourceforge.net";
+    platforms = platforms.unix;
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

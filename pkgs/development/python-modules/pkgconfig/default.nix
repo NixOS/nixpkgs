@@ -47,10 +47,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pkgconfig" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Interface Python with pkg-config";
     homepage = "https://github.com/matze/pkgconfig";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nickcao ];
+=======
+  meta = with lib; {
+    description = "Interface Python with pkg-config";
+    homepage = "https://github.com/matze/pkgconfig";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

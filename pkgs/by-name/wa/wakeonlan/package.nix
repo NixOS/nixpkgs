@@ -1,8 +1,16 @@
 {
   lib,
+<<<<<<< HEAD
   perlPackages,
   fetchFromGitHub,
   installShellFiles,
+=======
+  stdenv,
+  perlPackages,
+  fetchFromGitHub,
+  installShellFiles,
+  shortenPerlShebang,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -20,7 +28,12 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+<<<<<<< HEAD
   ];
+=======
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeCheckInputs = [
     perlPackages.TestPerlCritic
@@ -35,6 +48,7 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     install -Dt $out/bin wakeonlan
     installManPage blib/man1/wakeonlan.1
+<<<<<<< HEAD
   '';
 
   meta = {
@@ -42,6 +56,18 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://github.com/jpoliv/wakeonlan";
     license = lib.licenses.artistic1;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    shortenPerlShebang $out/bin/wakeonlan
+  '';
+
+  meta = with lib; {
+    description = "Perl script for waking up computers via Wake-On-LAN magic packets";
+    homepage = "https://github.com/jpoliv/wakeonlan";
+    license = licenses.artistic1;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wakeonlan";
   };
 }

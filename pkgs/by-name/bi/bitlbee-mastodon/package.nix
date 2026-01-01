@@ -28,11 +28,19 @@ stdenv.mkDerivation rec {
     export BITLBEE_DATADIR=$out/share/bitlbee
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bitlbee plugin for Mastodon";
     homepage = "https://alexschroeder.ch/cgit/bitlbee-mastodon/about";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jpotier ];
+=======
+  meta = with lib; {
+    description = "Bitlbee plugin for Mastodon";
+    homepage = "https://alexschroeder.ch/cgit/bitlbee-mastodon/about";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ jpotier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 }

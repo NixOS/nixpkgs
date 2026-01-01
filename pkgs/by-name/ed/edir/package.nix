@@ -22,12 +22,21 @@ python3Packages.buildPythonApplication rec {
     platformdirs
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Program to rename and remove files and directories using your editor";
     homepage = "https://github.com/bulletmark/edir";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ guyonvarch ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Program to rename and remove files and directories using your editor";
+    homepage = "https://github.com/bulletmark/edir";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ guyonvarch ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "edir";
   };
 }

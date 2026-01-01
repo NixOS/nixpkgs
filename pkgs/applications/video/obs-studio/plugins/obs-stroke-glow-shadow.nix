@@ -25,11 +25,19 @@ stdenv.mkDerivation rec {
     rm -rf $out/data
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "OBS plugin to provide efficient Stroke, Glow, and Shadow effects on masked sources";
     homepage = "https://github.com/FiniteSingularity/obs-stroke-glow-shadow";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Only;
+=======
+  meta = with lib; {
+    description = "OBS plugin to provide efficient Stroke, Glow, and Shadow effects on masked sources";
+    homepage = "https://github.com/FiniteSingularity/obs-stroke-glow-shadow";
+    maintainers = with maintainers; [ flexiondotorg ];
+    license = licenses.gpl2Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

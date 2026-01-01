@@ -47,18 +47,30 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Steganographic image analyzer, solver and data extractor for challanges";
     homepage = "https://www.wechall.net/forum/show/thread/527/Stegsolve_1.3/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+=======
+  meta = with lib; {
+    description = "Steganographic image analyzer, solver and data extractor for challanges";
+    homepage = "https://www.wechall.net/forum/show/thread/527/Stegsolve_1.3/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     license = {
       fullName = "Cronos License";
       url = "http://www.caesum.com/legal.php";
       free = false;
       redistributable = true;
     };
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.all;
+=======
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "stegsolve";
   };
 })

@@ -7,7 +7,11 @@ fetchurl {
   url = "https://ajax.googleapis.com/ajax/libs/prototype/${version}/prototype.js";
   sha256 = "0q43vvrsb22h4jvavs1gk3v4ps61yx9k85b5n6q9mxivhmxprg26";
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Foundation for ambitious web user interfaces";
     longDescription = ''
       Prototype takes the complexity out of client-side web
@@ -18,7 +22,12 @@ fetchurl {
     '';
     homepage = "http://prototypejs.org/";
     downloadPage = "http://prototypejs.org/download/";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ das_j ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ das_j ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1,7 +1,11 @@
 {
   buildNpmPackage,
   copyDesktopItems,
+<<<<<<< HEAD
   electron_37,
+=======
+  electron,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   lib,
   makeDesktopItem,
@@ -11,18 +15,29 @@
   rsync,
   stdenv,
 }:
+<<<<<<< HEAD
 let
   electron = electron_37;
 in
 buildNpmPackage rec {
   pname = "super-productivity";
   version = "16.7.3";
+=======
+
+buildNpmPackage rec {
+  pname = "super-productivity";
+  version = "16.3.6";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-nr1umVoOQ9uzswgU16hpcTpaM6W8C3CZMG/O44WFtnw=";
+=======
+    hash = "sha256-DyDNLSbYs8XP5vqp0QRNmsXc3i2iQgvbWhWrwkJXnVA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     postFetch = ''
       find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
@@ -65,7 +80,11 @@ buildNpmPackage rec {
       dontInstall = true;
 
       outputHashMode = "recursive";
+<<<<<<< HEAD
       hash = "sha256-t22mdvx1rJFzXKFscnweggFCqTKheTAzElA4ksUQQ5k=";
+=======
+      hash = "sha256-xYjw94mZDnHodu/PMh7mugOHZCch28r+VWxsifxf/vs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
   );
 
@@ -170,7 +189,10 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       offline
       pineapplehunter
+<<<<<<< HEAD
       tebriel
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
     mainProgram = "super-productivity";
   };

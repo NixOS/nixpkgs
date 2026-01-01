@@ -15,7 +15,10 @@
   toml11,
   jemalloc,
   doctest,
+<<<<<<< HEAD
   zlib,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 let
   boost = boost186;
@@ -30,13 +33,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "foundationdb";
+<<<<<<< HEAD
   version = "7.3.68";
+=======
+  version = "7.3.42";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "foundationdb";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-OaV7YyBggeX3vrnI2EYwlWdIGRHOAeP5OZN0Rmd/dnw=";
+=======
+    hash = "sha256-jQcm+HLai5da2pZZ7iLdN6fpQZxf5+/kkfv9OSXQ57c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -81,7 +92,10 @@ stdenv.mkDerivation rec {
     msgpack-cxx
     openssl
     toml11
+<<<<<<< HEAD
     zlib
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   checkInputs = [ doctest ];
@@ -109,12 +123,15 @@ stdenv.mkDerivation rec {
 
     "-DBUILD_DOCUMENTATION=FALSE"
 
+<<<<<<< HEAD
     # Disable the default static linking to libc++, libstdc++ and libgcc.
     #
     # This leads to various, non-obvious problems as our dependencies bring in
     # their own copies of these libraries.
     "-DSTATIC_LINK_LIBCXX=FALSE"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # LTO brings up overall build time, but results in much smaller
     # binaries for all users and the cache.
     "-DUSE_LTO=ON"
@@ -178,7 +195,11 @@ stdenv.mkDerivation rec {
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
     maintainers = with lib.maintainers; [
       thoughtpolice
+<<<<<<< HEAD
       kornholi
+=======
+      lostnet
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

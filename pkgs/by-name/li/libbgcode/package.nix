@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LibBGCode_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/prusa3d/libbgcode";
     description = "Prusa Block & Binary G-code reader / writer / converter";
@@ -48,5 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ lach ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/prusa3d/libbgcode";
+    description = "Prusa Block & Binary G-code reader / writer / converter";
+    mainProgram = "bgcode";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ lach ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

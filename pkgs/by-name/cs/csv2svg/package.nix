@@ -15,10 +15,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-RwpRxSD/oRAYD1udrHt3fy/SrrNUTVdGf+CdzQnJZ2U=";
 
+<<<<<<< HEAD
   meta = {
     description = "Take a csv as input and outputs svg";
     homepage = "https://github.com/Canop/csv2svg";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Take a csv as input and outputs svg";
+    homepage = "https://github.com/Canop/csv2svg";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "csv2svg";
   };

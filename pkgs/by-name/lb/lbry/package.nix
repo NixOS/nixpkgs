@@ -33,17 +33,29 @@ appimageTools.wrapAppImage rec {
     cp -r ${src}/usr/share/icons $out/share
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Browser and wallet for LBRY, the decentralized, user-controlled content marketplace";
     longDescription = ''
       The LBRY app is a graphical browser for the decentralized content marketplace provided by the LBRY protocol.
       It is essentially the lbry daemon bundled with a UI using Electron.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     homepage = "https://lbry.com/";
     downloadPage = "https://lbry.com/get/";
     changelog = "https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md";
     maintainers = with lib.maintainers; [ enderger ];
+=======
+    license = licenses.mit;
+    homepage = "https://lbry.com/";
+    downloadPage = "https://lbry.com/get/";
+    changelog = "https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md";
+    maintainers = with maintainers; [ enderger ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
     mainProgram = "lbry";
   };

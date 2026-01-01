@@ -50,10 +50,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of Tribler's IPv8 p2p-networking layer";
     homepage = "https://github.com/Tribler/py-ipv8";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ mkg20001 ];
+=======
+  meta = with lib; {
+    description = "Python implementation of Tribler's IPv8 p2p-networking layer";
+    homepage = "https://github.com/Tribler/py-ipv8";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ mkg20001 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

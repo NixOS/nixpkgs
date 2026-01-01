@@ -51,11 +51,19 @@ stdenv.mkDerivation rec {
     find . -name .libs -exec rm -rf -- {} +
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "NILFS utilities";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "NILFS utilities";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2Plus
       lgpl21
     ];

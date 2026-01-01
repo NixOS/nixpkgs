@@ -63,11 +63,20 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Style to bend Qt applications to look like they belong into GNOME Shell";
     homepage = "https://github.com/FedoraQt/adwaita-qt";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Style to bend Qt applications to look like they belong into GNOME Shell";
+    homepage = "https://github.com/FedoraQt/adwaita-qt";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

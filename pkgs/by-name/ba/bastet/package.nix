@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     cp bastet.6 "$out"/share/man/man6
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Tetris clone with 'bastard' block-choosing AI";
     mainProgram = "bastet";
@@ -52,5 +53,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.dezgeg ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Tetris clone with 'bastard' block-choosing AI";
+    mainProgram = "bastet";
+    homepage = "http://fph.altervista.org/prog/bastet.html";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.dezgeg ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

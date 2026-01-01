@@ -68,12 +68,21 @@ python3Packages.buildPythonApplication rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Command line interface for audible package. With the cli you can download your Audible books, cover, chapter files";
     license = lib.licenses.agpl3Only;
     homepage = "https://github.com/mkb79/audible-cli";
     changelog = "https://github.com/mkb79/audible-cli/blob/${src.rev}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ jvanbruegge ];
+=======
+  meta = with lib; {
+    description = "Command line interface for audible package. With the cli you can download your Audible books, cover, chapter files";
+    license = licenses.agpl3Only;
+    homepage = "https://github.com/mkb79/audible-cli";
+    changelog = "https://github.com/mkb79/audible-cli/blob/${src.rev}/CHANGELOG.md";
+    maintainers = with maintainers; [ jvanbruegge ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "audible";
   };
 }

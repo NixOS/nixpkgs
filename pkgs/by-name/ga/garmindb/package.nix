@@ -7,14 +7,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "garmindb";
+<<<<<<< HEAD
   version = "3.6.7";
+=======
+  version = "3.6.5";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tcgoetz";
     repo = "garmindb";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Dosw6/n4GYYJR3KFP4RdNOUpACpRAfMMmyNj/J54TMk=";
+=======
+    hash = "sha256-uXRFvItaO4ptvxzvqN8bOzTUWcVeGk0IX82z+yLWFDw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [

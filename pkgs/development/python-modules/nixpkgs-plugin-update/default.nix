@@ -3,7 +3,10 @@
   buildPythonPackage,
   uv-build,
   gitpython,
+<<<<<<< HEAD
   packaging,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ruff,
   mypy,
 }:
@@ -19,7 +22,10 @@ buildPythonPackage {
 
   dependencies = [
     gitpython
+<<<<<<< HEAD
     packaging
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   nativeCheckInputs = [
@@ -35,10 +41,17 @@ buildPythonPackage {
   meta = {
     description = "Library for updating plugin collections in Nixpkgs";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
       teto
       PerchunPak
       khaneliman
+=======
+    maintainers = [
+      lib.maintainers.teto
+      lib.maintainers.perchun
+      lib.maintainers.khaneliman
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

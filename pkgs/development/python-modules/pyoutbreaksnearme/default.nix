@@ -53,11 +53,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyoutbreaksnearme" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for retrieving data from for Outbreaks Near Me";
     homepage = "https://github.com/bachya/pyoutbreaksnearme";
     changelog = "https://github.com/bachya/pyoutbreaksnearme/releases/tag/${version}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for retrieving data from for Outbreaks Near Me";
+    homepage = "https://github.com/bachya/pyoutbreaksnearme";
+    changelog = "https://github.com/bachya/pyoutbreaksnearme/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

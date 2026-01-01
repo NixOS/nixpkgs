@@ -35,12 +35,21 @@ buildGoModule rec {
     export CGO_LDFLAGS_ALLOW='-(s|w)'
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast and secure on-the-fly image processing server written in Go";
     mainProgram = "imgproxy";
     homepage = "https://imgproxy.net";
     changelog = "https://github.com/imgproxy/imgproxy/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ paluh ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ paluh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

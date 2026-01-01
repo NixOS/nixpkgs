@@ -29,10 +29,18 @@ buildKodiAddon rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/voc/plugin.video.media-ccc-de/";
     description = "media.ccc.de for Kodi";
     license = lib.licenses.mit;
     teams = [ lib.teams.kodi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/voc/plugin.video.media-ccc-de/";
+    description = "media.ccc.de for Kodi";
+    license = licenses.mit;
+    teams = [ teams.kodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     install_name_tool -id $out/lib/libsonic.so.0.3.0 $out/lib/libsonic.so.0.3.0
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Simple library to speed up or slow down speech";
     mainProgram = "sonic";
@@ -46,5 +47,14 @@ stdenv.mkDerivation {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aske ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Simple library to speed up or slow down speech";
+    mainProgram = "sonic";
+    homepage = "https://github.com/waywardgeek/sonic";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aske ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

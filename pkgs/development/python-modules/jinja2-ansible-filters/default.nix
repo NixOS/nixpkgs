@@ -26,10 +26,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jinja2_ansible_filters" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Jinja2 Ansible Filters";
     homepage = "https://pypi.org/project/jinja2-ansible-filters/";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Jinja2 Ansible Filters";
+    homepage = "https://pypi.org/project/jinja2-ansible-filters/";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

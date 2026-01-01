@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Windows VirtIO Drivers";
     homepage = "https://docs.fedoraproject.org/en-US/quick-docs/creating-windows-virtual-machines-using-virtio-drivers/index.html";
@@ -39,5 +40,15 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ anthonyroussel ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Windows VirtIO Drivers";
+    homepage = "https://docs.fedoraproject.org/en-US/quick-docs/creating-windows-virtual-machines-using-virtio-drivers/index.html";
+    changelog = "https://fedorapeople.org/groups/virt/virtio-win/CHANGELOG";
+    license = [ licenses.bsd3 ];
+    maintainers = with maintainers; [ anthonyroussel ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

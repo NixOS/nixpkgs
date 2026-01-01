@@ -36,11 +36,19 @@ buildGoModule rec {
     GOOS= GOARCH= go generate
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Performs the communication between the YubiHSM 2 and applications that use it";
     homepage = "https://developers.yubico.com/yubihsm-connector/";
     maintainers = with lib.maintainers; [ matthewcroughan ];
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Performs the communication between the YubiHSM 2 and applications that use it";
+    homepage = "https://developers.yubico.com/yubihsm-connector/";
+    maintainers = with maintainers; [ matthewcroughan ];
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "yubihsm-connector";
   };
 }

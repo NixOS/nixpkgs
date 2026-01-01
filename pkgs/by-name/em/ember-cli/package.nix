@@ -32,12 +32,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nodejs
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ember-cli/ember-cli";
     description = "Ember.js command line utility";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jfvillablanca ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ember-cli/ember-cli";
+    description = "Ember.js command line utility";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jfvillablanca ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ember";
   };
 })

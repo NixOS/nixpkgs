@@ -51,12 +51,21 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Merge bot for GitLab";
     homepage = "https://gitlab.com/marge-org/marge-bot";
     changelog = "https://gitlab.com/marge-org/marge-bot/-/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Merge bot for GitLab";
+    homepage = "https://gitlab.com/marge-org/marge-bot";
+    changelog = "https://gitlab.com/marge-org/marge-bot/-/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bcdarwin
       lelgenio
     ];

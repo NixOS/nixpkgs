@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "libpyvivotek" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python Library for Vivotek IP Cameras";
     homepage = "https://github.com/HarlemSquirrel/python-vivotek";
     changelog = "https://github.com/HarlemSquirrel/python-vivotek/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python Library for Vivotek IP Cameras";
+    homepage = "https://github.com/HarlemSquirrel/python-vivotek";
+    changelog = "https://github.com/HarlemSquirrel/python-vivotek/releases/tag/${src.tag}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

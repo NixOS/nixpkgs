@@ -52,10 +52,17 @@ buildGoModule rec {
       }"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
     homepage = "https://zaquestion.github.io/lab";
     license = lib.licenses.cc0;
+=======
+  meta = with lib; {
+    description = "Wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
+    homepage = "https://zaquestion.github.io/lab";
+    license = licenses.cc0;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "lab";
   };

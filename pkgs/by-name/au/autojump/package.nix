@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
     install -Dt "$out/share/zsh/site-functions/" -m444 "$out/share/autojump/autojump.zsh"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "`cd' command that learns";
     mainProgram = "autojump";
     longDescription = ''
@@ -54,9 +58,15 @@ stdenv.mkDerivation rec {
       Autojump supports tab-completion.
     '';
     homepage = "https://github.com/wting/autojump";
+<<<<<<< HEAD
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       yurrriq
     ];
   };

@@ -16,7 +16,11 @@
  #include <X11/Xcursor/Xcursor.h>
 
 +
+<<<<<<< HEAD
 +void *malloc (size_t __size);
+=======
++void *malloc ();
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 +
 +/* Allocate an N-byte block of memory from the heap.
 +   If N is zero, allocate a 1-byte block.  */

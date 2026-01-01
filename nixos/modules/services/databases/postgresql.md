@@ -173,7 +173,11 @@ These instructions are also applicable to other versions.
 
 Major PostgreSQL upgrades require a downtime and a few imperative steps to be called. This is the case because
 each major version has some internal changes in the databases' state. Because of that,
+<<<<<<< HEAD
 NixOS places the state into {file}`/var/lib/postgresql/$psqlSchema` where `$psqlSchema`
+=======
+NixOS places the state into {file}`/var/lib/postgresql/&lt;version&gt;` where each `version`
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 can be obtained like this:
 ```
 $ nix-instantiate --eval -A postgresql_15.psqlSchema
@@ -485,6 +489,7 @@ with hardening, it's considered a bug.
 When using extensions that are not packaged in `nixpkgs`, hardening adjustments may
 become necessary.
 
+<<<<<<< HEAD
 ## `postgresql.service` vs `postgresql.target` {#module-services-postgresql-target-vs-service}
 
 In order to delay a service's startup until the local PostgreSQL instance is up, one usually uses a combination of `wants`/`after`, i.e.
@@ -514,6 +519,8 @@ This is implemented by making `postgresql.target` wait for `postgresql-setup.ser
 
 Restarting `postgresql.service` by hand also triggers a restart of `postgresql.target`.
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 ## Notable differences to upstream {#module-services-postgres-upstream-deviation}
 
 - To avoid circular dependencies between default and -dev outputs, the output of the `pg_config` system view has been removed.

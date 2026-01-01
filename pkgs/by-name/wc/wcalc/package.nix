@@ -20,11 +20,19 @@ stdenv.mkDerivation rec {
     readline
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command line calculator";
     homepage = "https://w-calc.sourceforge.net";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Command line calculator";
+    homepage = "https://w-calc.sourceforge.net";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wcalc";
   };
 }

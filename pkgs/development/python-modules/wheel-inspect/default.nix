@@ -59,12 +59,21 @@ buildPythonPackage rec {
     "-Wignore::DeprecationWarning"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extract information from wheels";
     homepage = "https://github.com/jwodder/wheel-inspect";
     changelog = "https://github.com/wheelodex/wheel-inspect/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ayazhafiz ];
+=======
+  meta = with lib; {
+    description = "Extract information from wheels";
+    homepage = "https://github.com/jwodder/wheel-inspect";
+    changelog = "https://github.com/wheelodex/wheel-inspect/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ayazhafiz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wheel2json";
   };
 }

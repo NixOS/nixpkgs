@@ -47,13 +47,22 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool which mechanically generates Java bindings from a native library headers";
     mainProgram = "jextract";
     homepage = "https://github.com/openjdk/jextract";
     platforms = jdk25.meta.platforms;
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jlesquembre
       sharzy
     ];

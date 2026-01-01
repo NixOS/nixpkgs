@@ -43,10 +43,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Helper for generating Javascript catalog to static files";
     homepage = "https://github.com/zyegfryed/django-statici18n";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Helper for generating Javascript catalog to static files";
+    homepage = "https://github.com/zyegfryed/django-statici18n";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [
     ];
   };

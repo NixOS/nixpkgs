@@ -9,14 +9,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pytr";
+<<<<<<< HEAD
   version = "0.4.5";
+=======
+  version = "0.4.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytr-org";
     repo = "pytr";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-VfNoovNGvu1tNbYYiIX8KTOfll0WrHxJsLk/Yoyhu6s=";
+=======
+    hash = "sha256-72CxtO9AvjgK0lwcjHZexfedpNbrFEvRSN30hhiv+Zk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python3Packages; [
@@ -50,6 +58,11 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonImportsCheck = [ "pytr" ];
 
   meta = {

@@ -4,13 +4,20 @@
   appdirs,
   buildPythonPackage,
   fetchPypi,
+<<<<<<< HEAD
   glibcLocales,
   isPyPy,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mock,
   psutil,
   pyftpdlib,
   pytestCheckHook,
+<<<<<<< HEAD
   pythonAtLeast,
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pytz,
   setuptools,
   six,
@@ -21,8 +28,12 @@ buildPythonPackage rec {
   version = "2.4.16";
   pyproject = true;
 
+<<<<<<< HEAD
   # https://github.com/PyFilesystem/pyfilesystem2/issues/596
   disabled = pythonAtLeast "3.14";
+=======
+  disabled = pythonOlder "3.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchPypi {
     inherit pname version;
@@ -49,9 +60,12 @@ buildPythonPackage rec {
     mock
     psutil
     pytestCheckHook
+<<<<<<< HEAD
   ]
   ++ lib.optionals isPyPy [
     glibcLocales
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   LC_ALL = "en_US.utf-8";
@@ -83,6 +97,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Filesystem abstraction";
     homepage = "https://github.com/PyFilesystem/pyfilesystem2";
@@ -90,5 +105,14 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Filesystem abstraction";
+    homepage = "https://github.com/PyFilesystem/pyfilesystem2";
+    changelog = "https://github.com/PyFilesystem/pyfilesystem2/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

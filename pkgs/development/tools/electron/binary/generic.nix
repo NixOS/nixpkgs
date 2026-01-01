@@ -39,12 +39,21 @@ version: hashes:
 let
   pname = "electron";
 
+<<<<<<< HEAD
   meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = lib.licenses.mit;
     mainProgram = "electron";
     teams = [ lib.teams.electron ];
+=======
+  meta = with lib; {
+    description = "Cross platform desktop application shell";
+    homepage = "https://github.com/electron/electron";
+    license = licenses.mit;
+    mainProgram = "electron";
+    teams = [ teams.electron ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"
@@ -52,9 +61,15 @@ let
       "aarch64-linux"
       "aarch64-darwin"
     ];
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
     knownVulnerabilities = lib.optional (lib.versionOlder version "37.0.0") "Electron version ${version} is EOL";
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
+    knownVulnerabilities = optional (versionOlder version "37.0.0") "Electron version ${version} is EOL";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   fetcher =

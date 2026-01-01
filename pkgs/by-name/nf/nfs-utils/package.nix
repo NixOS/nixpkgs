@@ -183,7 +183,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Linux user-space NFS utilities";
 
     longDescription = ''
@@ -193,8 +197,13 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://linux-nfs.org/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ lib.maintainers.dotlambda ];
   };
 }

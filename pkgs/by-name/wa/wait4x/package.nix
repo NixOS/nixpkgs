@@ -22,11 +22,19 @@ buildGoModule {
   # Tests make network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Allows you to wait for a port or a service to enter the requested state";
     homepage = "https://github.com/wait4x/wait4x";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jfvillablanca ];
+=======
+  meta = with lib; {
+    description = "Allows you to wait for a port or a service to enter the requested state";
+    homepage = "https://github.com/wait4x/wait4x";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jfvillablanca ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wait4x";
   };
 }

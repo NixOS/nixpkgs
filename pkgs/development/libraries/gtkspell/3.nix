@@ -45,11 +45,19 @@ stdenv.mkDerivation rec {
     "--enable-vala"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gtkspell.sourceforge.net/";
     description = "Word-processor-style highlighting GtkTextView widget";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://gtkspell.sourceforge.net/";
+    description = "Word-processor-style highlighting GtkTextView widget";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

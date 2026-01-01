@@ -34,11 +34,19 @@ stdenv.mkDerivation rec {
       'export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH' ""
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://noedler.de/projekte/wdfs/";
     license = lib.licenses.gpl2Plus;
     description = "User-space filesystem that allows to mount a webdav share";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://noedler.de/projekte/wdfs/";
+    license = licenses.gpl2Plus;
+    description = "User-space filesystem that allows to mount a webdav share";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wdfs";
   };
 }

@@ -71,11 +71,20 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/bachya/simplisafe-python/releases/tag/${version}";
     description = "Python library the SimpliSafe API";
     homepage = "https://simplisafe-python.readthedocs.io/";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/bachya/simplisafe-python/releases/tag/${version}";
+    description = "Python library the SimpliSafe API";
+    homepage = "https://simplisafe-python.readthedocs.io/";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

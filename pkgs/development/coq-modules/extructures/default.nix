@@ -44,10 +44,17 @@
 
   propagatedBuildInputs = [ mathcomp-boot ];
 
+<<<<<<< HEAD
   meta = {
     description = "Finite data structures with extensional reasoning";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    description = "Finite data structures with extensional reasoning";
+    license = licenses.mit;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
 }).overrideAttrs

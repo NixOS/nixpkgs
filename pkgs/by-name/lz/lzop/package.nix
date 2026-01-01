@@ -16,12 +16,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lzo ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.lzop.org";
     description = "Fast file compressor";
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://www.lzop.org";
+    description = "Fast file compressor";
+    maintainers = [ ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lzop";
   };
 }

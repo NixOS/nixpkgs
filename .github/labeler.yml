@@ -263,7 +263,11 @@
           - any-glob-to-any-file:
               - nixos/modules/services/cluster/rancher/default.nix
               - nixos/modules/services/cluster/rancher/k3s.nix
+<<<<<<< HEAD
               - nixos/tests/rancher/**/*
+=======
+              - nixos/tests/k3s/**/*
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               - pkgs/applications/networking/cluster/k3s/**/*
 
 "6.topic: kernel":
@@ -527,6 +531,7 @@
               - pkgs/test/texlive/**
               - pkgs/tools/typesetting/tex/**/*
 
+<<<<<<< HEAD
 "6.topic: tree-sitter":
   - any:
       - changed-files:
@@ -540,6 +545,8 @@
               - pkgs/development/python-modules/*tree-sitter*/**/*
               - pkgs/development/tools/parsing/tree-sitter/**/*
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 "6.topic: updaters":
   - any:
       - changed-files:
@@ -589,6 +596,7 @@
               - nixos/modules/services/x11/desktop-managers/xfce.nix
               - nixos/tests/xfce.nix
               - pkgs/desktops/xfce/**/*
+<<<<<<< HEAD
               - pkgs/by-name/ga/garcon/**/*
               - pkgs/by-name/li/libxfce4*/**/*
               - pkgs/by-name/th/thunar/**/*
@@ -598,6 +606,8 @@
               - pkgs/by-name/xf/xfconf/**/*
               - pkgs/by-name/xf/xfdesktop/**/*
               - pkgs/by-name/xf/xfwm4/**/*
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
 "6.topic: zig":
   - any:

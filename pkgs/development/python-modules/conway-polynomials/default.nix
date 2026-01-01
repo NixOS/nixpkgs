@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "conway_polynomials" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python interface to Frank Lübeck's Conway polynomial database";
     homepage = "https://github.com/sagemath/conway-polynomials";
     teams = [ lib.teams.sage ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Python interface to Frank Lübeck's Conway polynomial database";
+    homepage = "https://github.com/sagemath/conway-polynomials";
+    teams = [ teams.sage ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

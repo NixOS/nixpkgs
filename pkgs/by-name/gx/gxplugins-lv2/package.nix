@@ -41,11 +41,19 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/brummer10/GxPlugins.lv2";
     description = "Set of extra lv2 plugins from the guitarix project";
     maintainers = [ lib.maintainers.magnetophon ];
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/brummer10/GxPlugins.lv2";
+    description = "Set of extra lv2 plugins from the guitarix project";
+    maintainers = [ maintainers.magnetophon ];
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.linux;
   };
 }

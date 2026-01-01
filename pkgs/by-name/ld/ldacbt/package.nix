@@ -41,12 +41,21 @@ stdenv.mkDerivation rec {
         'cmake_minimum_required(VERSION 3.0...3.10)'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "AOSP libldac dispatcher";
     homepage = "https://github.com/EHfive/ldacBT";
     license = lib.licenses.asl20;
     # libldac code detects & #error's out on non-LE byte order
     platforms = lib.platforms.littleEndian;
+=======
+  meta = with lib; {
+    description = "AOSP libldac dispatcher";
+    homepage = "https://github.com/EHfive/ldacBT";
+    license = licenses.asl20;
+    # libldac code detects & #error's out on non-LE byte order
+    platforms = platforms.littleEndian;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -62,10 +62,18 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Manage OpenID Connect tokens on the command line";
     homepage = "https://github.com/indigo-dc/oidc-agent";
     maintainers = with lib.maintainers; [ xinyangli ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Manage OpenID Connect tokens on the command line";
+    homepage = "https://github.com/indigo-dc/oidc-agent";
+    maintainers = with maintainers; [ xinyangli ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

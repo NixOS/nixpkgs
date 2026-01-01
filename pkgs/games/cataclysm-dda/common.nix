@@ -96,7 +96,11 @@ stdenv.mkDerivation {
     isCurses = !tiles;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free, post apocalyptic, zombie infested rogue-like";
     mainProgram = "cataclysm-tiles";
     longDescription = ''
@@ -123,11 +127,20 @@ stdenv.mkDerivation {
       than their original form.
     '';
     homepage = "https://cataclysmdda.org/";
+<<<<<<< HEAD
     license = lib.licenses.cc-by-sa-30;
     maintainers = with lib.maintainers; [
       mnacamura
       DeeUnderscore
     ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.cc-by-sa-30;
+    maintainers = with maintainers; [
+      mnacamura
+      DeeUnderscore
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

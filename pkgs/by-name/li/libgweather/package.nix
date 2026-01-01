@@ -119,11 +119,20 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Library to access weather information from online services for numerous locations";
     homepage = "https://gitlab.gnome.org/GNOME/libgweather";
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Library to access weather information from online services for numerous locations";
+    homepage = "https://gitlab.gnome.org/GNOME/libgweather";
+    license = licenses.gpl2Plus;
+    teams = [ teams.gnome ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

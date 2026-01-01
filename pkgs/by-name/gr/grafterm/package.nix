@@ -23,11 +23,19 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool for rendering metrics dashboards inspired by Grafana";
     homepage = "https://github.com/slok/grafterm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ arikgrahl ];
+=======
+  meta = with lib; {
+    description = "Command-line tool for rendering metrics dashboards inspired by Grafana";
+    homepage = "https://github.com/slok/grafterm";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ arikgrahl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "grafterm";
   };
 }

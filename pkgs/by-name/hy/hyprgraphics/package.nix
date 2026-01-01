@@ -1,6 +1,10 @@
 {
   lib,
+<<<<<<< HEAD
   gcc15Stdenv,
+=======
+  stdenv,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   nix-update-script,
   cmake,
@@ -17,15 +21,25 @@
   pixman,
 }:
 
+<<<<<<< HEAD
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
   version = "0.5.0";
+=======
+stdenv.mkDerivation (finalAttrs: {
+  pname = "hyprgraphics";
+  version = "0.4.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-MRD+Jr2bY11MzNDfenENhiK6pvN+nHygxdHoHbZ1HtE=";
+=======
+    hash = "sha256-JnET78yl5RvpGuDQy3rCycOCkiKoLr5DN1fPhRNNMco=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

@@ -32,11 +32,20 @@ stdenvNoCC.mkDerivation (self: {
     hardcodeZeroVersion = true;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of Alacritty color schemes";
     homepage = "https://alacritty.org/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.nicoo ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Collection of Alacritty color schemes";
+    homepage = "https://alacritty.org/";
+    license = licenses.asl20;
+    maintainers = [ maintainers.nicoo ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

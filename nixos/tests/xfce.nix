@@ -18,9 +18,15 @@
       };
 
       services.xserver.desktopManager.xfce.enable = true;
+<<<<<<< HEAD
       environment.systemPackages = [ pkgs.xfce4-whiskermenu-plugin ];
 
       programs.thunar.plugins = [ pkgs.thunar-archive-plugin ];
+=======
+      environment.systemPackages = [ pkgs.xfce.xfce4-whiskermenu-plugin ];
+
+      programs.thunar.plugins = [ pkgs.xfce.thunar-archive-plugin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       programs.ydotool.enable = true;
     };
 

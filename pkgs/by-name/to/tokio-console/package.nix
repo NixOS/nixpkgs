@@ -44,11 +44,20 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/tokio-console --log-dir $(mktemp -d) gen-completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Debugger for asynchronous Rust code";
     homepage = "https://github.com/tokio-rs/console";
     mainProgram = "tokio-console";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ max-niederman ];
+=======
+  meta = with lib; {
+    description = "Debugger for asynchronous Rust code";
+    homepage = "https://github.com/tokio-rs/console";
+    mainProgram = "tokio-console";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ max-niederman ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

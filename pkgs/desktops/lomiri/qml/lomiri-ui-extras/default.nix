@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-extras";
+<<<<<<< HEAD
   version = "0.8.0";
+=======
+  version = "0.7.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-extras";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-wNYAcWcihMFXWuVfrSzxDVE15MR2+cgnss018FextpU=";
+=======
+    hash = "sha256-fN9rZC8J8xyAStvBNTpLqAcssaiQQpu6INwMLlnkvfw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

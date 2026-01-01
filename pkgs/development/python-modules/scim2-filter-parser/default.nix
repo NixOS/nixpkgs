@@ -52,11 +52,20 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.django-query;
 
+<<<<<<< HEAD
   meta = {
     description = "Customizable parser/transpiler for SCIM2.0 filters";
     homepage = "https://github.com/15five/scim2-filter-parser";
     changelog = "https://github.com/15five/scim2-filter-parser/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ s1341 ];
+=======
+  meta = with lib; {
+    description = "Customizable parser/transpiler for SCIM2.0 filters";
+    homepage = "https://github.com/15five/scim2-filter-parser";
+    changelog = "https://github.com/15five/scim2-filter-parser/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ s1341 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

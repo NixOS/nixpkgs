@@ -25,11 +25,20 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to make pdfpc interpret slides created by polylux correctly";
     homepage = "https://github.com/polylux-typ/polylux/tree/main/pdfpc-extractor";
     license = lib.licenses.mit;
     mainProgram = "polylux2pdfpc";
     maintainers = [ lib.maintainers.diogotcorreia ];
+=======
+  meta = with lib; {
+    description = "Tool to make pdfpc interpret slides created by polylux correctly";
+    homepage = "https://github.com/polylux-typ/polylux/tree/main/pdfpc-extractor";
+    license = licenses.mit;
+    mainProgram = "polylux2pdfpc";
+    maintainers = [ maintainers.diogotcorreia ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

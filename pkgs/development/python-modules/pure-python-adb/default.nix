@@ -29,10 +29,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ppadb.client" ] ++ lib.optionals doCheck [ "ppadb.client_async" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure python implementation of the adb client";
     homepage = "https://github.com/Swind/pure-python-adb";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  meta = with lib; {
+    description = "Pure python implementation of the adb client";
+    homepage = "https://github.com/Swind/pure-python-adb";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

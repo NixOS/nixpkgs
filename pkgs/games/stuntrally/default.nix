@@ -83,11 +83,20 @@ stdenv.mkDerivation rec {
     tinyxml-2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
     homepage = "http://stuntrally.tuxfamily.org/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
+    homepage = "http://stuntrally.tuxfamily.org/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

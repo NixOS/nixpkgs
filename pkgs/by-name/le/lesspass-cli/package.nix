@@ -49,11 +49,20 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "lesspass" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stateless password manager";
     mainProgram = "lesspass";
     homepage = "https://lesspass.com";
     maintainers = with lib.maintainers; [ jasoncarr ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    description = "Stateless password manager";
+    mainProgram = "lesspass";
+    homepage = "https://lesspass.com";
+    maintainers = with maintainers; [ jasoncarr ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

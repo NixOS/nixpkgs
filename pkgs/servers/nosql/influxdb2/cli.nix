@@ -38,9 +38,15 @@ buildGoModule {
       --zsh  <($out/bin/influx completion zsh)
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for managing resources in InfluxDB v2";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "CLI for managing resources in InfluxDB v2";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://influxdata.com/";
     maintainers = [ ];
     mainProgram = "influx";

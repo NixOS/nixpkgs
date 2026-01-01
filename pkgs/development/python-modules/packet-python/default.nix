@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "packet" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python client for the Packet API";
     homepage = "https://github.com/packethost/packet-python";
     changelog = "https://github.com/packethost/packet-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ dipinhora ];
+=======
+  meta = with lib; {
+    description = "Python client for the Packet API";
+    homepage = "https://github.com/packethost/packet-python";
+    changelog = "https://github.com/packethost/packet-python/blob/v${version}/CHANGELOG.md";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ dipinhora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

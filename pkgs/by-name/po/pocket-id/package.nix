@@ -5,6 +5,7 @@
   stdenvNoCC,
   nodejs,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   nixosTests,
@@ -13,17 +14,34 @@
 buildGo125Module (finalAttrs: {
   pname = "pocket-id";
   version = "1.16.0";
+=======
+  nixosTests,
+  nix-update-script,
+}:
+
+buildGo125Module (finalAttrs: {
+  pname = "pocket-id";
+  version = "1.15.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-2tGd/gl0Pm5b5GfkTsChvZoWov4dwljwqDcitX5NKCY=";
+=======
+    hash = "sha256-mnmBwQ79sScTPM4Gh9g0x/QTmqm1TgxaOkww+bvs1b4=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
+<<<<<<< HEAD
   vendorHash = "sha256-ttbiuYRWbn8KRZtg499R4NF/E9+B+fOylxZcMwNg69M=";
+=======
+  vendorHash = "sha256-CmhPURPNwcpmD9shLrQPVKFGBirEMjq0Z4lmgMCpxS8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -35,11 +53,14 @@ buildGo125Module (finalAttrs: {
     cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
   '';
 
+<<<<<<< HEAD
   checkFlags = [
     # requires networking
     "-skip=TestOidcService_downloadAndSaveLogoFromURL"
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
   '';
@@ -50,6 +71,7 @@ buildGo125Module (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_10
     ];
@@ -58,6 +80,14 @@ buildGo125Module (finalAttrs: {
       pnpm = pnpm_10;
       fetcherVersion = 1;
       hash = "sha256-drXGcUHP7J7keGra7/x1tr9Pfh/wjzmtUE1yAybYXLQ=";
+=======
+      pnpm_10.configHook
+    ];
+    pnpmDeps = pnpm_10.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      fetcherVersion = 1;
+      hash = "sha256-/e1zBHdy3exqbMvlv0Jth7vpJd7DDnWXGfMV+Cdr56I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
     env.BUILD_OUTPUT_PATH = "dist";

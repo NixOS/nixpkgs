@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hexbytes" ];
 
+<<<<<<< HEAD
   meta = {
     description = "`bytes` subclass that decodes hex, with a readable console output";
     homepage = "https://github.com/ethereum/hexbytes";
     changelog = "https://github.com/ethereum/hexbytes/blob/v${version}/docs/release_notes.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "`bytes` subclass that decodes hex, with a readable console output";
+    homepage = "https://github.com/ethereum/hexbytes";
+    changelog = "https://github.com/ethereum/hexbytes/blob/v${version}/docs/release_notes.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

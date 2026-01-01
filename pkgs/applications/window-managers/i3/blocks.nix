@@ -32,11 +32,20 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Flexible scheduler for your i3bar blocks";
     mainProgram = "i3blocks";
     homepage = "https://github.com/vivien/i3blocks";
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; freebsd ++ linux;
+=======
+  meta = with lib; {
+    description = "Flexible scheduler for your i3bar blocks";
+    mainProgram = "i3blocks";
+    homepage = "https://github.com/vivien/i3blocks";
+    license = licenses.gpl3;
+    platforms = with platforms; freebsd ++ linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

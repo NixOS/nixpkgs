@@ -45,7 +45,11 @@ stdenv.mkDerivation rec {
       --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.ImageMagick ]}"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Convert DocBook to OpenDocument Format (ODF)";
     longDescription = ''
       Docbook2odf is a toolkit that automatically converts DocBook to OASIS
@@ -55,9 +59,15 @@ stdenv.mkDerivation rec {
       documents are XML based.
     '';
     homepage = "http://open.comsultia.com/docbook2odf/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "docbook2odf";
   };
 }

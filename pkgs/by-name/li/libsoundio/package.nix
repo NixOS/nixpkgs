@@ -40,11 +40,20 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-strict-prototypes";
 
+<<<<<<< HEAD
   meta = {
     description = "Cross platform audio input and output";
     homepage = "http://libsound.io/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.andrewrk ];
+=======
+  meta = with lib; {
+    description = "Cross platform audio input and output";
+    homepage = "http://libsound.io/";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.andrewrk ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

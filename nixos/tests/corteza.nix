@@ -4,7 +4,11 @@ let
 in
 {
   name = "corteza";
+<<<<<<< HEAD
   meta.maintainers = lib.teams.ngi.members;
+=======
+  meta.maintainers = [ lib.teams.ngi.members ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nodes.machine = {
     services.corteza = {

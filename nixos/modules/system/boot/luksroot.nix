@@ -647,8 +647,11 @@ in
         "sha512"
         "af_alg"
         "algif_skcipher"
+<<<<<<< HEAD
         "cryptd"
         "input_leds" # for capslock LED on most keyboards in case decryption requires password
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
@@ -1137,6 +1140,11 @@ in
     boot.initrd.availableKernelModules = [
       "dm_mod"
       "dm_crypt"
+<<<<<<< HEAD
+=======
+      "cryptd"
+      "input_leds"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ]
     ++ luks.cryptoModules
     # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged

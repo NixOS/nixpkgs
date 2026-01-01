@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asgiref" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/django/asgiref/blob/${src.rev}/CHANGELOG.txt";
     description = "Reference ASGI adapters and channel layers";
     homepage = "https://github.com/django/asgiref";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    changelog = "https://github.com/django/asgiref/blob/${src.rev}/CHANGELOG.txt";
+    description = "Reference ASGI adapters and channel layers";
+    homepage = "https://github.com/django/asgiref";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

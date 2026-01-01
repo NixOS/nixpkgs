@@ -51,7 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Network library for client/server games with dedicated servers";
     longDescription = ''
       yojimbo is a network library for client/server games with dedicated servers.
@@ -59,8 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
       As such it provides a time critical networking layer on top of UDP, with a client/server architecture supporting up to 64 players per-dedicated server instance.
     '';
     homepage = "https://github.com/mas-bandwidth/yojimbo";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     platforms = lib.platforms.x86_64;
+=======
+    license = licenses.bsd3;
+    platforms = platforms.x86_64;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

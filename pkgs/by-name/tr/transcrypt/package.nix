@@ -75,7 +75,11 @@ stdenv.mkDerivation rec {
     version = "transcrypt ${version}";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Transparently encrypt files within a Git repository";
     longDescription = ''
       A script to configure transparent encryption of sensitive files stored in
@@ -86,8 +90,14 @@ stdenv.mkDerivation rec {
       non-encrypted files.
     '';
     homepage = "https://github.com/elasticdog/transcrypt";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.elasticdog ];
     platforms = lib.platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = [ maintainers.elasticdog ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

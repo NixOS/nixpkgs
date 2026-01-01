@@ -30,14 +30,22 @@
 
 buildPythonPackage rec {
   pname = "markitdown";
+<<<<<<< HEAD
   version = "0.1.4";
+=======
+  version = "0.1.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-WKA2eY8wY3SM9xZ7Cek5eUcJbO5q6eMDx2aTKfQnFvE=";
+=======
+    hash = "sha256-bHnJsv4ln1W0lVbWwLmCzQ15KOGJZ9gF2yx4TDuBqBI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/packages/markitdown";

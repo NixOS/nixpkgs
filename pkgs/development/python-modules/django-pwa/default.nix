@@ -38,11 +38,20 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Django app to include a manifest.json and Service Worker instance to enable progressive web app behavior";
     homepage = "https://github.com/silviolleite/django-pwa";
     changelog = "https://github.com/silviolleite/django-pwa/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
+=======
+  meta = with lib; {
+    description = "Django app to include a manifest.json and Service Worker instance to enable progressive web app behavior";
+    homepage = "https://github.com/silviolleite/django-pwa";
+    changelog = "https://github.com/silviolleite/django-pwa/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ derdennisop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

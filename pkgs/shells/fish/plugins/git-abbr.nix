@@ -14,10 +14,18 @@ buildFishPlugin {
     hash = "sha256-6z3Wr2t8CP85xVEp6UCYaM2KC9PX4MDyx19f/wjHkb0=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Abbreviations for git for the fish shell 🐟";
     homepage = "https://github.com/lewisacidic/fish-git-abbr";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hmajid2301 ];
+=======
+  meta = with lib; {
+    description = "Abbreviations for git for the fish shell 🐟";
+    homepage = "https://github.com/lewisacidic/fish-git-abbr";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hmajid2301 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

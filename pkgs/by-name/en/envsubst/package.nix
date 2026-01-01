@@ -21,11 +21,19 @@ buildGoModule rec {
     install -Dm444 -t $out/share/doc/envsubst LICENSE *.md
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Environment variables substitution for Go";
     homepage = "https://github.com/a8m/envsubst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicknovitski ];
+=======
+  meta = with lib; {
+    description = "Environment variables substitution for Go";
+    homepage = "https://github.com/a8m/envsubst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nicknovitski ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "envsubst";
   };
 }

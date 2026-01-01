@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "libtracefs-";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Linux kernel trace file system library";
     mainProgram = "sqlhist";
@@ -70,5 +71,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wentasah ];
+=======
+  meta = with lib; {
+    description = "Linux kernel trace file system library";
+    mainProgram = "sqlhist";
+    homepage = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/";
+    license = licenses.lgpl21Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wentasah ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

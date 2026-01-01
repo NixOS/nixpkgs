@@ -18,10 +18,18 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonpath" ];
   enabledTestPaths = [ "test/test*.py" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sean2077/jsonpath-python";
     description = "More powerful JSONPath implementations in modern python";
     maintainers = with lib.maintainers; [ dadada ];
     license = with lib.licenses; [ mit ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sean2077/jsonpath-python";
+    description = "More powerful JSONPath implementations in modern python";
+    maintainers = with maintainers; [ dadada ];
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

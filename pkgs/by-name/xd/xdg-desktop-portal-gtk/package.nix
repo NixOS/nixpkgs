@@ -46,10 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
     '')
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Desktop integration portals for sandboxed apps";
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    description = "Desktop integration portals for sandboxed apps";
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

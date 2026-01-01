@@ -2,17 +2,26 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   cmake,
   pkg-config,
   qt6,
+=======
+  pkg-config,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libjack2,
   alsa-lib,
   liblo,
   lv2,
+<<<<<<< HEAD
+=======
+  libsForQt5,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "synthv1";
+<<<<<<< HEAD
   version = "1.3.2";
 
   src = fetchurl {
@@ -28,6 +37,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     qt6.qtbase
     qt6.qttools
+=======
+  version = "0.9.23";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/synthv1/synthv1-${finalAttrs.version}.tar.gz";
+    hash = "sha256-0V72T51icT/t9fJf4mwcMYZLjzTPnmiCbU+BdwnCmw4=";
+  };
+
+  buildInputs = [
+    libsForQt5.qtbase
+    libsForQt5.qttools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libjack2
     alsa-lib
     liblo
@@ -35,9 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     cmake
     pkg-config
     qt6.wrapQtAppsHook
+=======
+    pkg-config
+    libsForQt5.wrapQtAppsHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   meta = {

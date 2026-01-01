@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "schema" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for validating Python data structures";
     homepage = "https://github.com/keleshev/schema";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tobim ];
+=======
+  meta = with lib; {
+    description = "Library for validating Python data structures";
+    homepage = "https://github.com/keleshev/schema";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tobim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

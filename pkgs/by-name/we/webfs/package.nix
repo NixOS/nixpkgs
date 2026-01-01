@@ -29,12 +29,21 @@ stdenv.mkDerivation {
     install -Dm444 -t $out/etc ${mailcap}/etc/mime.types
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "HTTP server for purely static content";
     homepage = "http://linux.bytesex.org/misc/webfs.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zimbatm ];
+=======
+  meta = with lib; {
+    description = "HTTP server for purely static content";
+    homepage = "http://linux.bytesex.org/misc/webfs.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ zimbatm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "webfsd";
   };
 }

@@ -22,11 +22,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Convert Ingress resources to Gateway API resources";
     homepage = "https://github.com/kubernetes-sigs/ingress2gateway";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ arikgrahl ];
+=======
+  meta = with lib; {
+    description = "Convert Ingress resources to Gateway API resources";
+    homepage = "https://github.com/kubernetes-sigs/ingress2gateway";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ arikgrahl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ingress2gateway";
   };
 }

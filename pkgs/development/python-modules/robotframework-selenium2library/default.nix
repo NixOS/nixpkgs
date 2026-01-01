@@ -20,10 +20,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ robotframework-seleniumlibrary ];
 
+<<<<<<< HEAD
   meta = {
     description = "Web testing library for Robot Framework";
     homepage = "https://github.com/robotframework/Selenium2Library";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Web testing library for Robot Framework";
+    homepage = "https://github.com/robotframework/Selenium2Library";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

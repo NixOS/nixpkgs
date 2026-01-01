@@ -34,10 +34,17 @@ buildGoModule rec {
     "-run=Test(Encode|Decode|Variant)"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple FUSE filesystem for mounting Android devices as a MTP device";
     homepage = "https://github.com/hanwen/go-mtpfs";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Simple FUSE filesystem for mounting Android devices as a MTP device";
+    homepage = "https://github.com/hanwen/go-mtpfs";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "go-mtpfs";

@@ -53,11 +53,20 @@ stdenv.mkDerivation {
     sed -i -e "s/0.6.00/0.6.0/" $out/lib/pkgconfig/cwiid.pc
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Linux Nintendo Wiimote interface";
     homepage = "http://cwiid.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ bennofs ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Linux Nintendo Wiimote interface";
+    homepage = "http://cwiid.org";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ bennofs ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

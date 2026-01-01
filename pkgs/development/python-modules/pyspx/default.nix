@@ -32,11 +32,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyspx" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for SPHINCS";
     homepage = "https://github.com/sphincs/pyspx";
     changelog = "https://github.com/sphincs/pyspx/releases/tag/v${version}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python bindings for SPHINCS";
+    homepage = "https://github.com/sphincs/pyspx";
+    changelog = "https://github.com/sphincs/pyspx/releases/tag/v${version}";
+    license = licenses.cc0;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

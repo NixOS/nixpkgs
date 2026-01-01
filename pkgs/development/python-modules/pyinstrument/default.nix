@@ -31,12 +31,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyinstrument" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Call stack profiler for Python";
     mainProgram = "pyinstrument";
     homepage = "https://github.com/joerick/pyinstrument";
     changelog = "https://github.com/joerick/pyinstrument/releases/tag/${src.tag}";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

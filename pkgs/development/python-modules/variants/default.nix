@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "variants" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library providing syntactic sugar for creating variant forms of a canonical function";
     homepage = "https://github.com/python-variants/variants";
     changelog = "https://github.com/python-variants/variants/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rakesh4g ];
+=======
+  meta = with lib; {
+    description = "Library providing syntactic sugar for creating variant forms of a canonical function";
+    homepage = "https://github.com/python-variants/variants";
+    changelog = "https://github.com/python-variants/variants/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ rakesh4g ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

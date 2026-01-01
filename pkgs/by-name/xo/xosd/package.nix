@@ -24,11 +24,20 @@ stdenv.mkDerivation rec {
     xorgproto
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Displays text on your screen";
     homepage = "https://sourceforge.net/projects/libxosd";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    description = "Displays text on your screen";
+    homepage = "https://sourceforge.net/projects/libxosd";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

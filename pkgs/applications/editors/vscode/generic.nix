@@ -26,7 +26,10 @@
   libglvnd,
   libkrb5,
   openssl,
+<<<<<<< HEAD
   webkitgtk_4_1,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # Populate passthru.tests
   tests,
@@ -57,7 +60,10 @@
   ripgrep,
   hasVsceSign ? false,
   patchVSCodePath ? true,
+<<<<<<< HEAD
   imagemagick,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 stdenv.mkDerivation (
@@ -236,7 +242,10 @@ stdenv.mkDerivation (
       nss
       nspr
       systemdLibs
+<<<<<<< HEAD
       webkitgtk_4_1
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       xorg.libxkbfile
     ];
 
@@ -250,7 +259,10 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = [
       unzip
+<<<<<<< HEAD
       imagemagick
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
@@ -291,6 +303,7 @@ stdenv.mkDerivation (
           # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
           + ''
             mkdir -p "$out/share/pixmaps"
+<<<<<<< HEAD
             icon_file="$out/lib/${libraryName}/resources/app/resources/linux/code.png"
             cp "$icon_file" "$out/share/pixmaps/${iconName}.png"
 
@@ -298,6 +311,9 @@ stdenv.mkDerivation (
             size=$(identify -format "%wx%h" "$icon_file")
             mkdir -p "$out/share/icons/hicolor/$size/apps"
             cp "$icon_file" "$out/share/icons/hicolor/$size/apps/${iconName}.png"
+=======
+            cp "$out/lib/${libraryName}/resources/app/resources/linux/code.png" "$out/share/pixmaps/${iconName}.png"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
           ''
         )
         # Override the previously determined VSCODE_PATH with the one we know to be correct

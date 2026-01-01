@@ -72,7 +72,11 @@ buildPythonPackage rec {
     "tests/test_unit/test_console.py"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python package for handling messy CSV files";
     mainProgram = "clevercsv";
     longDescription = ''
@@ -83,7 +87,12 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/alan-turing-institute/CleverCSV";
     changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/${src.rev}/CHANGELOG.md";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

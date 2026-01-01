@@ -87,12 +87,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "can" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CAN support for Python";
     homepage = "https://python-can.readthedocs.io";
     changelog = "https://github.com/hardbyte/python-can/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "CAN support for Python";
+    homepage = "https://python-can.readthedocs.io";
+    changelog = "https://github.com/hardbyte/python-can/releases/tag/${src.tag}";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fab
       sorki
     ];

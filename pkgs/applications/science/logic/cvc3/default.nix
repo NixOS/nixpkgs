@@ -42,12 +42,21 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Prover for satisfiability modulo theory (SMT)";
     mainProgram = "cvc3";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
     license = lib.licenses.free;
+=======
+  meta = with lib; {
+    description = "Prover for satisfiability modulo theory (SMT)";
+    mainProgram = "cvc3";
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+    license = licenses.free;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://cs.nyu.edu/acsys/cvc3/index.html";
   };
   passthru = {

@@ -57,7 +57,11 @@ buildPythonPackage rec {
     ${python.interpreter} run_all.py
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://matplotlib.org/basemap/";
     description = "Plot data on map projections with matplotlib";
     longDescription = ''
@@ -65,8 +69,13 @@ buildPythonPackage rec {
       coastlines, lakes, rivers and political boundaries. See
       https://matplotlib.org/basemap/stable/users/examples.html for examples of what it can do.
     '';
+<<<<<<< HEAD
     teams = [ lib.teams.geospatial ];
     license = with lib.licenses; [
+=======
+    teams = [ teams.geospatial ];
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       lgpl21
     ];

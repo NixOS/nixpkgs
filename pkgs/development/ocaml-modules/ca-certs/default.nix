@@ -42,10 +42,17 @@ buildDunePackage rec {
     fmt
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Detect root CA certificates from the operating system";
     maintainers = [ lib.maintainers.sternenseemann ];
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Detect root CA certificates from the operating system";
+    maintainers = [ maintainers.sternenseemann ];
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/mirage/ca-certs";
   };
 }

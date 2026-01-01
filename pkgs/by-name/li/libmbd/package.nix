@@ -43,11 +43,20 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mpi ];
 
+<<<<<<< HEAD
   meta = {
     description = "Many-body dispersion library";
     homepage = "https://github.com/libmbd/libmbd";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
+=======
+  meta = with lib; {
+    description = "Many-body dispersion library";
+    homepage = "https://github.com/libmbd/libmbd";
+    license = licenses.mpl20;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.sheepforce ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

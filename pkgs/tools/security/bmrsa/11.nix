@@ -25,11 +25,20 @@ stdenv.mkDerivation rec {
     echo -e 'install:\n\tcp bmrsa '$out'/bin' >> Makefile
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "RSA utility";
     mainProgram = "bmrsa";
     homepage = "http://bmrsa.sourceforge.net/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "RSA utility";
+    mainProgram = "bmrsa";
+    homepage = "http://bmrsa.sourceforge.net/";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

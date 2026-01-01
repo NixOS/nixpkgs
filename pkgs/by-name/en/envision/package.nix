@@ -22,6 +22,19 @@ buildFHSEnv {
       stdenv.cc.libc
       gcc
     ])
+<<<<<<< HEAD
+=======
+    ++
+      # OpenHMD dependencies
+      (
+        pkgs.openhmd.buildInputs
+        ++ pkgs.openhmd.nativeBuildInputs
+        ++ (with pkgs; [
+          meson
+        ])
+      )
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ++ (
       # OpenComposite dependencies
       pkgs.opencomposite.buildInputs ++ pkgs.opencomposite.nativeBuildInputs
@@ -128,6 +141,10 @@ buildFHSEnv {
       kebabToCamel = x: pascalToCamel (kebabToPascal x);
       profiles = [
         "lighthouse-default"
+<<<<<<< HEAD
+=======
+        "openhmd-default"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         "simulated-default"
         "survive-default"
         "wmr-default"

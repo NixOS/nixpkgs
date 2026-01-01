@@ -22,11 +22,19 @@
   # nativeCheckInputs
   pytestCheckHook,
   pytest-asyncio,
+<<<<<<< HEAD
+=======
+  coverage,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "atproto";
+<<<<<<< HEAD
   version = "0.0.65";
+=======
+  version = "0.0.62";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   format = "pyproject";
 
   # use GitHub, pypi does not include tests
@@ -34,7 +42,11 @@ buildPythonPackage rec {
     owner = "MarshalX";
     repo = "atproto";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-0NogKxYO+lCtNhK2ZWwRLQTV7rHU5Oz+lnE4awsoPsM=";
+=======
+    hash = "sha256-T1Jdg62fSV+5qC486Agsuk6qrDhGSNHq75uvOyvOwpA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -63,6 +75,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+<<<<<<< HEAD
+=======
+    coverage
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   disabledTestPaths = [

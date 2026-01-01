@@ -24,10 +24,18 @@ stdenv.mkDerivation rec {
     sed -e 's/\t\t@/\t\t/g' -i Makefile
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Common Lisp launcher script";
     license = lib.licenses.llgpl21;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Common Lisp launcher script";
+    license = licenses.llgpl21;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

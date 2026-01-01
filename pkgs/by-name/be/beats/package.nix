@@ -20,12 +20,21 @@ stdenv.mkDerivation rec {
     "CC=cc"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/j0hax/beats";
     license = lib.licenses.gpl3Only;
     description = "Swatch Internet Time implemented as a C program";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.j0hax ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/j0hax/beats";
+    license = licenses.gpl3Only;
+    description = "Swatch Internet Time implemented as a C program";
+    platforms = platforms.all;
+    maintainers = [ maintainers.j0hax ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "beats";
   };
 }

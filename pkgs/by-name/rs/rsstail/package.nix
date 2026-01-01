@@ -28,7 +28,11 @@ stdenv.mkDerivation (final: {
   # just runs cppcheck linter
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Monitor RSS feeds for new entries";
     mainProgram = "rsstail";
     longDescription = ''
@@ -36,8 +40,14 @@ stdenv.mkDerivation (final: {
       detects a new entry it'll emit only that new entry.
     '';
     homepage = "https://www.vanheusden.com/rsstail/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.Necior ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.Necior ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

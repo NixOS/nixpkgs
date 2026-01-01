@@ -17,11 +17,20 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-R8r6YFo0Ih7esJl/OpcNNmmmB9pGxOXCc+3/ZivaWSw=";
 
+<<<<<<< HEAD
   meta = {
     description = "Daily journaling in plain markdown";
     homepage = "https://github.com/JachymPutta/dailies";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ JachymPutta ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Daily journaling in plain markdown";
+    homepage = "https://github.com/JachymPutta/dailies";
+    license = licenses.mit;
+    maintainers = with maintainers; [ JachymPutta ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

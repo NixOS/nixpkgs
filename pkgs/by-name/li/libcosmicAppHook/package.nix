@@ -11,8 +11,11 @@
   makeBinaryWrapper,
   pkg-config,
   targetPackages,
+<<<<<<< HEAD
   cosmic-icons,
   cosmic-settings,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   libGL,
   libxkbcommon,
   xorg,
@@ -51,6 +54,7 @@ makeSetupHook {
       let
         fallbackThemes = runCommand "cosmic-fallback-themes" { } ''
           mkdir -p $out/share
+<<<<<<< HEAD
           ln -s ${targetPackages.cosmic-settings or cosmic-settings}/share/cosmic $out/share/cosmic
         '';
       in
@@ -58,6 +62,18 @@ makeSetupHook {
         lib.optionals includeSettings [ fallbackThemes ] ++ [ targetPackages.cosmic-icons or cosmic-icons ]
       );
     cargoLinkerVar = targetPackages.stdenv.hostPlatform.rust.cargoEnvVarTarget;
+=======
+          ln -s ${targetPackages.cosmic-settings}/share/cosmic $out/share/cosmic
+        '';
+      in
+      lib.makeSearchPath "share" (
+        lib.optionals includeSettings [ fallbackThemes ] ++ [ targetPackages.cosmic-icons ]
+      );
+    # Temporarily using RUSTFLAGS: https://github.com/NixOS/nixpkgs/issues/464392
+    # See ./libcosmic-app-hook.sh
+    # cargoLinkerVar = targetPackages.stdenv.hostPlatform.rust.cargoEnvVarTarget;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # force linking for all libraries that may be dlopen'd by libcosmic/iced apps
     cargoLinkLibs = lib.escapeShellArgs (
       [

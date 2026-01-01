@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
     cp -r . $out
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Visual interface for viewing information about Java applications";
     mainProgram = "visualvm";
     longDescription = ''
@@ -50,12 +54,21 @@ stdenv.mkDerivation rec {
       SE platform.
     '';
     homepage = "https://visualvm.github.io";
+<<<<<<< HEAD
     license = with lib.licenses; [
       gpl2Plus
       classpathException20
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+    license = with licenses; [
+      gpl2Plus
+      classpathException20
+    ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       michalrus
       moaxcp
     ];

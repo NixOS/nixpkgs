@@ -50,6 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "ufoLib2" ];
@@ -59,6 +60,17 @@ buildPythonPackage rec {
     description = "Library to deal with UFO font sources";
     homepage = "https://github.com/fonttools/ufoLib2";
     license = lib.licenses.mit;
+=======
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "ufoLib2" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/fonttools/ufoLib2/releases/tag/${src.tag}";
+    description = "Library to deal with UFO font sources";
+    homepage = "https://github.com/fonttools/ufoLib2";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

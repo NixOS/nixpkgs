@@ -43,11 +43,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlobject" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Object Relational Manager for providing an object interface to your database";
     homepage = "https://www.sqlobject.org/";
     changelog = "https://github.com/sqlobject/sqlobject/blob/${version}/docs/News.rst";
     license = lib.licenses.lgpl21Only;
+=======
+  meta = with lib; {
+    description = "Object Relational Manager for providing an object interface to your database";
+    homepage = "https://www.sqlobject.org/";
+    changelog = "https://github.com/sqlobject/sqlobject/blob/${version}/docs/News.rst";
+    license = licenses.lgpl21Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

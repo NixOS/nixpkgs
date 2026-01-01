@@ -90,10 +90,18 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
+<<<<<<< HEAD
   meta = {
     description = "VLSI layout tool written in Tcl";
     homepage = "http://opencircuitdesign.com/magic/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "VLSI layout tool written in Tcl";
+    homepage = "http://opencircuitdesign.com/magic/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

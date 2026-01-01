@@ -89,7 +89,11 @@ let
     ;
 
   # Mark versions older than minSupportedVersion as EOL.
+<<<<<<< HEAD
   minSupportedVersion = "4.18";
+=======
+  minSupportedVersion = "4.17";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   scriptDeps =
     let

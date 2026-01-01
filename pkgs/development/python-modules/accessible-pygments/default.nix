@@ -38,11 +38,19 @@ buildPythonPackage rec {
     "a11y_pygments.utils"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of accessible pygments styles";
     homepage = "https://github.com/Quansight-Labs/accessible-pygments";
     changelog = "https://github.com/Quansight-Labs/accessible-pygments/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Collection of accessible pygments styles";
+    homepage = "https://github.com/Quansight-Labs/accessible-pygments";
+    changelog = "https://github.com/Quansight-Labs/accessible-pygments/raw/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

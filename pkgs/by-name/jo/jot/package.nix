@@ -17,11 +17,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-B3CkXoSShZTnT3OlVaqRBbGIaOKiqri6AuYVrUHB6NQ=";
 
+<<<<<<< HEAD
   meta = {
     description = "Rapid note management for the terminal";
     homepage = "https://github.com/shashwatah/jot";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
+=======
+  meta = with lib; {
+    description = "Rapid note management for the terminal";
+    homepage = "https://github.com/shashwatah/jot";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jt";
   };
 }

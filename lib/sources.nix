@@ -20,7 +20,11 @@ let
 
   /**
     A basic filter for `cleanSourceWith` that removes
+<<<<<<< HEAD
     directories of version control system, backup files (`*~`)
+=======
+    directories of version control system, backup files (*~)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     and some generated files.
 
     # Inputs
@@ -72,7 +76,11 @@ let
     );
 
   /**
+<<<<<<< HEAD
     Filters a source tree removing version control files and directories using `cleanSourceFilter`.
+=======
+    Filters a source tree removing version control files and directories using cleanSourceFilter.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 

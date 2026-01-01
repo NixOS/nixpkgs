@@ -184,7 +184,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Install udev files into our own tree.
+<<<<<<< HEAD
   env.PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+=======
+  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   separateDebugInfo = true;
 
@@ -204,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Window manager for GNOME";
     mainProgram = "mutter";
@@ -211,5 +216,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Window manager for GNOME";
+    mainProgram = "mutter";
+    homepage = "https://gitlab.gnome.org/GNOME/mutter";
+    license = licenses.gpl2Plus;
+    teams = [ teams.pantheon ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

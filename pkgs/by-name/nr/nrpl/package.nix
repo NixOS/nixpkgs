@@ -43,6 +43,7 @@ buildNimPackage {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "REPL for the Nim programming language";
     mainProgram = "nrpl";
@@ -50,5 +51,14 @@ buildNimPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = with lib.platforms; linux ++ darwin;
+=======
+  meta = with lib; {
+    description = "REPL for the Nim programming language";
+    mainProgram = "nrpl";
+    homepage = "https://github.com/wheineman/nrpl";
+    license = licenses.mit;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

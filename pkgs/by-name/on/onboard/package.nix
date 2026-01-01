@@ -189,10 +189,18 @@ python3.pkgs.buildPythonApplication rec {
     rm -rf  $out/share/icons/ubuntu-mono-*
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://launchpad.net/onboard";
     description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
     maintainers = [ ];
     license = lib.licenses.gpl3;
+=======
+  meta = with lib; {
+    homepage = "https://launchpad.net/onboard";
+    description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
+    maintainers = [ ];
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -72,13 +72,22 @@ let
       });
     };
 
+<<<<<<< HEAD
     meta = {
+=======
+    meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       description = "Code audit tool for python";
       mainProgram = "pylama";
       homepage = "https://github.com/klen/pylama";
       changelog = "https://github.com/klen/pylama/blob/${version}/Changelog";
+<<<<<<< HEAD
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ dotlambda ];
+=======
+      license = licenses.mit;
+      maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   };
 in

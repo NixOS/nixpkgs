@@ -20,11 +20,20 @@ stdenv.mkDerivation {
     autoreconfHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Creates a bidirectional virtual data connection tunnelled in HTTP requests";
     homepage = "http://www.gnu.org/software/httptunnel/httptunnel.html";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ koral ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Creates a bidirectional virtual data connection tunnelled in HTTP requests";
+    homepage = "http://www.gnu.org/software/httptunnel/httptunnel.html";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ koral ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

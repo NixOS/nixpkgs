@@ -20,22 +20,36 @@
   systemd,
   udevCheckHook,
   util-linux,
+<<<<<<< HEAD
   glib,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   x86_energy_perf_policy,
   # RDW only works with NetworkManager, and thus is optional with default off
   enableRDW ? false,
   networkmanager,
+<<<<<<< HEAD
   tlp-pd,
 }:
 stdenv.mkDerivation rec {
   pname = "tlp";
   version = "1.9.0";
+=======
+}:
+stdenv.mkDerivation rec {
+  pname = "tlp";
+  version = "1.8.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-aM/4+cgtUe6qv3MNT4moXvNzqG5gKvwMbg14L8ifWlc=";
+=======
+    hash = "sha256-Bqg0IwLh3XIVJd2VkPQFDCZ/hVrzRFrRLlSHJXlJGWU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   # XXX: See patch files for relevant explanations.
@@ -106,7 +120,10 @@ stdenv.mkDerivation rec {
           smartmontools
           systemd
           util-linux
+<<<<<<< HEAD
           glib # gdbus
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         ]
         ++ lib.optional enableRDW networkmanager
         ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
@@ -139,6 +156,7 @@ stdenv.mkDerivation rec {
       rm -rf $out/share/metainfo
     '';
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit tlp-pd;
   };
@@ -153,5 +171,17 @@ stdenv.mkDerivation rec {
       lovesegfault
     ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Advanced Power Management for Linux";
+    homepage = "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
+    changelog = "https://github.com/linrunner/TLP/releases/tag/${version}";
+    platforms = platforms.linux;
+    mainProgram = "tlp";
+    maintainers = with maintainers; [
+      lovesegfault
+    ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

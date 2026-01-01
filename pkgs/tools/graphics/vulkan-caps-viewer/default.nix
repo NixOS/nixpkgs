@@ -53,7 +53,11 @@ stdenv.mkDerivation rec {
     cp -r vulkanCapsViewer.app "$out/Applications"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vulkanCapsViewer";
     description = "Vulkan hardware capability viewer";
     longDescription = ''
@@ -61,9 +65,15 @@ stdenv.mkDerivation rec {
       The hardware reports can be submitted to a public online database that allows comparing different devices, browsing available features, extensions, formats, etc.
     '';
     homepage = "https://vulkan.gpuinfo.org/";
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ pedrohlc ];
+=======
+    platforms = platforms.unix;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ pedrohlc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/SaschaWillems/VulkanCapsViewer/releases/tag/${version}";
   };
 }

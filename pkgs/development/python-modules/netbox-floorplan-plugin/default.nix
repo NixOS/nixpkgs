@@ -36,11 +36,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "netbox_floorplan" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Netbox plugin providing floorplan mapping capability for locations and sites";
     homepage = "https://github.com/netbox-community/netbox-floorplan-plugin";
     changelog = "https://github.com/netbox-community/netbox-floorplan-plugin/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ cobalt ];
+=======
+  meta = with lib; {
+    description = "Netbox plugin providing floorplan mapping capability for locations and sites";
+    homepage = "https://github.com/netbox-community/netbox-floorplan-plugin";
+    changelog = "https://github.com/netbox-community/netbox-floorplan-plugin/releases/tag/${src.tag}";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ cobalt ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

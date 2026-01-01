@@ -29,11 +29,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_unordered" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/utapyngo/pytest-unordered/blob/v${version}/CHANGELOG.md";
     description = "Test equality of unordered collections in pytest";
     homepage = "https://github.com/utapyngo/pytest-unordered";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/utapyngo/pytest-unordered/blob/v${version}/CHANGELOG.md";
+    description = "Test equality of unordered collections in pytest";
+    homepage = "https://github.com/utapyngo/pytest-unordered";
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -30,10 +30,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Links recognition library with full unicode support";
     homepage = "https://github.com/tsutsu3/linkify-it-py";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Links recognition library with full unicode support";
+    homepage = "https://github.com/tsutsu3/linkify-it-py";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

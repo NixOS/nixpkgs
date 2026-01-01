@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "responses" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for mocking out the requests Python library";
     homepage = "https://github.com/getsentry/responses";
     changelog = "https://github.com/getsentry/responses/blob/${src.tag}/CHANGES";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for mocking out the requests Python library";
+    homepage = "https://github.com/getsentry/responses";
+    changelog = "https://github.com/getsentry/responses/blob/${src.tag}/CHANGES";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

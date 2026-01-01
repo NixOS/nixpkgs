@@ -26,11 +26,20 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://jwilk.net/software/fbcat";
     description = "Framebuffer screenshot tool";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://jwilk.net/software/fbcat";
+    description = "Framebuffer screenshot tool";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

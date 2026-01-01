@@ -62,17 +62,29 @@ rustPlatform.buildRustPackage rec {
     inherit swim;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Better hardware description language";
     homepage = "https://gitlab.com/spade-lang/spade";
     changelog = "https://gitlab.com/spade-lang/spade/-/blob/${src.rev}/CHANGELOG.md";
     # compiler is eupl12, spade-lang stdlib is both asl20 and mit
+<<<<<<< HEAD
     license = with lib.licenses; [
+=======
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       eupl12
       asl20
       mit
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ pbsds ];
+=======
+    maintainers = with maintainers; [ pbsds ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "spade";
   };
 }

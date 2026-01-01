@@ -89,10 +89,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "neutronclient" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for the OpenStack Networking API";
     homepage = "https://github.com/openstack/python-neutronclient/";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
+=======
+  meta = with lib; {
+    description = "Python bindings for the OpenStack Networking API";
+    homepage = "https://github.com/openstack/python-neutronclient/";
+    license = licenses.asl20;
+    teams = [ teams.openstack ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

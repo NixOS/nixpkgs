@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gcc-14.patch
+<<<<<<< HEAD
+    ./gcc-15.patch
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ./macos-10_7-getline.patch
   ];
 
@@ -27,6 +31,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Implements Wake On LAN functionality in a small program";
     homepage = "https://sourceforge.net/projects/wake-on-lan/";
@@ -34,5 +39,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ makefu ];
     mainProgram = "wol";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Implements Wake On LAN functionality in a small program";
+    homepage = "https://sourceforge.net/projects/wake-on-lan/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ makefu ];
+    mainProgram = "wol";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

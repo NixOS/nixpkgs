@@ -9,8 +9,11 @@
 
   # buildInputs
   fmt,
+<<<<<<< HEAD
   libbfd,
   libunwind,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   rsync,
 
   versionCheckHook,
@@ -19,13 +22,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
+<<<<<<< HEAD
   version = "3.16.1";
+=======
+  version = "3.15.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     tag = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-HYtnTJYII548+/tp+1UjRgsBaTuDz27AIc2MvBjBh8o=";
+=======
+    hash = "sha256-frsq5OA3giLOJ/KPcAqVhme+0CtJuZrS3F4zHN1PnFM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetchSubmodules = true;
   };
 
@@ -36,8 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fmt
+<<<<<<< HEAD
     libbfd
     libunwind
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rsync
@@ -126,6 +140,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

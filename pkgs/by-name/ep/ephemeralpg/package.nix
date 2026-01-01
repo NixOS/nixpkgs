@@ -24,12 +24,22 @@ stdenv.mkDerivation rec {
       ]
     }
   '';
+<<<<<<< HEAD
   meta = {
     description = "Run tests on an isolated, temporary PostgreSQL database";
     license = lib.licenses.isc;
     homepage = "https://eradman.com/ephemeralpg/";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Run tests on an isolated, temporary PostgreSQL database";
+    license = licenses.isc;
+    homepage = "https://eradman.com/ephemeralpg/";
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      hrdinka
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       medv
     ];
   };

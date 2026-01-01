@@ -69,11 +69,20 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Set of libraries and utilities to access smart cards";
     homepage = "https://github.com/OpenSC/OpenSC/wiki";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.michaeladler ];
+=======
+  meta = with lib; {
+    description = "Set of libraries and utilities to access smart cards";
+    homepage = "https://github.com/OpenSC/OpenSC/wiki";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.michaeladler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "derpconf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to abstract loading configuration files for your app";
     homepage = "https://github.com/globocom/derpconf";
     changelog = "https://github.com/globocom/derpconf/releases/tag/${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Module to abstract loading configuration files for your app";
+    homepage = "https://github.com/globocom/derpconf";
+    changelog = "https://github.com/globocom/derpconf/releases/tag/${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

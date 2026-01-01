@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_jsonreport" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pytest plugin to report test results as JSON";
     homepage = "https://github.com/numirias/pytest-json-report";
     changelog = "https://github.com/numirias/pytest-json-report/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Pytest plugin to report test results as JSON";
+    homepage = "https://github.com/numirias/pytest-json-report";
+    changelog = "https://github.com/numirias/pytest-json-report/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

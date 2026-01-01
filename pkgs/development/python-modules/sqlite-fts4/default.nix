@@ -24,10 +24,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlite_fts4" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Custom Python functions for working with SQLite FTS4";
     homepage = "https://github.com/simonw/sqlite-fts4";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ meatcar ];
+=======
+  meta = with lib; {
+    description = "Custom Python functions for working with SQLite FTS4";
+    homepage = "https://github.com/simonw/sqlite-fts4";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ meatcar ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

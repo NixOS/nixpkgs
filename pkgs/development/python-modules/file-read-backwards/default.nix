@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "file_read_backwards" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Memory efficient way of reading files line-by-line from the end of file";
     homepage = "https://github.com/RobinNil/file_read_backwards";
     changelog = "https://github.com/RobinNil/file_read_backwards/blob/v${version}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ j0hax ];
+=======
+  meta = with lib; {
+    description = "Memory efficient way of reading files line-by-line from the end of file";
+    homepage = "https://github.com/RobinNil/file_read_backwards";
+    changelog = "https://github.com/RobinNil/file_read_backwards/blob/v${version}/HISTORY.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ j0hax ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "locket" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library which provides a lock that can be used by multiple processes";
     homepage = "https://github.com/mwilliamson/locket.py";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ teh ];
+=======
+  meta = with lib; {
+    description = "Library which provides a lock that can be used by multiple processes";
+    homepage = "https://github.com/mwilliamson/locket.py";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ teh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

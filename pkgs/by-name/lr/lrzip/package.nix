@@ -51,11 +51,20 @@ stdenv.mkDerivation rec {
     "--disable-asm"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://ck.kolivas.org/apps/lrzip/";
     description = "CK LRZIP compression program (LZMA + RZIP)";
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://ck.kolivas.org/apps/lrzip/";
+    description = "CK LRZIP compression program (LZMA + RZIP)";
+    maintainers = [ ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,6 +28,7 @@ stdenv.mkDerivation {
 
   doCheck = false; # fails
 
+<<<<<<< HEAD
   meta = {
     description = "Ultra-low delay audio codec";
     homepage = "https://gitlab.xiph.org/xiph/celt"; # http://www.celt-codec.org/ is gone
@@ -37,5 +38,16 @@ stdenv.mkDerivation {
       raskin
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Ultra-low delay audio codec";
+    homepage = "https://gitlab.xiph.org/xiph/celt"; # http://www.celt-codec.org/ is gone
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+      codyopel
+      raskin
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

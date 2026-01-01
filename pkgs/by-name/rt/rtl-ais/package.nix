@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple AIS tuner and generic dual-frequency FM demodulator";
     homepage = "https://github.com/dgiardini/rtl-ais";
@@ -32,5 +33,14 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ mgdm ];
     mainProgram = "rtl_ais";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple AIS tuner and generic dual-frequency FM demodulator";
+    homepage = "https://github.com/dgiardini/rtl-ais";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ mgdm ];
+    mainProgram = "rtl_ais";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

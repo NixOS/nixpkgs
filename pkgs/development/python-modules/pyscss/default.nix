@@ -26,10 +26,17 @@ buildPythonPackage rec {
   # See https://github.com/Kronuz/pyScss/issues/415
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Scss compiler for Python";
     homepage = "https://pyscss.readthedocs.org/en/latest/";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Scss compiler for Python";
+    homepage = "https://pyscss.readthedocs.org/en/latest/";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

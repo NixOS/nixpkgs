@@ -21,9 +21,16 @@ buildPythonPackage rec {
     colorama
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
     homepage = "https://github.com/smeggingsmegger/VeryPrettyTable";
     license = lib.licenses.free;
+=======
+  meta = with lib; {
+    description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
+    homepage = "https://github.com/smeggingsmegger/VeryPrettyTable";
+    license = licenses.free;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

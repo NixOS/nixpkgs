@@ -26,6 +26,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Small QR-code tool";
     homepage = "https://github.com/qsantos/qrcode";
@@ -35,6 +36,17 @@ stdenv.mkDerivation {
       lucasew
     ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "Small QR-code tool";
+    homepage = "https://github.com/qsantos/qrcode";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      raskin
+      lucasew
+    ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qrcode";
   };
 }

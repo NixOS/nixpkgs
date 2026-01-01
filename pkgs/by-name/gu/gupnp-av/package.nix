@@ -66,10 +66,18 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://gupnp.org/";
     description = "Collection of helpers for building AV (audio/video) applications using GUPnP";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://gupnp.org/";
+    description = "Collection of helpers for building AV (audio/video) applications using GUPnP";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -46,7 +46,11 @@ symlinkJoin {
     wordlistsPathBin
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Collection of wordlists useful for security testing";
     longDescription = ''
       The `wordlists` package provides two scripts. One is called {command}`wordlists`,
@@ -70,7 +74,11 @@ symlinkJoin {
       If you want to add a new package that provides wordlist/s the convention
       is to copy it to {file}`$out/share/wordlists/myNewWordlist`.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pamplemousse
       h7x4
     ];

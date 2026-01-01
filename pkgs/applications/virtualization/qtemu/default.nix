@@ -43,12 +43,21 @@ mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Qt-based front-end for QEMU emulator";
     homepage = "https://qtemu.org";
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ romildo ];
+=======
+  meta = with lib; {
+    description = "Qt-based front-end for QEMU emulator";
+    homepage = "https://qtemu.org";
+    license = licenses.gpl2;
+    platforms = with platforms; linux;
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "qtemu";
   };
 }

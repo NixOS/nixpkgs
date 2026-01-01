@@ -47,16 +47,26 @@ stdenv.mkDerivation {
     substituteInPlace meson.build --replace "git = find_program('git')" "git = 'false'"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Contrast, brightness, and gamma adjustments for Wayland";
     longDescription = ''
       Small GTK GUI application to set contrast, brightness, and gamma for wayland compositors which
       support the wlr-gamma-control protocol extension.
     '';
     homepage = "https://github.com/mischw/wl-gammactl";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ lodi ];
+=======
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ lodi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wl-gammactl";
   };
 }

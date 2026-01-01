@@ -45,11 +45,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Communicate with Nitrokey devices in a clean and easy manner";
     homepage = "https://github.com/Nitrokey/libnitrokey";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Communicate with Nitrokey devices in a clean and easy manner";
+    homepage = "https://github.com/Nitrokey/libnitrokey";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       panicgh
       raitobezarius
     ];

@@ -53,13 +53,23 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.gnome.org/GNOME/gnome-mahjongg";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-mahjongg/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Disassemble a pile of tiles by removing matching pairs";
     mainProgram = "gnome-mahjongg";
+<<<<<<< HEAD
     teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    teams = [ teams.gnome ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

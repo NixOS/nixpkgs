@@ -18,11 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "0blr1casmxickic84dxzfmn3lm7wrsl4aa2abvpq93rdfddfy3nn";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     sqlite
@@ -34,11 +37,20 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "--no-warn-unused-cli" ];
   env.NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://cppcms.com/sql/cppdb/";
     description = "C++ Connectivity library that supports MySQL, PostgreSQL, Sqlite3 databases and generic ODBC drivers";
     platforms = lib.platforms.linux;
     license = lib.licenses.boost;
     maintainers = [ lib.maintainers.juliendehos ];
+=======
+  meta = with lib; {
+    homepage = "http://cppcms.com/sql/cppdb/";
+    description = "C++ Connectivity library that supports MySQL, PostgreSQL, Sqlite3 databases and generic ODBC drivers";
+    platforms = platforms.linux;
+    license = licenses.boost;
+    maintainers = [ maintainers.juliendehos ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

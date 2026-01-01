@@ -18,16 +18,27 @@
 
 buildNpmPackage rec {
   pname = "basedpyright";
+<<<<<<< HEAD
   version = "1.36.1";
+=======
+  version = "1.34.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-c0yvnLOwOR4nMYbfyXe/QRUt3qaNRzwuS8UbyviJj9E=";
   };
 
   npmDepsHash = "sha256-VHQOmRWirZYnoxk/JzGwFFV5QEIyHGg/isDvf/f7uro=";
+=======
+    hash = "sha256-GTyxJBjzRlCjyaa7xayHzlKQApCbMTh+MUOEZydjteA=";
+  };
+
+  npmDepsHash = "sha256-zNmZ4wXxe31NnQ+VlTLoPM2zTDmKdw1D28pi/roybdQ=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   npmWorkspace = "packages/pyright";
 
   preBuild = ''
@@ -52,6 +63,10 @@ buildNpmPackage rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {

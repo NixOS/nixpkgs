@@ -29,10 +29,18 @@ stdenv.mkDerivation rec {
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Bluetooth baseband decoding library";
     homepage = "https://github.com/greatscottgadgets/libbtbb";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ oxzi ];
+=======
+  meta = with lib; {
+    description = "Bluetooth baseband decoding library";
+    homepage = "https://github.com/greatscottgadgets/libbtbb";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ oxzi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,10 +39,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "warrant_lite" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for process SRP requests for AWS Cognito";
     homepage = "https://github.com/capless/warrant-lite";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for process SRP requests for AWS Cognito";
+    homepage = "https://github.com/capless/warrant-lite";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

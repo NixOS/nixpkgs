@@ -49,11 +49,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "home" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to automate (home) devices";
     homepage = "https://github.com/majamassarini/automate-home";
     changelog = "https://github.com/majamassarini/automate-home/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to automate (home) devices";
+    homepage = "https://github.com/majamassarini/automate-home";
+    changelog = "https://github.com/majamassarini/automate-home/releases/tag/${version}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

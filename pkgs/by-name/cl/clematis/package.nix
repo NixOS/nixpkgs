@@ -17,12 +17,21 @@ buildGoModule {
 
   vendorHash = "sha256-YKu+7LFUoQwCH//URIswiaqa0rmnWZJvuSn/68G3TUA=";
 
+<<<<<<< HEAD
   meta = {
     description = "Discord rich presence for MPRIS music players";
     homepage = "https://github.com/TorchedSammy/Clematis";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ misterio77 ];
+=======
+  meta = with lib; {
+    description = "Discord rich presence for MPRIS music players";
+    homepage = "https://github.com/TorchedSammy/Clematis";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ misterio77 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "clematis";
   };
 }

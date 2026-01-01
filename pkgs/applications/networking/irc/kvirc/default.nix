@@ -35,11 +35,20 @@ mkDerivation {
     gettext
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Advanced IRC Client";
     homepage = "https://www.kvirc.net/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.suhr ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Advanced IRC Client";
+    homepage = "https://www.kvirc.net/";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.suhr ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -2,6 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   beautifulsoup4,
   boto3,
@@ -18,14 +22,25 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
+<<<<<<< HEAD
   version = "114";
+=======
+  version = "113";
+
+  disabled = pythonOlder "3.10";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boxine";
     repo = "bx_py_utils";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-AAn1e5HuSngEnCoCpOvVjxavZbiH2YL+38gXxhqLLBo=";
+=======
+    hash = "sha256-rpDRLiqcbg/aRzdmKwGJAGrhBJTA+7tXsjPUIeeC03I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -74,6 +89,13 @@ buildPythonPackage rec {
     "test_assert_html_snapshot_by_css_selector"
     # test accesses the internet
     "test_happy_path"
+<<<<<<< HEAD
+=======
+    # test assumes a virtual environment
+    "test_code_style"
+    # AssertionError: Lists differ: ['my...
+    "test_import_all_files"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   disabledTestPaths = [

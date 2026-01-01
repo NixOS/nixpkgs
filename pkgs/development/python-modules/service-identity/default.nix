@@ -49,11 +49,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "service_identity" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Service identity verification for pyOpenSSL";
     homepage = "https://service-identity.readthedocs.io";
     changelog = "https://github.com/pyca/service-identity/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Service identity verification for pyOpenSSL";
+    homepage = "https://service-identity.readthedocs.io";
+    changelog = "https://github.com/pyca/service-identity/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

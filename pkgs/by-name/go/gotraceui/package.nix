@@ -55,6 +55,7 @@ buildGoModule rec {
     cp -r share $out/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Efficient frontend for Go execution traces";
     mainProgram = "gotraceui";
@@ -62,5 +63,14 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dominikh ];
+=======
+  meta = with lib; {
+    description = "Efficient frontend for Go execution traces";
+    mainProgram = "gotraceui";
+    homepage = "https://github.com/dominikh/gotraceui";
+    platforms = platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ dominikh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

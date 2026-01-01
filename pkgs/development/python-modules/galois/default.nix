@@ -45,12 +45,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "galois" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Python package that extends NumPy arrays to operate over finite fields";
     homepage = "https://github.com/mhostetter/galois";
     changelog = "https://github.com/mhostetter/galois/releases/tag/${src.tag}";
     downloadPage = "https://github.com/mhostetter/galois/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ chrispattison ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ chrispattison ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

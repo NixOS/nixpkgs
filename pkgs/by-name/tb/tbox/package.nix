@@ -27,11 +27,20 @@ stdenv.mkDerivation rec {
     substituteAll ${./libtbox.pc.in} $out/lib/pkgconfig/libtbox.pc
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Glib-like multi-platform c library";
     homepage = "https://docs.tboox.org";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ wineee ];
+=======
+  meta = with lib; {
+    description = "Glib-like multi-platform c library";
+    homepage = "https://docs.tboox.org";
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wineee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -26,10 +26,17 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Backport of the concurrent.futures package from Python 3.2";
     homepage = "https://github.com/agronholm/pythonfutures";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Backport of the concurrent.futures package from Python 3.2";
+    homepage = "https://github.com/agronholm/pythonfutures";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

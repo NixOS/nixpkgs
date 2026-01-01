@@ -10,6 +10,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+<<<<<<< HEAD
   zig_0_15,
 }:
 
@@ -19,19 +20,36 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-bedload";
   version = "0.2.0";
+=======
+  zig_0_14,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "river-bedload";
+  version = "0.1.1-unstable-2025-03-19";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromSourcehut {
     owner = "~novakane";
     repo = "river-bedload";
+<<<<<<< HEAD
     tag = "v${finalAttrs.version}";
     hash = "sha256-MOZju7mU/AtaSm9CJgb/UqYpCg697tefJC1yvQPK3S8=";
+=======
+    rev = "4a2855ca2669372c346975dd6e1f612ca563b131";
+    hash = "sha256-CQH2LQi2ga4YDD2ZYb998ExDJHK4TGHq5h3z94703Dc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   deps = callPackage ./build.zig.zon.nix { };
 
   nativeBuildInputs = [
     pkg-config
+<<<<<<< HEAD
     zig.hook
+=======
+    zig_0_14.hook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [

@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gettext,
 }:
 
@@ -20,12 +23,15 @@ stdenv.mkDerivation rec {
     # requires that compat/getopt.h is also removed
     # https://savannah.gnu.org/bugs/?64307
     ./0001-use-system-getopt.patch
+<<<<<<< HEAD
     # Fix build with gcc15
     #   regex.c:3565:13: error: too many arguments to function 're_match_2_internal'; expected 0, have 8
     (fetchpatch2 {
       url = "https://salsa.debian.org/debian/enscript/-/raw/7a51479540a210dee5eee4ece5b54e3ce15dec52/debian/patches/1096582-gcc-15";
       hash = "sha256-0H8FNCKgQ1YCwcBaMChQSuFaYlmzSsoqtfsNSr567+Y=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   postPatch = ''

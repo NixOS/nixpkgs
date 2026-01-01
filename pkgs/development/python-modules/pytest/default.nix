@@ -101,11 +101,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
     teams = [ lib.teams.python ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Framework for writing tests";
+    homepage = "https://docs.pytest.org";
+    changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
+    teams = [ teams.python ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

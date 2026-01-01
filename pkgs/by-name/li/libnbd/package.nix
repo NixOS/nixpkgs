@@ -64,7 +64,11 @@ stdenv.mkDerivation rec {
     substituteAllInPlace $LIBNBD_PYTHON_METADATA
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://gitlab.com/nbdkit/libnbd";
     description = "Network Block Device client library in userspace";
     longDescription = ''
@@ -82,11 +86,19 @@ stdenv.mkDerivation rec {
       - Bindings in several programming languages.
       - Shell (nbdsh) for command line and scripting.
     '';
+<<<<<<< HEAD
     license = with lib.licenses; lgpl21Plus;
     maintainers = with lib.maintainers; [
       humancalico
     ];
     platforms = with lib.platforms; linux;
+=======
+    license = with licenses; lgpl21Plus;
+    maintainers = with maintainers; [
+      humancalico
+    ];
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.version "4.05";
   };
 }

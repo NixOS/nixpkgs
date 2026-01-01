@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     install -Dm0644 -t $out/include Inc/*.h
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Unfree binary release of the TI MSP430 FET debug driver";
     homepage = "https://www.ti.com/tool/MSPDS";
@@ -41,5 +42,14 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ aerialx ];
+=======
+  meta = with lib; {
+    description = "Unfree binary release of the TI MSP430 FET debug driver";
+    homepage = "https://www.ti.com/tool/MSPDS";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ aerialx ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

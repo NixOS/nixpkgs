@@ -27,6 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-wcQd5j74y7d0xFeWlwlhceZj95ixUmv5upnv/6Rl1ew=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Python RAML parser";
     mainProgram = "ramlfications";
@@ -34,6 +35,15 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Python RAML parser";
+    mainProgram = "ramlfications";
+    homepage = "https://ramlfications.readthedocs.org";
+    license = licenses.asl20;
+    maintainers = [ ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   doCheck = false;

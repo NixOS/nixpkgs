@@ -50,10 +50,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unicorn" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for Unicorn CPU emulator engine";
     homepage = "https://www.unicorn-engine.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python bindings for Unicorn CPU emulator engine";
+    homepage = "https://www.unicorn-engine.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

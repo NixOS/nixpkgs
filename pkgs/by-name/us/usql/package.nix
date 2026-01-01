@@ -11,13 +11,21 @@
 
 buildGoModule rec {
   pname = "usql";
+<<<<<<< HEAD
   version = "0.20.0";
+=======
+  version = "0.19.26";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-/wF2cZ+gGr4ydSREMTvfNayLEOcOpsEeAlXpSYiVcI0=";
+=======
+    hash = "sha256-Qs/P7WFoc9w3jYLX48F7KSXLYBjrX0DppJmfZvY6Cq8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -25,7 +33,11 @@ buildGoModule rec {
     icu
   ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-hOTmU33gOWUfMJRmixQXY+qkQ2aanOTtEhYrycxyqFM=";
+=======
+  vendorHash = "sha256-gkC9o7aBZPqHoYODwstRehfaE+Gvtnv7gvKxbnc+BNI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   proxyVendor = true;
 
   # Exclude drivers from the bad group

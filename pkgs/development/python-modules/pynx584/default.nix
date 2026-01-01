@@ -44,10 +44,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nx584" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for communicating to NX584/NX8E interfaces";
     homepage = "https://github.com/kk7ds/pynx584";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python package for communicating to NX584/NX8E interfaces";
+    homepage = "https://github.com/kk7ds/pynx584";
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

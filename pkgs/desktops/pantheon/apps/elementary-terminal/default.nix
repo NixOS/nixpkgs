@@ -54,16 +54,26 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Terminal emulator designed for elementary OS";
     longDescription = ''
       A super lightweight, beautiful, and simple terminal. Comes with sane defaults, browser-class tabs, sudo paste protection,
       smart copy/paste, and little to no configuration.
     '';
     homepage = "https://github.com/elementary/terminal";
+<<<<<<< HEAD
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];
+=======
+    license = licenses.lgpl3Plus;
+    platforms = platforms.linux;
+    teams = [ teams.pantheon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "io.elementary.terminal";
   };
 }

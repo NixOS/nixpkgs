@@ -27,11 +27,19 @@ buildPythonApplication rec {
   # Different pandoc executables are not available
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Standalone pandoc filter from the pandoc-xnos suite for numbering tables and table references";
     homepage = "https://github.com/tomduck/pandoc-tablenos";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ppenguin ];
+=======
+  meta = with lib; {
+    description = "Standalone pandoc filter from the pandoc-xnos suite for numbering tables and table references";
+    homepage = "https://github.com/tomduck/pandoc-tablenos";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ ppenguin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pandoc-tablenos";
   };
 }

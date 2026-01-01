@@ -36,7 +36,11 @@ stdenv.mkDerivation {
     chmod +x $out/bin/omegat
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Free computer aided translation (CAT) tool for professionals";
     mainProgram = "omegat";
     longDescription = ''
@@ -45,9 +49,15 @@ stdenv.mkDerivation {
       translation leveraging into updated projects.
     '';
     homepage = "http://www.omegat.org/";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ t184256 ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ t184256 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

@@ -53,13 +53,23 @@ stdenv.mkDerivation rec {
     ))
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     isIbusEngine = true;
     description = "Ibus Hangul engine";
     mainProgram = "ibus-setup-hangul";
     homepage = "https://github.com/libhangul/ibus-hangul";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -4,13 +4,19 @@
   buildPythonPackage,
   setuptools,
   fetchPypi,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   replaceVars,
 
   # build
   autoPatchelfHook,
   attrdict,
+<<<<<<< HEAD
   cython,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doxygen,
   pkg-config,
   python,
@@ -40,26 +46,40 @@
   numpy,
   pillow,
   six,
+<<<<<<< HEAD
 
   # checks
   py,
   pytest,
   pytest-forked,
   xvfb-run,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "wxpython";
+<<<<<<< HEAD
   version = "4.2.4";
   format = "other";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-LrEjl5yHvLMp6KJFImnWD/j59lHpvyXGdXnlPE67rjw=";
+=======
+  version = "4.2.3";
+  format = "other";
+
+  src = fetchPypi {
+    pname = "wxPython";
+    inherit version;
+    hash = "sha256-INbgySfifO2FZDcZvWPp9/1QHfbpqKqxSJsDmJf9fAE=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
     (replaceVars ./4.2-ctypes.patch {
+<<<<<<< HEAD
       libgdk = "${lib.getLib gtk3}/lib/libgdk-3${stdenv.hostPlatform.extensions.sharedLibrary}";
       libpangocairo = "${lib.getLib pango}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       libcairo = "${lib.getLib cairo}/lib/libcairo${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -72,19 +92,33 @@ buildPythonPackage rec {
       url = "https://github.com/wxWidgets/Phoenix/commit/31303649ab0a0fed0789e0951a7487d172b65bfa.patch";
       hash = "sha256-OAnAsyqHGPNEAiOxLLpdEGcd92K7TCxqEBYceuIb8so=";
     })
+=======
+      libgdk = "${gtk3.out}/lib/libgdk-3.so";
+      libpangocairo = "${pango}/lib/libpangocairo-1.0.so";
+      libcairo = "${cairo}/lib/libcairo.so";
+    })
+    ./0001-add-missing-bool-c.patch # Add missing bool.c from old source
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # https://github.com/wxWidgets/Phoenix/issues/2575
   postPatch = ''
     ln -s ${lib.getExe buildPackages.waf} bin/waf
     substituteInPlace build.py \
+<<<<<<< HEAD
       --replace-fail "distutils.dep_util" "setuptools.modified" \
       --replace-fail "runcmd(cmd, fatal=False)" "runcmd(cmd, fatal=True)" # fail when pytest reports errors
+=======
+      --replace-fail "distutils.dep_util" "setuptools.modified"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   nativeBuildInputs = [
     attrdict
+<<<<<<< HEAD
     cython
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkg-config
     requests
     setuptools
@@ -118,6 +152,7 @@ buildPythonPackage rec {
     six
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     py # py must be ordered before pytest (see https://github.com/pytest-dev/pytest-forked/issues/88)
     pytest
@@ -125,6 +160,8 @@ buildPythonPackage rec {
     xvfb-run
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   wafPath = "bin/waf";
 
   buildPhase = ''
@@ -147,6 +184,7 @@ buildPythonPackage rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   # The majority of the tests require a graphical environment, but xvfb-run is available only on Linux.
   # Tests fail randomly on OfBorg and Hydra.
   doCheck = false;
@@ -185,5 +223,24 @@ buildPythonPackage rec {
       lgpl2Plus
       wxWindowsException31
     ];
+=======
+  checkPhase = ''
+    runHook preCheck
+
+    ${python.interpreter} build.py -v test
+
+    runHook postCheck
+  '';
+
+  meta = with lib; {
+    changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
+    description = "Cross platform GUI toolkit for Python, Phoenix version";
+    homepage = "http://wxpython.org/";
+    license = with licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

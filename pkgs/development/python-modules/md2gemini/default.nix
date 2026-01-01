@@ -26,11 +26,20 @@ buildPythonPackage rec {
     hash = "sha256-XreDqqzH3UQ+RIBOrvHpaBb7PXcPPptjQx5cjpI+VzQ=";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Markdown to Gemini text format conversion library";
     homepage = "https://github.com/makeworld-the-better-one/md2gemini";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.kaction ];
     broken = lib.versionAtLeast mistune.version "3";
+=======
+  meta = with lib; {
+    description = "Markdown to Gemini text format conversion library";
+    homepage = "https://github.com/makeworld-the-better-one/md2gemini";
+    license = licenses.lgpl3Plus;
+    maintainers = [ maintainers.kaction ];
+    broken = versionAtLeast mistune.version "3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

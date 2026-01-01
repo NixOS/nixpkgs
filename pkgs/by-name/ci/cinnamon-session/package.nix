@@ -33,13 +33,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
+<<<<<<< HEAD
   version = "6.6.1";
+=======
+  version = "6.4.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-session";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-zPfyPBKN9Qqs2UndW0vYzBqmeFla3ytvdcv/X2dv1zs=";
+=======
+    hash = "sha256-zv1X1MLZBg+Bayd4hjsmrdXkFTRkH4kz7PJe6mFTBqc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -95,11 +103,20 @@ stdenv.mkDerivation rec {
     )
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/cinnamon-session";
     description = "Cinnamon session manager";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/cinnamon-session";
+    description = "Cinnamon session manager";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

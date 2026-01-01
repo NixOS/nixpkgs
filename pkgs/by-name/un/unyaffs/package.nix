@@ -39,6 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/whataday/unyaffs";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ KSJ2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "unyaffs";
   };
 })

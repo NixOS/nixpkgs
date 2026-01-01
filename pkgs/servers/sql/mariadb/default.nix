@@ -216,6 +216,7 @@ let
             mysql-replication = nixosTests.mysql-replication.${testVersion};
           };
 
+<<<<<<< HEAD
         meta = {
           description = "Enhanced, drop-in replacement for MySQL";
           homepage = "https://mariadb.org/";
@@ -223,6 +224,15 @@ let
           maintainers = with lib.maintainers; [ thoughtpolice ];
           teams = [ lib.teams.helsinki-systems ];
           platforms = lib.platforms.all;
+=======
+        meta = with lib; {
+          description = "Enhanced, drop-in replacement for MySQL";
+          homepage = "https://mariadb.org/";
+          license = licenses.gpl2Plus;
+          maintainers = with maintainers; [ thoughtpolice ];
+          teams = [ teams.helsinki-systems ];
+          platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       };
 

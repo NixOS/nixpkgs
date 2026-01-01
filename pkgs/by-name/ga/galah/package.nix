@@ -22,11 +22,19 @@ buildGoModule {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "LLM-powered web honeypot using the OpenAI API";
     homepage = "https://github.com/0x4D31/galah";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "LLM-powered web honeypot using the OpenAI API";
+    homepage = "https://github.com/0x4D31/galah";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "galah";
   };
 }

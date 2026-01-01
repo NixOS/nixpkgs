@@ -21,13 +21,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
+<<<<<<< HEAD
   version = "3.1.10";
+=======
+  version = "3.1.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-/spb1BH5zPyxPKNI419/gYON2EfPtjPzT8ba1nEsjl4=";
+=======
+    hash = "sha256-eKQ2Hvx+IIZNvd5ZNr/V+ii8vtDkoWToqdtPDI+3glI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

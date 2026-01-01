@@ -18,10 +18,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library written in C for encoding and decoding data using base32 or base64 (RFC-4648)";
     homepage = "https://github.com/paolostivanin/libbaseencode";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ alexbakker ];
+=======
+  meta = with lib; {
+    description = "Library written in C for encoding and decoding data using base32 or base64 (RFC-4648)";
+    homepage = "https://github.com/paolostivanin/libbaseencode";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ alexbakker ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

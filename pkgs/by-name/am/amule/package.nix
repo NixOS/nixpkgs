@@ -91,7 +91,11 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libupnp ]}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Peer-to-peer client for the eD2K and Kademlia networks";
     longDescription = ''
       aMule is an eMule-like client for the eD2k and Kademlia
@@ -105,9 +109,15 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://github.com/amule-project/amule";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Undefined symbols for architecture arm64: "_FSFindFolder"
     broken = stdenv.hostPlatform.isDarwin;
   };

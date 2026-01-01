@@ -62,11 +62,20 @@ python3.pkgs.buildPythonApplication rec {
     "invoice2data"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Data extractor for PDF invoices";
     mainProgram = "invoice2data";
     homepage = "https://github.com/invoice-x/invoice2data";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
+=======
+  meta = with lib; {
+    description = "Data extractor for PDF invoices";
+    mainProgram = "invoice2data";
+    homepage = "https://github.com/invoice-x/invoice2data";
+    license = licenses.mit;
+    maintainers = with maintainers; [ psyanticy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

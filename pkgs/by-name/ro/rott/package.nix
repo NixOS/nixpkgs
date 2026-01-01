@@ -75,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "rott";
     homepage = "https://icculus.org/rott/";
     license = with lib.licenses; [ gpl2Plus ] ++ lib.optional withSharewareData unfreeRedistributable;
+<<<<<<< HEAD
+=======
+    maintainers = with lib.maintainers; [ sander ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.all;
   };
 })

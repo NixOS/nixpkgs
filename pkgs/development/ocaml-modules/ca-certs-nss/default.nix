@@ -39,11 +39,19 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ alcotest ];
 
+<<<<<<< HEAD
   meta = {
     description = "X.509 trust anchors extracted from Mozilla's NSS";
     homepage = "https://github.com/mirage/ca-certs-nss";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.sternenseemann ];
+=======
+  meta = with lib; {
+    description = "X.509 trust anchors extracted from Mozilla's NSS";
+    homepage = "https://github.com/mirage/ca-certs-nss";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "extract-from-certdata";
   };
 }

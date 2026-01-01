@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Small GTK app for presenting keybinding hints";
     mainProgram = "remontoire";
@@ -55,5 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ aacebedo ];
+=======
+  meta = with lib; {
+    description = "Small GTK app for presenting keybinding hints";
+    mainProgram = "remontoire";
+    homepage = "https://github.com/regolith-linux/remontoire";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ aacebedo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

@@ -38,11 +38,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tzlocal" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tzinfo object for the local timezone";
     homepage = "https://github.com/regebro/tzlocal";
     changelog = "https://github.com/regebro/tzlocal/blob/${version}/CHANGES.txt";
     license = lib.licenses.cddl;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Tzinfo object for the local timezone";
+    homepage = "https://github.com/regebro/tzlocal";
+    changelog = "https://github.com/regebro/tzlocal/blob/${version}/CHANGES.txt";
+    license = licenses.cddl;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

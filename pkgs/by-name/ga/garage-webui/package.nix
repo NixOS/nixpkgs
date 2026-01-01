@@ -5,10 +5,18 @@
   buildGoModule,
   nodejs,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
 }:
+=======
+  nix-update-script,
+}:
+let
+  pnpm = pnpm_9;
+in
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 buildGoModule (finalAttrs: {
   pname = "garage-webui";
   version = "1.1.0";
@@ -26,6 +34,7 @@ buildGoModule (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm_9
     ];
@@ -33,6 +42,13 @@ buildGoModule (finalAttrs: {
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs') pname version src;
       pnpm = pnpm_9;
+=======
+      pnpm.configHook
+    ];
+
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs') pname version src;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 2;
       hash = "sha256-8eQhR/fuDFNL8W529Ev7piCaseVaFahgZJQk3AJA3ng=";
     };

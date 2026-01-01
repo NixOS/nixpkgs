@@ -15,11 +15,19 @@ assert lib.versionAtLeast ocaml.version "4.08.0";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opam";
+<<<<<<< HEAD
   version = "2.5.0";
 
   src = fetchurl {
     url = "https://github.com/ocaml/opam/releases/download/${finalAttrs.version}/opam-full-${finalAttrs.version}.tar.gz";
     hash = "sha256-JfuY+WLEInwSYeFCr8aKQWd45ugZYAvV7j7EoYrh4jg=";
+=======
+  version = "2.4.1";
+
+  src = fetchurl {
+    url = "https://github.com/ocaml/opam/releases/download/${finalAttrs.version}/opam-full-${finalAttrs.version}.tar.gz";
+    hash = "sha256-xNBTApeTxxTk5zQLEVdCjA+QeDWF+xfzUVgkemQEZ9k=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   strictDeps = true;

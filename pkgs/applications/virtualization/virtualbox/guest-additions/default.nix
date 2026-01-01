@@ -171,6 +171,10 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     license = lib.licenses.gpl3Only;
     maintainers = [
+<<<<<<< HEAD
+=======
+      lib.maintainers.sander
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lib.maintainers.friedrichaltheide
     ];
     platforms = [

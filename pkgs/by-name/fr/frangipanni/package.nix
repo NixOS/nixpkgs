@@ -17,11 +17,20 @@ buildGoModule rec {
 
   vendorHash = "sha256-TSN5M/UCTtfoTf1hDCfrJMCFdSwL/NVXssgt4aefom8=";
 
+<<<<<<< HEAD
   meta = {
     description = "Convert lines of text into a tree structure";
     mainProgram = "frangipanni";
     homepage = "https://github.com/birchb1024/frangipanni";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
+=======
+  meta = with lib; {
+    description = "Convert lines of text into a tree structure";
+    mainProgram = "frangipanni";
+    homepage = "https://github.com/birchb1024/frangipanni";
+    license = licenses.mit;
+    maintainers = with maintainers; [ siraben ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

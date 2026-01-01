@@ -28,10 +28,14 @@ let
     # musl 1.1.x doesn't use 64bit time_t
     "--disable-year2038"
     # libstdbuf.so fails in static builds
+<<<<<<< HEAD
     "--enable-no-install-program=stdbuf,arch,coreutils,hostname"
     # Disable PATH_MAX for better reproducibility
     "gl_cv_func_getcwd_path_max=\"no, but it is partly working\""
     "gl_cv_have_unlimited_file_name_length=no"
+=======
+    "--enable-no-install-program=stdbuf"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 in
 bash.runCommand "${pname}-${version}"
@@ -55,12 +59,21 @@ bash.runCommand "${pname}-${version}"
         mkdir $out
       '';
 
+<<<<<<< HEAD
     meta = {
       description = "GNU Core Utilities";
       homepage = "https://www.gnu.org/software/coreutils";
       license = lib.licenses.gpl3Plus;
       teams = [ lib.teams.minimal-bootstrap ];
       platforms = lib.platforms.unix;
+=======
+    meta = with lib; {
+      description = "GNU Core Utilities";
+      homepage = "https://www.gnu.org/software/coreutils";
+      license = licenses.gpl3Plus;
+      teams = [ teams.minimal-bootstrap ];
+      platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
   ''
@@ -71,7 +84,10 @@ bash.runCommand "${pname}-${version}"
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
     export LD=tcc
+<<<<<<< HEAD
     export LDFLAGS="-L ./lib"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     bash ./configure ${lib.concatStringsSep " " configureFlags}
 
     # Build

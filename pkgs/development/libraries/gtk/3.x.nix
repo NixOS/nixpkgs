@@ -275,7 +275,11 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
@@ -288,9 +292,15 @@ stdenv.mkDerivation (finalAttrs: {
       royalties.
     '';
     homepage = "https://www.gtk.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
+=======
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "gdk-3.0"
       "gtk+-3.0"
@@ -299,7 +309,11 @@ stdenv.mkDerivation (finalAttrs: {
       "gdk-x11-3.0"
       "gtk+-x11-3.0"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
   };
 })

@@ -17,11 +17,19 @@ buildPythonPackage rec {
   # FAIL: test_checkers_testsuite (testsuite.test_all.Pep8TestCase)
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://pep8.readthedocs.org/";
     description = "Python style guide checker";
     mainProgram = "pep8";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://pep8.readthedocs.org/";
+    description = "Python style guide checker";
+    mainProgram = "pep8";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

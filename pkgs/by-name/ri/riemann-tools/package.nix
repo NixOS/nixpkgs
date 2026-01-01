@@ -32,6 +32,7 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "riemann-tools";
 
+<<<<<<< HEAD
   meta = {
     description = "Tools to submit data to Riemann";
     homepage = "https://riemann.io";
@@ -40,5 +41,15 @@ bundlerApp {
       nicknovitski
     ];
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tools to submit data to Riemann";
+    homepage = "https://riemann.io";
+    maintainers = with maintainers; [
+      manveru
+      nicknovitski
+    ];
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

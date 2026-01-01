@@ -147,18 +147,31 @@ stdenv.mkDerivation rec {
     rm -rf pkg
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Computational discrete algebra system";
     # We are also grateful to ChrisJefferson for previous work on the package,
     # and to ChrisJefferson and fingolfin for help with GAP-related questions
     # from the upstream point of view.
+<<<<<<< HEAD
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.all;
+=======
+    teams = [ teams.sage ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # keeping all packages increases the package size considerably, which is
     # why a local build is preferable in that situation. The timeframe is
     # reasonable and that way the binary cache doesn't get overloaded.
     hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
+=======
+    license = licenses.gpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.gap-system.org";
   };
 }

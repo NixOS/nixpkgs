@@ -65,7 +65,11 @@ python3Packages.buildPythonApplication rec {
       pytest-aiohttp
       pytestCheckHook
     ]
+<<<<<<< HEAD
     ++ lib.concatAttrValues optional-dependencies;
+=======
+    ++ lib.flatten (lib.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = lib.optionals enableDbusUi [
     wrapGAppsHook3
@@ -87,10 +91,18 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests) pantalaimon;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "End-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ valodim ];
+=======
+  meta = with lib; {
+    description = "End-to-end encryption aware Matrix reverse proxy daemon";
+    homepage = "https://github.com/matrix-org/pantalaimon";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ valodim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

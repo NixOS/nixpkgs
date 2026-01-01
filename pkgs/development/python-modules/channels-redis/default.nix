@@ -41,11 +41,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "channels_redis" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Redis-backed ASGI channel layer implementation";
     homepage = "https://github.com/django/channels_redis/";
     changelog = "https://github.com/django/channels_redis/blob/${src.tag}/CHANGELOG.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmai ];
+=======
+  meta = with lib; {
+    description = "Redis-backed ASGI channel layer implementation";
+    homepage = "https://github.com/django/channels_redis/";
+    changelog = "https://github.com/django/channels_redis/blob/${src.tag}/CHANGELOG.txt";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mmai ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

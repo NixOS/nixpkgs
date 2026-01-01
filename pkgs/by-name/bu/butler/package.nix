@@ -32,9 +32,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-A6u7bKI7eoptkjBuXoQlLYHkEVtrl8aNnBb65k1bFno=";
 
+<<<<<<< HEAD
   # Needed due to vendored dependencies breaking in gnu23 mode.
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Command-line itch.io helper";
     changelog = "https://github.com/itchio/butler/releases/tag/v${version}/CHANGELOG.md";

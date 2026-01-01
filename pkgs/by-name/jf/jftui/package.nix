@@ -33,12 +33,21 @@ stdenv.mkDerivation rec {
     install -Dm555 build/jftui $out/bin/jftui
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Jellyfin Terminal User Interface";
     homepage = "https://github.com/Aanok/jftui";
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.nyanloutre ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Jellyfin Terminal User Interface";
+    homepage = "https://github.com/Aanok/jftui";
+    license = licenses.unlicense;
+    maintainers = [ maintainers.nyanloutre ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "jftui";
   };
 }

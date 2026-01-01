@@ -106,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelChecking = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Library for scalable cross-language services";
     mainProgram = "thrift";
@@ -113,5 +114,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Library for scalable cross-language services";
+    mainProgram = "thrift";
+    homepage = "https://thrift.apache.org/";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

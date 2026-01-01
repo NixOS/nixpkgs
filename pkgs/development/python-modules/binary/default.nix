@@ -31,11 +31,19 @@ buildPythonPackage rec {
     "binary.core"
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/ofek/binary/releases/tag/${src.tag}";
     description = "Easily convert between binary and SI units (kibibyte, kilobyte, etc.)";
     homepage = "https://github.com/ofek/binary";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    changelog = "https://github.com/ofek/binary/releases/tag/${src.tag}";
+    description = "Easily convert between binary and SI units (kibibyte, kilobyte, etc.)";
+    homepage = "https://github.com/ofek/binary";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       mit
     ];

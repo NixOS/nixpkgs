@@ -31,10 +31,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wcmatch" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wilcard File Name matching library";
     homepage = "https://github.com/facelessuser/wcmatch";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Wilcard File Name matching library";
+    homepage = "https://github.com/facelessuser/wcmatch";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -23,10 +23,18 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tahoma_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module to interface with Tahoma REST API";
     homepage = "https://github.com/philklei/tahoma-api/";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module to interface with Tahoma REST API";
+    homepage = "https://github.com/philklei/tahoma-api/";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

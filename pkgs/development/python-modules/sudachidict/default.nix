@@ -15,7 +15,11 @@ buildPythonPackage rec {
     owner = "WorksApplications";
     repo = "SudachiDict";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-twmQWz8MWYBE2QtowiqPrmjudOgFfk7MjjujYG8ykcY=";
+=======
+    hash = "sha256-nunc0obZ+4GvzP1+GgyOommBpK6sCAOXxwq04PWKf8c=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/python";

@@ -12,25 +12,41 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudo-rs";
+<<<<<<< HEAD
   version = "0.2.11";
+=======
+  version = "0.2.10";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-F1JwVP2GDzKCfiJXh8PXTBghNwWeD8a+TMiEaPx6wGg=";
   };
 
   cargoHash = "sha256-6NhyPdOAk2va8Vibsfpfq3xGLIzDBRmqxj4bZhQT9bY=";
+=======
+    hash = "sha256-DGoEHeVs7EbzpfbmJQEIsL/eWXBvUCbaSPAGD65Op7k=";
+  };
+
+  cargoHash = "sha256-fn97cKdaIsbozI794CAeWQooC7evTErRJOg6cEjzvjY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ pam ];
 
   postPatch = ''
+<<<<<<< HEAD
     substituteInPlace src/system/audit.rs \
       --replace-fail '/usr/share/zoneinfo' '/etc/zoneinfo' \
       --replace-fail '/usr/share/lib/zoneinfo' '${tzdata}/share/zoneinfo'
+=======
+    substituteInPlace build.rs \
+      --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   postInstall = ''
@@ -63,11 +79,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "system::interface::test::test_unix_user"
     "system::tests::test_get_user_and_group_by_id"
 
+<<<<<<< HEAD
     # Store paths are not owned by root in the build sandbox, so the zoneinfo path
     # doesn't pass the validations done by sudo-rs.
     # This is not an issue at runtime, since there the zoneinfo path is owned by root.
     "sudo::env::environment::tests::test_tzinfo"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Unsure why those are failing
     "env::tests::test_environment_variable_filtering"
     "su::context::tests::invalid_shell"
@@ -78,6 +97,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   # sudo binary fails because it checks if it is suid 0
   versionCheckProgram = "${placeholder "out"}/bin/su";
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   postInstallCheck = ''
     [ -e ${placeholder "out"}/share/man/man8/sudo.8.gz ] || \
@@ -85,7 +108,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
+<<<<<<< HEAD
     updateScript = nix-update-script { };
+=======
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=^v([0-9]+\\.[0-9]+\\.[0-9])$"
+      ];
+    };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     tests = nixosTests.sudo-rs;
   };
 

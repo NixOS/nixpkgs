@@ -9,16 +9,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
+<<<<<<< HEAD
   version = "4.0.2";
+=======
+  version = "4.0.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-hdYbLgBpPzizaYbj+W+YyXj9ks04SFObJ23gkSMTRPs=";
   };
 
   cargoHash = "sha256-oMD0AqLBPXRmlKEmIBfAazO6IqfiB2aeA9VwxXyx1Xw=";
+=======
+    hash = "sha256-m6mXq62imJ9yVpH6M8O3I7Z4FDdnEtp9ADfMjD4RDM4=";
+  };
+
+  cargoHash = "sha256-E2mLpRCffFySzBZVtxS4YZPuTRhjU4LrFEfC1dbF6ug=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     installShellFiles

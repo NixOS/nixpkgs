@@ -11,6 +11,7 @@ let
 
   nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
 
+<<<<<<< HEAD
   path =
     with pkgs;
     [
@@ -97,6 +98,80 @@ let
     ++ lib.optionals nvidiaEnabled [
       libnvidia-container
     ];
+=======
+  serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
+    lib.makeBinPath (
+      with pkgs;
+      [
+        cfg.package
+
+        acl
+        attr
+        bash
+        btrfs-progs
+        cdrkit
+        coreutils
+        criu
+        dnsmasq
+        e2fsprogs
+        findutils
+        getent
+        gawk
+        gnugrep
+        gnused
+        gnutar
+        gptfdisk
+        gzip
+        iproute2
+        iptables
+        iw
+        kmod
+        libxfs
+        lvm2
+        lxcfs
+        minio
+        minio-client
+        nftables
+        qemu-utils
+        qemu_kvm
+        rsync
+        squashfs-tools-ng
+        squashfsTools
+        sshfs
+        swtpm
+        systemd
+        thin-provisioning-tools
+        util-linux
+        virtiofsd
+        xdelta
+        xz
+      ]
+      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
+        skopeo
+        umoci
+      ]
+      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
+        lego
+      ]
+      ++ lib.optionals config.security.apparmor.enable [
+        apparmor-bin-utils
+
+        (writeShellScriptBin "apparmor_parser" ''
+          exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+        '')
+      ]
+      ++ lib.optionals config.services.ceph.client.enable [ ceph-client ]
+      ++ lib.optionals config.virtualisation.vswitch.enable [ config.virtualisation.vswitch.package ]
+      ++ lib.optionals config.boot.zfs.enabled [
+        config.boot.zfs.package
+        "${config.boot.zfs.package}/lib/udev"
+      ]
+      ++ lib.optionals nvidiaEnabled [
+        libnvidia-container
+      ]
+    )
+  }'';
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
   OVMF2MB = pkgs.OVMF.override {
@@ -149,6 +224,10 @@ let
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
       INCUS_AGENT_PATH = "${cfg.package}/share/agent";
+<<<<<<< HEAD
+=======
+      PATH = lib.mkForce serverBinPath;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     (lib.mkIf (cfg.ui.enable) { "INCUS_UI" = cfg.ui.package; })
   ];
@@ -301,7 +380,11 @@ in
         assertion =
           !(
             config.networking.firewall.enable
+<<<<<<< HEAD
             && !(config.networking.nftables.enable || config.networking.firewall.backend == "nftables")
+=======
+            && !config.networking.nftables.enable
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
             && config.virtualisation.incus.enable
           );
         message = "Incus on NixOS is unsupported using iptables. Set `networking.nftables.enable = true;`";
@@ -394,7 +477,11 @@ in
     systemd.services.incus = {
       description = "Incus Container and Virtual Machine Management Daemon";
 
+<<<<<<< HEAD
       inherit environment path;
+=======
+      inherit environment;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       wantedBy = lib.mkIf (!cfg.socketActivation) [ "multi-user.target" ];
       after = [
@@ -433,7 +520,11 @@ in
     systemd.services.incus-user = {
       description = "Incus Container and Virtual Machine Management User Daemon";
 
+<<<<<<< HEAD
       inherit environment path;
+=======
+      inherit environment;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       after = [
         "incus.service"
@@ -454,7 +545,11 @@ in
     systemd.services.incus-startup = lib.mkIf cfg.softDaemonRestart {
       description = "Incus Instances Startup/Shutdown";
 
+<<<<<<< HEAD
       inherit environment path;
+=======
+      inherit environment;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       after = [
         "incus.service"

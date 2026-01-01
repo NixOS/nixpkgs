@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radio_beam" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for Beam IO and Manipulation";
     homepage = "http://radio-astro-tools.github.io";
     changelog = "https://github.com/radio-astro-tools/radio-beam/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ smaret ];
+=======
+  meta = with lib; {
+    description = "Tools for Beam IO and Manipulation";
+    homepage = "http://radio-astro-tools.github.io";
+    changelog = "https://github.com/radio-astro-tools/radio-beam/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ smaret ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

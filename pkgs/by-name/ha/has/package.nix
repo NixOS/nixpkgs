@@ -23,12 +23,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/kdabir/has";
     description = "Checks presence of various command line tools and their versions on the path";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Freed-Wu ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/kdabir/has";
+    description = "Checks presence of various command line tools and their versions on the path";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Freed-Wu ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "has";
   };
 })

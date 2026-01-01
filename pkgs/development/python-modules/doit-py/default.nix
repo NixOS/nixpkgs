@@ -41,10 +41,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "doitpy" ];
 
+<<<<<<< HEAD
   meta = {
     description = "doit tasks for python stuff";
     homepage = "http://pythonhosted.org/doit-py";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
+=======
+  meta = with lib; {
+    description = "doit tasks for python stuff";
+    homepage = "http://pythonhosted.org/doit-py";
+    license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

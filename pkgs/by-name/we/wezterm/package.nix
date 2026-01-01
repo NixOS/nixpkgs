@@ -154,12 +154,21 @@ rustPlatform.buildRustPackage rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezterm.org";
     license = lib.licenses.mit;
     mainProgram = "wezterm";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
+    homepage = "https://wezterm.org";
+    license = licenses.mit;
+    mainProgram = "wezterm";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mimame
       SuperSandro2000
     ];

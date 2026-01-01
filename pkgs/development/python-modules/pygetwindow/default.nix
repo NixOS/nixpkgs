@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyrect ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, cross-platform module for obtaining GUI information on applications' windows";
     homepage = "https://github.com/asweigart/PyGetWindow";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ lucasew ];
+=======
+  meta = with lib; {
+    description = "Simple, cross-platform module for obtaining GUI information on applications' windows";
+    homepage = "https://github.com/asweigart/PyGetWindow";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ lucasew ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

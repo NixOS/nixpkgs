@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "xrdp sink/source pulseaudio modules";
     homepage = "https://github.com/neutrinolabs/pulseaudio-module-xrdp";
@@ -61,5 +62,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lucasew ];
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
+=======
+  meta = with lib; {
+    description = "xrdp sink/source pulseaudio modules";
+    homepage = "https://github.com/neutrinolabs/pulseaudio-module-xrdp";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ lucasew ];
+    platforms = platforms.linux;
+    sourceProvenance = [ sourceTypes.fromSource ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

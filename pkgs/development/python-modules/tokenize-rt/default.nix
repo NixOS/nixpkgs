@@ -25,11 +25,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper around the stdlib `tokenize` which roundtrips";
     mainProgram = "tokenize-rt";
     homepage = "https://github.com/asottile/tokenize-rt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
+=======
+  meta = with lib; {
+    description = "Wrapper around the stdlib `tokenize` which roundtrips";
+    mainProgram = "tokenize-rt";
+    homepage = "https://github.com/asottile/tokenize-rt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lovesegfault ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,11 +17,19 @@ buildGoModule {
 
   vendorHash = "sha256-/MDSWIuSYNxKbTslqIooI2qKA8Pye0yJF2dY8g8qbWI=";
 
+<<<<<<< HEAD
   meta = {
     description = "Parsing HTML at the command line";
     mainProgram = "pup";
     homepage = "https://github.com/ericchiang/pup";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Parsing HTML at the command line";
+    mainProgram = "pup";
+    homepage = "https://github.com/ericchiang/pup";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

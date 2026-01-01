@@ -44,11 +44,19 @@ buildPythonPackage rec {
     "test_assign_cvec_phas_slice"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for audio and music analysis";
     homepage = "https://aubio.org";
     changelog = "https://github.com/aubio/aubio/blob/${version}/ChangeLog";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Library for audio and music analysis";
+    homepage = "https://aubio.org";
+    changelog = "https://github.com/aubio/aubio/blob/${version}/ChangeLog";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

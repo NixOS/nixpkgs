@@ -28,10 +28,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioymaps" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package fetch data from Yandex maps";
     homepage = "https://github.com/devbis/aioymaps";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python package fetch data from Yandex maps";
+    homepage = "https://github.com/devbis/aioymaps";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

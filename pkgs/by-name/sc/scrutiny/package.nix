@@ -38,7 +38,11 @@ let
       runHook postInstall
     '';
 
+<<<<<<< HEAD
     passthru.updateScript = nix-update-script { };
+=======
+    passthru.updatescript = nix-update-script { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 in
 buildGoModule rec {
@@ -60,7 +64,11 @@ buildGoModule rec {
   '';
 
   passthru.tests.scrutiny = nixosTests.scrutiny;
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
+=======
+  passthru.updatescript = nix-update-script { };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   meta = {
     description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";

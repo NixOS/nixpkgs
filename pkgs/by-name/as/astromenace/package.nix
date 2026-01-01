@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Hardcore 3D space shooter with spaceship upgrade possibilities";
     homepage = "https://www.viewizard.com/";
@@ -81,5 +82,14 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "astromenace";
     maintainers = with lib.maintainers; [ fgaz ];
+=======
+  meta = with lib; {
+    description = "Hardcore 3D space shooter with spaceship upgrade possibilities";
+    homepage = "https://www.viewizard.com/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    mainProgram = "astromenace";
+    maintainers = with maintainers; [ fgaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

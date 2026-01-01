@@ -75,9 +75,12 @@ buildPythonPackage rec {
     # matplotlib/backend_bases.py", line 2654 in create_with_canvas
     "test_optimize_kl_domain_expansion"
     "test_plot_priorsamples"
+<<<<<<< HEAD
 
     # [XPASS(strict)] np.vdot inaccurate for single precision
     "test_vdot"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [

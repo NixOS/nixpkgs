@@ -19,10 +19,18 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
+<<<<<<< HEAD
   meta = {
     description = "Provides many low-level data structures which are helpful for writing compilers";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Provides many low-level data structures which are helpful for writing compilers";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

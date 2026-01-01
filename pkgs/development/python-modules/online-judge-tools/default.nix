@@ -38,11 +38,20 @@ buildPythonPackage rec {
   # Requires internet access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for various online judges. Download sample cases, generate additional test cases, test your code, and submit it";
     mainProgram = "oj";
     homepage = "https://github.com/online-judge-tools/oj";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sei40kr ];
+=======
+  meta = with lib; {
+    description = "Tools for various online judges. Download sample cases, generate additional test cases, test your code, and submit it";
+    mainProgram = "oj";
+    homepage = "https://github.com/online-judge-tools/oj";
+    license = licenses.mit;
+    maintainers = with maintainers; [ sei40kr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

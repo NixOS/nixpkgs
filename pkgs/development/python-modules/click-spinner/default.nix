@@ -39,11 +39,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_spinner" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Add support for showwing that command line app is active to Click";
     homepage = "https://github.com/click-contrib/click-spinner";
     changelog = "https://github.com/click-contrib/click-spinner/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Add support for showwing that command line app is active to Click";
+    homepage = "https://github.com/click-contrib/click-spinner";
+    changelog = "https://github.com/click-contrib/click-spinner/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

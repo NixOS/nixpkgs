@@ -35,10 +35,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycose" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python implementation of the COSE specification";
     homepage = "https://github.com/TimothyClaeys/pycose";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ t4ccer ];
+=======
+  meta = with lib; {
+    description = "Python implementation of the COSE specification";
+    homepage = "https://github.com/TimothyClaeys/pycose";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ t4ccer ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

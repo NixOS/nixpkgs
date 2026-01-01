@@ -37,10 +37,17 @@ stdenv.mkDerivation rec {
     pcre2
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, graphical serial port terminal emulator";
     homepage = "https://github.com/wvdakker/gtkterm";
     license = lib.licenses.gpl3Plus;
+=======
+  meta = with lib; {
+    description = "Simple, graphical serial port terminal emulator";
+    homepage = "https://github.com/wvdakker/gtkterm";
+    license = licenses.gpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       GTKTerm is a simple, graphical serial port terminal emulator for
       Linux and possibly other POSIX-compliant operating systems. It
@@ -48,8 +55,13 @@ stdenv.mkDerivation rec {
       serial interface, such as embedded computers, microcontrollers,
       modems, GPS receivers, CNC machines and more.
     '';
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ wentasah ];
     platforms = lib.platforms.linux;
+=======
+    maintainers = with maintainers; [ wentasah ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gtkterm";
   };
 }

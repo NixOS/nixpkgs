@@ -25,10 +25,18 @@ buildDunePackage rec {
   ];
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mirage/mirage-unix";
     description = "Unix core platform libraries for MirageOS";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sternenseemann ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mirage/mirage-unix";
+    description = "Unix core platform libraries for MirageOS";
+    license = licenses.isc;
+    maintainers = with maintainers; [ sternenseemann ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

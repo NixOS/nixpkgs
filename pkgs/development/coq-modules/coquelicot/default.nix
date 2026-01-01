@@ -47,10 +47,18 @@ mkCoqDerivation {
   ];
   useMelquiondRemake.logpath = "Coquelicot";
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://coquelicot.saclay.inria.fr/";
     description = "Coq library for Reals";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
+=======
+  meta = with lib; {
+    homepage = "http://coquelicot.saclay.inria.fr/";
+    description = "Coq library for Reals";
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

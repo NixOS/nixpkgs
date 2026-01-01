@@ -19,7 +19,11 @@ clangStdenv.mkDerivation {
     owner = "tihmstar";
     repo = "usbmuxd2";
     rev = "2ce399ddbacb110bd5a83a6b8232d42c9a9b6e84";
+<<<<<<< HEAD
     hash = "sha256-u7qRKH5y+Q1HnnumjVm3Ce4SlT3YaEVSPUXYOAiFBes=";
+=======
+    hash = "sha256-UVLLE73XuWTgGlpTMxUDykFmiBDqz6NCRO2rpRAYfow=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Leave DotGit so that autoconfigure can read version from git tags
     leaveDotGit = true;
   };

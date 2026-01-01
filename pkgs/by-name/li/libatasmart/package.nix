@@ -20,10 +20,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://0pointer.de/blog/projects/being-smart.html";
     description = "Library for querying ATA SMART status";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://0pointer.de/blog/projects/being-smart.html";
+    description = "Library for querying ATA SMART status";
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

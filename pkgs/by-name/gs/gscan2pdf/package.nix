@@ -123,6 +123,7 @@ perlPackages.buildPerlPackage rec {
   ]);
 
   checkPhase = ''
+<<<<<<< HEAD
     # Temporarily disable a test failing because of a behavioural change in ImageMagick7
     # t/04_Page.t ................................... 1/12
     #   Failed test 'undefined'
@@ -132,16 +133,26 @@ perlPackages.buildPerlPackage rec {
     # Looks like you failed 1 test of 12.
     rm t/04_Page.t
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     export XDG_CACHE_HOME="$(mktemp -d)"
     xvfb-run -s '-screen 0 800x600x24' \
       make test
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://gscan2pdf.sourceforge.net/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ euxane ];
+=======
+  meta = with lib; {
+    description = "GUI to produce PDFs or DjVus from scanned documents";
+    homepage = "https://gscan2pdf.sourceforge.net/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ euxane ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "gscan2pdf";
   };
 }

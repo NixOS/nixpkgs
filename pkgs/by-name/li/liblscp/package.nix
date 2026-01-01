@@ -28,11 +28,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://www.linuxsampler.org";
     description = "LinuxSampler Control Protocol (LSCP) wrapper library";
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "http://www.linuxsampler.org";
+    description = "LinuxSampler Control Protocol (LSCP) wrapper library";
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

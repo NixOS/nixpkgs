@@ -106,12 +106,21 @@ python.pkgs.toPythonModule (
       updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     };
 
+<<<<<<< HEAD
     meta = {
       homepage = "https://github.com/searxng/searxng";
       description = "Fork of Searx, a privacy-respecting, hackable metasearch engine";
       license = lib.licenses.agpl3Plus;
       mainProgram = "searxng-run";
       maintainers = with lib.maintainers; [
+=======
+    meta = with lib; {
+      homepage = "https://github.com/searxng/searxng";
+      description = "Fork of Searx, a privacy-respecting, hackable metasearch engine";
+      license = licenses.agpl3Plus;
+      mainProgram = "searxng-run";
+      maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         SuperSandro2000
         _999eagle
       ];

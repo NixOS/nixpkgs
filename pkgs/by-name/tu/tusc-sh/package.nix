@@ -44,6 +44,7 @@ writeShellApplication {
   text = ''
     tusc.sh "$@"
   '';
+<<<<<<< HEAD
   meta = {
     description = "Tus 1.0.0 client protocol implementation for bash";
     homepage = "https://github.com/adhocore/tusc.sh";
@@ -52,5 +53,15 @@ writeShellApplication {
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "tusc";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Tus 1.0.0 client protocol implementation for bash";
+    homepage = "https://github.com/adhocore/tusc.sh";
+    changelog = "https://github.com/adhocore/tusc.sh/blob/${tusc.version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ happysalada ];
+    mainProgram = "tusc";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   lib,
+=======
+  pkgs,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildPythonPackage,
   fetchPypi,
 }:
@@ -17,10 +21,18 @@ buildPythonPackage rec {
   # No tests distributed
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple, generic API for escaping strings";
     homepage = "https://github.com/minrk/escapism";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bzizou ];
+=======
+  meta = with pkgs.lib; {
+    description = "Simple, generic API for escaping strings";
+    homepage = "https://github.com/minrk/escapism";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bzizou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

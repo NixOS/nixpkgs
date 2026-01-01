@@ -52,6 +52,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   meta = {
@@ -59,5 +60,14 @@ buildPythonPackage rec {
     homepage = "https://github.com/welch/seasonal";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mbalatsko ];
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  meta = with lib; {
+    description = "Robustly estimate trend and periodicity in a timeseries";
+    homepage = "https://github.com/welch/seasonal";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mbalatsko ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -39,11 +39,19 @@ buildPythonPackage rec {
   # Tests will fail.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python tool to translate between different languages by using multiple translators";
     homepage = "https://deep-translator.readthedocs.io";
     changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Python tool to translate between different languages by using multiple translators";
+    homepage = "https://deep-translator.readthedocs.io";
+    changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

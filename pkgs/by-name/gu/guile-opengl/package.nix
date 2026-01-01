@@ -20,11 +20,20 @@ stdenv.mkDerivation rec {
     guile
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.gnu.org/software/guile-opengl/";
     description = "Guile bindings for the OpenGL graphics API";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/guile-opengl/";
+    description = "Guile bindings for the OpenGL graphics API";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

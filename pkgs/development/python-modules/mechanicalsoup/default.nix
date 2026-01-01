@@ -58,12 +58,21 @@ buildPythonPackage rec {
     "test_select_form_associated_elements"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for automating interaction with websites";
     homepage = "https://github.com/hickford/MechanicalSoup";
     changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python library for automating interaction with websites";
+    homepage = "https://github.com/hickford/MechanicalSoup";
+    changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       jgillich
       fab
     ];

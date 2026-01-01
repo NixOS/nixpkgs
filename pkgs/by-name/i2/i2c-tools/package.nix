@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/include/linux/i2c-dev.h # conflics with kernel headers
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Set of I2C tools for Linux";
     homepage = "https://i2c.wiki.kernel.org/index.php/I2C_Tools";
@@ -46,5 +47,17 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.dezgeg ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Set of I2C tools for Linux";
+    homepage = "https://i2c.wiki.kernel.org/index.php/I2C_Tools";
+    # library is LGPL 2.1 or later; "most tools" GPL 2 or later
+    license = with licenses; [
+      lgpl21Plus
+      gpl2Plus
+    ];
+    maintainers = [ maintainers.dezgeg ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

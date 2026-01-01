@@ -53,7 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydrive2" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Google Drive API Python wrapper library";
     homepage = "https://github.com/iterative/PyDrive2";
     changelog = "https://github.com/iterative/PyDrive2/releases/tag/${version}";
@@ -61,7 +65,12 @@ buildPythonPackage rec {
     # https://github.com/iterative/PyDrive2/issues/361
     # TODO: re-enable it in `duplicity` when fixed
     broken = true;
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sei40kr ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sei40kr ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

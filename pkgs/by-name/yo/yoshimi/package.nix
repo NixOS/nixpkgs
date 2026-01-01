@@ -64,7 +64,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.cc.libc}/lib/libm.so" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "High quality software synthesizer based on ZynAddSubFX";
     longDescription = ''
       Yoshimi delivers the same synthesizer capabilities as
@@ -72,8 +76,13 @@ stdenv.mkDerivation rec {
       functionality on Linux
     '';
     homepage = "https://yoshimi.github.io/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "yoshimi";
   };

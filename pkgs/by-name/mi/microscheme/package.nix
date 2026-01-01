@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://ryansuchocki.github.io/microscheme/";
     description = "Scheme subset for Atmel microcontrollers";
     mainProgram = "microscheme";
@@ -36,8 +40,14 @@ stdenv.mkDerivation rec {
       Microscheme is a Scheme subset/variant designed for Atmel
       microcontrollers, especially as found on Arduino boards.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ardumont ];
+=======
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ ardumont ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

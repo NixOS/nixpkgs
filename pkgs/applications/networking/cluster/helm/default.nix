@@ -70,12 +70,21 @@ buildGoModule (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/helm/helm";
     description = "Package manager for kubernetes";
     mainProgram = "helm";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/helm/helm";
+    description = "Package manager for kubernetes";
+    mainProgram = "helm";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       rlupton20
       edude03
       saschagrunert

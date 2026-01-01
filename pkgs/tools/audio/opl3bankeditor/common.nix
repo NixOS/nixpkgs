@@ -69,6 +69,7 @@ mkDerivation rec {
     ln -s "$out/Applications/${binname}.app/Contents/MacOS/${binname}" $out/bin/${mainProgram}
   '';
 
+<<<<<<< HEAD
   meta = {
     inherit mainProgram;
     description = "Small cross-platform editor of the ${chip} FM banks of different formats";
@@ -76,5 +77,14 @@ mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ OPNA2608 ];
+=======
+  meta = with lib; {
+    inherit mainProgram;
+    description = "Small cross-platform editor of the ${chip} FM banks of different formats";
+    homepage = src.meta.homepage;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ OPNA2608 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

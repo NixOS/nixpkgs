@@ -82,7 +82,11 @@ stdenv.mkDerivation {
     cp -a *.ttf $out/share/fonts/truetype/
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://fonts.google.com/specimen/Rubik";
     description = "Rubik Font - is a 5 weight Roman + Italic family";
     longDescription = ''
@@ -102,6 +106,10 @@ stdenv.mkDerivation {
       expanded by Cyreal Fonts Team (Alexei Vanyashin and Nikita Kanarev). Existing
       glyphs were improved, and glyph set was expanded to GF Cyrillic Plus.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

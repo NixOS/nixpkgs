@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libgovirt";
     description = "GObject wrapper for the oVirt REST API";
@@ -65,5 +66,16 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.lgpl21Plus;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/libgovirt";
+    description = "GObject wrapper for the oVirt REST API";
+    maintainers = with maintainers; [
+      amarshall
+      atemu
+    ];
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

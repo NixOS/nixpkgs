@@ -34,13 +34,22 @@ stdenv.mkDerivation rec {
       -e "/SAVE/d" Makefile
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Transparent SOCKS v4 proxying library";
     mainProgram = "tsocks";
     homepage = "https://tsocks.sourceforge.net/";
     license = lib.licenses.gpl2;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ edwtjo ];
     platforms = lib.platforms.unix;
+=======
+    maintainers = with maintainers; [ edwtjo ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

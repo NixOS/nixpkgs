@@ -42,10 +42,18 @@ buildPythonPackage rec {
     "tests/test_shaping_harfbuzz.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for compiling OpenType font features";
     homepage = "https://github.com/simoncozens/fontFeatures";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ danc86 ];
+=======
+  meta = with lib; {
+    description = "Python library for compiling OpenType font features";
+    homepage = "https://github.com/simoncozens/fontFeatures";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ danc86 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

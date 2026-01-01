@@ -27,9 +27,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "seccomp" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings for libseccomp";
     license = with lib.licenses; [ lgpl21 ];
     maintainers = with lib.maintainers; [ thoughtpolice ];
+=======
+  meta = with lib; {
+    description = "Python bindings for libseccomp";
+    license = with licenses; [ lgpl21 ];
+    maintainers = with maintainers; [ thoughtpolice ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

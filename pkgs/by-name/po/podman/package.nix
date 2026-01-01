@@ -5,15 +5,23 @@
   pkg-config,
   installShellFiles,
   buildGoModule,
+<<<<<<< HEAD
   buildPackages,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gpgme,
   lvm2,
   btrfs-progs,
   libapparmor,
   libseccomp,
   libselinux,
+<<<<<<< HEAD
   # TODO: investigate why changing from `systemd` to `systemdMinimal` breaks `podman logs`
   systemd,
+=======
+  systemd,
+  go-md2man,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nixosTests,
   python3,
   makeBinaryWrapper,
@@ -22,7 +30,10 @@
   extraPackages ? [ ],
   crun,
   runc,
+<<<<<<< HEAD
   krunkit,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   conmon,
   extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
@@ -72,6 +83,10 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+<<<<<<< HEAD
+=======
+    go-md2man
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     installShellFiles
     makeBinaryWrapper
     python3
@@ -90,7 +105,10 @@ buildGoModule (finalAttrs: {
   env = {
     HELPER_BINARIES_DIR = "${placeholder "out"}/libexec/podman"; # used in buildPhase & installPhase
     PREFIX = "${placeholder "out"}";
+<<<<<<< HEAD
     GOMD2MAN = "${buildPackages.go-md2man}/bin/go-md2man";
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildPhase = ''
@@ -148,6 +166,10 @@ buildGoModule (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -167,8 +189,14 @@ buildGoModule (finalAttrs: {
         iproute2
         nftables
       ]
+<<<<<<< HEAD
       ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform vfkit) vfkit
       ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+=======
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        vfkit
+      ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ++ extraPackages
     );
 

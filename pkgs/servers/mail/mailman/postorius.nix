@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   passthru.tests = { inherit (nixosTests) mailman; };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://docs.mailman3.org/projects/postorius";
     description = "Web-based user interface for managing GNU Mailman";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ qyliss ];
+=======
+  meta = with lib; {
+    homepage = "https://docs.mailman3.org/projects/postorius";
+    description = "Web-based user interface for managing GNU Mailman";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ qyliss ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

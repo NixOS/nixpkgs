@@ -36,11 +36,20 @@ python3.pkgs.buildPythonApplication rec {
     werkzeug
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Capturing system using playwright";
     homepage = "https://github.com/ail-project/lacus";
     changelog = "https://github.com/ail-project/lacus/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Capturing system using playwright";
+    homepage = "https://github.com/ail-project/lacus";
+    changelog = "https://github.com/ail-project/lacus/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

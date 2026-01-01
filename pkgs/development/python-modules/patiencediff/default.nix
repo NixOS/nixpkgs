@@ -27,12 +27,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "patiencediff" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "C implementation of patiencediff algorithm for Python";
     mainProgram = "patiencediff";
     homepage = "https://github.com/breezy-team/patiencediff";
     changelog = "https://github.com/breezy-team/patiencediff/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ wildsebastian ];
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wildsebastian ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

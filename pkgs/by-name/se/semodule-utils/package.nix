@@ -23,10 +23,18 @@ stdenv.mkDerivation rec {
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "SELinux policy core utilities (packaging additions)";
     license = lib.licenses.gpl2Only;
     inherit (libsepol.meta) homepage platforms;
     maintainers = with lib.maintainers; [ RossComputerGuy ];
+=======
+  meta = with lib; {
+    description = "SELinux policy core utilities (packaging additions)";
+    license = licenses.gpl2Only;
+    inherit (libsepol.meta) homepage platforms;
+    maintainers = with maintainers; [ RossComputerGuy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

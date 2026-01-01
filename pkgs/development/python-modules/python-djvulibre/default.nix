@@ -47,11 +47,20 @@ buildPythonPackage rec {
     "-v"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python support for the DjVu image format";
     homepage = "https://github.com/FriedrichFroebel/python-djvulibre";
     license = lib.licenses.gpl2Only;
     changelog = "https://github.com/FriedrichFroebel/python-djvulibre/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [ dansbandit ];
+=======
+  meta = with lib; {
+    description = "Python support for the DjVu image format";
+    homepage = "https://github.com/FriedrichFroebel/python-djvulibre";
+    license = licenses.gpl2Only;
+    changelog = "https://github.com/FriedrichFroebel/python-djvulibre/releases/tag/${src.tag}";
+    maintainers = with maintainers; [ dansbandit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

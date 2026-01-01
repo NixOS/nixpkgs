@@ -61,10 +61,18 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for generating DVD files to be played on standalone DVD players";
     homepage = "https://dvdauthor.sourceforge.net/"; # or https://github.com/ldo/dvdauthor
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Tools for generating DVD files to be played on standalone DVD players";
+    homepage = "https://dvdauthor.sourceforge.net/"; # or https://github.com/ldo/dvdauthor
+    license = licenses.gpl2;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

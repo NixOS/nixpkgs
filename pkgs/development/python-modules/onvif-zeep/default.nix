@@ -26,11 +26,20 @@ buildPythonPackage rec {
   # Tests require hardware
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Python Client for ONVIF Camera";
     mainProgram = "onvif-cli";
     homepage = "https://github.com/quatanium/python-onvif";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fleaz ];
+=======
+  meta = with lib; {
+    description = "Python Client for ONVIF Camera";
+    mainProgram = "onvif-cli";
+    homepage = "https://github.com/quatanium/python-onvif";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fleaz ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

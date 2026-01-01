@@ -21,10 +21,18 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple stupid SVG parser";
     homepage = "https://github.com/memononen/nanosvg";
     license = lib.licenses.zlib;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Simple stupid SVG parser";
+    homepage = "https://github.com/memononen/nanosvg";
+    license = licenses.zlib;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

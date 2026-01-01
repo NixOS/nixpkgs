@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     rm -rf src/{libmongoc,libbson}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Official C client library for MongoDB";
     homepage = "http://mongoc.org";
@@ -56,5 +57,14 @@ stdenv.mkDerivation rec {
     mainProgram = "mongoc-stat";
     maintainers = with lib.maintainers; [ archer-65 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Official C client library for MongoDB";
+    homepage = "http://mongoc.org";
+    license = licenses.asl20;
+    mainProgram = "mongoc-stat";
+    maintainers = with maintainers; [ archer-65 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

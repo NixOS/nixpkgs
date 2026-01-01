@@ -25,7 +25,11 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/matryer/moq";
     description = "Interface mocking tool for go generate";
     mainProgram = "moq";
@@ -33,7 +37,12 @@ buildGoModule rec {
       Moq is a tool that generates a struct from any interface. The struct can
       be used in test code as a mock of the interface.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anpryl ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ anpryl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

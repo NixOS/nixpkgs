@@ -42,6 +42,7 @@ mkDerivation rec {
 
   enableParallelBuilding = false;
 
+<<<<<<< HEAD
   meta = {
     description = "PDF viewer for the Lumina Desktop";
     mainProgram = "lumina-pdf";
@@ -49,5 +50,14 @@ mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.lumina ];
+=======
+  meta = with lib; {
+    description = "PDF viewer for the Lumina Desktop";
+    mainProgram = "lumina-pdf";
+    homepage = "https://github.com/lumina-desktop/lumina-pdf";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    teams = [ teams.lumina ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

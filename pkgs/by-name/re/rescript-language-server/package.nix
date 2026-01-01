@@ -54,12 +54,20 @@ buildNpmPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
+<<<<<<< HEAD
       "([0-9]+\\.[0-9]+\\.[0-9]+)"
+=======
+      "([0-9]+\.[0-9]+\.[0-9]+)"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 

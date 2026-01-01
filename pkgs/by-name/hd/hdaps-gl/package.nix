@@ -25,12 +25,21 @@ stdenv.mkDerivation rec {
     libGLU
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "GL-based laptop model that rotates in real-time via hdaps";
     homepage = "https://github.com/linux-thinkpad/hdaps-gl";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.symphorien ];
+=======
+  meta = with lib; {
+    description = "GL-based laptop model that rotates in real-time via hdaps";
+    homepage = "https://github.com/linux-thinkpad/hdaps-gl";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.symphorien ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "hdaps-gl";
   };
 }

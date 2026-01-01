@@ -37,11 +37,19 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Detecting natural selection from population-based genetic data";
     homepage = "http://cmpg.unibe.ch/software/BayeScan";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.bzizou ];
+=======
+  meta = with lib; {
+    description = "Detecting natural selection from population-based genetic data";
+    homepage = "http://cmpg.unibe.ch/software/BayeScan";
+    license = licenses.gpl3;
+    maintainers = [ maintainers.bzizou ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bayescan_${version}";
     platforms = lib.platforms.all;
   };

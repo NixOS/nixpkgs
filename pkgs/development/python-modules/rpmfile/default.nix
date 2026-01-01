@@ -21,11 +21,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rpmfile" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Read rpm archive files";
     mainProgram = "rpmfile";
     homepage = "https://github.com/srossross/rpmfile";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Read rpm archive files";
+    mainProgram = "rpmfile";
+    homepage = "https://github.com/srossross/rpmfile";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

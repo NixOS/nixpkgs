@@ -1,5 +1,9 @@
 { copyparty }:
+<<<<<<< HEAD
 (copyparty.override {
+=======
+copyparty.override {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   withHashedPasswords = true;
   withCertgen = true;
   withThumbnails = true;
@@ -14,6 +18,7 @@
   withSMB = true;
   nameSuffix = "-full-buggy";
   longDescription = "Full variant, all dependencies and features including those marked buggy";
+<<<<<<< HEAD
 }).overrideAttrs
   (old: {
     # don't try to update this package, just update `copyparty`
@@ -27,3 +32,6 @@
       description = old.meta.description + " - full variant";
     };
   })
+=======
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

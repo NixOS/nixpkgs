@@ -74,7 +74,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
+<<<<<<< HEAD
   version = "2.86.3";
+=======
+  version = "2.86.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   outputs = [
     "bin"
@@ -87,7 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-syEdjTS5313KBXh+8K1dfKdd7JmLlw4aqwAB0imXfGU=";
+=======
+    hash = "sha256-EZ0XCMoCJVbW0pie6QrRuCvZwNFmfgZpRKbQAg4tXlc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches =
@@ -362,6 +370,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "C library of programming buildings blocks";
     homepage = "https://gitlab.gnome.org/GNOME/glib";
@@ -371,12 +380,27 @@ stdenv.mkDerivation (finalAttrs: {
       raskin
     ];
     teams = [ lib.teams.gnome ];
+=======
+  meta = with lib; {
+    description = "C library of programming buildings blocks";
+    homepage = "https://gitlab.gnome.org/GNOME/glib";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [
+      lovek323
+      raskin
+    ];
+    teams = [ teams.gnome ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     pkgConfigModules = [
       "gio-2.0"
       "gobject-2.0"
       "gthread-2.0"
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix ++ lib.platforms.windows;
+=======
+    platforms = platforms.unix ++ platforms.windows;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     longDescription = ''
       GLib provides the core application building blocks for libraries

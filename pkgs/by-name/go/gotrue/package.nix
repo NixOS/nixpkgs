@@ -26,12 +26,21 @@ buildGoModule rec {
   # integration tests require network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/netlify/gotrue";
     description = "SWT based API for managing users and issuing SWT tokens";
     mainProgram = "gotrue";
     changelog = "https://github.com/netlify/gotrue/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ urandom ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ urandom ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

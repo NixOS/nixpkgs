@@ -35,11 +35,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylibftdi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Wrapper to Intra2net's libftdi driver for FTDI's USB devices";
     homepage = "https://pylibftdi.readthedocs.io/";
     changelog = "https://github.com/codedstructure/pylibftdi/blob/${version}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthuszagh ];
+=======
+  meta = with lib; {
+    description = "Wrapper to Intra2net's libftdi driver for FTDI's USB devices";
+    homepage = "https://pylibftdi.readthedocs.io/";
+    changelog = "https://github.com/codedstructure/pylibftdi/blob/${version}/CHANGES.txt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthuszagh ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

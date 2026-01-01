@@ -48,7 +48,11 @@ buildGoModule rec {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Shell extension that manages your environment";
     longDescription = ''
       Once hooked into your shell direnv is looking for an .envrc file in your
@@ -62,8 +66,13 @@ buildGoModule rec {
       environment variables.
     '';
     homepage = "https://direnv.net";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.zimbatm ];
+=======
+    license = licenses.mit;
+    maintainers = [ maintainers.zimbatm ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "direnv";
   };
 }

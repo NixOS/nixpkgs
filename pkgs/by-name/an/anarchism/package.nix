@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
     cp debian/anarchism.desktop $out/share/applications
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://www.anarchistfaq.org/";
     changelog = "http://anarchism.pageabode.com/afaq/new.html";
     description = "Exhaustive exploration of Anarchist theory and practice";
@@ -41,8 +45,14 @@ stdenv.mkDerivation rec {
       from the basics of Anarchism to very specific discussions of politics,
       social organization, and economics.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ davidak ];
     platforms = with lib.platforms; all;
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ davidak ];
+    platforms = with platforms; all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

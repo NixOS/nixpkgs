@@ -20,10 +20,18 @@ stdenv.mkDerivation {
     cp adslib.so $out/lib/adslib.so
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Beckhoff protocol to communicate with TwinCAT devices";
     homepage = "https://github.com/stlehmann/ADS";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+  meta = with lib; {
+    description = "Beckhoff protocol to communicate with TwinCAT devices";
+    homepage = "https://github.com/stlehmann/ADS";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

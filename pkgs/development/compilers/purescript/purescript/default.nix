@@ -78,12 +78,21 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
     license = lib.licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Strongly-typed functional programming language that compiles to JavaScript";
+    homepage = "https://www.purescript.org/";
+    license = licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       justinwoo
       mbbx6spp
       cdepillabout

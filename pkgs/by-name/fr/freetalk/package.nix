@@ -49,12 +49,21 @@ stdenv.mkDerivation rec {
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-largp";
 
+<<<<<<< HEAD
   meta = {
     description = "Console XMPP client";
     mainProgram = "freetalk";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Console XMPP client";
+    mainProgram = "freetalk";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     downloadPage = "https://www.gnu.org/software/freetalk/";
   };
 }

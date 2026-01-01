@@ -25,10 +25,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "textparser" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/eerimoq/textparser";
     description = "Text parser";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gray-heron ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/eerimoq/textparser";
+    description = "Text parser";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gray-heron ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

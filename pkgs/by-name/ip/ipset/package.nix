@@ -20,11 +20,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-kmod=no" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://ipset.netfilter.org/";
     description = "Administration tool for IP sets";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://ipset.netfilter.org/";
+    description = "Administration tool for IP sets";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ipset";
   };
 })

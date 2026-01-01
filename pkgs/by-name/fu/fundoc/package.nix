@@ -27,11 +27,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-17PzGHSwruHPRKjyiHWBMqHANR5ulb+/J5UoVsOrbyc=";
 
+<<<<<<< HEAD
   meta = {
     description = "Language agnostic documentation generator";
     mainProgram = "fundoc";
     homepage = "https://github.com/daynin/fundoc";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Language agnostic documentation generator";
+    mainProgram = "fundoc";
+    homepage = "https://github.com/daynin/fundoc";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

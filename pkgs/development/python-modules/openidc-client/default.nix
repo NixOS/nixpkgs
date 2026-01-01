@@ -18,10 +18,18 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "CLI python OpenID Connect client with token caching and management";
     homepage = "https://github.com/puiterwijk";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ disassembler ];
+=======
+  meta = with lib; {
+    description = "CLI python OpenID Connect client with token caching and management";
+    homepage = "https://github.com/puiterwijk";
+    license = licenses.mit;
+    maintainers = with maintainers; [ disassembler ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

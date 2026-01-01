@@ -48,10 +48,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asgi_csrf" ];
 
+<<<<<<< HEAD
   meta = {
     description = "ASGI middleware for protecting against CSRF attacks";
     license = lib.licenses.asl20;
     homepage = "https://github.com/simonw/asgi-csrf";
     maintainers = [ lib.maintainers.ris ];
+=======
+  meta = with lib; {
+    description = "ASGI middleware for protecting against CSRF attacks";
+    license = licenses.asl20;
+    homepage = "https://github.com/simonw/asgi-csrf";
+    maintainers = [ maintainers.ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -44,11 +44,20 @@ buildPythonPackage rec {
     pexpect
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library to read characters and key strokes";
     homepage = "https://github.com/magmax/python-readchar";
     changelog = "https://github.com/magmax/python-readchar/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mmahut ];
+=======
+  meta = with lib; {
+    description = "Python library to read characters and key strokes";
+    homepage = "https://github.com/magmax/python-readchar";
+    changelog = "https://github.com/magmax/python-readchar/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmahut ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

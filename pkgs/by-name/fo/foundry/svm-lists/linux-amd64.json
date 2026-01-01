@@ -945,6 +945,7 @@
       "urls": [
         "dweb:/ipfs/QmPsmKxpd5berCgcTBXXPBC4PLHrb56tr3f6ZMxPGEf6vn"
       ]
+<<<<<<< HEAD
     },
     {
       "path": "solc-linux-amd64-v0.8.31+commit.fd3a2265",
@@ -960,6 +961,11 @@
   ],
   "releases": {
     "0.8.31": "solc-linux-amd64-v0.8.31+commit.fd3a2265",
+=======
+    }
+  ],
+  "releases": {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     "0.8.30": "solc-linux-amd64-v0.8.30+commit.73712a01",
     "0.8.29": "solc-linux-amd64-v0.8.29+commit.ab55807c",
     "0.8.28": "solc-linux-amd64-v0.8.28+commit.7893614a",
@@ -1047,5 +1053,9 @@
     "0.4.11": "solc-linux-amd64-v0.4.11+commit.68ef5810",
     "0.4.10": "solc-linux-amd64-v0.4.10+commit.9e8cc01b"
   },
+<<<<<<< HEAD
   "latestRelease": "0.8.31"
+=======
+  "latestRelease": "0.8.30"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }

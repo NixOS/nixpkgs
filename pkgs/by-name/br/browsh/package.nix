@@ -41,11 +41,19 @@ buildGoModule rec {
   # Tests require network access
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Fully-modern text-based browser, rendering to TTY and browsers";
     mainProgram = "browsh";
     homepage = "https://www.brow.sh/";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Fully-modern text-based browser, rendering to TTY and browsers";
+    mainProgram = "browsh";
+    homepage = "https://www.brow.sh/";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kalbasit
       siraben
     ];

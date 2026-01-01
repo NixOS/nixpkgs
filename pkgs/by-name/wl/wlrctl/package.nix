@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=type-limits";
 
+<<<<<<< HEAD
   meta = {
     description = "Command line utility for miscellaneous wlroots Wayland extensions";
     homepage = "https://git.sr.ht/~brocellous/wlrctl";
@@ -49,6 +50,17 @@ stdenv.mkDerivation rec {
       artturin
     ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Command line utility for miscellaneous wlroots Wayland extensions";
+    homepage = "https://git.sr.ht/~brocellous/wlrctl";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      puffnfresh
+      artturin
+    ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "wlrctl";
   };
 }

@@ -33,11 +33,19 @@ stdenv.mkDerivation rec {
     cp streaming_extractor_music $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://acousticbrainz.org/download";
     description = "AcousticBrainz audio feature extractor";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ lovesegfault ];
+=======
+  meta = with lib; {
+    homepage = "https://acousticbrainz.org/download";
+    description = "AcousticBrainz audio feature extractor";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ lovesegfault ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"

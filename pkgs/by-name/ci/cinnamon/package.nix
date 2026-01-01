@@ -10,6 +10,10 @@
   cjs,
   evolution-data-server,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gcr,
   gdk-pixbuf,
   gettext,
@@ -18,7 +22,11 @@
   gobject-introspection,
   gsound,
   gtk3,
+<<<<<<< HEAD
   ibus,
+=======
+  intltool,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   json-glib,
   libsecret,
   libstartup_notification,
@@ -34,6 +42,10 @@
   wrapGAppsHook3,
   libxml2,
   gtk-doc,
+<<<<<<< HEAD
+=======
+  caribou,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python3,
   keybinder3,
   cairo,
@@ -44,7 +56,10 @@
   accountsservice,
   gnome-online-accounts,
   glib-networking,
+<<<<<<< HEAD
   graphene,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pciutils,
   timezonemap,
   libnma,
@@ -57,6 +72,10 @@
 let
   pythonEnv = python3.withPackages (
     pp: with pp; [
+<<<<<<< HEAD
+=======
+      dbus-python
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       setproctitle
       pygobject3
       pycairo
@@ -74,18 +93,40 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon";
+<<<<<<< HEAD
   version = "6.6.3";
+=======
+  version = "6.4.13";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-BPHHvcE0jmrOo5W4Egv1Hir8t4CSPJGH3oqv1VJ4AUQ=";
+=======
+    hash = "sha256-XGG5Qf6Kx1gvZITuuZWn1ggY4FNW/aEuBLbpWyxE2V8=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
+<<<<<<< HEAD
+=======
+
+    # js: Use DesktopAppInfo form GioUnix, not Gio
+    # https://github.com/linuxmint/cinnamon/pull/13091
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/fa3aef20533af4499fb1161011e62e048bbdc396.patch";
+      hash = "sha256-qhgBniaUE/8q9BQ+EXcY7BF6eMJg+wC7EYgktwAMbwM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/330b9ff19f33ec1e94e36048ca46011404f796b4.patch";
+      hash = "sha256-YEQG6C4tx2T3wMfCLZXPFynAzEeIE1eVoadWVENZDFc=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   buildInputs = [
@@ -100,10 +141,15 @@ stdenv.mkDerivation rec {
     gcr
     gdk-pixbuf
     glib
+<<<<<<< HEAD
     graphene
     gsound
     gtk3
     ibus
+=======
+    gsound
+    gtk3
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     json-glib
     libsecret
     libstartup_notification
@@ -120,6 +166,10 @@ stdenv.mkDerivation rec {
 
     # bindings
     cairo
+<<<<<<< HEAD
+=======
+    caribou
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     keybinder3
     upower
     xapp
@@ -139,6 +189,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     wrapGAppsHook3
+<<<<<<< HEAD
+=======
+    intltool
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     gtk-doc
     perl
     python3.pkgs.libsass # for pysassc
@@ -164,6 +218,10 @@ stdenv.mkDerivation rec {
                                                           --replace-fail 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
                                                           --replace-fail "msgfmt" "${gettext}/bin/msgfmt"
       substituteInPlace ./modules/cs_info.py              --replace-fail "lspci" "${pciutils}/bin/lspci"
+<<<<<<< HEAD
+=======
+      substituteInPlace ./modules/cs_keyboard.py          --replace-fail "/usr/bin/cinnamon-dbus-command" "$out/bin/cinnamon-dbus-command"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       substituteInPlace ./modules/cs_themes.py            --replace-fail "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
       substituteInPlace ./modules/cs_user.py              --replace-fail "/usr/bin/passwd" "/run/wrappers/bin/passwd"
     popd
@@ -175,7 +233,11 @@ stdenv.mkDerivation rec {
     substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
       --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
 
+<<<<<<< HEAD
     patchShebangs src/data-to-c.pl
+=======
+    patchShebangs src/data-to-c.pl data/theme/parse-sass.sh
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   postInstall = ''
@@ -184,6 +246,14 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+<<<<<<< HEAD
+=======
+    # https://github.com/NixOS/nixpkgs/issues/101881
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${caribou}/share"
+    )
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     buildPythonPath "$out ${python3.pkgs.python-xapp}"
 
     # https://github.com/NixOS/nixpkgs/issues/200397
@@ -208,11 +278,20 @@ stdenv.mkDerivation rec {
     ];
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/cinnamon";
     description = "Cinnamon desktop environment";
     license = [ lib.licenses.gpl2 ];
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/cinnamon";
+    description = "Cinnamon desktop environment";
+    license = [ licenses.gpl2 ];
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

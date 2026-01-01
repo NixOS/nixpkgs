@@ -28,11 +28,19 @@ stdenv.mkDerivation rec {
     rm -rf $out/obs-plugins $out/data
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin for adding a gradient Source to OBS Studio";
     homepage = "https://github.com/exeldro/obs-gradient-source";
     maintainers = with lib.maintainers; [ flexiondotorg ];
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    description = "Plugin for adding a gradient Source to OBS Studio";
+    homepage = "https://github.com/exeldro/obs-gradient-source";
+    maintainers = with maintainers; [ flexiondotorg ];
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (obs-studio.meta) platforms;
   };
 }

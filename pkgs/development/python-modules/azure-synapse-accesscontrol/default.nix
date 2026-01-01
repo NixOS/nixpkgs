@@ -35,11 +35,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "azure.synapse.accesscontrol" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Synapse AccessControl Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-synapse-accesscontrol";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-accesscontrol_${version}/sdk/synapse/azure-synapse-accesscontrol/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Synapse AccessControl Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-synapse-accesscontrol";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-synapse-accesscontrol_${version}/sdk/synapse/azure-synapse-accesscontrol/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

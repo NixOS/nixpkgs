@@ -11,16 +11,27 @@
 
 buildGoModule rec {
   pname = "kopia";
+<<<<<<< HEAD
   version = "0.22.3";
+=======
+  version = "0.22.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-5oNam99Mij78snSO6jiGPYzeD68sXEBKM2dGQtTUrww=";
   };
 
   vendorHash = "sha256-szlCiZOLU0KVWb2YX3Wmicrumn+fNm2AWdPxaJZZT90=";
+=======
+    hash = "sha256-UtyOMXX6Q0fhlnSMmI5d+0BHGvoWkPZbcm9B6vWG05Y=";
+  };
+
+  vendorHash = "sha256-zjUkVU9I+Dp21QcOZPT30Ki570vQJPyK4UYSy8PEiZI=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   subPackages = [ "." ];
 

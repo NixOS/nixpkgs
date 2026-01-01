@@ -40,15 +40,28 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Text hyphenation library";
     mainProgram = "substrings.pl";
     homepage = "https://sourceforge.net/projects/hunspell/files/Hyphen/";
     platforms = lib.platforms.all;
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Text hyphenation library";
+    mainProgram = "substrings.pl";
+    homepage = "https://sourceforge.net/projects/hunspell/files/Hyphen/";
+    platforms = platforms.all;
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       gpl2
       lgpl21
       mpl11
     ];
+<<<<<<< HEAD
+=======
+    maintainers = with maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

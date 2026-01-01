@@ -32,11 +32,19 @@ buildGoModule rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Declarative configuration for Gmail filters";
     homepage = "https://github.com/mbrt/gmailctl";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Declarative configuration for Gmail filters";
+    homepage = "https://github.com/mbrt/gmailctl";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       doronbehar
       SuperSandro2000
     ];

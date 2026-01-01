@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     description = "C++/C library to construct Excel .xls files in code";
     homepage = "https://sourceforge.net/projects/xlslib/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "C++/C library to construct Excel .xls files in code";
+    homepage = "https://sourceforge.net/projects/xlslib/";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

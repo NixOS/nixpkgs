@@ -38,10 +38,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_cid" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ntninja/pytest-cid";
     description = "Simple wrapper around py-cid for easily writing tests involving CIDs in datastructures";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ntninja/pytest-cid";
+    description = "Simple wrapper around py-cid for easily writing tests involving CIDs in datastructures";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

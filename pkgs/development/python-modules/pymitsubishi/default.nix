@@ -18,6 +18,7 @@ buildPythonPackage rec {
     owner = "pymitsubishi";
     repo = "pymitsubishi";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-frqyAXAP2O8TZzXx5ephcLSLJA9p0P74KJrPoSKPYYo=";
   };
 
@@ -26,6 +27,11 @@ buildPythonPackage rec {
     grep -qF 'version = "${version}"' pyproject.toml
   '';
 
+=======
+    hash = "sha256-QjHMIzl2VV1S8tNWsFLgLDNX6/0wN9FeIJIo5KgkDVE=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   build-system = [ setuptools ];
 
   dependencies = [

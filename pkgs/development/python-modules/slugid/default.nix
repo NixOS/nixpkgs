@@ -20,10 +20,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slugid" ];
 
+<<<<<<< HEAD
   meta = {
     description = "URL-safe base64 UUID encoder for generating 22 character slugs";
     homepage = "https://github.com/taskcluster/slugid.py";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "URL-safe base64 UUID encoder for generating 22 character slugs";
+    homepage = "https://github.com/taskcluster/slugid.py";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

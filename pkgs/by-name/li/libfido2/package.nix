@@ -48,12 +48,15 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   # Required for FreeBSD
   # https://github.com/freebsd/freebsd-ports/blob/21a6f0f5829384117dfc1ed11ad67954562ef7d6/security/libfido2/Makefile#L37C27-L37C77
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace-fail "-D_POSIX_C_SOURCE=200809L" "-D_POSIX_C_SOURCE=202405L"
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -71,13 +74,23 @@ stdenv.mkDerivation rec {
   # causes possible redefinition of _FORTIFY_SOURCE?
   hardeningDisable = [ "fortify3" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       Provides library functionality for FIDO 2.0, including communication with a device over USB.
     '';
     homepage = "https://github.com/Yubico/libfido2";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ prusnak ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ prusnak ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

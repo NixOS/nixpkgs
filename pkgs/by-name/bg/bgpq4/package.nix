@@ -20,12 +20,21 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "BGP filtering automation tool";
     homepage = "https://github.com/bgp/bgpq4";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ vincentbernat ];
     platforms = with lib.platforms; unix;
+=======
+  meta = with lib; {
+    description = "BGP filtering automation tool";
+    homepage = "https://github.com/bgp/bgpq4";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ vincentbernat ];
+    platforms = with platforms; unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "bgpq4";
   };
 }

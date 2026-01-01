@@ -6,6 +6,7 @@ buildDotnetGlobalTool {
 
   nugetHash = "sha256-Rx7L1Bl2VwsAZMGudsFA7K++WuhJpjqlRsHMuBebo6Y=";
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for managing Akka.NET applications and Akka.NET Clusters";
     homepage = "https://cmd.petabridge.com/index.html";
@@ -13,6 +14,15 @@ buildDotnetGlobalTool {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "CLI for managing Akka.NET applications and Akka.NET Clusters";
+    homepage = "https://cmd.petabridge.com/index.html";
+    changelog = "https://cmd.petabridge.com/articles/RELEASE_NOTES.html";
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       anpin
       mdarocha
     ];

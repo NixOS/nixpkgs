@@ -35,6 +35,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "archspec" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for detecting, labeling, and reasoning about microarchitectures";
     homepage = "https://archspec.readthedocs.io/";
@@ -44,6 +45,17 @@ buildPythonPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ atila ];
+=======
+  meta = with lib; {
+    description = "Library for detecting, labeling, and reasoning about microarchitectures";
+    homepage = "https://archspec.readthedocs.io/";
+    changelog = "https://github.com/archspec/archspec/releases/tag/${src.tag}";
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [ atila ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "archspec";
   };
 }

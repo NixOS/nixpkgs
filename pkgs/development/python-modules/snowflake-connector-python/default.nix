@@ -125,11 +125,19 @@ buildPythonPackage rec {
     "snowflake.connector"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Snowflake Connector for Python";
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
     changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/${src.tag}/DESCRIPTION.md";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Snowflake Connector for Python";
+    homepage = "https://github.com/snowflakedb/snowflake-connector-python";
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/${src.tag}/DESCRIPTION.md";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

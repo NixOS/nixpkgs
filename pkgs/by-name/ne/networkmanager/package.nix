@@ -64,11 +64,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
+<<<<<<< HEAD
   version = "1.54.3";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
     hash = "sha256-z0/vw76WgCxaTas+aQvcTOTHglGVTvChtlAm2IZwmYk=";
+=======
+  version = "1.54.1";
+
+  src = fetchurl {
+    url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
+    hash = "sha256-APPwvhKsTUhY6/FSQwuS3vFXSAP/YQf378dkoFbUxMc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -235,6 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://networkmanager.dev";
     description = "Network configuration and management tool";
@@ -245,6 +254,18 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://networkmanager.dev";
+    description = "Network configuration and management tool";
+    license = licenses.gpl2Plus;
+    changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${finalAttrs.version}/NEWS";
+    maintainers = with maintainers; [
+      obadz
+    ];
+    teams = [ teams.freedesktop ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

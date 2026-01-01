@@ -54,11 +54,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "isal" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/pycompression/python-isal/blob/${src.rev}/CHANGELOG.rst";
     description = "Faster zlib and gzip compatible compression and decompression by providing python bindings for the isa-l library";
     homepage = "https://github.com/pycompression/python-isal";
     license = lib.licenses.psfl;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/pycompression/python-isal/blob/${src.rev}/CHANGELOG.rst";
+    description = "Faster zlib and gzip compatible compression and decompression by providing python bindings for the isa-l library";
+    homepage = "https://github.com/pycompression/python-isal";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

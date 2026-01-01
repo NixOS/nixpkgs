@@ -11,11 +11,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "diylc";
+<<<<<<< HEAD
   version = "5.7.0";
 
   src = fetchurl {
     url = "https://github.com/bancika/diy-layout-creator/releases/download/v${finalAttrs.version}/diylc-${finalAttrs.version}-universal.zip";
     hash = "sha256-0402HeOQrLJSor4bERyAkIO65kUYMLq2wo1ZgKLcMn4=";
+=======
+  version = "5.6.0";
+
+  src = fetchurl {
+    url = "https://github.com/bancika/diy-layout-creator/releases/download/v${finalAttrs.version}/diylc-${finalAttrs.version}-universal.zip";
+    hash = "sha256-y47md9kaiqpmx+ZNTm5PCHiNMMR9zjsvjc2xpVD6FAk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

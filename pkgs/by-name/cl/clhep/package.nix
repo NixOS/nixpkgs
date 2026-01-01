@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of HEP-specific foundation and utility classes such as random generators, physics vectors, geometry and linear algebra";
     homepage = "https://cern.ch/clhep";
@@ -36,5 +37,16 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ veprbl ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Set of HEP-specific foundation and utility classes such as random generators, physics vectors, geometry and linear algebra";
+    homepage = "https://cern.ch/clhep";
+    license = with licenses; [
+      gpl3Only
+      lgpl3Only
+    ];
+    maintainers = with maintainers; [ veprbl ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

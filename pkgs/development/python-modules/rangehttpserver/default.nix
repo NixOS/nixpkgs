@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "RangeHTTPServer" ];
 
+<<<<<<< HEAD
   meta = {
     description = "SimpleHTTPServer with support for Range requests";
     homepage = "https://github.com/danvk/RangeHTTPServer";
     changelog = "https://github.com/danvk/RangeHTTPServer/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "SimpleHTTPServer with support for Range requests";
+    homepage = "https://github.com/danvk/RangeHTTPServer";
+    changelog = "https://github.com/danvk/RangeHTTPServer/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

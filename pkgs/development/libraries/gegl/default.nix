@@ -128,11 +128,20 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Graph-based image processing framework";
     homepage = "https://www.gegl.org";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ jtojnar ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Graph-based image processing framework";
+    homepage = "https://www.gegl.org";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

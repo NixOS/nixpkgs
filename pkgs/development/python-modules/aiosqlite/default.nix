@@ -30,11 +30,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiosqlite" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asyncio bridge to the standard sqlite3 module";
     homepage = "https://github.com/jreese/aiosqlite";
     changelog = "https://github.com/omnilib/aiosqlite/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Asyncio bridge to the standard sqlite3 module";
+    homepage = "https://github.com/jreese/aiosqlite";
+    changelog = "https://github.com/omnilib/aiosqlite/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

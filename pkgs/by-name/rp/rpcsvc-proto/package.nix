@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
       --replace '$(top_builddir)/rpcgen/rpcgen' '${buildPackages.rpcsvc-proto}/bin/rpcgen'
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/thkukuk/rpcsvc-proto";
     description = "This package contains rpcsvc proto.x files from glibc, which are missing in libtirpc";
     longDescription = ''
@@ -57,8 +61,13 @@ stdenv.mkDerivation rec {
       (https://sourceware.org/pipermail/libc-announce/2020/000029.html) recommend to use
       `libtirpc` and this package instead.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ma27 ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ ma27 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "rpcgen";
   };
 }

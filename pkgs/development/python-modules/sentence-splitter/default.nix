@@ -28,10 +28,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sentence_splitter" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Text to sentence splitter using heuristic algorithm by Philipp Koehn and Josh Schroeder";
     homepage = "https://github.com/mediacloud/sentence-splitter";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Text to sentence splitter using heuristic algorithm by Philipp Koehn and Josh Schroeder";
+    homepage = "https://github.com/mediacloud/sentence-splitter";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

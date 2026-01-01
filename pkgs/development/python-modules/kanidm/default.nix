@@ -51,11 +51,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kanidm" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Kanidm client library";
     homepage = "https://github.com/kanidm/kanidm/tree/master/pykanidm";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Kanidm client library";
+    homepage = "https://github.com/kanidm/kanidm/tree/master/pykanidm";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       arianvp
       hexa
     ];

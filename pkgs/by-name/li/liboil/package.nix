@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   # fixes a cast in inline asm: easier than patching
   buildFlags = lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-fheinous-gnu-extensions";
 
+<<<<<<< HEAD
   meta = {
     description = "Library of simple functions that are optimized for various CPUs";
     mainProgram = "oil-bugreport";
@@ -41,5 +42,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Library of simple functions that are optimized for various CPUs";
+    mainProgram = "oil-bugreport";
+    homepage = "https://liboil.freedesktop.org";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

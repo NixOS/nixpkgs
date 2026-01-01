@@ -7,6 +7,10 @@
   fontconfig,
   gn,
   harfbuzzFull,
+<<<<<<< HEAD
+=======
+  icu,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   lib,
   libglvnd,
   libjpeg,
@@ -25,13 +29,21 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "skia-aseprite";
+<<<<<<< HEAD
   version = "m124-08a5439a6b";
+=======
+  version = "m102-861e4743af";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "skia";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-D79Z/deJsDVclcUTZXUrNZdTPW2TFNaVF4mTeHO8I+U=";
+=======
+    hash = "sha256-IlZbalmHl549uDUfPG8hlzub8TLWhG0EsV6HVAPdsl0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -40,6 +52,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+<<<<<<< HEAD
   # Using substituteInPlace because no clean upstream backport for GCC 15 exists for this version of Skia, newer versions fix this with large refactorings.
   postPatch = ''
     substituteInPlace include/private/SkSLProgramKind.h \
@@ -50,19 +63,30 @@ clangStdenv.mkDerivation (finalAttrs: {
     #include <cstdint>"
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   preConfigure = with depSrcs; ''
     mkdir -p third_party/externals
     ln -s ${angle2} third_party/externals/angle2
     ln -s ${dng_sdk} third_party/externals/dng_sdk
+<<<<<<< HEAD
     ln -s ${icu} third_party/externals/icu
     ln -s ${icu4x} third_party/externals/icu4x
     ln -s ${piex} third_party/externals/piex
     ln -s ${wuffs} third_party/externals/wuffs
+=======
+    ln -s ${piex} third_party/externals/piex
+    ln -s ${sfntly} third_party/externals/sfntly
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 
   configurePhase = ''
     runHook preConfigure
+<<<<<<< HEAD
     gn gen lib --args="is_debug=false is_official_build=true skia_use_system_icu=false extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+=======
+    gn gen lib --args="is_debug=false is_official_build=true extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     runHook postConfigure
   '';
 
@@ -70,6 +94,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig
     harfbuzzFull
+<<<<<<< HEAD
+=======
+    icu
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     libglvnd
     libjpeg
     libpng
@@ -94,6 +122,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
     # All these paths are used in some way when building Aseprite.
     cp -r --parents -t $out/ \
+<<<<<<< HEAD
       include/codec/**/*.h \
       include/config/**/*.h \
       include/core/**/*.h \
@@ -114,6 +143,22 @@ clangStdenv.mkDerivation (finalAttrs: {
       src/base/**/*.h \
       third_party/externals/angle2/include \
       third_party/externals/icu/flutter/icudtl.dat
+=======
+      include/codec \
+      include/config \
+      include/core \
+      include/effects \
+      include/gpu \
+      include/private \
+      include/utils \
+      include/third_party/skcms/*.h \
+      lib/*.a \
+      modules/skshaper/include/*.h \
+      src/core/*.h \
+      src/gpu/**/*.h \
+      third_party/externals/angle2/include \
+      third_party/skcms/**/*.h
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     runHook postInstall
   '';

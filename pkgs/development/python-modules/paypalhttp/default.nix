@@ -50,11 +50,20 @@ buildPythonPackage rec {
     responses
   ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/paypal/paypalhttp_python/releases/tag/${version}";
     description = "PayPalHttp is a generic HTTP Client";
     homepage = "https://github.com/paypal/paypalhttp_python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/paypal/paypalhttp_python/releases/tag/${version}";
+    description = "PayPalHttp is a generic HTTP Client";
+    homepage = "https://github.com/paypal/paypalhttp_python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

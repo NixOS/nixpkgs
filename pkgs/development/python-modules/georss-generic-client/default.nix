@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "georss_generic_client" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for accessing generic GeoRSS feeds";
     homepage = "https://github.com/exxamalte/python-georss-generic-client";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library for accessing generic GeoRSS feeds";
+    homepage = "https://github.com/exxamalte/python-georss-generic-client";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

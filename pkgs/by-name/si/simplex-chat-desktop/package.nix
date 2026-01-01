@@ -3,11 +3,15 @@
   appimageTools,
   fetchurl,
   gitUpdater,
+<<<<<<< HEAD
   stdenv,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 let
   pname = "simplex-chat-desktop";
+<<<<<<< HEAD
   version = "6.4.8";
 
   sources = {
@@ -26,6 +30,15 @@ let
 
   src = sources.${system} or throwSystem;
 
+=======
+  version = "6.4.7";
+
+  src = fetchurl {
+    url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
+    hash = "sha256-zCkbQS99FNZS9Q6MgQuINcgWn+/JdfrLraEKWAGqguY=";
+  };
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   appimageContents = appimageTools.extract {
     inherit pname version src;
   };
@@ -58,9 +71,13 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/simplex-chat/simplex-chat/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ terryg ];
+<<<<<<< HEAD
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
+=======
+    platforms = [ "x86_64-linux" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -54,10 +54,18 @@ buildPythonPackage {
     runHook postCheck
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Pure Python library for PNG image encoding/decoding";
     homepage = "https://github.com/scondo/purepng";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    description = "Pure Python library for PNG image encoding/decoding";
+    homepage = "https://github.com/scondo/purepng";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

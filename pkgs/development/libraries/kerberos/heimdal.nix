@@ -185,6 +185,7 @@ stdenv.mkDerivation {
     tests.nixos = nixosTests.kerberos.heimdal;
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.heimdal.software";
     changelog = "https://github.com/heimdal/heimdal/releases";
@@ -192,6 +193,15 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://www.heimdal.software";
+    changelog = "https://github.com/heimdal/heimdal/releases";
+    description = "Implementation of Kerberos 5 (and some more stuff)";
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       h7x4
       dblsaiko
     ];

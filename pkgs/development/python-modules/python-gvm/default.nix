@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gvm" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
     homepage = "https://github.com/greenbone/python-gvm";
     changelog = "https://github.com/greenbone/python-gvm/releases/tag/${src.tag}";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
+    homepage = "https://github.com/greenbone/python-gvm";
+    changelog = "https://github.com/greenbone/python-gvm/releases/tag/${src.tag}";
+    license = with licenses; [ gpl3Plus ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

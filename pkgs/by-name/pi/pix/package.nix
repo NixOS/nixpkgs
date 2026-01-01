@@ -35,13 +35,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pix";
+<<<<<<< HEAD
   version = "3.4.9";
+=======
+  version = "3.4.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "pix";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-cuNggVsNNqACWttPy1Tt8MfPFQKiuYhaMnh8TTHCi74=";
+=======
+    hash = "sha256-zK02qhTGuYgZWHkJ6c3EVinUcojNEWwecvPjblECLkw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -103,6 +111,7 @@ stdenv.mkDerivation rec {
     }")
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "pix";
@@ -110,5 +119,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    description = "Generic image viewer from Linux Mint";
+    mainProgram = "pix";
+    homepage = "https://github.com/linuxmint/pix";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

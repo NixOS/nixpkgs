@@ -44,11 +44,19 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Minimalistic database migration tool with MySQL, PostgreSQL and SQLite support";
     mainProgram = "shmig";
     homepage = "https://github.com/mbucc/shmig";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Minimalistic database migration tool with MySQL, PostgreSQL and SQLite support";
+    mainProgram = "shmig";
+    homepage = "https://github.com/mbucc/shmig";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

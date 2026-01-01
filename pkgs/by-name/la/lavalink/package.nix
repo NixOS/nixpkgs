@@ -10,11 +10,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lavalink";
+<<<<<<< HEAD
   version = "4.1.2";
 
   src = fetchurl {
     url = "https://github.com/lavalink-devs/Lavalink/releases/download/${finalAttrs.version}/Lavalink.jar";
     hash = "sha256-dl3DRtEZp0njQMUy1KEKPTV4+Y2vRk14k2K+QIwTqE4=";
+=======
+  version = "4.1.1";
+
+  src = fetchurl {
+    url = "https://github.com/lavalink-devs/Lavalink/releases/download/${finalAttrs.version}/Lavalink.jar";
+    hash = "sha256-ZR/5YDgbziAqOR8fex3aMzybPmLy/KOGtNM12Zj/ttg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [

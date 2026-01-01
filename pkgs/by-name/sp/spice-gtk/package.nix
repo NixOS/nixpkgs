@@ -135,7 +135,11 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
+<<<<<<< HEAD
   env.PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+=======
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   mesonFlags = [
     "-Dusb-acl-helper-dir=${placeholder "out"}/bin"
@@ -170,7 +174,11 @@ stdenv.mkDerivation rec {
       --replace-fail ",--version-script=@0@'.format(spice_client_glib_syms_path)" "'"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "GTK 3 SPICE widget";
     longDescription = ''
       spice-gtk is a GTK 3 SPICE widget. It features glib-based
@@ -180,8 +188,14 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.spice-space.org/";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.xeji ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.xeji ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

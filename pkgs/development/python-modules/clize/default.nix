@@ -48,11 +48,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clize" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line argument parsing for Python";
     homepage = "https://github.com/epsy/clize";
     changelog = "https://github.com/epsy/clize/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Command-line argument parsing for Python";
+    homepage = "https://github.com/epsy/clize";
+    changelog = "https://github.com/epsy/clize/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -35,11 +35,20 @@ python3.pkgs.buildPythonApplication rec {
     "s3bro"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "S3 CLI tool";
     mainProgram = "s3bro";
     homepage = "https://github.com/rsavordelli/s3bro";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
+=======
+  meta = with lib; {
+    description = "S3 CLI tool";
+    mainProgram = "s3bro";
+    homepage = "https://github.com/rsavordelli/s3bro";
+    license = licenses.mit;
+    maintainers = with maintainers; [ psyanticy ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

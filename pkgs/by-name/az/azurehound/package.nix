@@ -29,6 +29,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta = {
     description = "Azure Data Exporter for BloodHound";
     homepage = "https://github.com/SpecterOps/AzureHound";

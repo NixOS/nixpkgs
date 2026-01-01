@@ -173,18 +173,32 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK for GCE hosts. Used by `google-cloud-sdk` only on GCE guests.";
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    description = "Tools for the google cloud platform";
+    longDescription = "The Google Cloud SDK for GCE hosts. Used by `google-cloud-sdk` only on GCE guests.";
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fromSource
       binaryNativeCode # anthoscli and possibly more
     ];
     # This package contains vendored dependencies. All have free licenses.
+<<<<<<< HEAD
     license = lib.licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     changelog = "https://cloud.google.com/sdk/docs/release-notes";
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.free;
+    homepage = "https://cloud.google.com/sdk/";
+    changelog = "https://cloud.google.com/sdk/docs/release-notes";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       iammrinal0
       marcusramberg
       pradyuman

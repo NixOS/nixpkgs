@@ -52,11 +52,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_codeautolink" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension that makes code examples clickable";
     homepage = "https://github.com/felix-hilden/sphinx-codeautolink";
     changelog = "https://github.com/felix-hilden/sphinx-codeautolink/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
+=======
+  meta = with lib; {
+    description = "Sphinx extension that makes code examples clickable";
+    homepage = "https://github.com/felix-hilden/sphinx-codeautolink";
+    changelog = "https://github.com/felix-hilden/sphinx-codeautolink/releases/tag/${src.tag}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kaction ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

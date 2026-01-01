@@ -28,12 +28,21 @@ stdenv.mkDerivation {
       --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Securely control a remote docker daemon CLI using ssh forwarding, no SSL setup needed";
     mainProgram = "rdocker";
     homepage = "https://github.com/dvddarias/rdocker";
     maintainers = [ lib.maintainers.pneumaticat ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

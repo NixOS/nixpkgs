@@ -24,11 +24,20 @@ buildGoModule rec {
     "-X github.com/jessfraz/dockfmt/version.VERSION=${version}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dockerfile format";
     mainProgram = "dockfmt";
     homepage = "https://github.com/jessfraz/dockfmt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
+=======
+  meta = with lib; {
+    description = "Dockerfile format";
+    mainProgram = "dockfmt";
+    homepage = "https://github.com/jessfraz/dockfmt";
+    license = licenses.mit;
+    maintainers = with maintainers; [ cpcloud ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

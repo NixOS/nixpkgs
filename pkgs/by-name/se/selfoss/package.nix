@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Web-based news feed (RSS/Atom) aggregator";
     homepage = "https://selfoss.aditu.de";
@@ -40,5 +41,16 @@ stdenvNoCC.mkDerivation rec {
       regnat
     ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Web-based news feed (RSS/Atom) aggregator";
+    homepage = "https://selfoss.aditu.de";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+      jtojnar
+      regnat
+    ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

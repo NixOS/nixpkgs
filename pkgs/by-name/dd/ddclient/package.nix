@@ -52,12 +52,21 @@ perlPackages.buildPerlPackage rec {
   # TODO: run upstream tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Client for updating dynamic DNS service entries";
     homepage = "https://ddclient.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bjornfor ];
+=======
+  meta = with lib; {
+    description = "Client for updating dynamic DNS service entries";
+    homepage = "https://ddclient.net/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ddclient";
   };
 }

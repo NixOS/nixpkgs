@@ -39,15 +39,25 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vpTUZVD5ONcQeDnjPmQDY9Qf/bmDqZMnxA+I8ALOB7Y=";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/alexpevzner/sane-airscan";
     description = "Scanner Access Now Easy - Apple AirScan (eSCL) driver";
     mainProgram = "airscan-discover";
     longDescription = ''
       sane-airscan: Linux support of Apple AirScan (eSCL) compatible document scanners.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zaninime ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ zaninime ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

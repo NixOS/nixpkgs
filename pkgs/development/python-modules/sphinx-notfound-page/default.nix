@@ -51,11 +51,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "notfound" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension to create a custom 404 page with absolute URLs hardcoded";
     homepage = "https://github.com/readthedocs/sphinx-notfound-page";
     changelog = "https://github.com/readthedocs/sphinx-notfound-page/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kaction ];
+=======
+  meta = with lib; {
+    description = "Sphinx extension to create a custom 404 page with absolute URLs hardcoded";
+    homepage = "https://github.com/readthedocs/sphinx-notfound-page";
+    changelog = "https://github.com/readthedocs/sphinx-notfound-page/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kaction ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -19,11 +19,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for working with Valve Pak files";
     mainProgram = "vpk";
     homepage = "https://github.com/ValvePython/vpk";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ joshuafern ];
+=======
+  meta = with lib; {
+    description = "Library for working with Valve Pak files";
+    mainProgram = "vpk";
+    homepage = "https://github.com/ValvePython/vpk";
+    license = licenses.mit;
+    maintainers = with maintainers; [ joshuafern ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

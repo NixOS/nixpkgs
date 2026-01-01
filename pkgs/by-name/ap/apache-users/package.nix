@@ -37,11 +37,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Username Enumeration through Apache UserDir";
     homepage = "https://labs.portcullis.co.uk/downloads/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ emilytrau ];
+=======
+  meta = with lib; {
+    description = "Username Enumeration through Apache UserDir";
+    homepage = "https://labs.portcullis.co.uk/downloads/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "apache-users";
   };
 })

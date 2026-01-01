@@ -9,7 +9,11 @@
   linkFarm,
   wrapGAppsHook3,
   gtk3,
+<<<<<<< HEAD
   xfce4-dev-tools,
+=======
+  xfce,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   at-spi2-core,
   librsvg,
   hicolor-icon-theme,
@@ -28,7 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     intltool
+<<<<<<< HEAD
     xfce4-dev-tools
+=======
+    xfce.xfce4-dev-tools
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     wrapGAppsHook3
   ];
 

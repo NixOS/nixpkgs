@@ -25,10 +25,18 @@ buildGoModule rec {
     "cmd/kubectl-argo-rollouts"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Kubernetes Progressive Delivery Controller";
     homepage = "https://github.com/argoproj/argo-rollouts/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ psibi ];
+=======
+  meta = with lib; {
+    description = "Kubernetes Progressive Delivery Controller";
+    homepage = "https://github.com/argoproj/argo-rollouts/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ psibi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

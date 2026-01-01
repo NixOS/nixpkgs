@@ -1,7 +1,11 @@
 {
   lib,
   mdbook,
+<<<<<<< HEAD
   nodejs,
+=======
+  nodePackages,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   python3,
   util-linux,
   rustPlatform,
@@ -21,19 +25,32 @@ rustPlatform.buildRustPackage {
 
   nativeCheckInputs = [
     mdbook # used by tests/book.rs
+<<<<<<< HEAD
     nodejs # used by tests/regression/inline_call/input.md
+=======
+    nodePackages.nodejs # used by tests/regression/inline_call/input.md
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     python3 # used by tests/regression/py_*
     util-linux # used by tests/regression/shell/input.md
   ];
 
   cargoHash = "sha256-C3Rg+WXHBA7KyUDFdhBz4mOm8CFH/f7UVA8KOLs9ClE=";
 
+<<<<<<< HEAD
   meta = {
     description = "mdbook preprocessor to run arbitrary commands";
     mainProgram = "mdbook-cmdrun";
     homepage = "https://github.com/FauconFan/mdbook-cmdrun";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "mdbook preprocessor to run arbitrary commands";
+    mainProgram = "mdbook-cmdrun";
+    homepage = "https://github.com/FauconFan/mdbook-cmdrun";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       pinpox
       matthiasbeyer
     ];

@@ -27,10 +27,17 @@ stdenv.mkDerivation {
     echo kernel/x86/microcode/AuthenticAMD.bin | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- > $out/amd-ucode.img
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "AMD Processor microcode patch";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
     license = lib.licenses.unfreeRedistributableFirmware;
+=======
+  meta = with lib; {
+    description = "AMD Processor microcode patch";
+    homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
+    license = licenses.unfreeRedistributableFirmware;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "i686-linux"
       "x86_64-linux"

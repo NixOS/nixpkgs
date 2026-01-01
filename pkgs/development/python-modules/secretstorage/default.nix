@@ -30,10 +30,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "secretstorage" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python bindings to FreeDesktop.org Secret Service API";
     homepage = "https://github.com/mitya57/secretstorage";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ teto ];
+=======
+  meta = with lib; {
+    description = "Python bindings to FreeDesktop.org Secret Service API";
+    homepage = "https://github.com/mitya57/secretstorage";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ teto ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

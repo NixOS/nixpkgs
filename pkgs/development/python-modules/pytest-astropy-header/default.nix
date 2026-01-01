@@ -27,10 +27,17 @@ buildPythonPackage rec {
     numpy
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Plugin to add diagnostic information to the header of the test output";
     homepage = "https://astropy.org";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Plugin to add diagnostic information to the header of the test output";
+    homepage = "https://astropy.org";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

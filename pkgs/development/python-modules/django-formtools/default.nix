@@ -34,11 +34,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "formtools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of high-level abstractions for Django forms";
     homepage = "https://github.com/jazzband/django-formtools";
     changelog = "https://github.com/jazzband/django-formtools/blob/master/docs/changelog.rst";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Set of high-level abstractions for Django forms";
+    homepage = "https://github.com/jazzband/django-formtools";
+    changelog = "https://github.com/jazzband/django-formtools/blob/master/docs/changelog.rst";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [
     ];
   };

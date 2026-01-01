@@ -23,13 +23,22 @@ stdenv.mkDerivation {
     install fw $out/bin/fw
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     version = "3.20";
     description = "Simple, reliable literate-programming macro preprocessor";
     mainProgram = "fw";
     homepage = "http://www.ross.net/funnelweb/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

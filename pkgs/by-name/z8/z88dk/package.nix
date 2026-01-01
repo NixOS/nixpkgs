@@ -194,6 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     "install"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.z88dk.org";
     description = "z80 Development Kit";
@@ -203,5 +204,16 @@ stdenv.mkDerivation (finalAttrs: {
       hzeller
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://www.z88dk.org";
+    description = "z80 Development Kit";
+    license = licenses.clArtistic;
+    maintainers = with maintainers; [
+      siraben
+      hzeller
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

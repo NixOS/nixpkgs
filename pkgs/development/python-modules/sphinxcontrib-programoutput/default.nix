@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension to include program output";
     homepage = "https://github.com/NextThought/sphinxcontrib-programoutput";
     license = lib.licenses.bsd2;
+=======
+  meta = with lib; {
+    description = "Sphinx extension to include program output";
+    homepage = "https://github.com/NextThought/sphinxcontrib-programoutput";
+    license = licenses.bsd2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

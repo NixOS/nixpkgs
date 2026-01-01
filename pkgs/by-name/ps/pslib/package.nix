@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     cp -r ../doc/. $doc/share/doc/${pname}
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "C-library for generating multi page PostScript documents";
     homepage = "https://pslib.sourceforge.net/";
@@ -66,5 +67,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ ShamrockLee ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "C-library for generating multi page PostScript documents";
+    homepage = "https://pslib.sourceforge.net/";
+    changelog = "https://sourceforge.net/p/pslib/git/ci/master/tree/pslib/ChangeLog";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ShamrockLee ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -44,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "certifi" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/certifi/python-certifi";
     description = "Python package for providing Mozilla's CA Bundle";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ koral ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/certifi/python-certifi";
+    description = "Python package for providing Mozilla's CA Bundle";
+    license = licenses.isc;
+    maintainers = with maintainers; [ koral ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

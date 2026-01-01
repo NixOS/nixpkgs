@@ -38,11 +38,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/exactassembly/meta-xa-stm/tree/master/recipes-support/lsiutil/files";
     description = "Configuration utility for MPT adapters (FC, SCSI, and SAS/SATA)";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/exactassembly/meta-xa-stm/tree/master/recipes-support/lsiutil/files";
+    description = "Configuration utility for MPT adapters (FC, SCSI, and SAS/SATA)";
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Luflosi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

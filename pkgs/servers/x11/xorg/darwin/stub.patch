@@ -1,0 +1,61 @@
+When the X / Xquartz server initializes, it starts the XQuartz.app and
+hands-off the display FD. To start the XQuartz.app, Xquartz normally uses some
+system calls to get the path of the application by app bundle id, and then
+executes the Contents/MacOS/X11 script contained inside, which in turn executes
+Contents/MacOS/X11.bin (the actual app).
+
+This patch replaces that discovery technique with a simple call to
+`getenv' and a hardcoded default. In order to make Xquartz work if the
+app is moved, we'll need another wrapper that sets the `XQUARTZ_X11'
+environment variable to point to the `X11' script.
+
+diff --git a/hw/xquartz/mach-startup/stub.c b/hw/xquartz/mach-startup/stub.c
+index 83252e805..f1974215b 100644
+--- a/hw/xquartz/mach-startup/stub.c
++++ b/hw/xquartz/mach-startup/stub.c
+@@ -52,7 +52,6 @@
+ 
+ #include "launchd_fd.h"
+ 
+-static CFURLRef x11appURL;
+ static FSRef x11_appRef;
+ static pid_t x11app_pid = 0;
+ aslclient aslc;
+@@ -60,29 +59,21 @@ aslclient aslc;
+ static void
+ set_x11_path(void)
+ {
+-    OSStatus osstatus = LSFindApplicationForInfo(kLSUnknownCreator, CFSTR(kX11AppBundleId),
+-                                                 nil, &x11_appRef, &x11appURL);
++    unsigned char *xquartzApp = getenv("XQUARTZ_APP");
++    if (!xquartzApp) {
++        xquartzApp = "@XQUARTZ_APP@";
++    }
++
++    OSStatus osstatus = FSPathMakeRef(xquartzApp, &x11_appRef, NULL);
+ 
+     switch (osstatus) {
+     case noErr:
+-        if (x11appURL == NULL) {
+-            asl_log(aslc, NULL, ASL_LEVEL_ERR,
+-                    "Xquartz: Invalid response from LSFindApplicationForInfo(%s)",
+-                    kX11AppBundleId);
+-            exit(1);
+-        }
+         break;
+ 
+-    case kLSApplicationNotFoundErr:
+-        asl_log(aslc, NULL, ASL_LEVEL_ERR,
+-                "Xquartz: Unable to find application for %s",
+-                kX11AppBundleId);
+-        exit(10);
+-
+     default:
+         asl_log(aslc, NULL, ASL_LEVEL_ERR,
+-                "Xquartz: Unable to find application for %s, error code = %d",
+-                kX11AppBundleId, (int)osstatus);
++                "Xquartz: Unable to find FSRef for %s, error code = %d",
++                xquartzApp, (int)osstatus);
+         exit(11);
+     }
+ }

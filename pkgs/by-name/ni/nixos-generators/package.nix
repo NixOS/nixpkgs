@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       }
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of image builders";
     homepage = "https://github.com/nix-community/nixos-generators";
@@ -42,5 +43,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lassulus ];
     mainProgram = "nixos-generate";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Collection of image builders";
+    homepage = "https://github.com/nix-community/nixos-generators";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lassulus ];
+    mainProgram = "nixos-generate";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

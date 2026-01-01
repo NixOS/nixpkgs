@@ -105,7 +105,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
@@ -113,9 +117,15 @@ stdenv.mkDerivation rec {
       editing tools and a super-fast workflow.
     '';
     homepage = "https://www.bitwig.com/";
+<<<<<<< HEAD
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bfortz
       michalrus
       mrVanDalo

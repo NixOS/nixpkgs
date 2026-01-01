@@ -40,11 +40,20 @@ buildPythonPackage rec {
   # https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/identity/tests.yml
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Microsoft Azure Identity Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/identity/azure-identity";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-identity_${version}/sdk/identity/azure-identity/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "Microsoft Azure Identity Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/identity/azure-identity";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-identity_${version}/sdk/identity/azure-identity/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

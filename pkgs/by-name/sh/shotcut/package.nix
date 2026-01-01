@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
+<<<<<<< HEAD
   version = "25.10.31";
+=======
+  version = "25.08.16";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-EUcYUhOZeTMCazl6TH3t1aP0cRhPXC4WKQlAiUkVoyw=";
+=======
+    hash = "sha256-PpMfiqUwG11H+7sLkp3sLzDWjco1OxYqGyfMAFojSPU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -46,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtmultimedia
     qt6.qtcharts
     qt6.qtwayland
+<<<<<<< HEAD
     qt6.qtwebsockets
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";

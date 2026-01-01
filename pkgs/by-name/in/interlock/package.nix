@@ -48,11 +48,20 @@ buildGoModule rec {
   # Tests are broken due to an error during key generation.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/usbarmory/interlock";
     description = "File encryption tool and an HSM frontend";
     mainProgram = "interlock";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/usbarmory/interlock";
+    description = "File encryption tool and an HSM frontend";
+    mainProgram = "interlock";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

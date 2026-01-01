@@ -75,7 +75,11 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_sentry.py"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Phabricator CLI from Mozilla to support submission of a series of commits";
     mainProgram = "moz-phab";
     longDescription = ''
@@ -84,8 +88,14 @@ python3.pkgs.buildPythonApplication rec {
       submitting series of commits.
     '';
     homepage = "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
+<<<<<<< HEAD
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.mpl20;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -33,10 +33,18 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Terminal keypress reading library";
     homepage = "http://www.leonerd.org.uk/code/libtermkey";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Terminal keypress reading library";
+    homepage = "http://www.leonerd.org.uk/code/libtermkey";
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

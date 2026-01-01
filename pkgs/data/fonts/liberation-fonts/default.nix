@@ -42,7 +42,11 @@ let
         done
       '';
 
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         description = "Liberation Fonts, replacements for Times New Roman, Arial, and Courier New";
         longDescription = ''
           The Liberation Fonts are intended to be replacements for the three most
@@ -56,9 +60,15 @@ let
           Bitstream Vera Sans Mono).
         '';
 
+<<<<<<< HEAD
         license = lib.licenses.ofl;
         homepage = "https://github.com/liberationfonts";
         maintainers = with lib.maintainers; [ raskin ];
+=======
+        license = licenses.ofl;
+        homepage = "https://github.com/liberationfonts";
+        maintainers = with maintainers; [ raskin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 in

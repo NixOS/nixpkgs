@@ -3,8 +3,11 @@
   lib,
   nodejs_22,
   pnpm_10,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   electron_39,
   python3,
   makeWrapper,
@@ -24,7 +27,11 @@
 }:
 let
   nodejs = nodejs_22;
+<<<<<<< HEAD
   pnpm = pnpm_10;
+=======
+  pnpm = pnpm_10.override { inherit nodejs; };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   electron = electron_39;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
@@ -54,13 +61,21 @@ let
     '';
   });
 
+<<<<<<< HEAD
   version = "7.83.0";
+=======
+  version = "7.80.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-hzeioXrO9kdFFTGhhY4klrCxRgS1eoGY7+7fTGsN4cY=";
+=======
+    hash = "sha256-q4eRrMXYu1jVi1/gcFrEcwhmwtiEv2JOepyxf0wTPws=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -68,9 +83,14 @@ let
     inherit version;
     src = src + "/sticker-creator";
 
+<<<<<<< HEAD
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname src version;
       inherit pnpm;
+=======
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs) pname src version;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fetcherVersion = 1;
       hash = "sha256-m/JxsKnVhcya7dUz1MBMQKwEdqoV3xQiGOoT4egh3K4=";
     };
@@ -78,8 +98,12 @@ let
     strictDeps = true;
     nativeBuildInputs = [
       nodejs
+<<<<<<< HEAD
       pnpmConfigHook
       pnpm
+=======
+      pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
 
     buildPhase = ''
@@ -102,8 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     makeWrapper
     copyDesktopItems
     python3
@@ -129,13 +157,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
   '';
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+<<<<<<< HEAD
     inherit pnpm;
     fetcherVersion = 1;
     hash =
@@ -143,12 +176,24 @@ stdenv.mkDerivation (finalAttrs: {
         "sha256-taF3A2YcqMzqcS401fxRW9wEC/Ol7bVJ6belF4RTIRk="
       else
         "sha256-sWxxANPW0W5/tmowoJ7ZPBEBSurKN6C+wZAcLa2QHz8=";
+=======
+    fetcherVersion = 1;
+    hash =
+      if withAppleEmojis then
+        "sha256-7zw9qmnQt5NYRKI4bLCM5Hg0d/6kVKovy1k8CpZ/1R8="
+      else
+        "sha256-Mya7v0uhjP4GVyD412SMiQ8/YHaq99fDIjGHCJOIWxY=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
+<<<<<<< HEAD
     SOURCE_DATE_EPOCH = 1766066770;
+=======
+    SOURCE_DATE_EPOCH = 1764091164;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   preBuild = ''

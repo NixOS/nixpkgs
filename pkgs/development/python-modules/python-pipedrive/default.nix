@@ -19,10 +19,18 @@ buildPythonPackage rec {
 
   doCheck = false; # Tests are not provided.
 
+<<<<<<< HEAD
   meta = {
     description = "Python library for interacting with the pipedrive.com API";
     homepage = "https://github.com/jscott1989/python-pipedrive";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ mrmebelman ];
+=======
+  meta = with lib; {
+    description = "Python library for interacting with the pipedrive.com API";
+    homepage = "https://github.com/jscott1989/python-pipedrive";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ mrmebelman ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

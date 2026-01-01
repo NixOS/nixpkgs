@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "caribou"; };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Input assistive technology intended for switch and pointer users";
     mainProgram = "caribou-preferences";
@@ -114,6 +115,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Input assistive technology intended for switch and pointer users";
+    mainProgram = "caribou-preferences";
+    homepage = "https://gitlab.gnome.org/Archive/caribou";
+    license = licenses.lgpl21;
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # checking for a Python interpreter with version >= 2.4... none
     # configure: error: no suitable Python interpreter found
     broken = stdenv.buildPlatform != stdenv.hostPlatform;

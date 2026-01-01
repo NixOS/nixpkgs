@@ -40,12 +40,21 @@ stdenv.mkDerivation {
         }"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Docker garbage collection of containers and images";
     mainProgram = "docker-gc";
     license = lib.licenses.asl20;
     homepage = "https://github.com/spotify/docker-gc";
     maintainers = with lib.maintainers; [ offline ];
+=======
+  meta = with lib; {
+    description = "Docker garbage collection of containers and images";
+    mainProgram = "docker-gc";
+    license = licenses.asl20;
+    homepage = "https://github.com/spotify/docker-gc";
+    maintainers = with maintainers; [ offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = docker.meta.platforms;
   };
 }

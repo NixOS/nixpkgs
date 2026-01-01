@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Top-like tool for viewing AMD Radeon GPU utilization";
     mainProgram = "radeontop";
     longDescription = ''
@@ -59,7 +63,12 @@ stdenv.mkDerivation rec {
       loads.
     '';
     homepage = "https://github.com/clbr/radeontop";
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
+=======
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

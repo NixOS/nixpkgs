@@ -1,6 +1,10 @@
 { lib, ... }:
 {
+<<<<<<< HEAD
   name = "xscreensaver";
+=======
+  name = "pass-secret-service";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   meta.maintainers = with lib.maintainers; [
     vancluever
   ];
@@ -54,6 +58,7 @@
           })
         ];
       };
+<<<<<<< HEAD
 
     hooks =
       { lib, ... }:
@@ -73,6 +78,11 @@
   };
 
   testScript = /* python */ ''
+=======
+  };
+
+  testScript = ''
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ok.wait_for_x()
     ok.wait_for_unit("xscreensaver", "alice")
     _, output_ok = ok.systemctl("status xscreensaver", "alice")
@@ -93,10 +103,13 @@
     assert 'To prevent the kernel from randomly unlocking' in output_bad_wrapperPrefix
     assert 'your screen via the out-of-memory killer' in output_bad_wrapperPrefix
     assert '"xscreensaver-auth" must be setuid root' in output_bad_wrapperPrefix
+<<<<<<< HEAD
 
     hooks.wait_for_x()
     hooks.wait_for_unit("xscreensaver", "alice")
     hooks.wait_for_unit("xscreensaver-hooks", "alice")
     hooks.wait_for_file("/home/alice/xscreensaver-works")
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   '';
 }

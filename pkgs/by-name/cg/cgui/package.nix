@@ -36,10 +36,18 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "SYSTEM_DIR=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Multiplatform basic GUI library";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.free;
+=======
+  meta = with lib; {
+    description = "Multiplatform basic GUI library";
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license = licenses.free;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -24,10 +24,18 @@ buildPythonPackage rec {
   checkPhase = "pytest";
   pythonImportsCheck = [ "mergedeep" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/clarketm/mergedeep";
     description = "Deep merge function for python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ris ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/clarketm/mergedeep";
+    description = "Deep merge function for python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

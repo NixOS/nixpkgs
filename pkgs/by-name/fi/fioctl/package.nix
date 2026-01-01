@@ -42,11 +42,19 @@ buildGoModule rec {
     version = "v${version}";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple CLI to manage your Foundries Factory";
     homepage = "https://github.com/foundriesio/fioctl";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Simple CLI to manage your Foundries Factory";
+    homepage = "https://github.com/foundriesio/fioctl";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nixinator
       matthewcroughan
     ];

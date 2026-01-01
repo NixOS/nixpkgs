@@ -7,14 +7,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nvitop";
+<<<<<<< HEAD
   version = "1.6.1";
+=======
+  version = "1.6.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "XuehaiPan";
     repo = "nvitop";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-CPx69Gp0n715q7ZoL0s19+IUdS1+vjw+49es2vzEFWg=";
+=======
+    hash = "sha256-Ce92O0GfOIIwHHFLBYQdvYlQmAeeJ6xBfMVXps6+B5E=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -30,6 +38,10 @@ python3Packages.buildPythonApplication rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "nvitop" ];
 

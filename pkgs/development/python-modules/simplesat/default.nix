@@ -49,11 +49,20 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "simplesat/tests" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Prototype for SAT-based dependency handling";
     homepage = "https://github.com/enthought/sat-solver";
     changelog = "https://github.com/enthought/sat-solver/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ genericnerdyusername ];
+=======
+  meta = with lib; {
+    description = "Prototype for SAT-based dependency handling";
+    homepage = "https://github.com/enthought/sat-solver";
+    changelog = "https://github.com/enthought/sat-solver/blob/${src.tag}/CHANGES.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ genericnerdyusername ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

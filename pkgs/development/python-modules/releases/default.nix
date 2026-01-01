@@ -32,10 +32,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "releases" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Sphinx extension for changelog manipulation";
     homepage = "https://github.com/bitprophet/releases";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ samuela ];
+=======
+  meta = with lib; {
+    description = "Sphinx extension for changelog manipulation";
+    homepage = "https://github.com/bitprophet/releases";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ samuela ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

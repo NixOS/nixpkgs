@@ -18,7 +18,11 @@
   and each link is labeled with the VLAN we are assigning it in
   virtualisation.vlans.
 */
+<<<<<<< HEAD
 
+=======
+with builtins;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 let
   commonConf = {
     systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";

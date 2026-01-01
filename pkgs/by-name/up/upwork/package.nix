@@ -124,6 +124,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Online freelancing platform desktop application for time tracking";
     homepage = "https://www.upwork.com/ab/downloads/";
@@ -131,5 +132,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ zakkor ];
+=======
+  meta = with lib; {
+    description = "Online freelancing platform desktop application for time tracking";
+    homepage = "https://www.upwork.com/ab/downloads/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ zakkor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

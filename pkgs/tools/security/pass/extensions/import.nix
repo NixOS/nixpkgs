@@ -52,17 +52,30 @@ python3Packages.buildPythonApplication rec {
     $out/bin/pimport --list-exporters --list-importers
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Pass extension for importing data from existing password managers";
     mainProgram = "pimport";
     homepage = "https://github.com/roddhjav/pass-import";
     changelog = "https://github.com/roddhjav/pass-import/blob/v${version}/CHANGELOG.rst";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       lovek323
       fpletz
       tadfisher
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

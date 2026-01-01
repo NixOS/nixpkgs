@@ -12,6 +12,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
+<<<<<<< HEAD
           hash = "sha256-oN7pb/KKhzx7LgODvEh5GyX9Nismtz1lsDcGsDlmaO0=";
         };
         "x86_64-darwin" = {
@@ -25,13 +26,32 @@ vscode-utils.buildVscodeMarketplaceExtension {
         "aarch64-darwin" = {
           arch = "darwin-arm64";
           hash = "sha256-Tr6KjEDTtCH3EgSKK0WqU/5w8gjSz3azhxHVHlXwZTw=";
+=======
+          hash = "sha256-Ll+V+0SBAXIQBvfbGQ1lgU8KtAAQiHJjc6t0Nxh1LvY=";
+        };
+        "x86_64-darwin" = {
+          arch = "darwin-x64";
+          hash = "sha256-NBHmOJT1n+Xc/8rS2gapPMRDsQXCsCbo9sK2tXRpyHA=";
+        };
+        "aarch64-linux" = {
+          arch = "linux-arm64";
+          hash = "sha256-vv5q6t4wh0K5Ll39/Fed0p9XPbm/YrkH3L7uVRB2Ndg=";
+        };
+        "aarch64-darwin" = {
+          arch = "darwin-arm64";
+          hash = "sha256-V//GHbjbHos3u/DF4qPplufscJ0Yclg5HTII27U9SDw=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         };
       };
     in
     {
       name = "ruff";
       publisher = "charliermarsh";
+<<<<<<< HEAD
       version = "2025.32.0";
+=======
+      version = "2025.30.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");

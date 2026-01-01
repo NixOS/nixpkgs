@@ -60,12 +60,21 @@ stdenv.mkDerivation {
 
   passthru.driverPath = "/lib/libfprint-2/tod-1";
 
+<<<<<<< HEAD
   meta = {
     description = "Libfprint-2-tod Touch OEM Driver for 2016 ThinkPad's fingerprint readers";
     homepage = "https://gitlab.freedesktop.org/3v1n0/libfprint-tod-vfs0090";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ valodim ];
+=======
+  meta = with lib; {
+    description = "Libfprint-2-tod Touch OEM Driver for 2016 ThinkPad's fingerprint readers";
+    homepage = "https://gitlab.freedesktop.org/3v1n0/libfprint-tod-vfs0090";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ valodim ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Does not compile against libfprint-tod, hasn't seen any maintenance
     # since 2020.
     broken = true;

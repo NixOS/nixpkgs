@@ -104,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.mysqlVersion = lib.versions.majorMinor finalAttrs.version;
 
+<<<<<<< HEAD
   meta = {
     description = "Non-blocking backup tool for MySQL";
     homepage = "http://www.percona.com/software/percona-xtrabackup";
@@ -111,5 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.izorkin ];
     teams = [ lib.teams.flyingcircus ];
+=======
+  meta = with lib; {
+    description = "Non-blocking backup tool for MySQL";
+    homepage = "http://www.percona.com/software/percona-xtrabackup";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.izorkin ];
+    teams = [ teams.flyingcircus ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

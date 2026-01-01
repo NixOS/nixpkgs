@@ -57,11 +57,19 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Simple terminal user interface for Signal";
     mainProgram = "scli";
     homepage = "https://github.com/isamert/scli";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "Simple terminal user interface for Signal";
+    mainProgram = "scli";
+    homepage = "https://github.com/isamert/scli";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -45,14 +45,23 @@ symlinkJoin {
     cp ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Decentralized messaging and sharing app built on top of Secure Scuttlebutt (SSB)";
     longDescription = ''
       sea-slang for gossip - a scuttlebutt is basically a watercooler on a ship.
     '';
     homepage = "https://www.scuttlebutt.nz/";
+<<<<<<< HEAD
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asymmetric
       picnoir
       cyplo

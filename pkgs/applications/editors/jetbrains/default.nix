@@ -1,12 +1,19 @@
 let
   # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
   # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
+<<<<<<< HEAD
   ideInfo = builtins.fromJSON (builtins.readFile ./ides.json);
+=======
+  ideInfo = builtins.fromJSON (builtins.readFile ./bin/ides.json);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
 in
 
 {
+<<<<<<< HEAD
   config,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   lib,
   stdenv,
   callPackage,
@@ -46,7 +53,11 @@ let
 
   products = versions.${system} or (throw "Unsupported system: ${system}");
 
+<<<<<<< HEAD
   dotnet-sdk = dotnetCorePackages.sdk_10_0-source;
+=======
+  dotnet-sdk = dotnetCorePackages.sdk_9_0-source;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   package = if stdenv.hostPlatform.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
   mkJetBrainsProductCore = callPackage package { inherit vmopts; };
@@ -117,8 +128,21 @@ let
       passthru.tests = extraTests // {
         plugins = callPackage ./plugins/tests.nix { ideName = pname; };
       };
+<<<<<<< HEAD
       libdbm = communitySources."${pname}".libdbm or communitySources.idea-oss.libdbm;
       fsnotifier = communitySources."${pname}".fsnotifier or communitySources.idea-oss.fsnotifier;
+=======
+      libdbm =
+        if ideInfo."${pname}".meta.isOpenSource then
+          communitySources."${pname}".libdbm
+        else
+          communitySources.idea-community.libdbm;
+      fsnotifier =
+        if ideInfo."${pname}".meta.isOpenSource then
+          communitySources."${pname}".fsnotifier
+        else
+          communitySources.idea-community.fsnotifier;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
 
   communitySources = callPackage ./source { };
@@ -174,6 +198,7 @@ let
       --replace-needed libcrypt.so.1 libcrypt.so \
       ${lib.optionalString stdenv.hostPlatform.isAarch "--replace-needed libxml2.so.2 libxml2.so"}
   '';
+<<<<<<< HEAD
 
   # TODO: These can be moved down again when we don't need the aliases anymore:
   _idea = buildIdea {
@@ -198,6 +223,18 @@ let
 in
 {
   # Sorted alphabetically. Deprecated products and aliases are at the very end.
+=======
+in
+rec {
+  # Sorted alphabetically
+
+  aqua = mkJetBrainsProduct {
+    pname = "aqua";
+    extraBuildInputs = [
+      lldb
+    ];
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   clion =
     (mkJetBrainsProduct {
@@ -277,9 +314,34 @@ in
           '';
       });
 
+<<<<<<< HEAD
   idea = _idea;
 
   idea-oss = _idea-oss;
+=======
+  idea-community-bin = buildIdea {
+    pname = "idea-community";
+  };
+
+  idea-community-src = buildIdea {
+    pname = "idea-community";
+    fromSource = true;
+  };
+
+  idea-community =
+    if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64 then
+      idea-community-bin
+    else
+      idea-community-src;
+
+  idea-ultimate = buildIdea {
+    pname = "idea-ultimate";
+    extraBuildInputs = [
+      lldb
+      musl
+    ];
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   mps = mkJetBrainsProduct { pname = "mps"; };
 
@@ -290,9 +352,26 @@ in
     ];
   };
 
+<<<<<<< HEAD
   pycharm = _pycharm;
 
   pycharm-oss = _pycharm-oss;
+=======
+  pycharm-community-bin = buildPycharm { pname = "pycharm-community"; };
+
+  pycharm-community-src = buildPycharm {
+    pname = "pycharm-community";
+    fromSource = true;
+  };
+
+  pycharm-community =
+    if stdenv.hostPlatform.isDarwin then pycharm-community-bin else pycharm-community-src;
+
+  pycharm-professional = buildPycharm {
+    pname = "pycharm-professional";
+    extraBuildInputs = [ musl ];
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   rider =
     (mkJetBrainsProduct {
@@ -367,11 +446,21 @@ in
     ];
   };
 
+<<<<<<< HEAD
   # Plugins
+=======
+  writerside = mkJetBrainsProduct {
+    pname = "writerside";
+    extraBuildInputs = [
+      musl
+    ];
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   plugins = callPackage ./plugins { };
 
 }
+<<<<<<< HEAD
 
 // lib.optionalAttrs config.allowAliases rec {
 
@@ -434,3 +523,5 @@ in
         ];
       });
 }
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

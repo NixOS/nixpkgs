@@ -18,9 +18,16 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pyxlsb" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Excel 2007-2010 Binary Workbook (xlsb) parser";
     homepage = "https://github.com/willtrnr/pyxlsb";
     license = lib.licenses.lgpl3Plus;
+=======
+  meta = with lib; {
+    description = "Excel 2007-2010 Binary Workbook (xlsb) parser";
+    homepage = "https://github.com/willtrnr/pyxlsb";
+    license = licenses.lgpl3Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

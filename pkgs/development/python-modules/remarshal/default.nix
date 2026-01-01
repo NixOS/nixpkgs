@@ -47,12 +47,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";
     description = "Convert between TOML, YAML and JSON";
     license = lib.licenses.mit;
     homepage = "https://github.com/dbohdan/remarshal";
     maintainers = with lib.maintainers; [ offline ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";
+    description = "Convert between TOML, YAML and JSON";
+    license = licenses.mit;
+    homepage = "https://github.com/dbohdan/remarshal";
+    maintainers = with maintainers; [ offline ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "remarshal";
   };
 }

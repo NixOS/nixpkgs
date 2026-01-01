@@ -11,6 +11,7 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "showoff";
 
+<<<<<<< HEAD
   meta = {
     description = "Slideshow presentation tool with a twist";
     longDescription = "It runs as a web application, with audience interactivity features. This means that your audience can follow along in their own browsers, can download supplemental materials, can participate in quizzes or polls, post questions for the presenter, etc. By default, their slideshows will synchronize with the presenter, but they can switch to self-navigation mode";
@@ -18,6 +19,15 @@ bundlerApp {
     license = with lib.licenses; mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Slideshow presentation tool with a twist";
+    longDescription = "It runs as a web application, with audience interactivity features. This means that your audience can follow along in their own browsers, can download supplemental materials, can participate in quizzes or polls, post questions for the presenter, etc. By default, their slideshows will synchronize with the presenter, but they can switch to self-navigation mode";
+    homepage = "https://puppetlabs.github.io/showoff/";
+    license = with licenses; mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       maxwilson
       nicknovitski
     ];

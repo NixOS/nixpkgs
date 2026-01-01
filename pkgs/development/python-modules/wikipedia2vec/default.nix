@@ -54,12 +54,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wikipedia2vec" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Tool for learning vector representations of words and entities from Wikipedia";
     mainProgram = "wikipedia2vec";
     homepage = "https://wikipedia2vec.github.io/wikipedia2vec/";
     changelog = "https://github.com/wikipedia2vec/wikipedia2vec/releases/tag/v${version}";
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ derdennisop ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ derdennisop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

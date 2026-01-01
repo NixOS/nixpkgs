@@ -6,13 +6,21 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "scons";
+<<<<<<< HEAD
   version = "4.10.1";
+=======
+  version = "4.10.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "Scons";
     repo = "scons";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-Lq6sDd6Bs9lMfTptlxdeNhOc1acP7xuLdDhIi65uqFo=";
+=======
+    hash = "sha256-ZmJETrznHH3zsNBO5o8JCvf+6l7NICOAfIqASYzYBaM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pyproject = true;

@@ -53,10 +53,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyatem" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for controlling Blackmagic Design ATEM video mixers";
     homepage = "https://git.sr.ht/~martijnbraam/pyatem";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Library for controlling Blackmagic Design ATEM video mixers";
+    homepage = "https://git.sr.ht/~martijnbraam/pyatem";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -57,9 +57,16 @@ stdenv.mkDerivation rec {
     2to3 --write --nobackup gsettings/gsettings-schema-convert
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://projects.gnome.org/gconf/";
     description = "Deprecated system for storing application preferences";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://projects.gnome.org/gconf/";
+    description = "Deprecated system for storing application preferences";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

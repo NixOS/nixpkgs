@@ -54,11 +54,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tqdm" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Fast, Extensible Progress Meter";
     mainProgram = "tqdm";
     homepage = "https://github.com/tqdm/tqdm";
     changelog = "https://tqdm.github.io/releases/";
+<<<<<<< HEAD
     license = with lib.licenses; [ mit ];
+=======
+    license = with licenses; [ mit ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

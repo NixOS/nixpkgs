@@ -17,14 +17,22 @@
 
 buildPythonPackage rec {
   pname = "finetuning-scheduler";
+<<<<<<< HEAD
   version = "2.9.2";
+=======
+  version = "2.9.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-+LJ36LzFamC5Mv5ec+uUtMWZt0WMjuHKZlA73rZqoxw=";
+=======
+    hash = "sha256-6v7KhY2dOc/Sbw85UO9KVDSS0+4DJ+VWrQ5Tg5E8Ddc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = [ setuptools ];

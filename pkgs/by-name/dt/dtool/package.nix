@@ -21,11 +21,19 @@ rustPlatform.buildRustPackage rec {
 
   checkType = "debug";
 
+<<<<<<< HEAD
   meta = {
     description = "Command-line tool collection to assist development written in RUST";
     homepage = "https://github.com/guoxbin/dtool";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ linuxissuper ];
+=======
+  meta = with lib; {
+    description = "Command-line tool collection to assist development written in RUST";
+    homepage = "https://github.com/guoxbin/dtool";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ linuxissuper ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "dtool";
   };
 }

@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
     homepage = "https://github.com/Netflix/vmaf";
@@ -66,5 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.cfsmp3 ];
     mainProgram = "vmaf";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
+    homepage = "https://github.com/Netflix/vmaf";
+    changelog = "https://github.com/Netflix/vmaf/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = licenses.bsd2Patent;
+    maintainers = [ maintainers.cfsmp3 ];
+    mainProgram = "vmaf";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

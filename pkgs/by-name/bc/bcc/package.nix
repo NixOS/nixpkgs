@@ -130,17 +130,29 @@ python3Packages.buildPythonApplication rec {
     bpf = nixosTests.bpf;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Dynamic Tracing Tools for Linux";
     homepage = "https://iovisor.github.io/bcc/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Dynamic Tracing Tools for Linux";
+    homepage = "https://iovisor.github.io/bcc/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ragge
       mic92
       thoughtpolice
       martinetd
       ryan4yin
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
+=======
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

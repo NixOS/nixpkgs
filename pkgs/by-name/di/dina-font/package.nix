@@ -76,7 +76,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Monospace bitmap font aimed at programmers";
     longDescription = ''
       Dina is a monospace bitmap font, primarily aimed at programmers. It is
@@ -84,8 +88,13 @@ stdenv.mkDerivation {
       clear enough to remain readable even at high resolutions.
     '';
     homepage = "https://www.dcmembers.com/jibsen/download/61/";
+<<<<<<< HEAD
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.free;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       prikhi
       ncfavier
     ];

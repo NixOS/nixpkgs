@@ -15,13 +15,22 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
+<<<<<<< HEAD
   version = "2.0.0-unstable-2025-12-19";
+=======
+  version = "2.0.0-unstable-2025-11-14";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
+<<<<<<< HEAD
     rev = "ed389b9c3b3b9ee2c777b021c7825416c460ed64";
     hash = "sha256-bavnyTRNGVSuoxNVsn94AJfbddHYg9skkW/4G/ExNeU=";
+=======
+    rev = "f0dfb35aa35518acd489ea2239a0e52260db23ca";
+    hash = "sha256-fKxP4febum5XqAKMKVMc1uXiieXbZfJiKBOj2K99mkU=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -78,17 +87,30 @@ stdenv.mkDerivation (finalAttrs: {
     tagPrefix = "v";
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://sioyek.info/";
     description = "PDF viewer designed for research papers and technical books";
     mainProgram = "sioyek";
     changelog = "https://github.com/ahrm/sioyek/releases/tag/v${finalAttrs.version}";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       podocarp
       stephen-huan
       xyven1
     ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

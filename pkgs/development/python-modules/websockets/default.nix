@@ -65,11 +65,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "websockets" ];
 
+<<<<<<< HEAD
   meta = {
     description = "WebSocket implementation in Python";
     homepage = "https://websockets.readthedocs.io/";
     changelog = "https://github.com/aaugustin/websockets/blob/${src.tag}/docs/project/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "WebSocket implementation in Python";
+    homepage = "https://websockets.readthedocs.io/";
+    changelog = "https://github.com/aaugustin/websockets/blob/${src.tag}/docs/project/changelog.rst";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

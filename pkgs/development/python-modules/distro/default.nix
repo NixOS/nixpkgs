@@ -22,11 +22,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "distro" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/nir0s/distro";
     description = "Linux Distribution - a Linux OS platform information API";
     mainProgram = "distro";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/nir0s/distro";
+    description = "Linux Distribution - a Linux OS platform information API";
+    mainProgram = "distro";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

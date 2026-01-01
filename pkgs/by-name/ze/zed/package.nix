@@ -12,7 +12,11 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "brimdata";
+<<<<<<< HEAD
     repo = "zed-archive";
+=======
+    repo = "zed";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     rev = "v${version}";
     sha256 = "sha256-NCoeTeOkxkCsj/nRBhMJeEshFuwozOXNJvgp8vyCQDk=";
   };

@@ -26,16 +26,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
+<<<<<<< HEAD
   version = "0.52.0";
+=======
+  version = "0.51.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-jwEJ+myovZYcohvxH1VvvOW8xok3HSLvhtMsLC2M3KY=";
   };
 
   cargoHash = "sha256-EfgDL5asygFqr8pVcTR9BsYU3fcG28xhrCn5nCkVfcA=";
+=======
+    hash = "sha256-EjG8FFz4PDAgCPTkHAxJieW+t6RAPx3MTSku8QGXjYg=";
+  };
+
+  cargoHash = "sha256-17hmdom7ZZQQ4vYte3IKZnqlLEv7D7LY6tyWqdeuUHk=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config
@@ -115,6 +126,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+<<<<<<< HEAD
+=======
+  versionCheckProgramArg = "--version";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   doInstallCheck = true;
 
   passthru = {
@@ -124,6 +139,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
@@ -134,6 +150,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       happysalada
     ];
     platforms = with lib.platforms; all;
+=======
+  meta = with lib; {
+    description = "High-performance observability data pipeline";
+    homepage = "https://github.com/vectordotdev/vector";
+    changelog = "https://github.com/vectordotdev/vector/releases/tag/v${finalAttrs.version}";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [
+      thoughtpolice
+      happysalada
+    ];
+    platforms = with platforms; all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "vector";
   };
 })

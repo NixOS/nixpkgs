@@ -103,7 +103,11 @@ stdenv.mkDerivation rec {
     nixos-test = nixosTests.packagekit;
   };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "System to facilitate installing and updating packages";
     longDescription = ''
       PackageKit is a system designed to make installing and updating software
@@ -116,8 +120,13 @@ stdenv.mkDerivation rec {
       mode package managers.
     '';
     homepage = "https://github.com/PackageKit/PackageKit";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

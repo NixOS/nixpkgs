@@ -25,12 +25,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python package for writing Value Change Dump (VCD) files";
     homepage = "https://github.com/SanDisk-Open-Source/pyvcd";
     changelog = "https://github.com/SanDisk-Open-Source/pyvcd/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Python package for writing Value Change Dump (VCD) files";
+    homepage = "https://github.com/SanDisk-Open-Source/pyvcd";
+    changelog = "https://github.com/SanDisk-Open-Source/pyvcd/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       sb0
     ];
   };

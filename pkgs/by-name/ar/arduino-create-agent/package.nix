@@ -1,12 +1,20 @@
 {
   lib,
   stdenv,
+<<<<<<< HEAD
   buildGo124Module,
+=======
+  buildGoModule,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fetchFromGitHub,
   go-task,
 }:
 
+<<<<<<< HEAD
 buildGo124Module rec {
+=======
+buildGoModule rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "arduino-create-agent";
   version = "1.7.0";
 

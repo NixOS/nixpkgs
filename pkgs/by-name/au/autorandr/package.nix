@@ -78,12 +78,21 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/phillipberndt/autorandr/";
     description = "Automatically select a display configuration based on connected devices";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/phillipberndt/autorandr/";
+    description = "Automatically select a display configuration based on connected devices";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "autorandr";
   };
 }

@@ -36,12 +36,21 @@ stdenv.mkDerivation rec {
 
   allowedReferences = [ ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of icons for the GNOME 2 desktop";
     homepage = "https://download.gnome.org/sources/gnome-icon-theme/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+=======
+  meta = with lib; {
+    description = "Collection of icons for the GNOME 2 desktop";
+    homepage = "https://download.gnome.org/sources/gnome-icon-theme/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-icon-theme.x86_64-darwin
   };
 }

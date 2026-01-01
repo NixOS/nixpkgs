@@ -43,10 +43,18 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "govee_led_wez" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Control Govee Lights from Python";
     homepage = "https://github.com/wez/govee-py";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
+=======
+  meta = with lib; {
+    description = "Control Govee Lights from Python";
+    homepage = "https://github.com/wez/govee-py";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

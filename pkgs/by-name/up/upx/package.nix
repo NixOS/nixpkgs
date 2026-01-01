@@ -25,12 +25,21 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://upx.github.io/";
     description = "Ultimate Packer for eXecutables";
     changelog = "https://github.com/upx/upx/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "https://upx.github.io/";
+    description = "Ultimate Packer for eXecutables";
+    changelog = "https://github.com/upx/upx/blob/${finalAttrs.src.rev}/NEWS";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "upx";
   };
 })

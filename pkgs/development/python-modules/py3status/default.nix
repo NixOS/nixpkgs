@@ -27,12 +27,20 @@
 
 buildPythonPackage rec {
   pname = "py3status";
+<<<<<<< HEAD
   version = "3.63";
+=======
+  version = "3.62";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-k9zkbkgw+rD/0JxQyxT5xdEgdDmY/y7zCw6wGo+2Xhg=";
+=======
+    hash = "sha256-8+1uj6ZL0BBxVUkiZf29bmN4adAbFmFHYbqkJvm9Y4I=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -76,11 +84,19 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Extensible i3status wrapper";
     homepage = "https://github.com/ultrabug/py3status";
     changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Extensible i3status wrapper";
+    homepage = "https://github.com/ultrabug/py3status";
+    changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

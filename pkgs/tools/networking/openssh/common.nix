@@ -18,9 +18,13 @@
   fetchurl,
   fetchpatch,
   autoreconfHook,
+<<<<<<< HEAD
   withAudit ? false,
   audit,
   libcap_ng,
+=======
+  audit,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   zlib,
   openssl,
   softhsm,
@@ -48,9 +52,12 @@
   isNixos ? stdenv.hostPlatform.isLinux,
 }:
 
+<<<<<<< HEAD
 # libaudit support requires Linux
 assert withAudit -> stdenv.hostPlatform.isLinux;
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 # FIDO support requires SK support
 assert withFIDO -> withSecurityKey;
 
@@ -72,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
 
+<<<<<<< HEAD
     # See discussion in https://github.com/NixOS/nixpkgs/issues/466049 and
     # https://gitlab.archlinux.org/archlinux/packaging/packages/openssh/-/issues/23
     (fetchpatch {
@@ -101,6 +109,11 @@ stdenv.mkDerivation (finalAttrs: {
       hunks = [ "2-" ];
       hash = "sha256-b9YCOav32kY5VEvIG3W1fyD87HaQxof6Zwq9Oo+/Lac=";
     })
+=======
+    # See discussion in https://github.com/NixOS/nixpkgs/issues/453782 and
+    # https://github.com/openssh/openssh-portable/pull/602
+    ./fix_pkcs11_tests.patch
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ]
   ++ extraPatches;
 
@@ -130,10 +143,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withKerberos krb5
   ++ lib.optional withLdns ldns
   ++ lib.optional withPAM pam
+<<<<<<< HEAD
   ++ lib.optionals withAudit [
     audit
     libcap_ng
   ];
+=======
+  ++ lib.optional stdenv.hostPlatform.isStatic audit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -141,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     unset LD
   '';
 
+<<<<<<< HEAD
   env =
     lib.optionalAttrs isNixos {
       # openssh calls passwd to allow the user to reset an expired password, but nixos
@@ -157,6 +175,13 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       );
     };
+=======
+  env = lib.optionalAttrs isNixos {
+    # openssh calls passwd to allow the user to reset an expired password, but nixos
+    # doesn't ship it at /usr/bin/passwd.
+    PATH_PASSWD_PROG = "/run/wrappers/bin/passwd";
+  };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -181,9 +206,20 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLdns "--with-ldns"
   ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
   ++ lib.optional withLinuxMemlock "--with-linux-memlock-onfault"
+<<<<<<< HEAD
   ++ lib.optional withAudit "--with-audit=linux"
   ++ extraConfigureFlags;
 
+=======
+  ++ extraConfigureFlags;
+
+  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} = [
+    "-laudit"
+  ]
+  ++ lib.optional withKerberos "-lkeyutils"
+  ++ lib.optional withLdns "-lcrypto";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
   enableParallelBuilding = true;

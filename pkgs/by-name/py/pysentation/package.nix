@@ -33,11 +33,19 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pysentation" ];
 
+<<<<<<< HEAD
   meta = {
     description = "CLI for displaying Python presentations";
     homepage = "https://github.com/mimseyedi/pysentation";
     changelog = "https://github.com/mimseyedi/pysentation/releases/tag/${src.rev}";
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    description = "CLI for displaying Python presentations";
+    homepage = "https://github.com/mimseyedi/pysentation";
+    changelog = "https://github.com/mimseyedi/pysentation/releases/tag/${src.rev}";
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "pysentation";
   };

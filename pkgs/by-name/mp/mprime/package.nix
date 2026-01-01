@@ -69,7 +69,11 @@ stdenv.mkDerivation rec {
     install -Dm555 -t $out/bin ${srcDir}/mprime
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Mersenne prime search / System stability tester";
     longDescription = ''
       MPrime is the Linux command-line interface version of Prime95, to be run
@@ -80,14 +84,22 @@ stdenv.mkDerivation rec {
     homepage = "https://www.mersenne.org/";
     # Unfree, because of a license requirement to share prize money if you find
     # a suitable prime. http://www.mersenne.org/legal/#EULA
+<<<<<<< HEAD
     license = lib.licenses.unfree;
+=======
+    license = licenses.unfree;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # Untested on linux-32 and osx. Works in theory.
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "x86_64-darwin"
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ dstremur ];
+=======
+    maintainers = with maintainers; [ dstremur ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "mprime";
   };
 }

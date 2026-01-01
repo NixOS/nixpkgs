@@ -17,9 +17,16 @@ buildPythonPackage rec {
 
   doCheck = (!isPy3k);
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://launchpad.net/versiontools";
     description = "Smart replacement for plain tuple used in __version__";
     license = lib.licenses.lgpl2;
+=======
+  meta = with lib; {
+    homepage = "https://launchpad.net/versiontools";
+    description = "Smart replacement for plain tuple used in __version__";
+    license = licenses.lgpl2;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

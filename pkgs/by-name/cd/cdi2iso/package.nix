@@ -22,11 +22,20 @@ stdenv.mkDerivation rec {
     cp cdi2iso $out/bin
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Very simple utility for converting DiscJuggler images to the standard ISO-9660 format";
     homepage = "https://sourceforge.net/projects/cdi2iso.berlios";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Very simple utility for converting DiscJuggler images to the standard ISO-9660 format";
+    homepage = "https://sourceforge.net/projects/cdi2iso.berlios";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ hrdinka ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "cdi2iso";
   };
 }

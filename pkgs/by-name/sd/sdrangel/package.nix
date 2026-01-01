@@ -12,7 +12,10 @@
   dsdcc,
   faad2,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   fftwFloat,
   flac,
   glew,
@@ -52,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VYSM9ldzx/8tWKQb++qGROSXdeEXIDhGqnnHUmkW4+k=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with Qt 6.10, remove when the commit reaches a release
     (fetchpatch {
@@ -60,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     ninja

@@ -66,12 +66,21 @@ stdenv.mkDerivation {
     mkfontdir "$fontDir"
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = ''
       A monospace bitmap font well suited for programming and terminal use
     '';
     homepage = "https://font.gohu.org/";
+<<<<<<< HEAD
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ rnhmjoj ];
+=======
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ rnhmjoj ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

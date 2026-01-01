@@ -47,6 +47,7 @@ buildPythonPackage rec {
     '';
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/coolbho3k/manuf";
     description = "Parser library for Wireshark's OUI database";
@@ -57,5 +58,17 @@ buildPythonPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ dsuetin ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/coolbho3k/manuf";
+    description = "Parser library for Wireshark's OUI database";
+    mainProgram = "manuf";
+    platforms = platforms.linux;
+    license = with licenses; [
+      lgpl3Plus
+      asl20
+    ];
+    maintainers = with maintainers; [ dsuetin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

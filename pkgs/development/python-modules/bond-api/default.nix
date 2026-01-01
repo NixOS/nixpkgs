@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bond_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Asynchronous Python wrapper library over Bond Local API";
     homepage = "https://github.com/prystupa/bond-api";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Asynchronous Python wrapper library over Bond Local API";
+    homepage = "https://github.com/prystupa/bond-api";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,10 +28,18 @@ buildPythonPackage rec {
     pytest
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "High performance functions to work with the async IO";
     homepage = "https://kamadorueda.github.io/aioextensions";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kamadorueda ];
+=======
+  meta = with lib; {
+    description = "High performance functions to work with the async IO";
+    homepage = "https://kamadorueda.github.io/aioextensions";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

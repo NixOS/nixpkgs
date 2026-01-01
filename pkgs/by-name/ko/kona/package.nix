@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
   preInstall = ''mkdir -p "$out/bin"'';
 
+<<<<<<< HEAD
   meta = {
     description = "Interpreter of K, APL-like programming language";
     homepage = "https://github.com/kevinlawler/kona/";
@@ -25,5 +26,14 @@ stdenv.mkDerivation rec {
     mainProgram = "k";
     platforms = lib.platforms.all;
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Interpreter of K, APL-like programming language";
+    homepage = "https://github.com/kevinlawler/kona/";
+    maintainers = with maintainers; [ raskin ];
+    mainProgram = "k";
+    platforms = platforms.all;
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

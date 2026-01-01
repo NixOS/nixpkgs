@@ -43,12 +43,21 @@ buildPythonPackage rec {
     "rest_to_html"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "ReStructuredText viewer";
     homepage = "https://mg.pov.lt/restview/";
     changelog = "https://github.com/mgedmin/restview/blob/${version}/CHANGES.rst";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ koral ];
+=======
+  meta = with lib; {
+    description = "ReStructuredText viewer";
+    homepage = "https://mg.pov.lt/restview/";
+    changelog = "https://github.com/mgedmin/restview/blob/${version}/CHANGES.rst";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ koral ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "restview";
   };
 }

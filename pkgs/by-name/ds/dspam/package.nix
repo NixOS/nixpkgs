@@ -144,11 +144,19 @@ stdenv.mkDerivation rec {
       $out/bin/dspam_maintenance
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://dspam.sourceforge.net/";
     description = "Community Driven Antispam Filter";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://dspam.sourceforge.net/";
+    description = "Community Driven Antispam Filter";
+    license = licenses.agpl3Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

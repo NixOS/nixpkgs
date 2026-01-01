@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     "-Dupdate-mimedb=true"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Database of common MIME types";
     homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
@@ -55,6 +56,15 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.mimame ];
     teams = [ lib.teams.freedesktop ];
+=======
+  meta = with lib; {
+    description = "Database of common MIME types";
+    homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.mimame ];
+    teams = [ teams.freedesktop ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "update-mime-database";
   };
 }

@@ -11,7 +11,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "3.21.0";
+=======
+  version = "3.16.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   kata-images = callPackage ./kata-images.nix { inherit version; };
 
@@ -34,7 +38,11 @@ buildGoModule rec {
     owner = "kata-containers";
     repo = "kata-containers";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-gOPabvimKzP7U1/BRzjKPDKE0MHnhKI4j0WZPM6ZTSA=";
+=======
+    hash = "sha256-+SppAF77NbXlSrBGvIm40AmNC12GrexbX7fAPBoDAcs=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/src/runtime";

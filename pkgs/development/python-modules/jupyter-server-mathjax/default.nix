@@ -36,10 +36,17 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   meta = {
     description = "MathJax resources as a Jupyter Server Extension";
     homepage = "https://github.com/jupyter-server/jupyter_server_mathjax";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "MathJax resources as a Jupyter Server Extension";
+    homepage = "https://github.com/jupyter-server/jupyter_server_mathjax";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

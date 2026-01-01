@@ -17,9 +17,16 @@ buildPythonPackage rec {
   # Fails with "error: invalid command 'test'"
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/google/gdata-python-client";
     description = "Python client library for Google data APIs";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/google/gdata-python-client";
+    description = "Python client library for Google data APIs";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -57,12 +57,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stack_data" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Extract data from stack frames and tracebacks";
     homepage = "https://github.com/alexmojaki/stack_data/";
     changelog = "https://github.com/alexmojaki/stack_data/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
+=======
+  meta = with lib; {
+    description = "Extract data from stack frames and tracebacks";
+    homepage = "https://github.com/alexmojaki/stack_data/";
+    changelog = "https://github.com/alexmojaki/stack_data/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "stack-data";
   };
 }

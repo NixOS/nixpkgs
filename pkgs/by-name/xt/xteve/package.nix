@@ -18,11 +18,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-oPkSWpqNozfSFLIFsJ+e2pOL6CcR91YHbqibEVF2aSk=";
 
+<<<<<<< HEAD
   meta = {
     description = "M3U Proxy for Plex DVR and Emby Live TV";
     homepage = "https://github.com/xteve-project/xTeVe";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nrhelmi ];
+=======
+  meta = with lib; {
+    description = "M3U Proxy for Plex DVR and Emby Live TV";
+    homepage = "https://github.com/xteve-project/xTeVe";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nrhelmi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xteve";
     broken = stdenv.hostPlatform.isDarwin;
   };

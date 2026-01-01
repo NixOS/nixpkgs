@@ -43,11 +43,20 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+<<<<<<< HEAD
   meta = {
     description = "Token Bucket Implementation for Python Web Apps";
     homepage = "https://github.com/falconry/token-bucket";
     changelog = "https://github.com/falconry/token-bucket/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Token Bucket Implementation for Python Web Apps";
+    homepage = "https://github.com/falconry/token-bucket";
+    changelog = "https://github.com/falconry/token-bucket/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

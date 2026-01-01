@@ -122,6 +122,7 @@ stdenv.mkDerivation rec {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
+<<<<<<< HEAD
   env = {
     PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
     PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
@@ -129,6 +130,13 @@ stdenv.mkDerivation rec {
     PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
     PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
   };
+=======
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_TMPFILESDIR = "${placeholder "out"}/lib/tmpfiles.d";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   passthru = {
     tests = {
@@ -136,6 +144,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = "https://www.freedesktop.org/software/colord/";
@@ -143,5 +152,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.marcweber ];
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
+    homepage = "https://www.freedesktop.org/software/colord/";
+    license = licenses.lgpl2Plus;
+    maintainers = [ maintainers.marcweber ];
+    teams = [ teams.freedesktop ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

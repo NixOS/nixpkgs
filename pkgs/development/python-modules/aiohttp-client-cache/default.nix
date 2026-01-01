@@ -67,7 +67,11 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pytestFlags = [ "--asyncio-mode=auto" ];
 
@@ -78,11 +82,20 @@ buildPythonPackage rec {
     "test/integration/*"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Async persistent cache for aiohttp requests";
     homepage = "https://github.com/requests-cache/aiohttp-client-cache";
     changelog = "https://github.com/requests-cache/aiohttp-client-cache/blob/v${version}/HISTORY.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ seirl ];
+=======
+  meta = with lib; {
+    description = "Async persistent cache for aiohttp requests";
+    homepage = "https://github.com/requests-cache/aiohttp-client-cache";
+    changelog = "https://github.com/requests-cache/aiohttp-client-cache/blob/v${version}/HISTORY.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ seirl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

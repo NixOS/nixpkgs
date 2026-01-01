@@ -56,16 +56,28 @@ buildPythonPackage rec {
     "test_semver_version"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for parsing version ranges and expressions";
     homepage = "https://github.com/aboutcode-org/univers";
     changelog = "https://github.com/aboutcode-org/univers/blob/v${version}/CHANGELOG.rst";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Library for parsing version ranges and expressions";
+    homepage = "https://github.com/aboutcode-org/univers";
+    changelog = "https://github.com/aboutcode-org/univers/blob/v${version}/CHANGELOG.rst";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       asl20
       bsd3
       mit
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [
+=======
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       armijnhemel
       sbruder
     ];

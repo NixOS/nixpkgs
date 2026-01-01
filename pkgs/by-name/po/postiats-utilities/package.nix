@@ -16,11 +16,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QeBbv5lwqL2ARjB+RGyBHeuibaxugffBLhC9lYs+5tE=";
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/Hibou57/PostiATS-Utilities";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.ttuegel ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/Hibou57/PostiATS-Utilities";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.ttuegel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [

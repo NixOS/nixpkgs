@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     libmicrohttpd
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Monitors the video signal from cameras";
     homepage = "https://motion-project.github.io/";
@@ -40,6 +41,17 @@ stdenv.mkDerivation rec {
       veprbl
     ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Monitors the video signal from cameras";
+    homepage = "https://motion-project.github.io/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      puffnfresh
+      veprbl
+    ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "motion";

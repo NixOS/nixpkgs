@@ -33,11 +33,20 @@ stdenv.mkDerivation rec {
     cp -r templates $out/share/omega
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Indexer and CGI search front-end built on Xapian library";
     homepage = "https://xapian.org/";
     changelog = "https://xapian.org/docs/xapian-omega-${version}/NEWS";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Indexer and CGI search front-end built on Xapian library";
+    homepage = "https://xapian.org/";
+    changelog = "https://xapian.org/docs/xapian-omega-${version}/NEWS";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -34,10 +34,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "calysto" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for Jupyter and Python";
     homepage = "https://github.com/Calysto/calysto";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ kranzes ];
+=======
+  meta = with lib; {
+    description = "Tools for Jupyter and Python";
+    homepage = "https://github.com/Calysto/calysto";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ kranzes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

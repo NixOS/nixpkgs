@@ -106,6 +106,7 @@ stdenv.mkDerivation rec {
     meta.downloadPage
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
     downloadPage = "https://www.mkgmap.org.uk/download/mkgmap.html";
@@ -115,6 +116,17 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
+    downloadPage = "https://www.mkgmap.org.uk/download/mkgmap.html";
+    homepage = "https://www.mkgmap.org.uk/";
+    license = licenses.gpl2Only;
+    mainProgram = "mkgmap";
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fromSource
       binaryBytecode # deps
     ];

@@ -47,11 +47,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymemcache" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/pinterest/pymemcache/blob/${src.rev}/ChangeLog.rst";
     description = "Python memcached client";
     homepage = "https://pymemcache.readthedocs.io/";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    changelog = "https://github.com/pinterest/pymemcache/blob/${src.rev}/ChangeLog.rst";
+    description = "Python memcached client";
+    homepage = "https://pymemcache.readthedocs.io/";
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

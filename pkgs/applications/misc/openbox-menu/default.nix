@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=${placeholder "out"}" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "http://fabrice.thiroux.free.fr/openbox-menu_en.html";
     description = "Dynamic XDG menu generator for Openbox";
     longDescription = ''
@@ -44,9 +48,15 @@ stdenv.mkDerivation rec {
       dynamic menu listing installed applications. Most of the work is done by
       the LXDE library menu-cache.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.romildo ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.romildo ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "openbox-menu";
   };
 }

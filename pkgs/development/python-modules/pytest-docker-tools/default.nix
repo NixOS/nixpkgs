@@ -34,11 +34,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_docker_tools" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Opionated helpers for creating py.test fixtures for Docker integration and smoke testing environments";
     homepage = "https://github.com/Jc2k/pytest-docker-tools";
     changelog = "https://github.com/Jc2k/pytest-docker-tools/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Opionated helpers for creating py.test fixtures for Docker integration and smoke testing environments";
+    homepage = "https://github.com/Jc2k/pytest-docker-tools";
+    changelog = "https://github.com/Jc2k/pytest-docker-tools/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

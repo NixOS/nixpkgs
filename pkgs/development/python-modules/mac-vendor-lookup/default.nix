@@ -31,11 +31,20 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "mac_vendor_lookup" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Find the vendor for a given MAC address";
     mainProgram = "mac_vendor_lookup";
     homepage = "https://github.com/bauerj/mac_vendor_lookup";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Find the vendor for a given MAC address";
+    mainProgram = "mac_vendor_lookup";
+    homepage = "https://github.com/bauerj/mac_vendor_lookup";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

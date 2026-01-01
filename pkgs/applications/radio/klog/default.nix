@@ -36,7 +36,11 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "KLog.pro" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Multiplatform free hamradio logger";
     mainProgram = "klog";
     longDescription = ''
@@ -44,8 +48,14 @@ stdenv.mkDerivation rec {
       ClubLog integration, WSJT-X, DX-Marathon support and much more.
     '';
     homepage = "https://www.klog.xyz/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pulsation ];
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pulsation ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

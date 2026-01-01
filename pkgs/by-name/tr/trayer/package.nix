@@ -31,12 +31,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/sargon/trayer-srg";
     license = lib.licenses.mit;
     description = "Lightweight GTK2-based systray for UNIX desktop";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/sargon/trayer-srg";
+    license = licenses.mit;
+    description = "Lightweight GTK2-based systray for UNIX desktop";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "trayer";
   };
 }

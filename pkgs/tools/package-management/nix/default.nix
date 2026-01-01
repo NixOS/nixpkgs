@@ -5,7 +5,10 @@
   nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchpatch2,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   runCommand,
   pkgs,
   pkgsi686Linux,
@@ -138,6 +141,23 @@ lib.makeExtensible (
         self_attribute_name = "nix_2_28";
       };
 
+<<<<<<< HEAD
+=======
+      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.29.2";
+        inherit maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          tag = version;
+          hash = "sha256-50p2sG2RFuRnlS1/Vr5et0Rt+QDgfpNE2C2WWRztnbQ=";
+        };
+      };
+
+      nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nixComponents_2_30 = nixDependencies.callPackage ./modular/packages.nix rec {
         version = "2.30.3";
         inherit maintainers teams;
@@ -152,6 +172,7 @@ lib.makeExtensible (
 
       nix_2_30 = addTests "nix_2_30" self.nixComponents_2_30.nix-everything;
 
+<<<<<<< HEAD
       nixComponents_2_31 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.31.2";
@@ -172,6 +193,19 @@ lib.makeExtensible (
               hash = "sha256-CerSBAI+H2RqPp9jsCP0QIM2rZYx3yBZHVVUAztgc18=";
             })
           );
+=======
+      nixComponents_2_31 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.31.2";
+        inherit (self.nix_2_30.meta) maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          tag = version;
+          hash = "sha256-NLGXPLjENLeKVOg3OZgHXZ+1x6sPIKq9FHH8pxbCrDI=";
+        };
+      };
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
@@ -219,6 +253,7 @@ lib.makeExtensible (
         ) (lib.range 4 23)
       )
       // {
+<<<<<<< HEAD
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_31.";
         nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_31.";
         nix_2_24 = throw "nix_2_24 has been removed. use nix_2_31.";
@@ -226,6 +261,13 @@ lib.makeExtensible (
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_31.";
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_31.";
         nix_2_29 = throw "nix_2_29 has been removed. use nix_2_31.";
+=======
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_git.";
+        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_28.";
+        nix_2_26 = throw "nix_2_26 has been removed. use nix_2_28.";
+        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
+        nix_2_25 = throw "nix_2_25 has been removed. use nix_2_28.";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         minimum = throw "nixVersions.minimum has been removed. Use a specific version instead.";
         unstable = throw "nixVersions.unstable has been removed. use nixVersions.latest or the nix flake.";

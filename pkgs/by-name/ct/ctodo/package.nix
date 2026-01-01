@@ -30,12 +30,21 @@ stdenv.mkDerivation rec {
       'cmake_minimum_required(VERSION 3.5)'
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://ctodo.apakoh.dk/";
     description = "Simple ncurses-based task list manager";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    homepage = "http://ctodo.apakoh.dk/";
+    description = "Simple ncurses-based task list manager";
+    license = licenses.mit;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "ctodo";
   };
 }

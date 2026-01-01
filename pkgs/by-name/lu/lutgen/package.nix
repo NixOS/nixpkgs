@@ -43,15 +43,26 @@ rustPlatform.buildRustPackage rec {
     extraArgs = [ "--version-regex=^lutgen-v([0-9.]+)$" ];
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Blazingly fast interpolated LUT generator and applicator for arbitrary and popular color palettes";
     homepage = "https://github.com/ozwaldorf/lutgen-rs";
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Blazingly fast interpolated LUT generator and applicator for arbitrary and popular color palettes";
+    homepage = "https://github.com/ozwaldorf/lutgen-rs";
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ozwaldorf
       zzzsy
       donovanglover
     ];
     mainProgram = "lutgen";
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -96,14 +96,22 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
+<<<<<<< HEAD
   version = "0.7.20";
+=======
+  version = "0.7.19";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-RU9WnKuPaxDnPW5MQyrxPEw7ufMcVNxSRyJ5QvrzoVs=";
+=======
+    hash = "sha256-H2Umh4/vRDqaGXVoK/fZaj9guA4IaVSgOEDAVEPsD9A=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   build-system = with python.pkgs; [

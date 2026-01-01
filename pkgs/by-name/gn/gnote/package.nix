@@ -20,11 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnote";
+<<<<<<< HEAD
   version = "49.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     hash = "sha256-l845YCx31l3w1d0z4HtbhtakWFdtzh5rbtGx5If14HM=";
+=======
+  version = "49.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    hash = "sha256-GXUaLyN3Kb+fSElVQKNeNG5FwbobAW25y3VNReztCl0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   buildInputs = [
@@ -52,6 +60,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnote";
     description = "Note taking application";
@@ -59,5 +68,14 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jfvillablanca ];
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gnote";
+    description = "Note taking application";
+    mainProgram = "gnote";
+    maintainers = with maintainers; [ jfvillablanca ];
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

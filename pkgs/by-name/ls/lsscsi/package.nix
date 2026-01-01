@@ -17,8 +17,14 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace /usr "$out"
   '';
 
+<<<<<<< HEAD
   meta = {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

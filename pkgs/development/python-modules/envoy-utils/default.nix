@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "envoy_utils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python utilities for the Enphase Envoy";
     homepage = "https://pypi.org/project/envoy-utils/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python utilities for the Enphase Envoy";
+    homepage = "https://pypi.org/project/envoy-utils/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

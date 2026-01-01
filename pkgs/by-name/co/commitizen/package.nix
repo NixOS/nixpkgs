@@ -28,14 +28,22 @@ let
 in
 python3Packages.buildPythonPackage rec {
   pname = "commitizen";
+<<<<<<< HEAD
   version = "4.10.1";
+=======
+  version = "4.9.1";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
     tag = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-B4V2UPTEXQNASrwGRZbfFOqPuBIFzBM39a5rAC+Hk5Q=";
+=======
+    hash = "sha256-4hsKCBJHeRjc519h7KO/X8BJhGuw0N6XmC6u+QEiAnc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   pythonRelaxDeps = [

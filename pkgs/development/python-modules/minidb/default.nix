@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "minidb" ];
 
+<<<<<<< HEAD
   meta = {
     description = "SQLite3-based store for Python objects";
     homepage = "https://thp.io/2010/minidb/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ tv ];
+=======
+  meta = with lib; {
+    description = "SQLite3-based store for Python objects";
+    homepage = "https://thp.io/2010/minidb/";
+    license = licenses.isc;
+    maintainers = with maintainers; [ tv ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

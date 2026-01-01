@@ -5,12 +5,22 @@
   poetry-core,
   pysigma,
   pytestCheckHook,
+<<<<<<< HEAD
+=======
+  pythonOlder,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-insightidr";
   version = "0.2.4";
+<<<<<<< HEAD
   pyproject = true;
+=======
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
@@ -19,9 +29,17 @@ buildPythonPackage rec {
     hash = "sha256-dc25zDYQeU9W9qwrRz7zsM2wOl8kMapDvwFhB6VOwhY=";
   };
 
+<<<<<<< HEAD
   build-system = [ poetry-core ];
 
   dependencies = [ pysigma ];
+=======
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [ pysigma ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonRelaxDeps = [ "pysigma" ];
 
@@ -32,6 +50,7 @@ buildPythonPackage rec {
     "sigma.pipelines.insight_idr"
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # Tests are outdated
     "est_insight_idr_pipeline_dns_field_mapping"
@@ -71,5 +90,12 @@ buildPythonPackage rec {
     changelog = "https://github.com/SigmaHQ/pySigma-backend-insightidr/releases/tag/${src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library to support the Rapid7 InsightIDR backend for pySigma";
+    homepage = "https://github.com/SigmaHQ/pySigma-backend-insightidr";
+    license = with licenses; [ lgpl21Only ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

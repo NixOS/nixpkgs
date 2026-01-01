@@ -22,10 +22,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple bencode parser (for Python 2, Python 3 and PyPy)";
     homepage = "https://github.com/fuzeman/bencode.py";
     license = lib.licenses.bitTorrent11;
     maintainers = with lib.maintainers; [ vamega ];
+=======
+  meta = with lib; {
+    description = "Simple bencode parser (for Python 2, Python 3 and PyPy)";
+    homepage = "https://github.com/fuzeman/bencode.py";
+    license = licenses.bitTorrent11;
+    maintainers = with maintainers; [ vamega ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

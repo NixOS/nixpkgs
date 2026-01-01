@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_session" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Web sessions for aiohttp.web";
     homepage = "https://github.com/aio-libs/aiohttp-session";
     changelog = "https://github.com/aio-libs/aiohttp-session/blob/${src.rev}/CHANGES.txt";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
+=======
+  meta = with lib; {
+    description = "Web sessions for aiohttp.web";
+    homepage = "https://github.com/aio-libs/aiohttp-session";
+    changelog = "https://github.com/aio-libs/aiohttp-session/blob/${src.rev}/CHANGES.txt";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

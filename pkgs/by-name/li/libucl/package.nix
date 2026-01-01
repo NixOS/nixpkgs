@@ -27,13 +27,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libucl";
+<<<<<<< HEAD
   version = "0.9.3";
+=======
+  version = "0.9.2";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "libucl";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-dub829xZ10sJ5qwegYUiGoyAVLiwg44GKSzz+BMLJis=";
+=======
+    sha256 = "sha256-esNEVBa660rl3Oo2SLaLrFThFkjbqtZ1r0tjMq3h6cM=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   nativeBuildInputs = [
@@ -51,11 +59,20 @@ stdenv.mkDerivation rec {
     feat: enabled: lib.strings.enableFeature enabled feat
   ) features;
 
+<<<<<<< HEAD
   meta = {
     description = "Universal configuration library parser";
     homepage = "https://github.com/vstakhov/libucl";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jpotier ];
+=======
+  meta = with lib; {
+    description = "Universal configuration library parser";
+    homepage = "https://github.com/vstakhov/libucl";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ jpotier ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

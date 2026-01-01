@@ -52,7 +52,11 @@ let
 
         with subtest("Do a backup and wait for it to start"):
             machine.start_job("automysqlbackup.service")
+<<<<<<< HEAD
             machine.wait_for_unit("automysqlbackup.service")
+=======
+            machine.wait_for_job("automysqlbackup.service")
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
         with subtest("wait for backup file and check that data appears in backup"):
             machine.wait_for_file("/var/backup/mysql/daily/testdb")

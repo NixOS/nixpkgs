@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "maintenance_mode" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Shows a 503 error page when maintenance-mode is on";
     homepage = "https://github.com/fabiocaccamo/django-maintenance-mode";
     changelog = "https://github.com/fabiocaccamo/django-maintenance-mode/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mrmebelman ];
+=======
+  meta = with lib; {
+    description = "Shows a 503 error page when maintenance-mode is on";
+    homepage = "https://github.com/fabiocaccamo/django-maintenance-mode";
+    changelog = "https://github.com/fabiocaccamo/django-maintenance-mode/releases/tag/${src.tag}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mrmebelman ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

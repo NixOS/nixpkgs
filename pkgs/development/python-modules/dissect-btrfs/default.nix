@@ -46,11 +46,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.btrfs" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Dissect module implementing a parser for the BTRFS file system";
     homepage = "https://github.com/fox-it/dissect.btrfs";
     changelog = "https://github.com/fox-it/dissect.btrfs/releases/tag/${src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Dissect module implementing a parser for the BTRFS file system";
+    homepage = "https://github.com/fox-it/dissect.btrfs";
+    changelog = "https://github.com/fox-it/dissect.btrfs/releases/tag/${src.tag}";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -36,11 +36,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "upass" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Console UI for pass";
     mainProgram = "upass";
     homepage = "https://github.com/Kwpolska/upass";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Console UI for pass";
+    mainProgram = "upass";
+    homepage = "https://github.com/Kwpolska/upass";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

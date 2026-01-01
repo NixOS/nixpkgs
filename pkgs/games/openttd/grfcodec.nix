@@ -29,10 +29,18 @@ stdenv.mkDerivation {
     cp -a grfcodec grfid grfstrip nforenum $out/bin/
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Low-level (dis)assembler and linter for OpenTTD GRF files";
     homepage = "http://openttd.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ToxicFrog ];
+=======
+  meta = with lib; {
+    description = "Low-level (dis)assembler and linter for OpenTTD GRF files";
+    homepage = "http://openttd.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ToxicFrog ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

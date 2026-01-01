@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+<<<<<<< HEAD
   fetchDebianPatch,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pkg-config,
   curl,
   libxml2,
@@ -17,6 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Z9hgBiRZ6ieEwHtNeRMxnZU5+nKfU0N46OQciRjyrfY=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchDebianPatch {
       inherit pname version;
@@ -26,6 +30,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   postPatch = ''
     rm -rf lib/expat
   '';
@@ -53,6 +59,7 @@ stdenv.mkDerivation rec {
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight RPC library based on XML and HTTP";
     homepage = "https://xmlrpc-c.sourceforge.net/";
@@ -60,5 +67,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+  meta = with lib; {
+    description = "Lightweight RPC library based on XML and HTTP";
+    homepage = "https://xmlrpc-c.sourceforge.net/";
+    # <xmlrpc-c>/doc/COPYING also lists "ABYSS Web Server License" and "Python 1.5.2 License"
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

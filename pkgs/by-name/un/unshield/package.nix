@@ -24,11 +24,19 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool and library to extract CAB files from InstallShield installers";
     homepage = "https://github.com/twogood/unshield";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+=======
+  meta = with lib; {
+    description = "Tool and library to extract CAB files from InstallShield installers";
+    homepage = "https://github.com/twogood/unshield";
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "unshield";
   };
 }

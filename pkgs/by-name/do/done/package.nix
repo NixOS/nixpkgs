@@ -59,11 +59,19 @@ stdenv.mkDerivation rec {
     GETTEXT_DIR = gettext;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Ultimate task management solution for seamless organization and efficiency";
     homepage = "https://done.edfloreshz.dev/";
     changelog = "https://github.com/done-devs/done/blob/${src.rev}/CHANGES.md";
     license = lib.licenses.mpl20;
+=======
+  meta = with lib; {
+    description = "Ultimate task management solution for seamless organization and efficiency";
+    homepage = "https://done.edfloreshz.dev/";
+    changelog = "https://github.com/done-devs/done/blob/${src.rev}/CHANGES.md";
+    license = licenses.mpl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "done";
     maintainers = [ ];
   };

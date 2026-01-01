@@ -33,10 +33,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_odoo_contrib" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Collection of community-maintained scripts for Odoo maintenance";
     homepage = "https://github.com/acsone/click-odoo-contrib";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ yajo ];
+=======
+  meta = with lib; {
+    description = "Collection of community-maintained scripts for Odoo maintenance";
+    homepage = "https://github.com/acsone/click-odoo-contrib";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ yajo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

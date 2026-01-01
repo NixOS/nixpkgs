@@ -17,11 +17,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Linux Framebuffer Benchmark";
     homepage = "https://github.com/caramelli/fbmark";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ davidak ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Linux Framebuffer Benchmark";
+    homepage = "https://github.com/caramelli/fbmark";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ davidak ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

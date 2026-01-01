@@ -47,11 +47,20 @@ buildPythonPackage rec {
     "epitran.vector"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tools for transcribing languages into IPA";
     homepage = "https://github.com/dmort27/epitran";
     changelog = "https://github.com/dmort27/epitran/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vizid ];
+=======
+  meta = with lib; {
+    description = "Tools for transcribing languages into IPA";
+    homepage = "https://github.com/dmort27/epitran";
+    changelog = "https://github.com/dmort27/epitran/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vizid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

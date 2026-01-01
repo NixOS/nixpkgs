@@ -31,11 +31,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dockerspawner" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Custom spawner for Jupyterhub";
     homepage = "https://github.com/jupyterhub/dockerspawner";
     changelog = "https://github.com/jupyterhub/dockerspawner/blob/${version}/docs/source/changelog.md";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Custom spawner for Jupyterhub";
+    homepage = "https://github.com/jupyterhub/dockerspawner";
+    changelog = "https://github.com/jupyterhub/dockerspawner/blob/${version}/docs/source/changelog.md";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

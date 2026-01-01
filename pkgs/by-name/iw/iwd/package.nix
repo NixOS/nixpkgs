@@ -132,6 +132,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
+<<<<<<< HEAD
+=======
+      dtzWill
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fpletz
     ];
   };

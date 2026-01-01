@@ -37,9 +37,12 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.4.0)" "cmake_minimum_required(VERSION 3.10)"
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sed -i -e '/GECKO/d' CMakeLists.txt
     sed -i -e '/mozilla/d' src/CMakeLists.txt
     sed -i -e '1i \

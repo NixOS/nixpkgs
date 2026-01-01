@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchgit,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   autoreconfHook,
   pkg-config,
   ncurses,
@@ -19,7 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+<<<<<<< HEAD
     ./0001-Fix-wcwidth-declaration.patch
+=======
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/abook-gcc15.patch?h=abook";
+      hash = "sha256-+73+USELoby8JvuVOWZe6E+xtdhajnLnDkzD/77QoTo=";
+    })
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # error: implicit declaration of function 'isalnum' [-Wimplicit-function-declaration]
@@ -43,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://abook.sourceforge.net/";
     description = "Text-based addressbook program designed to use with mutt mail client";
     license = lib.licenses.gpl3Only;
+<<<<<<< HEAD
+=======
+    maintainers = [ lib.maintainers.edwtjo ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = lib.platforms.unix;
     mainProgram = "abook";
   };

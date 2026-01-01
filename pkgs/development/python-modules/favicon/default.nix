@@ -37,10 +37,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "favicon" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Find a website's favicon";
     homepage = "https://github.com/scottwernervt/favicon";
     changelog = "https://github.com/scottwernervt/favicon/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Find a website's favicon";
+    homepage = "https://github.com/scottwernervt/favicon";
+    changelog = "https://github.com/scottwernervt/favicon/blob/${version}/CHANGELOG.rst";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

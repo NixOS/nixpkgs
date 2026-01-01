@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Small printer daemon passing jobs directly to the printer";
     longDescription = ''
       p910nd is a small printer daemon intended for diskless platforms that
@@ -48,9 +52,15 @@ stdenv.mkDerivation rec {
       this protocol and the syntax is lp=remotehost%9100 in /etc/printcap.
     '';
     homepage = "https://github.com/kenyapcomau/p910nd";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "p910nd";
   };
 }

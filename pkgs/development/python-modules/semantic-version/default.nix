@@ -23,11 +23,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "semantic_version" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library implementing the 'SemVer' scheme";
     homepage = "https://github.com/rbarrois/python-semanticversion/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Library implementing the 'SemVer' scheme";
+    homepage = "https://github.com/rbarrois/python-semanticversion/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       layus
       makefu
     ];

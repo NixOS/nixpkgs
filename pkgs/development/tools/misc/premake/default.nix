@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   premake_cmd = "premake4";
   setupHook = ./setup-hook.sh;
 
+<<<<<<< HEAD
   meta = {
     description = "Simple build configuration and project generation tool using lua";
     homepage = "https://premake.github.io/";
@@ -34,5 +35,14 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "premake4";
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Simple build configuration and project generation tool using lua";
+    homepage = "https://premake.github.io/";
+    license = lib.licenses.bsd3;
+    maintainers = [ maintainers.bjornfor ];
+    mainProgram = "premake4";
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

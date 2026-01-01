@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     install -D fastp $out/bin/fastp
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Ultra-fast all-in-one FASTQ preprocessor";
     mainProgram = "fastp";
@@ -35,5 +36,14 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OpenGene/fastp";
     maintainers = with lib.maintainers; [ jbedo ];
     platforms = lib.platforms.x86_64;
+=======
+  meta = with lib; {
+    description = "Ultra-fast all-in-one FASTQ preprocessor";
+    mainProgram = "fastp";
+    license = licenses.mit;
+    homepage = "https://github.com/OpenGene/fastp";
+    maintainers = with maintainers; [ jbedo ];
+    platforms = platforms.x86_64;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

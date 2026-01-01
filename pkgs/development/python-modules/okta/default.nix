@@ -78,11 +78,20 @@ buildPythonPackage rec {
     "okta.request_executor"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python SDK for the Okta Management API";
     homepage = "https://github.com/okta/okta-sdk-python";
     changelog = "https://github.com/okta/okta-sdk-python/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jbgosselin ];
+=======
+  meta = with lib; {
+    description = "Python SDK for the Okta Management API";
+    homepage = "https://github.com/okta/okta-sdk-python";
+    changelog = "https://github.com/okta/okta-sdk-python/blob/v${version}/CHANGELOG.md";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ jbgosselin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

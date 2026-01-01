@@ -5,6 +5,11 @@
   cmake,
   ninja,
   pkg-config,
+<<<<<<< HEAD
+=======
+  tomlplusplus,
+  cli11,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   gtest,
   libei,
   libportal,
@@ -32,13 +37,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
+<<<<<<< HEAD
   version = "1.25.0";
+=======
+  version = "1.24.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-IclKXYCvYHMK4e1z1efmOHUaJqnmZgofK5r6Ml+i5OI=";
+=======
+    hash = "sha256-eXQXHi8TMMwyIkZ7gQ9GHIzSOM2rtzV+w1R7hxS+WSA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''
@@ -63,6 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   buildInputs = [
+<<<<<<< HEAD
+=======
+    tomlplusplus
+    cli11
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     gtest
     libei
     libportal
@@ -80,8 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     wayland-protocols
     qt6.qtwayland
+<<<<<<< HEAD
     qt6.qtdeclarative
     qt6.qttools
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     wayland
     libsysprof-capture
     lerc

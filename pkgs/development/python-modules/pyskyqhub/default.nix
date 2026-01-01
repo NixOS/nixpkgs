@@ -27,10 +27,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyskyqhub" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for accessing SkyQ Hub";
     homepage = "https://github.com/RogerSelwyn/skyq_hub";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python module for accessing SkyQ Hub";
+    homepage = "https://github.com/RogerSelwyn/skyq_hub";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

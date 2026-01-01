@@ -30,7 +30,11 @@ buildPythonPackage rec {
     repo = "scs-python";
     tag = version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-ZxbQ1WbavDKKYBmGB2W0zMVCH/WZIk8bFJ5TmC+QqYc=";
+=======
+    hash = "sha256-MC63xCZxJsHOiarMsQYtXljTV8xdIfJHzkUG5mV63NA=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   postPatch = ''

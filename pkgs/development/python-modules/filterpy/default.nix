@@ -39,10 +39,17 @@ buildPythonPackage {
     "test_multivariate_gaussian"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/rlabbe/filterpy";
     description = "Kalman filtering and optimal estimation library";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/rlabbe/filterpy";
+    description = "Kalman filtering and optimal estimation library";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

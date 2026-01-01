@@ -24,10 +24,18 @@ buildPythonPackage rec {
   ];
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "cachey" ];
+<<<<<<< HEAD
   meta = {
     description = "Caching based on computation time and storage space";
     homepage = "https://github.com/dask/cachey/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SomeoneSerge ];
+=======
+  meta = with lib; {
+    description = "Caching based on computation time and storage space";
+    homepage = "https://github.com/dask/cachey/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ SomeoneSerge ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

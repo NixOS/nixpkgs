@@ -21,10 +21,17 @@ buildPythonPackage rec {
     numpy
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "C/C++ source generation from an AST";
     homepage = "https://github.com/inducer/genpy";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "C/C++ source generation from an AST";
+    homepage = "https://github.com/inducer/genpy";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

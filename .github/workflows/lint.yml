@@ -26,7 +26,11 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+=======
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -35,7 +39,11 @@ jobs:
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
+<<<<<<< HEAD
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
+=======
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       # TODO: Figure out how to best enable caching for the treefmt job. Cachix won't work well,
       # because the cache would be invalidated on every commit - treefmt checks every file.
@@ -61,7 +69,11 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+=======
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -70,7 +82,11 @@ jobs:
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
+<<<<<<< HEAD
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
+=======
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         continue-on-error: true
@@ -90,7 +106,11 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 10
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+=======
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
         with:
           persist-credentials: false
           sparse-checkout: .github/actions
@@ -100,7 +120,11 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
+<<<<<<< HEAD
       - uses: cachix/install-nix-action@4e002c8ec80594ecd40e759629461e26c8abed15 # v31
+=======
+      - uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         continue-on-error: true
@@ -124,6 +148,7 @@ jobs:
             echo "If you're having trouble, ping @NixOS/nixpkgs-vet"
             exit "$exitCode"
           fi
+<<<<<<< HEAD
 
   commits:
     # Only check commits if we have access to the pull_request context.
@@ -151,3 +176,5 @@ jobs:
               context,
               core,
             })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

@@ -4,13 +4,21 @@
   fetchFromGitHub,
 
   # build-system
+<<<<<<< HEAD
   hatchling,
+=======
+  pdm-backend,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   # dependencies
   filetype,
   google-api-core,
   google-auth,
+<<<<<<< HEAD
   google-genai,
+=======
+  google-generativeai,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   langchain-core,
   pydantic,
 
@@ -29,19 +37,31 @@
 
 buildPythonPackage rec {
   pname = "langchain-google-genai";
+<<<<<<< HEAD
   version = "4.1.1";
+=======
+  version = "3.0.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
     tag = "libs/genai/v${version}";
+<<<<<<< HEAD
     hash = "sha256-PqJyT6Z6XpDvbexLlrrfeeycS4mXNR3vpWz3vSy+iac=";
+=======
+    hash = "sha256-9Z0iRSICApA5/iHB7NTVYGpkktaoynG74W2mvn9zeMg=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   sourceRoot = "${src.name}/libs/genai";
 
+<<<<<<< HEAD
   build-system = [ hatchling ];
+=======
+  build-system = [ pdm-backend ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
@@ -53,7 +73,11 @@ buildPythonPackage rec {
     filetype
     google-api-core
     google-auth
+<<<<<<< HEAD
     google-genai
+=======
+    google-generativeai
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     langchain-core
     pydantic
   ];
@@ -68,6 +92,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
+<<<<<<< HEAD
   enabledTestPaths = [ "tests/unit_tests" ];
 
   disabledTests = [
@@ -75,6 +100,9 @@ buildPythonPackage rec {
     "test_serdes"
     "test_serialize"
   ];
+=======
+  pytestFlagsArray = [ "tests/unit_tests" ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   pythonImportsCheck = [ "langchain_google_genai" ];
 

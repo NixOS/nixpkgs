@@ -40,7 +40,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Programming tools for Atmel SAM3/7/9 ARM-based microcontrollers";
     longDescription = ''
       Atmel SAM-BA software provides an open set of tools for programming the
@@ -48,9 +52,16 @@ stdenv.mkDerivation rec {
     '';
     # Alternatively: https://www.microchip.com/en-us/development-tool/SAM-BA-In-system-Programmer
     homepage = "http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools";
+<<<<<<< HEAD
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.bjornfor ];
+=======
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl2Only;
+    platforms = [ "x86_64-linux" ];
+    maintainers = [ maintainers.bjornfor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

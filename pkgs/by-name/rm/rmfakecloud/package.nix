@@ -4,11 +4,18 @@
   buildGoModule,
   enableWebui ? true,
   pnpm_9,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
   nixosTests,
 }:
+=======
+  nodejs,
+  nixosTests,
+}:
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 buildGoModule rec {
   pname = "rmfakecloud";
   version = "0.0.26";
@@ -25,6 +32,7 @@ buildGoModule rec {
   # if using webUI build it
   # use env because of https://github.com/NixOS/nixpkgs/issues/358844
   env.pnpmRoot = "ui";
+<<<<<<< HEAD
   env.pnpmDeps = fetchPnpmDeps {
     inherit
       pname
@@ -34,6 +42,12 @@ buildGoModule rec {
     sourceRoot = "${src.name}/ui";
     pnpmLock = "${src}/ui/pnpm-lock.yaml";
     pnpm = pnpm_9;
+=======
+  env.pnpmDeps = pnpm_9.fetchDeps {
+    inherit pname version src;
+    sourceRoot = "${src.name}/ui";
+    pnpmLock = "${src}/ui/pnpm-lock.yaml";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fetcherVersion = 1;
     hash = "sha256-uywmHN9HWKi0CaqTg9uEio2XCu6ap9v2xtbodW/6b4Q=";
   };
@@ -48,8 +62,12 @@ buildGoModule rec {
   '';
   nativeBuildInputs = lib.optionals enableWebui [
     nodejs
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm_9
+=======
+    pnpm_9.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   # ... or don't embed it in the server
@@ -65,11 +83,19 @@ buildGoModule rec {
 
   passthru.tests.rmfakecloud = nixosTests.rmfakecloud;
 
+<<<<<<< HEAD
   meta = {
     description = "Host your own cloud for the Remarkable";
     homepage = "https://ddvk.github.io/rmfakecloud/";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Host your own cloud for the Remarkable";
+    homepage = "https://ddvk.github.io/rmfakecloud/";
+    license = licenses.agpl3Only;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       euxane
       martinetd
     ];

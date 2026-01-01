@@ -2,8 +2,11 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+<<<<<<< HEAD
   fetchPnpmDeps,
   pnpmConfigHook,
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pnpm,
   nodejs,
 }:
@@ -19,15 +22,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-aV4dMt79t9ZZm+Z08odSONf/ghow4U+/aryk2+GJZvw=";
   };
 
+<<<<<<< HEAD
   pnpmDeps = fetchPnpmDeps {
+=======
+  pnpmDeps = pnpm.fetchDeps {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
     hash = "sha256-gfjRgq75hKxgfOn0wnWIzcFcdWVe7PZ4z8YHxLTCsjo=";
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pnpmConfigHook
     pnpm
+=======
+    pnpm.configHook
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     nodejs
   ];
 

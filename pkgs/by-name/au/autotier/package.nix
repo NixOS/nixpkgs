@@ -41,9 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   # Required by rocksdb after 10.7.5
   env.EXTRA_CFLAGS = "-std=c++20 -fno-char8_t";
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   buildInputs = [
     rocksdb
     boost

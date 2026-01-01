@@ -59,7 +59,11 @@ stdenv.mkDerivation rec {
     patchShebangs --update --host $out/bin/nvimpager
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Use neovim as pager";
     longDescription = ''
       Use neovim as a pager to view manpages, diffs, etc with nvim's syntax
@@ -67,9 +71,15 @@ stdenv.mkDerivation rec {
       and a ansi esc mode to highlight ansi escape sequences in neovim.
     '';
     homepage = "https://github.com/lucc/nvimpager";
+<<<<<<< HEAD
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.lucc ];
+=======
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.lucc ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "nvimpager";
   };
 }

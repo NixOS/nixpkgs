@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ahodesuka/ahoviewer";
     description = "GTK2 image viewer, manga reader, and booru browser";
@@ -75,5 +76,16 @@ stdenv.mkDerivation rec {
     # Unintentionally not working on Darwin:
     # https://github.com/ahodesuka/ahoviewer/issues/62
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ahodesuka/ahoviewer";
+    description = "GTK2 image viewer, manga reader, and booru browser";
+    mainProgram = "ahoviewer";
+    maintainers = with maintainers; [ xzfc ];
+    license = licenses.mit;
+    # Unintentionally not working on Darwin:
+    # https://github.com/ahodesuka/ahoviewer/issues/62
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -55,10 +55,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyscaffoldext.custom_extension" ];
 
+<<<<<<< HEAD
   meta = {
     description = "PyScaffold extension to create a custom PyScaffold extension";
     homepage = "https://pypi.org/project/pyscaffoldext-custom-extension/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
+=======
+  meta = with lib; {
+    description = "PyScaffold extension to create a custom PyScaffold extension";
+    homepage = "https://pypi.org/project/pyscaffoldext-custom-extension/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewcroughan ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

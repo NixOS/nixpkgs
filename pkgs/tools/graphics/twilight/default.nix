@@ -30,11 +30,19 @@ stdenv.mkDerivation rec {
     install -Dm755 twilight $out/bin/twilight
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Redo of IRIX twilight backdrop in old school OpenGL";
     homepage = src.meta.homepage;
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Redo of IRIX twilight backdrop in old school OpenGL";
+    homepage = src.meta.homepage;
+    license = licenses.mit;
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "twilight";
   };

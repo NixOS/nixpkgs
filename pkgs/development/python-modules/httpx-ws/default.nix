@@ -61,11 +61,19 @@ buildPythonPackage rec {
     "tests/test_api.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "WebSocket support for HTTPX";
     homepage = "https://github.com/frankie567/httpx-ws";
     changelog = "https://github.com/frankie567/httpx-ws/releases/tag/v${version}";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "WebSocket support for HTTPX";
+    homepage = "https://github.com/frankie567/httpx-ws";
+    changelog = "https://github.com/frankie567/httpx-ws/releases/tag/v${version}";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

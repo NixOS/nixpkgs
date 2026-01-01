@@ -27,11 +27,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytap2" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Object-oriented wrapper around the Linux Tun/Tap device";
     homepage = "https://github.com/johnthagen/pytap2";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Object-oriented wrapper around the Linux Tun/Tap device";
+    homepage = "https://github.com/johnthagen/pytap2";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

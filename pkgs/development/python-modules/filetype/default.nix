@@ -36,11 +36,20 @@ buildPythonPackage rec {
     "tests/test_benchmark.py"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Infer file type and MIME type of any file/buffer";
     mainProgram = "filetype";
     homepage = "https://github.com/h2non/filetype.py";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
+=======
+  meta = with lib; {
+    description = "Infer file type and MIME type of any file/buffer";
+    mainProgram = "filetype";
+    homepage = "https://github.com/h2non/filetype.py";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

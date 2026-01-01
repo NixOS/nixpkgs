@@ -53,10 +53,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openevsewifi" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module for communicating with the wifi module from OpenEVSE";
     homepage = "https://github.com/miniconfig/python-openevse-wifi";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module for communicating with the wifi module from OpenEVSE";
+    homepage = "https://github.com/miniconfig/python-openevse-wifi";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

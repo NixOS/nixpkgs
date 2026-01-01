@@ -11,16 +11,24 @@
   libseccomp,
   nix-update-script,
   nixosTests,
+<<<<<<< HEAD
   fetchpatch,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx_rustscheds";
   version = "1.0.19";
+=======
+}:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "scx_rustscheds";
+  version = "1.0.18";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "sched-ext";
     repo = "scx";
     tag = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-bOldw2Sob5aANmVzw6VwCgJ4+VzEsohKUxOxntow7VY=";
   };
 
@@ -32,6 +40,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       hash = "sha256-HpGJR3eBZKE+VsqGivjJp1n7JIORhZUxG87AsP1WWi0=";
     })
   ];
+=======
+    hash = "sha256-RkTY7gDcKbkNUKl7NJDX3Ac/I+dRG1Gj8rRHynbbxUU=";
+  };
+
+  cargoHash = "sha256-tuZhqDT1xMP+Pufwz6SBt44qNzHuGzcU9QmVNIg2zS0=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   nativeBuildInputs = [
     pkg-config
@@ -67,8 +81,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=cpumask"
     "--skip=topology"
     "--skip=proc_data::tests::test_thread_operations"
+<<<<<<< HEAD
     "--skip=json::tests::test_with_resources"
     "--skip=json::tests::test_with_dir"
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ];
 
   passthru.tests.basic = nixosTests.scx;

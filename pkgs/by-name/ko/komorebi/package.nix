@@ -46,13 +46,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # webkitgtk_4_0 was removed
     broken = true;
     description = "Beautiful and customizable wallpaper manager for Linux";
     homepage = "https://github.com/Komorebi-Fork/komorebi";
+<<<<<<< HEAD
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kranzes ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kranzes ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

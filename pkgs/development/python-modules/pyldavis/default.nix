@@ -40,11 +40,20 @@ buildPythonPackage rec {
     "pyLDAvis.gensim_models"
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/bmabey/pyLDAvis";
     description = "Python library for interactive topic model visualization";
     license = lib.licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/bmabey/pyLDAvis";
+    description = "Python library for interactive topic model visualization";
+    license = licenses.bsd3;
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

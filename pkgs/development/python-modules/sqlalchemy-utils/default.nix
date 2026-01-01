@@ -75,7 +75,11 @@ buildPythonPackage rec {
     pymysql
     pyodbc
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies)
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   ++ lib.optionals (pythonOlder "3.12") [
     # requires distutils, which were removed in 3.12
     psycopg2cffi
@@ -96,11 +100,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_utils" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Various utility functions and datatypes for SQLAlchemy";
     homepage = "https://github.com/kvesteri/sqlalchemy-utils";
     changelog = "https://github.com/kvesteri/sqlalchemy-utils/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ eadwu ];
+=======
+  meta = with lib; {
+    description = "Various utility functions and datatypes for SQLAlchemy";
+    homepage = "https://github.com/kvesteri/sqlalchemy-utils";
+    changelog = "https://github.com/kvesteri/sqlalchemy-utils/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ eadwu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

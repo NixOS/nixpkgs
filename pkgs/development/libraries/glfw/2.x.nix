@@ -35,11 +35,20 @@ stdenv.mkDerivation rec {
     ln -s libglfw.so.2 $out/lib/libglfw.so
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
     homepage = "https://glfw.sourceforge.net/";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
+    homepage = "https://glfw.sourceforge.net/";
+    license = licenses.zlib;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

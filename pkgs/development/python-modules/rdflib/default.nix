@@ -3,6 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+<<<<<<< HEAD
+=======
+  fetchpatch,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pythonOlder,
 
   # builds
@@ -27,15 +31,34 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
+<<<<<<< HEAD
   version = "7.5.0";
   pyproject = true;
 
+=======
+  version = "7.2.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   src = fetchFromGitHub {
     owner = "RDFLib";
     repo = "rdflib";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-jZ5mbTz/ra/ZHAFyMmtqaM4RZw851gfTCBCRuPcGeYA=";
   };
+=======
+    hash = "sha256-FisMiBTiL6emJS0d7UmlwGUzayA+CME5GGWgw/owfhc=";
+  };
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/RDFLib/rdflib/commit/0ab817f86b5733c9a3b4ede7ef065b8d79e53fc5.diff";
+      hash = "sha256-+yWzQ3MyH0wihgiQRMMXV/FpG8WlXaIBhpsDF4e3rbY=";
+    })
+  ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   build-system = [ poetry-core ];
 
@@ -83,11 +106,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rdflib" ];
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/RDFLib/rdflib/blob/${src.tag}/CHANGELOG.md";
     description = "Python library for working with RDF";
     homepage = "https://rdflib.readthedocs.io";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Python library for working with RDF";
+    homepage = "https://rdflib.readthedocs.io";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

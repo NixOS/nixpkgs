@@ -42,12 +42,21 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Stand alone tray";
     homepage = "https://github.com/kolbusa/stalonetray";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ raskin ];
+=======
+  meta = with lib; {
+    description = "Stand alone tray";
+    homepage = "https://github.com/kolbusa/stalonetray";
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "stalonetray";
   };
 }

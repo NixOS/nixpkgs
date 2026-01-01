@@ -38,10 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://projects.coin-or.org/CoinMP/";
     description = "COIN-OR lightweight API for COIN-OR libraries CLP, CBC, and CGL";
     platforms = lib.platforms.unix;
     license = lib.licenses.epl10;
+=======
+  meta = with lib; {
+    homepage = "https://projects.coin-or.org/CoinMP/";
+    description = "COIN-OR lightweight API for COIN-OR libraries CLP, CBC, and CGL";
+    platforms = platforms.unix;
+    license = licenses.epl10;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

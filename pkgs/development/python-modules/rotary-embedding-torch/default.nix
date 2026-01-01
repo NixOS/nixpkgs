@@ -40,11 +40,20 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "Implementation of Rotary Embeddings, from the Roformer paper, in Pytorch";
     homepage = "https://github.com/lucidrains/rotary-embedding-torch";
     changelog = "https://github.com/lucidrains/rotary-embedding-torch/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     teams = [ lib.teams.tts ];
+=======
+  meta = with lib; {
+    description = "Implementation of Rotary Embeddings, from the Roformer paper, in Pytorch";
+    homepage = "https://github.com/lucidrains/rotary-embedding-torch";
+    changelog = "https://github.com/lucidrains/rotary-embedding-torch/releases/tag/${src.tag}";
+    license = licenses.mit;
+    teams = [ teams.tts ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

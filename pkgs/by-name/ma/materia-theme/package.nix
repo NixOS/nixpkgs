@@ -45,10 +45,19 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/COPYING
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Material Design theme for GNOME/GTK based desktop environments";
     homepage = "https://github.com/nana-4/materia-theme";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Material Design theme for GNOME/GTK based desktop environments";
+    homepage = "https://github.com/nana-4/materia-theme";
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    maintainers = [ maintainers.mounium ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

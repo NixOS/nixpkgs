@@ -76,11 +76,19 @@ stdenvNoCC.mkDerivation {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Convenience script to run a virtualized X-Server";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.artturin ];
+=======
+  meta = with lib; {
+    description = "Convenience script to run a virtualized X-Server";
+    platforms = platforms.linux;
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.artturin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "xvfb-run";
   };
 }

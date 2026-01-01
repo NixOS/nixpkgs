@@ -91,10 +91,17 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s ${tex}/share/texmf-var $out/share/texmf
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://catdvi.sourceforge.net";
     description = "DVI to plain text translator";
     license = lib.licenses.gpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://catdvi.sourceforge.net";
+    description = "DVI to plain text translator";
+    license = licenses.gpl2Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 })

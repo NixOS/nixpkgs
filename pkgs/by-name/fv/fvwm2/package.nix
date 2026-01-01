@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "http://fvwm.org";
     changelog = "https://github.com/fvwmorg/fvwm/releases/tag/${src.rev}";
@@ -85,5 +86,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ edanaher ];
+=======
+  meta = with lib; {
+    homepage = "http://fvwm.org";
+    changelog = "https://github.com/fvwmorg/fvwm/releases/tag/${src.rev}";
+    description = "Multiple large virtual desktop window manager";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ edanaher ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -12,6 +12,7 @@
   grammarDrv,
 }:
 let
+<<<<<<< HEAD
   # Map nix style `0-unstable-YYYY-MM-DD` version identifiers to a PEP 440
   # compatible form (`0+unstableYYYYMMDD`).
   version = lib.pipe grammarDrv [
@@ -26,6 +27,10 @@ let
       if (metadata == "") then version else "${version}+${metadata}"
     )
   ];
+=======
+  inherit (grammarDrv) version;
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   snakeCaseName = lib.replaceStrings [ "-" ] [ "_" ] name;
   drvPrefix = "python-${name}";
   # If the name of the grammar attribute differs from the grammar's symbol name,

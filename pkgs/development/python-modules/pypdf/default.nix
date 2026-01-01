@@ -27,7 +27,11 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
+<<<<<<< HEAD
   version = "6.4.2";
+=======
+  version = "6.3.0";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +42,11 @@ buildPythonPackage rec {
     tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-GkCNw7XvDPvLIiIUAgXsTLQ2OBbqhpf3xHQZpB/f2ys=";
+=======
+    hash = "sha256-0cch0Je5se1FeHSXH78WhDpNiJQ3Qt0wqxRnv9lr8Qo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   outputs = [
@@ -81,11 +89,20 @@ buildPythonPackage rec {
     "enable_socket"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
     changelog = "https://github.com/py-pdf/pypdf/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ javaes ];
+=======
+  meta = with lib; {
+    description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
+    homepage = "https://github.com/py-pdf/pypdf";
+    changelog = "https://github.com/py-pdf/pypdf/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ javaes ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

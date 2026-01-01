@@ -33,10 +33,18 @@ buildPythonPackage rec {
     "test_tx_with_gpg"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Utilities for Bitcoin and altcoin addresses and transaction manipulation";
     homepage = "https://github.com/richardkiss/pycoin";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nyanloutre ];
+=======
+  meta = with lib; {
+    description = "Utilities for Bitcoin and altcoin addresses and transaction manipulation";
+    homepage = "https://github.com/richardkiss/pycoin";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nyanloutre ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

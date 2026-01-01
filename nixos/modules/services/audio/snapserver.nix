@@ -30,6 +30,7 @@ in
 {
   imports = [
     (mkRenamedOptionModule
+<<<<<<< HEAD
       [ "services" "snapserver" "listenAddress" ]
       [ "services" "snapserver" "settings" "tcp-streaming" "bind_to_address" ]
     )
@@ -73,6 +74,52 @@ in
     (mkRenamedOptionModule
       [ "services" "snapserver" "tcp" "port" ]
       [ "services" "snapserver" "settings" "tcp-control" "port" ]
+=======
+      [ "services" "snapserver" "controlPort" ]
+      [ "services" "snapserver" "tcp" "port" ]
+    )
+
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "listenAddress" ]
+      [ "services" "snapserver" "settings" "stream" "bind_to_address" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "port" ]
+      [ "services" "snapserver" "settings" "stream" "port" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "sampleFormat" ]
+      [ "services" "snapserver" "settings" "stream" "sampleformat" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "codec" ]
+      [ "services" "snapserver" "settings" "stream" "codec" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "streamBuffer" ]
+      [ "services" "snapserver" "settings" "stream" "chunk_ms" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "buffer" ]
+      [ "services" "snapserver" "settings" "stream" "buffer" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "send" ]
+      [ "services" "snapserver" "settings" "stream" "chunk_ms" ]
+    )
+
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "tcp" "enable" ]
+      [ "services" "snapserver" "settings" "tcp" "enabled" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "tcp" "listenAddress" ]
+      [ "services" "snapserver" "settings" "tcp" "bind_to_address" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "snapserver" "tcp" "port" ]
+      [ "services" "snapserver" "settings" "tcp" "port" ]
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     )
 
     (mkRenamedOptionModule
@@ -120,6 +167,7 @@ in
           freeformType = format.type;
           options = {
             stream = {
+<<<<<<< HEAD
               source = mkOption {
                 type = with types; either str (listOf str);
                 example = "pipe:///tmp/snapfifo?name=default";
@@ -134,6 +182,8 @@ in
                 default = true;
               };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               bind_to_address = mkOption {
                 default = "::";
                 description = ''
@@ -148,9 +198,23 @@ in
                   Port to listen on for snapclient connections.
                 '';
               };
+<<<<<<< HEAD
             };
 
             tcp-control = {
+=======
+
+              source = mkOption {
+                type = with types; either str (listOf str);
+                example = "pipe:///tmp/snapfifo?name=default";
+                description = ''
+                  One or multiple URIs to PCM inpuit streams.
+                '';
+              };
+            };
+
+            tcp = {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
               enabled = mkEnableOption "the TCP JSON-RPC";
 
               bind_to_address = mkOption {
@@ -250,10 +314,15 @@ in
     };
 
     networking.firewall.allowedTCPPorts =
+<<<<<<< HEAD
       lib.optionals (cfg.openFirewall && cfg.settings.tcp-streaming.enabled) [
         cfg.settings.tcp-streaming.port
       ]
       ++ lib.optional (cfg.openFirewall && cfg.settings.tcp-control.enabled) cfg.settings.tcp-control.port
+=======
+      lib.optionals cfg.openFirewall [ cfg.settings.stream.port ]
+      ++ lib.optional (cfg.openFirewall && cfg.settings.tcp.enabled) cfg.settings.tcp.port
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       ++ lib.optional (cfg.openFirewall && cfg.settings.http.enabled) cfg.settings.http.port;
   };
 

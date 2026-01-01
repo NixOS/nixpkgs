@@ -32,13 +32,23 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Real-mode x86 code emulator";
     maintainers = with lib.maintainers; [ raskin ];
+=======
+  meta = with lib; {
+    description = "Real-mode x86 code emulator";
+    maintainers = with maintainers; [ raskin ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
+<<<<<<< HEAD
     license = lib.licenses.mit;
+=======
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

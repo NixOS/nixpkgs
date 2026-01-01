@@ -115,6 +115,7 @@ lib.fix (
           touch $out
         '';
 
+<<<<<<< HEAD
     meta = {
       description = "XML Security Library in C based on libxml2";
       homepage = "https://www.aleksey.com/xmlsec/";
@@ -123,6 +124,16 @@ lib.fix (
       mainProgram = "xmlsec1";
       maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
+=======
+    meta = with lib; {
+      description = "XML Security Library in C based on libxml2";
+      homepage = "https://www.aleksey.com/xmlsec/";
+      downloadPage = "https://www.aleksey.com/xmlsec/download.html";
+      license = licenses.mit;
+      mainProgram = "xmlsec1";
+      maintainers = [ ];
+      platforms = with platforms; linux ++ darwin;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     };
   }
 )

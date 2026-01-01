@@ -119,6 +119,7 @@ maven.buildMavenPackage {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Power tool for working with messy data and improving it";
     homepage = "https://openrefine.org";
@@ -128,6 +129,17 @@ maven.buildMavenPackage {
       arcstur
     ];
     sourceProvenance = with lib.sourceTypes; [
+=======
+  meta = with lib; {
+    description = "Power tool for working with messy data and improving it";
+    homepage = "https://openrefine.org";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [
+      ris
+      arcstur
+    ];
+    sourceProvenance = with sourceTypes; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       fromSource
       binaryBytecode # maven dependencies
     ];

@@ -43,12 +43,21 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cfn_flip" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool for converting AWS CloudFormation templates between JSON and YAML formats";
     mainProgram = "cfn-flip";
     homepage = "https://github.com/awslabs/aws-cfn-template-flip";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Tool for converting AWS CloudFormation templates between JSON and YAML formats";
+    mainProgram = "cfn-flip";
+    homepage = "https://github.com/awslabs/aws-cfn-template-flip";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       kamadorueda
       psyanticy
     ];

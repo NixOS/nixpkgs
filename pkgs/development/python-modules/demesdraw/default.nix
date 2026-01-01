@@ -48,11 +48,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "demesdraw" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Drawing functions for Demes demographic models";
     mainProgram = "demesdraw";
     homepage = "https://github.com/grahamgower/demesdraw";
     license = lib.licenses.isc;
+=======
+  meta = with lib; {
+    description = "Drawing functions for Demes demographic models";
+    mainProgram = "demesdraw";
+    homepage = "https://github.com/grahamgower/demesdraw";
+    license = licenses.isc;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

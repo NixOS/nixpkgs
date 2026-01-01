@@ -18,10 +18,18 @@ stdenv.mkDerivation rec {
     cp * "$out/share/graphs/"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Database of graphs";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     teams = [ lib.teams.sage ];
+=======
+  meta = with lib; {
+    description = "Database of graphs";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    teams = [ teams.sage ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -28,11 +28,19 @@ buildDunePackage {
     sexplib0
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code (RPC mode)";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ocaml-ppx/ocamlformat";
+    description = "Auto-formatter for OCaml code (RPC mode)";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       Zimmi48
       Julow
     ];

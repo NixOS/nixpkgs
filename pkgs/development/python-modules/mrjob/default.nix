@@ -72,6 +72,7 @@ buildPythonPackage rec {
     unittestCheckHook
     warcio
   ]
+<<<<<<< HEAD
   ++ lib.concatAttrValues optional-dependencies;
 
   unittestFlagsArray = [ "-v" ];
@@ -81,6 +82,17 @@ buildPythonPackage rec {
     description = "Run MapReduce jobs on Hadoop or Amazon Web Services";
     homepage = "https://github.com/Yelp/mrjob";
     license = lib.licenses.asl20;
+=======
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  unittestFlagsArray = [ "-v" ];
+
+  meta = with lib; {
+    changelog = "https://github.com/Yelp/mrjob/blob/v${version}/CHANGES.txt";
+    description = "Run MapReduce jobs on Hadoop or Amazon Web Services";
+    homepage = "https://github.com/Yelp/mrjob";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

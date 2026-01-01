@@ -46,10 +46,18 @@ buildDunePackage rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/mirleft/ocaml-x509";
     description = "X509 (RFC5280) handling in OCaml";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ vbgl ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/mirleft/ocaml-x509";
+    description = "X509 (RFC5280) handling in OCaml";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ vbgl ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

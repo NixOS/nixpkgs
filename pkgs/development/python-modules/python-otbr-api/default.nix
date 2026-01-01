@@ -44,11 +44,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_otbr_api" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for the Open Thread Border Router";
     homepage = "https://github.com/home-assistant-libs/python-otbr-api";
     changelog = "https://github.com/home-assistant-libs/python-otbr-api/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for the Open Thread Border Router";
+    homepage = "https://github.com/home-assistant-libs/python-otbr-api";
+    changelog = "https://github.com/home-assistant-libs/python-otbr-api/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

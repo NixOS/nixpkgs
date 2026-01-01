@@ -38,6 +38,7 @@ let
   unsupportedDeviceIds = lib.removeAttrs deviceIds (lib.attrNames supportedDeviceIds);
 
   componentHashes = {
+<<<<<<< HEAD
     "arria_lite" = "sha256-Epxvu1z7Z4vQWASIYEJAy5P7Meee114ZNVIAZnmTEH8=";
     "cyclone" = "sha256-lKOYy61BHxY4OyonxADg6d7IGwckGX8zu0x6dpGB5Lo=";
     "cyclone10lp" = "sha256-lurSlhCuE6i2ULKNFvlWNtk6rqdvVwREC607HbMSH2I=";
@@ -47,6 +48,17 @@ let
   };
 
   version = "25.1std.0.1129";
+=======
+    "arria_lite" = "sha256-ASvi9YX15b4XXabGjkuR5wl9wDwCijl8s750XTR/4XU=";
+    "cyclone" = "sha256-iNA4S5mssffgn29NUhibJk6iKnmJ+vG9LYY3W+nnqcI=";
+    "cyclone10lp" = "sha256-247yR2fm5A3LWRjePJU99z1NBYziV8WkPL05wHJ4Z1Q=";
+    "cyclonev" = "sha256-Fa1PQ3pp9iTPYQljeKGyxHIXHaSolJZR8vXVb3gEN7g=";
+    "max" = "sha256-lAA1CgSfAjfilLDhRzfU2OkzGAChk7TMFckeboMB4mI=";
+    "max10" = "sha256-edycBj0P3qwLN2YS//QpCHQeGOW8WM0RqTIWdGAkEv8=";
+  };
+
+  version = "24.1std.0.1077";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   download =
     { name, sha256 }:
@@ -60,12 +72,20 @@ let
     [
       {
         name = "QuartusLiteSetup-${version}-linux.run";
+<<<<<<< HEAD
         sha256 = "sha256-UYQz7H3NYXJVYK9lM1P3pcMgzOnlKLInR7io3zZ0xOs=";
+=======
+        sha256 = "sha256-NFWT1VWcb3gun7GhpPbHzR3SIYBMpK40jESXS/vC5II=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       }
     ]
     ++ lib.optional withQuesta {
       name = "QuestaSetup-${version}-linux.run";
+<<<<<<< HEAD
       sha256 = "sha256-0F7psE+jTimCoy+UVJRgxNC6GEVdY/PJu49hf+D7T3U=";
+=======
+      sha256 = "sha256-4+Y34UiJwenlIp/XKzMs+2aYZt/Y6XmNmiYyXVmOQkc=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     }
   );
   components = map (
@@ -122,6 +142,7 @@ stdenv.mkDerivation {
         --replace-fail 'grep sse /proc/cpuinfo > /dev/null 2>&1' ':'
     '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://fpgasoftware.intel.com";
     description = "FPGA design and simulation software";
@@ -129,6 +150,15 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    homepage = "https://fpgasoftware.intel.com";
+    description = "FPGA design and simulation software";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       bjornfor
       kwohlfahrt
       zainkergaye

@@ -24,11 +24,19 @@ buildGoModule rec {
     "-w"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Generator of an implementation of the service interface for ent protobuff";
     mainProgram = "protoc-gen-entgrpc";
     downloadPage = "https://github.com/ent/contrib/";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Generator of an implementation of the service interface for ent protobuff";
+    mainProgram = "protoc-gen-entgrpc";
+    downloadPage = "https://github.com/ent/contrib/";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://entgo.io/";
     maintainers = [ ];
   };

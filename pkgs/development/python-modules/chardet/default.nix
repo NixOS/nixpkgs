@@ -33,12 +33,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "chardet" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     changelog = "https://github.com/chardet/chardet/releases/tag/${version}";
     description = "Universal encoding detector";
     mainProgram = "chardetect";
     homepage = "https://github.com/chardet/chardet";
+<<<<<<< HEAD
     license = lib.licenses.lgpl21Plus;
+=======
+    license = licenses.lgpl21Plus;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

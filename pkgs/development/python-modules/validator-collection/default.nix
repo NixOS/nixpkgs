@@ -47,11 +47,20 @@ buildPythonPackage rec {
     "test_is_readable"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python library of 60+ commonly-used validator functions";
     homepage = "https://github.com/insightindustry/validator-collection/";
     changelog = "https://github.com/insightindustry/validator-collection/blob/${src.rev}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Python library of 60+ commonly-used validator functions";
+    homepage = "https://github.com/insightindustry/validator-collection/";
+    changelog = "https://github.com/insightindustry/validator-collection/blob/${src.rev}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

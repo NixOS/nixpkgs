@@ -37,14 +37,25 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ libuecc ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";
     homepage = "https://github.com/freifunk-gluon/ecdsautils/";
     license = with lib.licenses; [
+=======
+  meta = with lib; {
+    description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";
+    homepage = "https://github.com/freifunk-gluon/ecdsautils/";
+    license = with licenses; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       mit
       bsd2
     ];
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

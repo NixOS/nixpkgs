@@ -55,12 +55,21 @@ let
         runHook postInstall
       '';
 
+<<<<<<< HEAD
       meta = {
         inherit (data) description;
         homepage = "https://www.yamagi.org/quake2/";
         license = lib.licenses.unfree;
         platforms = lib.platforms.unix;
         maintainers = with lib.maintainers; [ tadfisher ];
+=======
+      meta = with lib; {
+        inherit (data) description;
+        homepage = "https://www.yamagi.org/quake2/";
+        license = licenses.unfree;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ tadfisher ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       };
     };
 

@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional sslSupport openssl
     ++ lib.optional idnSupport libidn;
 
+<<<<<<< HEAD
   meta = {
     description = "Portable high-level Jabber/XMPP library for C++";
     mainProgram = "gloox-config";
@@ -39,6 +40,15 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Portable high-level Jabber/XMPP library for C++";
+    mainProgram = "gloox-config";
+    homepage = "http://camaya.net/gloox";
+    license = licenses.gpl3;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # The last successful Darwin Hydra build was in 2023
     broken = stdenv.hostPlatform.isDarwin;
   };

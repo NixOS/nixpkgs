@@ -20,7 +20,10 @@ lib.makeScope pkgs.newScope (
       switchboard-plug-notifications
       switchboard-plug-onlineaccounts
       switchboard-plug-pantheon-shell
+<<<<<<< HEAD
       switchboard-plug-parental-controls
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       switchboard-plug-power
       switchboard-plug-printers
       switchboard-plug-security-privacy
@@ -202,8 +205,11 @@ lib.makeScope pkgs.newScope (
 
     switchboard-plug-pantheon-shell = callPackage ./apps/switchboard-plugs/pantheon-shell { };
 
+<<<<<<< HEAD
     switchboard-plug-parental-controls = callPackage ./apps/switchboard-plugs/parental-controls { };
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     switchboard-plug-power = callPackage ./apps/switchboard-plugs/power { };
 
     switchboard-plug-printers = callPackage ./apps/switchboard-plugs/printers { };

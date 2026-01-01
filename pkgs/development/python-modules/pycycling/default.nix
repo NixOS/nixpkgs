@@ -24,11 +24,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ pname ];
 
+<<<<<<< HEAD
   meta = {
     description = "Package for interacting with Bluetooth Low Energy (BLE) compatible bike trainers, power meters, radars and heart rate monitors";
     homepage = "https://github.com/zacharyedwardbull/pycycling";
     changelog = "https://github.com/zacharyedwardbull/pycycling/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ viraptor ];
+=======
+  meta = with lib; {
+    description = "Package for interacting with Bluetooth Low Energy (BLE) compatible bike trainers, power meters, radars and heart rate monitors";
+    homepage = "https://github.com/zacharyedwardbull/pycycling";
+    changelog = "https://github.com/zacharyedwardbull/pycycling/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ viraptor ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

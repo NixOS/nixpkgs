@@ -66,11 +66,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "commoncode" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
     changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Set of common utilities, originally split from ScanCode";
+    homepage = "https://github.com/nexB/commoncode";
+    changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

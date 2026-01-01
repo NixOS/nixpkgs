@@ -32,12 +32,21 @@ buildNimPackage (finalAttrs: {
 
   nimFlags = [ "--opt:speed" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/cab404/swaycwd";
     description = "Returns cwd for shell in currently focused sway window, or home directory if cannot find shell";
     maintainers = with lib.maintainers; [ cab404 ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Only;
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/cab404/swaycwd";
+    description = "Returns cwd for shell in currently focused sway window, or home directory if cannot find shell";
+    maintainers = with maintainers; [ cab404 ];
+    platforms = platforms.linux;
+    license = licenses.gpl3Only;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "swaycwd";
   };
 })

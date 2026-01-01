@@ -22,10 +22,18 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/bin/colp $out/bin/colorpanes
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Panes in the 8 bright terminal colors with shadows of the respective darker color";
     homepage = "https://codeberg.org/annaaurora/colorpanes";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ annaaurora ];
+=======
+  meta = with lib; {
+    description = "Panes in the 8 bright terminal colors with shadows of the respective darker color";
+    homepage = "https://codeberg.org/annaaurora/colorpanes";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ annaaurora ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

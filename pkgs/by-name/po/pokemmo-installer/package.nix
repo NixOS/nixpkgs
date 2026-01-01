@@ -62,12 +62,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
+<<<<<<< HEAD
   meta = {
     description = "Installer and Launcher for the PokeMMO emulator";
     homepage = "https://pokemmo.eu";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Installer and Launcher for the PokeMMO emulator";
+    homepage = "https://pokemmo.eu";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "pokemmo-installer";
   };
 })

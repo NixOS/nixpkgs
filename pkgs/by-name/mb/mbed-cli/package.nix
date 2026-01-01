@@ -31,10 +31,17 @@ buildPythonApplication rec {
     pytest test
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/ARMmbed/mbed-cli";
     description = "Arm Mbed Command Line Interface";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    homepage = "https://github.com/ARMmbed/mbed-cli";
+    description = "Arm Mbed Command Line Interface";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

@@ -20,10 +20,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xdxf2html" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Python module for converting XDXF dictionary texts into HTML";
     homepage = "https://github.com/Crissium/python-xdxf2html";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ vizid ];
+=======
+  meta = with lib; {
+    description = "Python module for converting XDXF dictionary texts into HTML";
+    homepage = "https://github.com/Crissium/python-xdxf2html";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ vizid ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

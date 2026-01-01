@@ -21,10 +21,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ xstatic-jquery ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://plugins.jquery.com/project/jQuery-File-Upload";
     description = "jquery-file-upload packaged static files for python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ makefu ];
+=======
+  meta = with lib; {
+    homepage = "https://plugins.jquery.com/project/jQuery-File-Upload";
+    description = "jquery-file-upload packaged static files for python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ makefu ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -17,10 +17,17 @@ buildPythonPackage rec {
   # Requires tox
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Backport/clone of ChainMap";
     homepage = "https://bitbucket.org/jeunice/chainmap";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    description = "Backport/clone of ChainMap";
+    homepage = "https://bitbucket.org/jeunice/chainmap";
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

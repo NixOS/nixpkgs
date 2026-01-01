@@ -71,7 +71,11 @@ buildPythonPackage rec {
     "test_widget_and_html_reprs"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Deploy dask on YARN clusters";
     mainProgram = "dask-yarn";
     longDescription = ''
@@ -81,7 +85,12 @@ buildPythonPackage rec {
             stop, and scale Dask clusters natively from Python.
     '';
     homepage = "https://yarn.dask.org/";
+<<<<<<< HEAD
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ illustris ];
+=======
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ illustris ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

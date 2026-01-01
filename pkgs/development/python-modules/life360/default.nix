@@ -30,11 +30,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "life360" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module to interact with Life360";
     homepage = "https://github.com/pnbruckner/life360";
     changelog = "https://github.com/pnbruckner/life360/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Module to interact with Life360";
+    homepage = "https://github.com/pnbruckner/life360";
+    changelog = "https://github.com/pnbruckner/life360/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -27,6 +27,7 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Modern desktop theme suite featuring a mostly flat with a minimal use of shadows for depth";
     homepage = "https://snwh.org/paper";
@@ -35,6 +36,16 @@ stdenv.mkDerivation {
     maintainers = [
       lib.maintainers.simonvandel
       lib.maintainers.romildo
+=======
+  meta = with lib; {
+    description = "Modern desktop theme suite featuring a mostly flat with a minimal use of shadows for depth";
+    homepage = "https://snwh.org/paper";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [
+      maintainers.simonvandel
+      maintainers.romildo
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     ];
   };
 }

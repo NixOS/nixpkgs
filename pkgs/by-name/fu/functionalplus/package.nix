@@ -18,11 +18,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   meta = {
     description = "Functional Programming Library for C++";
     homepage = "https://github.com/Dobiasd/FunctionalPlus";
     license = lib.licenses.boost;
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Functional Programming Library for C++";
+    homepage = "https://github.com/Dobiasd/FunctionalPlus";
+    license = licenses.boost;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

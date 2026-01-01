@@ -31,11 +31,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "confection" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library that offers a configuration system";
     homepage = "https://github.com/explosion/confection";
     changelog = "https://github.com/explosion/confection/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library that offers a configuration system";
+    homepage = "https://github.com/explosion/confection";
+    changelog = "https://github.com/explosion/confection/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

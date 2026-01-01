@@ -37,11 +37,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kegtron_ble" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library for Kegtron BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/kegtron-ble";
     changelog = "https://github.com/Bluetooth-Devices/kegtron-ble/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+=======
+  meta = with lib; {
+    description = "Library for Kegtron BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/kegtron-ble";
+    changelog = "https://github.com/Bluetooth-Devices/kegtron-ble/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

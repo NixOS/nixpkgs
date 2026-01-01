@@ -12,6 +12,7 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.8.4";
 in
 stdenv.mkDerivation rec {
@@ -20,6 +21,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/clutter-gtk/${lib.versions.majorMinor version}/clutter-gtk-${version}.tar.xz";
+=======
+  pname = "clutter-gtk";
+  version = "1.8.4";
+in
+
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "01ibniy4ich0fgpam53q252idm7f4fn5xg5qvizcfww90gn9652j";
   };
 

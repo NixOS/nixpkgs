@@ -83,9 +83,16 @@ buildPythonPackage rec {
         done
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Enhancements to virtualenv";
     homepage = "https://github.com/python-virtualenvwrapper/virtualenvwrapper";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Enhancements to virtualenv";
+    homepage = "https://github.com/python-virtualenvwrapper/virtualenvwrapper";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -22,10 +22,18 @@ crystal.buildCrystalPackage rec {
   # there is one test that tries to clone a repo
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Better one-line git log";
     homepage = "https://github.com/taylorthurlow/thicket";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Better one-line git log";
+    homepage = "https://github.com/taylorthurlow/thicket";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Br1ght0ne ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "thicket";
   };
 }

@@ -22,10 +22,17 @@ rustPlatform.buildRustPackage rec {
     "--skip=command::test_run_command_fail"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to static turn CLI commands into TUIs";
     homepage = "https://github.com/jesseduffield/lazycli";
     license = lib.licenses.mit;
+=======
+  meta = with lib; {
+    description = "Tool to static turn CLI commands into TUIs";
+    homepage = "https://github.com/jesseduffield/lazycli";
+    license = licenses.mit;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
     mainProgram = "lazycli";
   };

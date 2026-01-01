@@ -21,10 +21,18 @@ buildPythonPackage rec {
     imageio-ffmpeg
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Turn Python scripts into handouts with Markdown and figures";
     homepage = "https://github.com/danijar/handout";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ averelld ];
+=======
+  meta = with lib; {
+    description = "Turn Python scripts into handouts with Markdown and figures";
+    homepage = "https://github.com/danijar/handout";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ averelld ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

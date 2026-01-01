@@ -79,12 +79,15 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/ROCR-Runtime/commit/41bfc66aef437a5b349f71105fa4b907cc7e17d5.patch";
       hash = "sha256-A7VhPR3eSsmjq2cTBSjBIz9i//WiNjoXm0EsRKtF+ns=";
     })
+<<<<<<< HEAD
     # Fix build with gcc15
     (fetchpatch {
       # [PATCH] rocr:Add missing cstdint include
       url = "https://github.com/ROCm/ROCR-Runtime/commit/5cc61b714d5b59ed5405639a37a582d839e6ebe9.patch";
       hash = "sha256-IPxDShpoFB0PjCG+zwFbnW9IBTCG3G2o9sfITGs+bN4=";
     })
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     # This causes a circular dependency, aqlprofile relies on hsa-runtime64
     # which is part of rocm-runtime
     # Worked around by having rocprofiler load aqlprofile directly
@@ -113,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/ROCm/ROCR-Runtime";
@@ -120,5 +124,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Platform runtime for ROCm";
+    homepage = "https://github.com/ROCm/ROCR-Runtime";
+    license = with licenses; [ ncsa ];
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

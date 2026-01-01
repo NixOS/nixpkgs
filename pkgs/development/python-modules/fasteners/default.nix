@@ -37,11 +37,19 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Module that provides useful locks";
     homepage = "https://github.com/harlowja/fasteners";
     changelog = "https://github.com/harlowja/fasteners/releases/tag/${version}";
     license = lib.licenses.asl20;
+=======
+  meta = with lib; {
+    description = "Module that provides useful locks";
+    homepage = "https://github.com/harlowja/fasteners";
+    changelog = "https://github.com/harlowja/fasteners/releases/tag/${version}";
+    license = licenses.asl20;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

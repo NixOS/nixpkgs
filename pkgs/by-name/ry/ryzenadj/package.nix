@@ -31,12 +31,21 @@ stdenv.mkDerivation rec {
     install -D ryzenadj $out/bin/ryzenadj
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Adjust power management settings for Ryzen Mobile Processors";
     mainProgram = "ryzenadj";
     homepage = "https://github.com/FlyGoat/RyzenAdj";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ rhendric ];
+=======
+  meta = with lib; {
+    description = "Adjust power management settings for Ryzen Mobile Processors";
+    mainProgram = "ryzenadj";
+    homepage = "https://github.com/FlyGoat/RyzenAdj";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ rhendric ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     platforms = [ "x86_64-linux" ];
   };
 }

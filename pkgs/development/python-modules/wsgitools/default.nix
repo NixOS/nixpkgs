@@ -30,8 +30,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
+<<<<<<< HEAD
   meta = {
     maintainers = with lib.maintainers; [ clkamp ];
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ clkamp ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     description = "Set of tools working with WSGI";
     longDescription = ''
       wsgitools is a set of tools working with WSGI (see PEP 333). It
@@ -40,7 +45,12 @@ buildPythonPackage rec {
       in writing it were portability and simplicity.
     '';
     homepage = "https://subdivi.de/~helmut/wsgitools/";
+<<<<<<< HEAD
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+=======
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

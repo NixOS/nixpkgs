@@ -16,8 +16,14 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "Ordered set";
     license = lib.licenses.psfl;
+=======
+  meta = with lib; {
+    description = "Ordered set";
+    license = licenses.psfl;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

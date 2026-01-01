@@ -29,10 +29,17 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests.py" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Library to apply JSON Patches according to RFC 6902";
     homepage = "https://github.com/stefankoegl/python-json-patch";
     license = lib.licenses.bsd3;
+=======
+  meta = with lib; {
+    description = "Library to apply JSON Patches according to RFC 6902";
+    homepage = "https://github.com/stefankoegl/python-json-patch";
+    license = licenses.bsd3;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     maintainers = [ ];
   };
 }

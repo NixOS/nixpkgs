@@ -32,6 +32,14 @@
   gtkmm3,
 }:
 
+<<<<<<< HEAD
+=======
+# Known issues:
+# - The daemon can't be started from the GUI, because pkexec requires a shell
+#   registered in /etc/shells. The nix's bash is not in there when running
+#   cpu-x from nixpkgs.
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpu-x";
   version = "5.4.0";
@@ -43,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-db7NxoVZgnYb1MZKfiFINx00JqDnf/TvwumBp6qDooQ=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     # https://github.com/TheTumultuousUnicornOfDarkness/CPU-X/pull/402
     # FIXME: remove in the next version
@@ -50,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "cpu	ia64" "cpu	default"
   '';
 
+=======
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   nativeBuildInputs = [
     cmake
     pkg-config

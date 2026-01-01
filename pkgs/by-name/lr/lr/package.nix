@@ -17,12 +17,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/chneukirchen/lr";
     description = "List files recursively";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ vikanezrimaya ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/chneukirchen/lr";
+    description = "List files recursively";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ vikanezrimaya ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "lr";
   };
 }

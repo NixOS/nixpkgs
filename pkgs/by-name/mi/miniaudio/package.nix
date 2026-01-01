@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   meta = {
     description = "Single header audio playback and capture library written in C";
     homepage = "https://github.com/mackron/miniaudio";
@@ -77,5 +78,18 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.jansol ];
     pkgConfigModules = [ "miniaudio" ];
     platforms = lib.platforms.linux;
+=======
+  meta = with lib; {
+    description = "Single header audio playback and capture library written in C";
+    homepage = "https://github.com/mackron/miniaudio";
+    changelog = "https://github.com/mackron/miniaudio/blob/${finalAttrs.version}/CHANGES.md";
+    license = with licenses; [
+      unlicense # or
+      mit0
+    ];
+    maintainers = [ maintainers.jansol ];
+    pkgConfigModules = [ "miniaudio" ];
+    platforms = platforms.linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })

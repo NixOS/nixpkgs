@@ -65,12 +65,20 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://github.com/dhewm/dhewm3";
     description = "Doom 3 port to SDL";
     mainProgram = "dhewm3";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+<<<<<<< HEAD
     platforms = with lib.platforms; linux;
+=======
+    platforms = with platforms; linux;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

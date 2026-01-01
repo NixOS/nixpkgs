@@ -26,7 +26,11 @@ stdenv.mkDerivation {
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     homepage = "https://flam3.com/";
     description = "Cosmic recursive fractal flames";
     longDescription = ''
@@ -36,8 +40,14 @@ stdenv.mkDerivation {
       used to create art and special effects. The shape and color of each image
       is specified by a long string of numbers - a genetic code of sorts.
     '';
+<<<<<<< HEAD
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+=======
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

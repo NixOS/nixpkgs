@@ -141,6 +141,7 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
@@ -148,6 +149,15 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];
+=======
+  meta = with lib; {
+    description = "Lightweight Identity and Authorization Management";
+    homepage = "https://canaille.readthedocs.io/en/latest/index.html";
+    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.rev}/CHANGES.rst";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "canaille";
   };
 

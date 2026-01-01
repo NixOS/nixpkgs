@@ -23,11 +23,20 @@ rustPlatform.buildRustPackage rec {
     package = cbfmt;
   };
 
+<<<<<<< HEAD
   meta = {
     description = "Tool to format codeblocks inside markdown and org documents";
     mainProgram = "cbfmt";
     homepage = "https://github.com/lukas-reineke/cbfmt";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.stehessel ];
+=======
+  meta = with lib; {
+    description = "Tool to format codeblocks inside markdown and org documents";
+    mainProgram = "cbfmt";
+    homepage = "https://github.com/lukas-reineke/cbfmt";
+    license = licenses.mit;
+    maintainers = [ maintainers.stehessel ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

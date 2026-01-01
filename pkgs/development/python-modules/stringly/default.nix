@@ -26,10 +26,18 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests
 
+<<<<<<< HEAD
   meta = {
     description = "Stringly: Human Readable Object Serialization";
     homepage = "https://github.com/evalf/stringly";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.Scriptkiddi ];
+=======
+  meta = with lib; {
+    description = "Stringly: Human Readable Object Serialization";
+    homepage = "https://github.com/evalf/stringly";
+    license = licenses.mit;
+    maintainers = [ maintainers.Scriptkiddi ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

@@ -180,7 +180,11 @@ rec {
   lowPrio = setPrio 10;
 
   /**
+<<<<<<< HEAD
     Apply `lowPrio` to an attrset with derivations.
+=======
+    Apply lowPrio to an attrset with derivations.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -203,7 +207,11 @@ rec {
   hiPrio = setPrio (-10);
 
   /**
+<<<<<<< HEAD
     Apply `hiPrio` to an attrset with derivations.
+=======
+    Apply hiPrio to an attrset with derivations.
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 
@@ -414,7 +422,11 @@ rec {
     licstr: default: lowercaseLicenses.${lib.toLower licstr} or default;
 
   /**
+<<<<<<< HEAD
     Get the path to the main program of a package based on `meta.mainProgram`
+=======
+    Get the path to the main program of a package based on meta.mainProgram
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
     # Inputs
 

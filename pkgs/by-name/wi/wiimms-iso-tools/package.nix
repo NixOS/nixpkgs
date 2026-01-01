@@ -50,11 +50,20 @@ stdenv.mkDerivation rec {
     ./install.sh --no-sudo
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://wit.wiimm.de";
     description = "Set of command line tools to manipulate Wii and GameCube ISO images and WBFS containers";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nilp0inter ];
+=======
+  meta = with lib; {
+    homepage = "https://wit.wiimm.de";
+    description = "Set of command line tools to manipulate Wii and GameCube ISO images and WBFS containers";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ nilp0inter ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

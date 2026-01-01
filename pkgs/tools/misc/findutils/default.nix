@@ -11,12 +11,20 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   pname = "findutils";
   version = "4.10.0";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "mirror://gnu/findutils/findutils-${finalAttrs.version}.tar.xz";
+=======
+    url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 
@@ -78,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.gnu.org/software/findutils/";
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     longDescription = ''
       The GNU Find Utilities are the basic directory searching
       utilities of the GNU operating system.  These programs are
@@ -95,9 +107,20 @@ stdenv.mkDerivation (finalAttrs: {
           * locate - list files in databases that match a pattern;
           * updatedb - update a file name database;
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
     mainProgram = "find";
     maintainers = [ lib.maintainers.mdaniels5757 ];
   };
 })
+=======
+
+    platforms = lib.platforms.all;
+
+    license = lib.licenses.gpl3Plus;
+
+    mainProgram = "find";
+  };
+}
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)

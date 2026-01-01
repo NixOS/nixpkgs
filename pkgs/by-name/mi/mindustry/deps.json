@@ -2,8 +2,13 @@
  "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
  "!version": 1,
  "https://download.savannah.gnu.org": {
+<<<<<<< HEAD
   "releases/freetype/freetype-2.14.1": {
    "tar.gz": "sha256-F02eU0AuG/nscnfiLsGZuj5Vpr4sB0DLGMDumFD8jDQ="
+=======
+  "releases/freetype/freetype-2.10.4": {
+   "tar.gz": "sha256-Xqt5XrsjrHcAHPtot9TVC11sdGkkewsBsslTJp9ljaw="
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   }
  },
  "https://github.com": {
@@ -26,6 +31,7 @@
    "jar": "sha256-YbaPhCjWtlExwQ1dFNA6JrkiAfQYWxJ0VRV9rLnoYhY=",
    "pom": "sha256-ktvhk8s3T1zswrYWuXz+cWHRyK3YbkikD5Sv/gjcfz4="
   },
+<<<<<<< HEAD
   "libgdx/gdx-jnigen#gdx-jnigen-gradle/2.5.1": {
    "jar": "sha256-58CVbO1KcCD3O1KssA1fjFtmFv/w1ELaKjpxYQy4uOo=",
    "module": "sha256-ed8mnMRwzTx8sz6m1K00O/m5TUClRgFBr7Z52QTvMYI=",
@@ -54,6 +60,29 @@
    "pom": "sha256-KoiNElh3d5C3j7zg6xTZUFBwv1uLzKS7YB4s6/pCPtA="
   },
   "org/jetbrains/kotlin/kapt#org.jetbrains.kotlin.kapt.gradle.plugin/2.1.10": {
+=======
+  "libgdx/gdx-jnigen#gdx-jnigen-gradle/dffc32eecbf77aad264991ea44f1767a58cbee9d": {
+   "jar": "sha256-nuUxM4zDV48+8Z+Rsn2dhEhkH4wOcfG62lz84BUhDH0=",
+   "module": "sha256-OU9DEb3A9A7OtnJ6jQkS32KImMlNn9NX7eKMX4YVh5E=",
+   "pom": "sha256-0THLPDNZDZe9PbIEPl71pGwL7E6Oq2Y5LiVevltdbP8="
+  },
+  "libgdx/gdx-jnigen#gdx-jnigen/28dd11fa4c33a7ae9e58897912b52ba7d53d54fe": {
+   "jar": "sha256-fPszziBPrTDACbBuL6OxJ2oK1iA4izBk4TMHK53b+GQ=",
+   "module": "sha256-0RR9vgSqD1ISADHSO5OV7rxi+6HM9h0ZO4kEYw/Ao4Y=",
+   "pom": "sha256-vnz59i+3/wY9RizYWGMOuebfrZO4HrpOYV73ShIFH2g="
+  },
+  "libgdx/gdx-jnigen#gdx-jnigen/dffc32eecbf77aad264991ea44f1767a58cbee9d": {
+   "jar": "sha256-bd8xr4/YgvQbvdFkayXdJKpMvYwE9XlISof20vsfcSU=",
+   "module": "sha256-zQ1DewRtrsdTgxXINq7pOa+UJwnDNrGsVKnX0K/AWRQ=",
+   "pom": "sha256-HWFvvs+x6DyJioqkRDDVvf0GCKfxPTjhdec8JC2PZvA="
+  }
+ },
+ "https://plugins.gradle.org/m2/org/jetbrains/kotlin": {
+  "jvm#org.jetbrains.kotlin.jvm.gradle.plugin/2.1.10": {
+   "pom": "sha256-KoiNElh3d5C3j7zg6xTZUFBwv1uLzKS7YB4s6/pCPtA="
+  },
+  "kapt#org.jetbrains.kotlin.kapt.gradle.plugin/2.1.10": {
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
    "pom": "sha256-HzOk8LbO3qaMYhC518PU/t7EGF2dUIqsqs0933q2Ti8="
   }
  },

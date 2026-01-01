@@ -191,6 +191,7 @@ effectiveStdenv.mkDerivation rec {
     fi
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
@@ -198,6 +199,15 @@ effectiveStdenv.mkDerivation rec {
     mainProgram = "xgboost";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
+=======
+  meta = with lib; {
+    description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
+    homepage = "https://github.com/dmlc/xgboost";
+    license = licenses.asl20;
+    mainProgram = "xgboost";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
       nviets
     ];
   };

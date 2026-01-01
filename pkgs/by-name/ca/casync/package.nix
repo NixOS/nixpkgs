@@ -64,8 +64,12 @@ stdenv.mkDerivation {
     patchShebangs test/http-server.py
   '';
 
+<<<<<<< HEAD
   env.PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
 
+=======
+  PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   mesonFlags =
     lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
     ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
@@ -78,6 +82,7 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   meta = {
     description = "Content-Addressable Data Synchronizer";
     mainProgram = "casync";
@@ -85,5 +90,14 @@ stdenv.mkDerivation {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ flokli ];
+=======
+  meta = with lib; {
+    description = "Content-Addressable Data Synchronizer";
+    mainProgram = "casync";
+    homepage = "https://github.com/systemd/casync";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ flokli ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

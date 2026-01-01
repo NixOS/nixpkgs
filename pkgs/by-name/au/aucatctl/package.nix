@@ -36,12 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '#include <string.h>' '#include <bsd/string.h>'
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Utility that allows to send MIDI messages to control sndiod and/or aucat volumes";
     homepage = "http://www.sndio.org";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ sna ];
     platforms = lib.platforms.unix;
+=======
+  meta = with lib; {
+    description = "Utility that allows to send MIDI messages to control sndiod and/or aucat volumes";
+    homepage = "http://www.sndio.org";
+    license = licenses.isc;
+    maintainers = with maintainers; [ sna ];
+    platforms = platforms.unix;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     mainProgram = "aucatctl";
   };
 })

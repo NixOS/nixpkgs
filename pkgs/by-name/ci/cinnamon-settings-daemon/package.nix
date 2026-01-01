@@ -8,13 +8,23 @@
   gtk3,
   lcms2,
   libcanberra-gtk3,
+<<<<<<< HEAD
   libnotify,
+=======
+  libgnomekbd,
+  libnotify,
+  libxklavier,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   wrapGAppsHook3,
   pkg-config,
   lib,
   stdenv,
   systemd,
   upower,
+<<<<<<< HEAD
+=======
+  dconf,
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   cups,
   polkit,
   librsvg,
@@ -30,13 +40,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
+<<<<<<< HEAD
   version = "6.6.1";
+=======
+  version = "6.4.3";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-settings-daemon";
     tag = version;
+<<<<<<< HEAD
     hash = "sha256-WK7MU63M3B0C4Dsik6j4cDyBTZlkF6pofZi2aJcH9eI=";
+=======
+    hash = "sha256-L7+OgymYoYBdprw66RW8tiGA7XGWjTBpDpXhli8Fjoo=";
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 
   patches = [
@@ -51,9 +69,18 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     lcms2
     libcanberra-gtk3
+<<<<<<< HEAD
     libnotify
     systemd
     upower
+=======
+    libgnomekbd
+    libnotify
+    libxklavier
+    systemd
+    upower
+    dconf
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     cups
     polkit
     librsvg
@@ -61,6 +88,10 @@ stdenv.mkDerivation rec {
     xorg.libXext
     xorg.libX11
     xorg.libXi
+<<<<<<< HEAD
+=======
+    xorg.libXfixes
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
     fontconfig
     nss
     libgudev
@@ -93,11 +124,20 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/csd-backlight-helper $out/bin/cinnamon-settings-daemon/csd-backlight-helper
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://github.com/linuxmint/cinnamon-settings-daemon";
     description = "Settings daemon for the Cinnamon desktop";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
+=======
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/cinnamon-settings-daemon";
+    description = "Settings daemon for the Cinnamon desktop";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    teams = [ teams.cinnamon ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

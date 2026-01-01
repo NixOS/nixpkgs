@@ -25,11 +25,20 @@ buildPecl rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib ];
 
+<<<<<<< HEAD
   meta = {
     description = "PHP extension for interfacing with memcached";
     license = lib.licenses.php301;
     homepage = "https://github.com/websupport-sk/pecl-memcache";
     maintainers = [ lib.maintainers.krzaczek ];
     teams = [ lib.teams.php ];
+=======
+  meta = with lib; {
+    description = "PHP extension for interfacing with memcached";
+    license = licenses.php301;
+    homepage = "https://github.com/websupport-sk/pecl-memcache";
+    maintainers = [ maintainers.krzaczek ];
+    teams = [ teams.php ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

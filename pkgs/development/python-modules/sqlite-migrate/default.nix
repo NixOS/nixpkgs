@@ -28,11 +28,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlite_migrate" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Simple database migration system for SQLite, based on sqlite-utils";
     homepage = "https://github.com/simonw/sqlite-migrate";
     changelog = "https://github.com/simonw/sqlite-migrate/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aldoborrero ];
+=======
+  meta = with lib; {
+    description = "Simple database migration system for SQLite, based on sqlite-utils";
+    homepage = "https://github.com/simonw/sqlite-migrate";
+    changelog = "https://github.com/simonw/sqlite-migrate/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aldoborrero ];
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 }

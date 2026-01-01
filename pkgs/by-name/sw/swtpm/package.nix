@@ -138,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) systemd-cryptenroll; };
 
+<<<<<<< HEAD
   meta = {
     description = "Libtpms-based TPM emulator";
     homepage = "https://github.com/stefanberger/swtpm";
@@ -145,5 +146,14 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.baloo ];
     mainProgram = "swtpm";
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "Libtpms-based TPM emulator";
+    homepage = "https://github.com/stefanberger/swtpm";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.baloo ];
+    mainProgram = "swtpm";
+    platforms = platforms.all;
+>>>>>>> 4dbde0a9cadc (Fixed upon CodeReview)
   };
 })
