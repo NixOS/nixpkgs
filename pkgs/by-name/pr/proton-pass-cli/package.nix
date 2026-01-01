@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   makeWrapper,
+  writeShellScript,
   jq,
   curl,
   testers,
@@ -61,7 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       command = "pass-cli --version";
     };
-    updateScript = ./update.sh;
+    updateScript = writeShellScript "update-version" ''
+      set -euo pipefail
+      ${lib.getExe curl} -fsSL -o pkgs/by-name/pr/proton-pass-cli/versions.json \
+        https://proton.me/download/pass-cli/versions.json
+    '';
   };
 
   meta = {
