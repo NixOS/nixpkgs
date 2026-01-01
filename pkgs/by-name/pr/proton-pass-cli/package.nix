@@ -10,22 +10,19 @@
 
 let
   versions = lib.importJSON ./versions.json;
-  arch =
-    if stdenv.hostPlatform.isx86_64 then
-      "x86_64"
-    else if stdenv.hostPlatform.isAarch64 then
-      "aarch64"
-    else
-      throw "Unsupported architecture";
+  arch = stdenv.hostPlatform.parsed.cpu.name;
+  # proton use macos designation instead of darwin
+  os = if stdenv.hostPlatform.isDarwin then "macos" else stdenv.hostPlatform.parsed.kernel.name;
 
-  os =
-    if stdenv.hostPlatform.isLinux then
-      "linux"
-    else if stdenv.hostPlatform.isDarwin then
-      "macos"
+  supportedCombinations = versions.passCliVersions.urls or { };
+  isSupported = supportedCombinations ? ${os} && supportedCombinations.${os} ? ${arch};
+  versionInfo =
+    if isSupported then
+      versions.passCliVersions.urls.${os}.${arch}
     else
-      throw "Unsupported OS";
-  inherit (versions.passCliVersions.urls.${os}.${arch}) url hash;
+      throw "Unsupported platform: ${os}-${arch}";
+
+  inherit (versionInfo) url hash;
   inherit (versions.passCliVersions) version;
 in
 stdenv.mkDerivation (finalAttrs: {
