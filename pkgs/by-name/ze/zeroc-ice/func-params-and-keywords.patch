@@ -1,0 +1,53 @@
+diff --git a/main.c b/main.c
+index 54a62b2..44265ad 100644
+--- a/main.c
++++ b/main.c
+@@ -302,7 +302,7 @@ int     mcpp_lib_main
+     inc_dirp = &null;   /* Initialize to current (null) directory   */
+     cur_fname = cur_fullname = "(predefined)";  /* For predefined macros    */
+     init_defines();                         /* Predefine macros     */
+-    mb_init(TRUE);      /* Should be initialized prior to get options   */
++    mb_init();      /* Should be initialized prior to get options   */
+     do_options( argc, argv, &in_file, &out_file);   /* Command line options */
+ 
+     /* Open input file, "-" means stdin.    */
+diff --git a/system.c b/system.c
+index a3501f9..18d35a9 100644
+--- a/system.c
++++ b/system.c
+@@ -1734,7 +1734,7 @@ static int  open_file(
+     if (! fullname)                 /* Non-existent or directory    */
+         return  FALSE;
+     if (included( fullname))        /* Once included    */
+-        goto  true;
++        goto  TRUE_LABEL;
+ 
+     if ((max_open != 0 && max_open <= include_nest)
+                             /* Exceed the known limit of open files */
+@@ -1761,12 +1761,12 @@ static int  open_file(
+         if ((fp = mcpp_fopen( fullname, "r")) == NULL) {
+             file->fp = mcpp_fopen( cur_fullname, "r");
+             fseek( file->fp, file->pos, SEEK_SET);
+-            goto  false;
++            goto  FALSE_LABEL;
+         }
+         if (max_open == 0)      /* Remember the limit of the system */
+             max_open = include_nest;
+     } else if (fp == NULL)                  /* No read permission   */
+-        goto  false;
++        goto  FALSE_LABEL;
+     /* Truncate buffer of the includer to save memory   */
+     len = (int) (file->bptr - file->buffer);
+     if (len) {
+@@ -1798,9 +1798,9 @@ static int  open_file(
+     if (mkdep && ((mkdep & MD_SYSHEADER) || ! infile->sys_header))
+         put_depend( fullname);          /* Output dependency line   */
+ 
+-true:
++TRUE_LABEL:
+     return  TRUE;
+-false:
++FALSE_LABEL:
+     free( fullname);
+     return  FALSE;
+ }
