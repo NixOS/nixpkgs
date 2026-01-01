@@ -9961,12 +9961,6 @@
     githubId = 2490088;
     name = "Gregory Schwartz";
   };
-  gspia = {
-    email = "iahogsp@gmail.com";
-    github = "gspia";
-    githubId = 3320792;
-    name = "gspia";
-  };
   gtrunsec = {
     email = "gtrunsec@hardenedlinux.org";
     github = "GTrunSec";
