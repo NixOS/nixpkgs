@@ -8,15 +8,16 @@
   cups,
   dbus,
   enscript,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "foomatic-filters";
   version = "4.0.17";
 
   src = fetchurl {
-    url = "https://www.openprinting.org/download/foomatic/foomatic-filters-${version}.tar.gz";
-    sha256 = "1qrkgbm5jay2r7sh9qbyf0aiyrsl1mdc844hxf7fhw95a0zfbqm2";
+    url = "https://www.openprinting.org/download/foomatic/foomatic-filters-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ouLlPlAlceiO65AQxFoNVGcfFXB+4QT1ycIrWep6M+M=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -39,7 +40,8 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace foomaticrip.c --replace /bin/bash ${stdenv.shell}
+    substituteInPlace foomaticrip.c \
+      --replace-fail /bin/bash ${stdenv.shell}
   '';
 
   # Workaround build failure on -fno-common toolchains like upstream
@@ -55,6 +57,9 @@ stdenv.mkDerivation rec {
     "CUPS_BACKENDS=$(out)/lib/cups/backend"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Foomatic printing filters";
     mainProgram = "foomatic-rip";
@@ -62,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})
