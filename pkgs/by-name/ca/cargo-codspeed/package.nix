@@ -53,14 +53,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/${finalAttrs.src.rev}";
     description = "Cargo extension to build & run your codspeed benchmarks";
     homepage = "https://github.com/CodSpeedHQ/codspeed-rust";
-    changelog = "https://github.com/CodSpeedHQ/codspeed-rust/releases/tag/${src.rev}";
     license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = [ ];
     mainProgram = "cargo-codspeed";
+    maintainers = [ ];
   };
 })
