@@ -13,7 +13,7 @@
   dav1d,
   libyuv,
   gdk-pixbuf,
-  makeWrapper,
+  buildPackages,
   gtest,
 }:
 
@@ -46,6 +46,18 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+    # Upstream ships `Findaom.cmake` which treats any library ending with ".a"
+    # as static. On MinGW, shared libraries are linked via import libraries
+    # named like "libaom.dll.a", and treating these as static causes bogus
+    # "*-NOTFOUND" tokens to be passed to the linker (e.g.
+    # "-l_aom_dep_lib_m-NOTFOUND").
+    substituteInPlace cmake/Modules/Findaom.cmake \
+      --replace-fail \
+        '    if("''${AOM_LIBRARY}" MATCHES "\\''${CMAKE_STATIC_LIBRARY_SUFFIX}$")' \
+        '    if(WIN32 AND "''${AOM_LIBRARY}" MATCHES "\\.dll\\''${CMAKE_STATIC_LIBRARY_SUFFIX}$")
+        add_library(aom SHARED IMPORTED GLOBAL)
+    elseif("''${AOM_LIBRARY}" MATCHES "\\''${CMAKE_STATIC_LIBRARY_SUFFIX}$")'
+
     substituteInPlace contrib/gdk-pixbuf/avif.thumbnailer.in \
       --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-avif"
 
@@ -62,15 +74,24 @@ stdenv.mkDerivation rec {
     "-DAVIF_BUILD_GDK_PIXBUF=ON"
     "-DAVIF_LIBSHARPYUV=SYSTEM"
     "-DAVIF_LIBXML2=SYSTEM"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # Cross builds can't run the produced binaries; keep to library/loader only.
+    "-DAVIF_BUILD_APPS=OFF"
+    "-DAVIF_BUILD_TESTS=OFF"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     "-DAVIF_BUILD_TESTS=ON"
     "-DAVIF_GTEST=SYSTEM"
   ];
 
   nativeBuildInputs = [
-    cmake
-    pkg-config
-    gdk-pixbuf
-    makeWrapper
+    buildPackages.cmake
+    buildPackages.pkg-config
+  ]
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    # Provides the `makeWrapper` shell function (no $out/bin/makeWrapper).
+    buildPackages.makeWrapper
   ];
 
   buildInputs = [
@@ -91,19 +112,31 @@ stdenv.mkDerivation rec {
 
   env.PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = gdkPixbufModuleDir;
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  postInstall = ''
-    GDK_PIXBUF_MODULEDIR=${gdkPixbufModuleDir} \
-    GDK_PIXBUF_MODULE_FILE=${gdkPixbufModuleFile} \
-    gdk-pixbuf-query-loaders --update-cache
-  ''
-  # Cross-compiled gdk-pixbuf doesn't support thumbnailers
-  + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-    mkdir -p "$out/bin"
-    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
-      --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
-  '';
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+      GDK_PIXBUF_MODULEDIR=${gdkPixbufModuleDir} \
+      GDK_PIXBUF_MODULE_FILE=${gdkPixbufModuleFile} \
+      ${gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders --update-cache
+    ''
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      # Ensure Wine (the default Windows emulator) has a writable HOME/prefix.
+      export HOME="$TMPDIR/home"
+      export WINEPREFIX="$TMPDIR/wineprefix"
+      mkdir -p "$HOME" "$WINEPREFIX"
+
+      GDK_PIXBUF_MODULEDIR=${gdkPixbufModuleDir} \
+      GDK_PIXBUF_MODULE_FILE=${gdkPixbufModuleFile} \
+      ${stdenv.hostPlatform.emulator buildPackages} ${gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders --update-cache || true
+    ''
+    +
+      # Cross-compiled gdk-pixbuf doesn't support thumbnailers
+      lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+        mkdir -p "$out/bin"
+        makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
+          --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
+      '';
 
   postFixup = ''
     substituteInPlace $dev/lib/cmake/libavif/libavif-config.cmake \
