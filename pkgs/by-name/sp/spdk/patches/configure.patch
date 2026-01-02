@@ -1,0 +1,14 @@
+diff --git a/configure b/configure
+index b0fdef9ec..413b7a968 100755
+--- a/configure
++++ b/configure
+@@ -959,6 +959,9 @@
+ 		dpdk_ver=$(< "$rootdir/dpdk/VERSION")
+ 	elif [[ -f "${CONFIG[DPDK_DIR]}"/../VERSION ]]; then
+ 		dpdk_ver=$(< "${CONFIG[DPDK_DIR]}"/../VERSION)
++       elif [[ "${CONFIG[DPDK_LIB_DIR]}" != "" && -e "${CONFIG[DPDK_LIB_DIR]}"/pkgconfig ]]; then
++               # Try pkg-config to figure out the module version
++               dpdk_ver=$(PKG_CONFIG_PATH="${CONFIG[DPDK_LIB_DIR]}"/pkgconfig pkg-config --modversion libdpdk)
+ 	fi
+ 	echo $dpdk_ver
+ }

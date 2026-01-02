@@ -1,0 +1,301 @@
+A shameless merge of many patches floating around; indeed it was made by reading
+and applying them manually.
+
+diff -Naur ventoy-1.0.81-old/CreatePersistentImg.sh ventoy-1.0.81-new/CreatePersistentImg.sh
+--- ventoy-1.0.81-old/CreatePersistentImg.sh	2022-10-25 08:26:21.000000000 -0300
++++ ventoy-1.0.81-new/CreatePersistentImg.sh	2022-11-02 10:29:07.355891607 -0300
+@@ -119,17 +119,13 @@
+ sync
+ 
+ if [ -n "$config" ]; then
+-    if [ -d ./persist_tmp_mnt ]; then
+-        rm -rf ./persist_tmp_mnt
+-    fi
+-    
+-    mkdir ./persist_tmp_mnt
+-    if mount $freeloop ./persist_tmp_mnt; then
+-        echo '/ union' > ./persist_tmp_mnt/$config
++    path_to_persist_mnt="`mktemp -d`"
++    if mount $freeloop "$path_to_persist_mnt"; then
++        echo '/ union' > "$path_to_persist_mnt"/$config
+         sync
+-        umount ./persist_tmp_mnt
++        umount "$path_to_persist_mnt"
+     fi
+-    rm -rf ./persist_tmp_mnt
++    rm -rf "$path_to_persist_mnt"
+ fi
+ 
+ if [ ! -z "$passphrase" ]; then
+diff -Naur ventoy-1.0.81-old/tool/ventoy_lib.sh ventoy-1.0.81-new/tool/ventoy_lib.sh
+--- ventoy-1.0.81-old/tool/ventoy_lib.sh	2022-10-25 08:26:21.000000000 -0300
++++ ventoy-1.0.81-new/tool/ventoy_lib.sh	2022-11-02 09:46:29.764568349 -0300
+@@ -6,6 +6,8 @@
+ VENTOY_SECTOR_SIZE=512
+ VENTOY_SECTOR_NUM=65536
+ 
++LOGFILE="/var/log/ventoy.log"
++
+ ventoy_false() {
+     [ "1" = "2" ]
+ }
+@@ -29,7 +31,7 @@
+ }
+ 
+ vtdebug() {
+-    echo "$*" >> ./log.txt
++    echo "$*" >> $LOGFILE
+ }
+ 
+ vtoy_gen_uuid() {
+@@ -51,31 +53,7 @@
+ }
+ 
+ check_tool_work_ok() {
+-    
+-    if echo 1 | hexdump > /dev/null; then
+-        vtdebug "hexdump test ok ..."
+-    else
+-        vtdebug "hexdump test fail ..."
+-        ventoy_false
+-        return
+-    fi
+-   
+-    if mkexfatfs -V > /dev/null; then
+-        vtdebug "mkexfatfs test ok ..."
+-    else
+-        vtdebug "mkexfatfs test fail ..."
+-        ventoy_false
+-        return
+-    fi
+-    
+-    if vtoycli fat -T; then
+-        vtdebug "vtoycli fat test ok ..."
+-    else
+-        vtdebug "vtoycli fat test fail ..."
+-        ventoy_false
+-        return
+-    fi
+-    
++
+     vtdebug "tool check success ..."
+     ventoy_true
+ }
+@@ -311,7 +289,7 @@
+     else
+     vtdebug "format disk by fdisk ..."
+     
+-fdisk $DISK >>./log.txt 2>&1 <<EOF
++fdisk $DISK >>$LOGFILE 2>&1 <<EOF
+ o
+ n
+ p
+diff -Naur ventoy-1.0.81-old/tool/VentoyWorker.sh ventoy-1.0.81-new/tool/VentoyWorker.sh
+--- ventoy-1.0.81-old/tool/VentoyWorker.sh	2022-10-25 08:26:21.000000000 -0300
++++ ventoy-1.0.81-new/tool/VentoyWorker.sh	2022-11-02 10:33:25.813135227 -0300
+@@ -106,7 +106,7 @@
+ if check_tool_work_ok; then
+     vtdebug "check tool work ok"
+ else
+-    vterr "Some tools can not run on current system. Please check log.txt for details."
++    vterr "Some tools can not run on current system. Please check $LOGFILE for details."
+     exit 1
+ fi
+ 
+@@ -159,19 +159,6 @@
+     exit 1
+ fi
+ 
+-
+-#check tmp_mnt directory
+-if [ -d ./tmp_mnt ]; then
+-    vtdebug "There is a tmp_mnt directory, now delete it."
+-    umount ./tmp_mnt >/dev/null 2>&1
+-    rm -rf ./tmp_mnt
+-    if [ -d ./tmp_mnt ]; then
+-        vterr "tmp_mnt directory exists, please delete it first."
+-        exit 1
+-    fi
+-fi
+-
+-
+ if [ "$MODE" = "install" -a -z "$NONDESTRUCTIVE" ]; then
+     vtdebug "install Ventoy ..."
+ 
+@@ -567,16 +554,16 @@
+     PART1_TYPE=$(dd if=$DISK bs=1 count=1 skip=450 status=none | hexdump -n1 -e  '1/1 "%02X"')
+ 
+     #reserve disk uuid
+-    rm -f ./diskuuid.bin
+-    dd status=none conv=fsync if=${DISK} skip=384 bs=1 count=16 of=./diskuuid.bin
++    path_to_diskuuid="`mktemp`"
++    dd status=none conv=fsync if=${DISK} skip=384 bs=1 count=16 of="$path_to_diskuuid"
+ 
+     dd status=none conv=fsync if=./boot/boot.img of=$DISK bs=1 count=440
+-    dd status=none conv=fsync if=./diskuuid.bin of=$DISK bs=1 count=16 seek=384
+-    rm -f ./diskuuid.bin
++    dd status=none conv=fsync if="$path_to_diskuuid" of=$DISK bs=1 count=16 seek=384
++    rm -f "$path_to_diskuuid"
+ 
+     #reserve data
+-    rm -f ./rsvdata.bin
+-    dd status=none conv=fsync if=${DISK} skip=2040 bs=512 count=8 of=./rsvdata.bin
++    path_to_rsvdata="`mktemp`"
++    dd status=none conv=fsync if=${DISK} skip=2040 bs=512 count=8 of="$path_to_rsvdata"
+ 
+     if [ "$PART1_TYPE" = "EE" ]; then
+         vtdebug "This is GPT partition style ..."
+@@ -598,8 +585,8 @@
+         xzcat ./boot/core.img.xz | dd status=none conv=fsync of=$DISK bs=512 count=2047 seek=1
+     fi
+ 
+-    dd status=none conv=fsync if=./rsvdata.bin seek=2040 bs=512 count=8 of=${DISK}
+-    rm -f ./rsvdata.bin
++    dd status=none conv=fsync if="$path_to_rsvdata" seek=2040 bs=512 count=8 of=${DISK}
++    rm -f "$path_to_rsvdata"
+ 
+     check_umount_disk "$DISK"
+     
+diff -Naur ventoy-1.0.81-old/Ventoy2Disk.sh ventoy-1.0.81-new/Ventoy2Disk.sh
+--- ventoy-1.0.81-old/Ventoy2Disk.sh	2022-10-25 08:26:21.000000000 -0300
++++ ventoy-1.0.81-new/Ventoy2Disk.sh	2022-11-02 09:50:17.649369332 -0300
+@@ -32,48 +32,4 @@
+ echo '**********************************************'
+ echo ''
+ 
+-
+-if ! [ -f ./boot/boot.img ]; then
+-    if [ -d ./grub ]; then
+-        echo "Don't run Ventoy2Disk.sh here, please download the released install package, and run the script in it."
+-    else
+-        echo "Please run under the correct directory!" 
+-    fi
+-    exit 1
+-fi
+-
+-echo "############# Ventoy2Disk $* [$TOOLDIR] ################" >> ./log.txt
+-date >> ./log.txt
+-
+-#decompress tool
+-echo "decompress tools" >> ./log.txt
+-cd ./tool/$TOOLDIR
+-
+-ls *.xz > /dev/null 2>&1
+-if [ $? -eq 0 ]; then
+-    [ -f ./xzcat ] && chmod +x ./xzcat
+-
+-    for file in $(ls *.xz); do
+-        echo "decompress $file" >> ./log.txt
+-        xzcat $file > ${file%.xz}
+-        [ -f ./${file%.xz} ] && chmod +x ./${file%.xz}
+-        [ -f ./$file ] && rm -f ./$file
+-    done
+-fi
+-
+-cd ../../
+-chmod +x -R ./tool/$TOOLDIR
+-
+-
+-if [ -f /bin/bash ]; then
+-    /bin/bash ./tool/VentoyWorker.sh $*
+-else
+-    ash ./tool/VentoyWorker.sh $*
+-fi
+-
+-if [ -n "$OLDDIR" ]; then 
+-    CURDIR=$(pwd)
+-    if [ "$CURDIR" != "$OLDDIR" ]; then
+-        cd "$OLDDIR"
+-    fi
+-fi
++./tool/VentoyWorker.sh $*
+diff -Naur ventoy-1.0.81-old/VentoyPlugson.sh ventoy-1.0.81-new/VentoyPlugson.sh
+--- ventoy-1.0.81-old/VentoyPlugson.sh	2022-10-25 08:26:21.000000000 -0300
++++ ventoy-1.0.81-new/VentoyPlugson.sh	2022-11-02 09:51:36.758360872 -0300
+@@ -43,39 +43,6 @@
+     exit 1
+ fi
+ 
+-
+-if ! [ -f "$OLDDIR/tool/plugson.tar.xz" ]; then
+-    echo "Please run under the correct directory!" 
+-    exit 1
+-fi
+-
+-echo "############# VentoyPlugson $* [$TOOLDIR] ################" >> ./VentoyPlugson.log
+-date >> ./VentoyPlugson.log
+-
+-echo "decompress tools" >> ./VentoyPlugson.log
+-cd ./tool/$TOOLDIR
+-
+-ls *.xz > /dev/null 2>&1
+-if [ $? -eq 0 ]; then
+-    [ -f ./xzcat ] && chmod +x ./xzcat
+-
+-    for file in $(ls *.xz); do
+-        echo "decompress $file" >> ./VentoyPlugson.log
+-        xzcat $file > ${file%.xz}
+-        [ -f ./${file%.xz} ] && chmod +x ./${file%.xz}
+-        [ -f ./$file ] && rm -f ./$file
+-    done
+-fi
+-
+-cd ../../
+-chmod +x -R ./tool/$TOOLDIR
+-
+-if ! [ -f "$OLDDIR/tool/$TOOLDIR/Plugson" ]; then
+-    echo "$OLDDIR/tool/$TOOLDIR/Plugson does not exist!" 
+-    exit 1
+-fi
+-
+-
+ PATH=./tool/$TOOLDIR:$PATH
+ 
+ HOST="127.0.0.1"
+@@ -217,11 +184,3 @@
+ 
+     wait $wID
+ fi
+-
+-
+-if [ -n "$OLDDIR" ]; then 
+-    CURDIR=$(pwd)
+-    if [ "$CURDIR" != "$OLDDIR" ]; then
+-        cd "$OLDDIR"
+-    fi
+-fi
+diff -Naur ventoy-1.0.81-old/VentoyWeb.sh ventoy-1.0.81-new/VentoyWeb.sh
+--- ventoy-1.0.81-old/VentoyWeb.sh	2022-10-25 08:26:21.000000000 -0300
++++ ventoy-1.0.81-new/VentoyWeb.sh	2022-11-02 09:53:13.773791254 -0300
+@@ -15,12 +15,6 @@
+     echo ""
+ }
+ 
+-uid=$(id -u)
+-if [ $uid -ne 0 ]; then
+-    print_err "Please use sudo or run the script as root."
+-    exit 1
+-fi
+-
+ OLDDIR=$(pwd)
+ 
+ if uname -m | egrep -q 'aarch64|arm64'; then
+@@ -85,8 +79,8 @@
+     exit 1
+ fi
+ 
+-LOGFILE=log.txt
+-#delete the log.txt if it's more than 8MB
++LOGFILE=/var/log/ventoy.log
++#delete the logfile if it's more than 8MB
+ if [ -f $LOGFILE ]; then
+     logsize=$(stat -c '%s' $LOGFILE)
+     if [ $logsize -gt 8388608 ]; then
+@@ -94,7 +88,6 @@
+     fi
+ fi
+ 
+-
+ if [ -f ./tool/$TOOLDIR/V2DServer.xz ]; then
+     xz -d ./tool/$TOOLDIR/V2DServer.xz
+     chmod +x ./tool/$TOOLDIR/V2DServer

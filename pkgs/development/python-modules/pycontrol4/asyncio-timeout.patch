@@ -1,0 +1,150 @@
+commit d110f0ae9a85f42858140c3cc325e69136f5da2f
+Author: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date:   Mon Nov 10 01:54:08 2025 +0100
+
+    Use native asyncio.timeout from python stdlib
+    
+    This drops the dependency on async_timeout and bumps the required Python
+    version to 3.11, which is when asyncio.timeout was introduced.
+
+diff --git a/pyControl4/account.py b/pyControl4/account.py
+index 658f1b3..60c6cd9 100644
+--- a/pyControl4/account.py
++++ b/pyControl4/account.py
+@@ -3,7 +3,7 @@ controller info, and retrieves a bearer token for connecting to a Control4 Direc
+ """
+ 
+ import aiohttp
+-import async_timeout
++import asyncio
+ import json
+ import logging
+ import datetime
+@@ -64,14 +64,14 @@ class C4Account:
+         }
+         if self.session is None:
+             async with aiohttp.ClientSession() as session:
+-                with async_timeout.timeout(10):
++                async with asyncio.timeout(10):
+                     async with session.post(
+                         AUTHENTICATION_ENDPOINT, json=dataDictionary
+                     ) as resp:
+                         await checkResponseForError(await resp.text())
+                         return await resp.text()
+         else:
+-            with async_timeout.timeout(10):
++            async with asyncio.timeout(10):
+                 async with self.session.post(
+                     AUTHENTICATION_ENDPOINT, json=dataDictionary
+                 ) as resp:
+@@ -94,12 +94,12 @@ class C4Account:
+             raise
+         if self.session is None:
+             async with aiohttp.ClientSession() as session:
+-                with async_timeout.timeout(10):
++                async with asyncio.timeout(10):
+                     async with session.get(uri, headers=headers) as resp:
+                         await checkResponseForError(await resp.text())
+                         return await resp.text()
+         else:
+-            with async_timeout.timeout(10):
++            async with asyncio.timeout(10):
+                 async with self.session.get(uri, headers=headers) as resp:
+                     await checkResponseForError(await resp.text())
+                     return await resp.text()
+@@ -125,7 +125,7 @@ class C4Account:
+         }
+         if self.session is None:
+             async with aiohttp.ClientSession() as session:
+-                with async_timeout.timeout(10):
++                async with asyncio.timeout(10):
+                     async with session.post(
+                         CONTROLLER_AUTHORIZATION_ENDPOINT,
+                         headers=headers,
+@@ -134,7 +134,7 @@ class C4Account:
+                         await checkResponseForError(await resp.text())
+                         return await resp.text()
+         else:
+-            with async_timeout.timeout(10):
++            async with asyncio.timeout(10):
+                 async with self.session.post(
+                     CONTROLLER_AUTHORIZATION_ENDPOINT,
+                     headers=headers,
+diff --git a/pyControl4/director.py b/pyControl4/director.py
+index d2bf551..764959d 100644
+--- a/pyControl4/director.py
++++ b/pyControl4/director.py
+@@ -3,7 +3,7 @@ getting details about items on the Director.
+ """
+ 
+ import aiohttp
+-import async_timeout
++import asyncio
+ import json
+ 
+ from .error_handling import checkResponseForError
+@@ -50,14 +50,14 @@ class C4Director:
+             async with aiohttp.ClientSession(
+                 connector=aiohttp.TCPConnector(verify_ssl=False)
+             ) as session:
+-                with async_timeout.timeout(10):
++                async with asyncio.timeout(10):
+                     async with session.get(
+                         self.base_url + uri, headers=self.headers
+                     ) as resp:
+                         await checkResponseForError(await resp.text())
+                         return await resp.text()
+         else:
+-            with async_timeout.timeout(10):
++            async with asyncio.timeout(10):
+                 async with self.session.get(
+                     self.base_url + uri, headers=self.headers
+                 ) as resp:
+@@ -86,14 +86,14 @@ class C4Director:
+             async with aiohttp.ClientSession(
+                 connector=aiohttp.TCPConnector(verify_ssl=False)
+             ) as session:
+-                with async_timeout.timeout(10):
++                async with asyncio.timeout(10):
+                     async with session.post(
+                         self.base_url + uri, headers=self.headers, json=dataDictionary
+                     ) as resp:
+                         await checkResponseForError(await resp.text())
+                         return await resp.text()
+         else:
+-            with async_timeout.timeout(10):
++            async with asyncio.timeout(10):
+                 async with self.session.post(
+                     self.base_url + uri, headers=self.headers, json=dataDictionary
+                 ) as resp:
+diff --git a/pyControl4/websocket.py b/pyControl4/websocket.py
+index 1ee67f2..e8bb37d 100644
+--- a/pyControl4/websocket.py
++++ b/pyControl4/websocket.py
+@@ -1,7 +1,7 @@
+ """Handles Websocket connections to a Control4 Director, allowing for real-time updates using callbacks."""
+ 
+ import aiohttp
+-import async_timeout
++import asyncio
+ import socketio_v4 as socketio
+ import logging
+ 
+@@ -60,7 +60,7 @@ class _C4DirectorNamespace(socketio.AsyncClientNamespace):
+                 async with aiohttp.ClientSession(
+                     connector=aiohttp.TCPConnector(verify_ssl=False)
+                 ) as session:
+-                    with async_timeout.timeout(10):
++                    async with asyncio.timeout(10):
+                         async with session.get(
+                             self.url + self.uri,
+                             params={"JWT": self.token, "SubscriptionClient": clientId},
+@@ -71,7 +71,7 @@ class _C4DirectorNamespace(socketio.AsyncClientNamespace):
+                             self.subscriptionId = data["subscriptionId"]
+                             await self.emit("startSubscription", self.subscriptionId)
+             else:
+-                with async_timeout.timeout(10):
++                async with asyncio.timeout(10):
+                     async with self.session.get(
+                         self.url + self.uri,
+                         params={"JWT": self.token, "SubscriptionClient": clientId},
