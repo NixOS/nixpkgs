@@ -1,42 +1,35 @@
 {
   lib,
   buildPythonPackage,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
+  pydantic,
+  sqlalchemy,
+
+  # tests
   black,
-  jinja2,
   dirty-equals,
   fastapi,
   fetchFromGitHub,
-  fetchpatch,
-  pdm-backend,
-  pydantic,
+  jinja2,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "sqlmodel";
-  version = "0.0.24";
+  version = "0.0.31";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = "sqlmodel";
     tag = version;
-    hash = "sha256-RKihR3UJLuBYSHK79pcxIx/hT0nCkqQO8zBrq4AWaYM=";
+    hash = "sha256-HJ8we0gYySagUvs7NEKcwe9l7KEcqmJ8+CTW/rjBdME=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/tiangolo/sqlmodel/pull/969
-      name = "passthru-environ-variables.patch";
-      url = "https://github.com/tiangolo/sqlmodel/pull/969/commits/42d33049e9e4182b78914ad41d1e3d30125126ba.patch";
-      hash = "sha256-dPuFCFUnmTpduxn45tE8XUP0Jlwjwmwe+zFaKSganOg=";
-    })
-  ];
 
   build-system = [ pdm-backend ];
 
@@ -47,9 +40,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     black
-    jinja2
     dirty-equals
     fastapi
+    jinja2
     pytest-asyncio
     pytestCheckHook
   ];
