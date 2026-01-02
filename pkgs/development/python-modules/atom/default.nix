@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.11.0";
+  version = "0.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "nucleic";
     repo = "atom";
     tag = version;
-    hash = "sha256-3Xk4CM8Cnkc0lIdjJUYs/6UTqqpPALrUa3DpKD40og8=";
+    hash = "sha256-XFJujJrxubtdCLTr1oaM7h0LNS1Ep08f8+1tRzARBqs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
