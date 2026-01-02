@@ -14,13 +14,13 @@
   wrapGAppsHook3,
   xcbuild,
 
-  electron_37,
+  electron_39,
 
   nix-update-script,
 }:
 
 let
-  electron = electron_37; # don't use latest electron to avoid going over the supported abi numbers
+  electron = electron_39; # don't use latest electron to avoid going over the supported abi numbers
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    ./bump-node-abi.patch
+    ./bump-abi-compat.patch
   ];
 
-  offlineCache = fetchYarnDeps {
+  yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-gRaHVWSTBwjVcswy6DVk5yLympudbDcKkvWDry4rsvI=";
+    hash = "sha256-p5Lj1x3bF+5HANHG9ubnMRtZ8hJlQRbdlfB/JMrJZCI=";
   };
 
   nativeBuildInputs = [
