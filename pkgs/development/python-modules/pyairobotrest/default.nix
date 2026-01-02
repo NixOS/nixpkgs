@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyairobotrest";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mettolen";
     repo = "pyairobotrest";
     tag = "v${version}";
-    hash = "sha256-MqZV8+uwKLIbh0A/lYMB/9iPDl/8a4IAoYMdoxiIJqY=";
+    hash = "sha256-a0xsmknDe96cOBewhwVLy2Tw5sYffh8lZR4e+q6uGz4=";
   };
 
   build-system = [ setuptools ];
