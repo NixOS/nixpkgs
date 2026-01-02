@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals useGTK [ gtk2 ];
 
+  # temporary workaround for compile error with GCC 15
+  # https://github.com/openlink/iODBC/issues/113
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   preBuild = ''
     export NIX_LDFLAGS_BEFORE="-rpath $out/lib"
   '';
