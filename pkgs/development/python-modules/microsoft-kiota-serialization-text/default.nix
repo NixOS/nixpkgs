@@ -8,7 +8,6 @@
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   gitUpdater,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-text";
   version = "1.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
