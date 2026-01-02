@@ -1727,15 +1727,9 @@ with haskellLib;
   svgcairo = overrideCabal (drv: {
     patches = drv.patches or [ ] ++ [
       # Remove when https://github.com/gtk2hs/svgcairo/pull/12 goes in.
-      (fetchpatch {
-        url = "https://github.com/gtk2hs/svgcairo/commit/348c60b99c284557a522baaf47db69322a0a8b67.patch";
-        sha256 = "0akhq6klmykvqd5wsbdfnnl309f80ds19zgq06sh1mmggi54dnf3";
-      })
+      ./patches/svgcairo-update-cpp-option-to-fix-the-build.patch
       # Remove when https://github.com/gtk2hs/svgcairo/pull/13 goes in.
-      (fetchpatch {
-        url = "https://github.com/dalpd/svgcairo/commit/d1e0d7ae04c1edca83d5b782e464524cdda6ae85.patch";
-        sha256 = "1pq9ld9z67zsxj8vqjf82qwckcp69lvvnrjb7wsyb5jc6jaj3q0a";
-      })
+      ./patches/svgcairo-fix-librsvg-2.51.0-greater.patch
     ];
     editedCabalFile = null;
     revision = null;
