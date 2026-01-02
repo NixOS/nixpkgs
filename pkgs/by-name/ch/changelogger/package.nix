@@ -42,11 +42,11 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Tool to manage your changelog file in Markdown";
     homepage = "https://github.com/MarkusFreitag/changelogger";
-    changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
     mainProgram = "changelogger";
+    maintainers = [ ];
   };
 })
