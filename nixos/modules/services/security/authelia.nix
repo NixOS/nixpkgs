@@ -123,7 +123,7 @@ let
         };
 
         settings = mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Your Authelia config.yml as a Nix attribute set.
             There are several values that are defined and documented in nix such as `default_2fa_method`,
             but additional items can also be included.
