@@ -114,6 +114,7 @@ lib.fix (
         maintainers = with lib.maintainers; [
           tazjin
           lorenzleutgeb
+          defelo
         ];
       };
     }
