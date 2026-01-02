@@ -394,7 +394,7 @@ in
       instanceUrl = mkOption {
         description = "The instance url to which the provisioning tool should connect.";
         default = "https://localhost:${serverPort}";
-        defaultText = ''"https://localhost:<port from serverSettings.bindaddress>"'';
+        defaultText = "https://localhost:<port from serverSettings.bindaddress>";
         type = types.str;
       };
 
