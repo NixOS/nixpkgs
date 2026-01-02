@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "sqlboiler";
-  version = "4.19.5";
+  version = "4.19.6";
 
   src = fetchFromGitHub {
     owner = "volatiletech";
     repo = "sqlboiler";
     tag = "v${version}";
-    hash = "sha256-GbQCHScE04nM8QzQzPSpD3efmfYEQRbioNfVcdmfPlc=";
+    hash = "sha256-A0NHGq5yVlHqKpu/4KIVj/EJYOrN/oFRaCkOBm5h4i8=";
   };
 
-  vendorHash = "sha256-LMHFDOKZQa0DJLHehRBzGGlb7apppnMDbjnJ4spuZtA=";
+  vendorHash = "sha256-ULoyMN54RIFST6P91V3MnRrfiC7+o3LmUFdc0pIqj90=";
 
   tags = [
     "mysql"

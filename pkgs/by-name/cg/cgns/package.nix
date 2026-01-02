@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cgns";
     repo = "cgns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9i44GJesbZ2kV+ZSpYPYEhH873W8DxD1/aYzD19eAJ8=";
+    hash = "sha256-0cZtq8nVAHAubHD6IDofnh8N7xiNHQkbhXR5OpdhPQU=";
   };
 
   postPatch = ''
