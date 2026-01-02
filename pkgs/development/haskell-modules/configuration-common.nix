@@ -1899,11 +1899,7 @@ with haskellLib;
   ];
 
   # https://github.com/k0001/pipes-aeson/pull/21
-  pipes-aeson = appendPatch (fetchpatch {
-    url = "https://github.com/k0001/pipes-aeson/commit/08c25865ef557b41d7e4a783f52e655d2a193e18.patch";
-    relative = "pipes-aeson";
-    sha256 = "sha256-kFV6CcwKdMq+qSgyc+eIApnaycq5A++pEEVr2A9xvts=";
-  }) super.pipes-aeson;
+  pipes-aeson = appendPatch ./patches/pipes-aeson-relax-lower-bound-on-attoparsec-aeson.patch super.pipes-aeson;
 
   moto-postgresql = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3

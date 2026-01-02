@@ -1,0 +1,22 @@
+From 08c25865ef557b41d7e4a783f52e655d2a193e18 Mon Sep 17 00:00:00 2001
+From: Alexandre Esteves <alexfmpe@proton.me>
+Date: Sun, 21 Jul 2024 14:20:52 +0100
+Subject: [PATCH] Relax lower bound on attoparsec-aeson
+
+---
+ pipes-aeson/pipes-aeson.cabal | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pipes-aeson/pipes-aeson.cabal b/pipes-aeson/pipes-aeson.cabal
+index 4c3dabd..5cc3a82 100644
+--- a/pipes-aeson/pipes-aeson.cabal
++++ b/pipes-aeson/pipes-aeson.cabal
+@@ -32,7 +32,7 @@ library
+   build-depends:
+       aeson            (>=0.6.1)
+     , attoparsec       (>=0.10)
+-    , attoparsec-aeson (>=2.2)
++    , attoparsec-aeson (>=2.1 && <2.3)
+     , base             (>=4.5 && <5.0)
+     , pipes            (>=4.1)
+     , pipes-attoparsec (>=0.5)
