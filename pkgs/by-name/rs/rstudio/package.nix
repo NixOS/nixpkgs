@@ -17,7 +17,7 @@
   git,
   jdk,
   makeWrapper,
-  nodejs,
+  nodejs_22,
   npmHooks,
   xcbuild,
   yarn,
@@ -44,6 +44,10 @@
 }:
 
 let
+  # nodejs_24 has npm v11, which broke the lockfile
+  # let's just use nodejs_22 for now
+  nodejs = nodejs_22;
+
   electron = electron_37;
 
   mathJaxSrc = fetchzip {
