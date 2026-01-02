@@ -567,6 +567,10 @@ in
       );
     };
 
+    system.switch.inhibitors = [
+      cfg.package
+    ];
+
     environment.systemPackages = [ cfg.package ];
 
     environment.etc =
