@@ -66,6 +66,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Radicle JSON HTTP API Daemon";
     longDescription = ''
