@@ -89,6 +89,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       gador
       lorenzleutgeb
+      defelo
     ];
     mainProgram = "radicle-httpd";
   };
