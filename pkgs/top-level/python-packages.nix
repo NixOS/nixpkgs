@@ -18212,6 +18212,10 @@ self: super: with self; {
     callPackage ../development/python-modules/streamcontroller-plugin-tools
       { };
 
+  streamcontroller-streamdeck =
+    callPackage ../development/python-modules/streamcontroller-streamdeck
+      { };
+
   streamdeck = callPackage ../development/python-modules/streamdeck { };
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
