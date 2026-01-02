@@ -1768,10 +1768,7 @@ with haskellLib;
   hcoord = overrideCabal (drv: {
     # Remove when https://github.com/danfran/hcoord/pull/8 is merged.
     patches = [
-      (fetchpatch {
-        url = "https://github.com/danfran/hcoord/pull/8/commits/762738b9e4284139f5c21f553667a9975bad688e.patch";
-        sha256 = "03r4jg9a6xh7w3jz3g4bs7ff35wa4rrmjgcggq51y0jc1sjqvhyz";
-      })
+      ./patches/permit-hunit-dependency-in-vresion-1-6.patch
     ];
     # Remove when https://github.com/danfran/hcoord/issues/9 is closed.
     doCheck = false;
