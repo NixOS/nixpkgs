@@ -7,7 +7,7 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netcat-openbsd";
   version = "1.234-1";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "netcat-openbsd";
-    tag = "debian/${version}";
+    tag = "debian/${finalAttrs.version}";
     hash = "sha256-6pCsBbS2IjXyXgNXURHK3uMRTJ0aXAsu29kc7f479Os=";
   };
 
@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    mv nc $out/bin/nc
+    install -Dm755 -t $out/bin nc
     installManPage nc.1
 
     runHook postInstall
@@ -57,4 +56,4 @@ stdenv.mkDerivation rec {
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
