@@ -9,14 +9,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-codspeed";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "codspeed-rust";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ofVgb+9YUNiCPhRZHY3Fm1nXRZK+9Uq8pc5XAm3P6oU=";
   };
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoBuildFlags = [ "-p=cargo-codspeed" ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
   checkFlags = [
     # requires an extra dependency, blit
     "--skip=test_package_in_deps_build"
@@ -63,4 +63,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "cargo-codspeed";
   };
-}
+})
