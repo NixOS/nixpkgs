@@ -7,7 +7,6 @@
   fetchFromGitHub,
   olefile,
   pytestCheckHook,
-  pythonOlder,
   red-black-tree-mod,
   rtfde,
   setuptools,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "extract-msg";
   version = "0.55.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "TeamMsgExtractor";
@@ -34,9 +31,7 @@ buildPythonPackage rec {
     "red-black-tree-mod"
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     beautifulsoup4
