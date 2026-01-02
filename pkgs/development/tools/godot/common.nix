@@ -423,6 +423,11 @@ let
             url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
             hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
           })
+          (fetchpatch {
+            name = "thorvg-header-fix.patch";
+            url = "https://github.com/godotengine/godot/commit/1823460787a6c1bb8e4eaf21ac2a3f90d24d5ee0.patch";
+            hash = "sha256-PcHEMXd0v2c3j6Eitxt5uWi6cD+OmsBAn3TNMNRNPog=";
+          })
           # Fix a crash in the mono test project build. It no longer seems to
           # happen in 4.4, but an existing fix couldn't be identified.
           ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
