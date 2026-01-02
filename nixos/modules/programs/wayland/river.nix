@@ -14,6 +14,16 @@ in
   options.programs.river-classic = {
     enable = lib.mkEnableOption "river-classic, a dynamic tiling Wayland compositor";
 
+    initFile = lib.mkOption {
+      type = lib.types.path;
+      default = "${pkgs.river-classic}/example/init";
+      defaultText = lib.literalExpression "\${pkgs.river-classic}/example/init";
+      description = ''
+        Path to the river-classic init executable or script.
+        By default, it uses the example init script provided by the package.
+      '';
+    };
+
     package =
       lib.mkPackageOption pkgs "river-classic" {
         nullable = true;
