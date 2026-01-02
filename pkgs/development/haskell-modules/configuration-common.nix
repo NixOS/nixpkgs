@@ -1741,10 +1741,7 @@ with haskellLib;
   ascii-numbers = doJailbreak super.ascii-numbers;
 
   # Upstream PR: https://github.com/jkff/splot/pull/9
-  splot = appendPatch (fetchpatch {
-    url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
-    sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
-  }) super.splot;
+  splot = appendPatch ./patches/splot-fix-build-remove-broken-module.patch super.splot;
 
   # Support ansi-terminal 1.1: https://github.com/facebookincubator/retrie/pull/73
   retrie = appendPatch (fetchpatch {
