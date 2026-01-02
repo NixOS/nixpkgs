@@ -5,6 +5,7 @@
   rustPlatform,
   fontconfig,
   libxkbcommon,
+  nix-update-script,
   openssl,
   pkg-config,
   xorg,
@@ -55,6 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         ]
       }
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Track your time without being tracked";
