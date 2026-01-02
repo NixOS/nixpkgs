@@ -22,6 +22,9 @@ stdenv.mkDerivation {
     sha256 = "3RoG83jLOsdTEmvUkkxb7wa8oBrJA4v1mGtxTGwSowU=";
   };
 
+  # Until upstream updates their code to work with GCC 15.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [
     automake
     autoconf
