@@ -123,20 +123,60 @@ let
         };
 
         settings = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Your Authelia config.yml as a Nix attribute set.
             There are several values that are defined and documented in nix such as `default_2fa_method`,
             but additional items can also be included.
 
-            <https://github.com/authelia/authelia/blob/master/config.template.yml>
+            Refer to the [Authelia Configuration Documentation](https://www.authelia.com/configuration/)
+            for details.
+
+            Note: Authelia requires several sections to be configured for a minimal setup,
+            including `session`, `storage`, `notifier`, and `authentication_backend`.
+            These are not configured by default and must be provided manually.
           '';
           default = { };
-          example = ''
+          example = lib.literalExpression ''
             {
               theme = "light";
               default_2fa_method = "totp";
-              log.level = "debug";
-              server.disable_healthcheck = true;
+              server.address = "tcp://0.0.0.0:9091";
+
+              log = {
+                level = "debug";
+              };
+
+              authentication_backend.file = {
+                path = "/var/lib/authelia/users_database.yml";
+              };
+
+              access_control = {
+                default_policy = "two_factor";
+                rules = [
+                  {
+                    domain = "public.example.com";
+                    policy = "bypass";
+                  }
+                ];
+              };
+
+              session = {
+                name = "authelia_session";
+                domain = "example.com";
+                secret = "YOUR_SESSION_SECRET"; # Use secrets management for production
+              };
+
+              storage = {
+                local = {
+                  path = "/var/lib/authelia/db.sqlite3";
+                };
+              };
+
+              notifier = {
+                filesystem = {
+                  filename = "/var/lib/authelia/notification.txt";
+                };
+              };
             }
           '';
           type = types.submodule {
