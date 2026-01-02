@@ -486,11 +486,7 @@ with haskellLib;
   # Fix 32bit struct being used for 64bit syscall on 32bit platforms
   # https://github.com/haskellari/lukko/issues/15
   lukko = appendPatches [
-    (fetchpatch {
-      name = "lukko-ofd-locking-32bit.patch";
-      url = "https://github.com/haskellari/lukko/pull/32/commits/4e69ffad996c3771f50017b97375af249dd17c85.patch";
-      sha256 = "0n8vig48irjz0jckc20dzc23k16fl5hznrc0a81y02ms72msfwi1";
-    })
+    ./patches/lukko-ofd-locking-32bit.patch
   ] super.lukko;
 
   # Relax version constraints (network < 3.2, text < 2.1)
