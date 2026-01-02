@@ -16,12 +16,12 @@
   gdk-pixbuf,
   openexr,
   pkg-config,
-  makeWrapper,
   zlib,
   asciidoc,
   graphviz,
   doxygen,
   python3,
+  buildPackages,
   lcms2,
   enablePlugins ? true,
 }:
@@ -51,17 +51,19 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    cmake
-    pkg-config
-    gdk-pixbuf
-    makeWrapper
-    asciidoc
-    doxygen
-    python3
+    buildPackages.cmake
+    buildPackages.pkg-config
+    buildPackages.asciidoc
+    buildPackages.doxygen
+    buildPackages.python3
+  ]
+  ++ lib.optionals (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) [
+    # Provides the `makeWrapper` shell function (no $out/bin/makeWrapper).
+    buildPackages.makeWrapper
   ];
 
   depsBuildBuild = [
-    graphviz
+    buildPackages.graphviz
   ];
 
   # Functionality not currently provided by this package
@@ -163,11 +165,24 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    lib.optionalString enablePlugins ''
-      GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
-      GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
-        gdk-pixbuf-query-loaders --update-cache
-    ''
+    lib.optionalString enablePlugins (
+      lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+        GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
+        GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+          ${gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders --update-cache
+      ''
+      + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+        # Cross builds can't run target executables directly; try via emulator.
+        # In our environment wine may still be incomplete, so don't hard-fail.
+        export HOME="$TMPDIR/home"
+        export WINEPREFIX="$TMPDIR/wineprefix"
+        mkdir -p "$HOME" "$WINEPREFIX"
+
+        GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
+        GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+          ${stdenv.hostPlatform.emulator buildPackages} ${gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders --update-cache || true
+      ''
+    )
     # Cross-compiled gdk-pixbuf doesn't support thumbnailers
     + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
       mkdir -p "$out/bin"
