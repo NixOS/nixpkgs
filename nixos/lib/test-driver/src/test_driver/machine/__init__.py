@@ -93,19 +93,24 @@ def make_command(args: list) -> str:
     return " ".join(map(shlex.quote, (map(str, args))))
 
 
-def retry(fn: Callable, timeout: int = 900) -> None:
-    """Call the given function repeatedly, with 1 second intervals,
-    until it returns True or a timeout is reached.
-    """
+def retry(fn: Callable, timeout_seconds: int = 900) -> None:
+    """Call the given function repeatedly, with a one second interval between
+    retries, until it returns True or a timeout is reached.
 
-    for _ in range(timeout):
+    Note that the timeout shown will include the time of the last attempted run.
+    """
+    start_time = time.monotonic()
+
+    while time.monotonic() - start_time < timeout_seconds:
         if fn(False):
             return
         time.sleep(1)
 
+    elapsed = time.monotonic() - start_time
+
     if not fn(True):
         raise RequestedAssertionFailed(
-            f"action timed out after {timeout} tries with one-second pause in-between"
+            f"action timed out after {elapsed:.2f} seconds (timeout={timeout_seconds})"
         )
 
 

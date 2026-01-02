@@ -24,8 +24,6 @@
   ladspaH,
   jackSupport ? true,
   libjack2,
-  lashSupport ? false,
-  lash,
   ossSupport ? true,
   portaudioSupport ? true,
   portaudio,
@@ -113,7 +111,6 @@ stdenv.mkDerivation rec {
     ladspaH
   ]
   ++ lib.optionals jackSupport [ libjack2 ]
-  ++ lib.optionals lashSupport [ lash ]
   ++ lib.optionals portaudioSupport [ portaudio ]
   ++ lib.optionals sndioSupport [ sndio ]
   ++ lib.optionals (guiModule == "fltk") [
