@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  runCommand,
+  writeText,
   clang-unwrapped,
   clang,
   libcxxClang,
@@ -10,7 +12,7 @@
   enableLibcxx ? false,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clang-tools";
   version = lib.getVersion clang-unwrapped;
   dontUnpack = true;
@@ -48,8 +50,42 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.tests.smokeOk =
+    let
+      src = writeText "main.cpp" ''
+        #include <iostream>
+
+        int main() {
+          std::cout << "Hi!";
+        }
+      '';
+
+    in
+    runCommand "clang-tools-test-smoke-ok" { } ''
+      ${finalAttrs.finalPackage}/bin/clangd  --check=${src}
+      touch $out
+    '';
+
+  passthru.tests.smokeErr =
+    let
+      src = writeText "main.cpp" ''
+        #include <iostream>
+
+        int main() {
+           std::cout << "Hi!";
+        }
+      '';
+
+    in
+    runCommand "clang-tools-test-smoke-err" { } ''
+      (${finalAttrs.finalPackage}/bin/clangd --query-driver='**' --check=${src} 2>&1 || true) \
+          | grep 'use of undeclared identifier'
+
+      touch $out
+    '';
+
   meta = llvm_meta // {
     description = "Standalone command line tools for C++ development";
     maintainers = with lib.maintainers; [ patryk27 ];
   };
-}
+})
