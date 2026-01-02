@@ -119,7 +119,13 @@ cat >versions.nix <<EOF
   k3sCNISha256 = "${CNIPLUGINS_SHA256}";
   containerdVersion = "${VERSION_CONTAINERD:1}";
   containerdSha256 = "${CONTAINERD_SHA256}";
+  containerdPackage = "${PKG_CONTAINERD_K3S}";
   criCtlVersion = "${VERSION_CRICTL:1}";
+  flannelVersion = "${VERSION_FLANNEL}";
+  flannelPluginVersion = "${VERSION_FLANNEL_PLUGIN}";
+  kubeRouterVersion = "${VERSION_KUBE_ROUTER}";
+  criDockerdVersion = "${VERSION_CRI_DOCKERD}";
+  helmJobVersion = "${VERSION_HELM_JOB}";
 }
 EOF
 
