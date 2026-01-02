@@ -1595,6 +1595,7 @@ in
   stub-ld = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stub-ld.nix { };
   stump = runTest ./web-apps/stump.nix;
   stunnel = import ./stunnel.nix { inherit runTest; };
+  sub-store = runTest ./sub-store.nix;
   sudo = runTest ./sudo.nix;
   sudo-rs = runTest ./sudo-rs.nix;
   sunshine = runTest ./sunshine.nix;
