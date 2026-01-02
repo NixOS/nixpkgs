@@ -2531,8 +2531,8 @@ let
         mktplcRef = {
           publisher = "jnoortheen";
           name = "nix-ide";
-          version = "0.5.0";
-          hash = "sha256-jVuGQzMspbMojYq+af5fmuiaS3l3moG8L8Kyf40vots=";
+          version = "0.5.5";
+          hash = "sha256-epdEMPAkSo0IXsd+ozicI8bjPPquDKIzB3ONRUYWwn8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
@@ -2609,8 +2609,8 @@ let
         mktplcRef = {
           name = "language-julia";
           publisher = "julialang";
-          version = "1.167.2";
-          hash = "sha256-0BrJjnKli7GE/CLGUSXJySFJjjpd1S/GMLa6PmddO1Q=";
+          version = "1.170.2";
+          hash = "sha256-1Qu7d3Acrb/+uvAQMID3daH7UJcxt/Lr4yG0sVSlsYU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
@@ -3466,8 +3466,8 @@ let
         mktplcRef = {
           name = "veriloghdl";
           publisher = "mshr-h";
-          version = "1.22.0";
-          hash = "sha256-8c8uLcVmOoNpibW29h6Jguim4Sx8KvSKuPWKiQ4tSiM=";
+          version = "1.22.2";
+          hash = "sha256-qkSBD8Mk6ow1GryitXgXx0kcLHCJeRs51VxqLQv6gac=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";
@@ -4620,8 +4620,8 @@ let
         mktplcRef = {
           name = "ayu";
           publisher = "teabyii";
-          version = "1.0.5";
-          sha256 = "sha256-+IFqgWliKr+qjBLmQlzF44XNbN7Br5a119v9WAnZOu4=";
+          version = "1.1.6";
+          sha256 = "sha256-jC9y/a3kYbBlYYOUIuRIb7g9FQ2j4Z4X+hqmU0TA3kY=";
         };
         meta = {
           description = "Simple theme with bright colors and comes in three versions — dark, light and mirage for all day long comfortable work";
@@ -5072,8 +5072,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-java-dependency";
-          version = "0.26.5";
-          hash = "sha256-prg8Dmba0bLr7NEmP7q4bE/oUW7YrsLBfsnXIF7ozyA=";
+          version = "0.27.0";
+          hash = "sha256-Ez3ogyCYWvniP/9BdRnsEQtRj9iFWiK0AecEreqrWnA=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5452,8 +5452,8 @@ let
         mktplcRef = {
           name = "tabler-icons";
           publisher = "zguolee";
-          version = "0.4.1";
-          hash = "sha256-Pqc91AXOH8K4as/978rM41M18IzGwzjefqCTAyJ5fOQ=";
+          version = "0.4.2";
+          hash = "sha256-2PKMyK8XYIjuoD1InrNaWZTP29LcPYetP8pmXRK/zYg=";
         };
         meta = {
           description = "Tabler product icon theme for Visual Studio Code";

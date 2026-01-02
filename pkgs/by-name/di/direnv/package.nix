@@ -48,6 +48,10 @@ buildGoModule rec {
     runHook postCheck
   '';
 
+  postInstall = ''
+    rm -rf "$out/share/fish"
+  '';
+
   meta = {
     description = "Shell extension that manages your environment";
     longDescription = ''
