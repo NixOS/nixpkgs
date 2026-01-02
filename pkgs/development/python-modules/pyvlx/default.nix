@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   typing-extensions,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pyvlx";
   version = "0.2.27";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Julius2342";
@@ -43,7 +40,7 @@ buildPythonPackage rec {
       devices, e.g. Velux Windows.
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
-    changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
+    changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${src.tag}";
     license = lib.licenses.lgpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };
