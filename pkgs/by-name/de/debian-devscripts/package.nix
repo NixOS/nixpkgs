@@ -30,14 +30,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "debian-devscripts";
-  version = "2.25.32";
+  version = "2.25.33";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "devscripts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zf12gMhJ2gHh3ZKiH0tLG28CUhz73gpV2PJyjT9YJqM=";
+    hash = "sha256-Vn8RiTmMSxqHgP9u4tFJY6xl0RR6MT12+mBQv7W4m1U=";
   };
 
   patches = [

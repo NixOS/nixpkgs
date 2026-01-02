@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "bark-server";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "Finb";
     repo = "bark-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MXvmS61r/DZ1KL4xh2kv+NpnPhSpRefJn7LuWLoLD0w=";
+    hash = "sha256-yL/5qXvCzcVG0p2VIx6yTu9rudNxk9rSJTN9PRJ6zSs=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;

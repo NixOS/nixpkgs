@@ -8,9 +8,9 @@
   };
 
   beancount = {
-    version = "2.4.1";
+    version = "2.4.2";
     url = "github:polarmutex/tree-sitter-beancount";
-    hash = "sha256-i/Dgen2qF1Qmpi0nm2hDGNUe0tSw03llY4tPTiygWGQ=";
+    hash = "sha256-YMIFnx4N9EtdzCxrzQv3xQbLHfDMnbXN+OP5KkMT7+s=";
   };
 
   bibtex = {

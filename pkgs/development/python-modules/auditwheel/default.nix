@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "auditwheel";
-  version = "6.5.0";
+  version = "6.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T7y9WFQFS7HdeHDbA3J7hxuWsYFH21cllWHAWGA5h9c=";
+    hash = "sha256-EeYR9wkLbPQHVTW4j0NkgZuEnYJwLauwlHz3ycXVh6A=";
   };
 
   build-system = [ setuptools-scm ];

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "textual-image";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lnqs";
     repo = "textual-image";
     tag = "v${version}";
-    hash = "sha256-tmQxCSlcUZy0oEk+EX7Bny75GZ3SOGSRXCNbyo1vLf8=";
+    hash = "sha256-gkLsM02oQ2H4UUhezbcmaOa2FQfzvFRsa0gd07eNucw=";
   };
 
   buildInputs = [ setuptools ];
