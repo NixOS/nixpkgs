@@ -123,8 +123,8 @@ in
         '';
         defaultText = lib.literalExpression ''
           [
-            config.system.build.initialRamdisk
-            config.system.build.kernel
+            (config.system.build.initialRamdisk or null)
+            (config.system.build.kernel or null)
             config.hardware.firmware
             (pkgs.writeTextFile {
               name = "kernel-params";
@@ -223,8 +223,8 @@ in
     {
       system = {
         autoUpgrade.rebootTriggers = [
-          config.system.build.initialRamdisk
-          config.system.build.kernel
+          (config.system.build.initialRamdisk or null)
+          (config.system.build.kernel or null)
           config.hardware.firmware
           (pkgs.writeTextFile {
             name = "kernel-params";
