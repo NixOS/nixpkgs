@@ -3,7 +3,6 @@
   buildPythonPackage,
   cython,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "lupa";
   version = "2.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,7 +27,7 @@ buildPythonPackage rec {
     description = "Lua in Python";
     homepage = "https://github.com/scoder/lupa";
     changelog = "https://github.com/scoder/lupa/blob/lupa-${version}/CHANGES.rst";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }
