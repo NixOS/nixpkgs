@@ -298,8 +298,8 @@ rec {
       ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
 
       # Wait until virtiofsd has created these sockets to avoid race condition.
-      until [[ -e virtio-store.sock ]]; do sleep 1; done
-      until [[ -e virtio-xchg.sock ]]; do sleep 1; done
+      until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 1; done
+      until [[ -e virtio-xchg.sock ]]; do ${coreutils}/bin/sleep 1; done
 
       ${qemuCommand}
       EOF
