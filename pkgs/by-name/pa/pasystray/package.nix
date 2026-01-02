@@ -15,30 +15,21 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pasystray";
-  version = "0.8.2";
+  version = "0.8.2-unstable-2025-10-04";
 
   src = fetchFromGitHub {
     owner = "christophgysin";
     repo = "pasystray";
-    rev = version;
-    sha256 = "sha256-QaTQ8yUviJaFEQaQm2vYAUngqHliKe8TDYqfWt1Nx/0=";
+    rev = "5a199dc6958bcaac07a8031eb48b9fad8730bf71";
+    sha256 = "sha256-1vP1ZNvq7raz9te5WK+RPTP09BzF/jAFoeRjsvYXmZo=";
   };
 
   patches = [
-    # Use ayatana-appindicator instead of appindicator
-    # https://github.com/christophgysin/pasystray/issues/98
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/p/pasystray/0.8.1-1/debian/patches/0001-Build-against-ayatana-appindicator.patch";
-      sha256 = "sha256-/HKPqVARfHr/3Vyls6a1n8ejxqW9Ztu4+8KK4jK8MkI=";
-    })
     # Require X11 backend
     # https://github.com/christophgysin/pasystray/issues/90#issuecomment-361881076
-    (fetchpatch {
-      url = "https://sources.debian.org/data/main/p/pasystray/0.8.1-1/debian/patches/0002-Require-X11-backend.patch";
-      sha256 = "sha256-6njC3vqBPWFS1xAsa1katQ4C0KJdVkHAP1MCPiZ6ELM=";
-    })
+    ./require-x11-backend.patch
   ];
 
   nativeBuildInputs = [
@@ -46,6 +37,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     wrapGAppsHook3
   ];
+
   buildInputs = [
     adwaita-icon-theme
     avahi

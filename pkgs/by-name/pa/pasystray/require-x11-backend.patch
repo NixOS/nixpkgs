@@ -1,0 +1,19 @@
+From: Scott Leggett <scott@sl.id.au>
+Date: Mon, 29 Oct 2018 22:40:16 +1100
+Subject: Require X11 backend
+Forwarded: not-needed
+
+---
+ src/pasystray.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/src/pasystray.c
++++ b/src/pasystray.c
+@@ -38,6 +38,7 @@ static menu_infos_t* mis;
+ 
+ int main(int argc, char *argv[])
+ {
++    gdk_set_allowed_backends ("x11");
+     GOptionEntry* options = get_options();
+     GError *error = NULL;
+     gtk_init_with_args(&argc, &argv, NULL, options, NULL, &error);
