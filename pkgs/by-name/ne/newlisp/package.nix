@@ -43,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ rc-zb ];
     mainProgram = "newlisp";
     platforms = lib.platforms.all;
+    broken = true;
   };
 })
