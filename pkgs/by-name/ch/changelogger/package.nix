@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "MarkusFreitag";
     repo = "changelogger";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-Glup2Y3sGO2hNKFeZXOrffHct2F4Ebn9+f6yOy3pekY=";
   };
 
