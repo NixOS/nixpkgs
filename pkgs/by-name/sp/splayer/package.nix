@@ -7,6 +7,9 @@
   pnpm_10,
   nodejs,
   electron,
+  rustPlatform,
+  cargo,
+  rustc,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -14,14 +17,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0-beta.7";
+  version = "3.0.0-beta.8.2025";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-W4XvYQ0O3Qnr9kRxTxt21UkU5dw66ww1qpIY3ph3elE=";
+    hash = "sha256-LS9Z+dfL50ICaF8WskiKswl3LD7aSrpJHu6DY9m6ByE=";
   };
 
   pnpm = pnpm_10;
@@ -34,13 +37,25 @@ stdenv.mkDerivation (finalAttrs: {
       pnpm
       ;
     fetcherVersion = 2;
-    hash = "sha256-lcSecyT55hFtRFPK7xtPhSbXynGIOgKIfV5T5tDQzfA=";
+    hash = "sha256-t1pZJ7j+VyvXSTctNVg2XkoQ4CA6DlkxOlK9akDghUU=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    hash = "sha256-LJuY9BFI+/GSckilZCXs3cw1EEG5Oy/iSljIABqsD/E=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
     finalAttrs.pnpm
     nodejs
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
     makeWrapper
     copyDesktopItems
   ];
@@ -49,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postConfigure = ''
     cp .env.example .env
+  '';
+
+  postPatch = ''
+    # Workaround for https://github.com/electron/electron/issues/31121
+    substituteInPlace electron/main/utils/native-loader.ts \
+      --replace-fail 'process.resourcesPath' "'$out/share/splayer/resources'"
   '';
 
   buildPhase = ''
