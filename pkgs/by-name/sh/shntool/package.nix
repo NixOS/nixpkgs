@@ -17,10 +17,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Qn4LwVx34EhypiZDIxuveNhePigkuiICn1nBukoQf5Y=";
   };
 
+  patches = [
+    # Fix conflicts between reserved keywords `bool` (starting from C23) and custom `typedef`s.
+    ./bool-type.patch
+    # Fix implicit weak-typed pointer casting.
+    ./function-pointer-type.patch
+  ];
+
   buildInputs = [ flac ];
 
   prePatch = ''
-    patches=$(grep -v '#' ./debian/patches/series | while read patch; do echo "./debian/patches/$patch"; done | tr '\n' ' ')
+    additional_patches=$(grep -v '#' ./debian/patches/series | while read patch; do echo "./debian/patches/$patch"; done | tr '\n' ' ')
+    patches="$patches $additional_patches"
   '';
 
   meta = {
