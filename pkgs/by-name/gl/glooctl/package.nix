@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "glooctl";
-  version = "1.20.6";
+  version = "1.20.7";
 
   src = fetchFromGitHub {
     owner = "solo-io";
     repo = "gloo";
     rev = "v${version}";
-    hash = "sha256-B3Hbj9T2ZefH9c/Zlgi7odInuIH96tFtyhrQLIiZPpU=";
+    hash = "sha256-2GILbG7pnkaaoUQkTMTt+1GLpUPfbz3gbPV+a49ERh0=";
   };
 
   vendorHash = "sha256-zJmp3UWzZSI7G54DTOEOEo2ZIKjM6GZ0Cf5/BukaB4o=";
