@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "picat";
-  version = "3.8#7";
+  version = "3.9#4";
 
   src = fetchurl {
-    url = "https://picat-lang.org/download/picat387_src.tar.gz";
-    hash = "sha256-H+aFmagdb7jU4LZCYrNPa4ZWVB1ziiJHrUe4b1ImWks=";
+    url = "https://picat-lang.org/download/picat394_src.tar.gz";
+    hash = "sha256-dAYiV2zG2Z01qBshsqORL9oR2NvNnRavvGSDaOEJdDk=";
   };
 
   patches = [
