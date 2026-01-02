@@ -45,6 +45,8 @@ buildPythonPackage rec {
     (replaceVars ./dont-fetch-pybind11.patch {
       pybind11 = pybind11-src;
     })
+    # error: ‘uint32_t’ does not name a type
+    ./add-missing-cstdint-sentencepiece.patch
   ];
 
   postPatch = ''
