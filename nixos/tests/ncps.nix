@@ -49,7 +49,7 @@
       networking.firewall.allowedTCPPorts = [ 8501 ];
     };
 
-    client01 = {
+    client = {
       nix.settings = {
         substituters = lib.mkForce [ "http://ncps:8501" ];
         trusted-public-keys = lib.mkForce [
@@ -85,10 +85,10 @@
 
       ncps.wait_for_unit("ncps.service")
 
-      client01.wait_until_succeeds("curl -f http://ncps:8501/ | grep '\"hostname\":\"${toString nodes.ncps.services.ncps.cache.hostName}\"' >&2")
+      client.wait_until_succeeds("curl -f http://ncps:8501/ | grep '\"hostname\":\"${toString nodes.ncps.services.ncps.cache.hostName}\"' >&2")
 
-      client01.succeed("cat /etc/nix/nix.conf >&2")
-      client01.succeed("nix-store --realise ${pkgs.emptyFile}")
+      client.succeed("cat /etc/nix/nix.conf >&2")
+      client.succeed("nix-store --realise ${pkgs.emptyFile}")
 
       ncps.succeed("cat ${narinfoPath} >&2")
     '';
