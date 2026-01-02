@@ -346,16 +346,6 @@ buildGoModule (finalAttrs: {
       --replace-fail '"$LDFLAGS $STATIC" -o' \
                 '"$LDFLAGS" -o'
 
-    # Upstream codegen fails with trimpath set. Removes "trimpath" for 'go generate':
-
-    substituteInPlace scripts/package-cli \
-      --replace-fail '"''${GO}" generate' \
-                'GOFLAGS="" \
-                 GOOS="${pkgsBuildBuild.go.GOOS}" \
-                 GOARCH="${pkgsBuildBuild.go.GOARCH}" \
-                 CC="${pkgsBuildBuild.stdenv.cc}/bin/cc" \
-                 "''${GO}" generate'
-
     # Add the -e flag to process "errornous" packages. We need to modify this because the upstream
     # build-time version detection doesn't work with a vendor directory.
     substituteInPlace scripts/version.sh \
