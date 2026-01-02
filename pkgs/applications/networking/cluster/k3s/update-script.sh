@@ -35,8 +35,8 @@ K3S_REPO_SHA256=${PREFETCH_META%$'\n'*}
 
 cd "$K3S_STORE_PATH"
 # Set the DRONE variables as they are expected to be set in version.sh
-DRONE_TAG="$LATEST_TAG_NAME"
-DRONE_COMMIT="$K3S_COMMIT"
+TAG="$LATEST_TAG_NAME"
+GITHUB_SHA="$K3S_COMMIT"
 NO_DAPPER="" # Source git_version.sh in scripts/version.sh#L8
 source "${K3S_STORE_PATH}/scripts/version.sh"
 
