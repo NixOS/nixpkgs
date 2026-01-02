@@ -84,6 +84,9 @@ const RELOAD_BY_ACTIVATION_LIST_FILE: &str = "/run/nixos/activation-reload-list"
 const DRY_RESTART_BY_ACTIVATION_LIST_FILE: &str = "/run/nixos/dry-activation-restart-list";
 const DRY_RELOAD_BY_ACTIVATION_LIST_FILE: &str = "/run/nixos/dry-activation-reload-list";
 
+// Reuse the same default timeout that systemd uses. See https://github.com/systemd/systemd/blob/8b4278d12ec55cc3f96764bc8197e1055fbb6d3f/src/libsystemd/sd-bus/bus-internal.h#L312
+const BUS_TIMEOUT: Duration = Duration::from_secs(25);
+
 #[derive(Debug, Clone, PartialEq)]
 enum Action {
     Switch,
@@ -908,7 +911,7 @@ fn systemd1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
     conn.with_proxy(
         "org.freedesktop.systemd1",
         "/org/freedesktop/systemd1",
-        Duration::from_millis(10000),
+        BUS_TIMEOUT,
     )
 }
 
@@ -916,7 +919,7 @@ fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
     conn.with_proxy(
         "org.freedesktop.login1",
         "/org/freedesktop/login1",
-        Duration::from_millis(10000),
+        BUS_TIMEOUT,
     )
 }
 
