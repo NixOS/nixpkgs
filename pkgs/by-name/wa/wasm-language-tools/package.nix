@@ -30,7 +30,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/g-plane/wasm-language-tools/";
     changelog = "https://github.com/g-plane/wasm-language-tools/releases/tag/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      samestep
+    ];
     mainProgram = "wat_server";
   };
 }
