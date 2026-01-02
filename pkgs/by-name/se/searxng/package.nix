@@ -85,6 +85,7 @@ python.pkgs.toPythonModule (
         whitenoise
       ]
       ++ httpx.optional-dependencies.http2
+      ++ httpx.optional-dependencies.socks
       ++ httpx-socks.optional-dependencies.asyncio;
 
     # tests try to connect to network
