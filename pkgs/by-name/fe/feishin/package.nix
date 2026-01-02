@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_38,
+  electron_39,
   dart-sass,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -14,16 +14,16 @@
 }:
 let
   pname = "feishin";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-otobV3bpANbhrAiscDxV1IGJ36i/37aPei6wdo5SDSw=";
+    hash = "sha256-Fz50mpwBc8a7XRo0CLPppPdb1pWwi4Dnr+COlBszsPc=";
   };
 
-  electron = electron_38;
+  electron = electron_39;
 in
 buildNpmPackage {
   inherit pname version;
@@ -40,7 +40,7 @@ buildNpmPackage {
       src
       ;
     fetcherVersion = 2;
-    hash = "sha256-iZs2YtB0U8RpZXrIYHBc/cgFISDF/4tz+D13/+HlszU=";
+    hash = "sha256-cIHwCZg7sf4phEZMCX4Y/4CGnGEPvL1spNt4GgEVLPw=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
