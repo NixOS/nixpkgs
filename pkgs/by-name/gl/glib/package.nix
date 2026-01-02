@@ -9,7 +9,6 @@
   pkg-config,
   perl,
   python3,
-  python3Packages,
   libiconv,
   zlib,
   libffi,
@@ -156,13 +155,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     finalAttrs.setupHook
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+  # sysprof-capture uses Unix-only headers (sys/mman.h, sys/syscall.h, endian.h, ...)
+  # and does not build on MinGW (Windows). MSYS2 disables sysprof for mingw-w64-glib2.
+  ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD && !stdenv.hostPlatform.isWindows) [
     libsysprof-capture
   ]
   ++ [
     pcre2
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+  # These are only needed/meaningful on Unix-y targets. On Windows targets
+  # (including MinGW/windows-gnu), avoid evaluating them at all.
+  ++ lib.optionals stdenv.hostPlatform.isUnix [
     bash
     gnum4 # install glib-gettextize and m4 macros for other apps to use
   ]
@@ -187,9 +190,13 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     perl
+    # In cross builds, `python3` in nativeBuildInputs is spliced to the build
+    # platform by strictDeps. For nested package sets like `python3Packages.*`,
+    # explicitly use `buildPackages` to avoid accidentally evaluating the target
+    # Python package set.
     python3
-    python3Packages.packaging # mostly used to make meson happy
-    python3Packages.wrapPython # for patchPythonScript
+    buildPackages.python3Packages.packaging # mostly used to make meson happy
+    buildPackages.python3Packages.wrapPython # for patchPythonScript
     gettext
     libxslt
   ]
@@ -235,6 +242,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "-Dxattr=false"
     "-Dsysprof=disabled" # sysprof-capture does not build on FreeBSD
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "-Dsysprof=disabled" # sysprof-capture does not build on MinGW (Windows)
   ];
 
   env = {
@@ -292,7 +302,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    buildPythonPath ${python3Packages.packaging}
+    buildPythonPath ${buildPackages.python3Packages.packaging}
     patchPythonScript "$dev/share/glib-2.0/codegen/utils.py"
   '';
 
