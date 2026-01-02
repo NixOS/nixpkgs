@@ -23,9 +23,13 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace 'rm abstime.h' ""
   '';
 
-  # Workaround build failure on -fno-common toolchains:
-  #   ld: mmix-config.o:(.bss+0x600): multiple definition of `buffer'; /build/ccDuGrwH.o:(.bss+0x20): first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: mmix-config.o:(.bss+0x600): multiple definition of `buffer'; /build/ccDuGrwH.o:(.bss+0x20): first defined here
+    "-fcommon"
+    # Workaround to build with GCC 15
+    "-std=gnu17"
+  ];
 
   nativeBuildInputs = [ tetex ];
   enableParallelBuilding = true;

@@ -91,6 +91,8 @@ let
       hash = "sha256-i5KseBz/SuicEhoj6s197AWiqr7azMI6GdGglYtAEqg=";
     };
 
+    patches = [ ./fix-build-with-c23.patch ];
+
     nativeBuildInputs = [ unzip ];
     buildInputs = [
       libjpeg

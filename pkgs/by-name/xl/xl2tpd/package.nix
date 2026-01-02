@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -std=gnu17";
+
   meta = {
     homepage = src.meta.homepage;
     description = "Layer 2 Tunnelling Protocol Daemon (RFC 2661)";
