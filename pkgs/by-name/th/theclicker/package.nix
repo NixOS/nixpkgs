@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "theclicker";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "konkitoman";
     repo = "autoclicker";
     tag = finalAttrs.version;
-    hash = "sha256-Q5Uwl2SWdat/cHRPf4GVQihn1NwlFKbkpWRFnScnvw0=";
+    hash = "sha256-KhPSsLb5lg93WOI2JAbwSsM6x0A7t4ZNq2yGYg1Sqy0=";
   };
 
-  cargoHash = "sha256-JL/X2s/SnmK88btz/MmB6t8nKqUXks07+tWXc4trfLM=";
+  cargoHash = "sha256-H0S1nP7EaNEougscmmelsY5CC7yHwXGhHGkY4vOZqho=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

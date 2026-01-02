@@ -32945,10 +32945,10 @@ with self;
 
   TermReadLineGnu = buildPerlPackage {
     pname = "Term-ReadLine-Gnu";
-    version = "1.46";
+    version = "1.47";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAYASHI/Term-ReadLine-Gnu-1.46.tar.gz";
-      hash = "sha256-sTgyEy5QNmw0/qwSzoKDfAqds0ylMK5dJ9uXz5yWTHs=";
+      url = "mirror://cpan/authors/id/H/HA/HAYASHI/Term-ReadLine-Gnu-1.47.tar.gz";
+      hash = "sha256-OwesiptJTFCqh6QNzKs/h5uS65UnrA8t7V1HQ9Fmtkk=";
     };
     buildInputs = [
       pkgs.readline

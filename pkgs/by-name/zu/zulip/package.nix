@@ -1,45 +1,52 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
-  buildNpmPackage,
+  fetchPnpmDeps,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
   python3,
-  electron_37,
+  electron_39,
   makeDesktopItem,
-  makeShellWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
 }:
 
-buildNpmPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zulip";
-  version = "5.12.2";
+  version = "5.12.3";
 
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "zulip-desktop";
-    tag = "v${version}";
-    hash = "sha256-+OS3Fw4Z1ZOzXou1sK39AUFLI78nUl4UBVYA3SNH7I0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jRco2eyQrWf5jGvdWYn4mt8FD/xu1+FftQoB3wuF2Lw=";
   };
 
-  npmDepsHash = "sha256-5qjBZfl9kse97y5Mru4RF4RLTbojoXeUp84I/bOHEcw=";
-  makeCacheWritable = true;
-
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-s/KllzT46L2o4SWS3z3Z7FDQD6FEEEAnPdM6tsfGRUo=";
   };
 
   nativeBuildInputs = [
-    makeShellWrapper
+    nodejs
+    pnpm_10
+    pnpmConfigHook
+    makeBinaryWrapper
     copyDesktopItems
-    (python3.withPackages (ps: with ps; [ distutils ]))
+    python3
   ];
 
-  dontNpmBuild = true;
   buildPhase = ''
     runHook preBuild
 
-    npm run pack -- \
-      -c.electronDist=${electron_37}/libexec/electron \
-      -c.electronVersion=${electron_37.version}
+    npm_config_nodedir=${electron_39.headers} \
+      node --run pack -- \
+      -c.electronDist=${electron_39}/libexec/electron \
+      -c.electronVersion=${electron_39.version}
 
     runHook postBuild
   '';
@@ -52,9 +59,8 @@ buildNpmPackage rec {
 
     install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
 
-    makeShellWrapper '${lib.getExe electron_37}' "$out/bin/zulip" \
+    makeBinaryWrapper '${lib.getExe electron_39}' "$out/bin/zulip" \
       --add-flags "$out/share/lib/zulip/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}" \
       --inherit-argv0
 
     runHook postInstall
@@ -85,4 +91,4 @@ buildNpmPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "zulip";
   };
-}
+})

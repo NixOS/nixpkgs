@@ -7,26 +7,32 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "updog";
-  version = "1.4";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sc0tfree";
     repo = "updog";
-    tag = version;
-    hash = "sha256-e6J4Cbe9ZRb+nDMi6uxwP2ZggbNDyKysQC+IcKCDtIw=";
+    tag = "v${version}";
+    hash = "sha256-EFAqxlKrQ9HBMHBdmstY+RZPqK0kWY5Ws6WMFHlMyM0=";
   };
 
   build-system = [
-    python3Packages.setuptools
+    python3Packages.poetry-core
   ];
 
   dependencies = with python3Packages; [
     colorama
     flask
+    flask-cors
     flask-httpauth
-    werkzeug
     pyopenssl
+    werkzeug
+  ];
+
+  pythonRelaxDeps = [
+    "pyopenssl"
+    "flask-cors"
   ];
 
   nativeCheckInputs = [ versionCheckHook ];
@@ -37,7 +43,7 @@ python3Packages.buildPythonApplication rec {
     description = "Replacement for Python's SimpleHTTPServer";
     mainProgram = "updog";
     homepage = "https://github.com/sc0tfree/updog";
-    changelog = "https://github.com/sc0tfree/updog/releases/tag/${version}";
+    changelog = "https://github.com/sc0tfree/updog/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };

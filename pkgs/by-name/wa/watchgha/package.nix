@@ -5,13 +5,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "watchgha";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "watchgha";
-    hash = "sha256-jjQk/X9kd8qhqgvivSIsvg0BOp6zh6yqpPiAS6ak/Ps=";
+    hash = "sha256-D8Asyd2BGjPYWrAqnXRDMKgZVKC5euzBdbgw6EiEC4I=";
   };
 
   build-system = with python3Packages; [

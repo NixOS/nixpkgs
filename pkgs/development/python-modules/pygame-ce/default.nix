@@ -25,13 +25,14 @@
   SDL2_mixer,
   SDL2_ttf,
   numpy,
+  astroid,
 
   pygame-gui,
 }:
 
 buildPythonPackage rec {
   pname = "pygame-ce";
-  version = "2.5.5";
+  version = "2.5.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     owner = "pygame-community";
     repo = "pygame-ce";
     tag = version;
-    hash = "sha256-OWC063N7G8t2ai/Qyz8DwP76BrFve5ZCbLD/mQwVbi4=";
+    hash = "sha256-0DNvAs1E6OhN6wTvbMCDt9YAEFoBZp1r7hI4GSnJUl8=";
     # Unicode files cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
   };
@@ -71,12 +72,13 @@ buildPythonPackage rec {
     # cython was pinned to fix windows build hangs (pygame-community/pygame-ce/pull/3015)
     substituteInPlace pyproject.toml \
       --replace-fail '"pyproject-metadata!=0.9.1",' '"pyproject-metadata",' \
-      --replace-fail '"meson<=1.7.0",' '"meson",' \
-      --replace-fail '"meson-python<=0.17.1",' '"meson-python",' \
-      --replace-fail '"ninja<=1.12.1",' "" \
-      --replace-fail '"cython<=3.0.11",' '"cython",' \
-      --replace-fail '"sphinx<=8.1.3",' "" \
-      --replace-fail '"sphinx-autoapi<=3.3.2",' ""
+      --replace-fail '"meson<=1.9.1",' '"meson",' \
+      --replace-fail '"meson-python<=0.18.0",' '"meson-python",' \
+      --replace-fail '"ninja<=1.13.0",' "" \
+      --replace-fail '"astroid<4.0.0",' "" \
+      --replace-fail '"cython<=3.1.4",' '"cython",' \
+      --replace-fail '"sphinx<=8.2.3",' "" \
+      --replace-fail '"sphinx-autoapi<=3.6.0",' ""
     substituteInPlace buildconfig/config_{unix,darwin}.py \
       --replace-fail 'from distutils' 'from setuptools._distutils'
     substituteInPlace src_py/sysfont.py \
@@ -109,6 +111,7 @@ buildPythonPackage rec {
     (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
+    astroid
   ];
 
   nativeCheckInputs = [
