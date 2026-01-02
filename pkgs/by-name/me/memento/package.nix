@@ -3,24 +3,21 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qt6,
-  wrapQtAppsHook,
+  qt6Packages,
 
-  # before that => zeal
   sqlite,
   json_c,
   libzip,
   mpv,
   yt-dlp,
   makeWrapper,
-  qcoro,
   withOcr ? false,
   python3,
 }:
 let
   libmocr = stdenv.mkDerivation {
     pname = "libmocr";
-    version = "unstable-2023-11-15"; # Placeholder version
+    version = "0-unstable-2023-11-15";
 
     src = fetchFromGitHub {
       owner = "ripose-jp";
@@ -31,15 +28,15 @@ let
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [
-      qt6.qtbase
+      qt6Packages.qtbase
       python3
     ];
     dontWrapQtApps = true;
-    meta = with lib; {
+    meta = {
       description = "A library for Manga OCR";
       homepage = "https://github.com/ripose-jp/libmocr";
-      license = licenses.gpl2;
-      platforms = platforms.linux;
+      license = lib.licenses.gpl2;
+      platforms = lib.platforms.linux;
     };
   };
 in
@@ -65,17 +62,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     makeWrapper
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qt6.qtbase
-    qt6.qtsvg
-    qt6.qtwayland
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
+    qt6Packages.qtwayland
     sqlite
     json_c
     libzip
-    qcoro
+    qt6Packages.qcoro
   ]
 
   ++ lib.optionals withOcr [ libmocr ];
@@ -91,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       wrapProgram "$out/bin/memento" \
-        --prefix PATH : "${yt-dlp}/bin" ${lib.optionalString withOcr "--suffix PYTHONPATH : \"${pyEnv}/${pyEnv.sitePackages}\""}
+        --prefix PATH : "${yt-dlp}/bin" ${lib.optionalString withOcr "--suffix PYTHONPATH : \"${pyEnv}/${python3.sitePackages}\""}
     '';
 
   passthru.libmocr = libmocr;
