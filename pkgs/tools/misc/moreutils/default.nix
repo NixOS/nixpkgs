@@ -12,7 +12,25 @@
   cctools,
   gitUpdater,
 }:
-
+let
+  subPackages = [
+    "chronic"
+    "combine"
+    "errno"
+    "ifdata"
+    "ifne"
+    "isutf8"
+    "lckdo"
+    "mispipe"
+    "parallel"
+    "pee"
+    "sponge"
+    "ts"
+    "vidir"
+    "vipe"
+    "zrun"
+  ];
+in
 stdenv.mkDerivation rec {
   pname = "moreutils";
   version = "0.70";
@@ -22,6 +40,11 @@ stdenv.mkDerivation rec {
     tag = version;
     hash = "sha256-71ACHzzk258U4q2L7GJ59mrMZG99M7nQkcH4gHafGP0=";
   };
+
+  outputs = [
+    "out"
+  ]
+  ++ subPackages;
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -49,6 +72,12 @@ stdenv.mkDerivation rec {
     "INSTALL_BIN=install"
     "PREFIX=${placeholder "out"}"
   ];
+
+  postInstall = lib.strings.join "\n" (
+    lib.lists.map (
+      p: "moveToOutput bin/${p} \$${p} && moveToOutput share/man/man1/${p}.1 \$${p}"
+    ) subPackages
+  );
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.
