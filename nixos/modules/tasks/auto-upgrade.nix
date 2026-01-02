@@ -220,7 +220,7 @@ in
 
   config = lib.mkMerge [
 
-    {
+    (lib.mkIf (!config.boot.isContainer) {
       system = {
         autoUpgrade.rebootTriggers = [
           config.system.build.initialRamdisk
@@ -242,10 +242,16 @@ in
           text = lib.concatMapStringsSep "\n" (drv: drv.outPath) config.system.autoUpgrade.rebootTriggers;
         };
       };
-    }
+    })
 
     (lib.mkIf cfg.enable {
       assertions = [
+        {
+          assertion = !config.boot.isContainer;
+          message = ''
+            The option 'system.autoUpgrade.enable' cannot be enabled for a container.
+          '';
+        }
         {
           assertion = !((cfg.channel != null) && (cfg.flake != null));
           message = ''
