@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     homepage = "https://ispc.github.io/";
-    changelog = "https://github.com/ispc/ispc/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/ispc/ispc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       thoughtpolice
