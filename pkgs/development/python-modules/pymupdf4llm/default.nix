@@ -4,25 +4,36 @@
   fetchFromGitHub,
   setuptools,
   pymupdf,
+  tabulate,
+  opencv-python,
 }:
 
 buildPythonPackage rec {
   pname = "pymupdf4llm";
-  version = "0.0.27";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
-    repo = "RAG";
-    tag = "v${version}";
-    hash = "sha256-rezdDsjNCDetvrX3uvykYuL/y40MZnr0fFMvQY3JRr0=";
+    repo = "pymupdf4llm";
+    tag = version;
+    hash = "sha256-3D4EGTNTCU9umK1i7lZLAI0cS7RUdnagit3nqpMg3Ds=";
   };
 
   sourceRoot = "${src.name}/pymupdf4llm";
 
   build-system = [ setuptools ];
 
-  dependencies = [ pymupdf ];
+  dependencies = [
+    pymupdf
+    tabulate
+  ];
+
+  optional-dependencies = {
+    ocr = [ opencv-python ];
+    # TODO: We need to package `pymupdf-layout`
+    # layout = [ pymupdf-layout ];
+  };
 
   checkPhase = ''
     runHook preCheck
