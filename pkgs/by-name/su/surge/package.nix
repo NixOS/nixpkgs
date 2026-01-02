@@ -70,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     rsync
   ];
 
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated";
+
   postPatch = ''
     substituteInPlace src/common/SurgeStorage.cpp \
       --replace "/usr/share/Surge" "$out/share/surge"
