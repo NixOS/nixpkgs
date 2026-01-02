@@ -3,19 +3,30 @@
   buildPythonPackage,
   fetchPypi,
   unittestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "untokenize";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3865dbbbb8efb4bb5eaa72f1be7f3e0be00ea8b7f125c69cbd1f5fda926f37a2";
+    hash = "sha256-OGXbu7jvtLteqnLxvn8+C+AOqLfxJcacvR9f2pJvN6I=";
   };
 
+  postPatch = ''
+    # Fix AttributeError
+      substituteInPlace setup.py \
+        --replace-fail 'version=version(),' 'version="${version}"',
+  '';
+
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "untokenize" ];
 
   meta = {
     description = "Transforms tokens into original source code while preserving whitespace";
