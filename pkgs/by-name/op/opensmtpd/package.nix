@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./proc_path.diff # TODO: upstream to OpenSMTPD, see https://github.com/NixOS/nixpkgs/issues/54045
     ./offline.patch
+    ./libexec_path.diff
   ];
 
   postPatch = ''

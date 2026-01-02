@@ -1,0 +1,12 @@
+diff --git a/configure.ac b/configure.ac
+index 2c78868c..4b29744d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -70,6 +70,7 @@ AS_CASE(["$host"],
+ 			supported by bsd-setproctitle.c])
+ ],
+ 	[*-*-linux* | *-gnu* | *-k*bsd*-gnu*], [
++		pkglibexecdir="$libexecdir/smtpd"
+ 		use_pie=auto
+ 		AC_DEFINE([SPT_TYPE], [SPT_REUSEARGV])
+ ],
