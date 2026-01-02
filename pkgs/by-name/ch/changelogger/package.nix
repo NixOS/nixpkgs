@@ -47,6 +47,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/MarkusFreitag/changelogger";
     license = lib.licenses.mit;
     mainProgram = "changelogger";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
 })
