@@ -9,6 +9,7 @@
   pnpmConfigHook,
   makeBinaryWrapper,
   nix-update-script,
+  nixosTests,
 
   nodejs,
 }:
@@ -58,7 +59,12 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) sub-store;
+    };
+  };
 
   meta = {
     description = "Advanced Subscription Manager for QX, Loon, Surge, Stash, Egern and Shadowrocket";
