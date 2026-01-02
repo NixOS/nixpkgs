@@ -22,7 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     "prefix=${placeholder "out"}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^R(.*)" ];
+  };
 
   meta = {
     homepage = "https://github.com/cktan/tomlc17";
