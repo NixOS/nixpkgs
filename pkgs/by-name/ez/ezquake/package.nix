@@ -7,46 +7,45 @@
   jansson,
   libpng,
   libjpeg,
-  libGLU,
   libGL,
   libX11,
   libsndfile,
-  libXxf86vm,
-  pcre,
+  pcre2,
+  minizip,
+  cmake,
   pkg-config,
   SDL2,
-  vim,
-  speex,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ezquake";
-  version = "3.6.3";
+  version = "3.6.8";
 
   src = fetchFromGitHub {
     owner = "QW-Group";
     repo = "ezquake" + "-source";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-ThrsJfj+eP7Lv2ZSNLO6/b98VHrL6/rhwf2p0qMvTF8=";
+    hash = "sha256-BIkBl6ncwo0NljuqOHJ3yQeDTcClh5FGssdFsKUjN90=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
   buildInputs = [
+    minizip
+    pcre2
     expat
     curl
     jansson
     libpng
     libjpeg
-    libGLU
     libGL
     libsndfile
     libX11
-    libXxf86vm
-    pcre
     SDL2
-    vim
-    speex
   ];
 
   installPhase =
