@@ -7,7 +7,6 @@
   nix-update-script,
   pkg-config,
   rustPlatform,
-  solc,
   versionCheckHook,
 }:
 
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  buildInputs = [ solc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
 
   # Tests are run upstream, and many perform I/O
   # incompatible with the nix build sandbox.
