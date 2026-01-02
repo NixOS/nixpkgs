@@ -765,12 +765,12 @@ final: prev: {
 
   alabaster-nvim = buildVimPlugin {
     pname = "alabaster.nvim";
-    version = "2025-11-21";
+    version = "0-unstable-2025-11-21";
     src = fetchFromGitHub {
       owner = "p00f";
       repo = "alabaster.nvim";
       rev = "1fc9e29fbbce94f127cc8b21960b7e3c85187960";
-      sha256 = "0jm5rlc1j4gni8qgcba0ssdnakdpl0hrqlm61xmipv0k2sr3wy2y";
+      hash = "sha256-Xng+shYT7BtrD6ZSnCGgt01lm9ZALfYwivYRGRjNpUo=";
     };
     meta.homepage = "https://github.com/p00f/alabaster.nvim/";
     meta.hydraPlatforms = [ ];
@@ -1671,6 +1671,19 @@ final: prev: {
       hash = "sha256-uL3yKHIE2VgQUYZIKl4PFOrccluywSI3ofhZaiUN5rg=";
     };
     meta.homepage = "https://github.com/erooke/blink-cmp-latex/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  blink-cmp-nixpkgs-maintainers = buildVimPlugin {
+    pname = "blink-cmp-nixpkgs-maintainers";
+    version = "0-unstable-2026-01-01";
+    src = fetchFromGitHub {
+      owner = "GaetanLepage";
+      repo = "blink-cmp-nixpkgs-maintainers";
+      rev = "b572f807ca3b4b6f87c791b0d5ceaa81dbb00d70";
+      hash = "sha256-ollZI9Bd3eAKvzS84oIzToVruYbCERKKhZpIR+cBxBE=";
+    };
+    meta.homepage = "https://github.com/GaetanLepage/blink-cmp-nixpkgs-maintainers/";
     meta.hydraPlatforms = [ ];
   };
 

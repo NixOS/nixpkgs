@@ -301,6 +301,10 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  blink-cmp-nixpkgs-maintainers = super.blink-cmp-nixpkgs-maintainers.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   blink-cmp-npm-nvim = super.blink-cmp-npm-nvim.overrideAttrs {
     nvimSkipModules = [
       # Test files
