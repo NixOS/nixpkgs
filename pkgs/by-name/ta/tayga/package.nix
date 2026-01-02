@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.9.5";
+  version = "0.9.6";
   pname = "tayga";
 
   src = fetchFromGitHub {
     owner = "apalrd";
     repo = "tayga";
     tag = finalAttrs.version;
-    hash = "sha256-xOm4fetFq2UGuhOojrT8WOcX78c6MLTMVbDv+O62x2E=";
+    hash = "sha256-OsF2RqZzDvf8FMLHN6YAKvWfFgAIQfVkbBTC8hjf2dU=";
   };
 
   makeFlags = [ "CC=${lib.getExe stdenv.cc}" ];
