@@ -34,7 +34,7 @@ let
 in
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
-  version = "2025-12-21";
+  version = "0.3.8.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
