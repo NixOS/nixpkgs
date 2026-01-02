@@ -9,6 +9,7 @@
   rustPlatform,
   stdenv,
   xdg-utils,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -60,6 +61,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         }"
     done
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Radicle JSON HTTP API Daemon";
