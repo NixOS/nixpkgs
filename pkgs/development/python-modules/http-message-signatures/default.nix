@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "http-message-signatures";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pyauth";
     repo = "http-message-signatures";
     tag = "v${version}";
-    hash = "sha256-vPZeAS3hR7Bmj2FtME+V9WU3TViBndrBb9GLkdMVh2Q=";
+    hash = "sha256-c5zwH28FFbEmLfL4nBBE2S1YEbwicoJo3UAYn/0zXEM=";
   };
 
   build-system = [
