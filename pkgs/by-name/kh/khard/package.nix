@@ -8,12 +8,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "khard";
-  version = "0.20.0";
+  version = "0.20.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F48yzPAcBQtc2ec2KCWD3ppkRf2Y4AOI33kiB2KbvdA=";
+    hash = "sha256-s+W/rfa11+jxaNDDIMdLlU5NDvQZSyh5EUD+V3pI+Ug=";
   };
 
   build-system = with python3.pkgs; [
