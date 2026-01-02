@@ -11,5 +11,11 @@
   k3sCNISha256 = "04xig5spp81l81781ixmk99ghiz8lk0p16zhcbja5mslfdjmc7vg";
   containerdVersion = "2.1.5-k3s1";
   containerdSha256 = "0n0g58d352i8wz0bqn87vgrd7z54j268cbmbp19fz68wmifm7fl8";
+  containerdPackage = "";
   criCtlVersion = "1.34.0-k3s2";
+  flannelVersion = "";
+  flannelPluginVersion = "";
+  kubeRouterVersion = "";
+  criDockerdVersion = "";
+  helmJobVersion = "";
 }
