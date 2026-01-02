@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-httpd";
-  version = "0.20.0";
+  version = "0.22.0";
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -22,15 +22,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
-    node = "z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM";
+    node = "z6MkwPUeUS2fJMfc2HZN1RQTQcTTuhw4HhPySB8JeUg2mVvx";
     tag = "v${finalAttrs.version}";
     sparseCheckout = [ "radicle-httpd" ];
-    hash = "sha256-9rJH4ECqOJ9wnYxCbEFHXo3PlhbPdeOnF+Pf1MzX25c=";
+    hash = "sha256-NA5U+Ac6imbtNabvaeYATfUbbmT48uqWAcbJ+ukJcDs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/radicle-httpd";
 
-  cargoHash = "sha256-1GWWtrSYzTXUAgjeWaxyOuDqTDuTMWleug8SmxTHXbI=";
+  cargoHash = "sha256-9xyuoOuoFWu7oItQporJuGA8EIfEMrCvPaRPnwYMzmM=";
 
   nativeBuildInputs = [
     asciidoctor
