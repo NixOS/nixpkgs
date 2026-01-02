@@ -123,8 +123,8 @@ in
         '';
         defaultText = lib.literalExpression ''
           [
-            (config.system.build.initialRamdisk or null)
-            (config.system.build.kernel or null)
+            config.system.build.initialRamdisk
+            config.system.build.kernel
             config.hardware.firmware
             (pkgs.writeTextFile {
               name = "kernel-params";
@@ -222,16 +222,7 @@ in
 
     {
       system = {
-        autoUpgrade.rebootTriggers = [
-          (config.system.build.initialRamdisk or null)
-          (config.system.build.kernel or null)
-          config.hardware.firmware
-          (pkgs.writeTextFile {
-            name = "kernel-params";
-            text = lib.concatStringsSep " " config.boot.kernelParams;
-          })
-        ]
-        ++ config.system.switch.inhibitors;
+        autoUpgrade.rebootTriggers = config.system.switch.inhibitors;
 
         systemBuilderCommands = ''
           ln -s ${config.system.build.rebootTriggers} $out/reboot-triggers
@@ -244,8 +235,26 @@ in
       };
     }
 
+    (lib.mkIf (!config.boot.isContainer) {
+      system.autoUpgrade.rebootTriggers = [
+        config.system.build.initialRamdisk
+        config.system.build.kernel
+        config.hardware.firmware
+        (pkgs.writeTextFile {
+          name = "kernel-params";
+          text = lib.concatStringsSep " " config.boot.kernelParams;
+        })
+      ];
+    })
+
     (lib.mkIf cfg.enable {
       assertions = [
+        {
+          assertion = !config.boot.isContainer;
+          message = ''
+            The option 'system.autoUpgrade.enable' cannot be enabled for a container.
+          '';
+        }
         {
           assertion = !((cfg.channel != null) && (cfg.flake != null));
           message = ''
