@@ -1,11 +1,11 @@
 {
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
   curl,
-  pkg-config,
+  fetchFromGitHub,
+  lib,
   libgit2,
   openssl,
+  pkg-config,
+  rustPlatform,
   zlib,
 }:
 
