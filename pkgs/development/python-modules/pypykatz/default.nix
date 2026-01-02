@@ -8,23 +8,23 @@
   minidump,
   minikerberos,
   msldap,
-  pythonOlder,
+  setuptools,
   winsspi,
 }:
 
 buildPythonPackage rec {
   pname = "pypykatz";
   version = "0.6.13";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-+T1E/Dk4OcXa8vBhspuB/8V23TORsXXetZpylW25SJM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aesedb
     aiosmb
     aiowinreg
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Mimikatz implementation in Python";
-    mainProgram = "pypykatz";
     homepage = "https://github.com/skelsec/pypykatz";
     changelog = "https://github.com/skelsec/pypykatz/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "pypykatz";
   };
 }
