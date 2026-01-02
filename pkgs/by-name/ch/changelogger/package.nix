@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "changelogger";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "MarkusFreitag";
     repo = "changelogger";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Glup2Y3sGO2hNKFeZXOrffHct2F4Ebn9+f6yOy3pekY=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/MarkusFreitag/changelogger/cmd.BuildVersion=${version}"
+    "-X github.com/MarkusFreitag/changelogger/cmd.BuildVersion=${finalAttrs.version}"
     "-X github.com/MarkusFreitag/changelogger/cmd.BuildDate=1970-01-01T00:00:00"
   ];
 
@@ -44,9 +44,9 @@ buildGoModule rec {
   meta = {
     description = "Tool to manage your changelog file in Markdown";
     homepage = "https://github.com/MarkusFreitag/changelogger";
-    changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "changelogger";
   };
-}
+})
