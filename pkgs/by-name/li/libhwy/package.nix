@@ -89,7 +89,8 @@ stdenv.mkDerivation rec {
       asl20
       bsd3
     ];
-    platforms = lib.platforms.unix;
+    # MSYS2 ships highway for mingw-w64; allow evaluation for Windows/MinGW.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }
