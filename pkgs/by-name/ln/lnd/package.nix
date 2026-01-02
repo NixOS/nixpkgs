@@ -39,6 +39,8 @@ buildGoModule rec {
     "cmd/lnd"
   ];
 
+  env.CGO_ENABLED = 0;
+
   inherit tags;
 
   meta = {
