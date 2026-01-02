@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
       --replace "ls_program = xstrdup(\"ls\")" "ls_program = xstrdup(\"${coreutils}/bin/ls\")"
   '';
 
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeBuildInputs = [ readline ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
