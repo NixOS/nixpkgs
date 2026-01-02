@@ -7,6 +7,7 @@
   gtest,
   llvmPackages,
   meson,
+  mesonEmulatorHook,
   ninja,
   nixVersions,
   nix-update-script,
@@ -22,13 +23,13 @@
 let
   nixComponents = nixVersions.nixComponents_2_30;
   common = rec {
-    version = "2.7.0";
+    version = "2.8.1";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-VPUX/68ysFUr1S8JW9I1rU5UcRoyZiCjL+9u2owrs6w=";
+      hash = "sha256-daCKs314m8BlxZ9DZRr7XkpcDK9suE5kZK5X4BoZMpA=";
     };
 
     nativeBuildInputs = [
@@ -72,7 +73,12 @@ in
         "dev"
       ];
 
+      nativeBuildInputs =
+        common.nativeBuildInputs
+        ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
+
       buildInputs = [
+        nixComponents.nix-expr
         gtest
         boost
         nlohmann_json

@@ -88,6 +88,7 @@ let
     miele = getComponentDeps "cloud";
     mjpeg = getComponentDeps "camera";
     mobile_app = getComponentDeps "frontend";
+    mopeka = getComponentDeps "switchbot";
     motioneye = getComponentDeps "camera";
     mqtt = getComponentDeps "camera";
     nest = getComponentDeps "camera" ++ [
@@ -199,6 +200,13 @@ let
     conversation = [
       # intent fixture mismatch
       "test_error_no_device_on_floor"
+    ];
+    homewizard = [
+      # Messages don't match expected due to a change in Homewizard's outputs
+      "test_identify_button"
+      "test_number_entities"
+      "test_select_request_error"
+      "test_switch_entities"
     ];
     sensor = [
       # Failed: Translation not found for sensor

@@ -11,7 +11,7 @@
 }:
 buildPythonPackage rec {
   pname = "ziafont";
-  version = "0.10";
+  version = "0.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = "ziafont";
     tag = version;
-    hash = "sha256-tDwl+2EChzBDCFcZW71r4eSKyazlJSv7tRX6soPNSuY=";
+    hash = "sha256-KjJ+/Yo5mLV6m7Y0eIGHECH0RvdI+eaFTccDmytNTKI=";
   };
 
   build-system = [ setuptools ];

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "GNU Guile library implementing Semantic Versioning 2.0.0";
     homepage = "https://ngyro.com/software/guile-semver.html";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ foo-dogsquared ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

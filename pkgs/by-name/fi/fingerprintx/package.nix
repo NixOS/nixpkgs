@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "fingerprintx";
-  version = "1.1.15";
+  version = "1.1.16";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "fingerprintx";
     tag = "v${version}";
-    hash = "sha256-kbSP/nSdCrcEYVvLVawjZ2RDvTGv5JsHEIXXcPLA1ng=";
+    hash = "sha256-U6QHSvZKgFwRkbWXpHMJZQyXG68DYyl5zXA+Y7eQp8Y=";
   };
 
   vendorHash = "sha256-1KSNvK2ylqWjfhxMY+NQFoDahPgqGb12nA4oGqqoFIA=";

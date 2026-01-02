@@ -8,22 +8,24 @@
   clang_20,
   libsecret,
   ripgrep,
-  nodejs,
+  nodejs_22,
   nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "gemini-cli";
-  version = "0.21.1";
+  version = "0.22.5";
 
   src = fetchFromGitHub {
     owner = "google-gemini";
     repo = "gemini-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WhQbEgr1NhReexVbCxOv11mcP+gftl1J7/FJVdiADXA=";
+    hash = "sha256-3d9Lq3IulIgp4QGNtSvkwz10kfygX6vsmVdlU3lE6Gw=";
   };
 
-  npmDepsHash = "sha256-Q6mtA+Y3k4VoazJ4+uKIFbaC/lUTQFSpXxfXoP7i6Lc=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-6NqpkUgez7CqQAMDQW3Zdi86sF5qXseKXMw1Vw/5zWU=";
 
   nativeBuildInputs = [
     jq
@@ -63,7 +65,7 @@ buildNpmPackage (finalAttrs: {
   # Prevent npmDeps and python from getting into the closure
   disallowedReferences = [
     finalAttrs.npmDeps
-    nodejs.python
+    nodejs_22.python
   ];
 
   installPhase = ''
@@ -97,6 +99,7 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [
+      brantes
       xiaoxiangmoe
       FlameFlag
       taranarmo

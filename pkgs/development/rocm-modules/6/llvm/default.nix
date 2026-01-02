@@ -359,6 +359,14 @@ overrideLlvmPackagesRocm (s: {
             url = "https://github.com/llvm/llvm-project/commit/816fde1cbb700ebcc8b3df81fb93d675c04c12cd.patch";
             relative = "clang";
           })
+          (fetchpatch {
+            # [PATCH] Reapply "[CUDA][HIP] Add a __device__ version of std::__glibcxx_assert_fail()"
+            # Fix errors with gcc15
+            # https://github.com/ROCm/composable_kernel/issues/2887
+            hash = "sha256-liowyS6FTsDhH8mJYXsanK7GEIlXFhd68GRDf/7Y6gg=";
+            url = "https://github.com/llvm/llvm-project/commit/8ec0552a7f1f50986dda6d13eae310d121d7e3ba.patch";
+            relative = "clang";
+          })
         ]
         ++ old.patches
         ++ [

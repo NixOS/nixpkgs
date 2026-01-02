@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.1.4";
+  version = "5.1.5";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-MlBLhgqpF+A9hotnhX83349wIpCQfzsqpyZb0xME2XQ=";
+    hash = "sha256-eMo/ZsZdfAxR14aSnit3yHdw/yv8KdfKjK1Hu7Ce/3o=";
   };
 
   outputs = [

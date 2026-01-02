@@ -115,7 +115,6 @@ let
       # Note that at this point in evaluation, there is nothing whatsoever on the
       # fish_function_path. That means we don't have most fish builtins, e.g., `eval`.
 
-
       # additional profiles are expected in order of precedence, which means the reverse of the
       # NIX_PROFILES variable (same as config.environment.profiles)
       set -l __nix_profile_paths (string split ' ' $NIX_PROFILES)[-1..1]
@@ -151,13 +150,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.2.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-BUtHMx44efWTiS6heCUqONxngLwUCBOoDQqxoCj189U=";
+    hash = "sha256-/B4U3giKGmU5B/L5HQLS1lU8f7hsfI4aCeOjWcQ1dpA=";
   };
 
   env = {
@@ -168,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-00Ch1EcX4cxMwvuDQLzTUIY7XkE3WX8bXBUA3yMRAMI=";
+    hash = "sha256-/udRRs/ieLfazVTwM47ElExN40QdAG/OqQXmYurgC1I=";
   };
 
   patches = [
@@ -220,6 +219,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace tests/checks/complete.fish \
       --replace-fail '/bin/ls' '${lib.getExe' coreutils "ls"}'
+
+    substituteInPlace tests/checks/output-buffering.fish \
+      --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
+
+    substituteInPlace tests/pexpects/wait.py \
+      --replace-fail 'expect_prompt("Job ' 'expect_prompt("fish: Job ' \
+      --replace-fail 'expect_str("Job ' 'expect_str("fish: Job '
+
+    substituteInPlace share/tools/web_config/webconfig.py \
+      --replace-fail 'os.environ["__fish_terminal_color_theme"]' \
+        'os.environ.get("__fish_terminal_color_theme", "default")'
 
     # Several pexpect tests are flaky
     # See https://github.com/fish-shell/fish-shell/issues/8789
@@ -356,7 +366,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   # Ensure that we don't vendor libpcre2, but instead link against the one from nixpkgs

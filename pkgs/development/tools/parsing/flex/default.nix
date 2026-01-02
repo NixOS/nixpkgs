@@ -30,7 +30,14 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/lede-project/source/0fb14a2b1ab2f82ce63f4437b062229d73d90516/tools/flex/patches/200-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch";
       sha256 = "0mpp41zdg17gx30kcpj83jl8hssks3adbks0qzbhcz882b9c083r";
     })
-  ];
+  ]
+  ++ (lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    (fetchurl {
+      name = "gcc-15.patch";
+      url = "https://github.com/westes/flex/commit/bf254c75b1e0d2641ebbd7fc85fb183f36a62ea7.patch";
+      hash = "sha256-Bnv23M2K1Qf7pEaEz0ueSNzTCdjMTDiMm+H7JaxUISs=";
+    })
+  ]);
 
   postPatch = ''
     patchShebangs tests

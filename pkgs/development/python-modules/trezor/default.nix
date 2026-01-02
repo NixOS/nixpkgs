@@ -46,6 +46,9 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
 
+  # fix "click<8.2,>=7 not satisfied by version 8.3.1"
+  pythonRelaxDeps = [ "click" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [

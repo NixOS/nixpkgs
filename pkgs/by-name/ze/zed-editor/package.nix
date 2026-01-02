@@ -311,14 +311,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "^v(?!.*(?:-pre|0\.999999\.0|0\.9999-temporary)$)(.+)$"
+        "^v(?!.*(?:-pre|0\\.999999\\.0|0\\.9999-temporary)$)(.+)$"
 
         # use github releases instead of git tags
         # zed sometimes moves git tags, making them unreliable

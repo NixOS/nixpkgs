@@ -7,17 +7,28 @@
 let
   cfg = config.services.knot-resolver;
   # pkgs.writers.yaml_1_1.generate with additional kresctl validate
-  configFile =
-    pkgs.runCommandLocal "knot-resolver.yaml"
+  configFile = pkgs.callPackage (
+    {
+      runCommandLocal,
+      remarshal_0_17,
+      stdenv,
+    }:
+    runCommandLocal "knot-resolver.yaml"
       {
-        nativeBuildInputs = [ pkgs.remarshal_0_17 ];
+        nativeBuildInputs = [ remarshal_0_17 ];
         value = builtins.toJSON cfg.settings;
         passAsFile = [ "value" ];
       }
       ''
         json2yaml "$valuePath" "$out"
-        ${cfg.managerPackage}/bin/kresctl validate "$out"
-      '';
+        ${
+          # We skip validation if the build platform cannot execute # the binary targeting the host platform.
+          lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+            ${cfg.managerPackage}/bin/kresctl validate "$out"
+          ''
+        }
+      ''
+  ) { };
 in
 {
   meta.maintainers = [
@@ -36,10 +47,9 @@ in
         If you want to use knot-resolver 5, please use services.kresd.
       '';
     };
-    package = lib.mkPackageOption pkgs "knot-resolver-manager_6.knot-resolver" {
-      example = "knot-resolver_6.override { extraFeatures = true; }";
+    managerPackage = lib.mkPackageOption pkgs "knot-resolver-manager_6" {
+      example = "pkgs.knot-resolver-manager_6.override { extraFeatures = true; }";
     };
-    managerPackage = lib.mkPackageOption pkgs "knot-resolver-manager_6" { };
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = (pkgs.formats.yaml { }).type;
@@ -113,16 +123,6 @@ in
     users.groups.knot-resolver = { };
     networking.resolvconf.useLocalResolver = lib.mkDefault true;
 
-    assertions = [
-      {
-        assertion = lib.versionAtLeast cfg.package.version "6.0.0";
-        message = ''
-          services.knot-resolver only works with knot-resolver 6 or later.
-          Please use services.kresd for knot-resolver 5.
-        '';
-      }
-    ];
-
     environment = {
       etc."knot-resolver/config.yaml".source = configFile;
       systemPackages = [
@@ -134,10 +134,9 @@ in
       ];
     };
 
-    systemd.packages = [ cfg.package ]; # the unit gets patched a bit just below
+    systemd.packages = [ cfg.managerPackage.kresd ]; # the unit gets patched a bit just below
     systemd.services."knot-resolver" = {
       wantedBy = [ "multi-user.target" ];
-      path = [ (lib.getBin cfg.package) ];
       stopIfChanged = false;
       reloadTriggers = [
         configFile

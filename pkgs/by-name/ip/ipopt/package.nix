@@ -6,9 +6,12 @@
   blas,
   lapack,
   gfortran,
-  mumps,
-  spral,
+  enableAMPL ? true,
   libamplsolver,
+  enableMUMPS ? true,
+  mumps,
+  enableSPRAL ? true,
+  spral,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -25,12 +28,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
   };
 
-  outputs = [
-    "bin"
-    "dev"
-    "out"
-    "doc"
-  ];
+  outputs =
+    # The solver executables for AMPL modeling environment are only installed
+    # when AMPL is available.
+    lib.optional enableAMPL "bin" ++ [
+      "out"
+      "dev"
+      "doc"
+    ];
 
   nativeBuildInputs = [
     pkg-config
@@ -40,17 +45,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     blas
     lapack
-    mumps
-    spral
-    libamplsolver
-  ];
+  ]
+  ++ lib.optional enableMUMPS mumps
+  ++ lib.optional enableSPRAL spral
+  ++ lib.optional enableAMPL libamplsolver;
 
-  configureFlags = [
-    "--with-mumps-cflags=-I${lib.getDev mumps}/include/mumps_seq"
-    "--with-mumps-lflags=-ldmumps"
-    "--with-spral-lflags=-lspral"
-    "--with-asl-lflags=-lamplsolver"
-  ];
+  configureFlags =
+    lib.optionals enableMUMPS [
+      "--with-mumps-cflags=-I${lib.getDev mumps}/include/mumps_seq"
+      "--with-mumps-lflags=-ldmumps"
+    ]
+    ++ lib.optional enableSPRAL "--with-spral-lflags=-lspral"
+    ++ lib.optional enableAMPL "--with-asl-lflags=-lamplsolver";
 
   enableParallelBuilding = true;
 

@@ -498,6 +498,7 @@ in
   earlyoom = runTestOn [ "x86_64-linux" ] ./earlyoom.nix;
   easytier = runTest ./easytier.nix;
   ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
+  ec2-image = runTest ./ec2-image.nix;
   ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
   echoip = runTest ./echoip.nix;
   ecryptfs = runTest ./ecryptfs.nix;
@@ -1104,6 +1105,7 @@ in
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
+  nohang = runTest ./nohang.nix;
   nomad = runTest ./nomad.nix;
   nominatim = runTest ./nominatim.nix;
   non-default-filesystems = handleTest ./non-default-filesystems.nix { };
@@ -1293,7 +1295,10 @@ in
   privatebin = runTest ./privatebin.nix;
   privoxy = runTest ./privoxy.nix;
   prometheus = import ./prometheus { inherit runTest; };
-  prometheus-exporters = handleTest ./prometheus-exporters.nix { };
+  prometheus-exporters = import ./prometheus-exporters.nix {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   prosody = runTest ./xmpp/prosody.nix;
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
   prowlarr = runTest ./prowlarr.nix;
@@ -1551,6 +1556,7 @@ in
   szurubooru = handleTest ./szurubooru.nix { };
   taler = handleTest ./taler { };
   tandoor-recipes = runTest ./tandoor-recipes.nix;
+  tandoor-recipes-media = runTest ./tandoor-recipes-media.nix;
   tandoor-recipes-script-name = runTest ./tandoor-recipes-script-name.nix;
   tang = runTest ./tang.nix;
   taskchampion-sync-server = runTest ./taskchampion-sync-server.nix;

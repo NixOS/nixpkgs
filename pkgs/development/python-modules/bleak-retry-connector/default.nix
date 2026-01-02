@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   dependencies = [
     bleak
+    dbus-fast
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     bluetooth-adapters
-    dbus-fast
   ];
 
   nativeCheckInputs = [

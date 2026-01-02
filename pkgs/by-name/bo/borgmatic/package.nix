@@ -59,7 +59,8 @@ python3Packages.buildPythonApplication rec {
   postInstall =
     lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd borgmatic \
-        --bash <($out/bin/borgmatic --bash-completion)
+        --bash <($out/bin/borgmatic --bash-completion) \
+        --fish <($out/bin/borgmatic --fish-completion)
     ''
     + lib.optionalString enableSystemd ''
       mkdir -p $out/lib/systemd/system

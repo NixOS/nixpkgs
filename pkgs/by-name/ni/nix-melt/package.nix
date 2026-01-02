@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/nix-melt";
     changelog = "https://github.com/nix-community/nix-melt/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

@@ -127,6 +127,7 @@
   sad,
   # tv.nvim dependency
   television,
+  tree-sitter,
 }:
 self: super:
 let
@@ -192,6 +193,14 @@ assertNoAdditions {
     dependencies = with self; [
       nui-nvim
       plenary-nvim
+    ];
+  };
+
+  artio-nvim = super.artio-nvim.overrideAttrs {
+    # Requires extui enabled
+    nvimSkipModules = [
+      "artio.view"
+      "artio.picker"
     ];
   };
 
@@ -290,6 +299,10 @@ assertNoAdditions {
 
   blink-cmp-git = super.blink-cmp-git.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+  };
+
+  blink-cmp-nixpkgs-maintainers = super.blink-cmp-nixpkgs-maintainers.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
   };
 
   blink-cmp-npm-nvim = super.blink-cmp-npm-nvim.overrideAttrs {
@@ -877,8 +890,8 @@ assertNoAdditions {
   copilot-vim = super.copilot-vim.overrideAttrs (old: {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/client.vim \
-        --replace-fail "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
-                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+        --replace-fail "let node = s:GetCommand('copilot_node_command', ['node'])" \
+                       "let node = s:GetCommand('copilot_node_command', ['${nodejs}/bin/node'])"
     '';
 
     meta = old.meta // {
@@ -1529,6 +1542,10 @@ assertNoAdditions {
     dependencies = [ self.nvim-treesitter ];
   };
 
+  iswap-nvim = super.iswap-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
   jdd-nvim = super.jdd-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -1558,21 +1575,34 @@ assertNoAdditions {
     ];
   };
 
-  kulala-nvim = super.kulala-nvim.overrideAttrs {
-    dependencies = with self; [
-      nvim-treesitter
-      nvim-treesitter-parsers.http
-    ];
-    buildInputs = [ curl ];
-    postPatch = ''
-      substituteInPlace lua/kulala/config/defaults.lua \
-        --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
-    '';
-    nvimSkipModules = [
-      # Requires some extra work to get CLI working in nixpkgs
-      "cli.kulala_cli"
-    ];
-  };
+  kulala-nvim = super.kulala-nvim.overrideAttrs (
+    old:
+    let
+      kulala-http-grammar = neovimUtils.grammarToPlugin (
+        tree-sitter.buildGrammar {
+          inherit (old) version src meta;
+          language = "kulala_http";
+          location = "lua/tree-sitter";
+          generate = false;
+        }
+      );
+    in
+    {
+      dependencies = [ kulala-http-grammar ];
+      buildInputs = [ curl ];
+
+      patches = [ ./patches/kulala-nvim/do-not-install-grammar.patch ];
+      postPatch = ''
+        substituteInPlace lua/kulala/config/defaults.lua \
+          --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
+      '';
+
+      nvimSkipModules = [
+        # Requires some extra work to get CLI working in nixpkgs
+        "cli.kulala_cli"
+      ];
+    }
+  );
 
   lazydocker-nvim = super.lazydocker-nvim.overrideAttrs {
     runtimeDeps = [
@@ -1647,7 +1677,6 @@ assertNoAdditions {
 
   lean-nvim = super.lean-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-lspconfig
       plenary-nvim
     ];
   };
@@ -3581,6 +3610,10 @@ assertNoAdditions {
     ];
   };
 
+  treesitter-modules-nvim = super.treesitter-modules-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
   triptych-nvim = super.triptych-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -4007,6 +4040,10 @@ assertNoAdditions {
     meta = old.meta // {
       maintainers = with lib.maintainers; [ llakala ];
     };
+  });
+
+  vim-textobj-quote = super.vim-textobj-quote.overrideAttrs (old: {
+    dependencies = [ self.vim-textobj-user ];
   });
 
   vim-tpipeline = super.vim-tpipeline.overrideAttrs {

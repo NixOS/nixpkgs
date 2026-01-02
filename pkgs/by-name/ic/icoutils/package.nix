@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.nongnu.org/cgit/icoutils.git/patch/?id=aa3572119bfe34484025f37dbbc4d5070f735908";
       hash = "sha256-4YCI+SYT2bCBNegkpN5jcfi6gOeec65TmCABr98HHB4=";
     })
+    # Fix build with GCC 15 / C23.
+    # https://savannah.nongnu.org/bugs/index.php?66812
+    (fetchpatch {
+      url = "https://git.savannah.nongnu.org/cgit/icoutils.git/patch/?id=298da402990ebe1279fb82b63ae2dc66ad78fd36";
+      hash = "sha256-XQXhc1GkKhm4RJZPvkV8DYULziuBo0Dpt6hscM2Qcus=";
+    })
   ];
 
   nativeBuildInputs = [

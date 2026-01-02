@@ -23,6 +23,8 @@
   decorator,
   astor,
   opt-einsum,
+  rdma-core,
+  safetensors,
   typing-extensions,
 }:
 
@@ -32,15 +34,20 @@ let
   version = sources.version;
   format = "wheel";
   pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-  cpuOrGpu = if cudaSupport then "gpu" else "cpu";
   hash =
-    sources."${stdenv.hostPlatform.system}"."${cpuOrGpu}"."${pyShortVersion}"
-      or (throw "${pname} has no sources.nix entry for '${stdenv.hostPlatform.system}.${cpuOrGpu}.${pyShortVersion}' attribute");
+    if cudaSupport then
+      sources."${stdenv.hostPlatform.system}"."gpu"."cu${
+        lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version
+      }"."${pyShortVersion}"
+    else
+      sources."${stdenv.hostPlatform.system}"."cpu"."${pyShortVersion}";
   platform = sources."${stdenv.hostPlatform.system}".platform;
   src =
     if cudaSupport then
       (fetchurl {
-        url = "https://paddle-whl.bj.bcebos.com/stable/cu128/paddlepaddle-gpu/paddlepaddle-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
+        url = "https://paddle-whl.bj.bcebos.com/stable/cu${
+          lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version
+        }/paddlepaddle-gpu/paddlepaddle_gpu-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
         inherit hash;
       })
     else
@@ -72,6 +79,8 @@ buildPythonPackage {
   ]
   ++ lib.optionals cudaSupport [ autoPatchelfHook ];
 
+  buildInputs = lib.optionals cudaSupport [ rdma-core ];
+
   dependencies = [
     setuptools
     httpx
@@ -81,6 +90,7 @@ buildPythonPackage {
     decorator
     astor
     opt-einsum
+    safetensors
     typing-extensions
   ];
 
@@ -126,6 +136,8 @@ buildPythonPackage {
       sed -i '/# Check python lib installed or not./,/^fi$/d' $out/bin/paddle
       sed -i 's/^INSTALLED_VERSION=.*/INSTALLED_VERSION="${version}"/' $out/bin/paddle
     '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Machine Learning Framework from Industrial Practice";

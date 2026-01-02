@@ -70,11 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional xwaylandSupport "-Dxwayland";
 
   postInstall = ''
+    install -Dm755 example/init -t $out/example/
     install contrib/river.desktop -Dt $out/share/wayland-sessions
 
     # Update the desktop file to use the installed example config
     substituteInPlace $out/share/wayland-sessions/river.desktop \
           --replace-fail "Exec=river" "Exec=$out/bin/river -c $out/lib/river/example/init"
+    
   '';
 
   doInstallCheck = true;
@@ -98,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       the river 0.4.0 release.
     '';
     changelog = "https://codeberg.org/river/river-classic/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       adamcstephens
       moni

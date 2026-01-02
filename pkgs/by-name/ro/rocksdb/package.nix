@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "10.5.1";
+  version = "10.7.5";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TDYXzYbOLhcIRi+qi0FW1OLVtfKOF+gUbj62Tgpp3/E=";
+    hash = "sha256-kKMwgRcjELla/9aak5gZbUHg1bkgGhlobr964wdatxI=";
   };
 
   patches = lib.optional (
@@ -89,6 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
       sed -e '1i #include <cstdint>' -i table/block_based/data_block_hash_index.h
       sed -e '1i #include <cstdint>' -i util/string_util.h
       sed -e '1i #include <cstdint>' -i include/rocksdb/utilities/checkpoint.h
+    ''
+    + lib.optionalString (lib.versionOlder finalAttrs.version "10.4.2") ''
+      # Fix gcc-15 build failures due to missing <cstdint>
+      sed -e '1i #include <cstdint>' -i db/blob/blob_file_meta.h
+      sed -e '1i #include <cstdint>' -i include/rocksdb/sst_partitioner.h
+      sed -e '1i #include <cstdint>' -i include/rocksdb/write_batch_base.h
+      # Some older versions don't have this
+      sed -e '1i #include <cstdint>' -i include/rocksdb/trace_record.h || true
     ''
     + lib.optionalString (lib.versionOlder finalAttrs.version "7") ''
       # Fix gcc-13 build failures due to missing <cstdint> and

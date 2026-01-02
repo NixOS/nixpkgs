@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
   setuptools,
   typing-extensions,
   pytestCheckHook,
@@ -22,6 +23,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-FJ1q6W9IYs0OSMZc+bI4v22hOAAWAv2OW3BAqixm8Hs=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/aio-libs/async-lru/issues/635
+      name = "python314-compatibility.patch";
+      url = "https://github.com/aio-libs/async-lru/commit/4df3785d3e5210ce6277b3137c4625cd73918088.patch";
+      hash = "sha256-B9KCJPbiZTQJrnxC/7VI+jgr2PKfwOmS7naXZwKtF9c=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

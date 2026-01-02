@@ -12,14 +12,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmatekbd";
   version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "libmatekbd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6s8JiuXbBWOHxbNSuO8rglzOCRKlQ9fx/GsYYc08GmI=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

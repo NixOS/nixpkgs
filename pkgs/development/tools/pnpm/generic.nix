@@ -89,7 +89,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           );
       configHook =
         lib.warn
-          "pnpm.configHook: The package attribue is deprecated. Use the top-level pnpmConfigHook attribute instead"
+          "pnpm.configHook: The package attribute is deprecated. Use the top-level pnpmConfigHook attribute instead"
           (
             pnpmConfigHook.overrideAttrs (prevAttrs: {
               propagatedBuildInputs = prevAttrs.propagatedBuildInputs or [ ] ++ [

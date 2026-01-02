@@ -8,15 +8,15 @@
   gobject-introspection,
   libayatana-appindicator,
   polkit,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-polkit";
   version = "1.28.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-polkit-${finalAttrs.version}.tar.xz";
     sha256 = "NQod0KjtaiycGDz/KiHzlCmelo/MauLoyTxWXa5gSug=";
   };
 
@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-polkit";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Integrates polkit authentication for MATE desktop";
@@ -43,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

@@ -17,6 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
   # tradcpp only comes with BSD-make Makefile; the patch adds configure support
   patches = [ ./tradcpp-configure.patch ];
 
+  # Fix build with gcc15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook ];

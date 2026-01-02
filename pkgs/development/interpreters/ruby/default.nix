@@ -20,7 +20,6 @@
   buildEnv,
   bundler,
   bundix,
-  cargo,
   rustPlatform,
   rustc,
   makeBinaryWrapper,
@@ -100,7 +99,6 @@ let
           # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
           removeReferencesTo,
           jitSupport ? yjitSupport,
-          cargo,
           rustPlatform,
           rustc,
           yjitSupport ? yjitSupported,
@@ -150,7 +148,6 @@ let
           ])
           ++ ops yjitSupport [
             rustPlatform.cargoSetupHook
-            cargo
             rustc
           ]
           ++ op useBaseRuby baseRuby;
@@ -413,8 +410,8 @@ in
   };
 
   ruby_4_0 = generic {
-    version = rubyVersion "4" "0" "0" "preview3";
-    hash = "sha256-Q9CSbndvvVWZrcx7zLTMyAThCfQCogaGB6KoZWLCzcA=";
+    version = rubyVersion "4" "0" "0" "";
+    hash = "sha256-LoOJyMByy2WMk6E3JzLZ6shAgsiLBldQ2x5SpaxjAnE=";
     cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
   };
 

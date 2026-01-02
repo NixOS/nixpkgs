@@ -7,7 +7,6 @@
   mock-services,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   urllib3,
   requests-toolbelt,
@@ -18,25 +17,21 @@
 
 buildPythonPackage rec {
   pname = "pylxd";
-  version = "2.3.2";
+  version = "2.3.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "pylxd";
     tag = version;
-    hash = "sha256-Q4GMz7HFpJNPYlYgLhE0a7mVCwNpdbw4XVcUGQ2gUJ0=";
+    hash = "sha256-UbDkau3TLwFxWZxJGNF5hgtGn6JgVq5L2CvUgnb4IC8=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     python-dateutil
     requests
@@ -62,7 +57,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for interacting with the LXD REST API";
     homepage = "https://pylxd.readthedocs.io/";
-    changelog = "https://github.com/canonical/pylxd/releases/tag/${version}";
+    changelog = "https://github.com/canonical/pylxd/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

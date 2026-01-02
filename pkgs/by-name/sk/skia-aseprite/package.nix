@@ -7,7 +7,6 @@
   fontconfig,
   gn,
   harfbuzzFull,
-  icu,
   lib,
   libglvnd,
   libjpeg,
@@ -26,13 +25,13 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "skia-aseprite";
-  version = "m102-861e4743af";
+  version = "m124-08a5439a6b";
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "skia";
     rev = finalAttrs.version;
-    hash = "sha256-IlZbalmHl549uDUfPG8hlzub8TLWhG0EsV6HVAPdsl0=";
+    hash = "sha256-D79Z/deJsDVclcUTZXUrNZdTPW2TFNaVF4mTeHO8I+U=";
   };
 
   nativeBuildInputs = [
@@ -41,17 +40,29 @@ clangStdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
+  # Using substituteInPlace because no clean upstream backport for GCC 15 exists for this version of Skia, newer versions fix this with large refactorings.
+  postPatch = ''
+    substituteInPlace include/private/SkSLProgramKind.h \
+      --replace-fail "#include <cinttypes>" "#include <cinttypes>
+    #include <cstdint>"
+    substituteInPlace src/sksl/transform/SkSLTransform.h \
+      --replace-fail "#include <vector>" "#include <vector>
+    #include <cstdint>"
+  '';
+
   preConfigure = with depSrcs; ''
     mkdir -p third_party/externals
     ln -s ${angle2} third_party/externals/angle2
     ln -s ${dng_sdk} third_party/externals/dng_sdk
+    ln -s ${icu} third_party/externals/icu
+    ln -s ${icu4x} third_party/externals/icu4x
     ln -s ${piex} third_party/externals/piex
-    ln -s ${sfntly} third_party/externals/sfntly
+    ln -s ${wuffs} third_party/externals/wuffs
   '';
 
   configurePhase = ''
     runHook preConfigure
-    gn gen lib --args="is_debug=false is_official_build=true extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
+    gn gen lib --args="is_debug=false is_official_build=true skia_use_system_icu=false extra_cflags=[\"-I${harfbuzzFull.dev}/include/harfbuzz\"]"
     runHook postConfigure
   '';
 
@@ -59,7 +70,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig
     harfbuzzFull
-    icu
     libglvnd
     libjpeg
     libpng
@@ -84,20 +94,26 @@ clangStdenv.mkDerivation (finalAttrs: {
 
     # All these paths are used in some way when building Aseprite.
     cp -r --parents -t $out/ \
-      include/codec \
-      include/config \
-      include/core \
-      include/effects \
-      include/gpu \
-      include/private \
-      include/utils \
-      include/third_party/skcms/*.h \
+      include/codec/**/*.h \
+      include/config/**/*.h \
+      include/core/**/*.h \
+      include/effects/**/*.h \
+      include/gpu/**/*.h \
+      include/private/**/*.h \
+      include/utils/**/*.h \
+      include/ports/**/*.h \
+      include/sksl/**/*.h \
       lib/*.a \
-      modules/skshaper/include/*.h \
+      modules/skshaper/**/*.h \
+      modules/skcms/**/*.h \
+      modules/skunicode/**/*.h \
       src/core/*.h \
       src/gpu/**/*.h \
+      src/image/*.h \
+      src/sksl/**/*.h \
+      src/base/**/*.h \
       third_party/externals/angle2/include \
-      third_party/skcms/**/*.h
+      third_party/externals/icu/flutter/icudtl.dat
 
     runHook postInstall
   '';

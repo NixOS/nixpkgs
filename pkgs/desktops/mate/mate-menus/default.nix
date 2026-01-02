@@ -10,17 +10,17 @@
   gobject-introspection,
   mate-common,
   python3,
-  mateUpdateScript,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mate-menus";
   version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-menus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GAc9DPsXdswmyNKlbY6cyHBWO2OSKCBygtzttNHN/p4=";
   };
   nativeBuildInputs = [
@@ -44,7 +44,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname; };
+  passthru.updateScript = gitUpdater {
+    url = "https://git.mate-desktop.org/mate-menus";
+    odd-unstable = true;
+    rev-prefix = "v";
+  };
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
@@ -57,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };
-}
+})

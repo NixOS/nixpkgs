@@ -19,6 +19,7 @@
   hyprland-qtutils,
   hyprlang,
   hyprutils,
+  hyprwire,
   hyprwayland-scanner,
   libGL,
   libdrm,
@@ -91,14 +92,14 @@ assert assertMsg (
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.52.2";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R2Hm7XbW8CTLEIeYCAlSQ3U5bFhn76FC17hEy/ws8EM=";
+    hash = "sha256-1jZK7hqNhQRqhj+2eb/JvnBoARxUgoVXKLSwp2RPmNQ=";
   };
 
   postPatch = ''
@@ -107,6 +108,7 @@ customStdenv.mkDerivation (finalAttrs: {
 
     # Remove extra @PREFIX@ to fix pkg-config paths
     sed -i "s#@PREFIX@/##g" hyprland.pc.in
+    sed -i "s#@PREFIX@/##g" example/hyprland.desktop.in
   '';
 
   # variables used by CMake, and shown in `hyprctl version`
@@ -127,6 +129,7 @@ customStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     hyprwayland-scanner
+    hyprwire
     makeWrapper
     cmake
     # meson + ninja are used to build the hyprland-protocols submodule
@@ -187,13 +190,13 @@ customStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeFlags = mapAttrsToList cmakeBool {
+    "BUILT_WITH_NIX" = true;
     "NO_XWAYLAND" = !enableXWayland;
     "NO_SYSTEMD" = !withSystemd;
     "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
     "NO_UWSM" = true;
     "NO_HYPRPM" = true;
     "TRACY_ENABLE" = false;
-    "BUILD_HYPRTESTER" = true;
   };
 
   postInstall = ''

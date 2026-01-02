@@ -46,6 +46,10 @@ stdenv.mkDerivation {
     texinfo
   ];
 
+  # Fix build with gcc15
+  # https://savannah.nongnu.org/bugs/index.php?66726
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   configureFlags = [
     "--with-editor=${nano}/bin/nano"
 

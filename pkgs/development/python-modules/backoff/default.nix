@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-g8bYGJ6Kw6y3BUnuoP1IAye5CL0geH5l7pTb3xxq7jI=";
   };
 
+  patches = [
+    # https://github.com/litl/backoff/pull/220
+    ./python314-compat.patch
+  ];
+
   nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [

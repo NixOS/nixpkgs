@@ -42,7 +42,6 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/metal";
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Official Equinix Metal CLI";

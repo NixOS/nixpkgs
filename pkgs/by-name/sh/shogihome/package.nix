@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_37,
+  electron_39,
   vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
@@ -18,20 +18,20 @@
 }:
 
 let
-  electron = electron_37;
+  electron = electron_39;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.25.1";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CRPZmycYaKtqjjiISKVGLf2jUvM6Xk6cUryKZcFX3tc=";
+    hash = "sha256-Mq5fmxecPqb0YH4vgzAKiZ+5f77acQRoodJaqJqjjQI=";
   };
 
-  npmDepsHash = "sha256-8v6r3DAUzNeMQqLl99mp5rUytbUe7wFj3jkHb6lbwFI=";
+  npmDepsHash = "sha256-iFAIwvM0SjZiLfY0Ejdk1TlKEJDh/bx3fdzkzNBOkkE=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -39,11 +39,12 @@ buildNpmPackage (finalAttrs: {
       --replace-fail 'npm run install:electron && ' ""
 
     substituteInPlace .electron-builder.config.mjs \
-      --replace-fail 'AppImage' 'dir'
+      --replace-fail 'AppImage' 'dir' \
+      --replace-fail 'await signMacApp' '// await signMacApp'
   ''
   # Workaround for https://github.com/electron/electron/issues/31121
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace src/background/window/path.ts \
+    substituteInPlace src/background/proc/env.ts \
       --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
   '';
 

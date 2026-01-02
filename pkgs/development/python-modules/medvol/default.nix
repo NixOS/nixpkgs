@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   numpy,
@@ -10,16 +9,14 @@
 
 buildPythonPackage rec {
   pname = "medvol";
-  version = "0.0.17";
+  version = "0.0.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
     repo = "medvol";
-    rev = "v${version}";
-    hash = "sha256-AuVTJvKalRXf/ObxXFk0aBVkqRffo4Ph5/LJ2vDK1nU=";
+    tag = "v${version}";
+    hash = "sha256-PUZZRF5KzfvwI335H1tnUtGa2+zdnL6J5NArqQWL7tM=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Wrapper for loading medical 3D image volumes such as NIFTI or NRRD images";
     homepage = "https://github.com/MIC-DKFZ/medvol";
-    changelog = "https://github.com/MIC-DKFZ/MedVol/releases/tag/v${version}";
+    changelog = "https://github.com/MIC-DKFZ/MedVol/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

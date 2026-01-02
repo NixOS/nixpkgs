@@ -1,18 +1,19 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
 }:
 buildGoModule rec {
   pname = "nom";
-  version = "2.20.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "guyfedwards";
     repo = "nom";
     tag = "v${version}";
-    hash = "sha256-3jkHwHEuwq+KmPyDqdRsHtU4HJiBSogifufUiFpsYkI=";
+    hash = "sha256-DoSTBFRGJ7oUjUaiszO87b+0v1sBgLmL24Zd/YaMMXQ=";
   };
 
   vendorHash = "sha256-d5KTDZKfuzv84oMgmsjJoXGO5XYLVKxOB5XehqgRvYw=";
@@ -20,6 +21,9 @@ buildGoModule rec {
   ldflags = [
     "-X 'main.version=${version}'"
   ];
+
+  # only run xdg-specific test on linux
+  checkFlags = lib.optional stdenv.hostPlatform.isDarwin "-skip=^TestNewDefaultWithXDGConfigHome$";
 
   passthru.updateScript = nix-update-script { };
 

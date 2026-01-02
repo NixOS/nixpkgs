@@ -577,6 +577,8 @@ let
 
         extunix = callPackage ../development/ocaml-modules/extunix/default.nix { };
 
+        ezgzip = callPackage ../development/ocaml-modules/ezgzip { };
+
         ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
         ezjsonm-encoding = callPackage ../development/ocaml-modules/ezjsonm-encoding { };
@@ -1090,6 +1092,8 @@ let
         logs = callPackage ../development/ocaml-modules/logs { };
 
         logs-syslog = callPackage ../development/ocaml-modules/logs-syslog { };
+
+        lreplay = callPackage ../development/ocaml-modules/lreplay { };
 
         lru = callPackage ../development/ocaml-modules/lru { };
 

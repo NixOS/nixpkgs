@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -42,6 +43,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-Prj1saT0yoPAP8rDE0ipBEpR3QMk4PS12VSJlxc22p8=";
   };
+
+  patches = [
+    # Compatibility with torch >= 2.5 (arg_constraints is now a property)
+    (fetchpatch {
+      url = "https://github.com/pyro-ppl/funsor/commit/c5e2a48d73cad4e98058147af4090171272a44e5.patch";
+      hash = "sha256-sTR+hbJtS0Th5sIqlvB2bReEC0wnEbnB7gAiZKiqjAQ=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

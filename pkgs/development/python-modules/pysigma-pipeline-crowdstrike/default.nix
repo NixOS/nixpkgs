@@ -5,22 +5,21 @@
   poetry-core,
   pysigma,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-crowdstrike";
-  version = "2.0.1";
+  version = "3.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-crowdstrike";
     tag = "v${version}";
-    hash = "sha256-WYgT0tRXdSR4qJA7UHotPn9qfnpaIJaqASBXVDG1kOU=";
+    hash = "sha256-c7+4/55rrVVVdw2Yy8emoiWkyKlCgP4PKdAa1XW+aYM=";
   };
+
+  pythonRelaxDeps = [ "pysigma" ];
 
   build-system = [ poetry-core ];
 
@@ -38,8 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to support CrowdStrike pipeline for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike";
-    changelog = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike/releases/tag/v${version}";
-    license = with lib.licenses; [ lgpl21Only ];
+    changelog = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

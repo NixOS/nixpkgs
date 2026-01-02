@@ -306,7 +306,10 @@ in
         name = "nixos-install";
         package = config.system.build.nixos-install;
       })
-      (mkToolModule { name = "nixos-option"; })
+      (mkToolModule {
+        name = "nixos-option";
+        package = pkgs.nixos-option.override { nix = config.nix.package; };
+      })
       (mkToolModule {
         name = "nixos-rebuild";
         package = config.system.build.nixos-rebuild;

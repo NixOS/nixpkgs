@@ -103,15 +103,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.23";
+  version = "3.0.23-2";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "vlc";
-    # 3.0.23 was retagged (3697ebcb2716cb4f9c7824b11ce33afefb0212ab -> 578d28f6c9f2379164516e689418f92ac74a3445)
-    rev = "578d28f6c9f2379164516e689418f92ac74a3445";
-    hash = "sha256-/gopvzgtvbaIHq7VG8/edAelhSApQT7GxD5mN9nvfOw=";
+    rev = finalAttrs.version;
+    hash = "sha256-vg/kKNrIpGF7Olz8EiA1ZsW5SB4iHlvFbREDp4JokB0=";
   };
 
   depsBuildBuild = optionals waylandSupport [ pkg-config ];

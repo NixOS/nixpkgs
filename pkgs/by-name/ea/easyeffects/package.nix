@@ -59,13 +59,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "8.0.8";
+  version = "8.0.9";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${version}";
-    hash = "sha256-Pw9rMYHrRBSttdtElWDH1YOF0tNWgb2zBzJBI9jJe4Q=";
+    hash = "sha256-cFMbeJeEIDP7uiNi+rRKErgHtjP/PbPKASo+M2qogZQ=";
   };
 
   patches = [ ./qmlmodule-fix.patch ];

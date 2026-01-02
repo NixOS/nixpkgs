@@ -72,6 +72,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openvinotoolkit/openvino/commit/677716c2471cadf1bf1268eca6343498a886a229.patch?full_index=1";
       hash = "sha256-iaifJBdl7+tQZq1d8SiczUaXz+AdfMrLtwzfTmSG+XA=";
     })
+    (fetchpatch {
+      url = "https://github.com/openvinotoolkit/openvino/commit/564d2d6b9ca179004d32b70466dbd088eef8a307.patch?full_index=1";
+      hash = "sha256-2khosDwlV7Dwxu0dvyDuCbo/XzR/eeYRGhlSieOfrFQ=";
+    })
   ];
 
   outputs = [

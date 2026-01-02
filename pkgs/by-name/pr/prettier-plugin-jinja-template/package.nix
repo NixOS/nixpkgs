@@ -18,7 +18,7 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-/m0+z2fSwX77zRY4Yg4xdyI/ZEzAKNUuicaqz0b8f5w=";
 
-  passthru.update-script = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Formatter plugin for Jinja2 template files";
