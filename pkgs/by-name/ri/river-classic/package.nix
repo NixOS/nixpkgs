@@ -71,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
+
+    # Update the desktop file to use the installed example config
+    substituteInPlace $out/share/wayland-sessions/river.desktop \
+          --replace-fail "Exec=river" "Exec=$out/bin/river -c $out/lib/river/example/init"
   '';
 
   doInstallCheck = true;
