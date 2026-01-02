@@ -1,7 +1,7 @@
 {
     "testing": {
-        "version": "6.19-rc1",
-        "hash": "sha256:1jfcm4m2xbglirn8qdvhb3675fln9cjfva3v9hhs6a4qqqx2396f",
+        "version": "6.19-rc3",
+        "hash": "sha256:1ps2bq9jag0ypr9nj2zfqak81sc12l2hrj2065k2jnvwqcx0vhw3",
         "lts": false
     },
     "6.1": {
@@ -30,8 +30,8 @@
         "lts": true
     },
     "6.18": {
-        "version": "6.18.2",
-        "hash": "sha256:0smrmbnlhfivw2kx689wd52aff80gf0gw9wqz4s2nja9nyx6p32m",
+        "version": "6.18.3",
+        "hash": "sha256:16kzgpxrmaxd2kcsmlnsvc2ryxih457rrwynfzhbmi49gcb7k23s",
         "lts": false
     }
 }
