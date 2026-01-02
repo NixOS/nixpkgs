@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VQC1xvFw6TDw6P3UcQ4Y++UpjSgEGiRh0M+i1Z8O+N4=";
+    hash = "sha256-KUcI+0+ICMdwAF30CLM3QdS+X8UnYiHhcYkvEQ6WgS8=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-p5Lj1x3bF+5HANHG9ubnMRtZ8hJlQRbdlfB/JMrJZCI=";
+    hash = "sha256-XyFcY0XeNdNzLuqfv9Z2/41875Nl5OrAT/QVyI/+OQc=";
   };
 
   nativeBuildInputs = [
