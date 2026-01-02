@@ -4,6 +4,12 @@
   wasm-language-tools,
 }:
 
+# The update script for the wasm-language-tools package itself updates this
+# package too, so we disable nixpkgs-update for this package to avoid sometimes
+# accidentally updating just this package by itself.
+
+# nixpkgs-update: no auto update
+
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "gplane";
