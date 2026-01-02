@@ -43,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern and easy-to-use crypto library";
     homepage = "https://doc.libsodium.org/";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      mdaniels5757
+      raskin
+    ];
     pkgConfigModules = [ "libsodium" ];
     platforms = lib.platforms.all;
   };
