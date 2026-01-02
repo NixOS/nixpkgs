@@ -26799,13 +26799,6 @@
     name = "Tomodachi94";
     keys = [ { fingerprint = "B208 D6E5 B8ED F47D 5687  627B 2E27 5F21 C4D5 54A3"; } ];
   };
-  tomsiewert = {
-    email = "tom@siewert.io";
-    matrix = "@tom:frickel.earth";
-    github = "sinuscosinustan";
-    githubId = 8794235;
-    name = "Tom Siewert";
-  };
   tomsmeets = {
     email = "tom.tsmeets@gmail.com";
     github = "TomSmeets";
