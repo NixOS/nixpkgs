@@ -59,16 +59,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "vinegar";
-  version = "1.8.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7rc6LKZx0OOZDedtTpHIQT4grx1FejRiVnJnVDUddy4=";
+    hash = "sha256-wL7tdGza+lrIwpG5yG3lIrFq7XoKVR+IIWZIij3eQ5k=";
   };
 
-  vendorHash = "sha256-TZhdwHom4DTgLs4z/eADeoKakMtyFrvVljDg4JJp7dc=";
+  vendorHash = "sha256-gzy7Lw7AP1evPSDSzMQb/yzn+8uVtyk8TOBL2fjE3R8=";
 
   nativeBuildInputs = [
     glib
