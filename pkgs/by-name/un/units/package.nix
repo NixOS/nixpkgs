@@ -35,9 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Matches AUR PKGBuild change for unbreaking builds GCC15
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
-  prePatch = lib.optionalString enableCurrenciesUpdater ''
+  postPatch = lib.optionalString enableCurrenciesUpdater ''
     substituteInPlace units_cur \
-      --replace "#!/usr/bin/env python" ${pythonEnv}/bin/python
+      --replace-fail "#!/usr/bin/python" "#!${pythonEnv}/bin/python"
   '';
 
   postInstall = lib.optionalString enableCurrenciesUpdater ''
