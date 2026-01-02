@@ -9,6 +9,7 @@
   nix-update-script,
   ripgrep,
   testers,
+  installShellFiles,
   writableTmpDirAsHomeHook,
 }:
 let
@@ -85,8 +86,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     bun
+    installShellFiles
     makeBinaryWrapper
     models-dev
+    writableTmpDirAsHomeHook
   ];
 
   patches = [
@@ -197,6 +200,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           $out/lib/opencode/node_modules/@opentui/$pkgName
       fi
     done
+
+    ${lib.optionalString (stdenvNoCC.hostPlatform.system != "x86_64-darwin") ''
+      installShellCompletion --cmd opencode \
+        --bash <($out/bin/opencode completion)
+    ''}
   '';
 
   passthru = {
