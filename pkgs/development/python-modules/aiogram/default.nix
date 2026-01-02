@@ -76,6 +76,11 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
+  pytestFlags = [
+    # DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slate...
+    "-Wignore::DeprecationWarning"
+  ];
+
   pythonImportsCheck = [ "aiogram" ];
 
   passthru.updateScript = gitUpdater {
