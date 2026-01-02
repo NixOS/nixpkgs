@@ -16,13 +16,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samrewritten";
-  version = "20251216.1";
+  version = "20251229.1";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
     repo = "SamRewritten";
     tag = finalAttrs.version;
-    hash = "sha256-pMHkgB7z4coXS9N8+bBCo0gqtNKrXQO1qOTi4pNo19Y=";
+    hash = "sha256-E5/h14QnAAkZOrFmrXo457t1cPPNnRTka+CJ1Psor7A=";
   };
 
   cargoHash = "sha256-7FVjWiNzAQTN9ITmdoRZaQRnwg+epJyphil1e8QAHfo=";

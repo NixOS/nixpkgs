@@ -9,7 +9,6 @@
   inBootstrap ? false,
   pkg-config,
   gnumake,
-  directoryListingUpdater,
 }:
 
 let
@@ -36,7 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: stdenv’s setup.sh should be aware of patch directories. It’s very
   # convenient to keep them in a separate directory but we can defer listing the
   # directory until derivation realization to avoid unnecessary Nix evaluations.
-  patches = lib.filesystem.listFilesRecursive ./patches;
+  patches =
+    lib.filesystem.listFilesRecursive ./patches
+    ++ lib.optionals stdenv.hostPlatform.isMusl (lib.filesystem.listFilesRecursive ./musl-patches);
 
   nativeBuildInputs = [
     autoreconfHook
@@ -53,15 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   separateDebugInfo = true;
 
-  passthru = {
-    tests = {
-      # make sure that the override doesn't break bootstrapping
-      gnumakeWithGuile = gnumake.override { guileSupport = true; };
-    };
-    updateScript = directoryListingUpdater {
-      inherit (finalAttrs) pname version;
-      url = "https://ftp.gnu.org/gnu/make/";
-    };
+  passthru.tests = {
+    # make sure that the override doesn't break bootstrapping
+    gnumakeWithGuile = gnumake.override { guileSupport = true; };
   };
 
   meta = {

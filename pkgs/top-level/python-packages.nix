@@ -482,8 +482,6 @@ self: super: with self; {
 
   aiosendspin = callPackage ../development/python-modules/aiosendspin { };
 
-  aiosenz = callPackage ../development/python-modules/aiosenz { };
-
   aioserial = callPackage ../development/python-modules/aioserial { };
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
@@ -727,6 +725,8 @@ self: super: with self; {
   anndata = callPackage ../development/python-modules/anndata { };
 
   annexremote = callPackage ../development/python-modules/annexremote { };
+
+  annotated-doc = callPackage ../development/python-modules/annotated-doc { };
 
   annotated-types = callPackage ../development/python-modules/annotated-types { };
 
@@ -3981,7 +3981,7 @@ self: super: with self; {
   dj-static = callPackage ../development/python-modules/dj-static { };
 
   # LTS with mainsteam support
-  django = self.django_4;
+  django = self.django_5;
 
   django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
 
@@ -4133,7 +4133,7 @@ self: super: with self; {
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
-  django-jinja = callPackage ../development/python-modules/django-jinja2 { };
+  django-jinja = callPackage ../development/python-modules/django-jinja { };
 
   django-jquery-js = callPackage ../development/python-modules/django-jquery-js { };
 
@@ -5746,6 +5746,8 @@ self: super: with self; {
   formulaic = callPackage ../development/python-modules/formulaic { };
 
   fortiosapi = callPackage ../development/python-modules/fortiosapi { };
+
+  fortune = callPackage ../development/python-modules/fortune { };
 
   foundationdb = callPackage ../development/python-modules/foundationdb {
     inherit (pkgs) foundationdb;
@@ -11000,7 +11002,9 @@ self: super: with self; {
 
   numbagg = callPackage ../development/python-modules/numbagg { };
 
-  numcodecs = callPackage ../development/python-modules/numcodecs { };
+  numcodecs = callPackage ../development/python-modules/numcodecs {
+    inherit (pkgs) zstd;
+  };
 
   numdifftools = callPackage ../development/python-modules/numdifftools { };
 
@@ -11829,8 +11833,6 @@ self: super: with self; {
   pastel = callPackage ../development/python-modules/pastel { };
 
   pastescript = callPackage ../development/python-modules/pastescript { };
-
-  patator = callPackage ../development/python-modules/patator { };
 
   patch = callPackage ../development/python-modules/patch { };
 
@@ -12948,6 +12950,8 @@ self: super: with self; {
   pyarrow = callPackage ../development/python-modules/pyarrow { inherit (pkgs) arrow-cpp cmake; };
 
   pyarrow-hotfix = callPackage ../development/python-modules/pyarrow-hotfix { };
+
+  pyaskalono = callPackage ../development/python-modules/pyaskalono { };
 
   pyasn = callPackage ../development/python-modules/pyasn { };
 
@@ -14546,6 +14550,8 @@ self: super: with self; {
 
   pysensors = callPackage ../development/python-modules/pysensors { };
 
+  pysenz = callPackage ../development/python-modules/pysenz { };
+
   pysequoia = callPackage ../development/python-modules/pysequoia { };
 
   pyserial = callPackage ../development/python-modules/pyserial { };
@@ -14723,8 +14729,6 @@ self: super: with self; {
   pysptk = callPackage ../development/python-modules/pysptk { };
 
   pyspx = callPackage ../development/python-modules/pyspx { };
-
-  pysqlcipher3 = callPackage ../development/python-modules/pysqlcipher3 { inherit (pkgs) sqlcipher; };
 
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
 
@@ -16044,6 +16048,8 @@ self: super: with self; {
   quart-cors = callPackage ../development/python-modules/quart-cors { };
 
   quart-schema = callPackage ../development/python-modules/quart-schema { };
+
+  quart-trio = callPackage ../development/python-modules/quart-trio { };
 
   quaternion = callPackage ../development/python-modules/quaternion { };
 
@@ -19419,7 +19425,7 @@ self: super: with self; {
 
   typer-shell = callPackage ../development/python-modules/typer-shell { };
 
-  typer-slim = self.typer.override { package = "typer-slim"; };
+  typer-slim = callPackage ../development/python-modules/typer-slim { };
 
   types-aiobotocore = callPackage ../development/python-modules/types-aiobotocore { };
 
@@ -19986,6 +19992,8 @@ self: super: with self; {
   unearth = callPackage ../development/python-modules/unearth { };
 
   unicode-rbnf = callPackage ../development/python-modules/unicode-rbnf { };
+
+  unicode-segmentation-rs = callPackage ../development/python-modules/unicode-segmentation-rs { };
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 

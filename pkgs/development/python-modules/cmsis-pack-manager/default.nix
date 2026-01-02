@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "cmsis-pack-manager";
-  version = "0.5.2";
+  version = "0.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyocd";
     repo = "cmsis-pack-manager";
     tag = "v${version}";
-    hash = "sha256-PeyJf3TGUxv8/MKIQUgWrenrK4Hb+4cvtDA2h3r6kGg=";
+    hash = "sha256-kb0VSg89qglL6Q5kx1nEN1OW1GYoccBTITtPw2/dXTY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-OBh5WWSekrqdLLmxEXS0LfPIfy4QWKYgO+8o6PYWjN4=";
+    hash = "sha256-yRNSFlEwFhfkSNjbFHipVZvJZ40pKbI9HhLtciws7nc=";
   };
 
   nativeBuildInputs = [

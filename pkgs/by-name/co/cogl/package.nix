@@ -111,9 +111,16 @@ stdenv.mkDerivation rec {
         "-I${harfbuzz.dev}/include/harfbuzz"
       ]
     );
-  }
-  // lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    NIX_CFLAGS_COMPILE = toString (
+      [ ]
+      ++ lib.optional stdenv.cc.isGNU [
+        # Fix build with gcc15
+        "-std=gnu17"
+      ]
+      ++ lib.optional stdenv.cc.isClang [
+        "-Wno-error=implicit-function-declaration"
+      ]
+    );
   };
 
   #doCheck = true; # all tests fail (no idea why)

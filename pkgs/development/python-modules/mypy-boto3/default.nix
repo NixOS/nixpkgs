@@ -338,8 +338,8 @@ in
       "sha256-zMNP1LXKSynkfJSLn19sz5UoT8LiswD5qSZCn1y5GsA=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.14"
-      "sha256-IG24SYEczO1XbjusR1zgHLGtMF3k43OXEsZKh7aShrI=";
+    buildMypyBoto3Package "connect" "1.42.19"
+      "sha256-PDva4umoq8e5JTRSaLs+VPr5fJFUdhy+QQKajM9G4MA=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -713,8 +713,8 @@ in
       "sha256-N21GfynAZdHOQnQgKcA9mJMWDfbN/pBfx509W4XDGjU=";
 
   mypy-boto3-kafkaconnect =
-    buildMypyBoto3Package "kafkaconnect" "1.42.12"
-      "sha256-CdqSbNGUfeYz76BipvPsF+8j7hFOHJSSgXgcr2BEDUY=";
+    buildMypyBoto3Package "kafkaconnect" "1.42.19"
+      "sha256-82y1eElG60knpJhQYQiVa+qv2xi1z+CHjHE8IfGSpkE=";
 
   mypy-boto3-kendra =
     buildMypyBoto3Package "kendra" "1.42.3"
@@ -1073,8 +1073,8 @@ in
       "sha256-YrrEKl3aGz//5Z5JGapHhWtk6hBXQ4cuRQmLqGYztzg=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.42.8"
-      "sha256-gzUtWuBpdWN+nRaJmsrs4EKzsTeRgiDnacEs8yG9PjQ=";
+    buildMypyBoto3Package "quicksight" "1.42.18"
+      "sha256-6gYCSoGVbd2hw/NktDiLo1QlOO23LrwlaJ3gm30gpDQ=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.42.3"

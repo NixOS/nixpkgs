@@ -32,7 +32,6 @@ let
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -55,7 +54,6 @@ let
           pname
           version
           nativeInstallCheckInputs
-          versionCheckProgramArg
           doInstallCheck
           meta
           ;
@@ -158,7 +156,6 @@ let
           pname
           version
           nativeInstallCheckInputs
-          versionCheckProgramArg
           doInstallCheck
           meta
           ;

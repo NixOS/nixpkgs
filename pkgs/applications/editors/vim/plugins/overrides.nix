@@ -3606,6 +3606,10 @@ assertNoAdditions {
     ];
   };
 
+  treesitter-modules-nvim = super.treesitter-modules-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
   triptych-nvim = super.triptych-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };

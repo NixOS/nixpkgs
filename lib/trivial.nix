@@ -197,7 +197,7 @@ in
 
     : 2\. Function argument
   */
-  or = x: y: x || y;
+  "or" = x: y: x || y;
 
   /**
     boolean “and”

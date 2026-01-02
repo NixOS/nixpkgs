@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dz045yhcsw1rdamzpz4bk8mw888in7fyqk1q1b3m1yk4pd1ahkh";
   };
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   patches = [
     ./remove-sys-sysctl.h.patch
     ./get-missing-basename.patch

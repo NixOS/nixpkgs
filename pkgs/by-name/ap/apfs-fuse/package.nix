@@ -26,6 +26,10 @@ stdenv.mkDerivation {
     # fix for CMake v4
     # https://github.com/sgan81/apfs-fuse/pull/211
     ./cmake-v4.patch
+
+    # fix for GCC 15
+    # https://github.com/sgan81/apfs-fuse/pull/209
+    ./add_cstdint_fix_gcc15.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    NOCONFIGURE=1 NOGIT=1 ./autogen.sh
+    NOCONFIGURE=1 NOGIT=1 ACLOCAL_FLAGS="-I ${gettext}/share/gettext/m4" ./autogen.sh
   '';
 
   configureFlags = [

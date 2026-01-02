@@ -20,20 +20,22 @@
   systemd,
   udevCheckHook,
   util-linux,
+  glib,
   x86_energy_perf_policy,
   # RDW only works with NetworkManager, and thus is optional with default off
   enableRDW ? false,
   networkmanager,
+  tlp-pd,
 }:
 stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-Bqg0IwLh3XIVJd2VkPQFDCZ/hVrzRFrRLlSHJXlJGWU=";
+    hash = "sha256-aM/4+cgtUe6qv3MNT4moXvNzqG5gKvwMbg14L8ifWlc=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -104,6 +106,7 @@ stdenv.mkDerivation rec {
           smartmontools
           systemd
           util-linux
+          glib # gdbus
         ]
         ++ lib.optional enableRDW networkmanager
         ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
@@ -135,6 +138,10 @@ stdenv.mkDerivation rec {
       rm -rf $out/var
       rm -rf $out/share/metainfo
     '';
+
+  passthru.tests = {
+    inherit tlp-pd;
+  };
 
   meta = {
     description = "Advanced Power Management for Linux";

@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "pmbootstrap";
     tag = version;
-    hash = "sha256-l8y1GoNZd6JeWzO2TI0GIVc/WlMv9EunFGH94pZ7ibk=";
+    hash = "sha256-PbaWqtBcAXnVmB2a2DflQhayvuT3qNBCHaXuDfdrtrY=";
     domain = "gitlab.postmarketos.org";
   };
 
@@ -61,8 +61,6 @@ python3Packages.buildPythonApplication rec {
     # AssertionError: assert <ChrootType.NATIVE: 'native'> == <ChrootType.BUILDROOT: 'buildroot'>
     "test_valid_chroots"
   ];
-
-  versionCheckProgramArg = "--version";
 
   makeWrapperArgs = [
     "--prefix PATH : ${

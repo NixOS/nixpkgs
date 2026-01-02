@@ -223,7 +223,7 @@ let
         else if format != null then
           format
         else
-          throw "${name} does not configure a `format`. To build with setuptools as before, set `pyproject = true` and `build-system = [ setuptools ]`.`";
+          throw "${name} does not configure a `format`. To build with setuptools as before, set `pyproject = true` and `build-system = [ setuptools ]`.";
 
       withDistOutput = withDistOutput' format';
 

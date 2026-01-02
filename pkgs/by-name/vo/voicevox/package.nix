@@ -40,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # don't fail if node version doesn't fit the constraint
+    substituteInPlace .npmrc \
+      --replace-fail "engine-strict=true" ""
+
     # unlock the overly specific pnpm package version pin
     # and also set version to a proper value
     jq "del(.packageManager) | .version = \"$version\"" package.json | sponge package.json

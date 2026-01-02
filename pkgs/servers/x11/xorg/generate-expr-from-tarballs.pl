@@ -76,6 +76,7 @@ $pcMap{"xinerama"} = "libXinerama";
 $pcMap{"xkbfile"} = "libxkbfile";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
+$pcMap{"xorg-server"} = "xorgserver";
 $pcMap{"xp"} = "libXp";
 $pcMap{"xpm"} = "libXpm";
 $pcMap{"xpresent"} = "libXpresent";
@@ -475,6 +476,7 @@ print OUT <<EOF;
   xorg-cf-files,
   xorg-docs,
   xorgproto,
+  xorg-server,
   xorg-sgml-doctools,
   xprop,
   xrandr,
@@ -485,6 +487,7 @@ print OUT <<EOF;
   xsm,
   xstdcmap,
   xtrans,
+  xvfb,
   xvinfo,
   xwininfo,
   xwud,
@@ -559,6 +562,7 @@ self: with self; {
     xsm
     xstdcmap
     xtrans
+    xvfb
     xvinfo
     xwininfo
     xwud
@@ -649,6 +653,7 @@ self: with self; {
   xcursorthemes = xcursor-themes;
   xorgcffiles = xorg-cf-files;
   xorgdocs = xorg-docs;
+  xorgserver = xorg-server;
   xorgsgmldoctools = xorg-sgml-doctools;
 
 EOF

@@ -76,6 +76,7 @@ buildPythonPackage rec {
     "pydantic"
     "pydantic-settings"
     "pyjwt"
+    "python-dotenv"
     "regex"
     "tokenizers"
     "tomli"
@@ -444,8 +445,6 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--override-ini=addopts="
   ];
-
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";

@@ -1,0 +1,186 @@
+From b47ef629459076a5ccb3d0caf83ccfbb8ba0571b Mon Sep 17 00:00:00 2001
+From: Marcus Ramberg <marcus@means.no>
+Date: Wed, 3 Sep 2025 10:35:58 +0200
+Subject: [PATCH] patches for perl-5.42.0
+
+---
+ cnf/diffs/perl5-5.42.0/constant.patch       |  1 +
+ cnf/diffs/perl5-5.42.0/dynaloader.patch     |  1 +
+ cnf/diffs/perl5-5.42.0/findext.patch        |  1 +
+ cnf/diffs/perl5-5.42.0/installscripts.patch |  1 +
+ cnf/diffs/perl5-5.42.0/liblist.patch        | 80 +++++++++++++++++++++
+ cnf/diffs/perl5-5.42.0/makemaker.patch      |  1 +
+ cnf/diffs/perl5-5.42.0/posix-makefile.patch |  1 +
+ cnf/diffs/perl5-5.42.0/test-checkcase.patch |  1 +
+ cnf/diffs/perl5-5.42.0/test-makemaker.patch |  1 +
+ cnf/diffs/perl5-5.42.0/xconfig.patch        |  1 +
+ 10 files changed, 89 insertions(+)
+ create mode 120000 cnf/diffs/perl5-5.42.0/constant.patch
+ create mode 120000 cnf/diffs/perl5-5.42.0/dynaloader.patch
+ create mode 120000 cnf/diffs/perl5-5.42.0/findext.patch
+ create mode 120000 cnf/diffs/perl5-5.42.0/installscripts.patch
+ create mode 100644 cnf/diffs/perl5-5.42.0/liblist.patch
+ create mode 120000 cnf/diffs/perl5-5.42.0/makemaker.patch
+ create mode 120000 cnf/diffs/perl5-5.42.0/posix-makefile.patch
+ create mode 120000 cnf/diffs/perl5-5.42.0/test-checkcase.patch
+ create mode 120000 cnf/diffs/perl5-5.42.0/test-makemaker.patch
+ create mode 120000 cnf/diffs/perl5-5.42.0/xconfig.patch
+
+diff --git a/cnf/diffs/perl5-5.42.0/constant.patch b/cnf/diffs/perl5-5.42.0/constant.patch
+new file mode 120000
+index 0000000..065e198
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/constant.patch
+@@ -0,0 +1 @@
++../perl5-5.22.3/constant.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.0/dynaloader.patch b/cnf/diffs/perl5-5.42.0/dynaloader.patch
+new file mode 120000
+index 0000000..ffb73eb
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/dynaloader.patch
+@@ -0,0 +1 @@
++../perl5-5.22.3/dynaloader.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.0/findext.patch b/cnf/diffs/perl5-5.42.0/findext.patch
+new file mode 120000
+index 0000000..9efbe5b
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/findext.patch
+@@ -0,0 +1 @@
++../perl5-5.22.3/findext.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.0/installscripts.patch b/cnf/diffs/perl5-5.42.0/installscripts.patch
+new file mode 120000
+index 0000000..1c05e0f
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/installscripts.patch
+@@ -0,0 +1 @@
++../perl5-5.36.0/installscripts.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.0/liblist.patch b/cnf/diffs/perl5-5.42.0/liblist.patch
+new file mode 100644
+index 0000000..5e6331f
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/liblist.patch
+@@ -0,0 +1,80 @@
++When deciding which libraries are available, the original Configure uses
++shaky heuristics to physically locate library files.
++This is a very very bad thing to do, *especially* when cross-compiling,
++as said heiristics are likely to locate the host libraries, not the target ones.
++
++The only real need for this test is to make sure it's safe to pass -llibrary
++to the compiler. So that's exactly what perl-cross does, pass -llibrary
++and see if it breaks things.
++
++Note this is a part of MakeMaker, and only applies to module Makefiles.
++
++
++--- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/Liblist/Kid.pm
+++++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/Liblist/Kid.pm
++@@ -20,9 +20,10 @@
++ use File::Spec;
++ 
++ sub ext {
++-    if    ( $^O eq 'VMS' )     { goto &_vms_ext; }
++-    elsif ( $^O eq 'MSWin32' ) { goto &_win32_ext; }
++-    else                       { goto &_unix_os2_ext; }
+++  if   ($Config{usemmldlt}){ goto &_ld_ext;       }
+++  elsif($^O eq 'VMS')      { goto &_vms_ext;      }
+++  elsif($^O eq 'MSWin32')  { goto &_win32_ext;    }
+++  else                     { goto &_unix_os2_ext; }
++ }
++ 
++ sub _unix_os2_ext {
++@@ -661,4 +662,51 @@
++     wantarray ? ( $lib, '', $ldlib, '', ( $give_libs ? \@flibs : () ) ) : $lib;
++ }
++ 
+++# A direct test for -l validity.
+++# Because guessing real file names for -llib options when dealing
+++# with a cross compiler is generally a BAD IDEA^tm.
+++sub _ld_ext {
+++    my($self,$potential_libs, $verbose, $give_libs) = @_;
+++    $verbose ||= 0;
+++
+++    if ($^O =~ 'os2' and $Config{perllibs}) { 
+++	# Dynamic libraries are not transitive, so we may need including
+++	# the libraries linked against perl.dll again.
+++
+++	$potential_libs .= " " if $potential_libs;
+++	$potential_libs .= $Config{perllibs};
+++    }
+++    return ("", "", "", "", ($give_libs ? [] : ())) unless $potential_libs;
+++    warn "Potential libraries are '$potential_libs':\n" if $verbose;
+++
+++    my($ld)   = $Config{ld};
+++    my($ldflags)   = $Config{ldflags};
+++    my($libs) = defined $Config{perllibs} ? $Config{perllibs} : $Config{libs};
+++
+++    my $try = 'try_mm.c';
+++    my $tryx = 'try_mm.x';
+++    open(TRY, '>', $try) || die "Can't create MakeMaker test file $try: $!\n";
+++    print TRY "int main(void) { return 0; }\n";
+++    close(TRY);
+++
+++    my $testlibs = '';
+++    my @testlibs = ();
+++    foreach my $thislib (split ' ', $potential_libs) {
+++        $testlibs = join(' ', @testlibs);
+++	if($thislib =~ /^-L/) {
+++		push(@testlibs, $thislib);
+++		next
+++	};
+++	my $cmd = "$ld $ldflags -o $tryx $try $testlibs $thislib >/dev/null 2>&1";
+++	my $ret = system($cmd);
+++	warn "Warning (mostly harmless): " . "No library found for $thislib\n" if $ret;
+++	next if $ret;
+++	push @testlibs, $thislib;
+++    }
+++    unlink($try);
+++    unlink($tryx);
+++
+++    return (join(' ', @testlibs), '', join(' ', @testlibs), '');
+++}
+++
++ 1;
+diff --git a/cnf/diffs/perl5-5.42.0/makemaker.patch b/cnf/diffs/perl5-5.42.0/makemaker.patch
+new file mode 120000
+index 0000000..d7bd609
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/makemaker.patch
+@@ -0,0 +1 @@
++../perl5-5.38.0/makemaker.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.0/posix-makefile.patch b/cnf/diffs/perl5-5.42.0/posix-makefile.patch
+new file mode 120000
+index 0000000..29463b7
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/posix-makefile.patch
+@@ -0,0 +1 @@
++../perl5-5.22.3/posix-makefile.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.0/test-checkcase.patch b/cnf/diffs/perl5-5.42.0/test-checkcase.patch
+new file mode 120000
+index 0000000..36c5186
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/test-checkcase.patch
+@@ -0,0 +1 @@
++../perl5-5.22.3/test-checkcase.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.0/test-makemaker.patch b/cnf/diffs/perl5-5.42.0/test-makemaker.patch
+new file mode 120000
+index 0000000..4e970ff
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/test-makemaker.patch
+@@ -0,0 +1 @@
++../perl5-5.34.0/test-makemaker.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.0/xconfig.patch b/cnf/diffs/perl5-5.42.0/xconfig.patch
+new file mode 120000
+index 0000000..1c22c96
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.0/xconfig.patch
+@@ -0,0 +1 @@
++../perl5-5.41.3/xconfig.patch
+\ No newline at end of file

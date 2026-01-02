@@ -30,8 +30,6 @@ buildGoModule rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Cipher/decipher text within a file";
     mainProgram = "s5";

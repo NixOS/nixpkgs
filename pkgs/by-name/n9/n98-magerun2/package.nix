@@ -16,10 +16,9 @@ php83.buildComposerProject2 (finalAttrs: {
     hash = "sha256-kjT72pLKuN166Edm8+8vUIfhFdMnZkeTagl0ECL20b8=";
   };
 
-  vendorHash = "sha256-0Bk01aU3vicwk9swkv+8VZxcPdaEMOOtp9niNfPfQyA=";
+  vendorHash = "sha256-wqaePPMC1OiXwtdhMJzg4AvcYDmJg2Uo2LV7TbZ00ec=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {

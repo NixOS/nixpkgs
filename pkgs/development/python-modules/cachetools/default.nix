@@ -2,23 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "6.1.0";
+  version = "6.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tkem";
     repo = "cachetools";
     tag = "v${version}";
-    hash = "sha256-o3Ice6w7Ovot+nsmTpsl/toosZuVbi9RvRGs07W4H0Y=";
+    hash = "sha256-seoyqkrRQpRiMd5GTEvenjirn173Hq40Zuk1u7TvMPI=";
   };
 
   build-system = [ setuptools ];
