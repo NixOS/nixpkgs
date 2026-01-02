@@ -11,7 +11,8 @@
   nixosTests,
 }:
 let
-  yarn-berry = yarn-berry_4;
+  nodejs = nodejs_22;
+  yarn-berry = yarn-berry_4.override { inherit nodejs; };
   version = "25.12.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
@@ -40,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     yarn-berry
-    nodejs_22
-    yarn-berry.yarnBerryConfigHook
+    nodejs
+    (yarn-berry.yarnBerryConfigHook.override { inherit nodejs; })
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by node-gyp
     makeWrapper
   ]
@@ -120,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r node_modules/.bin
     cp -r ./node_modules $out/lib/actual/
 
-    makeWrapper ${lib.getExe nodejs_22} "$out/bin/actual-server" \
+    makeWrapper ${lib.getExe nodejs} "$out/bin/actual-server" \
       --add-flags "$out/lib/actual/packages/sync-server/bin/actual-server.js" \
       --set NODE_PATH "$out/actual/lib/node_modules"
 

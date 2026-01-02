@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "usb-modeswitch-data";
-  version = "20191128";
+  version = "20251207";
 
   src = fetchurl {
     url = "http://www.draisberghof.de/usb_modeswitch/${pname}-${version}.tar.bz2";
-    sha256 = "1ygahl3r26r38ai8yyblq9nhf3v5i6n6r6672p5wf88wg5h9n0rz";
+    sha256 = "sha256-C7EtZK7l5GfDGvYaU/uCj/eqWcVKgsqF7u3kxWkL+mY=";
   };
 
   doInstallCheck = true;

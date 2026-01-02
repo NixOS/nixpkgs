@@ -7182,13 +7182,6 @@
     name = "Tom van Dijk";
     keys = [ { fingerprint = "D044 F07B 8863 B681 26BD  79FE 7A98 4C82 07AD BA51"; } ];
   };
-  dtzWill = {
-    email = "w@wdtz.org";
-    github = "dtzWill";
-    githubId = 817330;
-    name = "Will Dietz";
-    keys = [ { fingerprint = "389A 78CB CD88 5E0C 4701  DEB9 FD42 C7D0 D414 94C8"; } ];
-  };
   dudeofawesome = {
     email = "tourist-04.iced@icloud.com";
     github = "dudeofawesome";
@@ -7899,6 +7892,12 @@
     github = "emanueleperuffo";
     githubId = 5085029;
     name = "Emanuele Peruffo";
+  };
+  EpicEric = {
+    email = "eric@eric.dev.br";
+    github = "EpicEric";
+    githubId = 3129194;
+    name = "Eric Rodrigues Pires";
   };
   epireyn = {
     github = "epireyn";
@@ -9960,12 +9959,6 @@
     github = "GregorySchwartz";
     githubId = 2490088;
     name = "Gregory Schwartz";
-  };
-  gspia = {
-    email = "iahogsp@gmail.com";
-    github = "gspia";
-    githubId = 3320792;
-    name = "gspia";
   };
   gtrunsec = {
     email = "gtrunsec@hardenedlinux.org";
@@ -17900,6 +17893,11 @@
     github = "sciabarracom";
     githubId = 30654959;
     name = "Michele Sciabarra";
+  };
+  mse63 = {
+    name = "Mahmoud Elsharawy";
+    github = "mse63";
+    githubId = 81396550;
   };
   msgilligan = {
     email = "sean@msgilligan.com";
