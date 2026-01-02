@@ -38,7 +38,7 @@
 let
   stdenvTarget = if cudaSupport then gcc13Stdenv else stdenv;
 in
-buildPythonPackage rec {
+buildPythonPackage.override { stdenv = stdenvTarget; } rec {
   pname = "llama-cpp-python";
   version = "0.3.16";
   pyproject = true;
@@ -103,8 +103,6 @@ buildPythonPackage rec {
       libcublas # cublas_v2.h
     ]
   );
-
-  stdenv = stdenvTarget;
 
   dependencies = [
     diskcache
