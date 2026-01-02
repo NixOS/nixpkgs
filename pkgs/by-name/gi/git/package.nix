@@ -349,7 +349,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Also put git-http-backend into $PATH, so that we can use smart
     # HTTP(s) transports for pushing
-    ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+    ln -s $out/libexec/git-core/git-http-backend${stdenv.hostPlatform.extensions.executable} $out/bin/git-http-backend
     ln -s $out/share/git/contrib/git-jump/git-jump $out/bin/git-jump
   ''
   + lib.optionalString perlSupport ''
