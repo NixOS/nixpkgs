@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       the river 0.4.0 release.
     '';
     changelog = "https://codeberg.org/river/river-classic/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       adamcstephens
       moni
