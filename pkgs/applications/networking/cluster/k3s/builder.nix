@@ -426,8 +426,8 @@ buildGoModule (finalAttrs: {
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
 
     export ARCH=$GOARCH
-    export DRONE_TAG="v${k3sVersion}"
-    export DRONE_COMMIT="${k3sCommit}"
+    export TAG="v${k3sVersion}"
+    export GITHUB_SHA="${k3sCommit}"
     # use ./scripts/package-cli to run 'go generate' + 'go build'
 
     ./scripts/package-cli
