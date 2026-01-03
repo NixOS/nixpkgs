@@ -4,35 +4,31 @@
   cmake,
   git,
   fetchFromGitHub,
-  wrapQtAppsHook,
-  qtbase,
-  qtdeclarative,
-  qtsvg,
-  qtwebengine,
+  qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphia";
   version = "5.2";
 
   src = fetchFromGitHub {
     owner = "graphia-app";
     repo = "graphia";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-tS5oqpwpqvWGu67s8OuA4uQR3Zb5VzHTY/GnfVQki6k=";
   };
 
   nativeBuildInputs = [
     cmake
     git # needs to define some hash as a version
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtdeclarative
-    qtsvg
-    qtwebengine
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+    qt6.qtwebengine
   ];
 
   meta = {
@@ -46,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bgamari ];
     platforms = lib.platforms.all;
   };
-}
+})

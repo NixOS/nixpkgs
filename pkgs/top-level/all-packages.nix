@@ -6740,9 +6740,6 @@ with pkgs;
   ghp-import = with python3Packages; toPythonApplication ghp-import;
 
   ghcid = haskellPackages.ghcid.bin;
-
-  graphia = qt6Packages.callPackage ../applications/science/misc/graphia { };
-
   glfw = glfw3;
 
   glfw3-minecraft = callPackage ../by-name/gl/glfw3/package.nix {
