@@ -128,7 +128,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pygame" ];
 
   meta = {
-    description = "Python library for games";
+    description = "Python library for games (original distribution)";
     homepage = "https://www.pygame.org/";
     changelog = "https://github.com/pygame/pygame/releases/tag/${src.tag}";
     license = lib.licenses.lgpl21Plus;

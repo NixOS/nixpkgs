@@ -13439,11 +13439,13 @@ self: super: with self; {
 
   pygal = callPackage ../development/python-modules/pygal { };
 
-  pygame = callPackage ../development/python-modules/pygame { };
+  pygame = pygame-original;
 
   pygame-ce = callPackage ../development/python-modules/pygame-ce { };
 
   pygame-gui = callPackage ../development/python-modules/pygame-gui { };
+
+  pygame-original = callPackage ../development/python-modules/pygame-original { };
 
   pygame-sdl2 = callPackage ../development/python-modules/pygame-sdl2 { };
 
