@@ -57,15 +57,23 @@ stdenv.mkDerivation (finalAttrs: {
       libtool
     ];
 
-  # Don't remove static libraries (e.g. 'libs/*.a') on darwin.  They're needed to
-  # compile ffmpeg (and perhaps other things).
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+  # Don't remove static/import libraries on darwin or MinGW.
+  # - Darwin: ffmpeg (and others) may need the static libs.
+  # - MinGW: the import library (*.dll.a) is required for linkers to resolve -lxvidcore.
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMinGW) ''
     rm $out/lib/*.a
   '';
 
   # Dependants of xvidcore don't know to look in bin for dependencies. Link them
   # in lib so other depedants of xvidcore can find the dlls.
   postFixup = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    # MSYS2 renames these so -lxvidcore works (expects libxvidcore*).
+    if [[ -e "$out/lib/xvidcore.dll.a" && ! -e "$out/lib/libxvidcore.dll.a" ]]; then
+      mv "$out/lib/xvidcore.dll.a" "$out/lib/libxvidcore.dll.a"
+    fi
+    if [[ -e "$out/lib/xvidcore.a" && ! -e "$out/lib/libxvidcore.a" ]]; then
+      mv "$out/lib/xvidcore.a" "$out/lib/libxvidcore.a"
+    fi
     ln -s $out/bin/*.dll $out/lib
   '';
 
