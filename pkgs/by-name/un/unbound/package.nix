@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
   version = "1.24.2";
 
+  isMinGW = stdenv.hostPlatform.isMinGW;
+
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
@@ -86,8 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     nettle
     expat
-    libevent
   ]
+  ++ lib.optionals (!finalAttrs.isMinGW) [ libevent ]
   ++ lib.optionals withSystemd [ systemd ]
   ++ lib.optionals withDoH [ libnghttp2 ]
   ++ lib.optionals withPythonModule [ python ];
@@ -97,7 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--with-libexpat=${expat.dev}"
-    "--with-libevent=${libevent.dev}"
+    # MSYS2 disables libevent for mingw-w64-unbound:
+    # - fix-nixpkgs/MINGW-packages/mingw-w64-unbound/PKGBUILD
+    (if finalAttrs.isMinGW then "--with-libevent=no" else "--with-libevent=${libevent.dev}")
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--sbindir=\${out}/bin"
@@ -167,9 +171,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
-  postInstall = ''
-    make unbound-event-install
-  ''
+  postInstall =
+    lib.optionalString (!finalAttrs.isMinGW) ''
+      make unbound-event-install
+    ''
   + lib.optionalString withMakeWrapper ''
     wrapProgram $out/bin/unbound-control-setup \
       --prefix PATH : ${lib.makeBinPath [ openssl ]}
