@@ -23,21 +23,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.9";
+  version = "3.8.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-aE2gtAGzLBcUk+Heg+ZOMLd1wX6VEbrSpxkWETmlEZc=";
+    hash = "sha256-npB0maYIdAZgHBVZqQ9lUe9VfvRkI3E1WSnG7RIYje4=";
   };
-
-  # Qt 6.10 build patch from master
-  # can be removed with next release
-  patches = [
-    (fetchpatch2 {
-      url = "https://invent.kde.org/education/kstars/-/commit/ce53888e6dbaeb1b9239fca55288b5ead969b5a7.diff";
-      hash = "sha256-awZeOLlG1vlCWC+QfypqHIIYexpywRmNT1ACdkqqLt4=";
-    })
-  ];
 
   nativeBuildInputs = with kdePackages; [
     extra-cmake-modules
