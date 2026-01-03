@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchurl,
   pkg-config,
   libgit2,
   rust-jemalloc-sys,
@@ -57,6 +58,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     unset BIOME_VERSION
   '';
 
+  passthru.schema = fetchurl {
+    url = "https://biomejs.dev/schemas/${finalAttrs.version}/schema.json";
+    hash = "sha256-iGFDTliW7WKae+f8C6Ksic9rul8dU+0veygfLQmI/XE=";
+  };
+
   meta = {
     description = "Toolchain of the web";
     homepage = "https://biomejs.dev/";
@@ -65,6 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       isabelroses
       wrbbz
+      eveeifyeve # Schema
     ];
     mainProgram = "biome";
   };
