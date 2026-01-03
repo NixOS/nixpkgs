@@ -17,7 +17,6 @@
   docker ? null,
   nginx ? null,
   s6-rc ? null,
-  xinetd ? null,
 
   # Configuration flags
   enableApacheWebApplication ? false,
@@ -32,7 +31,6 @@
   enableSupervisordProgram ? false,
   enableDockerContainer ? false,
   enableNginxWebApplication ? false,
-  enableXinetdService ? false,
   enableS6RCService ? false,
   enableLegacy ? false,
   catalinaBaseDir ? "/var/tomcat",
@@ -50,7 +48,6 @@ assert enableSupervisordProgram -> supervisor != null;
 assert enableDockerContainer -> docker != null;
 assert enableNginxWebApplication -> nginx != null;
 assert enableS6RCService -> s6-rc != null;
-assert enableXinetdService -> xinetd != null;
 
 stdenv.mkDerivation rec {
   pname = "dysnomia";
@@ -73,7 +70,6 @@ stdenv.mkDerivation rec {
     (if enableSupervisordProgram then "--with-supervisord" else "--without-supervisord")
     (if enableDockerContainer then "--with-docker" else "--without-docker")
     (if enableNginxWebApplication then "--with-nginx" else "--without-nginx")
-    (if enableXinetdService then "--with-xinetd" else "--without-xinetd")
     (if enableS6RCService then "--with-s6-rc" else "--without-s6-rc")
     (if stdenv.hostPlatform.isDarwin then "--with-launchd" else "--without-launchd")
     "--with-job-template=${jobTemplate}"
@@ -97,8 +93,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableSupervisordProgram supervisor
   ++ lib.optional enableDockerContainer docker
   ++ lib.optional enableNginxWebApplication nginx
-  ++ lib.optional enableS6RCService s6-rc
-  ++ lib.optional enableXinetdService xinetd;
+  ++ lib.optional enableS6RCService s6-rc;
 
   meta = {
     description = "Automated deployment of mutable components and services for Disnix";
