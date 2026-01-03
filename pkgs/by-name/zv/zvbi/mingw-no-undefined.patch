@@ -1,0 +1,14 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index a48c026..e32aeeb 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -124,7 +124,7 @@ libzvbi_la_LIBADD = \
+ 	$(LIBS) \
+ 	$(UNICODE_LIBS)
+ 
+-libzvbi_la_LDFLAGS = -version-info $(LIBZVBI_SO_VERSION)
++libzvbi_la_LDFLAGS = -version-info $(LIBZVBI_SO_VERSION) -no-undefined
+ 
+ libzvbi_chains_la_SOURCES = \
+ 	chains.c \
+

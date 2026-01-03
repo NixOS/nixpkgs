@@ -6,6 +6,7 @@
   libiconv,
   libintl,
   stdenv,
+  windows,
   testers,
   validatePkgConfig,
 }:
@@ -21,10 +22,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-knc9PejugU6K4EQflfz91keZr3ZJqZu2TKFQFFJrxiI=";
   };
 
-  configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+    # MSYS2: mingw-w64-zvbi applies -no-undefined so shared libs can be built on MinGW.
+    ./mingw-no-undefined.patch
   ];
+
+  configureFlags =
+    lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+      "ac_cv_func_malloc_0_nonnull=yes"
+      "ac_cv_func_realloc_0_nonnull=yes"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      # MSYS2 disables these for MinGW; also cross builds can't run them.
+      "--disable-examples"
+      "--disable-tests"
+    ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -34,7 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     libiconv
     libintl
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    # libzvbi.h includes <pthread.h> on MinGW; consumers must see winpthreads headers.
+    windows.pthreads
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMinGW "-lpthread";
 
   outputs = [
     "out"
