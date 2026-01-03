@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     description = "Library to access Blu-Ray disks for video playback";
     license = lib.licenses.lgpl21;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
+    # MSYS2 ships libbluray for MinGW; allow Windows so pkgsCross.mingwW64 can evaluate it.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 
   passthru = {
