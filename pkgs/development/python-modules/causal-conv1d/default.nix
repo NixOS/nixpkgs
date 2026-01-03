@@ -14,9 +14,6 @@
   which,
 }:
 
-assert cudaSupport -> !rocmSupport;
-assert rocmSupport -> !cudaSupport;
-
 buildPythonPackage rec {
   pname = "causal-conv1d";
   version = "1.5.4";
@@ -87,7 +84,9 @@ buildPythonPackage rec {
     description = "Causal depthwise conv1d in CUDA with a PyTorch interface";
     homepage = "https://github.com/Dao-AILab/causal-conv1d";
     license = lib.licenses.bsd3;
-    # The package requires CUDA or ROCm
-    broken = !(cudaSupport || rocmSupport);
+
+    # The package requires either CUDA or ROCm.
+    # It doesn't work without either, nor with both.
+    broken = cudaSupport != rocmSupport;
   };
 }
