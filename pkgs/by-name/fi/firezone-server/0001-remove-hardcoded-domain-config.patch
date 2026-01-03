@@ -1,0 +1,14 @@
+diff --git a/elixir/config/config.exs b/elixir/config/config.exs
+index a6f03614e..4448410a8 100644
+--- a/elixir/config/config.exs
++++ b/elixir/config/config.exs
+@@ -18,9 +18,6 @@ config :portal, generators: [binary_id: true]
+
+ config :portal, sql_sandbox: false
+
+-# Don't run manual migrations by default
+-config :portal, run_manual_migrations: false
+-
+ config :portal, Portal.Repo,
+   hostname: "localhost",
+   username: "postgres",
