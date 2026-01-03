@@ -40,7 +40,8 @@ let
         lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version
       }"."${pyShortVersion}"
     else
-      sources."${stdenv.hostPlatform.system}"."cpu"."${pyShortVersion}";
+      sources."${stdenv.hostPlatform.system}"."cpu"."${pyShortVersion}"
+        or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   platform = sources."${stdenv.hostPlatform.system}".platform;
   src =
     if cudaSupport then
