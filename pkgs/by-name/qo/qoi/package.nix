@@ -17,6 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-E1hMtjMuDS2zma2s5hlHby/sroRGhtyZm9gLQ+VztsM=";
   };
 
+  patches = [
+    # https://github.com/phoboslab/qoi/pull/322
+    ./add-install-target-and-pc-module.patch
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -27,22 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libpng ];
 
-  installPhase = ''
-    runHook preInstall
-
-    # Conversion utility for images->qoi. Not usually needed for development.
-    mkdir -p ${placeholder "out"}/bin
-    install qoiconv ${placeholder "out"}/bin
-
-    # The actual single-header implementation. Nothing to compile, just install.
-    mkdir -p ${placeholder "dev"}/include/
-    install qoi.h ${placeholder "dev"}/include
-
-    runHook postInstall
-  '';
+  # Don't bloat the header-only output with binaries
+  propagatedBuildOutputs = [ ];
 
   makeFlags = [
     "CFLAGS=-I${lib.getDev stb}/include/stb"
+    "PREFIX=${placeholder "dev"}"
+    "BINDIR=${placeholder "out"}/bin"
   ];
 
   meta = {
