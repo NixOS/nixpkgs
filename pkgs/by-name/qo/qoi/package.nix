@@ -4,6 +4,7 @@
   libpng,
   stb,
   stdenv,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     "BINDIR=${placeholder "out"}/bin"
   ];
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+  };
+
   meta = {
     description = "'Quite OK Image Format' for fast, lossless image compression";
     mainProgram = "qoiconv";
@@ -48,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hzeller ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "qoi" ];
   };
 })
