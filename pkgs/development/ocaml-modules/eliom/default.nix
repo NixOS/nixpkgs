@@ -69,7 +69,7 @@ buildDunePackage rec {
     '';
 
     license = lib.licenses.lgpl21;
-    broken = lib.versionAtLeast ocaml.version "5.3";
+    broken = true;
     maintainers = [ lib.maintainers.gal_bolle ];
   };
 }
