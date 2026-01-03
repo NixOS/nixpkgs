@@ -529,8 +529,8 @@ let
       src = fetchFromGitHub {
         owner = "nginx";
         repo = "njs";
-        rev = "0.8.9";
-        hash = "sha256-TalS9EJP+vB1o3BKaTvXXnudjKhNOcob3kDAyeKej3c=";
+        tag = "0.9.4";
+        hash = "sha256-Ee55QKaeZ0mYGKUroKr/AYGoOCakEonU483qkhmZdzU=";
       };
 
       # njs module sources have to be writable during nginx build, so we copy them
