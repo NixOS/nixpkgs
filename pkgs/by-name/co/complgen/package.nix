@@ -1,7 +1,7 @@
 {
+  fetchFromGitHub,
   lib,
   rustPlatform,
-  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
