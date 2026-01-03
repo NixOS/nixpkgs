@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aotriton${lib.optionalString (!anySupportedTargets) "-shim"}";
-  version = "0.10b";
+  version = "0.11.1b";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "aotriton";
     tag = finalAttrs.version;
-    hash = "sha256-stAHnsqChkNv69wjlhM/qUetrJpNwI1i7rGnPMwsNz0=";
+    hash = "sha256-F7JjyS+6gMdCpOFLldTsNJdVzzVwd6lwW7+V8ZOZfig=";
     leaveDotGit = true;
     # fetch all submodules except unused triton submodule that is ~500MB
     postFetch = ''
@@ -65,9 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = if anySupportedTargets then [ "big-parallel" ] else [ ];
 
   env = {
+    AOTRITON_CI_SUPPLIED_SHA1 = finalAttrs.version;
     ROCM_PATH = "${clr}";
     CFLAGS = "-w -g1 -gz -Wno-c++11-narrowing";
     CXXFLAGS = finalAttrs.env.CFLAGS;
+    TRITON_STORE_BINARY_ONLY = 1; # reduce triton disk space usage
   };
 
   nativeBuildInputs = [
@@ -97,14 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     triton
   ]);
 
-  patches = [
-    # CMakeLists.txt: AOTRITON_INHERIT_SYSTEM_SITE_TRITON flag
-    (fetchpatch {
-      url = "https://github.com/ROCm/aotriton/commit/9734c3e999c412a07d2b35671998650942b26ed4.patch";
-      hash = "sha256-tBmjjhRJmLv3K6F2+4OcMuwf8dH7efPPECMQjh6QdUA=";
-    })
-  ];
-
   # Excerpt from README:
   # Note: do not run ninja separately, due to the limit of the current build system,
   # ninja install will run the whole build process unconditionally.
@@ -126,8 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
   # picked if nix-shell is used against this package
   preConfigure = ''
     cmakeFlagsArray+=(
-      "-DVENV_DIR=$(pwd)/aotriton-venv/"
-      "-DVENV_BIN_PYTHON=$(pwd)/aotriton-venv/bin/python"
+      "-DVENV_DIR=$(pwd)/build/venv/"
+      "-DVENV_BIN_PYTHON=$(pwd)/build/venv/bin/python"
     )
   '';
 
@@ -136,6 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "AOTRITON_NOIMAGE_MODE" (!anySupportedTargets))
     # Use preinstalled triton from our python's site-packages
     (lib.cmakeBool "AOTRITON_INHERIT_SYSTEM_SITE_TRITON" true)
+    # Circular dependency
+    (lib.cmakeBool "AOTRITON_USE_TORCH" false)
     # FP32 kernels are optional, turn them off to speed up builds and save space
     # Perf sensitive code should be using BF16 or F16
     (lib.cmakeBool "AOTRITON_ENABLE_FP32_INPUTS" false)
