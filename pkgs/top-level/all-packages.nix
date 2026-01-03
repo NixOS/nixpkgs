@@ -4104,6 +4104,7 @@ with pkgs;
 
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
+  opensplatWithRocm = opensplat.override { rocmSupport = true; };
   opensplatWithCuda = opensplat.override { cudaSupport = true; };
 
   chickenPackages_4 = recurseIntoAttrs (callPackage ../development/compilers/chicken/4 { });
