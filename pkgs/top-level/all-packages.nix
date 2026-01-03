@@ -2367,7 +2367,7 @@ with pkgs;
 
   cudaPackages_13 = cudaPackages_13_0;
 
-  cudaPackages = recurseIntoAttrs cudaPackages_12;
+  cudaPackages = recurseIntoAttrs cudaPackages_13;
 
   # TODO: move to alias
   cudatoolkit = cudaPackages.cudatoolkit;
