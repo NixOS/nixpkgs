@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  qtbase,
-  qtscxml,
+  qt6,
   cmake,
   json_c,
   mesa_glu,
@@ -13,8 +12,6 @@
   libtraceevent,
   libtracefs,
   freefont_ttf,
-  wrapQtAppsHook,
-  qtwayland,
   fetchpatch,
 }:
 
@@ -40,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtscxml
-    qtwayland
+    qt6.qtbase
+    qt6.qtscxml
+    qt6.qtwayland
     json_c
     mesa_glu
     libglut
