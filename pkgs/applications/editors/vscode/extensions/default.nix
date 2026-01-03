@@ -3768,6 +3768,8 @@ let
         };
       };
 
+      prettier.prettier-vscode = callPackage ./prettier.prettier-vscode { };
+
       prince781.vala = callPackage ./prince781.vala { };
 
       prisma.prisma = buildVscodeMarketplaceExtension {
