@@ -3,32 +3,31 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wrapQtAppsHook,
+  qt6,
   glm,
   eigen,
-  qtbase,
   stellarium,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calcmysky";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "10110111";
     repo = "CalcMySky";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AuDHLgOS+Cu2xSJQVi8XfrINoh18STP1ox7JElafW3k=";
   };
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     glm
     eigen
-    qtbase
+    qt6.qtbase
   ];
 
   cmakeFlags = [ "-DQT_VERSION=6" ];
@@ -45,4 +44,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

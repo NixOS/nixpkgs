@@ -10045,8 +10045,6 @@ with pkgs;
 
   breezy = with python3Packages; toPythonApplication breezy;
 
-  calcmysky = qt6Packages.callPackage ../applications/science/astronomy/calcmysky { };
-
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
   inherit (callPackage ../applications/networking/cluster/calico { })
     calico-apiserver
