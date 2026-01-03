@@ -26,6 +26,24 @@ in
     enable = mkEnableOption "actual, a privacy focused app for managing your finances";
     package = mkPackageOption pkgs "actual-server" { };
 
+    user = mkOption {
+      type = types.str;
+      default = "actual";
+      description = "User account under which actual runs.";
+    };
+
+    group = mkOption {
+      type = types.str;
+      default = "actual";
+      description = "Group under which actual runs.";
+    };
+
+    extraGroups = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "An array of additional groups for the actual user.";
+    };
+
     openFirewall = mkOption {
       default = false;
       type = types.bool;
@@ -81,8 +99,9 @@ in
       serviceConfig = {
         ExecStart = getExe cfg.package;
         DynamicUser = true;
-        User = "actual";
-        Group = "actual";
+        User = cfg.user;
+        Group = cfg.group;
+        SupplementaryGroups = cfg.extraGroups;
         StateDirectory = "actual";
         RuntimeDirectory = "actual";
         WorkingDirectory = dataDir;
