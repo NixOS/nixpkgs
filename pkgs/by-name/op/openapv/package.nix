@@ -4,6 +4,7 @@
   writeText,
   fetchFromGitHub,
   cmake,
+  windows,
   nix-update-script,
 }:
 let
@@ -27,6 +28,52 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ cmake ];
+
+  # openapv uses CMake Threads and links with -lpthread on MinGW.
+  # MSYS2 provides a working mingw-w64-openapv package; in nixpkgs the pthread
+  # provider is `windows.pthreads` (winpthreads).
+  buildInputs = lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMinGW "-lpthread";
+
+  postInstall = ''
+    # Upstream installs libraries under $out/lib/oapv[/import], but consumers
+    # (including FFmpeg's configure checks) expect -L$out/lib -loapv to work.
+    if [ -d "$out/lib/oapv" ]; then
+      if [ -e "$out/lib/oapv/liboapv.a" ]; then
+        mv "$out/lib/oapv/liboapv.a" "$out/lib/"
+      fi
+      if [ -d "$out/lib/oapv/import" ]; then
+        shopt -s nullglob
+        for f in "$out/lib/oapv/import/"liboapv*.dll.a; do
+          mv "$f" "$out/lib/"
+        done
+        shopt -u nullglob
+      fi
+    fi
+  '';
+
+  postFixup = ''
+    # Fix broken paths produced by upstream oapv.pc generation (double prefix and
+    # include dir pointing at .../include/oapv). Keep it minimal and correct.
+    cat > "$out/lib/pkgconfig/oapv.pc" <<'EOF'
+prefix=@prefix@
+exec_prefix=''${prefix}
+libdir=''${prefix}/lib
+includedir=''${prefix}/include
+
+Name: oapv
+Description: Advanced Professional Video Codec
+Version: @version@
+Libs: -L''${libdir} -loapv
+Libs.private: -lm@pthread@
+Cflags: -I''${includedir}
+EOF
+
+    substituteInPlace "$out/lib/pkgconfig/oapv.pc" \
+      --replace-fail "@prefix@" "$out" \
+      --replace-fail "@version@" "${finalAttrs.version}" \
+      --replace-fail "@pthread@" "${lib.optionalString stdenv.hostPlatform.isMinGW " -lpthread"}"
+  '';
 
   passthru.updateScript = nix-update-script { };
 
