@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/DynamicsAndNeuralSystems/pycatch22";
     changelog = "https://github.com/DynamicsAndNeuralSystems/pycatch22/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }
