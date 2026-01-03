@@ -18061,6 +18061,12 @@
     githubId = 96225281;
     name = "Mustafa Çalışkan";
   };
+  mushrowan = {
+    email = "roarch@proton.me";
+    name = "Rowan";
+    github = "mushrowan";
+    githubId = 69822445;
+  };
   musjj = {
     name = "musjj";
     github = "musjj";
