@@ -25,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Sigmanificient/filterpath";
     description = "Retrieve a valid path from a messy piped line";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [
+      sigmanificient
+      eveeifyeve # Darwin
+    ];
     mainProgram = "filterpath";
     platforms = lib.platforms.unix;
   };
