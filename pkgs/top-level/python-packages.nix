@@ -2910,6 +2910,8 @@ self: super: with self; {
 
   colcon-cd = callPackage ../development/python-modules/colcon-cd { };
 
+  colcon-cmake = callPackage ../development/python-modules/colcon-cmake { };
+
   colcon-coveragepy-result = callPackage ../development/python-modules/colcon-coveragepy-result { };
 
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
