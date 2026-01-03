@@ -49,14 +49,14 @@
   zstd,
 
   withQt ? true,
-  qt6 ? null,
+  qt6,
 }:
 let
+  libpcap' = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
   isAppBundle = withQt && stdenv.hostPlatform.isDarwin;
 in
-assert withQt -> qt6 != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
   version = "4.6.3";
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     repo = "wireshark";
     owner = "wireshark";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DthYkAW6UYnsDLQf2h3jgJB8RZoasjREWV1NTtZv7PQ=";
   };
 
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     libkrb5
     libmaxminddb
     libopus
-    libpcap
+    libpcap'
     libsmi
     libssh
     libxml2
@@ -224,7 +224,7 @@ stdenv.mkDerivation rec {
       experts. It runs on UNIX, macOS and Windows.
     '';
     homepage = "https://www.wireshark.org";
-    changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${version}.html";
+    changelog = "https://www.wireshark.org/docs/relnotes/wireshark-${finalAttrs.src.tag}.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
@@ -233,4 +233,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = if withQt then "wireshark" else "tshark";
   };
-}
+})
