@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/adaszko/complgen";
     license = lib.licenses.asl20;
     mainProgram = "complgen";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
 })
