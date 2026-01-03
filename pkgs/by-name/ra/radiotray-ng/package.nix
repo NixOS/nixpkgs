@@ -48,14 +48,14 @@ let
     lxml
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radiotray-ng";
   version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rRD/IfVnOxowr2mO2BB2hcHK5ByZSmTbcgYdULogYUs=";
   };
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
   ];
 
   # 'wxFont::wxFont(int, int, int, int, bool, const wxString&, wxFontEncoding)' is deprecated
@@ -125,4 +125,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
