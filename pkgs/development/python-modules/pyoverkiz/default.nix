@@ -10,22 +10,19 @@
   pyhumps,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   warrant-lite,
 }:
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.19.1";
+  version = "1.19.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     tag = "v${version}";
-    hash = "sha256-HRcjk8/5WdTMtpgf9ZOc8KIyrZvBre7PpvwM5P6R4As=";
+    hash = "sha256-h7PGtcpBcYGlqdi4grbz7KG65zZO3x8Hf/J7n271sDs=";
   };
 
   build-system = [ hatchling ];
