@@ -6,6 +6,7 @@
   replaceVars,
   fontconfig,
   python,
+  pythonAtLeast,
 
   # build-system
   cython,
@@ -134,5 +135,7 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+    # https://github.com/pygame/pygame/issues/4706
+    broken = pythonAtLeast "3.14";
   };
 }
