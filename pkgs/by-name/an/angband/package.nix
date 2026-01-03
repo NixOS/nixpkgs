@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  nix-update-script,
   ncurses5,
   enableSdl2 ? false,
   SDL2,
@@ -22,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XH2FUTJJaH5TqV2UD1CKKAXE4CRAb6zfg1UQ79a15k0=";
   };
 
+  passthru.updateScript = nix-update-script { };
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     ncurses5
@@ -33,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_ttf
   ];
 
+  enableParallelBuilding = true;
+
   configureFlags = lib.optional enableSdl2 "--enable-sdl2";
 
   installFlags = [ "bindir=$(out)/bin" ];
@@ -42,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Single-player roguelike dungeon exploration game";
     mainProgram = "angband";
     maintainers = [ lib.maintainers.kenran ];
+    changelog = "https://github.com/angband/angband/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
