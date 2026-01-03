@@ -7,17 +7,17 @@
 
 buildNpmPackage {
   pname = "coc-pyright";
-  version = "0-unstable-2025-12-01";
+  version = "0-unstable-2026-01-01";
 
   src = fetchFromGitHub {
     owner = "fannheyward";
     repo = "coc-pyright";
     # No tagged releases, this commit corresponds to the latest release of the package.
-    rev = "263919ddd3dce33d15626ed6c6139702839295e0";
-    hash = "sha256-tcD4Irq3IRVNFh1rCfvVg1VSbiMtc1bswAKTRmIfo8Y=";
+    rev = "33184c03e543b29227df989cf893752bae5f3ea2";
+    hash = "sha256-fj6iSQHprf/lkDGI5aFsogMAPv6a3Ghp9uDqnTM3/MY=";
   };
 
-  npmDepsHash = "sha256-LW0twhPlWZLFYSzfzoi9Rg8+EsmkllfasR51YtrcdnQ=";
+  npmDepsHash = "sha256-0KKEPl0H0HxNCw7GTaxE+voQhS5J1TSpd4JjyWW62UI=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
