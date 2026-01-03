@@ -1,0 +1,1016 @@
+diff -Naur a/cmake/AddEventLibrary.cmake b/cmake/AddEventLibrary.cmake
+--- a/cmake/AddEventLibrary.cmake	2025-05-20 15:12:42.864354000 +0300
++++ b/cmake/AddEventLibrary.cmake	2025-05-20 15:17:50.253181100 +0300
+@@ -1,4 +1,5 @@
+ include(CMakeParseArguments)
++include(GNUInstallDirs)
+ 
+ set(LIBEVENT_SHARED_LIBRARIES "")
+ set(LIBEVENT_STATIC_LIBRARIES "")
+@@ -11,38 +12,33 @@
+ endmacro()
+ 
+ macro(generate_pkgconfig LIB_NAME)
+-    set(prefix      ${CMAKE_INSTALL_PREFIX})
+-    set(exec_prefix ${CMAKE_INSTALL_PREFIX})
+-    set(libdir      ${CMAKE_INSTALL_PREFIX}/lib)
+-    set(includedir  ${CMAKE_INSTALL_PREFIX}/include)
++    set(prefix      "${CMAKE_INSTALL_PREFIX}")
++    set(exec_prefix "\${prefix}")
++    set(libdir      "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
++    set(includedir  "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+ 
+     set(VERSION ${EVENT_ABI_LIBVERSION})
+ 
+     set(LIBS         "")
+     foreach (LIB ${LIB_PLATFORM})
+-        set(LIBS "${LIBS} -L${LIB}")
+-    endforeach()
+-
+-    set(OPENSSL_LIBS "")
+-    foreach(LIB ${OPENSSL_LIBRARIES})
+-        set(OPENSSL_LIBS "${OPENSSL_LIBS} -L${LIB}")
++        set(LIBS "${LIBS} -l${LIB}")
+     endforeach()
+ 
+     configure_file("lib${LIB_NAME}.pc.in" "lib${LIB_NAME}.pc" @ONLY)
+     install(
+         FILES "${CMAKE_CURRENT_BINARY_DIR}/lib${LIB_NAME}.pc"
+-        DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig"
++        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+     )
+ endmacro()
+ 
+ # LIB_NAME maybe event_core, event_extra, event_openssl, event_pthreads or event.
+ # Targets whose LIB_NAME is not 'event' should be exported and installed.
+-macro(export_install_target TYPE LIB_NAME OUTER_INCLUDES)
++macro(export_install_target TYPE LIB_NAME)
+     if("${LIB_NAME}" STREQUAL "event")
+         install(TARGETS "${LIB_NAME}_${TYPE}"
+-            LIBRARY DESTINATION "lib" COMPONENT lib
+-            ARCHIVE DESTINATION "lib" COMPONENT lib
+-            RUNTIME DESTINATION "lib" COMPONENT lib
++            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT lib
++            ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT lib
++            RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT bin
+             COMPONENT dev
+         )
+     else()
+@@ -57,7 +53,6 @@
+             PUBLIC  "$<INSTALL_INTERFACE:include>"
+                     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+                     "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+-                    ${OUTER_INCS}
+         )
+         set_target_properties("${LIB_NAME}_${TYPE}" PROPERTIES EXPORT_NAME ${PURE_NAME})
+         export(TARGETS "${LIB_NAME}_${TYPE}"
+@@ -67,9 +62,9 @@
+         )
+         install(TARGETS "${LIB_NAME}_${TYPE}"
+             EXPORT LibeventTargets-${TYPE}
+-            LIBRARY DESTINATION "lib" COMPONENT lib
+-            ARCHIVE DESTINATION "lib" COMPONENT lib
+-            RUNTIME DESTINATION "lib" COMPONENT lib
++            LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT lib
++            ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT lib
++            RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT bin
+             COMPONENT dev
+         )
+     endif()
+@@ -81,8 +76,7 @@
+ # - EVENT_ABI_LIBVERSION_REVISION
+ # - EVENT_ABI_LIBVERSION_AGE
+ # - EVENT_PACKAGE_RELEASE
+-# - CMAKE_THREAD_LIBS_INIT LIB_PLATFORM
+-# - OPENSSL_LIBRARIES
++# - LIB_PLATFORM
+ # - EVENT_SHARED_FLAGS
+ # - EVENT_LIBRARY_STATIC
+ # - EVENT_LIBRARY_SHARED
+@@ -94,14 +88,12 @@
+     cmake_parse_arguments(LIB
+         "" # Options
+         "VERSION" # One val
+-        "SOURCES;LIBRARIES;INNER_LIBRARIES;OUTER_INCLUDES" # Multi val
++        "SOURCES;LIBRARIES;INNER_LIBRARIES" # Multi val
+         ${ARGN}
+     )
+ 
+-    if ("${LIB_OUTER_INCLUDES}" STREQUAL "")
+-        set(LIB_OUTER_INCLUDES NONE)
+-    endif()
+     set(ADD_EVENT_LIBRARY_INTERFACE)
++    set(INNER_LIBRARIES)
+ 
+     if (${EVENT_LIBRARY_STATIC})
+         add_library("${LIB_NAME}_static" STATIC ${LIB_SOURCES})
+@@ -113,12 +105,11 @@
+             set(INNER_LIBRARIES "${LIB_INNER_LIBRARIES}_static")
+         endif()
+         target_link_libraries("${LIB_NAME}_static"
+-            ${CMAKE_THREAD_LIBS_INIT}
+             ${LIB_PLATFORM}
+             ${INNER_LIBRARIES}
+             ${LIB_LIBRARIES})
+ 
+-        export_install_target(static "${LIB_NAME}" "${LIB_OUTER_INCLUDES}")
++        export_install_target(static "${LIB_NAME}")
+ 
+         set(ADD_EVENT_LIBRARY_INTERFACE "${LIB_NAME}_static")
+     endif()
+@@ -130,7 +121,6 @@
+             set(INNER_LIBRARIES "${LIB_INNER_LIBRARIES}_shared")
+         endif()
+         target_link_libraries("${LIB_NAME}_shared"
+-            ${CMAKE_THREAD_LIBS_INIT}
+             ${LIB_PLATFORM}
+             ${INNER_LIBRARIES}
+             ${LIB_LIBRARIES})
+@@ -150,7 +140,6 @@
+             set_target_properties(
+                 "${LIB_NAME}_shared" PROPERTIES
+                 OUTPUT_NAME "${LIB_NAME}-${EVENT_PACKAGE_RELEASE}.${CURRENT_MINUS_AGE}"
+-                INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
+                 LINK_FLAGS "-compatibility_version ${COMPATIBILITY_VERSION} -current_version ${COMPATIBILITY_VERSION}.${EVENT_ABI_LIBVERSION_REVISION}")
+         else()
+             math(EXPR CURRENT_MINUS_AGE "${EVENT_ABI_LIBVERSION_CURRENT}-${EVENT_ABI_LIBVERSION_AGE}")
+@@ -158,8 +147,7 @@
+                 "${LIB_NAME}_shared" PROPERTIES
+                 OUTPUT_NAME "${LIB_NAME}-${EVENT_PACKAGE_RELEASE}"
+                 VERSION "${CURRENT_MINUS_AGE}.${EVENT_ABI_LIBVERSION_AGE}.${EVENT_ABI_LIBVERSION_REVISION}"
+-                SOVERSION "${CURRENT_MINUS_AGE}"
+-                INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
++                SOVERSION "${CURRENT_MINUS_AGE}")
+         endif()
+ 
+         if (NOT WIN32)
+@@ -174,14 +162,14 @@
+                 WORKING_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+         endif()
+ 
+-        export_install_target(shared "${LIB_NAME}" "${LIB_OUTER_INCLUDES}")
++        export_install_target(shared "${LIB_NAME}")
+ 
+         set(ADD_EVENT_LIBRARY_INTERFACE "${LIB_NAME}_shared")
+ 
+         if (NOT WIN32)
+             install(FILES
+                 "$<TARGET_FILE_DIR:${LIB_NAME}_shared>/${LIB_LINK_NAME}"
+-                DESTINATION "lib"
++                DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+                 COMPONENT lib)
+         endif()
+     endif()
+diff -Naur a/cmake/AddLinkerFlags.cmake b/cmake/AddLinkerFlags.cmake
+--- a/cmake/AddLinkerFlags.cmake	1970-01-01 03:00:00.000000000 +0300
++++ b/cmake/AddLinkerFlags.cmake	2025-05-20 15:17:50.266242800 +0300
+@@ -0,0 +1,14 @@
++include(CheckLinkerFlag)
++
++macro(add_linker_flags)
++	foreach(flag ${ARGN})
++		string(REGEX REPLACE "[-.+/:= ]" "_" _flag_esc "${flag}")
++
++		check_linker_flag(C "${flag}" check_c_linker_flag_${_flag_esc})
++
++		if (check_c_linker_flag_${_flag_esc})
++			set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${flag}")
++			set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${flag}")
++		endif()
++	endforeach()
++endmacro()
+diff -Naur a/cmake/LibeventConfig.cmake.in b/cmake/LibeventConfig.cmake.in
+--- a/cmake/LibeventConfig.cmake.in	2020-07-05 15:01:34.000000000 +0300
++++ b/cmake/LibeventConfig.cmake.in	2025-05-20 15:17:50.381942000 +0300
+@@ -32,10 +33,17 @@
+ # find_package() can handle dependencies automatically. For example, given the 'openssl' component,
+ # all dependencies (libevent_core, libssl, libcrypto and openssl include directories) will be found.
+ 
+-set(CONFIG_FOR_INSTALL_TREE @CONFIG_FOR_INSTALL_TREE@)
+-
+ set(LIBEVENT_VERSION @EVENT_PACKAGE_VERSION@)
+ 
++# Load the dependencies of all components. As find_dependency propagates the original
++# find_package attributes (i.e. required or not), there's no need to repeat this or filter
++# by component.
++include(CMakeFindDependencyMacro)
++find_dependency(Threads)
++if(@EVENT__HAVE_OPENSSL@)
++    find_dependency(OpenSSL)
++endif()
++
+ # IMPORTED targets from LibeventTargets.cmake
+ set(LIBEVENT_STATIC_LIBRARIES "@LIBEVENT_STATIC_LIBRARIES@")
+ set(LIBEVENT_SHARED_LIBRARIES "@LIBEVENT_SHARED_LIBRARIES@")
+@@ -45,21 +56,20 @@
+     set(LIBEVENT_STATIC_LINK NOT @EVENT_LIBRARY_SHARED@)
+ endif()
+ 
+-set(CMAKE_FIND_LIBRARY_SUFFIXES_SAVE "${CMAKE_FIND_LIBRARY_SUFFIXES}")
+ if(${LIBEVENT_STATIC_LINK})
+     set(_LIB_TYPE static)
+-    set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_STATIC_LIBRARY_SUFFIX})
+     set(_AVAILABLE_LIBS "${LIBEVENT_STATIC_LIBRARIES}")
++
++    # CMake before 3.15 doesn't link OpenSSL to pthread/dl, do it ourselves instead
++    if (${CMAKE_VERSION} VERSION_LESS "3.15.0" AND "${LIBEVENT_STATIC_LINK}" AND "${OPENSSL_FOUND}" AND "${Threads_FOUND}")
++        set_property(TARGET OpenSSL::Crypto APPEND PROPERTY INTERFACE_LINK_LIBRARIES Threads::Threads)
++        set_property(TARGET OpenSSL::Crypto APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${CMAKE_DL_LIBS})
++    endif ()
+ else()
+     set(_LIB_TYPE shared)
+-    set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_SHARED_LIBRARY_SUFFIX})
+     set(_AVAILABLE_LIBS "${LIBEVENT_SHARED_LIBRARIES}")
+ endif()
+ 
+-# Get the path of the current file.
+-get_filename_component(LIBEVENT_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+-get_filename_component(_INSTALL_PREFIX "${LIBEVENT_CMAKE_DIR}/../../.." ABSOLUTE)
+-
+ macro(message_if_needed _flag _msg)
+     if (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+         message(${_flag} "${_msg}")
+@@ -110,63 +120,22 @@
+     endforeach()
+ endmacro()
+ 
+-if(CONFIG_FOR_INSTALL_TREE)
+-    ## Config for install tree ----------------------------------------
+-    # Find includes
+-    unset(_event_h CACHE)
+-    find_path(_event_h
+-              NAMES event2/event.h
+-              PATHS "${_INSTALL_PREFIX}/include"
+-              NO_DEFAULT_PATH)
+-    if(_event_h)
+-        set(LIBEVENT_INCLUDE_DIRS "${_event_h}")
+-        message_if_needed(STATUS "Found libevent include directory: ${_event_h}")
+-    else()
+-        message_if_needed(WARNING "Your libevent library does not contain header files!")
+-    endif()
++foreach(_comp ${_EVENT_COMPONENTS})
++    list(APPEND LIBEVENT_LIBRARIES "libevent::${_comp}")
++    set_case_insensitive_found(${_comp})
++endforeach()
+ 
+-    # Find libraries
+-    macro(find_event_lib _comp)
+-        unset(_event_lib CACHE)
+-        find_library(_event_lib
+-                    NAMES "event_${_comp}"
+-                    PATHS "${_INSTALL_PREFIX}/lib"
+-                    NO_DEFAULT_PATH)
+-        if(_event_lib)
+-            list(APPEND LIBEVENT_LIBRARIES "libevent::${_comp}")
+-            set_case_insensitive_found(${_comp})
+-            message_if_needed(STATUS "Found libevent component: ${_event_lib}")
+-        else()
+-            no_component_msg(${_comp})
+-        endif()
+-    endmacro()
+-
+-    foreach(comp ${_EVENT_COMPONENTS})
+-        find_event_lib(${comp})
+-    endforeach()
+-else()
+-    ## Config for build tree ----------------------------------------
+-    set(LIBEVENT_INCLUDE_DIRS "@EVENT__INCLUDE_DIRS@")
+-    foreach(_comp ${_EVENT_COMPONENTS})
+-        list(APPEND LIBEVENT_LIBRARIES "libevent::${_comp}")
+-        set_case_insensitive_found(${_comp})
+-    endforeach()
+-endif()
+-
+-set(LIBEVENT_INCLUDE_DIR ${LIBEVENT_INCLUDE_DIRS})
+ if(LIBEVENT_LIBRARIES)
+     set(LIBEVENT_LIBRARY ${LIBEVENT_LIBRARIES})
+-    if(CONFIG_FOR_INSTALL_TREE)
+-        message_if_needed(STATUS "Found libevent ${LIBEVENT_VERSION} in ${_INSTALL_PREFIX}")
+-    else()
+-        message_if_needed(STATUS "Found libevent ${LIBEVENT_VERSION} in ${LIBEVENT_CMAKE_DIR}")
+-    endif()
+ 
+-    # Avoid including targets more than one times
+-    if(NOT TARGET event_core_${_LIB_TYPE})
++    # Avoid including targets more than once.
++    if(NOT TARGET libevent::core)
+         # Include the project Targets file, this contains definitions for IMPORTED targets.
+-        include(${LIBEVENT_CMAKE_DIR}/LibeventTargets-${_LIB_TYPE}.cmake)
++        include(${CMAKE_CURRENT_LIST_DIR}/LibeventTargets-${_LIB_TYPE}.cmake)
+     endif()
++    get_target_property(LIBEVENT_INCLUDE_DIRS libevent::core INTERFACE_INCLUDE_DIRECTORIES)
++    get_filename_component(LIBEVENT_INSTALL_PREFIX "${LIBEVENT_INCLUDE_DIRS}" PATH)
++    message_if_needed(STATUS "Found libevent ${LIBEVENT_VERSION} in ${LIBEVENT_INSTALL_PREFIX}")
+ else()
+     if(${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
+         message(FATAL_ERROR "Can not find any libraries for libevent.")
+@@ -174,10 +143,9 @@
+         message_if_needed(WARNING "Can not find any libraries for libevent.")
+     endif()
+ endif()
++set(LIBEVENT_INCLUDE_DIR ${LIBEVENT_INCLUDE_DIRS})
+ 
+-set(CMAKE_FIND_LIBRARY_SUFFIXES "${CMAKE_FIND_LIBRARY_SUFFIXES_SAVE}")
+ unset(_LIB_TYPE)
+ unset(_AVAILABLE_LIBS)
+ unset(_EVENT_COMPONENTS)
+ unset(_POSSIBLE_PKG_NAMES)
+-unset(_INSTALL_PREFIX)
+diff -Naur a/cmake/RenameDoxygen.cmake b/cmake/RenameDoxygen.cmake
+--- a/cmake/RenameDoxygen.cmake	1970-01-01 03:00:00.000000000 +0300
++++ b/cmake/RenameDoxygen.cmake	2025-05-20 15:17:50.411471200 +0300
+@@ -0,0 +1,17 @@
++# Add prefix "libevent_" for manual pages
++
++message(STATUS "Rename man pages in ${CMAKE_BINARY_DIR}")
++
++# Remove old pages to avoid stalled copies
++file(GLOB LIBEVENT_MAN_PAGES RELATIVE ${CMAKE_BINARY_DIR} libevent_*)
++list(LENGTH LIBEVENT_MAN_PAGES LEN)
++if (${LEN} GREATER 0)
++    file(REMOVE ${LIBEVENT_MAN_PAGES})
++endif()
++
++# Create new
++file(GLOB LIBEVENT_MAN_PAGES RELATIVE ${CMAKE_BINARY_DIR} *)
++list(FILTER LIBEVENT_MAN_PAGES EXCLUDE REGEX ^libevent_.*$)
++foreach(MAN_PAGE ${LIBEVENT_MAN_PAGES})
++  file(RENAME ${CMAKE_BINARY_DIR}/${MAN_PAGE} ${CMAKE_BINARY_DIR}/libevent_${MAN_PAGE})
++endforeach()
+diff -Naur a/cmake/UseDoxygen.cmake b/cmake/UseDoxygen.cmake
+--- a/cmake/UseDoxygen.cmake	2020-07-05 15:01:34.000000000 +0300
++++ b/cmake/UseDoxygen.cmake	2025-05-20 15:17:50.425128700 +0300
+@@ -2,7 +2,6 @@
+ 
+ option(DOXYGEN_GENERATE_HTML  "Generate HTML"      ON)
+ option(DOXYGEN_GENERATE_MAN   "Generate man pages" OFF)
+-option(DOXYGEN_MAN_LINKS      "Generate man links" ON)
+ option(DOXYGEN_GENERATE_LATEX "Generate LaTeX"     OFF)
+ 
+ # If the case-insensitive value of the cmake option is one of
+@@ -90,16 +90,23 @@
+       if ("${DOXYGEN_GENERATE_HTML}" STREQUAL "YES")
+         install(DIRECTORY
+           ${PROJECT_BINARY_DIR}/${DOXYGEN_OUTPUT_DIRECTORY}/html
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/${PROJECT_NAME}
++          DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/doc/${PROJECT_NAME}
+           COMPONENT doc
+         )
+       endif()
+ 
+-      # Install manual into <prefix>/share/man/man3
+       if ("${DOXYGEN_GENERATE_MAN}" STREQUAL "YES")
++        set(MAN_PAGES_DIR ${PROJECT_BINARY_DIR}/${DOXYGEN_OUTPUT_DIRECTORY}/man/man3)
++        # Add prefix "libevent_" for manual pages
++        add_custom_target(doxygen-rename-man-pages ALL
++          COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/RenameDoxygen.cmake
++          DEPENDS doxygen
++          WORKING_DIRECTORY ${MAN_PAGES_DIR})
++
++        # Install manual into <prefix>/share/man/man3
+         install(DIRECTORY
+-          ${PROJECT_BINARY_DIR}/${DOXYGEN_OUTPUT_DIRECTORY}/man/man3
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man
++          ${MAN_PAGES_DIR}
++          DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/man
+           COMPONENT doc
+         )
+       endif()
+diff -Naur a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2025-05-21 09:38:25.519376100 +0300
++++ b/CMakeLists.txt	2025-05-21 10:00:55.384905300 +0300
+@@ -19,11 +19,8 @@
+ #       start libevent.sln
+ #
+ 
+-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ 
+-if (POLICY CMP0054)
+-    cmake_policy(SET CMP0054 NEW)
+-endif()
+ if (POLICY CMP0074)
+     cmake_policy(SET CMP0074 NEW)
+ endif()
+@@ -30,13 +30,18 @@
+ 
+ if(NOT CMAKE_BUILD_TYPE)
+     set(CMAKE_BUILD_TYPE Release
+-        CACHE STRING "Set build type to Debug o Release (default Release)" FORCE)
++        CACHE STRING "Set build type to Debug or Release (default Release)" FORCE)
++    message(STATUS "Set CMAKE_BUILD_TYPE to Release (default)")
+ endif()
+ string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWER)
+ 
+-# get rid of the extra default configurations
+-# what? why would you get id of other useful build types? - Ellzey
+-set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Limited configurations" FORCE)
++# Usually it is OK to define it unconditionally, but the problem is that we use
++# CMAKE_DEBUG_POSTFIX in *.pc.in
++if (CMAKE_BUILD_TYPE_LOWER STREQUAL "debug")
++    if(NOT DEFINED CMAKE_DEBUG_POSTFIX)
++        set(CMAKE_DEBUG_POSTFIX d)
++    endif()
++endif()
+ 
+ set(EVENT__LIBRARY_TYPE DEFAULT CACHE STRING
+     "Set library type to SHARED/STATIC/BOTH (default SHARED for MSVC, otherwise BOTH)")
+@@ -58,6 +63,7 @@
+ include(CheckFunctionKeywords)
+ include(CheckConstExists)
+ include(AddCompilerFlags)
++include(AddLinkerFlags)
+ include(VersionViaGit)
+ 
+ event_fuzzy_version_from_git()
+@@ -165,10 +171,35 @@
+     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+ endif()
+ 
++include(GNUInstallDirs)
++
++# The RPATH to be used when installing, but only if it's not a system directory
++#
++# Refs: https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
++macro(Configure_RPATH)
++    # NOTE: that CMAKE_INSTALL_FULL_LIBDIR not always normalized correctly, i.e.:
++    # - "///" -> "/"
++    # - "/////usr///" -> "//usr"
++    # So it should be normalized again.
++    get_filename_component(CMAKE_INSTALL_LIBDIR_NORMALIZED "${CMAKE_INSTALL_FULL_LIBDIR}" REALPATH)
++    list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_LIBDIR_NORMALIZED}" isSystemDir)
++
++    if(DEFINED CMAKE_INSTALL_RPATH)
++        message(STATUS "CMAKE_INSTALL_RPATH already set")
++    elseif("${isSystemDir}" STREQUAL "-1")
++        set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_LIBDIR_NORMALIZED}")
++    else()
++        message(STATUS "Detected install to system directory")
++    endif()
++endmacro()
++Configure_RPATH()
++
+ if (EVENT__ENABLE_VERBOSE_DEBUG)
+     add_definitions(-DUSE_DEBUG=1)
+ endif()
+ 
++add_linker_flags(-Wl,-z,max-page-size=16384)
++
+ # make it colorful under ninja-build
+ if ("${CMAKE_GENERATOR}" STREQUAL "Ninja")
+     add_compiler_flags(-fdiagnostics-color=always)
+@@ -182,9 +213,9 @@
+ 
+     message(STATUS "Setting coverage compiler flags")
+ 
+-    set(CMAKE_REQUIRED_LIBRARIES "--coverage")
++    list(APPEND CMAKE_REQUIRED_LIBRARIES "--coverage")
+     add_compiler_flags(-g -O0 --coverage)
+-    set(CMAKE_REQUIRED_LIBRARIES "")
++    list(REMOVE_ITEM CMAKE_REQUIRED_LIBRARIES "--coverage")
+ endif()
+ 
+ set(GNUC 0)
+@@ -265,10 +296,9 @@
+     option(EVENT__ENABLE_GCC_FUNCTION_SECTIONS "Enable gcc function sections" OFF)
+     option(EVENT__ENABLE_GCC_WARNINGS "Make all GCC warnings into errors" OFF)
+ 
+-    set(GCC_V ${CMAKE_C_COMPILER_VERSION})
+-
+     list(APPEND __FLAGS
+          -Wall -Wextra -Wno-unused-parameter -Wstrict-aliasing -Wstrict-prototypes
++         -Wundef
+ 
+          -fno-strict-aliasing # gcc 2.9.5+
+          -Wmissing-prototypes
+@@ -287,10 +317,19 @@
+          -Wlogical-op
+ 
+          -Wwrite-strings
++
++         # Disable unused-function warnings. These trigger for minheap-internal.h.
++         -Wno-unused-function
++
++         -Wno-pragmas
++
++         -Wvla
+     )
+ 
+     if (${CLANG})
+-        list(APPEND __FLAGS -Wno-unused-function)
++        list(APPEND __FLAGS
++             # we use this hack in tests
++             -Wno-void-pointer-to-enum-cast)
+     endif()
+ 
+     if (EVENT__DISABLE_GCC_WARNINGS)
+@@ -334,11 +373,19 @@
+ 
+ # Winsock.
+ if(WIN32)
+-    set(CMAKE_REQUIRED_LIBRARIES  ws2_32 shell32 advapi32)
++    list(APPEND CMAKE_REQUIRED_LIBRARIES
++        ws2_32
++        shell32
++        advapi32
++        bcrypt
++    )
+     set(CMAKE_REQUIRED_DEFINITIONS -FIwinsock2.h -FIws2tcpip.h -D_WIN32_WINNT=0x0600)
+ endif()
+ if (SOLARIS)
+-    set(CMAKE_REQUIRED_LIBRARIES socket nsl)
++    list(APPEND CMAKE_REQUIRED_LIBRARIES
++        socket
++        nsl
++    )
+ endif()
+ 
+ # Check if _GNU_SOURCE is available.
+@@ -427,6 +474,13 @@
+     )
+ endif()
+ 
++if (NOT EVENT__DISABLE_THREAD_SUPPORT AND NOT WIN32)
++    list(APPEND FILES_TO_CHECK pthread.h)
++    # (Only `CHECK_TYPE_SIZE()' will use `CMAKE_EXTRA_INCLUDE_FILES')
++    list(APPEND CMAKE_EXTRA_INCLUDE_FILES pthread.h)
++endif()
++
++# Fills EVENT_INCLUDES
+ foreach(FILE ${FILES_TO_CHECK})
+     CHECK_INCLUDE_FILE_CONCAT(${FILE} "EVENT")
+ endforeach()
+@@ -463,53 +517,87 @@
+ 
+ if (WIN32)
+     list(APPEND SYMBOLS_TO_CHECK
+-        _gmtime64_s
+         _gmtime64
++        _gmtime64_s
+     )
+ else()
+     list(APPEND SYMBOLS_TO_CHECK
+-        getifaddrs
+-        select
++        accept4
++        arc4random
++        arc4random_buf
++        arc4random_stir
+         epoll_create
+         epoll_create1
+         epoll_ctl
++        epoll_pwait2
+         eventfd
+-        poll
+-        port_create
+-        kqueue
+         fcntl
++        getegid
++        geteuid
++        gethostbyname_r
++        getifaddrs
++        getrandom
++        issetugid
++        kqueue
+         mmap
++        mmap64
+         pipe
+         pipe2
++        poll
++        port_create
++        pread
++        select
+         sendfile
++        setenv
++        setrlimit
+         sigaction
+         strsignal
+         sysctl
+-        accept4
+-        arc4random
+-        arc4random_buf
+-        arc4random_addrandom
+-        getrandom
+-        getegid
+-        geteuid
+-        issetugid
+-        usleep
+         timerfd_create
+-        setenv
+         unsetenv
+-        setrlimit
+-        gethostbyname_r
++        usleep
+     )
+     if (APPLE)
+         list(APPEND SYMBOLS_TO_CHECK mach_absolute_time)
+     endif()
+ endif()
+ 
+-# Add stdio.h for vasprintf
+-set(EVENT_INCLUDES ${EVENT_INCLUDES} stdio.h)
+-CHECK_SYMBOLS_EXIST("${SYMBOLS_TO_CHECK}" "${EVENT_INCLUDES}" "EVENT")
++set(PTHREADS_AVAILABLE OFF)
++if (NOT EVENT__DISABLE_THREAD_SUPPORT)
++    if (WIN32)
++        list(APPEND SRC_CORE evthread_win32.c)
++    elseif(ANDROID)
++        # pthreads is built in to bionic
++        set(EVENT__HAVE_PTHREADS 1)
++        CHECK_TYPE_SIZE(pthread_t EVENT__SIZEOF_PTHREAD_T)
++        list(APPEND SYMBOLS_TO_CHECK pthread_mutexattr_setprotocol)
++        set(PTHREADS_AVAILABLE ON)
++    else()
++        find_package(Threads REQUIRED)
++        if (NOT CMAKE_USE_PTHREADS_INIT)
++            message(FATAL_ERROR
++                    "Failed to find Pthreads, set EVENT__DISABLE_THREAD_SUPPORT to disable")
++        endif()
++        set(PTHREADS_AVAILABLE ON)
++
++        set(EVENT__HAVE_PTHREADS 1)
++        # for CHECK_SYMBOLS_EXIST()
++        list(APPEND CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
++        list(APPEND LIB_APPS Threads::Threads)
++
++        CHECK_TYPE_SIZE(pthread_t EVENT__SIZEOF_PTHREAD_T)
++        list(APPEND SYMBOLS_TO_CHECK pthread_mutexattr_setprotocol)
++    endif()
++endif()
++
++list(APPEND CMAKE_EXTRA_INCLUDE_FILES ${EVENT_INCLUDES} stdio.h)
++CHECK_SYMBOLS_EXIST("${SYMBOLS_TO_CHECK}" "${CMAKE_EXTRA_INCLUDE_FILES}" "EVENT")
+ unset(SYMBOLS_TO_CHECK)
+ set(EVENT__HAVE_EPOLL ${EVENT__HAVE_EPOLL_CREATE})
++set(EVENT__HAVE_SIGNALFD ${EVENT__HAVE_SYS_SIGNALFD_H})
++if(WIN32 AND NOT CYGWIN)
++    set(EVENT__HAVE_WEPOLL 1)
++endif()
+ 
+ # Get the gethostbyname_r prototype.
+ if(EVENT__HAVE_GETHOSTBYNAME_R)
+@@ -536,9 +624,6 @@
+     set(EVENT__HAVE_EVENT_PORTS 1)
+ endif()
+ 
+-# Only `CHECK_TYPE_SIZE()' will use `CMAKE_EXTRA_INCLUDE_FILES'
+-set(CMAKE_EXTRA_INCLUDE_FILES ${EVENT_INCLUDES})
+-
+ CHECK_TYPE_SIZE("struct sockaddr_un" EVENT__HAVE_STRUCT_SOCKADDR_UN)
+ CHECK_TYPE_SIZE("uint8_t" EVENT__HAVE_UINT8_T)
+ CHECK_TYPE_SIZE("uint16_t" EVENT__HAVE_UINT16_T)
+@@ -575,7 +660,6 @@
+ CHECK_SYMBOL_EXISTS("__func__"     "" EVENT__HAVE___func__)
+ CHECK_SYMBOL_EXISTS("__FUNCTION__" "" EVENT__HAVE___FUNCTION__)
+ 
+-CHECK_SYMBOL_EXISTS(TAILQ_FOREACH sys/queue.h EVENT__HAVE_TAILQFOREACH)
+ CHECK_CONST_EXISTS(CTL_KERN sys/sysctl.h EVENT__HAVE_DECL_CTL_KERN)
+ CHECK_CONST_EXISTS(KERN_ARND sys/sysctl.h EVENT__HAVE_DECL_KERN_ARND)
+ CHECK_SYMBOL_EXISTS(F_SETFD fcntl.h EVENT__HAVE_SETFD)
+@@ -584,10 +668,7 @@
+ 
+ CHECK_TYPE_SIZE(size_t EVENT__SIZEOF_SIZE_T)
+ if(NOT EVENT__SIZEOF_SIZE_T)
+-  set(EVENT__size_t "unsigned")
+   set(EVENT__SIZEOF_SIZE_T ${EVENT__SIZEOF_UNSIGNED})
+-else()
+-    set(EVENT__size_t size_t)
+ endif()
+ 
+ CHECK_TYPE_SIZE("off_t" EVENT__SIZEOF_OFF_T LANGUAGE C)
+@@ -604,13 +685,10 @@
+ 
+ if (EVENT__SIZEOF_SSIZE_T_LOWER)
+     set(EVENT__ssize_t "ssize_t")
+-    set(EVENT__SIZEOF_SSIZE_T ${EVENT__SIZEOF_SSIZE_T_LOWER})
+ elseif (EVENT__SIZEOF_SSIZE_T_UPPER)
+     set(EVENT__ssize_t "SSIZE_T")
+-    set(EVENT__SIZEOF_SSIZE_T ${EVENT__SIZEOF_SSIZE_T_UPPER})
+ else()
+     set(EVENT__ssize_t "int")
+-    set(EVENT__SIZEOF_SSIZE_T ${EVENT__SIZEOF_INT})
+ endif()
+ 
+ CHECK_TYPE_SIZE(socklen_t EVENT__SIZEOF_SOCKLEN_T)
+@@ -628,17 +706,6 @@
+ 	set(EVENT__SIZEOF_PID_T EVENT__SIZEOF_PID_T)
+ endif()
+ 
+-if (NOT EVENT__DISABLE_THREAD_SUPPORT)
+-    if (NOT WIN32)
+-        list(APPEND CMAKE_EXTRA_INCLUDE_FILES pthread.h)
+-    endif()
+-    CHECK_TYPE_SIZE(pthread_t EVENT__SIZEOF_PTHREAD_T)
+-endif()
+-
+-if(EVENT__HAVE_CLOCK_GETTIME)
+-  set(EVENT__DNS_USE_CPU_CLOCK_FOR_ID 1)
+-endif()
+-
+ # we're just getting lazy now.
+ CHECK_TYPE_SIZE("uintptr_t" EVENT__HAVE_UINTPTR_T)
+ CHECK_TYPE_SIZE("void *" EVENT__SIZEOF_VOID_P)
+@@ -701,15 +768,6 @@
+ endif()
+ 
+ CHECK_TYPE_SIZE("struct in6_addr" EVENT__HAVE_STRUCT_IN6_ADDR)
+-if(EVENT__HAVE_STRUCT_IN6_ADDR)
+-    CHECK_STRUCT_HAS_MEMBER("struct in6_addr"
+-            s6_addr16 "${SOCKADDR_HEADERS}"
+-            EVENT__HAVE_STRUCT_IN6_ADDR_S6_ADDR16)
+-
+-    CHECK_STRUCT_HAS_MEMBER("struct in6_addr"
+-            s6_addr32 "${SOCKADDR_HEADERS}"
+-            EVENT__HAVE_STRUCT_IN6_ADDR_S6_ADDR32)
+-endif()
+ 
+ CHECK_TYPE_SIZE("sa_family_t" EVENT__HAVE_SA_FAMILY_T)
+ CHECK_TYPE_SIZE("struct sockaddr_in6" EVENT__HAVE_STRUCT_SOCKADDR_IN6)
+@@ -795,7 +853,7 @@
+     include/event2/visibility.h
+     ${PROJECT_BINARY_DIR}/include/event2/event-config.h)
+ 
+-set(SRC_CORE
++list(APPEND SRC_CORE
+     buffer.c
+     bufferevent.c
+     bufferevent_filter.c
+@@ -837,45 +895,33 @@
+     list(APPEND SRC_CORE evport.c)
+ endif()
+ 
+-if (NOT EVENT__DISABLE_OPENSSL)
+-    find_package(OpenSSL REQUIRED)
+-
+-    set(EVENT__HAVE_OPENSSL 1)
+-
+-    message(STATUS "OpenSSL include: ${OPENSSL_INCLUDE_DIR}")
+-    message(STATUS "OpenSSL lib: ${OPENSSL_LIBRARIES}")
+-
+-    include_directories(${OPENSSL_INCLUDE_DIR})
++if (EVENT__DISABLE_OPENSSL STREQUAL "OFF" OR EVENT__DISABLE_OPENSSL STREQUAL "AUTO")
++    find_package(OpenSSL)
+ 
+-    list(APPEND SRC_OPENSSL bufferevent_openssl.c)
+-    list(APPEND HDR_PUBLIC include/event2/bufferevent_ssl.h)
+-    list(APPEND LIB_APPS ${OPENSSL_LIBRARIES})
+-endif()
+-
+-if (NOT EVENT__DISABLE_THREAD_SUPPORT)
+-    if (WIN32)
+-        list(APPEND SRC_CORE evthread_win32.c)
+-    else()
+-        find_package(Threads REQUIRED)
+-        if (NOT CMAKE_USE_PTHREADS_INIT)
+-            message(FATAL_ERROR
+-                    "Failed to find Pthreads, set EVENT__DISABLE_THREAD_SUPPORT to disable")
+-        endif()
+-
+-        set(EVENT__HAVE_PTHREADS 1)
+-        list(APPEND LIB_APPS ${CMAKE_THREAD_LIBS_INIT})
++    if (OPENSSL_FOUND)
++        set(EVENT__HAVE_OPENSSL 1)
++        set(OPENSSL_TARGETS OpenSSL::SSL)
++
++        message(STATUS "OpenSSL include: ${OPENSSL_INCLUDE_DIR}")
++        message(STATUS "OpenSSL lib: ${OPENSSL_LIBRARIES}")
++
++        list(APPEND SRC_OPENSSL bufferevent_openssl.c)
++        list(APPEND HDR_PUBLIC include/event2/bufferevent_ssl.h)
++        list(APPEND LIB_APPS ${OPENSSL_TARGETS})
++    elseif (EVENT__DISABLE_OPENSSL STREQUAL "OFF")
++        message(FATAL_ERROR "OpenSSL required, but not found.")
+     endif()
++elseif (EVENT__DISABLE_OPENSSL STREQUAL "ON")
++    message(STATUS "Disable OpenSSL support")
+ endif()
+ 
+ if (NOT EVENT__DISABLE_TESTS)
+     # Zlib is only used for testing.
+     find_package(ZLIB)
+ 
+     if (ZLIB_LIBRARY AND ZLIB_INCLUDE_DIR)
+-        include_directories(${ZLIB_INCLUDE_DIRS})
+-
+         set(EVENT__HAVE_LIBZ 1)
+-        list(APPEND LIB_APPS ${ZLIB_LIBRARIES})
++        list(APPEND LIB_APPS ZLIB::ZLIB)
+     endif()
+ endif()
+ 
+@@ -885,6 +931,15 @@
+     evdns.c
+     evrpc.c)
+ 
++if(${CMAKE_VERSION} VERSION_LESS "3.20")
++  include(TestBigEndian)
++  TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
++  if(IS_BIG_ENDIAN)
++    set(CMAKE_C_BYTE_ORDER BIG_ENDIAN)
++  else()
++    set(CMAKE_C_BYTE_ORDER LITTLE_ENDIAN)
++  endif()
++endif()
+ add_definitions(-DHAVE_CONFIG_H)
+ 
+ # We use BEFORE here so we don't accidentally look in system directories
+@@ -902,8 +957,7 @@
+ 
+     list(APPEND HDR_PRIVATE WIN32-Code/getopt.h)
+ 
+-    set(EVENT__DNS_USE_FTIME_FOR_ID 1)
+-    set(LIB_PLATFORM ws2_32 shell32 advapi32)
++    set(LIB_PLATFORM ws2_32 shell32 advapi32 bcrypt iphlpapi)
+     add_definitions(
+             -D_CRT_SECURE_NO_WARNINGS
+             -D_CRT_NONSTDC_NO_DEPRECATE)
+@@ -949,19 +1003,25 @@
+     INNER_LIBRARIES event_core
+     SOURCES ${SRC_EXTRA})
+ 
+-if (NOT EVENT__DISABLE_OPENSSL)
++if (EVENT__HAVE_OPENSSL)
+     add_event_library(event_openssl
+         INNER_LIBRARIES event_core
+-        OUTER_INCLUDES ${OPENSSL_INCLUDE_DIR}
+-        LIBRARIES ${OPENSSL_LIBRARIES}
++        LIBRARIES ${OPENSSL_TARGETS}
+         SOURCES ${SRC_OPENSSL})
+ endif()
+ 
+ if (EVENT__HAVE_PTHREADS)
+     set(SRC_PTHREADS evthread_pthread.c)
+-    add_event_library(event_pthreads
+-        INNER_LIBRARIES event_core
+-        SOURCES ${SRC_PTHREADS})
++    if(ANDROID)
++        add_event_library(event_pthreads
++            INNER_LIBRARIES event_core
++            SOURCES ${SRC_PTHREADS})
++    else()
++        add_event_library(event_pthreads
++            INNER_LIBRARIES event_core
++            LIBRARIES Threads::Threads
++            SOURCES ${SRC_PTHREADS})
++    endif()
+ endif()
+ 
+ # library exists for historical reasons; it contains the contents of
+@@ -1000,8 +1060,8 @@
+                           ${LIB_APPS}
+                           ${LIB_PLATFORM})
+ 
+-    if (${ssl})
+-        target_link_libraries(${name} event_openssl)
++    if (TARGET ${ssl})
++        target_link_libraries(${name} ${ssl})
+         if(WIN32)
+             target_link_libraries(${name} crypt32)
+         endif()
+@@ -1019,7 +1079,7 @@
+         add_sample_prog(OFF ${SAMPLE} sample/${SAMPLE}.c)
+     endforeach()
+ 
+-    if (NOT EVENT__DISABLE_OPENSSL)
++    if (EVENT__HAVE_OPENSSL)
+         add_sample_prog(ON https-client
+                         sample/https-client.c
+                         sample/openssl_hostname_validation.c
+@@ -1069,20 +1129,23 @@
+                           event_extra
+                           ${ARGN})
+ endmacro()
++
+ if (NOT EVENT__DISABLE_TESTS)
+     #
+     # Generate Regress tests.
+     #
+     if (NOT EVENT__DISABLE_REGRESS)
+         # (We require python to generate the regress tests)
+-        find_package(PythonInterp 3)
++        find_package(Python3 COMPONENTS Interpreter)
+ 
+-        if (PYTHONINTERP_FOUND)
++        if (Python3_FOUND)
+             set(__FOUND_USABLE_PYTHON 1)
++            set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
+         else()
+-            find_package(PythonInterp 2)
+-            if (PYTHONINTERP_FOUND)
++            find_package(Python2 COMPONENTS Interpreter)
++            if (Python2_FOUND)
+                 set(__FOUND_USABLE_PYTHON 1)
++                set(PYTHON_EXECUTABLE ${Python2_EXECUTABLE})
+             else()
+                 message(ERROR "No suitable Python version found, bailing...")
+             endif()
+@@ -1135,7 +1198,7 @@
+                 list(APPEND SRC_REGRESS test/regress_zlib.c)
+             endif()
+ 
+-            if (NOT EVENT__DISABLE_OPENSSL)
++            if (EVENT__HAVE_OPENSSL)
+                 list(APPEND SRC_REGRESS test/regress_ssl.c)
+             endif()
+ 
+@@ -1146,10 +1209,10 @@
+                                   ${LIB_PLATFORM}
+                                   event_core
+                                   event_extra)
+-            if (NOT EVENT__DISABLE_OPENSSL)
++            if (EVENT__HAVE_OPENSSL)
+                 target_link_libraries(regress event_openssl)
+             endif()
+-            if (CMAKE_USE_PTHREADS_INIT)
++            if (PTHREADS_AVAILABLE)
+                 target_link_libraries(regress event_pthreads)
+             endif()
+         else()
+@@ -1450,22 +1513,13 @@
+ #
+ 
+ set(EVENT_INSTALL_CMAKE_DIR
+-    "${CMAKE_INSTALL_PREFIX}/lib/cmake/libevent")
++    "${CMAKE_INSTALL_LIBDIR}/cmake/libevent")
+ 
+ export(PACKAGE libevent)
+ 
+-function(gen_package_config forinstall)
+-    if(${forinstall})
+-        set(CONFIG_FOR_INSTALL_TREE 1)
+-        set(dir "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}")
+-    else()
+-        set(CONFIG_FOR_INSTALL_TREE 0)
+-        set(dir "${PROJECT_BINARY_DIR}")
+-    endif()
+-    configure_file(${PROJECT_SOURCE_DIR}/cmake/LibeventConfig.cmake.in
+-                "${dir}/LibeventConfig.cmake"
+-                @ONLY)
+-endfunction()
++configure_file(${PROJECT_SOURCE_DIR}/cmake/LibeventConfig.cmake.in
++    "${PROJECT_BINARY_DIR}/LibeventConfig.cmake"
++    @ONLY)
+ 
+ # Generate the config file for the build-tree.
+ set(EVENT__INCLUDE_DIRS
+@@ -1476,11 +1530,6 @@
+     ${EVENT__INCLUDE_DIRS}
+     CACHE PATH "Libevent include directories")
+ 
+-gen_package_config(0)
+-
+-# Generate the config file for the installation tree.
+-gen_package_config(1)
+-
+ # Generate version info for both build-tree and install-tree.
+ configure_file(${PROJECT_SOURCE_DIR}/cmake/LibeventConfigVersion.cmake.in
+                ${PROJECT_BINARY_DIR}/LibeventConfigVersion.cmake
+@@ -1488,17 +1537,17 @@
+ 
+ # Install compat headers
+ install(FILES ${HDR_COMPAT}
+-        DESTINATION "include"
++        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+         COMPONENT dev)
+ 
+ # Install public headers
+ install(FILES ${HDR_PUBLIC}
+-        DESTINATION "include/event2"
++        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/event2"
+         COMPONENT dev)
+ 
+ # Install the configs.
+ install(FILES
+-        ${PROJECT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/LibeventConfig.cmake
++        ${PROJECT_BINARY_DIR}/LibeventConfig.cmake
+         ${PROJECT_BINARY_DIR}/LibeventConfigVersion.cmake
+         DESTINATION "${EVENT_INSTALL_CMAKE_DIR}"
+         COMPONENT dev)
+@@ -1521,7 +1570,7 @@
+ # Install the scripts.
+ install(PROGRAMS
+        ${CMAKE_CURRENT_SOURCE_DIR}/event_rpcgen.py
+-       DESTINATION "bin"
++       DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        COMPONENT runtime)
+ 
+ # Create documents with doxygen.
+@@ -1562,11 +1611,17 @@
+ message(STATUS "CMAKE_SYSTEM_VERSION:     ${CMAKE_SYSTEM_VERSION}")
+ message(STATUS "CMAKE_SYSTEM_PROCESSOR:   ${CMAKE_SYSTEM_PROCESSOR}")
+ message(STATUS "CMAKE_SKIP_RPATH:         ${CMAKE_SKIP_RPATH}")
++message(STATUS "CMAKE_SKIP_INSTALL_RPATH: ${CMAKE_SKIP_INSTALL_RPATH}")
++message(STATUS "CMAKE_INSTALL_RPATH:      ${CMAKE_INSTALL_RPATH}")
+ message(STATUS "CMAKE_VERBOSE_MAKEFILE:   ${CMAKE_VERBOSE_MAKEFILE}")
+ message(STATUS "CMAKE_C_FLAGS:            ${CMAKE_C_FLAGS}")
+ message(STATUS "CMAKE_BUILD_TYPE:         ${CMAKE_BUILD_TYPE}")
+-message(STATUS "CMAKE_C_COMPILER:         ${CMAKE_C_COMPILER} (id ${CMAKE_C_COMPILER_ID}, clang ${CLANG}, GNUC ${GNUC})")
++message(STATUS "CMAKE_C_COMPILER:         ${CMAKE_C_COMPILER} (id ${CMAKE_C_COMPILER_ID}, clang ${CLANG}, GNUC ${GNUC}, version ${CMAKE_C_COMPILER_VERSION})")
++message(STATUS "CMAKE_SHARED_LINKER_FLAGS:${CMAKE_SHARED_LINKER_FLAGS}")
++message(STATUS "CMAKE_EXE_LINKER_FLAGS:   ${CMAKE_EXE_LINKER_FLAGS}")
+ message(STATUS "CMAKE_AR:                 ${CMAKE_AR}")
+ message(STATUS "CMAKE_RANLIB:             ${CMAKE_RANLIB}")
++message(STATUS "CMAKE_INSTALL_PREFIX:     ${CMAKE_INSTALL_PREFIX}")
++message(STATUS "CMAKE_DEBUG_POSTFIX:      ${CMAKE_DEBUG_POSTFIX}")
+ message(STATUS "")
+ 

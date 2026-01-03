@@ -1,0 +1,12 @@
+--- libevent-2.1.12-stable/event-config.h.cmake.orig	2025-05-20 15:53:25.663066900 +0300
++++ libevent-2.1.12-stable/event-config.h.cmake	2025-05-20 15:53:35.806436300 +0300
+@@ -482,6 +482,9 @@
+ /* The size of 'void *', as computer by sizeof */
+ #define EVENT__SIZEOF_VOID_P @EVENT__SIZEOF_VOID_P@
+ 
++/* The size of 'time_t', as computer by sizeof */
++#define EVENT__SIZEOF_TIME_T @EVENT__SIZEOF_TIME_T@
++
+ /* Define to `__inline__' or `__inline' if that's what the C compiler
+    calls it, or to nothing if 'inline' is not supported under any name.  */
+ #ifndef __cplusplus

@@ -1,0 +1,12 @@
+--- a/evutil.c
++++ b/evutil.c
+@@ -37,9 +37,6 @@
+ #include <io.h>
+ #include <tchar.h>
+ #include <process.h>
+-#undef _WIN32_WINNT
+-/* For structs needed by GetAdaptersAddresses */
+-#define _WIN32_WINNT 0x0501
+ #include <iphlpapi.h>
+ #include <netioapi.h>
+ #endif

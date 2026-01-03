@@ -1,0 +1,11 @@
+--- libevent-2.1.12-stable/cmake/LibeventConfig.cmake.in.orig	2025-12-03 09:16:15.382975500 +0300
++++ libevent-2.1.12-stable/cmake/LibeventConfig.cmake.in	2025-12-03 09:17:23.989690200 +0300
+@@ -49,7 +49,7 @@
+ 
+ # Default to the same type as libevent was built:
+ if(NOT DEFINED LIBEVENT_STATIC_LINK)
+-    set(LIBEVENT_STATIC_LINK NOT @EVENT_LIBRARY_SHARED@)
++    set(LIBEVENT_STATIC_LINK NOT BUILD_SHARED_LIBS)
+ endif()
+ 
+ if(${LIBEVENT_STATIC_LINK})

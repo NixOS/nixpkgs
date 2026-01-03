@@ -1,0 +1,11 @@
+--- libevent-2.1.12-stable/cmake/AddEventLibrary.cmake.orig	2025-05-26 14:16:21.442791800 +0300
++++ libevent-2.1.12-stable/cmake/AddEventLibrary.cmake	2025-05-26 14:16:27.044588200 +0300
+@@ -133,7 +133,7 @@
+             set_target_properties(
+                 "${LIB_NAME}_shared" PROPERTIES
+                 OUTPUT_NAME "${LIB_NAME}"
+-                SOVERSION ${EVENT_ABI_LIBVERSION})
++                SOVERSION ${EVENT_ABI_LIBVERSION_CURRENT})
+         elseif (APPLE)
+             math(EXPR COMPATIBILITY_VERSION "${EVENT_ABI_LIBVERSION_CURRENT}+1")
+             math(EXPR CURRENT_MINUS_AGE "${EVENT_ABI_LIBVERSION_CURRENT}-${EVENT_ABI_LIBVERSION_AGE}")

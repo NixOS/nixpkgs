@@ -1,0 +1,20 @@
+diff -bur libevent-2.1.12-stable-orig/sample/http-server.c libevent-2.1.12-stable/sample/http-server.c
+--- libevent-2.1.12-stable-orig/sample/http-server.c	2024-03-16 14:46:32.888774200 -0600
++++ libevent-2.1.12-stable/sample/http-server.c	2024-03-16 14:47:16.838938500 -0600
+@@ -384,11 +384,15 @@
+ }
+ 
+ static void
+-do_term(int sig, short events, void *arg)
++do_term(evutil_socket_t sig, short events, void *arg)
+ {
+ 	struct event_base *base = arg;
+ 	event_base_loopbreak(base);
++#ifdef _WIN64
++	fprintf(stderr, "Got %lld, Terminating\n", sig);
++#else
+ 	fprintf(stderr, "Got %i, Terminating\n", sig);
++#endif
+ }
+ 
+ static int
