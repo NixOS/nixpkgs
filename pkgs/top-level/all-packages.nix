@@ -10328,8 +10328,6 @@ with pkgs;
 
   bfcal = libsForQt5.callPackage ../applications/misc/bfcal { };
 
-  bino3d = qt6Packages.callPackage ../applications/video/bino3d { };
-
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
 

@@ -6,10 +6,7 @@
   ninja,
   pkg-config,
   pandoc,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qttools,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,13 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     pandoc
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtmultimedia
-    qttools
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qttools
     # The optional QVR dependency is not currently packaged.
   ];
 
