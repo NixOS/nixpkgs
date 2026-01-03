@@ -18,9 +18,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optional (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) (
-    lib.cmakeBool "ENABLE_CUSTOM_COMPILER_FLAGS" false
-  );
+  cmakeFlags =
+    [
+      # Don't build/run tests in cross builds (and we don't need them for ffmpeg).
+      (lib.cmakeBool "ENABLE_CJSON_TEST" false)
+    ]
+    # Avoid treating warnings as errors on MinGW (e.g. float-conversion in isnan/isinf usage).
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      (lib.cmakeBool "ENABLE_CUSTOM_COMPILER_FLAGS" false)
+    ]
+    ++ lib.optional (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) (
+      lib.cmakeBool "ENABLE_CUSTOM_COMPILER_FLAGS" false
+    );
 
   postPatch =
     # cJSON actually uses C99 standard, not C89
@@ -46,6 +55,7 @@ stdenv.mkDerivation rec {
     description = "Ultralightweight JSON parser in ANSI C";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
-    platforms = lib.platforms.unix;
+    # MSYS2 ships cJSON for MinGW; allow Windows so pkgsCross.mingwW64 can evaluate it.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }
