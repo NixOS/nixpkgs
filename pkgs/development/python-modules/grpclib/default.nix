@@ -44,6 +44,8 @@ buildPythonPackage rec {
     certifi
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "grpclib" ];
 
   meta = {
