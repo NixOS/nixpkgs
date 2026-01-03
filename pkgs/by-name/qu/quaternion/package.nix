@@ -3,55 +3,39 @@
   lib,
   fetchFromGitHub,
   cmake,
-  wrapQtAppsHook,
-  qtbase,
-  qtquickcontrols2 ? null, # only a separate package on qt5
-  qtkeychain,
-  qtmultimedia,
-  qttools,
-  libquotient,
+  qt6,
   libsecret,
   olm,
+  kdePackages,
 }:
 
-let
-  inherit (lib) cmakeBool;
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "quaternion";
-  version = "0.0.96.1";
+  version = "0.0.97.1";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "Quaternion";
-    rev = finalAttrs.version;
-    hash = "sha256-lRCSEb/ldVnEv6z0moU4P5rf0ssKb9Bw+4QEssLjuwI=";
+    tag = finalAttrs.version;
+    hash = "sha256-Dn4E3mTqcNK88PNraL+qR1gREob5j7s3Qf8XAaTNSJg=";
   };
 
   buildInputs = [
-    libquotient
+    kdePackages.libquotient
     libsecret
     olm
-    qtbase
-    qtkeychain
-    qtmultimedia
-    qtquickcontrols2
+    qt6.qtbase
+    kdePackages.qtkeychain
+    qt6.qtmultimedia
   ];
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
-  # qt6 needs UTF
   env.LANG = "C.UTF-8";
-
-  cmakeFlags = [
-    # drop this from 0.0.97 onwards as it will be qt6 only
-    (cmakeBool "BUILD_WITH_QT6" ((lib.versions.major qtbase.version) == "6"))
-  ];
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then
@@ -62,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     else
       ''
-        substituteInPlace $out/share/applications/com.github.quaternion.desktop \
-          --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
+        substituteInPlace $out/share/applications/io.github.quotient_im.Quaternion.desktop \
+          --replace-fail 'Exec=quaternion' "Exec=$out/bin/quaternion"
       '';
 
   meta = {
@@ -72,6 +56,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://matrix.org/ecosystem/clients/quaternion/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ peterhoeg ];
-    inherit (qtbase.meta) platforms;
   };
 })

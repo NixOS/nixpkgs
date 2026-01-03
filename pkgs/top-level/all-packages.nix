@@ -1670,11 +1670,6 @@ with pkgs;
     charles5
     ;
 
-  quaternion-qt6 =
-    qt6Packages.callPackage ../applications/networking/instant-messengers/quaternion
-      { };
-  quaternion = quaternion-qt6;
-
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
   libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
@@ -4010,7 +4005,7 @@ with pkgs;
   # https://github.com/NixOS/nixpkgs/issues/227327
   wafHook = waf.hook;
 
-  web-eid-app = libsForQt5.callPackage ../tools/security/web-eid-app { };
+  web-eid-app = qt6Packages.callPackage ../tools/security/web-eid-app { };
 
   wio = callPackage ../by-name/wi/wio/package.nix {
     wlroots = wlroots_0_19;
