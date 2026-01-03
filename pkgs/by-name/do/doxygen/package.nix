@@ -6,6 +6,7 @@
   python3,
   flex,
   bison,
+  withGui ? false,
   qt6,
   libiconv,
   spdlog,
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     sqlite
   ]
-  ++ lib.optionals (qt6 != null) [
+  ++ lib.optionals withGui [
     qt6.qtbase
     qt6.wrapQtAppsHook
     qt6.qtsvg
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Duse_sys_fmt=ON"
     "-Duse_sys_sqlite3=ON"
   ]
-  ++ lib.optional (qt6 != null) "-Dbuild_wizard=YES";
+  ++ lib.optional withGui "-Dbuild_wizard=YES";
 
   # put examples in an output so people/tools can test against them
   outputs = [
@@ -89,6 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
       off-line reference manual (in LaTeX) from a set of documented source
       files.
     '';
-    platforms = if qt6 != null then lib.platforms.linux else lib.platforms.unix;
+    platforms = if withGui then lib.platforms.linux else lib.platforms.unix;
   };
 })
