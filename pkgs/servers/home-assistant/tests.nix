@@ -158,6 +158,10 @@ let
   };
 
   extraDisabledTestPaths = {
+    google_generative_ai_conversation = [
+      # Fails because googleapis/python-genai added 2 fields to a dict
+      "tests/components/google_generative_ai_conversation/test_conversation.py::test_function_call"
+    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "tests/components/jellyfin/test_media_source.py::test_resolve"
