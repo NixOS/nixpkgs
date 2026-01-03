@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-diffutils";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "diffutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IAgrCkhUC2Tkh+OM1lorpmD0GpsHUauLgU0KcmsvKb4=";
+    hash = "sha256-YZAa4A5fvW8BcaZn4xSVbSnzyoAaKKqBzpFOjnSRnc4=";
   };
 
-  cargoHash = "sha256-SiZIp0rJXl0ZqKaxLPtV1nypxSqKXW+NoFLxCVpW4OY=";
+  cargoHash = "sha256-jX3uuUopNaVi+XNskBUPzITlJrsVkXWR8LP7PTuwMm8=";
 
   checkFlags = [
     # called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
