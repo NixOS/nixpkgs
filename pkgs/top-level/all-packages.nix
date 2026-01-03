@@ -10228,8 +10228,6 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
-  focuswriter = qt6Packages.callPackage ../applications/editors/focuswriter { };
-
   fossil = callPackage ../applications/version-management/fossil {
     sqlite = sqlite.override { enableDeserialize = true; };
   };

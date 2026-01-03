@@ -2,41 +2,35 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   cmake,
   hunspell,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  qt5compat,
-  qtwayland,
-  wrapQtAppsHook,
+  qt6,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "focuswriter";
   version = "1.8.13";
 
   src = fetchFromGitHub {
     owner = "gottcode";
     repo = "focuswriter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lKhgfFPEcipQcW1S2+ntglVacH6dEcGpnNHvwgeVIzI=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    qttools
-    wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     hunspell
-    qtbase
-    qtmultimedia
-    qt5compat
-    qtwayland
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qt5compat
+    qt6.qtwayland
   ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
@@ -52,4 +46,4 @@ stdenv.mkDerivation rec {
     homepage = "https://gottcode.org/focuswriter/";
     mainProgram = "focuswriter";
   };
-}
+})
