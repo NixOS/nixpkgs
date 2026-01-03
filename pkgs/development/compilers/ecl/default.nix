@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ecl/patches/write_error.patch";
       sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
     })
+  ]
+  ++ lib.optionals stdenv.cc.isGNU [
     # Fix gcc15 compat for downstream packages e.g. sage
     # error: ‘bool’ cannot be defined via ‘typedef’
     (fetchpatch {
