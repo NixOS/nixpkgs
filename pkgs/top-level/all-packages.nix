@@ -9882,8 +9882,6 @@ with pkgs;
 
   papis = with python3Packages; toPythonApplication papis;
 
-  polychromatic = qt6Packages.callPackage ../applications/misc/polychromatic { };
-
   ricochet-refresh = callPackage ../by-name/ri/ricochet-refresh/package.nix {
     protobuf = protobuf_21; # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
   };

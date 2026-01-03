@@ -10,7 +10,7 @@
   wrapGAppsHook3,
   libayatana-appindicator,
   libxcb,
-  qt6,
+  qt6Packages,
   ibus,
   usbutils,
   psmisc,
@@ -48,11 +48,11 @@ python3Packages.buildPythonApplication rec {
     ninja
     sassc
     wrapGAppsHook3
-    qt6.wrapQtAppsHook
-    qt6.qtbase
+    qt6Packages.wrapQtAppsHook
+    qt6Packages.qtbase
   ];
 
-  buildInputs = [ qt6.qtwayland ];
+  buildInputs = [ qt6Packages.qtwayland ];
 
   propagatedBuildInputs =
     with python3Packages;
