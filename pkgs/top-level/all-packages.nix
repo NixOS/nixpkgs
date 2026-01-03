@@ -1670,9 +1670,6 @@ with pkgs;
     charles5
     ;
 
-  quaternion =  qt6Packages.callPackage ../applications/networking/instant-messengers/quaternion
-      { };
-
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
   libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
