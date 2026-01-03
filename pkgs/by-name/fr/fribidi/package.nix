@@ -42,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  doCheck = true;
+  # Cross builds cannot execute target binaries.
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeCheckInputs = [ python3 ];
 
   passthru.tests = {
@@ -56,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GNU implementation of the Unicode Bidirectional Algorithm (bidi)";
     mainProgram = "fribidi";
     license = lib.licenses.lgpl21;
-    platforms = lib.platforms.unix;
+    # MSYS2 ships fribidi for MinGW; allow Windows so pkgsCross.mingwW64 can evaluate it.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "fribidi" ];
   };
 })
