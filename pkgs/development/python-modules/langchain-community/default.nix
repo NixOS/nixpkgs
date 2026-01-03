@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -107,6 +108,9 @@ buildPythonPackage rec {
     # flaky
     "test_llm_caching"
     "test_llm_caching_async"
+    # Triggered by https://github.com/Mause/duckdb_engine/issues/1379
+    "test_table_info"
+    "test_sql_database_run"
   ];
 
   disabledTestPaths = [
