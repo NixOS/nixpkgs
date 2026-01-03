@@ -97,12 +97,9 @@ let
         ) allPackages;
     in
     {
-      airgap-images = mkTests ./airgap-images.nix;
       auto-deploy = mkTests ./auto-deploy.nix;
-      auto-deploy-charts = mkTests ./auto-deploy-charts.nix;
-      containerd-config = mkTests ./containerd-config.nix;
+      configuration = mkTests ./configuration.nix;
       etcd = mkTests ./etcd.nix;
-      kubelet-config = mkTests ./kubelet-config.nix;
       multi-node = mkTests ./multi-node.nix;
       single-node = mkTests ./single-node.nix;
     };
