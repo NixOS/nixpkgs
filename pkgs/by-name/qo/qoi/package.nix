@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  libpng,
   stb,
   stdenv,
 }:
@@ -21,15 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs = [ stb ];
+  strictDeps = true;
+  enableParalleBuilding = true;
 
-  buildPhase = ''
-    runHook preBuild
-
-    make CFLAGS_CONV="-I${stb}/include/stb -O3" qoiconv
-
-    runHook postBuild
-  '';
+  buildInputs = [ libpng ];
 
   installPhase = ''
     runHook preInstall
@@ -44,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  makeFlags = [
+    "CFLAGS=-I${lib.getDev stb}/include/stb"
+  ];
 
   meta = {
     description = "'Quite OK Image Format' for fast, lossless image compression";
