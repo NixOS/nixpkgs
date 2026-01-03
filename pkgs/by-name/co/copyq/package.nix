@@ -5,16 +5,11 @@
   fetchpatch2,
   cmake,
   ninja,
-  qtbase,
-  qtsvg,
-  qttools,
-  qtdeclarative,
+  qt6,
   libXfixes,
   libXtst,
-  qtwayland,
   wayland,
   pkg-config,
-  wrapQtAppsHook,
   kdePackages,
 }:
 
@@ -33,18 +28,18 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     kdePackages.extra-cmake-modules
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
-    qttools
-    qtdeclarative
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qtdeclarative
     libXfixes
     libXtst
-    qtwayland
+    qt6.qtwayland
     wayland
     kdePackages.kconfig
     kdePackages.kstatusnotifieritem
