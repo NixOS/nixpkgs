@@ -8827,10 +8827,10 @@ with self;
 
   DateManip = buildPerlPackage {
     pname = "Date-Manip";
-    version = "6.92";
+    version = "6.98";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.92.tar.gz";
-      hash = "sha256-q5Yr05ygnsb8/n5aaRKvcbDB9vA+TtK+9uRHHJ02ehM=";
+      url = "mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.98.tar.gz";
+      hash = "sha256-rP2KYFGbpM0YHIpnqD1/ApxtmrTosCEtxH5B1iEP2kk=";
     };
     # for some reason, parsing /etc/localtime does not work anymore - make sure that the fallback "/bin/date +%Z" will work
     patchPhase = ''

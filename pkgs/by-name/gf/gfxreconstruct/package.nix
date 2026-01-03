@@ -18,23 +18,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gfxreconstruct";
-  version = "1.0.4";
+  version = "1.0.4-unstable-2025-10-30";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
-    tag = "v${version}";
-    hash = "sha256-MuCdJoBFxKwDCOCltlU3oBS9elFS6F251dHjHcIb4Jg=";
+    rev = "4f1fa3aa9870b00404e6597283b2032a885303b3";
+    hash = "sha256-HwGmtkVQJirKikb37A/dQeEr3AWmqJMfBj46UKsS5m8=";
     fetchSubmodules = true;
   };
-
-  cmakeFlags = [
-    # The CMakeLists.txt is actually 3.10 compatible, but it specifies 3.5 as `CMAKE_VERSION_MINIMUM`
-    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
-  ];
-
-  # Workaround for "error: ... class std::__cxx11::wstring_convert' is deprecated [-Werror=deprecated-declarations]"
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   buildInputs = [
     libX11
@@ -72,6 +64,9 @@ stdenv.mkDerivation rec {
       --prefix VK_ADD_LAYER_PATH : "$out/share/vulkan/explicit_layer.d"
     wrapProgram $out/bin/gfxrecon-replay \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+
+    # Remove unrelated files that got installed
+    rm -r $out/lib/{cmake,pkgconfig}
   '';
 
   meta = {

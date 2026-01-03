@@ -57,7 +57,7 @@ makeSetupHook {
       lib.makeSearchPath "share" (
         lib.optionals includeSettings [ fallbackThemes ] ++ [ targetPackages.cosmic-icons or cosmic-icons ]
       );
-    cargoLinkerVar = targetPackages.stdenv.hostPlatform.rust.cargoEnvVarTarget;
+    cargoLinkerVar = stdenv.targetPlatform.rust.cargoEnvVarTarget;
     # force linking for all libraries that may be dlopen'd by libcosmic/iced apps
     cargoLinkLibs = lib.escapeShellArgs (
       [
