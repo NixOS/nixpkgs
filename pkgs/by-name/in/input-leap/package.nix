@@ -3,10 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-
-  withLibei ? !stdenv.hostPlatform.isDarwin,
-
-  avahi,
   curl,
   libICE,
   libSM,
@@ -21,20 +17,20 @@
   openssl,
   pkgsStatic,
   pkg-config,
-  qtbase,
-  qttools,
+  qt6,
   wrapGAppsHook3,
-  wrapQtAppsHook,
+  avahi,
+  avahi' ? avahi.override { withLibdnssdCompat = true; },
+  withLibei ? !stdenv.hostPlatform.isDarwin,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "input-leap";
   version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zSaeeMlhpWIX3y4OmZ7eHXCu1HPP7NU5HFkME/JZjuQ=";
     fetchSubmodules = true;
   };
@@ -45,14 +41,14 @@ stdenv.mkDerivation rec {
     pkg-config
     cmake
     wrapGAppsHook3
-    wrapQtAppsHook
-    qttools
+    qt6.wrapQtAppsHook
+    qt6.qttools
   ];
 
   buildInputs = [
     curl
-    qtbase
-    avahi
+    qt6.qtbase
+    avahi'
     libX11
     libXext
     libXtst
@@ -71,7 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DINPUTLEAP_REVISION=${builtins.substring 0 8 src.rev}"
+    "-DINPUTLEAP_REVISION=${builtins.substring 0 8 finalAttrs.src.rev}"
   ]
   ++ lib.optional withLibei "-DINPUTLEAP_BUILD_LIBEI=ON";
 
@@ -102,4 +98,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
