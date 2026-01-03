@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchurl,
   cmake,
@@ -7,24 +6,13 @@
   ninja,
   go,
   python3,
-  qtbase,
-  qt5compat,
-  qtdeclarative,
-  qtdoc,
-  qtquick3d,
-  qtquicktimeline,
-  qtserialport,
-  qtsvg,
-  qttools,
-  qtwebengine,
-  qtwayland,
-  qtshadertools,
-  wrapQtAppsHook,
+  qt6,
   yaml-cpp,
   litehtml,
   libsecret,
   gumbo,
-  llvmPackages,
+  llvmPackages_21,
+  stdenv' ? llvmPackages_21.stdenv,
   rustc-demangle,
   elfutils,
   perf,
@@ -49,39 +37,37 @@ let
       '';
     }).goModules;
 in
-stdenv.mkDerivation {
-  inherit pname;
-  inherit version;
-  inherit src;
+stdenv'.mkDerivation {
+  inherit pname version src;
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    (qttools.override { withClang = true; })
-    wrapQtAppsHook
+    (qt6.qttools.override { withClang = true; })
+    qt6.wrapQtAppsHook
     python3
     ninja
     go
   ];
 
   buildInputs = [
-    qtbase
-    qtdoc
-    qtsvg
-    qtquick3d
-    qtwebengine
-    qtwayland
-    qtserialport
-    qtshadertools
-    qt5compat
-    qtdeclarative
-    qtquicktimeline
+    qt6.qtbase
+    qt6.qtdoc
+    qt6.qtsvg
+    qt6.qtquick3d
+    qt6.qtwebengine
+    qt6.qtwayland
+    qt6.qtserialport
+    qt6.qtshadertools
+    qt6.qt5compat
+    qt6.qtdeclarative
+    qt6.qtquicktimeline
     yaml-cpp
     litehtml
     libsecret
     gumbo
-    llvmPackages.libclang
-    llvmPackages.llvm
+    llvmPackages_21.libclang
+    llvmPackages_21.llvm
     rustc-demangle
     elfutils
   ];
