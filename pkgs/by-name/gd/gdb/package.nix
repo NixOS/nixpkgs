@@ -12,10 +12,7 @@
   buildPackages,
 
   # Run time
-  ncurses,
   readline,
-  gmp,
-  mpfr,
   expat,
   libipt,
   zlib,
@@ -24,14 +21,23 @@
   dejagnu,
   sourceHighlight,
   libiconv,
+  xxHash,
 
+  withTui ? true,
+  ncurses,
+  withGmp ? true,
+  gmp,
+  withMpfr ? true,
+  mpfr,
+  withGuile ? false,
+  guile,
   pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin,
-  python3 ? null,
+  python3,
   enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils,
   elfutils,
-  guile ? null,
   hostCpuOnly ? false,
   enableSim ? false,
+  enableUbsan ? false,
   safePaths ? [
     # $debugdir:$datadir/auto-load are whitelisted by default by GDB
     "$debugdir"
@@ -43,39 +49,45 @@
 }:
 
 let
-  basename = "gdb";
-  targetPrefix = lib.optionalString (
+  inherit (lib)
+    optional
+    optionals
+    optionalString
+    withFeature
+    enableFeature
+    withFeatureAs
+    ;
+  targetPrefix = optionalString (
     stdenv.targetPlatform != stdenv.hostPlatform
   ) "${stdenv.targetPlatform.config}-";
+  pname = targetPrefix + "gdb" + optionalString hostCpuOnly "-host-cpu-only";
 in
 
-assert pythonSupport -> python3 != null;
-
-stdenv.mkDerivation rec {
-  pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname;
   version = "17.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
+    url = "mirror://gnu/gdb/gdb-${finalAttrs.version}.tar.xz";
     hash = "sha256-FJlvX3TJ9o9aVD/cRbyngAIH+R+SrupsLnkYIsfG2HY=";
   };
 
   postPatch =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
+    optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace gdb/darwin-nat.c \
-        --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+        --replace-fail '#include "bfd/mach-o.h"' '#include "mach-o.h"'
     ''
-    + lib.optionalString stdenv.hostPlatform.isMusl ''
-      substituteInPlace sim/erc32/erc32.c  --replace sys/fcntl.h fcntl.h
-      substituteInPlace sim/erc32/interf.c  --replace sys/fcntl.h fcntl.h
-      substituteInPlace sim/erc32/sis.c  --replace sys/fcntl.h fcntl.h
-      substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
+    + optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace sim/erc32/erc32.c  --replace-fail sys/fcntl.h fcntl.h
+      substituteInPlace sim/erc32/interf.c  --replace-fail sys/fcntl.h fcntl.h
+      substituteInPlace sim/erc32/sis.c  --replace-fail sys/fcntl.h fcntl.h
+      substituteInPlace sim/ppc/emul_unix.c --replace-fail sys/termios.h termios.h
     '';
 
   patches = [
     ./debug-info-from-env.patch
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ optionals stdenv.hostPlatform.isDarwin [
     ./darwin-target-match.patch
   ];
 
@@ -89,20 +101,22 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     readline
-    gmp
-    mpfr
     expat
     libipt
     zlib
     zstd
     xz
-    guile
     sourceHighlight
+    xxHash
+    dejagnu # for tests
   ]
-  ++ lib.optional pythonSupport python3
-  ++ lib.optional doCheck dejagnu
-  ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
-  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ++ optional withTui ncurses
+  ++ optional withMpfr mpfr
+  ++ optional withGmp gmp
+  ++ optional pythonSupport python3
+  ++ optional withGuile guile
+  ++ optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
+  ++ optional stdenv.hostPlatform.isDarwin libiconv;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -111,24 +125,23 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # darwin build fails with format hardening since v7.12
-  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "format" ];
+  hardeningDisable = optionals stdenv.hostPlatform.isDarwin [ "format" ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   # Workaround for Apple Silicon, configurePlatforms must be disabled
-  configurePlatforms =
-    lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64))
-      [
-        "build"
-        "host"
-        "target"
-      ];
+  configurePlatforms = optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [
+    "build"
+    "host"
+    "target"
+  ];
 
   preConfigure = ''
     # remove precompiled docs, required for man gdbinit to mention /etc/gdb/gdbinit
     rm gdb/doc/*.info*
     rm gdb/doc/*.5
     rm gdb/doc/*.1
+
     # fix doc build https://sourceware.org/bugzilla/show_bug.cgi?id=27808
     rm gdb/doc/GDBvn.texi
 
@@ -146,33 +159,33 @@ stdenv.mkDerivation rec {
     # subset of the platform description.
     "--program-prefix=${targetPrefix}"
 
-    "--disable-werror"
+    (enableFeature true "werror")
+    (enableFeature true "64-bit-bfd")
+    (enableFeature false "install-libbfd")
+    (enableFeature withTui "tui")
+    (withFeature withTui "curses")
+    (enableFeature false "shared")
+    (enableFeature true "static")
+    (withFeature true "system-readline")
+    (withFeature true "system-zlib")
+    (withFeature true "expat")
+    (withFeatureAs true "libexpat-prefix" "${expat.dev}")
+    (withFeatureAs withGmp "gmp" "${gmp.dev}")
+    (withFeatureAs withMpfr "mpfr" "${mpfr.dev}")
+    (withFeature pythonSupport "python")
+    (withFeature withGuile "guile")
+    (enableFeature enableSim "sim")
+    (enableFeature enableUbsan "ubsan")
+    (withFeatureAs true "system-gdbinit" "/etc/gdb/gdbinit")
+    (withFeatureAs true "system-gdbinit-dir" "/etc/gdb/gdbinit.d")
+    (withFeatureAs true "auto-load-safe-path" (builtins.concatStringsSep ":" safePaths))
+    (withFeature enableDebuginfod "debuginfod")
+    (enableFeature (!stdenv.hostPlatform.isMusl) "nls")
+    (enableFeature (!hostCpuOnly) "targets=all")
+    (enableFeature (!stdenv.hostPlatform.isStatic) "inprocess-agent")
   ]
-  ++ lib.optional (!hostCpuOnly) "--enable-targets=all"
-  ++ [
-    "--enable-64-bit-bfd"
-    "--disable-install-libbfd"
-    "--disable-shared"
-    "--enable-static"
-    "--with-system-zlib"
-    "--with-system-readline"
-
-    "--with-system-gdbinit=/etc/gdb/gdbinit"
-    "--with-system-gdbinit-dir=/etc/gdb/gdbinit.d"
-
-    "--with-gmp=${gmp.dev}"
-    "--with-mpfr=${mpfr.dev}"
-    "--with-expat"
-    "--with-libexpat-prefix=${expat.dev}"
-    "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
-  ]
-  ++ lib.optional (!pythonSupport) "--without-python"
-  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
-  ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
-  ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
-  ++ lib.optional (!enableSim) "--disable-sim"
   # Workaround for Apple Silicon, "--target" must be "faked", see eg: https://github.com/Homebrew/homebrew-core/pull/209753
-  ++ lib.optional (
+  ++ optional (
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
   ) "--target=x86_64-apple-darwin";
 
@@ -180,9 +193,6 @@ stdenv.mkDerivation rec {
     # Remove Info files already provided by Binutils and other packages.
     rm -v $out/share/info/bfd.info
   '';
-
-  # TODO: Investigate & fix the test failures.
-  doCheck = false;
 
   passthru = {
     updateScript = writeScript "update-gdb" ''
@@ -199,24 +209,19 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    mainProgram = "gdb";
-
     description = "GNU Project debugger";
-
+    mainProgram = "gdb";
     longDescription = ''
       GDB, the GNU Project debugger, allows you to see what is going
       on `inside' another program while it executes -- or what another
       program was doing at the moment it crashed.
     '';
-
     homepage = "https://www.gnu.org/software/gdb/";
-
     license = lib.licenses.gpl3Plus;
-
     platforms = with lib.platforms; linux ++ cygwin ++ freebsd ++ darwin;
     maintainers = with lib.maintainers; [
       pierron
       globin
     ];
   };
-}
+})

@@ -6539,10 +6539,6 @@ with pkgs;
     enablePythonApi = false;
   };
 
-  gdb = callPackage ../development/tools/misc/gdb {
-    guile = null;
-  };
-
   gdbHostCpuOnly = gdb.override { hostCpuOnly = true; };
 
   valgrind-light = (valgrind.override { gdb = null; }).overrideAttrs (oldAttrs: {
