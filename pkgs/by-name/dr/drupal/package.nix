@@ -19,7 +19,7 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerNoPlugins = false;
-  vendorHash = "sha256-CAntERLTmR9Gf/e+qBLJqqebdXZ0E9k8ifDh75ASoRo=";
+  vendorHash = "sha256-7FwwkPTKc/miStdHv1wfLoZhV4Gku1KwNgSlWdpPG8g=";
 
   passthru = {
     tests = {
