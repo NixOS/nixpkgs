@@ -74,7 +74,7 @@ in
         ''
           cp ${activationScript} $out/activate
           cp ${dryActivationScript} $out/dry-activate
-          ${lib.getExe pkgs.gnused} --in-place --expression "s|@out@|''${!toplevelVar}|g" $out/activate $out/dry-activate
+          ${lib.getExe pkgs.buildPackages.gnused} --in-place --expression "s|@out@|''${!toplevelVar}|g" $out/activate $out/dry-activate
         '';
 
       system.systemBuilderCommands = lib.mkIf config.system.activatable config.system.activatableSystemBuilderCommands;
