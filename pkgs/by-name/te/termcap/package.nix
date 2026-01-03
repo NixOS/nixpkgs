@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/msys2/MINGW-packages/raw/c6691ad1bd9d4c6823a18068ca0683c3e32ea005/mingw-w64-termcap/0001-tparam-replace-write-with-fprintf.patch";
       hash = "sha256-R9XaLfa8fzQBt+M+uA1AFTvKYCeOWLUD/7GViazXwto=";
     })
+    # Fix K&R-style forward declaration that breaks with newer compilers.
+    ./fix-tparam1-prototype.patch
+    # Fix remaining K&R-style forward declarations and callback prototypes.
+    ./fix-termcap-prototypes.patch
   ];
 
   outputs = [

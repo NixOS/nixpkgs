@@ -1,0 +1,31 @@
+--- a/termcap.c
++++ b/termcap.c
+@@ -124,5 +124,5 @@
+ static char *term_entry;
+ 
+-static char *tgetst1 ();
++static char *tgetst1 (char *ptr, char **area);
+ 
+ /* Search entry BP for capability CAP.
+@@ -306,7 +306,7 @@
+ void
+ tputs (str, nlines, outfun)
+      register char *str;
+      int nlines;
+-     register int (*outfun) ();
++     register int (*outfun) (int);
+ {
+   register int padcount = 0;
+@@ -386,8 +386,8 @@
+ /* Forward declarations of static functions.  */
+ 
+-static int scan_file ();
+-static char *gobble_line ();
+-static int compare_contin ();
+-static int name_match ();
++static int scan_file (char *str, int fd, struct termcap_buffer *bufp);
++static char *gobble_line (int fd, struct termcap_buffer *bufp, char *append_end);
++static int compare_contin (char *str1, char *str2);
++static int name_match (char *line, char *name);
+ 
+ #ifdef VMS

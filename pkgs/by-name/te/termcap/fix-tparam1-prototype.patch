@@ -1,0 +1,12 @@
+--- a/tparam.c
++++ b/tparam.c
+@@ -89,7 +89,7 @@
+ 
+    The fourth and following args to tparam serve as the parameter values.  */
+ 
+-static char *tparam1 ();
++static char *tparam1 (char *string, char *outstring, int len, char *up, char *left, int *argp);
+ 
+ /* VARARGS 2 */
+ char *
+
