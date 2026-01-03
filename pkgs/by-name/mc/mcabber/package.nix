@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
       sha256 = "01bc23z0mva9l9jv587sq2r9w3diachgkmb9ad99hlzgj02fmq4v";
       stripLen = 1;
     })
+    ./add-missing-arguments-to-function-prototypes.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];

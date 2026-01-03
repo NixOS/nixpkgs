@@ -25,6 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = "-liconv";
   };
 
+  # lib/string.h:754:20: error: expected declaration specifiers or '...' before numeric constant
+  # The embedded gnulib is currently broken on cygwin when fortify is enabled.
+  # This can be removed when gnulib is updated with the fix:
+  # https://gitweb.git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff_plain;h=c44fe03b72687c9e913727724c29bdb49c1f86e3
+  hardeningDisable = lib.optional stdenv.hostPlatform.isCygwin "fortify";
+
   doCheck = true;
 
   doInstallCheck = true;

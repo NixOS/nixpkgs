@@ -33,10 +33,18 @@ buildPythonPackage rec {
     hash = "sha256-8QXPvfVeT3qadxTvt/LQX3XM5tGj6SpfOhP/9xcZHW4=";
   };
 
+  patches = [ ./update-pyo3.patch ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit
+      pname
+      version
+      src
+      patches
+      ;
     sourceRoot = "${src.name}/aardwolf/utils/rlers";
-    hash = "sha256-+2hENnrG35eRgQwtCCJUux9mYEkzD2astLgOqWHrH/M=";
+    hash = "sha256-n28jzS2+zbXsdR7rT0PBvcqNacuFMJKUug0mBYc4eFE=";
+    patchFlags = [ "-p4" ]; # strip i/aardwolf/utils/rlers/ prefix
   };
 
   cargoRoot = "aardwolf/utils/rlers";
