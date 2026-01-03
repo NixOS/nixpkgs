@@ -357,15 +357,15 @@ fn main() -> anyhow::Result<()> {
         Ok::<_, anyhow::Error>(())
     })?;
 
-    // Fetch and cache packuments (package metadata) - only for cache version 2+
-    let cache_version: u32 = env::var("NPM_CACHE_VERSION")
+    // Fetch and cache packuments (package metadata) - only for fetcher version 2+
+    let fetcher_version: u32 = env::var("NPM_FETCHER_VERSION")
         .ok()
         .and_then(|v| v.parse().ok())
         .unwrap_or(1);
 
-    if cache_version >= 2 {
+    if fetcher_version >= 2 {
         fetch_packuments(&cache, package_names)?;
-        fs::write(out.join("cache_version"), format!("{cache_version}"))?;
+        fs::write(out.join(".fetcher-version"), format!("{fetcher_version}"))?;
     }
 
     fs::write(out.join("package-lock.json"), lock_content)?;

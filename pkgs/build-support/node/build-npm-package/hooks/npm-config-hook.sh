@@ -28,19 +28,19 @@ npmConfigHook() {
         exit 1
     fi
 
-    if [[ -e "$npmDeps/cache_version" ]]; then
-      local -r cacheVersion=$(cat "$npmDeps/cache_version")
+    if [[ -e "$npmDeps/.fetcher-version" ]]; then
+      local -r fetcherVersion=$(cat "$npmDeps/.fetcher-version")
     else
-      local -r cacheVersion="1"
+      local -r fetcherVersion="1"
     fi
 
     # Only run this in buildNpmPackage, this is just for a nicer error message; we trust that
     # people using the setup hook directly also know how FODs work. ;)
-    if [[ -n ${NIX_NPM_CACHE_VERSION+x} ]] && [[ $NIX_NPM_CACHE_VERSION != $cacheVersion ]]; then
+    if [[ -n ${NIX_NPM_FETCHER_VERSION+x} ]] && [[ $NIX_NPM_FETCHER_VERSION != $fetcherVersion ]]; then
       echo
       echo "ERROR: npmDepsHash is out of date"
       echo
-      echo "The cache version in the arguments to buildNpmPackage ($NIX_NPM_CACHE_VERSION) is not the same as the one in $npmDeps ($cacheVersion)."
+      echo "The fetcher version in the arguments to buildNpmPackage ($NIX_NPM_FETCHER_VERSION) is not the same as the one in $npmDeps ($fetcherVersion)."
       echo
       echo "To fix the issue:"
       echo '1. Use `lib.fakeHash` as the npmDepsHash value'
@@ -102,10 +102,10 @@ npmConfigHook() {
     local cachePath
 
     # When a given cache key has multiple entries (which is the case with
-    # cache version 2), npm always needs to write to the cache.
+    # fetcher version 2), npm always needs to write to the cache.
     #
     # TODO(winter): report upstream?
-    if [ -z "${makeCacheWritable-}" ] && (( cacheVersion == 1 )); then
+    if [ -z "${makeCacheWritable-}" ] && (( fetcherVersion == 1 )); then
         cachePath="$npmDeps"
     else
         echo "Making cache writable"
@@ -127,7 +127,7 @@ npmConfigHook() {
         echo "ERROR: npm failed to install dependencies"
         echo
         echo "Here are a few things you can try, depending on the error:"
-        echo '1. Set `npmDepsCacheVersion = 2` (and update `npmDepsHash`)'
+        echo '1. Set `npmDepsFetcherVersion = 2` (and update `npmDepsHash`)'
         echo '2. Set `makeCacheWritable = true`'
         echo "  Note that this won't help if npm is complaining about not being able to write to the logs directory -- look above that for the actual error."
         echo '3. Set `npmFlags = [ "--legacy-peer-deps" ]`'
