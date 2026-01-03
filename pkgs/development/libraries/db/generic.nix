@@ -4,6 +4,7 @@
   fetchpatch,
   fetchurl,
   autoreconfHook,
+  pthreads ? null,
   cxxSupport ? true,
   compat185 ? true,
   dbmSupport ? false,
@@ -36,6 +37,11 @@ stdenv.mkDerivation (
         url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/db/files/db-4.8.30-tls-configure.patch?id=1ae36006c79ef705252f5f7009e79f6add7dc353";
         hash = "sha256-OzQL+kgXtcvhvyleDLuH1abhY4Shb/9IXx4ZkeFbHOA=";
       })
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      # On case-sensitive filesystems, the upstream header include uses the
+      # wrong case. MinGW provides <winioctl.h>.
+      ./mingw-winioctl-case.patch
     ]
     ++ extraPatches;
 
@@ -92,7 +98,31 @@ stdenv.mkDerivation (
       (if compat185 then "--enable-compat185" else "--disable-compat185")
     ]
     ++ lib.optional dbmSupport "--enable-dbm"
+    # MSYS2 builds Berkeley DB for MinGW with --enable-mingw and winpthreads.
+    # Without this, configure can incorrectly select removed UNIX/fcntl mutexes.
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      "--enable-mingw"
+      # MSYS2 disables replication on MinGW; it is not needed for our consumers
+      # and avoids building repmgr codepaths that are fragile with modern GCC.
+      "--disable-replication"
+    ]
     ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
+
+    buildInputs = lib.optionals (stdenv.hostPlatform.isMinGW && pthreads != null) [
+      # MSYS2 depends on libwinpthread for MinGW.
+      pthreads
+    ];
+
+    env = lib.optionalAttrs (stdenv.hostPlatform.isMinGW && pthreads != null) {
+      NIX_LDFLAGS = "-lpthread";
+    };
+
+    # When cross-compiling to MinGW, libtool's POSTLINK step tries to translate
+    # a Unix-style PATH/LD_LIBRARY_PATH into a Windows host path and fails.
+    # Override it to a no-op so db_* utilities can still be linked.
+    makeFlags = lib.optionals (stdenv.hostPlatform.isMinGW && stdenv.buildPlatform != stdenv.hostPlatform) [
+      "POSTLINK=true"
+    ];
 
     preConfigure = ''
       cd build_unix
@@ -115,7 +145,8 @@ stdenv.mkDerivation (
       homepage = "https://www.oracle.com/database/technologies/related/berkeleydb.html";
       description = "Berkeley DB";
       license = license;
-      platforms = lib.platforms.unix;
+      # MSYS2 ships mingw-w64-db, so allow evaluation/builds on Windows/MinGW.
+      platforms = lib.platforms.unix ++ lib.platforms.windows;
     };
   }
   // drvArgs
