@@ -11683,10 +11683,6 @@ with pkgs;
     fltk = fltk13;
   };
 
-  radiotray-ng = callPackage ../applications/audio/radiotray-ng {
-    wxGTK = wxGTK32;
-  };
-
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
   };
