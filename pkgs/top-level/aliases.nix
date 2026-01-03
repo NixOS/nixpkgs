@@ -1753,6 +1753,7 @@ mapAliases {
   xf86_input_wacom = xf86-input-wacom; # Added 2025-12-12
   xflux = throw "'xflux' has been removed as it was unmaintained"; # Added 2025-08-22
   xflux-gui = throw "'xflux-gui' has been removed as it was unmaintained"; # Added 2025-08-22
+  xinetd = throw "'xinetd' has been removed due to lack of maintenance upstream"; # Added 2026-01-02
   xinput_calibrator = xinput-calibrator; # Added 2025-08-28
   xjump = throw "'xjump' has been removed as it is unmaintained"; # Added 2025-08-22
   xmlada = throw "'xmlada' has been renamed to/replaced by 'gnatPackages.xmlada'"; # Converted to throw 2025-10-27
