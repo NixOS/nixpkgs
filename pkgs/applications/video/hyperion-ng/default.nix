@@ -25,6 +25,7 @@
   qtwebsockets,
   withRPiDispmanx ? false,
   libraspberrypi,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwebsockets
     qtx11extras
+    sqlite
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libcec
   ++ lib.optional withRPiDispmanx libraspberrypi;
