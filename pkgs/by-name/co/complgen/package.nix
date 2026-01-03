@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "complgen";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "adaszko";
     repo = "complgen";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GgGFlrAJN9w+bsoXmVJaYUyx/ViH9m4E4EeJlmWRo6o=";
   };
 
@@ -21,8 +21,8 @@ rustPlatform.buildRustPackage rec {
     description = "Generate {bash,fish,zsh} completions from a single EBNF-like grammar";
     mainProgram = "complgen";
     homepage = "https://github.com/adaszko/complgen";
-    changelog = "https://github.com/adaszko/complgen/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/adaszko/complgen/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
