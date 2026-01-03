@@ -1,0 +1,12 @@
+diff --git a/apps/desktop/src-tauri/tauri.conf.json b/apps/desktop/src-tauri/tauri.conf.json
+index ed05fce..e1649e0 100644
+--- a/apps/desktop/src-tauri/tauri.conf.json
++++ b/apps/desktop/src-tauri/tauri.conf.json
+@@ -31,7 +31,6 @@
+       }
+     },
+     "active": true,
+-    "createUpdaterArtifacts": true,
+     "targets": "all",
+     "icon": [
+       "icons/32x32.png",

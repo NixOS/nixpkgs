@@ -1,0 +1,91 @@
+From a0f57159572c81c8ae6f9c9440e5cd74315b8570 Mon Sep 17 00:00:00 2001
+From: Jason Volk <jason@zemos.net>
+Date: Sun, 21 Dec 2025 22:04:07 +0000
+Subject: [PATCH] fix: validate event fields for invites over federation.
+
+---
+ src/api/server_server.rs | 61 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+
+diff --git a/src/api/server_server.rs b/src/api/server_server.rs
+index adc764ff..d29f6031 100644
+--- a/src/api/server_server.rs
++++ b/src/api/server_server.rs
+@@ -2132,6 +2132,44 @@ pub async fn create_invite_route(
+         CanonicalJsonValue::String(event_id.to_string()),
+     );
+ 
++    let event_room_id: OwnedRoomId = serde_json::from_value(
++        signed_event
++            .get("room_id")
++            .ok_or(Error::BadRequest(
++                ErrorKind::InvalidParam,
++                "Event had no room_id field.",
++            ))?
++            .clone()
++            .into(),
++    )
++    .map_err(|_| Error::BadRequest(ErrorKind::InvalidParam, "room_id is not a room id."))?;
++
++    if room_id != event_room_id {
++        return Err(Error::BadRequest(
++            ErrorKind::InvalidParam,
++            "room_id parameter does not match event.",
++        ));
++    }
++
++    let event_type: StateEventType = serde_json::from_value(
++        signed_event
++            .get("type")
++            .ok_or(Error::BadRequest(
++                ErrorKind::InvalidParam,
++                "Event had no type field.",
++            ))?
++            .clone()
++            .into(),
++    )
++    .map_err(|_| Error::BadRequest(ErrorKind::InvalidParam, "type is not an event type."))?;
++
++    if event_type != StateEventType::RoomMember {
++        return Err(Error::BadRequest(
++            ErrorKind::InvalidParam,
++            "Invite event was not m.room.member type.",
++        ));
++    }
++
+     let sender: OwnedUserId = serde_json::from_value(
+         signed_event
+             .get("sender")
+@@ -2144,6 +2182,29 @@ pub async fn create_invite_route(
+     )
+     .map_err(|_| Error::BadRequest(ErrorKind::InvalidParam, "sender is not a user id."))?;
+ 
++    if sender.server_name() != sender_servername {
++        return Err(Error::BadRequest(
++            ErrorKind::InvalidParam,
++            "Invite sender must match the origin server.",
++        ));
++    }
++
++    let event_content: RoomMemberEventContent = serde_json::from_value(
++        signed_event
++            .get("content")
++            .ok_or_else(|| Error::BadRequest(ErrorKind::InvalidParam, "Missing event content."))?
++            .clone()
++            .into(),
++    )
++    .map_err(|_| Error::BadRequest(ErrorKind::InvalidParam, "Invalid event content."))?;
++
++    if event_content.membership != MembershipState::Invite {
++        return Err(Error::BadRequest(
++            ErrorKind::InvalidParam,
++            "Membership of invite event must be invite.",
++        ));
++    }
++
+     let invited_user: Box<_> = serde_json::from_value(
+         signed_event
+             .get("state_key")
+-- 
+GitLab
+

@@ -1,0 +1,16 @@
+diff -Naur atasm109-old/src/Makefile atasm109-new/src/Makefile
+--- atasm109-old/src/Makefile	2021-09-08 09:53:25.581598063 -0300
++++ atasm109-new/src/Makefile	2021-09-08 09:55:20.366131338 -0300
+@@ -55,9 +55,9 @@
+ 	chown root.root $(DESTDIR)/atasm || true
+ 	chmod 711 $(DESTDIR)/atasm
+ 	mkdir $(DOCDIR) >/dev/null 2>&1 || echo $(DOCDIR) already exists
+-	cp ../atasm.txt $(DOCDIR)
+-	chown root.root $(DOCDIR)/atasm.txt || true
+-	chmod 644 $(DOCDIR)/atasm.txt
++	# cp ../atasm.txt $(DOCDIR)
++	# chown root.root $(DOCDIR)/atasm.txt || true
++	# chmod 644 $(DOCDIR)/atasm.txt
+ 	sed -e 's,%%DOCDIR%%,$(DOCDIR),g' < atasm.1.in > atasm.1
+ 	cp atasm.1 $(MANDIR)
+ 	chown root.root $(MANDIR)/atasm.1 || true

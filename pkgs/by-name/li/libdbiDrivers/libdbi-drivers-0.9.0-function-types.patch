@@ -1,0 +1,32 @@
+diff --git a/tests/cgreen/src/constraint.c b/tests/cgreen/src/constraint.c
+index 56c3625..d8972bb 100644
+--- a/tests/cgreen/src/constraint.c
++++ b/tests/cgreen/src/constraint.c
+@@ -22,7 +22,7 @@ static double unbox_double(intptr_t box);
+ static double as_double(intptr_t box);
+ 
+ static int compare_using_matcher(Constraint *constraint, intptr_t actual);
+-static void test_with_matcher(Constraint *constraint, const char *function, const char* matcher_name, intptr_t actual, const char *test_file, int test_line, TestReporter *reporter);
++static void test_with_matcher(Constraint *constraint, const char *function, intptr_t actual, const char *test_file, int test_line, TestReporter *reporter);
+ 
+ 
+ void destroy_constraint(void *abstract) {
+@@ -168,15 +168,14 @@ static int compare_using_matcher(Constraint *constraint, intptr_t actual) {
+     return matches((void *)actual);
+ }
+ 
+-static void test_with_matcher(Constraint *constraint, const char *function, const char* matcher_name, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter) {
++static void test_with_matcher(Constraint *constraint, const char *function, intptr_t matcher_function, const char *test_file, int test_line, TestReporter *reporter) {
+     (*reporter->assert_true)(
+             reporter,
+             test_file,
+             test_line,
+             (*constraint->compare)(constraint, matcher_function),
+-            "Wanted parameter [%s] to match [%s] in function [%s]",
++            "Wanted parameter [%s] to match [nil] in function [%s]",
+             constraint->parameter,
+-            matcher_name,
+             function);
+ }
+ 
+

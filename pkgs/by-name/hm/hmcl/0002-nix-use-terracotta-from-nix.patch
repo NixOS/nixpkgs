@@ -1,0 +1,43 @@
+From 541d055bf55703aa9e2c5a5e04a397f1d25efe28 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Wed, 29 Oct 2025 00:09:56 +0800
+Subject: [PATCH 2/3] nix: use terracotta from nix
+
+---
+ .../org/jackhuang/hmcl/terracotta/TerracottaNative.java   | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaNative.java b/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaNative.java
+index 079537978..68954b09e 100644
+--- a/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaNative.java
++++ b/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaNative.java
+@@ -47,7 +47,7 @@ public final class TerracottaNative {
+ 
+     public TerracottaNative(List<URI> links, Path path, FileDownloadTask.IntegrityCheck checking) {
+         this.links = links;
+-        this.path = path;
++        this.path = Path.of("@TERRACOTTA_BIN@");
+         this.checking = checking;
+     }
+ 
+@@ -130,9 +130,7 @@ public final class TerracottaNative {
+ 
+     public ITerracottaProvider.Status status() throws IOException {
+         if (Files.exists(path)) {
+-            if (DigestUtils.digestToString(checking.getAlgorithm(), path).equalsIgnoreCase(checking.getChecksum())) {
+-                return ITerracottaProvider.Status.READY;
+-            }
++            return ITerracottaProvider.Status.READY;
+         }
+ 
+         try {
+@@ -144,4 +142,4 @@ public final class TerracottaNative {
+         }
+         return ITerracottaProvider.Status.NOT_EXIST;
+     }
+-}
++}
+\ No newline at end of file
+-- 
+2.51.0
+

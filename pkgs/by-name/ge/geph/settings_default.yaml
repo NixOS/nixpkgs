@@ -1,0 +1,23 @@
+exit_constraint: auto
+
+broker:
+  race:
+    - fronted:
+        front: https://www.cdn77.com/
+        host: 1826209743.rsc.cdn77.org
+    - fronted:
+        front: https://www.vuejs.org/
+        host: svitania-naidallszei-2.netlify.app
+        override_dns:
+          - 75.2.60.5:443
+    - fronted:
+        front: https://www.vuejs.org/
+        host: svitania-naidallszei-3.netlify.app
+        override_dns:
+          - 75.2.60.5:443
+    - aws_lambda:
+        function_name: geph-lambda-bouncer
+        region: us-east-1
+        obfs_key: 855MJGAMB58MCPJBB97NADJ36D64WM2T:C4TN2M1H68VNMRVCCH57GDV2C5VN6V3RB8QMWP235D0P4RT2ACV7GVTRCHX3EC37
+
+spoof_dns: true

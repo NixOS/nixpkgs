@@ -1,0 +1,26 @@
+From 2643b06889605e6096174fb48dcb64a49b252217 Mon Sep 17 00:00:00 2001
+From: Michael Weiss <dev.primeos@gmail.com>
+Date: Sun, 17 Nov 2019 20:30:08 +0100
+Subject: [PATCH] lscollection: Add NixOS paths to DefaultWallpaperDirectories
+
+---
+ collections.go | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/collections.go b/collections.go
+index be04d41..cc79c56 100644
+--- a/collections.go
++++ b/collections.go
+@@ -22,6 +22,9 @@ const (
+ 
+ // DefaultWallpaperDirectories lists the default locations to look for wallpapers
+ var DefaultWallpaperDirectories = []string{
++	"/run/current-system/sw/share/pixmaps",
++	"/run/current-system/sw/share/wallpapers",
++	"/run/current-system/sw/share/backgrounds",
+ 	"/usr/share/pixmaps",
+ 	"/usr/share/wallpapers",
+ 	"/usr/share/backgrounds",
+-- 
+2.23.0
+

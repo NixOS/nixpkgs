@@ -1,0 +1,16 @@
+===================================================================
+RCS file: /ftp/cvs/cvsroot/src/sys/arch/i386/stand/efiboot/Makefile.efiboot,v
+rcsdiff: /ftp/cvs/cvsroot/src/sys/arch/i386/stand/efiboot/Makefile.efiboot,v: warning: Unknown phrases like `commitid ...;' are present.
+retrieving revision 1.16
+retrieving revision 1.17
+diff -u -p -r1.16 -r1.17
+--- a/sys/arch/i386/stand/efiboot/Makefile.efiboot	2019/09/13 02:19:45	1.16
++++ b/sys/arch/i386/stand/efiboot/Makefile.efiboot	2020/04/04 15:30:46	1.17
+@@ -41,6 +41,7 @@ BINMODE=444
+ .PATH:	${.CURDIR}/../../libsa
+ 
+ LDSCRIPT?= ${.CURDIR}/ldscript
++LDFLAGS+= --no-dynamic-linker --noinhibit-exec
+ LDFLAGS+= -nostdlib -T${LDSCRIPT} -Bsymbolic -shared -nocombreloc
+ CPPFLAGS+= -I$S -I${.CURDIR} -I${.CURDIR}/.. -I$S/lib/libsa
+ CPPFLAGS+= -I${.OBJDIR}

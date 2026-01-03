@@ -1,0 +1,32 @@
+diff --git a/bin/gscan2pdf b/bin/gscan2pdf
+index e075b0f2..ff124522 100755
+--- a/bin/gscan2pdf
++++ b/bin/gscan2pdf
+@@ -3434,9 +3434,11 @@ sub save_image {
+         if ( @{$list_of_pages} > 1 ) {
+             my $w = length scalar @{$list_of_pages};
+             for ( 1 .. @{$list_of_pages} ) {
++                _utf8_on($filename);
+                 my $current_filename =
+                   sprintf "${filename}_%0${w}d.$SETTING{'image type'}",
+                   $_;
++                _utf8_off($filename);
+                 if ( -f $current_filename ) {
+                     my $text = sprintf __('This operation would overwrite %s'),
+                       $current_filename;
+@@ -3450,11 +3452,15 @@ sub save_image {
+                     return;
+                 }
+             }
++            _utf8_on($filename);
+             $filename = "${filename}_%0${w}d.$SETTING{'image type'}";
++            _utf8_off($filename);
+         }
+         else {
+             if ( $filename !~ /[.]$SETTING{'image type'}$/ixsm ) {
++                _utf8_on($filename);
+                 $filename = "$filename.$SETTING{'image type'}";
++                _utf8_off($filename);
+                 return if ( file_exists( $file_chooser, $filename ) );
+             }
+             return if ( file_writable( $file_chooser, $filename ) );

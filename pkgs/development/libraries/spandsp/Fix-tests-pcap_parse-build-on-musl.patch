@@ -1,0 +1,28 @@
+From 5007684cd46fec39d3c8f67a222f2d34d48fd4b4 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Mon, 3 Nov 2025 12:07:48 +0100
+Subject: [PATCH] Fix tests/pcap_parse build on musl
+
+musl only defines the Linux-style struct udphdr member names if
+_GNU_SOURCE is defined, so do that, like certain other tests already
+do.
+---
+ tests/pcap_parse.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tests/pcap_parse.c b/tests/pcap_parse.c
+index 4e79743..a8a69a3 100644
+--- a/tests/pcap_parse.c
++++ b/tests/pcap_parse.c
+@@ -31,6 +31,8 @@
+ #include "config.h"
+ #endif
+ 
++#define _GNU_SOURCE
++
+ #include <inttypes.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+-- 
+2.51.0
+
