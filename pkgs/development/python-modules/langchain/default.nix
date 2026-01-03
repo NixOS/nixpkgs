@@ -28,7 +28,6 @@
   blockbuster,
   freezegun,
   httpx,
-  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -46,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "1.2.0";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-DximXCwrDSUVXZenUrubuGcxdnRCPCPMgdW9UJnkGnE=";
+    hash = "sha256-NQra/L7OfnVyFTbGkSDcG30r8W733eAs9abII53wy4g=";
   };
 
   sourceRoot = "${src.name}/libs/langchain_v1";
@@ -97,7 +96,6 @@ buildPythonPackage rec {
     freezegun
     httpx
     lark
-    langchain-tests
     pandas
     pytest-asyncio
     pytest-mock
@@ -126,8 +124,6 @@ buildPythonPackage rec {
     "test_timeout_returns_error"
     # Can't see the shell session results when sandboxed
     "test_startup_and_shutdown_commands"
-    # Timing sensitive tests
-    "test_tool_retry_constant_backoff"
   ];
 
   disabledTestPaths = [

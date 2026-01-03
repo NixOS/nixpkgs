@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-fireworks";
-  version = "1.1.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-fireworks==${version}";
-    hash = "sha256-gLc3pPxQZTm6PU5r1o7mxlnRI8tCeg/w9jkbbfUCSec=";
+    hash = "sha256-JULxbSSSerM7HifVBRxkv5YgpP5jFdm3XzHIJbM8T1Y=";
   };
 
   sourceRoot = "${src.name}/libs/partners/fireworks";
@@ -59,11 +59,6 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "tests/unit_tests" ];
-
-  disabledTests = [
-    # Fails when langchain-core gets ahead of this package
-    "test_serdes"
-  ];
 
   pythonImportsCheck = [ "langchain_fireworks" ];
 

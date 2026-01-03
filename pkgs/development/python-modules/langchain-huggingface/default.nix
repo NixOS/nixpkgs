@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-huggingface";
-  version = "1.2.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-huggingface==${version}";
-    hash = "sha256-ucKhuu8J6XudIyjCniJixFq79wPfoCnNBUd6r1U2ieI=";
+    hash = "sha256-SPWGPwOphT0ewgLYIhFdbNtzCI2wFhmsBlxYxNjswOY=";
   };
 
   sourceRoot = "${src.name}/libs/partners/huggingface";
@@ -77,11 +77,6 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "tests/unit_tests" ];
-
-  disabledTests = [
-    # Requires a circular dependency on langchain
-    "test_init_chat_model_huggingface"
-  ];
 
   pythonImportsCheck = [ "langchain_huggingface" ];
 
