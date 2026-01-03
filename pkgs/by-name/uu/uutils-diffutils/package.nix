@@ -30,6 +30,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s $out/bin/diffutils $out/bin/diff
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/diffutils 2>/dev/null | head -1 | grep -F 'diffutils ${finalAttrs.version}'
+
+    runHook postInstallCheck
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
