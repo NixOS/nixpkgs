@@ -878,13 +878,13 @@
     "vendorHash": "sha256-6CoEZz7/8PysjolcTsrBKForJkoOQqgERYX8g5PeoMY="
   },
   "marcofranssen_dexidp": {
-    "hash": "sha256-un+jAmcK1MYljcAFyIHw0AFmvz4GltAsWxTOd/zXxyU=",
+    "hash": "sha256-Aby3FNEA6LgsGM/N10LNu9sCv3f2N8WIrmWoqEqTa8E=",
     "homepage": "https://registry.terraform.io/providers/marcofranssen/dexidp",
     "owner": "marcofranssen",
     "repo": "terraform-provider-dexidp",
-    "rev": "v0.7.0",
+    "rev": "v0.8.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-0yoaiVn6j6g//iTPgX/y6M0A+cWAASDIuWMIHi/4w1o="
+    "vendorHash": "sha256-0Z2V8CyIZEHZFFqTNFnseBbvVenOnpNz9Tlbu7zaPOI="
   },
   "maxlaverse_bitwarden": {
     "hash": "sha256-dYWiz5DjkMQliUpvapKANj45vUyiPaE6GeP/HOBrKt8=",
