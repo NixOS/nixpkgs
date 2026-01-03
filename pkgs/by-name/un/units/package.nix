@@ -37,11 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     pythonEnv
   ];
 
-  prePatch = lib.optionalString enableCurrenciesUpdater ''
-    substituteInPlace units_cur \
-      --replace "#!/usr/bin/env python" ${pythonEnv}/bin/python
-  '';
-
   postInstall = lib.optionalString enableCurrenciesUpdater ''
     cp units_cur ${placeholder "out"}/bin/
   '';

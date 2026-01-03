@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -34,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.36.1";
+  version = "2.36.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -44,17 +43,8 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-rXLtrkuwmEe5+64Aao490VqD96LJ37/mxekWOzWRMlw=";
+    hash = "sha256-v6C3LL7ws+K7STqmd4j7/jNnMnnAmEUHzTHKv4446LU=";
   };
-
-  patches = [
-    # https://github.com/pymc-devs/pytensor/pull/1805
-    (fetchpatch {
-      name = "fix-test-tri-nonconcrete-jax-compatibility.patch";
-      url = "https://github.com/pymc-devs/pytensor/commit/86310f074267e24d1b3b99ecf3d9cc0b593b170d.patch";
-      hash = "sha256-KRywJLixmdDJ1GGYsd5Twjiwgce0ZFxUidhTgM6Obmg=";
-    })
-  ];
 
   build-system = [
     setuptools
