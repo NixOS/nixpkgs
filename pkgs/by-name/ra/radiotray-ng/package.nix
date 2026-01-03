@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radiotray-ng";
-  version = "0.2.9";
+  version = "0.2.10.1";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rRD/IfVnOxowr2mO2BB2hcHK5ByZSmTbcgYdULogYUs=";
+    hash = "sha256-GYSacYKS0az5sqPqZhnuTZOT9NSzW+P9o5r5p0RhTtI=";
   };
 
   nativeBuildInputs = [
