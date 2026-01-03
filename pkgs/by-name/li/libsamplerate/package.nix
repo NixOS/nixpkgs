@@ -18,7 +18,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
-  configureFlags = [ "--disable-fftw" ];
+  # MSYS2 ships mingw-w64-libsamplerate. The existing shared-library build in
+  # nixpkgs trips over MinGW-specific DLL export/.def handling; keep it simple
+  # for cross builds by producing a static library on MinGW.
+  configureFlags =
+    [ "--disable-fftw" ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      "--disable-shared"
+      "--enable-static"
+    ];
 
   outputs = [
     "dev"
@@ -31,7 +39,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.all;
-    # Linker is unhappy with the `.def` file.
-    broken = stdenv.hostPlatform.isMinGW;
+    broken = false;
   };
 }
