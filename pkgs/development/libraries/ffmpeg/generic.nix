@@ -109,7 +109,10 @@
   withNvdec ? withHeadlessDeps && withNvcodec,
   withNvenc ? withHeadlessDeps && withNvcodec,
   withOpenal ? withFullDeps, # OpenAL 1.1 capture support
-  withOpenapv ? withHeadlessDeps && lib.versionAtLeast version "8.0", # APV encoding support
+  # APV encoding support (via openapv).
+  # NOTE: MSYS2's MinGW ffmpeg build does not enable this by default, but nixpkgs
+  # should still be able to build it for MinGW once openapv is MinGW-clean.
+  withOpenapv ? withHeadlessDeps && lib.versionAtLeast version "8.0",
   withOpencl ? withHeadlessDeps,
   withOpencoreAmrnb ? withFullDeps && withVersion3, # AMR-NB de/encoder
   withOpencoreAmrwb ? withFullDeps && withVersion3, # AMR-WB decoder
@@ -123,7 +126,11 @@
   withQrencode ? withFullDeps && lib.versionAtLeast version "7", # QR encode generation
   withQuirc ? withFullDeps && lib.versionAtLeast version "7", # QR decoding
   withRav1e ? withFullDeps, # AV1 encoder (focused on speed and safety)
-  withRist ? withHeadlessDeps, # Reliable Internet Stream Transport (RIST) protocol
+  # Reliable Internet Stream Transport (RIST) protocol
+  # NOTE: MSYS2's MinGW ffmpeg build does not enable librist by default, but
+  # nixpkgs should still be able to build it for MinGW once librist/mbedtls are
+  # MinGW-clean.
+  withRist ? withHeadlessDeps,
   withRtmp ? false, # RTMP[E] support via librtmp
   withRubberband ? withFullDeps && withGPL && !stdenv.hostPlatform.isFreeBSD, # Rubberband filter
   withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3, # Samba protocol
@@ -967,7 +974,10 @@ stdenv.mkDerivation (
       ++ optionals withZimg [ zimg ]
       ++ optionals withZlib [ zlib ]
       ++ optionals withZmq [ zeromq ]
-      ++ optionals withZvbi [ zvbi ];
+      ++ optionals withZvbi [
+        zvbi
+        zvbi.dev
+      ];
 
     buildFlags = [ "all" ] ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
 
@@ -1067,8 +1077,11 @@ stdenv.mkDerivation (
         ++ optional buildSwresample "libswresample"
         ++ optional buildSwscale "libswscale";
       platforms = lib.platforms.all;
+      # Previously marked broken for MinGW64 (see link), but this derivation now
+      # builds under pkgsCross.mingwW64 (Linux -> MinGW) with the dependency/packaging
+      # fixes in this branch.
       # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
-      broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
+      broken = false;
       maintainers = with lib.maintainers; [
         atemu
         jopejoe1
