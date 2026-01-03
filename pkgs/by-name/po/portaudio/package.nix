@@ -22,9 +22,12 @@ stdenv.mkDerivation rec {
     pkg-config
     which
   ];
-  buildInputs = [
-    libjack2
-  ]
+  buildInputs =
+    # PortAudio's JACK backend is not built on MinGW in MSYS2 (their mingw-w64-portaudio
+    # does not depend on jack2). Avoid pulling jack2 into the MinGW build.
+    lib.optionals (stdenv.hostPlatform.isUnix && lib.meta.availableOn stdenv.hostPlatform libjack2) [
+      libjack2
+    ]
   # Enabling alsa causes linux-only sources to be built
   ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
@@ -65,7 +68,8 @@ stdenv.mkDerivation rec {
     # Not exactly a bsd license, but alike
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovek323 ];
-    platforms = lib.platforms.unix;
+    # MSYS2 ships portaudio for MinGW; allow Windows so pkgsCross.mingwW64 can evaluate it.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 
   passthru = {
