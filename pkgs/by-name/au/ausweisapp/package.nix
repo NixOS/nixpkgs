@@ -5,13 +5,8 @@
   testers,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
+  qt6,
   pcsclite,
-  qtscxml,
-  qtsvg,
-  qttools,
-  qtwayland,
-  qtwebsockets,
   gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   # The build scripts copy the entire translations directory from Qt
@@ -39,11 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     pcsclite
-    qtscxml
-    qtsvg
-    qttools
-    qtwayland
-    qtwebsockets
+    qt6.qtscxml
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qtwayland
+    qt6.qtwebsockets
   ];
 
   passthru = {
