@@ -25,12 +25,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=ed_diff::tests::test_permutations_empty_lines"
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/uutils/diffutils/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/uutils/diffutils/releases/tag/v${finalAttrs.version}";
     description = "Drop-in replacement of diffutils in Rust";
     homepage = "https://github.com/uutils/diffutils";
     license = lib.licenses.mit;
