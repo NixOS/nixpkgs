@@ -5,11 +5,7 @@
   fetchpatch,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
-  qtcharts,
-  qtmultimedia,
-  qt5compat,
+  qt6,
   faad2,
   rtl-sdr,
   soapysdr-with-plugins,
@@ -45,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     unixtools.xxd
   ];
 
@@ -55,10 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     lame
     libusb-compat-0_1
     mpg123
-    qtbase
-    qtcharts
-    qtmultimedia
-    qt5compat
+    qt6.qtbase
+    qt6.qtcharts
+    qt6.qtmultimedia
+    qt6.qt5compat
     rtl-sdr
     soapysdr-with-plugins
   ]

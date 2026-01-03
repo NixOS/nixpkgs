@@ -10270,8 +10270,6 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  welle-io = qt6Packages.callPackage ../applications/radio/welle-io { };
-
   wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
     libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
   };
