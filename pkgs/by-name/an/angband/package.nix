@@ -46,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://angband.github.io/angband";
     description = "Single-player roguelike dungeon exploration game";
     mainProgram = "angband";
-    maintainers = [ lib.maintainers.kenran ];
+    maintainers = with lib.maintainers; [
+      kenran
+      x123
+    ];
     changelog = "https://github.com/angband/angband/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
