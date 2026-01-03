@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   # The python script searches in subfolders, but we want to search in the same bin directory
   prePatch = ''
     substituteInPlace tools/gfxrecon/gfxrecon.py \
