@@ -1,12 +1,9 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchzip,
   fetchFromGitHub,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
-  qtsvg,
+  qt6,
   buildEnv,
   aspellDicts,
   # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
@@ -17,7 +14,7 @@
   ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "retext";
   version = "8.1.0";
   pyproject = true;
@@ -34,19 +31,19 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-nqKAUg9nTzGPPxr80KTn6JX9JgCUJwpcwp8aOIlcxPY=";
   };
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = [
-    wrapQtAppsHook
-    qttools.dev
+    qt6.wrapQtAppsHook
+    qt6.qttools.dev
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
+    qt6.qtbase
+    qt6.qtsvg
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     chardet
     docutils
     markdown
@@ -81,7 +78,7 @@ python3.pkgs.buildPythonApplication rec {
       }"
     )
 
-    cp ${toolbarIcons}/* $out/${python3.pkgs.python.sitePackages}/ReText/icons
+    cp ${toolbarIcons}/* $out/${python3Packages.python.sitePackages}/ReText/icons
 
     substituteInPlace $out/share/applications/me.mitya57.ReText.desktop \
       --replace-fail "Exec=retext-${version}.data/scripts/retext %F" "Exec=retext %F" \
