@@ -36,6 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
   ];
 
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+    # MSYS2 mingw-w64-libtre patch stack:
+    # fix-nixpkgs/MINGW-packages/mingw-w64-libtre/{001-autotools.patch,002-pointer-cast.patch}
+    ./mingw/001-autotools.patch
+    ./mingw/002-pointer-cast.patch
+  ];
+
   preConfigure = ''
     ./utils/autogen.sh
   '';
@@ -46,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/laurikari/tre/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     mainProgram = "agrep";
-    platforms = lib.platforms.unix;
+    # MSYS2 provides libtre for MinGW (mingw-w64-libtre).
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

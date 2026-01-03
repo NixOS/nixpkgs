@@ -1,0 +1,14 @@
+--- a/lib/tre-internal.h
++++ b/lib/tre-internal.h
+@@ -127,8 +127,8 @@
+ /* Returns number of bytes to add to (char *)ptr to make it
+    properly aligned for the type. */
+ #define ALIGN(ptr, type) \
+-  ((((long)ptr) % sizeof(type)) \
+-   ? (sizeof(type) - (((long)ptr) % sizeof(type))) \
++  ((((intptr_t)ptr) % sizeof(type)) \
++   ? (sizeof(type) - (((intptr_t)ptr) % sizeof(type))) \
+    : 0)
+ 
+ #undef MAX
+
