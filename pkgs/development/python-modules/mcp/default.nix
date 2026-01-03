@@ -57,7 +57,6 @@ buildPythonPackage rec {
     # testing this on macOS under load.
     substituteInPlace \
       "tests/client/test_stdio.py" \
-      "tests/server/fastmcp/test_integration.py" \
       "tests/shared/test_ws.py" \
       "tests/shared/test_sse.py" \
       "tests/shared/test_streamable_http.py" \
