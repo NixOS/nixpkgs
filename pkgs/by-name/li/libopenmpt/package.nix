@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://lib.openmpt.org/libopenmpt/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ OPNA2608 ];
-    platforms = lib.platforms.unix;
+    # MSYS2 ships libopenmpt for MinGW; allow Windows so pkgsCross.mingwW64 can evaluate it.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }
