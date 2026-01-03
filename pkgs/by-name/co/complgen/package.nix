@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-JexvR/djdRGq3BsOWfEhFCbTe3OaP/jqQgiO+RkK1Tg=";
 
   meta = {
-    description = "Generate {bash,fish,zsh} completions from a single EBNF-like grammar";
-    mainProgram = "complgen";
-    homepage = "https://github.com/adaszko/complgen";
     changelog = "https://github.com/adaszko/complgen/blob/v${finalAttrs.version}/CHANGELOG.md";
+    description = "Generate {bash,fish,zsh} completions from a single EBNF-like grammar";
+    homepage = "https://github.com/adaszko/complgen";
     license = lib.licenses.asl20;
+    mainProgram = "complgen";
     maintainers = [ ];
   };
 })
