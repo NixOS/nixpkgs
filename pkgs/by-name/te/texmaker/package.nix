@@ -4,21 +4,17 @@
   fetchurl,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
-  poppler,
-  qtbase,
-  qttools,
-  qtwebengine,
-  qt5compat,
+  qt6,
+  qt6Packages,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "texmaker";
   version = "6.0.1";
 
   src = fetchurl {
-    url = "http://www.xm1math.net/texmaker/texmaker-${version}.tar.bz2";
+    url = "http://www.xm1math.net/texmaker/texmaker-${finalAttrs.version}.tar.bz2";
     hash = "sha256-uMI13wzY/XcUzXDTte42MWOwJUqd6pGAeBuPDi5GyvY=";
   };
 
@@ -28,17 +24,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    poppler
-    qtbase
-    qtwebengine
-    qt5compat
-    qttools
+    qt6Packages.poppler
+    qt6.qtbase
+    qt6.qtwebengine
+    qt6.qt5compat
+    qt6.qttools
     zlib
   ];
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   qmakeFlags = [
@@ -63,4 +59,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "texmaker";
   };
-}
+})
