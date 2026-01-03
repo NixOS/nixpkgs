@@ -113,6 +113,9 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ex-writeShellApplication": [
+    "index.html#ex-writeShellApplication"
+  ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
