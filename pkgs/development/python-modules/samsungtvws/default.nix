@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "samsungtvws";
-  version = "2.7.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
     tag = "v${version}";
-    hash = "sha256-CU59Kg8kSEE71x6wifCKCaVFdaMftodtkrAOpD+qvWY=";
+    hash = "sha256-eK6tnBgnLHC4i4r41dp3V5V5zI1V40cWtcXRZBDgPKk=";
   };
 
   patches = [
