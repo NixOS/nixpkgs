@@ -4,7 +4,6 @@
   cryptography,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   hatchling,
   hatch-vcs,
   requests,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "http-message-signatures";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyauth";
