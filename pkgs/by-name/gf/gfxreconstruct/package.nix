@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   # The python script searches in subfolders, but we want to search in the same bin directory
   prePatch = ''
     substituteInPlace tools/gfxrecon/gfxrecon.py \
