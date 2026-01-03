@@ -12595,10 +12595,6 @@ with pkgs;
     d2x-rebirth-full
     ;
 
-  fltrator = callPackage ../games/fltrator {
-    fltk = fltk-minimal;
-  };
-
   factorio = callPackage ../by-name/fa/factorio/package.nix { releaseType = "alpha"; };
 
   factorio-experimental = factorio.override {
