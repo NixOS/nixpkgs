@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  cmakeFlags = [
+    # The CMakeLists.txt is actually 3.10 compatible, but it specifies 3.5 as `CMAKE_VERSION_MINIMUM`
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+  ];
+
+  # Workaround for "error: ... class std::__cxx11::wstring_convert' is deprecated [-Werror=deprecated-declarations]"
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   buildInputs = [
     libX11
     libxcb

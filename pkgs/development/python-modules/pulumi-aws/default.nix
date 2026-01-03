@@ -26,6 +26,14 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/sdk/python";
 
+  postPatch = ''
+    # We need the version of pulumi-aws in its package metadata to be accurate
+    # as this seems to be used to determine which version of the
+    # pulumi-resource-aws plugin to be dynamically downloaded by the pulumi CLI
+    substituteInPlace pyproject.toml \
+      --replace-fail "7.0.0a0+dev" "${version}"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

@@ -6,6 +6,7 @@
   replaceVars,
   fontconfig,
   python,
+  pythonAtLeast,
 
   # build-system
   cython,
@@ -128,11 +129,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pygame" ];
 
   meta = {
-    description = "Python library for games";
+    description = "Python library for games (original distribution)";
     homepage = "https://www.pygame.org/";
     changelog = "https://github.com/pygame/pygame/releases/tag/${src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;
+    # https://github.com/pygame/pygame/issues/4706
+    broken = pythonAtLeast "3.14";
   };
 }
