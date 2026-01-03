@@ -10981,20 +10981,13 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  welle-io = qt6Packages.callPackage ../applications/radio/welle-io { };
-
-  wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
-    libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
-  };
-  wireshark-qt = wireshark;
-
   qtwirediff = qt6Packages.callPackage ../applications/networking/sniffers/qtwirediff { };
 
+  welle-io = qt6Packages.callPackage ../applications/radio/welle-io { };
+
   tshark = wireshark-cli;
-  wireshark-cli = wireshark.override {
-    withQt = false;
-    libpcap = libpcap.override { withBluez = stdenv.hostPlatform.isLinux; };
-  };
+  wireshark-cli = wireshark.override { withQt = false; };
+  wireshark-qt = wireshark;
 
   buildMozillaMach =
     opts: callPackage (import ../build-support/build-mozilla-mach/default.nix opts) { };
