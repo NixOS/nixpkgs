@@ -88,7 +88,6 @@ in
             enable = true;
             accounts.main = {
               name = "My Account";
-              relayGroups.my-relays.name = "Relays";
               gatewayGroups.site.name = "Site";
               actors = {
                 admin = {
@@ -99,7 +98,7 @@ in
                 client = {
                   type = "service_account";
                   name = "A client";
-                  email = "client@example.com";
+                  # email removed - service_account type must not have email (type_is_valid constraint)
                 };
               };
               # service accounts aren't members of 'Everyone' so we need to add a separate group
@@ -153,12 +152,128 @@ in
             };
           };
 
-          api.externalUrl = "https://${domain}/api/";
-          web.externalUrl = "https://${domain}/";
+          portal.externalUrl = "https://${domain}/";
         };
 
-        systemd.services.firezone-server-domain.postStart = lib.mkAfter ''
-          ${lib.getExe config.services.firezone.server.domain.package} rpc 'Code.eval_file("${./create-tokens.exs}")'
+        specialisation.changeAttributes.configuration = {
+          services.firezone.server.provision = lib.mkForce {
+            enable = true;
+            accounts.main = {
+              name = "My Account (changed)";
+              gatewayGroups.site.name = "Site (changed)";
+              actors = {
+                admin = {
+                  type = "account_admin_user";
+                  name = "Admin (changed)";
+                  email = "admin@localhost.localdomain";
+                };
+                client = {
+                  type = "service_account";
+                  name = "A client (changed)";
+                };
+              };
+              groups.main = {
+                name = "main";
+                members = [
+                  "client"
+                  "admin"
+                ];
+              };
+              resources.res1 = {
+                type = "dns";
+                name = "Dns Resource (changed)";
+                address = "resource.example.com";
+                gatewayGroups = [ "site" ];
+                # Changed filters - only allow ICMP now
+                filters = [
+                  { protocol = "icmp"; }
+                ];
+              };
+              resources.res2 = {
+                type = "ip";
+                name = "Ip Resource (changed)";
+                address = "172.20.2.1";
+                gatewayGroups = [ "site" ];
+              };
+              resources.res3 = {
+                type = "cidr";
+                name = "Cidr Resource (changed)";
+                address = "172.20.1.0/24";
+                gatewayGroups = [ "site" ];
+              };
+              policies.pol1 = {
+                description = "Allow anyone res1 access (changed)";
+                group = "main";
+                resource = "res1";
+              };
+              policies.pol2 = {
+                description = "Allow anyone res2 access (changed)";
+                group = "main";
+                resource = "res2";
+              };
+              policies.pol3 = {
+                description = "Allow anyone res3 access (changed)";
+                group = "main";
+                resource = "res3";
+              };
+            };
+          };
+        };
+
+        specialisation.removeResource.configuration = {
+          services.firezone.server.provision = lib.mkForce {
+            enable = true;
+            accounts.main = {
+              name = "My Account (changed)";
+              gatewayGroups.site.name = "Site (changed)";
+              actors = {
+                admin = {
+                  type = "account_admin_user";
+                  name = "Admin (changed)";
+                  email = "admin@localhost.localdomain";
+                };
+                client = {
+                  type = "service_account";
+                  name = "A client (changed)";
+                };
+              };
+              groups.main = {
+                name = "main";
+                members = [
+                  "client"
+                  "admin"
+                ];
+              };
+              # res1 removed
+              resources.res2 = {
+                type = "ip";
+                name = "Ip Resource (changed)";
+                address = "172.20.2.1";
+                gatewayGroups = [ "site" ];
+              };
+              resources.res3 = {
+                type = "cidr";
+                name = "Cidr Resource (changed)";
+                address = "172.20.1.0/24";
+                gatewayGroups = [ "site" ];
+              };
+              # pol1 removed (referenced removed resource)
+              policies.pol2 = {
+                description = "Allow anyone res2 access (changed)";
+                group = "main";
+                resource = "res2";
+              };
+              policies.pol3 = {
+                description = "Allow anyone res3 access (changed)";
+                group = "main";
+                resource = "res3";
+              };
+            };
+          };
+        };
+
+        systemd.services.firezone-server.postStart = lib.mkAfter ''
+          ${lib.getExe config.services.firezone.server.package} rpc 'Code.eval_file("${./create-tokens.exs}")'
         '';
       };
 
@@ -335,12 +450,15 @@ in
   };
 
   testScript =
-    { ... }:
+    { nodes, ... }:
+    let
+      specialisations = "${nodes.server.system.build.toplevel}/specialisation";
+    in
     ''
       start_all()
 
       with subtest("Start server"):
-          server.wait_for_unit("firezone.target")
+          server.wait_for_unit("firezone-server.service")
           server.wait_until_succeeds("curl -Lsf https://${domain} | grep 'Welcome to Firezone'")
           server.wait_until_succeeds("curl -Ls https://${domain}/api | grep 'Not Found'")
 
@@ -377,10 +495,81 @@ in
 
       with subtest("Check CIDR based access"):
           # Check that we can access the resource through the VPN via CIDR
-          client.wait_until_succeeds("ping -c1 -W1 172.20.1.1")
+          client.wait_until_succeeds("ping -4 -c1 -W1 172.20.1.1")
 
       with subtest("Check IP based access"):
           # Check that we can access the resource through the VPN via IP
-          client.wait_until_succeeds("ping -c1 -W1 172.20.2.1")
+          client.wait_until_succeeds("ping -4 -c1 -W1 172.20.2.1")
+
+      with subtest("Test Provisioning - changeAttributes"):
+          # Stop services before switching configuration
+          client.succeed("systemctl stop firezone-headless-client")
+          gateway.succeed("systemctl stop firezone-gateway")
+          relay.succeed("systemctl stop firezone-relay")
+
+          # Switch to changed configuration
+          server.succeed('${specialisations}/changeAttributes/bin/switch-to-configuration test')
+          server.wait_for_unit("firezone-server.service")
+
+          # Verify portal is still accessible
+          server.wait_until_succeeds("curl -Lsf https://${domain} | grep 'Welcome to Firezone'")
+
+          # Restart services to pick up new configuration
+          relay.succeed("systemctl start firezone-relay")
+          relay.wait_for_unit("firezone-relay.service")
+          relay.wait_until_succeeds("journalctl --since -2m --unit firezone-relay.service --grep 'Connected to portal.*${domain}'", timeout=30)
+
+          gateway.succeed("systemctl start firezone-gateway")
+          gateway.wait_for_unit("firezone-gateway.service")
+          gateway.wait_until_succeeds("journalctl --since -2m --unit firezone-gateway.service --grep 'Connected to portal.*${domain}'", timeout=30)
+
+          client.succeed("systemctl start firezone-headless-client")
+          client.wait_for_unit("firezone-headless-client.service")
+          client.wait_until_succeeds("journalctl --since -2m --unit firezone-headless-client.service --grep 'Tunnel ready'", timeout=30)
+
+          # Wait for both client and gateway to set up the updated resource configuration
+          client.wait_until_succeeds("journalctl --since -2m --unit firezone-headless-client.service --grep 'Activating resource.*Dns Resource .changed'", timeout=30)
+          gateway.wait_until_succeeds("journalctl --since -2m --unit firezone-gateway.service --grep 'Set up DNS resource NAT.*resource.example.com'", timeout=30)
+
+          # Test changed filters: res1 now only allows ICMP (no HTTP)
+          client.wait_until_succeeds("ping -4 -c1 -W1 resource.example.com")
+          client.fail("curl -4 -Lsf --max-time 5 http://resource.example.com")
+
+          # Other resources should still work
+          client.wait_until_succeeds("ping -4 -c1 -W1 172.20.1.1")
+          client.wait_until_succeeds("ping -4 -c1 -W1 172.20.2.1")
+
+      with subtest("Test Provisioning - removeResource"):
+          # Stop services before switching configuration
+          client.succeed("systemctl stop firezone-headless-client")
+          gateway.succeed("systemctl stop firezone-gateway")
+          relay.succeed("systemctl stop firezone-relay")
+
+          # Switch to configuration with res1 removed
+          server.succeed('${specialisations}/removeResource/bin/switch-to-configuration test')
+          server.wait_for_unit("firezone-server.service")
+
+          # Verify portal is still accessible
+          server.wait_until_succeeds("curl -Lsf https://${domain} | grep 'Welcome to Firezone'")
+
+          # Restart services to pick up new configuration
+          relay.succeed("systemctl start firezone-relay")
+          relay.wait_for_unit("firezone-relay.service")
+          relay.wait_until_succeeds("journalctl --since -2m --unit firezone-relay.service --grep 'Connected to portal.*${domain}'", timeout=30)
+
+          gateway.succeed("systemctl start firezone-gateway")
+          gateway.wait_for_unit("firezone-gateway.service")
+          gateway.wait_until_succeeds("journalctl --since -2m --unit firezone-gateway.service --grep 'Connected to portal.*${domain}'", timeout=30)
+
+          client.succeed("systemctl start firezone-headless-client")
+          client.wait_for_unit("firezone-headless-client.service")
+          client.wait_until_succeeds("journalctl --since -2m --unit firezone-headless-client.service --grep 'Tunnel ready'", timeout=30)
+
+          # res1 (DNS resource) should no longer be accessible
+          client.wait_until_fails("ping -4 -c3 -W1 resource.example.com", timeout=30)
+
+          # res2 and res3 should still work
+          client.wait_until_succeeds("ping -4 -c1 -W1 172.20.1.1")
+          client.wait_until_succeeds("ping -4 -c1 -W1 172.20.2.1")
     '';
 }
