@@ -3,9 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qtbase,
   qt6,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,14 +18,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase
+    qt6.qtbase
     qt6.qtcharts
     qt6.qttools
   ];
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   meta = {

@@ -2960,8 +2960,6 @@ with pkgs;
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
 
-  maskromtool = qt6Packages.callPackage ../tools/graphics/maskromtool { };
-
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
   maubot = with python3Packages; toPythonApplication maubot;
