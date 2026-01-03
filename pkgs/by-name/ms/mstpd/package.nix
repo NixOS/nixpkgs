@@ -8,30 +8,23 @@
 
 stdenv.mkDerivation rec {
   pname = "mstpd";
-  version = "0.0.8";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "mstpd";
     repo = "mstpd";
     rev = version;
-    sha256 = "1xkfydxljdnj49p5r3mirk4k146428b6imfc9bkfps9yjn64mkgb";
+    hash = "sha256-m4gbVXAPIYGQvTFaSziFuOO6say5kgUsk7NSdqXgKmA=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-strncpy-gcc9.patch";
-      url = "https://github.com/mstpd/mstpd/commit/d27d7e93485d881d8ff3a7f85309b545edbe1fc6.patch";
-      sha256 = "19456daih8l3y6m9kphjr7pj7slrqzbj6yacnlgznpxyd8y4d86y";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
     "--prefix=$(out)"
     "--sysconfdir=$(out)/etc"
-    "--sbindir=$(out)/sbin"
+    "--sbindir=$(out)/bin"
     "--libexecdir=$(out)/lib"
+    "--with-bashcompletiondir=$(out)/share/bash-completion/completions"
   ];
 
   meta = {
