@@ -119,7 +119,13 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "loot";
       repo = "yaml-cpp";
       tag = "0.8.0+merge-key-support.2";
-      hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
+
+      # fixes error: 'uint16_t' was not declared in this scope
+      postFetch = ''
+        sed -e '1i #include <cstdint>' -i "$out/src/emitterutils.cpp"
+      '';
+
+      hash = "sha256-5xbqOI4L3XCqx+4k6IcZUwOdHAfbBy7nZgRKGkRJabQ=";
     };
 
     buildRustFFIPackage =

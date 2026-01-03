@@ -31,6 +31,14 @@
   confDir ? "/etc",
 }:
 let
+  # Support for mdbook >= 0.5, https://git.lix.systems/lix-project/lix/issues/1051
+  lixMdbookPatch = fetchpatch2 {
+    name = "lix-mdbook-0.5-support.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/54df89f601b3b4502a5c99173c9563495265d7e7.patch";
+    excludes = [ "package.nix" ];
+    hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
+  };
+
   makeLixScope =
     {
       attrName,
@@ -223,6 +231,8 @@ lib.makeExtensible (
             url = "https://git.lix.systems/lix-project/lix/commit/b6d5670bcffebdd43352ea79b36135e35a8148d9.patch";
             hash = "sha256-f4s0TR5MhNMNM5TYLOR7K2/1rtZ389KDjTCKFVK0OcE=";
           })
+
+          lixMdbookPatch
         ];
       };
     };
@@ -246,6 +256,8 @@ lib.makeExtensible (
           inherit src;
           hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
         };
+
+        patches = [ lixMdbookPatch ];
       };
     };
 
@@ -268,6 +280,8 @@ lib.makeExtensible (
           inherit src;
           hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
         };
+
+        patches = [ lixMdbookPatch ];
       };
     };
 

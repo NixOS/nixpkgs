@@ -5328,6 +5328,8 @@ self: super: with self; {
 
   fava-investor = callPackage ../development/python-modules/fava-investor { };
 
+  fava-portfolio-returns = callPackage ../development/python-modules/fava-portfolio-returns { };
+
   favicon = callPackage ../development/python-modules/favicon { };
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
@@ -10968,6 +10970,8 @@ self: super: with self; {
 
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
+  nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
+
   nsapi = callPackage ../development/python-modules/nsapi { };
 
   nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
@@ -15591,6 +15595,8 @@ self: super: with self; {
 
   python-watcherclient = callPackage ../development/python-modules/python-watcherclient { };
 
+  python-wayland-extra = callPackage ../development/python-modules/python-wayland-extra { };
+
   python-whois = callPackage ../development/python-modules/python-whois { };
 
   python-wink = callPackage ../development/python-modules/python-wink { };
@@ -18206,6 +18212,10 @@ self: super: with self; {
 
   streamcontroller-plugin-tools =
     callPackage ../development/python-modules/streamcontroller-plugin-tools
+      { };
+
+  streamcontroller-streamdeck =
+    callPackage ../development/python-modules/streamcontroller-streamdeck
       { };
 
   streamdeck = callPackage ../development/python-modules/streamdeck { };

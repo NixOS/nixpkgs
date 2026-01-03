@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-libusb_1_0" ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
     license = lib.licenses.gpl2;
     description = "Device Firmware Update based USB programmer for Atmel chips with a USB bootloader";

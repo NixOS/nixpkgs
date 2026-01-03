@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
+    install -Dm755 example/init -t $out/example/
   '';
 
   doInstallCheck = true;

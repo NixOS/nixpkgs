@@ -2,9 +2,10 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_22,
 }:
 
-buildNpmPackage (finalAttrs: {
+buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
   pname = "mongosh";
   version = "2.5.10";
 

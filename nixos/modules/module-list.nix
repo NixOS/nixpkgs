@@ -257,6 +257,7 @@
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
+  ./programs/lix.nix
   ./programs/localsend.nix
   ./programs/mdevctl.nix
   ./programs/mepo.nix
@@ -403,6 +404,7 @@
   ./security/please.nix
   ./security/polkit.nix
   ./security/rtkit.nix
+  ./security/run0.nix
   ./security/soteria.nix
   ./security/sudo-rs.nix
   ./security/sudo.nix

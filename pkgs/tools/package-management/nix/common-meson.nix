@@ -174,17 +174,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build tests
-  ''
-  # The ability to chmod the root filesystem only exist in filesystem namespacing capable Nix interpreters.
-  # At the time of writing, only Linux can do it.
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    # The build system produces $HOME during the install check phase
-    # and will fail when ran without build user separation.
-    # This will surface as a FIFO synchronization deadlock.
-    # To avoid this, the $HOME directory is barred from being mkdir()
-    # by the build system here.
-    # https://github.com/NixOS/nix/issues/11295
-    chmod 555 /
   '';
 
   preConfigure =

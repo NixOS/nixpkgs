@@ -43,16 +43,26 @@ let
 
     postInstall = ''
       installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/assets/tv.1
-
-      # These are actually shell integrations with keybindings
-      install -Dm644 television/utils/shell/completion.* -t $out/share/television/
     ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd tv \
-        --bash <($out/bin/tv init bash) \
-        --fish <($out/bin/tv init fish) \
-        --zsh <($out/bin/tv init zsh) \
-        --nushell <($out/bin/tv init nu)
+      mkdir -p $out/share/television
+      for shell in bash zsh fish; do
+        "$out/bin/tv" init $shell > completion.$shell
+
+        # split shell completion and shell integration
+        awk -v C=completion_pure.$shell -v D=$out/share/television/completion.$shell '
+          NR==FNR { key=$0; nextfile }
+          {
+            if (!found && index($0, key)) found=1
+            print > (found ? D : C)
+          }
+        ' television/utils/shell/completion.$shell completion.$shell
+
+        installShellCompletion --cmd tv completion_pure.$shell
+      done
+
+      # nushell doesn't contain regular completion for now
+      "$out/bin/tv" init nu > $out/share/television/completion.nu
     '';
 
     passthru = {

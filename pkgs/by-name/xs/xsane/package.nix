@@ -35,13 +35,17 @@ stdenv.mkDerivation rec {
         { name, hash }:
         fetchpatch {
           inherit name hash;
-          url = "https://src.fedoraproject.org/rpms/xsane/raw/846ace0a29063335c708b01e9696eda062d7459c/f/${name}";
+          url = "https://src.fedoraproject.org/rpms/xsane/raw/67c7f6591398ab46f71ba4f0eb33cb0539e56a4b/f/${name}";
         };
     in
     map fetchFedoraPatch [
       {
         name = "0001-Follow-new-convention-for-registering-gimp-plugin.patch";
         hash = "sha256-yOY7URyc8HEHHynvdcZAV1Pri31N/rJ0ddPavOF5zLw=";
+      }
+      {
+        name = "0001-replace-gtk_timeout-with-g_timeout.patch";
+        hash = "sha256-OMeukfbpagK05HI2R/2Gxrvk2nfrDK8ZmLmw0a6o10k=";
       }
       {
         name = "xsane-0.995-close-fds.patch";
@@ -106,6 +110,10 @@ stdenv.mkDerivation rec {
       {
         name = "xsane-configure-c99.patch";
         hash = "sha256-ukaNGgzCGiQwbOzSguAqBIKOUzXofSC3lct812U/8gY=";
+      }
+      {
+        name = "xsane-gcc15-c23.patch";
+        hash = "sha256-a1ZkVufpbwqL/bCFE2w44PoR42chl8aoRqeOP6L74Uw=";
       }
     ];
 

@@ -1202,13 +1202,13 @@
     "vendorHash": "sha256-wAVTsN0ZizBU4dMLK2wxf3RSNE6GCbXL1jTIULpKfNU="
   },
   "siderolabs_talos": {
-    "hash": "sha256-PPD4blyXt4/IalzwEn4+lvuD1Qx7VuUD/CUJILDRI5k=",
+    "hash": "sha256-NsIFyngT6/bU744fftNWWHU43W3sXO/0yzzAKSEH9/Q=",
     "homepage": "https://registry.terraform.io/providers/siderolabs/talos",
     "owner": "siderolabs",
     "repo": "terraform-provider-talos",
-    "rev": "v0.9.0",
+    "rev": "v0.10.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-J2fLyYvlnefFIaJ6UwRfJ5nas86JCuOHAdWalr9T9fw="
+    "vendorHash": "sha256-i5Qi2rs1NpOlOkM80Uj0GfQRbobp9+6lAgt2iN2uEn0="
   },
   "skytap_skytap": {
     "hash": "sha256-JII4czazo6Di2sad1uFHMKDO2gWgZlQE8l/+IRYHQHU=",
@@ -1310,11 +1310,11 @@
     "vendorHash": "sha256-omxEb+ntQuHDfS2Rmt0rj0BF0Q2T8DLhobLua2uU/0o="
   },
   "tencentcloudstack_tencentcloud": {
-    "hash": "sha256-bhqOLFVoLpGIE2yzHbMokeN+LJZbLgrzqyzrSlwdCu0=",
+    "hash": "sha256-KiHK/tkDDEL+osFp5gRvPTHrP7hEfMhl8aT4VHCCGpw=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.82.49",
+    "rev": "v1.82.50",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     "--enable-dst-correction"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing -Wno-error=incompatible-pointer-types -std=gnu17";
 
   postInstall = lib.optionalString addThumbnailer ''
     mkdir -p $out/share/thumbnailers

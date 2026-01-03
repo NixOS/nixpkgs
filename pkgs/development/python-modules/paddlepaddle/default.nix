@@ -13,7 +13,7 @@
   zlib,
   setuptools,
   cudaSupport ? config.cudaSupport or false,
-  cudaPackages_12_9,
+  cudaPackages,
   addDriverRunpath,
   # runtime dependencies
   httpx,
@@ -23,6 +23,7 @@
   decorator,
   astor,
   opt-einsum,
+  rdma-core,
   safetensors,
   typing-extensions,
 }:
@@ -33,15 +34,20 @@ let
   version = sources.version;
   format = "wheel";
   pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-  cpuOrGpu = if cudaSupport then "gpu" else "cpu";
   hash =
-    sources."${stdenv.hostPlatform.system}"."${cpuOrGpu}"."${pyShortVersion}"
-      or (throw "${pname} has no sources.nix entry for '${stdenv.hostPlatform.system}.${cpuOrGpu}.${pyShortVersion}' attribute");
+    if cudaSupport then
+      sources."${stdenv.hostPlatform.system}"."gpu"."cu${
+        lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version
+      }"."${pyShortVersion}"
+    else
+      sources."${stdenv.hostPlatform.system}"."cpu"."${pyShortVersion}";
   platform = sources."${stdenv.hostPlatform.system}".platform;
   src =
     if cudaSupport then
       (fetchurl {
-        url = "https://paddle-whl.bj.bcebos.com/stable/cu129/paddlepaddle-gpu/paddlepaddle_gpu-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
+        url = "https://paddle-whl.bj.bcebos.com/stable/cu${
+          lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version
+        }/paddlepaddle-gpu/paddlepaddle_gpu-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
         inherit hash;
       })
     else
@@ -73,6 +79,8 @@ buildPythonPackage {
   ]
   ++ lib.optionals cudaSupport [ autoPatchelfHook ];
 
+  buildInputs = lib.optionals cudaSupport [ rdma-core ];
+
   dependencies = [
     setuptools
     httpx
@@ -101,7 +109,7 @@ buildPythonPackage {
             (lib.getLib stdenv.cc.cc)
           ]
           ++ lib.optionals cudaSupport (
-            with cudaPackages_12_9;
+            with cudaPackages;
             [
               cudatoolkit.lib
               cudatoolkit.out

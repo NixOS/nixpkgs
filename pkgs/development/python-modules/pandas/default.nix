@@ -38,6 +38,7 @@
   pymysql,
   pyqt5,
   pyreadstat,
+  pyxlsb,
   qtpy,
   s3fs,
   scipy,
@@ -127,7 +128,7 @@ let
           excel = [
             odfpy
             openpyxl
-            # TODO: pyxlsb
+            pyxlsb
             xlrd
             xlsxwriter
           ];

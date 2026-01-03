@@ -40,6 +40,9 @@ stdenv.mkDerivation {
     })
   ];
 
+  # Fix build with gcc 15
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   postPatch = ''
     sed -ri -e '
       s!^(#define\s+CFG_[A-Z]+_NAME\s+).*/!\1"'"$out"'/etc/john/!
