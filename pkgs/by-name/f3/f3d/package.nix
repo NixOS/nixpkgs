@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     repo = "f3d";
     tag = "v${version}";
     hash = "sha256-nZXz5FiGAcDqTi5hlSH7rq2QazhqYg1IoNDog35dygA=";
+    fetchLFS = true;
   };
 
   nativeBuildInputs = [
