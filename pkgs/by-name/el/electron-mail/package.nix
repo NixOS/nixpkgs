@@ -7,11 +7,11 @@
 
 let
   pname = "electron-mail";
-  version = "5.3.3";
+  version = "5.3.5";
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    hash = "sha256-i1oJ/DNGspE7ELuN7MI0e8/69SZwirqahBa7Jf5kP7s=";
+    hash = "sha256-xlDk/MwDs1DKzIx+8NyrS+yQw4u3gY5iTXvc2NWLn8s=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
