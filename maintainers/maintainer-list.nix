@@ -20398,6 +20398,12 @@
     github = "peret";
     githubId = 617977;
   };
+  persn = {
+    email = "jkerper@persn.dev";
+    github = "spjoes";
+    githubId = 34802651;
+    name = "Joey Kerper";
+  };
   perstark = {
     email = "perstark.se@gmail.com";
     github = "perstarkse";
