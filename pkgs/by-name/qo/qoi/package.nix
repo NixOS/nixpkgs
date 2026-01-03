@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   libpng,
+  nix-update-script,
   stb,
   stdenv,
   testers,
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
