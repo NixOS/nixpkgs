@@ -6197,6 +6197,8 @@ with pkgs;
     haskellPackages.callPackage ../tools/misc/fffuu { }
   );
 
+  ffvship = recurseIntoAttrs (import ../tools/video/ffvship { inherit callPackage stdenv; });
+
   flow = callPackage ../development/tools/analysis/flow {
     ocamlPackages = ocaml-ng.ocamlPackages.overrideScope (
       self: super: {
@@ -8368,6 +8370,8 @@ with pkgs;
   # Temporarily use python 3.12
   # See: https://github.com/vllm-project/vllm/issues/12083
   vllm = with python312Packages; toPythonApplication vllm;
+
+  vship = recurseIntoAttrs (import ../development/libraries/vship { inherit callPackage stdenv; });
 
   vte-gtk4 = vte.override {
     gtkVersion = "4";
