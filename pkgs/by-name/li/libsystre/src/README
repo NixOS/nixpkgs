@@ -1,0 +1,6 @@
+This is a wrapper around TRE that provides POSIX API.
+
+Because it's a standalone library, it is a drop-in replacement for
+the outdated libgnurx or libregex, able to satisfy any configure check.
+
+
