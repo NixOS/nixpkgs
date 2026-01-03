@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./xpilot-ng-gcc-14-fix.patch
     ./xpilot-ng-sdl-window-fix.patch
+    ./xpilot-ng-gcc-15-fix.patch
   ];
 
   meta = {
