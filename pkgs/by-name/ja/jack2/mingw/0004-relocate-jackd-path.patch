@@ -1,0 +1,23 @@
+--- a/windows/JackWinServerLaunch.cpp
++++ b/windows/JackWinServerLaunch.cpp
+@@ -154,7 +154,18 @@ static int start_server_aux(const char* server_name)
+ 	}
+ 
+     if (!good) {
+-		strcpy(buffer, JACK_LOCATION "/jackd.exe");
++        HMODULE libjack_handle = NULL;
++        GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
++                           reinterpret_cast<LPCSTR>(start_server_aux), &libjack_handle);
++        if (3 < GetModuleFileNameA(libjack_handle, buffer, MAX_PATH)) {
++            char *bindir = strrchr(buffer, '\\');
++            if (bindir && (bindir != buffer)) {
++                *bindir = '\0';
++            }
++            strcat(buffer, "\\jackd.exe");
++        }
++        else
++            strcpy(buffer, "jackd.exe");
+ 		command = (char*)malloc((strlen(buffer))+1);
+ 		strcpy(command, buffer);
+         strncpy(arguments, "jackd.exe -S -d " JACK_DEFAULT_DRIVER, 255);
+

@@ -1,0 +1,12 @@
+--- a/wscript
++++ b/wscript
+@@ -224,7 +224,7 @@ def configure(conf):
+         conf.env.append_unique('CCDEFINES', '_POSIX')
+         conf.env.append_unique('CXXDEFINES', '_POSIX')
+         if Options.options.platform in ('msys', 'win32'):
+-            conf.env.append_value('INCLUDES', ['/mingw64/include'])
++            #conf.env.append_value('INCLUDES', ['/mingw64/include'])
+             conf.check(
+                 header_name='pa_asio.h',
+                 msg='Checking for PortAudio ASIO support',
+

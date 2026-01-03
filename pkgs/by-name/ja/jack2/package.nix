@@ -2,12 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   pkg-config,
   python3Packages,
   makeWrapper,
+  db,
+  readline,
+  libopus,
+  libsndfile,
   libsamplerate,
+  portaudio,
   wafHook,
+  libsystre,
+  windows,
   # Darwin Dependencies
   aften,
 
@@ -66,6 +72,22 @@ stdenv.mkDerivation (finalAttrs: {
     optLibffado
     optAlsaLib
   ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    # MSYS2's mingw-w64-jack2 depends on mingw-w64-portaudio.
+    portaudio
+    # MSYS2's mingw-w64-jack2 depends on mingw-w64-libsystre (POSIX regex API wrapper).
+    libsystre
+    # MSYS2's mingw-w64-jack2 depends on mingw-w64-db for JACK metadata support.
+    db
+    # MSYS2's mingw-w64-jack2 depends on mingw-w64-readline (used by tooling / interactive UX).
+    readline
+    # MSYS2's mingw-w64-jack2 depends on mingw-w64-opus (NetJACK Opus encoding support).
+    libopus
+    # MSYS2's mingw-w64-jack2 depends on mingw-w64-libsndfile (optional tooling / file I/O paths).
+    libsndfile
+    # Some parts of jack2 link against pthreads on MinGW; provide -lpthread and pthread.h.
+    windows.pthreads
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     aften
   ]
@@ -73,14 +95,18 @@ stdenv.mkDerivation (finalAttrs: {
     freebsd.libsysinfo
   ];
 
-  patches = [
-    (fetchpatch2 {
-      # Python 3.12 support
-      name = "jack2-waf2.0.26.patch";
-      url = "https://github.com/jackaudio/jack2/commit/250420381b1a6974798939ad7104ab1a4b9a9994.patch";
-      hash = "sha256-M/H72lLTeddefqth4BSkEfySZRYMIzLErb7nIgVN0u8=";
-    })
-  ];
+  patches =
+    # waf upstream uses the removed `imp` module; fix for Python 3.13+.
+    # This is not MinGW-specific; apply unconditionally.
+    [ ./mingw/0005-fix-new-python.patch ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      ./mingw/0001-wscript-remove-hardcoded-includedir.patch
+      ./mingw/0002-fix-format-security.patch
+      ./mingw/0003-relocate-plugins-libdir.patch
+      ./mingw/0004-relocate-jackd-path.patch
+      ./mingw/0006-missing-dllexport.patch
+      ./mingw/0007-unknown-autoimport-option-clang.patch
+    ];
 
   postPatch = ''
     patchShebangs --build svnversion_regenerate.sh
@@ -95,7 +121,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (optAlsaLib != null) "--alsa"
   ++ lib.optional (
     stdenv.hostPlatform != stdenv.buildPlatform
-  ) "--platform=${stdenv.hostPlatform.parsed.kernel.name}";
+  ) "--platform=${
+    # MSYS2 uses --platform=win32 for mingw-w64.
+    if stdenv.hostPlatform.isMinGW then "win32" else stdenv.hostPlatform.parsed.kernel.name
+  }";
+
+  env = {
+    # MSYS2 sets WAF_NO_PREFORK=1 for reproducible builds; keep the same behavior.
+    WAF_NO_PREFORK = lib.optionalString stdenv.hostPlatform.isMinGW "1";
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMinGW "-lpthread";
+  };
 
   postInstall = (
     if libOnly then
@@ -121,7 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://jackaudio.org";
     license = lib.licenses.gpl2Plus;
     pkgConfigModules = [ "jack" ];
-    platforms = lib.platforms.unix;
+    # MSYS2 provides a mingw-w64-jack2 package.
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = [ ];
   };
 })

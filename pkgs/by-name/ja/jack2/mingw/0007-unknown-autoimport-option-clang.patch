@@ -1,0 +1,30 @@
+--- a/common/wscript
++++ b/common/wscript
+@@ -178,7 +178,7 @@
+         clientlib.env['implib_PATTERN'] = 'lib%s.dll.a'
+         if staticbuild:
+             clientlib.env['SHLIB_MARKER'] = ''
+-        clientlib.env.append_value('LINKFLAGS', ['-static-libstdc++', '--disable-auto-import'])
++        #clientlib.env.append_value('LINKFLAGS', ['-static-libstdc++', '--disable-auto-import'])
+         clientlib.env.append_value('LINKFLAGS', ['-Wl,--output-def,lib%s.def' % clientlib.target])
+         bld.install_files(clientlib.install_path, [os.path.join(buildbindir, 'lib%s.def' % clientlib.target)])
+ 
+@@ -262,7 +262,7 @@
+         serverlib.env['implib_PATTERN'] = 'lib%s.dll.a'
+         if staticbuild:
+             serverlib.env['SHLIB_MARKER'] = ''
+-        serverlib.env.append_value('LINKFLAGS', ['-static-libstdc++', '--disable-auto-import'])
++        #serverlib.env.append_value('LINKFLAGS', ['-static-libstdc++', '--disable-auto-import'])
+         serverlib.env.append_value('LINKFLAGS', ['-Wl,--output-def,lib%s.def' % serverlib.target])
+         bld.install_files(serverlib.install_path, [os.path.join(buildbindir, 'lib%s.def' % serverlib.target)])
+     serverlib.source = [] + common_libsources
+@@ -378,7 +378,7 @@
+             netlib.env['implib_PATTERN'] = 'lib%s.dll.a'
+             if staticbuild:
+                 netlib.env['SHLIB_MARKER'] = ''
+-            netlib.env.append_value('LINKFLAGS', ['-static-libstdc++', '--disable-auto-import'])
++            #netlib.env.append_value('LINKFLAGS', ['-static-libstdc++', '--disable-auto-import'])
+             netlib.env.append_value('LINKFLAGS', ['-Wl,--output-def,lib%s.def' % netlib.target])
+             bld.install_files(netlib.install_path, [os.path.join(buildbindir, 'lib%s.def' % netlib.target)])
+         elif not bld.env['IS_MACOSX']:
+

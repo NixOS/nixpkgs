@@ -1,0 +1,9 @@
+--- a/windows/JackWinNamedPipeServerChannel.cpp
++++ b/windows/JackWinNamedPipeServerChannel.cpp
+@@ -1,7 +1,7 @@
+ int JackWinNamedPipeServerChannel::Open(const char* server_name, JackServer* server)
+ {
+     jack_log("JackWinNamedPipeServerChannel::Open");
+-    snprintf(fServerName, sizeof(fServerName), server_name);
++    snprintf(fServerName, sizeof(fServerName), "%s", server_name);
+ 

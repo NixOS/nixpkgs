@@ -1,0 +1,21 @@
+--- jack2-1.9.22/waflib/Context.py.orig	2023-02-02 12:04:10.000000000 +0100
++++ jack2-1.9.22/waflib/Context.py	2025-07-18 11:14:00.319286900 +0200
+@@ -6,7 +6,7 @@
+ Classes and functions enabling the command system
+ """
+ 
+-import os, re, imp, sys
++import os, re, types, sys
+ from waflib import Utils, Errors, Logs
+ import waflib.Node
+ 
+@@ -660,7 +660,7 @@
+ 	except KeyError:
+ 		pass
+ 
+-	module = imp.new_module(WSCRIPT_FILE)
++	module = types.ModuleType(name=WSCRIPT_FILE)
+ 	try:
+ 		code = Utils.readf(path, m='r', encoding=encoding)
+ 	except EnvironmentError:
+

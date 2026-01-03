@@ -1,0 +1,27 @@
+--- a/common/JackDriverLoader.cpp
++++ b/common/JackDriverLoader.cpp
+@@ -49,13 +49,17 @@ static wchar_t* locate_dll_driver_dir()
+     // For WIN32 ADDON_DIR is defined in JackConstants.h as relative path
+     wchar_t driver_dir_storage[512];
+     if (3 < GetModuleFileNameW(libjack_handle, driver_dir_storage, 512)) {
+-        wchar_t *p = wcsrchr(driver_dir_storage, L'\\');
+-        if (p && (p != driver_dir_storage)) {
+-            *p = 0;
+-        }   
+-        jack_info("Drivers/internals found in : %S", driver_dir_storage);
+-        wcscat(driver_dir_storage, L"\\");
++        wchar_t *bindir = wcsrchr(driver_dir_storage, L'\\');
++        if (bindir && (bindir != driver_dir_storage)) {
++            *bindir = L'\0';
++        }
++        wchar_t *prefix = wcsrchr(driver_dir_storage, L'\\');
++        if (prefix && (prefix != driver_dir_storage)) {
++            *prefix = L'\0';
++        }
++        wcscat(driver_dir_storage, L"\\lib\\");
+         wcscat(driver_dir_storage, ADDON_DIRW);
++        jack_info("Drivers/internals found in : %S", driver_dir_storage);
+         return wcsdup(driver_dir_storage);
+     } else {
+         jack_error("Cannot get JACK dll directory : %d", GetLastError());
+
