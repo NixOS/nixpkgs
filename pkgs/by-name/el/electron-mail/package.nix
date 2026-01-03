@@ -38,7 +38,10 @@ let
     mainProgram = "electron-mail";
     homepage = "https://github.com/vladimiry/ElectronMail";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.princemachiavelli ];
+    maintainers = with lib.maintainers; [
+      princemachiavelli
+      BatteredBunny
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
