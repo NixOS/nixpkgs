@@ -1432,9 +1432,27 @@ rec {
     :::
   */
   escapeNixIdentifier =
+    let
+      # see https://nix.dev/manual/nix/2.26/language/identifiers#keywords
+      nixKeywords = [
+        "assert"
+        "else"
+        "if"
+        "in"
+        "inherit"
+        "let"
+        "or"
+        "rec"
+        "then"
+        "with"
+      ];
+    in
     s:
     # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
-    if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null then s else escapeNixString s;
+    if (match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null) && (!lib.elem s nixKeywords) then
+      s
+    else
+      escapeNixString s;
 
   /**
     Escapes a string `s` such that it is safe to include verbatim in an XML
