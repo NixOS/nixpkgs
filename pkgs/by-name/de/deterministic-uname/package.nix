@@ -35,6 +35,8 @@ replaceVarsWith {
         "Darwin" # darwin isn't in host-os.m4 so where does this come from?
       else if forPlatform.isFreeBSD then
         "FreeBSD"
+      else if forPlatform.isCygwin then
+        "Cygwin"
       else
         "unknown";
 

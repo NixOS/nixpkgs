@@ -81,6 +81,6 @@ buildPythonPackage rec {
     description = "Data utilities for Machine Learning pipelines";
     homepage = "https://github.com/mindsdb/dataprep_ml";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

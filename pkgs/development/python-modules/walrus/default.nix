@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/coleifer/walrus";
     changelog = "https://github.com/coleifer/walrus/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }
