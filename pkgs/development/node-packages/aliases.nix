@@ -158,6 +158,7 @@ mapAliases {
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
   inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
+  elasticdump = throw "'elasticdump' has been removed because it was unmaintained in nixpkgs"; # Added 2025-12-26
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
   elm-oracle = throw "'elm-oracle' has been removed, since it doesn't work with modern versions of Elm."; # Added 2025-11-07
