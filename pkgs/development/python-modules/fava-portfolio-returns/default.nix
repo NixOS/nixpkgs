@@ -3,7 +3,6 @@
   buildPythonPackage,
   buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
   fava,
   hatch-vcs,
   hatchling,
@@ -71,16 +70,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "fava_portfolio_returns" ];
 
-  # Stay in the root of the repository, so that relative paths to example files
-  # loaded by tests stay correct.
-  # Remove `src` to avoid `PYTHONPATH` issues related to `pytestCheckHook` ([1])
+  # Use importlib import mode to avoid `PYTHONPATH` issues related to `pytestCheckHook` ([1])
   # [1]: https://github.com/NixOS/nixpkgs/issues/255262
-  preCheck = ''
-    rm -rf src
-  '';
-
   pytestFlags = [
-    "${placeholder "out"}"
+    "--import-mode=importlib"
   ];
 
   passthru = {
