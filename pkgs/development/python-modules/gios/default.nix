@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "7.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "bieniu";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for getting air quality data from GIOS";
     homepage = "https://github.com/bieniu/gios";
-    changelog = "https://github.com/bieniu/gios/releases/tag/${version}";
+    changelog = "https://github.com/bieniu/gios/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
