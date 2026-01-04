@@ -20,7 +20,6 @@
   pbr,
   prettytable,
   python,
-  pythonOlder,
   pyyaml,
   setuptools,
   stestr,
@@ -40,6 +39,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-ddm1OE7BDwDM4T9GIB0+qK8WvU/+aC+FBIGWDm3ObHM=";
   };
+
+  postPatch = ''
+    substituteInPlace tempest/lib/common/http.py \
+      --replace-fail 'getheaders()' 'headers'
+  '';
 
   pythonRelaxDeps = [ "defusedxml" ];
 
@@ -84,9 +88,6 @@ buildPythonPackage rec {
     chmod +x bin/*
 
     stestr --test-path tempest/tests run -e <(echo "
-      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_load_json_resource_list
-      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_load_json_saved_state
-      tempest.tests.cmd.test_cleanup.TestTempestCleanup.test_take_action_got_exception
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
     ")
   '';
