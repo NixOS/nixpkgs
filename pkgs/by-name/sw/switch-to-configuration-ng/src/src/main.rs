@@ -1158,19 +1158,19 @@ won't take effect until you reboot the system.
     let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
     let finished_jobs = Rc::new(RefCell::new(HashMap::new()));
 
-    let systemd_reload_status = Rc::new(RefCell::new(false));
+    let systemd_is_reloading = Rc::new(RefCell::new(false));
 
     systemd
         .subscribe()
         .context("Failed to subscribe to systemd dbus messages")?;
 
-    let _systemd_reload_status = systemd_reload_status.clone();
+    let _systemd_is_reloading = systemd_is_reloading.clone();
     let reloading_token = systemd
         .match_signal(
             move |signal: OrgFreedesktopSystemd1ManagerReloading,
                   _: &LocalConnection,
                   _msg: &Message| {
-                *_systemd_reload_status.borrow_mut() = signal.active;
+                *_systemd_is_reloading.borrow_mut() = signal.active;
 
                 true
             },
@@ -1690,10 +1690,12 @@ won't take effect until you reboot the system.
     // just in case the new one has trouble communicating with the running pid 1.
     if restart_systemd {
         eprintln!("restarting systemd...");
+        *systemd_is_reloading.borrow_mut() = true;
         _ = systemd.reexecute(); // we don't get a dbus reply here
 
         log::debug!("waiting for systemd restart to finish");
-        while !*systemd_reload_status.borrow() {
+
+        while *systemd_is_reloading.borrow() {
             _ = dbus_conn
                 .process(Duration::from_millis(500))
                 .context("Failed to process dbus messages")?;
@@ -1706,9 +1708,11 @@ won't take effect until you reboot the system.
         .context("Failed to reset failed units")?;
 
     // Make systemd reload its units.
+    *systemd_is_reloading.borrow_mut() = true;
     _ = systemd.reload(); // we don't get a dbus reply here
     log::debug!("waiting for systemd reload to finish");
-    while !*systemd_reload_status.borrow() {
+
+    while *systemd_is_reloading.borrow() {
         _ = dbus_conn
             .process(Duration::from_millis(500))
             .context("Failed to process dbus messages")?;
