@@ -436,13 +436,13 @@
     "vendorHash": "sha256-FcxAh8EOvnT8r1GHu0Oj2C5Jgbr2WPwD7/vY4/qIvTA="
   },
   "gitlabhq_gitlab": {
-    "hash": "sha256-XVOvtRj+MIrBtZQ6GJHOeLUu5Xjp6ZdGbRveXfZKEQc=",
+    "hash": "sha256-9NYlkXiUbUtTbaa4K2Ft+khPx6NlSQs9ZnzUf3Ms0K8=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v18.6.1",
+    "rev": "v18.7.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-/TJRnVktc1PwtlPgHuyAi/mUx16h7j5cCF9rhF8Goag="
+    "vendorHash": "sha256-TPyvNpTwTMcysG4kGeRuu+H5hR3/By69vyNuWodnKVg="
   },
   "go-gandi_gandi": {
     "hash": "sha256-fsCtmwyxkXfOtiZG27VEb010jglK35yr4EynnUWlFog=",
@@ -1004,13 +1004,13 @@
     "vendorHash": "sha256-CZo/GLUwmq/TxRDQr2h49rqENB24Zt4M7k5t7epXHuE="
   },
   "okta_okta": {
-    "hash": "sha256-2PiDzxS+O9iIqLxIfFGwfBLYP4f79m82tIBI2GeBUDs=",
+    "hash": "sha256-844cF3pAIegwOBhCwLmEaKZCGjgPnJry1DduXNfL8mg=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v6.5.2",
+    "rev": "v6.5.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-fPv5fezuiVNXCa8IedyaH1cnjMzEOiA7gl/r5K7cX3A="
+    "vendorHash": "sha256-XW0D9lsSkLyVPZQW+LmXrDoAeeYw337fAmU6GEZcMt0="
   },
   "oktadeveloper_oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",

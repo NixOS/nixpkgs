@@ -16648,12 +16648,6 @@
     githubId = 613740;
     name = "Martin Baillie";
   };
-  mbalatsko = {
-    email = "mbalatsko@gmail.com";
-    github = "mbalatsko";
-    githubId = 15967073;
-    name = "Maksym Balatsko";
-  };
   mbbx6spp = {
     email = "me@susanpotter.net";
     github = "mbbx6spp";
@@ -18066,6 +18060,12 @@
     github = "muscaln";
     githubId = 96225281;
     name = "Mustafa Çalışkan";
+  };
+  mushrowan = {
+    email = "roarch@proton.me";
+    name = "Rowan";
+    github = "mushrowan";
+    githubId = 69822445;
   };
   musjj = {
     name = "musjj";

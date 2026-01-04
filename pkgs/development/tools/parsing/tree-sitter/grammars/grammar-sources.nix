@@ -557,6 +557,12 @@
     version = "0-unstable-2025-02-17";
     url = "github:tris203/tree-sitter-razor/fe46ce5ea7d844e53d59bc96f2175d33691c61c5";
     hash = "sha256-E4fgy588g6IP258TS2DvoILc1Aikvpfbtq20VIhBE4U=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        tris203
+      ];
+    };
   };
 
   regex = {

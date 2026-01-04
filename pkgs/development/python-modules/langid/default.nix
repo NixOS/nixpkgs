@@ -33,6 +33,6 @@ buildPythonPackage rec {
     mainProgram = "langid";
     homepage = "https://pypi.org/project/langid/";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

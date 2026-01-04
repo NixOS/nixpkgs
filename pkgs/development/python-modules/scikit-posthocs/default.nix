@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/maximtrp/scikit-posthocs";
     changelog = "https://github.com/maximtrp/scikit-posthocs/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }
