@@ -305,17 +305,6 @@ in
                 type = nullOr str;
               };
             };
-            config_provider = mkOption {
-              description = ''
-                Source of truth of users.
-                DO NOT change this, Warpgate only implemented database provider.
-              '';
-              default = "database";
-              type = enum [
-                "file"
-                "database"
-              ];
-            };
           };
         };
         default = { };
@@ -379,6 +368,10 @@ in
         {
           assertion = !((cfg.databaseUrlFile == null) && (cfg.settings.database_url == null));
           message = "Either databaseUrlFile or settings.database_url must be set; Set the other to null.";
+        }
+        {
+          assertion = !(lib.hasAttr "config_provider" cfg.settings);
+          message = "`services.warpgate.settings.config_provider` is a legacy option that has been removed since 0.14.0. Please do not set this option.";
         }
       ];
 
