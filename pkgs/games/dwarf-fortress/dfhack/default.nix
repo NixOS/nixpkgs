@@ -157,6 +157,10 @@ stdenv.mkDerivation {
     mkdir -p .git/modules/library/xml
     touch .git/index .git/modules/library/xml/index
   '';
+postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.6 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10 FATAL_ERROR)"
+  '';
 
   cmakeFlags = [
     # Race condition in `Generating codegen.out.xml and df/headers` that is fixed when using Ninja.
