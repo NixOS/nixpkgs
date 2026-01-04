@@ -7,27 +7,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kakasi";
   version = "2.3.6";
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
-
-  meta = {
-    description = "Kanji Kana Simple Inverter";
-    longDescription = ''
-      KAKASI is the language processing filter to convert Kanji
-      characters to Hiragana, Katakana or Romaji and may be
-      helpful to read Japanese documents.
-    '';
-    homepage = "http://kakasi.namazu.org/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
-  };
-
   src = fetchurl {
-    url = "http://kakasi.namazu.org/stable/kakasi-${version}.tar.xz";
+    url = "http://kakasi.namazu.org/stable/kakasi-${finalAttrs.version}.tar.xz";
     sha256 = "1qry3xqb83pjgxp3my8b1sy77z4f0893h73ldrvdaky70cdppr9f";
   };
 
@@ -38,6 +23,9 @@ stdenv.mkDerivation rec {
     })
     ./gettext-0.25.patch
   ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   env = lib.optionalAttrs (!stdenv.cc.isClang) {
     NIX_CFLAGS_COMPILE = "-std=gnu17";
@@ -52,4 +40,15 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 1 of 6 tests
 
-}
+  meta = {
+    description = "Kanji Kana Simple Inverter";
+    longDescription = ''
+      KAKASI is the language processing filter to convert Kanji
+      characters to Hiragana, Katakana or Romaji and may be
+      helpful to read Japanese documents.
+    '';
+    homepage = "http://kakasi.namazu.org/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+  };
+})
