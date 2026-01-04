@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "orbiton";
-  version = "2.70.0";
+  version = "2.70.4";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
     tag = "v${version}";
-    hash = "sha256-3EAYPCNVQiED8qHyLbwyYU7gXJn2TFgiJ2/JyxyD7+M=";
+    hash = "sha256-cdaYD6PyOjgBo83eWD2+YWQj5uJzmeHDo67dlA7Pj1g=";
   };
 
   vendorHash = null;
@@ -33,9 +33,14 @@ buildGoModule rec {
 
   preBuild = "cd v2";
 
-  checkFlags = [
-    "-skip=TestPBcopy" # Requires impure pbcopy and pbpaste
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestPBcopy" # Requires impure pbcopy and pbpaste
+        "TestPkill" # error: no process named "sleep" found
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     cd ..

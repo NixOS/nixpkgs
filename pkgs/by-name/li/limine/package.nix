@@ -116,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
       lzcunt
       prince213
       programmerlexi
-      surfaceflinger
       ryand56
     ];
   };

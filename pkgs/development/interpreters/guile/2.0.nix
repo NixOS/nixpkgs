@@ -116,6 +116,10 @@ builder rec {
     "--without-threads"
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
   ''
