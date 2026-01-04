@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "we10xos-cursors";
-  version = "0-unstable-2026-01-02";
+  version = "0-unstable-2020-11-03";
 
   src = fetchFromGitHub {
     owner = "yeyushengfan258";
