@@ -81,7 +81,7 @@ body:
       options:
         - label: "I assert that this backport does not yet exist in an [open pull request](https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+in%3Atitle+backport)."
           required: true
-        - label: "I assert that this is not a [duplicate of any known issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+label%3A%229.needs%3A+port+to+stable%22+)."
+        - label: "I assert that this is not a [duplicate of any known issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+label%3A%229.needs%3A+port+to+stable%22+)."
           required: true
         - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
           required: true
