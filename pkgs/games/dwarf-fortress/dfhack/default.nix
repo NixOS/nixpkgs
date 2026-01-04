@@ -157,9 +157,11 @@ stdenv.mkDerivation {
     mkdir -p .git/modules/library/xml
     touch .git/index .git/modules/library/xml/index
   '';
-postPatch = ''
+  postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.6 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10 FATAL_ERROR)"
+      --replace-fail "cmake_minimum_required(VERSION 3.6 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+
+    sed -i "1i #include <cstdint>" g_src/files.h
   '';
 
   cmakeFlags = [
