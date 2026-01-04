@@ -37,6 +37,8 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "LOCALE_ARCHIVE",
     "-E",
     "NIXOS_INSTALL_BOOTLOADER",
+    "-E",
+    "NIXOS_NO_CHECK",
     "--collect",
     "--no-ask-password",
     "--pipe",
