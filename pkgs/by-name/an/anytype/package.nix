@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_22,
   pkg-config,
   anytype-heart,
   libsecret,
@@ -31,6 +32,9 @@ buildNpmPackage (finalAttrs: {
   };
 
   npmDepsHash = "sha256-GIGqaB7GeLDtxr8rV19o/nBqIlkjlLF/pR/mwGSogQE=";
+
+  # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
+  nodejs = nodejs_22;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
