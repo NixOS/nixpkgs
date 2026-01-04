@@ -31,6 +31,57 @@ fn get_packument_url(registry: &str, package_name: &str) -> anyhow::Result<Url> 
         .map_err(|e| anyhow!("failed to construct packument URL: {e}"))
 }
 
+/// Normalize packument data to ensure determinism.
+///
+/// Strips volatile fields like `_rev`, `time`, and `modified`.
+/// Filters the `versions` map to only include versions requested in the lockfile.
+fn normalize_packument(
+    package_name: &str,
+    data: &[u8],
+    requested_versions: &HashSet<String>,
+) -> anyhow::Result<Vec<u8>> {
+    let mut json: Value = serde_json::from_slice(data)
+        .map_err(|e| anyhow!("failed to parse packument JSON for {package_name}: {e}"))?;
+
+    let obj = json
+        .as_object_mut()
+        .ok_or_else(|| anyhow!("packument for {package_name} is not a JSON object"))?;
+
+    // Strip volatile top-level fields
+    obj.remove("_rev");
+    obj.remove("time");
+    obj.remove("modified");
+
+    // Filter versions to only those in lockfile
+    if let Some(Value::Object(versions)) = obj.get_mut("versions") {
+        versions.retain(|version, _| requested_versions.contains(version));
+
+        // Normalize each version object
+        for version_val in versions.values_mut() {
+            if let Some(version_obj) = version_val.as_object_mut() {
+                // Strip fields starting with underscore (volatile/internal)
+                version_obj.retain(|key, _| !key.starts_with('_'));
+                // Strip other often-volatile fields
+                version_obj.remove("gitHead");
+            }
+        }
+    }
+
+    // Filter dist-tags to only point to versions we kept
+    if let Some(Value::Object(tags)) = obj.get_mut("dist-tags") {
+        tags.retain(|_, version_val| {
+            if let Some(version) = version_val.as_str() {
+                requested_versions.contains(version)
+            } else {
+                false
+            }
+        });
+    }
+
+    serde_json::to_vec(&json)
+        .map_err(|e| anyhow!("failed to re-serialize packument for {package_name}: {e}"))
+}
+
 /// Fetch and cache packuments (package metadata) for all packages.
 ///
 /// This is needed because npm may query package metadata for optional peer dependencies
@@ -43,60 +94,68 @@ fn get_packument_url(registry: &str, package_name: &str) -> anyhow::Result<Url> 
 ///
 /// We cache both versions to ensure cache hits regardless of which header npm uses.
 /// See: pacote/lib/registry.js and @npmcli/arborist/lib/arborist/build-ideal-tree.js
-fn fetch_packuments(cache: &Cache, package_names: HashSet<String>) -> anyhow::Result<()> {
+fn fetch_packuments(
+    cache: &Cache,
+    package_versions: HashMap<String, HashSet<String>>,
+) -> anyhow::Result<()> {
     const CORGI_DOC: &str =
         "application/vnd.npm.install-v1+json; q=1.0, application/json; q=0.8, */*";
     const FULL_DOC: &str = "application/json";
 
-    info!("Fetching {} packuments", package_names.len());
+    info!("Fetching {} packuments", package_versions.len());
 
-    package_names.into_par_iter().try_for_each(|package_name| {
-        let packument_url = get_packument_url("https://registry.npmjs.org", &package_name)?;
+    package_versions
+        .into_par_iter()
+        .try_for_each(|(package_name, requested_versions)| {
+            let packument_url = get_packument_url("https://registry.npmjs.org", &package_name)?;
 
-        match util::get_url_body_with_retry(&packument_url) {
-            Ok(packument_data) => {
-                // npm's make-fetch-happen uses the URL-encoded form for cache keys
-                // e.g., "https://registry.npmjs.org/@types%2freact-dom" not "@types/react-dom"
-                // We must use the encoded form in both the cache key string AND the metadata URL
+            match util::get_url_body_with_retry(&packument_url) {
+                Ok(packument_data) => {
+                    let normalized_data =
+                        normalize_packument(&package_name, &packument_data, &requested_versions)?;
 
-                // Cache with corgiDoc header (for initial requests)
-                cache
-                    .put(
-                        format!("make-fetch-happen:request-cache:{packument_url}"),
-                        packument_url.clone(),
-                        &packument_data,
-                        None, // Packuments don't have integrity hashes
-                        Some(ReqHeaders {
-                            accept: String::from(CORGI_DOC),
-                        }),
-                    )
-                    .map_err(|e| {
-                        anyhow!("couldn't insert packument cache entry (corgi) for {package_name}: {e:?}")
-                    })?;
+                    // npm's make-fetch-happen uses the URL-encoded form for cache keys
+                    // e.g., "https://registry.npmjs.org/@types%2freact-dom" not "@types/react-dom"
+                    // We must use the encoded form in both the cache key string AND the metadata URL
 
-                // Cache with fullDoc header (for workspace/full metadata requests)
-                cache
-                    .put(
-                        format!("make-fetch-happen:request-cache:{packument_url}"),
-                        packument_url.clone(),
-                        &packument_data,
-                        None,
-                        Some(ReqHeaders {
-                            accept: String::from(FULL_DOC),
-                        }),
-                    )
-                    .map_err(|e| {
-                        anyhow!("couldn't insert packument cache entry (full) for {package_name}: {e:?}")
-                    })?;
+                    // Cache with corgiDoc header (for initial requests)
+                    cache
+                        .put(
+                            format!("make-fetch-happen:request-cache:{packument_url}"),
+                            packument_url.clone(),
+                            &normalized_data,
+                            None, // Packuments don't have integrity hashes
+                            Some(ReqHeaders {
+                                accept: String::from(CORGI_DOC),
+                            }),
+                        )
+                        .map_err(|e| {
+                            anyhow!("couldn't insert packument cache entry (corgi) for {package_name}: {e:?}")
+                        })?;
+
+                    // Cache with fullDoc header (for workspace/full metadata requests)
+                    cache
+                        .put(
+                            format!("make-fetch-happen:request-cache:{packument_url}"),
+                            packument_url.clone(),
+                            &normalized_data,
+                            None,
+                            Some(ReqHeaders {
+                                accept: String::from(FULL_DOC),
+                            }),
+                        )
+                        .map_err(|e| {
+                            anyhow!("couldn't insert packument cache entry (full) for {package_name}: {e:?}")
+                        })?;
+                }
+                Err(e) => {
+                    // Log but don't fail - some packages might not need packuments
+                    info!("Warning: couldn't fetch packument for {package_name}: {e}");
+                }
             }
-            Err(e) => {
-                // Log but don't fail - some packages might not need packuments
-                info!("Warning: couldn't fetch packument for {package_name}: {e}");
-            }
-        }
 
-        Ok::<_, anyhow::Error>(())
-    })
+            Ok::<_, anyhow::Error>(())
+        })
 }
 
 /// `fixup_lockfile` rewrites `integrity` hashes to match cache and removes the `integrity` field from Git dependencies.
@@ -330,12 +389,24 @@ fn main() -> anyhow::Result<()> {
     let cache = Cache::new(out.join("_cacache"));
     cache.init()?;
 
-    // Collect unique package names for packument fetching
-    // Extract from lockfile keys like "node_modules/@scope/name" -> "@scope/name"
-    let package_names: HashSet<String> = packages
-        .iter()
-        .filter_map(|p| p.name.rsplit_once("node_modules/").map(|(_, n)| n.to_string()))
-        .collect();
+    // Collect package names and their versions from the lockfile for packument filtering.
+    // For non-aliased packages: extract from lockfile keys like "node_modules/@scope/name" -> "@scope/name"
+    // For aliased packages: the name is already the real package name (e.g., "string-width" not "string-width-cjs")
+    // We only care about packages that have a version string (registry packages).
+    let mut package_versions: HashMap<String, HashSet<String>> = HashMap::new();
+    for p in &packages {
+        if let Some(version) = &p.version {
+            let pkg_name = p
+                .name
+                .rsplit_once("node_modules/")
+                .map(|(_, name)| name.to_string())
+                .unwrap_or_else(|| p.name.clone());
+            package_versions
+                .entry(pkg_name)
+                .or_default()
+                .insert(version.to_string());
+        }
+    }
 
     // Fetch and cache tarballs
     packages.into_par_iter().try_for_each(|package| {
@@ -364,7 +435,7 @@ fn main() -> anyhow::Result<()> {
         .unwrap_or(1);
 
     if fetcher_version >= 2 {
-        fetch_packuments(&cache, package_names)?;
+        fetch_packuments(&cache, package_versions)?;
         fs::write(out.join(".fetcher-version"), format!("{fetcher_version}"))?;
     }
 
