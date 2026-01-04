@@ -1,9 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
+  qt6,
+  R,
   copyDesktopItems,
-  libsForQt5,
   makeDesktopItem,
 }:
 
@@ -15,16 +16,17 @@ let
     inherit pname version;
     hash = "sha256-MZlR2Rap5oMRfCmswg9W//FYFkSEki7eyMNhLoGZgJM=";
   };
-  inherit (libsForQt5)
+  inherit (qt6)
     qtsvg
     wrapQtAppsHook
     ;
 in
-python3.pkgs.buildPythonApplication {
-  format = "setuptools";
+python3Packages.buildPythonApplication {
   inherit pname version src;
+  pyproject = true;
 
   nativeBuildInputs = [
+    R
     copyDesktopItems
     wrapQtAppsHook
   ];
@@ -33,20 +35,28 @@ python3.pkgs.buildPythonApplication {
     qtsvg
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    python-dateutil
-    markdown2
-    matplotlib
+  dependencies = with python3Packages; [
+    pyqt6
     numpy
-    pyenchant
-    pyqt5
-    setuptools
+    markdown2
+
+    # Optional
+    matplotlib # data visualization
+    pyenchant # spellchecker bindings
+    pip # python package installer
+    python-dateutil # extensions to standard datetime module
+    rpy2 # interface to R
+    plotnine # data visualization
+    openpyxl # r/w Excel 2010 xlsx/xlsm files
+
+    # Optional & not in nixpkgs
+    #py-moneyed # currency & money classes
+    #pycel # compile Excel spreadsheets to Python code
   ];
 
   strictDeps = true;
 
-  doCheck = false; # it fails miserably with a core dump
-
+  doCheck = true;
   pythonImportsCheck = [ "pyspread" ];
 
   desktopItems = [
@@ -56,7 +66,7 @@ python3.pkgs.buildPythonApplication {
       icon = "pyspread";
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
-      comment = "A Python-oriented spreadsheet application";
+      comment = "Python-oriented spreadsheet application";
       categories = [
         "Office"
         "Development"
@@ -64,6 +74,8 @@ python3.pkgs.buildPythonApplication {
       ];
     })
   ];
+
+  makeWrapperArgs = [ "--set R_HOME ${lib.getLib R}/lib/R" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -84,6 +96,7 @@ python3.pkgs.buildPythonApplication {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "pyspread";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Merikei ];
+    platforms = lib.platforms.linux;
   };
 }
