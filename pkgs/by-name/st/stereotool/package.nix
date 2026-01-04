@@ -5,6 +5,8 @@
   autoPatchelfHook,
   libX11,
   libXpm,
+  libXfixes,
+  jack2,
   alsa-lib,
   bzip2,
   zlib,
@@ -17,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stereotool";
-  version = "10.71";
+  version = "10.72";
 
   srcs =
     let
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
       (fetchurl {
         name = "stereo-tool-icon.png";
         url = "https://download.thimeo.com/stereo_tool_icon_${versionNoPoint}.png";
-        hash = "sha256-dcivH6Cc7pdQ99m80vS4E5mp/SHtTlNu1EHc+0ALIGM=";
+        hash = "sha256:0qr01d0gpp21sip56kpd47ysk68kp3sd5g6ryx89gvlwl0gszj3m";
       })
     ]
     ++ (
@@ -37,19 +39,19 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_64_${versionNoPoint}";
-            hash = "sha256-YDrB7MX2EbG9Eknx5XlOAaW/2sPTZzPIGXzFcwKGqK8=";
+            hash = "sha256:07rk25wbkjmc817plcjb0j32hmjnga4f4vqlqbdzfxkj4gd1ivpz";
           })
           # Jack version for 64bits.
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_64_${versionNoPoint}";
-            hash = "sha256-YDrB7MX2EbG9Eknx5XlOAaW/2sPTZzPIGXzFcwKGqK8=";
+            hash = "sha256:07rk25wbkjmc817plcjb0j32hmjnga4f4vqlqbdzfxkj4gd1ivpz";
           })
           # Cmd version for 64bits
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_cmd_64_${versionNoPoint}";
-            hash = "sha256-+hm8G5jwgFqDzy7BsYSfJh3x9asx7voc4NdIqkBDGmE=";
+            hash = "sha256:0jbd5fapcdni4c5x8r4n06yxphrs8lxpswmv998wkqxfscb06n7z";
           })
         ];
         # Sources if the system is aarch64-linux
@@ -57,17 +59,17 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_pi2_64_${versionNoPoint}";
-            hash = "sha256-nr3VlRpWELe4vlaKenPa3ZtOHjD66BXbGDd2WjTI70E=";
+            hash = "sha256:05kjghnwzmahb9ib52ksynrkp8vpbmsigvhfjmbffksjmics8714";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_pi2_64_${versionNoPoint}";
-            hash = "sha256-nr3VlRpWELe4vlaKenPa3ZtOHjD66BXbGDd2WjTI70E=";
+            hash = "sha256:05kjghnwzmahb9ib52ksynrkp8vpbmsigvhfjmbffksjmics8714";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_pi2_64_${versionNoPoint}";
-            hash = "sha256-QyJ/BulqWEIpGfbd6qGT4ejOtdVJ0/M2pEvJasRZUNE=";
+            hash = "sha256:0m8l4g3hifamg3pcp9wqv0y59x0sazzw5l907crbh75c7rrz14zq";
           })
         ];
         # Sources if the system is aarch32-linux
@@ -75,17 +77,17 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_pi2_${versionNoPoint}";
-            hash = "sha256-ryw4m08Ru2GI/Wq0UZwjmect7OAHaftfy+0J1S1bYh8=";
+            hash = "sha256:08169sjawi08fyc2anfbghg7bcpsgcg2y19a0vplzs8zbapn7adf";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_pi2_${versionNoPoint}";
-            hash = "sha256-ryw4m08Ru2GI/Wq0UZwjmect7OAHaftfy+0J1S1bYh8=";
+            hash = "sha256:08169sjawi08fyc2anfbghg7bcpsgcg2y19a0vplzs8zbapn7adf";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_pi2_${versionNoPoint}";
-            hash = "sha256-l9VWraDHJXfNJVb8/VvHENvdknT6ccPBmt/mGlwND00=";
+            hash = "sha256:0bmdg4k1rr9avvmzmqsax9lsv8gmz28whvwr81q8kl0yygvaqanf";
           })
         ];
         # Sources if the system is 32bits i686
@@ -94,17 +96,17 @@ stdenv.mkDerivation rec {
             # The name is the name of this source in the build directory
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_${versionNoPoint}";
-            hash = "sha256-OnGn/OUkXFZ4SnmibpF/0kxeq8YZIWMMVafy6i96GeA=";
+            hash = "sha256:188wj32am1g91h24wz0pdw9bdac9ymbpfnq6bnl49p4qw48a44j3";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_${versionNoPoint}";
-            hash = "sha256-OnGn/OUkXFZ4SnmibpF/0kxeq8YZIWMMVafy6i96GeA=";
+            hash = "sha256:188wj32am1g91h24wz0pdw9bdac9ymbpfnq6bnl49p4qw48a44j3";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_cmd_${versionNoPoint}";
-            hash = "sha256-GDpfSeL14XkvroIF6pm5CzNYiEz/v5uzfyjw+7K1idE=";
+            hash = "sha256:0qq6b6dnylm1anslfwqs6z096gnkfl9bkixmly9a8gbgzx6k8hvn";
           })
         ];
       }
@@ -157,6 +159,8 @@ stdenv.mkDerivation rec {
     zlib
     libXpm
     libgcc
+    libXfixes
+    jack2
   ];
 
   installPhase = ''
