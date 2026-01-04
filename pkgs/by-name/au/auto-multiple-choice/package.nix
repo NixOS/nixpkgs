@@ -98,7 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
     ''${makeWrapperArgs[@]} \
     --prefix PERL5LIB : $out/share/perl5 \
     --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
-    --prefix PATH : "$out/bin:${ghostscript}/bin:${netpbm}/bin" \
+    --prefix PATH : ${
+      lib.makeBinPath [
+        (placeholder "out")
+        ghostscript
+        netpbm
+      ]
+    } \
     --set TEXINPUTS ":.:$out/tex/latex"
   '';
 
