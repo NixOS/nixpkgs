@@ -353,6 +353,20 @@
             })
           ]
 
+      # Enable GHCi on LoongArch64 (not in upstream's hardcoded platform list)
+      ++ lib.optionals stdenv.targetPlatform.isLoongArch64 [
+        (
+          if lib.versionOlder version "9.10" then
+            ./ghc-9.6-hadrian-Enable-GHCi-on-all-platforms.patch
+          else if lib.versionOlder version "9.12" then
+            ./ghc-9.10-hadrian-Enable-GHCi-on-all-platforms.patch
+          else if lib.versionOlder version "9.14" then
+            ./ghc-9.12-hadrian-Enable-GHCi-on-all-platforms.patch
+          else
+            null
+        )
+      ]
+
       ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     stdenv = stdenvNoCC;
