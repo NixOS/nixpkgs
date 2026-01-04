@@ -3481,7 +3481,7 @@
   BIOS9 = {
     name = "NightFish";
     github = "BIOS9";
-    githubId = "15035908";
+    githubId = 15035908;
   };
   birdee = {
     name = "birdee";
