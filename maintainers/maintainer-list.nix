@@ -140,6 +140,12 @@
     github = "0xd61";
     githubId = 8351869;
   };
+  _0xMillyByte = {
+    email = "emilia.daelman@gmail.com";
+    name = "Emilia Daelman";
+    github = "0xMillyByte";
+    githubId = 48217459;
+  };
   _0xMRTT = {
     email = "0xMRTT@proton.me";
     name = "0xMRTT";
