@@ -19,9 +19,9 @@ buildNpmPackage rec {
 
   # `npm run build` tries installing clasp globally
   npmBuildScript = [ "compile" ];
-  # Remove dangling symlink of a dependency
+  # Remove dangling symlinks if they exist (npm prune may have already removed them)
   postInstall = ''
-    rm $out/lib/node_modules/@google/clasp/node_modules/.bin/sshpk-{verify,sign,conv}
+    rm -f $out/lib/node_modules/@google/clasp/node_modules/.bin/sshpk-{verify,sign,conv}
   '';
 
   meta = {
