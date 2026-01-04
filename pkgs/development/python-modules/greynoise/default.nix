@@ -77,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GreyNoise-Intelligence/pygreynoise";
     changelog = "https://github.com/GreyNoise-Intelligence/pygreynoise/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

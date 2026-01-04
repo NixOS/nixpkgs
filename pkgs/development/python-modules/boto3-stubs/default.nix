@@ -1096,7 +1096,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
-      mbalatsko
     ];
   };
 }

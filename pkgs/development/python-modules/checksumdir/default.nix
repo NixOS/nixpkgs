@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Simple package to compute a single deterministic hash of the file contents of a directory";
     homepage = "https://github.com/to-mc/checksumdir";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

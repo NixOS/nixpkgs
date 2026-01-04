@@ -55,7 +55,7 @@ let
         description = "Type annotations for aiobotocore ${serviceName}";
         homepage = "https://github.com/youtype/mypy_boto3_builder";
         license = lib.licenses.mit;
-        maintainers = with lib.maintainers; [ mbalatsko ];
+        maintainers = [ ];
       };
     };
 in

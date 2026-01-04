@@ -1111,6 +1111,6 @@ buildPythonPackage rec {
     description = "Type annotations for aiobotocore generated with mypy-boto3-builder";
     homepage = "https://pypi.org/project/types-aiobotocore/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

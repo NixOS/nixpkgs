@@ -56,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/claws/aioprometheus";
     changelog = "https://github.com/claws/aioprometheus/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }
