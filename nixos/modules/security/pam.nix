@@ -770,7 +770,11 @@ let
         rules =
           let
             autoOrderRules = lib.flip lib.pipe [
-              (lib.imap1 (index: rule: rule // { order = lib.mkDefault (10000 + index * 100); }))
+              (lib.imap1 (
+                index: rule:
+                assert lib.assertMsg (!rule ? order) "the 'order' option may not be set when using autoOrderRules";
+                rule // { order = lib.mkDefault (10000 + index * 100); }
+              ))
               (map (rule: lib.nameValuePair rule.name (removeAttrs rule [ "name" ])))
               lib.listToAttrs
             ];
