@@ -164,6 +164,8 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
     substituteInPlace depends/googletest/CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.8.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends/googletest/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
     substituteInPlace depends/googletest/googlemock/CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
   '';
