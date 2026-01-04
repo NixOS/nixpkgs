@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   qt6,
+  wrapGAppsHook3,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OMgxhb+9GdLK00nl/df9QiYYewr+YEjdX2KjQWvu1mk=";
   };
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     qt6.qtbase
@@ -39,6 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 ../icons/dsda-Launcher.desktop $out/share/applications/dsda-Launcher.desktop
     install -Dm444 ../icons/dsda-launcher.png $out/share/pixmaps/dsda-launcher.png
     runHook postInstall
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=(''${gappsWrapperArgs[@]})
   '';
 
   passthru.updateScript = nix-update-script { };
