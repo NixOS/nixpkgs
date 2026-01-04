@@ -11,13 +11,13 @@ buildGoModule rec {
   '';
 
   pname = "script_exporter";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "ricoberger";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fewhI47nfO95PXYUndaPFAXVyfQPWsoYy1J1pwd4SNs=";
+    hash = "sha256-TanhxXQYiMVkY89TfuzlHNrExe0u6FCPUlmuLgCN1RQ=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildGoModule rec {
     sed -i '/func TestHandler/a\\    t.Skip("skipped in Nix build")' prober/handler_test.go
   '';
 
-  vendorHash = "sha256-kzt84Zu24HJNaQeerx8M1YpMF4808K+/K6kVw5AbqVY=";
+  vendorHash = "sha256-g7Sd8rMqxFTNi3XsO05gyQ1d1icENx9FZthnGC2qQbM=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) script; };
 
