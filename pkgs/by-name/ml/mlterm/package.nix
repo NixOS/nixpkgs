@@ -251,5 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     mainProgram = desktopBinary;
+    # https://github.com/arakiken/mlterm/issues/157
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
