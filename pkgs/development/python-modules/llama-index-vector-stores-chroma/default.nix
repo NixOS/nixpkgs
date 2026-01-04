@@ -5,15 +5,12 @@
   fetchPypi,
   hatchling,
   llama-index-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-chroma";
   version = "0.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_chroma";
