@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   rustPlatform,
   libiconv,
 }:
@@ -12,9 +11,7 @@
 buildPythonPackage rec {
   pname = "evtx";
   version = "0.11.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omerbenamram";
@@ -42,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Bindings for evtx";
     homepage = "https://github.com/omerbenamram/pyevtx-rs";
-    changelog = "https://github.com/omerbenamram/pyevtx-rs/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/omerbenamram/pyevtx-rs/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }
