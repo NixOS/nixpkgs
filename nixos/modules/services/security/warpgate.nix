@@ -283,6 +283,14 @@ in
               };
             };
             log = {
+              format = mkOption {
+                description = "The format Warpgate emits logs in.";
+                default = "text";
+                type = enum [
+                  "text"
+                  "json"
+                ];
+              };
               retention = mkOption {
                 description = "How long Warpgate keep its logs.";
                 default = "7days";
