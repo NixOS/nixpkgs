@@ -112,10 +112,11 @@ in
     };
 
     system.build = {
+      finalImage = lib.warn "system.build.finalImage has been renamed to system.build.image" config.system.build.image;
 
       # intermediate system image without ESP
       intermediateImage =
-        (config.system.build.image.override {
+        (config.image.repart.image.override {
           # always disable compression for the intermediate image
           compression.enable = false;
         }).overrideAttrs
@@ -162,8 +163,8 @@ in
         );
 
       # final system image that is created from the intermediate image by injecting the UKI from above
-      finalImage =
-        (config.system.build.image.override {
+      image = lib.mkOverride 99 (
+        (config.image.repart.image.override {
           # continue building with existing intermediate image
           createEmpty = false;
         }).overrideAttrs
@@ -216,7 +217,8 @@ in
                 rm -v repart-output_orig.json
               '';
             }
-          );
+          )
+      );
     };
   };
 
