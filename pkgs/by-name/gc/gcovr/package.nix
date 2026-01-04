@@ -7,7 +7,7 @@
   gitMinimal,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "gcovr";
   version = "8.4";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gcovr";
     repo = "gcovr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-v3jNODYD9qa3mwttfuldhhIHrfR5LcsZ+WNWiOWb35E=";
   };
 
@@ -82,9 +82,9 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Python script for summarizing gcov data";
     homepage = "https://www.gcovr.com/";
-    changelog = "https://github.com/gcovr/gcovr/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/gcovr/gcovr/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "gcovr";
   };
-}
+})
