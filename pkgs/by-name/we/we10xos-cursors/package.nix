@@ -31,6 +31,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/yeyushengfan258/We10XOS-cursors";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ persn ];
   };
 }
