@@ -305,17 +305,6 @@ in
                 type = nullOr str;
               };
             };
-            config_provider = mkOption {
-              description = ''
-                Source of truth of users.
-                DO NOT change this, Warpgate only implemented database provider.
-              '';
-              default = "database";
-              type = enum [
-                "file"
-                "database"
-              ];
-            };
           };
         };
         default = { };
