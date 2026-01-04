@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://kakasi.namazu.org/stable/kakasi-${finalAttrs.version}.tar.xz";
-    sha256 = "1qry3xqb83pjgxp3my8b1sy77z4f0893h73ldrvdaky70cdppr9f";
+    hash = "sha256-LuV7GwPHT9V2bnQcOBICjvxzvA4L+Tpuf/IOtHAfPuM=";
   };
 
   patches = [
