@@ -7884,7 +7884,6 @@ with pkgs;
   openexr_2 = callPackage ../development/libraries/openexr/2.nix { };
 
   opencolorio = callPackage ../development/libraries/opencolorio { };
-  opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 
   openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
