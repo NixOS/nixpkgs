@@ -29457,6 +29457,12 @@
     githubId = 69384921;
     name = "ZeStig";
   };
+  zsuper = {
+    email = "piyushkumbhare10@gmail.com";
+    github = "zSuperx";
+    githubId = 130249145;
+    name = "Piyush Kumbhare";
+  };
   ztzg = {
     email = "dd@crosstwine.com";
     github = "ztzg";
