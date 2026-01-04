@@ -112,7 +112,6 @@ python3Packages.buildPythonApplication rec {
       ddgs
       docx2txt
       einops
-      extract-msg
       fake-useragent
       fastapi
       faster-whisper
@@ -126,7 +125,6 @@ python3Packages.buildPythonApplication rec {
       google-generativeai
       googleapis-common-protos
       httpx
-      iso-639
       itsdangerous
       langchain
       langchain-classic
@@ -156,7 +154,6 @@ python3Packages.buildPythonApplication rec {
       opentelemetry-instrumentation-httpx
       opentelemetry-instrumentation-aiohttp-client
       pandas
-      passlib
       peewee
       peewee-migrate
       pgvector
