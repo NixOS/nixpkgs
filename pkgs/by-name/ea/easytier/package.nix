@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false; # tests failed due to heavy rely on network
 
   passthru = {
-    tests = { inherit (nixosTests) easytier; };
+    tests = { inherit (nixosTests) easytier easytier-modular; };
     updateScript = nix-update-script { };
   };
 
