@@ -346,7 +346,8 @@ stdenv.mkDerivation (finalAttrs: {
     rapidcheck
   ];
 
-  doInstallCheck = true;
+  # Python splices are broken (https://github.com/NixOS/nixpkgs/issues/476822), causing build failure in `buildPackages.python3Packages.bcrypt`.
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
   mesonInstallCheckFlags = [
     "--suite=installcheck"
     "--print-errorlogs"
