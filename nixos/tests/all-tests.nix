@@ -1463,6 +1463,7 @@ in
   sudo = runTest ./sudo.nix;
   sudo-rs = runTest ./sudo-rs.nix;
   sunshine = runTest ./sunshine.nix;
+  super = runTest ./super.nix;
   suricata = runTest ./suricata.nix;
   suwayomi-server = import ./suwayomi-server.nix {
     inherit runTest;
