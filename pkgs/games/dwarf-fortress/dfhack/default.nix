@@ -197,10 +197,13 @@ stdenv.mkDerivation {
   ];
 
 NIX_CFLAGS_COMPILE = [
-  "-Wno-error=unused-result"
-  "-Wno-unused-result"
-  "-Wno-error=unused-variable"
-  "-Wno-error=deprecated-enum-enum-conversion"
+    "-Wno-error"
+    "-Wno-error=unused-result"
+    "-Wno-unused-result"
+    "-Wno-error=unused-variable"
+    "-Wno-unused-variable"
+    "-Wno-error=deprecated-enum-enum-conversion"
+    "-Wno-deprecated-enum-enum-conversion"
 ] ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
 
   preFixup = ''
