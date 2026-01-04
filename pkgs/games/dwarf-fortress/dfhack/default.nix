@@ -158,8 +158,8 @@ stdenv.mkDerivation {
     touch .git/index .git/modules/library/xml/index
   '';
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.6 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace library/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   cmakeFlags = [
