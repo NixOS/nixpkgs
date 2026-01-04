@@ -1241,6 +1241,7 @@ mapAliases {
   openbabel3 = openbabel; # Added 2025-09-17
   openbsdCross = throw "'openbsdCross' has been renamed to/replaced by 'openbsd'"; # Converted to throw 2025-10-27
   opencl-clang = throw "opencl-clang has been integrated into intel-graphics-compiler"; # Added 2025-09-10
+  opencolorio_1 = throw "'opencolorio_1' has been removed. Use opencolorio instead"; # Added 2026-01-03
   openconnect_gnutls = throw "'openconnect_gnutls' has been renamed to/replaced by 'openconnect'"; # Converted to throw 2025-10-27
   openexr_3 = throw "'openexr_3' has been renamed to/replaced by 'openexr'"; # Converted to throw 2025-10-27
   openhmd = throw "'openhmd' has been removed due to being unmaintained upstream"; # Added 2025-11-05

@@ -41,7 +41,7 @@ let
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-AKFPPfz5Cbk6fI0H6E3Q+KUvPW4YbVSKcQZUrJCyHeE=";
+    hash = "sha256-cnOhyaeoDXPaeRJnJpx1HcegWitcfMJe/vezxZ/zpFQ=";
     fetchSubmodules = true;
     fetchLFS = true;
   };

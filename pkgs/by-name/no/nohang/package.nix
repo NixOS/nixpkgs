@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nohang";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hakavlad";
     repo = "nohang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aRiBGnJHdtQ5euvJ4DSuCZO5i5OJVRiCesaatrIARmg=";
+    hash = "sha256-gCGjQoSxY/MprrcpdFrJ4VrsNyruqsUSPrHoy+R07Io=";
   };
 
   postPatch = ''
