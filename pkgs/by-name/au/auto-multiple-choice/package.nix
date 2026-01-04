@@ -24,6 +24,29 @@
   pkg-config,
   poppler,
 }:
+let
+  perlWithPackages = perl.withPackages (
+    p: with p; [
+      ArchiveZip
+      Cairo
+      CairoGObject
+      DBDSQLite
+      DBI
+      Glib
+      GlibObjectIntrospection
+      Gtk3
+      HashMerge
+      LocaleGettext
+      NetCUPS
+      OpenOfficeOODoc
+      PerlMagick
+      TextCSV
+      XMLParser
+      XMLSimple
+      XMLWriter
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "auto-multiple-choice";
   version = "1.7.0";
@@ -37,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   makeFlags = [
-    "PERLPATH=${perl}/bin/perl"
+    "PERLPATH=${perlWithPackages}/bin/perl"
     # We *need* to set DESTDIR as empty and use absolute paths below,
     # because the Makefile ignores PREFIX and MODSDIR is required to
     # be an absolute path to not trigger "portable distribution" check
@@ -73,28 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapProgram $out/bin/auto-multiple-choice \
     ''${makeWrapperArgs[@]} \
-    --prefix PERL5LIB : "${
-      with perlPackages;
-      makeFullPerlPath [
-        ArchiveZip
-        DBDSQLite
-        Cairo
-        CairoGObject
-        DBI
-        Glib
-        GlibObjectIntrospection
-        Gtk3
-        HashMerge
-        LocaleGettext
-        NetCUPS
-        OpenOfficeOODoc
-        PerlMagick
-        TextCSV
-        XMLParser
-        XMLSimple
-        XMLWriter
-      ]
-    }:"$out/share/perl5 \
+    --prefix PERL5LIB : $out/share/perl5 \
     --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
     --prefix PATH : "$out/bin:${ghostscript}/bin:${netpbm}/bin" \
     --set TEXINPUTS ":.:$out/tex/latex"
@@ -123,24 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
     opencv
     pango
     poppler
-  ]
-  ++ (with perlPackages; [
-    perl
-    ArchiveZip
-    Cairo
-    CairoGObject
-    DBDSQLite
-    DBI
-    Glib
-    GlibObjectIntrospection
-    Gtk3
-    LocaleGettext
-    PerlMagick
-    TextCSV
-    XMLParser
-    XMLSimple
-    XMLWriter
-  ]);
+    perlWithPackages
+  ];
 
   passthru = {
     tlType = "run";
