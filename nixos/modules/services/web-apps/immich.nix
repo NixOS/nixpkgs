@@ -78,7 +78,71 @@ in
     mediaLocation = mkOption {
       type = types.path;
       default = "/var/lib/immich";
-      description = "Directory used to store media files. If it is not the default, the directory has to be created manually such that the immich user is able to read and write to it.";
+      description = ''
+        Directory used to store media files. If it is not the default,
+        the directory has to be created manually such that the
+        immich user is able to read and write to it.
+      '';
+    };
+
+    mediaSubdirectories = mkOption {
+      type = types.submodule {
+        options = {
+          thumbs = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = ''
+              Custom location for thumbnail storage. Allows placing thumbnails
+              on a faster drive (e.g. SSD) than the main media storage.
+              When set to `null`, thumbnails are stored in the default
+              subdirectory under {option}`mediaLocation`.
+            '';
+          };
+          encodedVideo = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = ''
+              Custom location for transcoded video storage. Allows placing
+              encoded videos on a faster drive. When set to `null`, encoded
+              videos are stored in the default subdirectory under
+              {option}`mediaLocation`.
+            '';
+          };
+          profile = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = ''
+              Custom location for profile picture storage. When set to `null`,
+              profile pictures are stored in the default subdirectory under
+              {option}`mediaLocation`.
+            '';
+          };
+          backups = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = ''
+              Custom location for database backup storage. When set to `null`,
+              backups are stored in the default subdirectory under
+              {option}`mediaLocation`.
+            '';
+          };
+          library = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = ''
+              Custom location for original media files after storage template
+              is applied. When set to `null`, library files are stored in the
+              default subdirectory under {option}`mediaLocation`.
+            '';
+          };
+        };
+      };
+      default = { };
+      description = ''
+        Custom locations for media subdirectories. Each option allows placing
+        specific types of files on different drives. When a subdirectory option
+        is set to `null`, it uses the default location under {option}`mediaLocation`.
+      '';
     };
     environment = mkOption {
       type = types.submodule { freeformType = types.attrsOf types.str; };
@@ -455,18 +519,42 @@ in
     };
 
     systemd.tmpfiles.settings = {
-      immich = {
+      immich =
+        let
+          dirEntry = {
+            e = {
+              user = cfg.user;
+              group = cfg.group;
+              mode = "0700";
+            };
+          };
+          symlinkEntry = target: {
+            L = {
+              argument = target;
+            };
+          };
+        in
         # Redundant to the `UMask` service config setting on new installs, but installs made in
         # early 24.11 created world-readable media storage by default, which is a privacy risk. This
         # fixes those installs.
-        "${cfg.mediaLocation}" = {
-          e = {
-            user = cfg.user;
-            group = cfg.group;
-            mode = "0700";
-          };
+        {
+          "${cfg.mediaLocation}" = dirEntry;
+        }
+        // lib.optionalAttrs (cfg.mediaSubdirectories.thumbs != null) {
+          "${cfg.mediaLocation}/thumbs" = symlinkEntry cfg.mediaSubdirectories.thumbs;
+        }
+        // lib.optionalAttrs (cfg.mediaSubdirectories.encodedVideo != null) {
+          "${cfg.mediaLocation}/encoded-video" = symlinkEntry cfg.mediaSubdirectories.encodedVideo;
+        }
+        // lib.optionalAttrs (cfg.mediaSubdirectories.profile != null) {
+          "${cfg.mediaLocation}/profile" = symlinkEntry cfg.mediaSubdirectories.profile;
+        }
+        // lib.optionalAttrs (cfg.mediaSubdirectories.backups != null) {
+          "${cfg.mediaLocation}/backups" = symlinkEntry cfg.mediaSubdirectories.backups;
+        }
+        // lib.optionalAttrs (cfg.mediaSubdirectories.library != null) {
+          "${cfg.mediaLocation}/library" = symlinkEntry cfg.mediaSubdirectories.library;
         };
-      };
     };
 
     users.users = mkIf (cfg.user == "immich") {
