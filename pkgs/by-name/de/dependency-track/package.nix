@@ -65,7 +65,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-HZK/o/RMbMj7OUfucizO5/LpJhwNhHfwbyvUOcO13dA=";
+  mvnHash = "sha256-Y4imt+eB9KrLN6f1X5CqYoj0FiGU/6ST79R5tK4rWw4=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 
