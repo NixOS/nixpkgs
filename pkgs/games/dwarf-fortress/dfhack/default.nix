@@ -168,6 +168,8 @@ stdenv.mkDerivation {
       --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
     substituteInPlace depends//clsocket/CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.8 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10 FATAL_ERROR)"
+    substituteInPlace depends/libexpat/expat/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.3)" "cmake_minimum_required(VERSION 3.10)"
     substituteInPlace depends/googletest/googlemock/CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
   '';
