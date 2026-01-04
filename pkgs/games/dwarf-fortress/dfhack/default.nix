@@ -127,6 +127,7 @@ stdenv.mkDerivation {
     # Use SDL_GetPrefPath since this takes XDG_DATA_HOME into account (which is correct).
     ++ optional (versionAtLeast version "52.02-r2") ./use-df-linux-dir.patch;
 
+
   # gcc 11 fix
   CXXFLAGS = optionalString (versionOlder version "0.47.05-r3") "-fpermissive";
 
@@ -195,10 +196,11 @@ stdenv.mkDerivation {
     "-DSTONESENSE_INTERNAL_SO=OFF"
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=deprecated-enum-enum-conversion"
-  ]
-  ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
+NIX_CFLAGS_COMPILE = [
+  "-Wno-error=unused-result"
+  "-Wno-unused-result"
+  "-Wno-error=deprecated-enum-enum-conversion"
+] ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
 
   preFixup = ''
     # Wrap dfhack scripts.
