@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     ./gettext-0.25.patch
   ];
 
+  env = lib.optionalAttrs (!stdenv.cc.isClang) {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   postPatch = ''
     for a in tests/kakasi-* ; do
       substituteInPlace $a \
