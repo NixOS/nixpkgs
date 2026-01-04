@@ -13,7 +13,6 @@
 , "dotenv-vault"
 , "elasticdump"
 , "esy"
-, "grunt-cli"
 , "gulp-cli"
 , "js-yaml"
 , "lcov-result-merger"
