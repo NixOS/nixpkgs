@@ -10,13 +10,17 @@
   prefetch-npm-deps,
   rsync,
   stdenv,
+  nodejs_22,
 }:
 let
   electron = electron_37;
+  nodejs = nodejs_22;
 in
 buildNpmPackage rec {
   pname = "super-productivity";
   version = "16.7.3";
+
+  inherit nodejs;
 
   src = fetchFromGitHub {
     owner = "johannesjo";
