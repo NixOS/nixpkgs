@@ -27,6 +27,8 @@ buildPythonPackage rec {
     tomli
   ];
 
+  pythonImportsCheck = [ "dom_toml" ];
+
   meta = {
     description = "Dom's tools for Tom's Obvious, Minimal Language";
     homepage = "https://github.com/domdfcoding/dom_toml";
