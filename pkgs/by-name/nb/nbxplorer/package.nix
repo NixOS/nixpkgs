@@ -7,20 +7,20 @@
 
 buildDotnetModule rec {
   pname = "nbxplorer";
-  version = "2.5.30-1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "dgarage";
     repo = "NBXplorer";
     tag = "v${version}";
-    hash = "sha256-FVSoFvWwMpuMbH7xFE5aSkLPzROaufbPZL09OWabbus=";
+    hash = "sha256-X1+UdsKVOC3QpES22p0MG1Rz1oresilBM+b/4I1nCyI=";
   };
 
   projectFile = "NBXplorer/NBXplorer.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
 
   # macOS has a case-insensitive filesystem, so these two can be the same file
   postFixup = ''
