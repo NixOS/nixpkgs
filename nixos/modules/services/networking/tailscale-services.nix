@@ -182,6 +182,7 @@ let
 in
 {
   meta.maintainers = with maintainers; [
+    dan-theriault
     kusold
   ];
 
