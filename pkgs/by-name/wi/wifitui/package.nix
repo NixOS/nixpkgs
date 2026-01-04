@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "wifitui";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "shazow";
     repo = "wifitui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JFs+7MDc0/hIDrefSRLWXurwJvvpR7LHJmCvmO1lpHA=";
+    hash = "sha256-ZhVMcpua9foigtkaN4EFjugwrEwUBOkXGLIIAaq9+zs=";
   };
 
-  vendorHash = "sha256-SEQPc13cefzT8SyuD3UmNtTDgcrXUGTX54SBrnOHJJw=";
+  vendorHash = "sha256-HZEE8bJC9bsSYmyu7NBoxEprW08DO5+uApVnyNkKgMk=";
 
   ldflags = [
     "-X main.Version=${finalAttrs.version}"

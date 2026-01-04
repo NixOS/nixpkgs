@@ -140,6 +140,12 @@
     github = "0xd61";
     githubId = 8351869;
   };
+  _0xMillyByte = {
+    email = "emilia.daelman@gmail.com";
+    name = "Emilia Daelman";
+    github = "0xMillyByte";
+    githubId = 48217459;
+  };
   _0xMRTT = {
     email = "0xMRTT@proton.me";
     name = "0xMRTT";
@@ -16660,6 +16666,12 @@
     githubId = 396449;
     name = "Brandon Edens";
   };
+  mbinns = {
+    email = "mack@yourdata.rip";
+    github = "mbinns";
+    githubId = 14008591;
+    name = "Mack Binns";
+  };
   mbode = {
     email = "maxbode@gmail.com";
     github = "mbode";
@@ -19610,6 +19622,12 @@
     github = "OleMussmann";
     githubId = 14004859;
     name = "Ole Mussmann";
+  };
+  olillin = {
+    email = "oli@olillin.com";
+    github = "olillin";
+    githubId = 55047947;
+    name = "Oli";
   };
   oliver-koss = {
     email = "oliver.koss06@gmail.com";

@@ -13,22 +13,19 @@
   pycryptodomex,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "1.3.0";
+  version = "1.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
     tag = "v${version}";
-    hash = "sha256-Ix49ypsw8Ii7pkpznzNqP97vJ/x1QBEaAis8R/kOJe0=";
+    hash = "sha256-hZIhMBeF0YN0+dWQPyKf/6LQPq9MKYAE54lvhAvWZCY=";
   };
 
   build-system = [ poetry-core ];
