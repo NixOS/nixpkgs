@@ -190,7 +190,7 @@ in
           wantedBy = [ "multi-user.target" ];
           startLimitBurst = 5;
           startLimitIntervalSec = 60;
-          environment.MISSKEY_CONFIG_DIR = "/etc/sharkey";
+          environment.MISSKEY_CONFIG_YML = "/etc/sharkey/default.yml";
 
           serviceConfig = {
             Type = "simple";

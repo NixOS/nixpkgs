@@ -10,43 +10,47 @@
   jemalloc,
   makeWrapper,
   nix-update-script,
-  nodejs,
+  nodejs_22,
   pango,
   pixman,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
   vips,
   xcbuild,
 }:
+
+let
+  pnpm = pnpm_10.override { nodejs = nodejs_22; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharkey";
-  version = "2025.4.4";
+  version = "2025.10.2";
 
   src = fetchFromGitLab {
     domain = "activitypub.software";
     owner = "TransFem-org";
     repo = "Sharkey";
     tag = finalAttrs.version;
-    hash = "sha256-h6FkjwJ+TI5NZmGYOl/+yNP7gyc7FKmpdkfXmgqxh/s=";
+    hash = "sha256-JBcWcvhShsZMeilb40163N9eKl25FUBee//q/HNbVZA=";
     fetchSubmodules = true;
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-34X8oJGkGXB9y7W4MquUkv8vY5yq2RoGIUCbjYppkIU=";
+    pnpm = pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-L1nqjdemFGqhS+qm8iSQZI5T6QtK4RyGm9IHDNd7rbo=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    nodejs
+    nodejs_22
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm
     python3
   ]
   ++ (lib.optionals stdenv.hostPlatform.isDarwin [
@@ -71,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # rebuild some node modules that have native dependencies
-    export npm_config_nodedir=${nodejs}
+    export npm_config_nodedir=${nodejs_22}
 
     pushd node_modules/.pnpm/node_modules/re2
     pnpm rebuild
@@ -82,12 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     pushd node_modules/.pnpm/node_modules/canvas
+    NIX_CFLAGS_COMPILE="-include cstdint $NIX_CFLAGS_COMPILE"
     pnpm run install
     popd
 
     pnpm build
-    node scripts/trim-deps.mjs
-    pnpm prune --prod --ignore-scripts
+    # FIXME: pruning does produce missing symlinks in fixupPhase at the moment
+    # CI=true pnpm prune --prod --ignore-scripts
 
     runHook postBuild
   '';
@@ -96,8 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     let
       binPath = lib.makeBinPath [
         bash
-        nodejs
-        pnpm_9
+        nodejs_22
+        pnpm
       ];
       libPath = lib.makeLibraryPath [
         ffmpeg-headless
@@ -118,9 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $out/sharkey/packages/backend/scripts
       cp -r packages/backend/scripts/check_connect.js $out/sharkey/packages/backend/scripts/
 
-      mkdir -p $out/sharkey/packages/megalodon
-      cp -r packages/megalodon/{lib,node_modules,package.json} $out/sharkey/packages/megalodon/
-
       mkdir -p $out/sharkey/packages/misskey-{bubble-game,js,reversi}
       cp -r packages/misskey-bubble-game/{built,node_modules,package.json} $out/sharkey/packages/misskey-bubble-game/
       cp -r packages/misskey-js/{built,node_modules,package.json} $out/sharkey/packages/misskey-js/
@@ -130,11 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r packages/frontend/assets $out/sharkey/packages/frontend/
       cp -r packages/frontend-embed/assets $out/sharkey/packages/frontend-embed/
 
-      mkdir -p $out/sharkey/tossface-emojis
-      cp -r tossface-emojis/dist $out/sharkey/tossface-emojis/
-
       # create a wrapper script for running sharkey commands (ie. alias for pnpm run)
-      makeWrapper ${lib.getExe pnpm_9} $out/bin/sharkey \
+      makeWrapper ${lib.getExe pnpm} $out/bin/sharkey \
         --chdir $out/sharkey \
         --add-flags run \
         --set-default NODE_ENV production \
@@ -148,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preFixup
 
     # cleanup dangling symlinks in node_modules, referencing workspace packages we don't include in the final output
-    rm -r $out/sharkey/node_modules/.pnpm/node_modules/{sw,misskey-js-type-generator,frontend-shared}
+    rm -r $out/sharkey/node_modules/.pnpm/node_modules/{sw,misskey-js-type-generator,frontend-shared,@jest,@types,@storybook,@vitest,@vue,@microsoft,frontend-builder,icons-subsetter}
 
     # remove packageManager line from package.json; tries to download a different pnpm version into $HOME otherwise
     sed -i -e '9d' $out/sharkey/package.json
