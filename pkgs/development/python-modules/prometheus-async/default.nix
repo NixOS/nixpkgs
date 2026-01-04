@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hynek/prometheus-async";
     changelog = "https://github.com/hynek/prometheus-async/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

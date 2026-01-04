@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pdm-backend,
@@ -50,12 +51,17 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests" ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-    # CppCompileError: C++ compile error
-    # OpenMP support not found.
-    "test_kron"
-  ];
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.14") [
+      # RuntimeError: torch.compile is not supported on Python 3.14+
+      "test_kron"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+      # CppCompileError: C++ compile error
+      # OpenMP support not found.
+      "test_kron"
+    ];
 
   disabledTestPaths = [
     # Takes too long and also tries to download models

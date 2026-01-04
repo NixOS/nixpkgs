@@ -76,6 +76,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/mrsqm";
     changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

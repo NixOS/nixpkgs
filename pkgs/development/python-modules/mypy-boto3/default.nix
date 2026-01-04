@@ -39,7 +39,6 @@ let
         license = with lib.licenses; [ mit ];
         maintainers = with lib.maintainers; [
           fab
-          mbalatsko
         ];
       };
     };
