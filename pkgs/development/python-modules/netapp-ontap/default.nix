@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-bzDGsKCEH3oszuz4OKnOg7WTMQTnJAGh7POmGhRCyzc=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'marshmallow>=3.21.3,<4.0.0' 'marshmallow>=3.21.3'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

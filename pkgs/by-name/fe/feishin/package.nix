@@ -3,8 +3,9 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_38,
+  electron_39,
   dart-sass,
+  mpv,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm,
@@ -14,16 +15,16 @@
 }:
 let
   pname = "feishin";
-  version = "1.0.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-otobV3bpANbhrAiscDxV1IGJ36i/37aPei6wdo5SDSw=";
+    hash = "sha256-acNUXvmj964pO8h2fsGfex2BeIshExMWe0w/QmtikkM=";
   };
 
-  electron = electron_38;
+  electron = electron_39;
 in
 buildNpmPackage {
   inherit pname version;
@@ -39,8 +40,8 @@ buildNpmPackage {
       version
       src
       ;
-    fetcherVersion = 2;
-    hash = "sha256-iZs2YtB0U8RpZXrIYHBc/cgFISDF/4tz+D13/+HlszU=";
+    fetcherVersion = 3;
+    hash = "sha256-gQooubVt2kDOGq4GEZIT+pQcPnzss9QmqTO9kD5Kx58=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -97,6 +98,7 @@ buildNpmPackage {
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
     makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
       --set DISABLE_AUTO_UPDATES 1
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -110,6 +112,7 @@ buildNpmPackage {
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
     makeWrapper ${lib.getExe electron} $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
