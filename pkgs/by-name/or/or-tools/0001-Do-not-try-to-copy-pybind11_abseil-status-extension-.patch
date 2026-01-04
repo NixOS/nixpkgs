@@ -1,0 +1,60 @@
+From 077295f6ede59d9e2413b2d19f38cf63b64f4fec Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stefan=20Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>
+Date: Tue, 21 Oct 2025 17:05:59 +0300
+Subject: [PATCH] Do not try to copy pybind11_abseil status extension module
+
+The module is already installed in the correct location. And even if not,
+it should be done as part of the pybind11_abseil build ...
+---
+ cmake/python.cmake         | 5 -----
+ ortools/python/setup.py.in | 4 ----
+ 2 files changed, 9 deletions(-)
+
+diff --git a/cmake/python.cmake b/cmake/python.cmake
+index 2112ceeb66..db15434303 100644
+--- a/cmake/python.cmake
++++ b/cmake/python.cmake
+@@ -326,7 +326,6 @@ file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/init/python/__init__.py CONTENT "")
+ file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/linear_solver/__init__.py CONTENT "")
+ file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/linear_solver/python/__init__.py CONTENT "")
+ if(BUILD_MATH_OPT)
+-  file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/../pybind11_abseil/__init__.py CONTENT "")
+   file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/math_opt/__init__.py CONTENT "")
+   file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/math_opt/core/__init__.py CONTENT "")
+   file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/math_opt/core/python/__init__.py CONTENT "")
+@@ -680,9 +679,6 @@ add_custom_command(
+   COMMAND ${CMAKE_COMMAND} -E
+    $<IF:$<BOOL:${BUILD_MATH_OPT}>,copy,true>
+    $<TARGET_FILE:math_opt_io_pybind11> ${PYTHON_PROJECT}/math_opt/io/python
+-  COMMAND ${CMAKE_COMMAND} -E
+-   $<IF:$<BOOL:${BUILD_MATH_OPT}>,copy,true>
+-   $<TARGET_FILE:status_py_extension_stub> ${PYTHON_PROJECT}/../pybind11_abseil
+   COMMAND ${CMAKE_COMMAND} -E
+    $<IF:$<TARGET_EXISTS:pdlp_pybind11>,copy,true>
+    $<$<TARGET_EXISTS:pdlp_pybind11>:$<TARGET_FILE:pdlp_pybind11>> ${PYTHON_PROJECT}/pdlp/python
+@@ -744,7 +740,6 @@ add_custom_command(
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.constraint_solver.pywrapcp --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.linear_solver.pywraplp --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.linear_solver.python.model_builder_helper --output .
+-  COMMAND ${stubgen_EXECUTABLE} -p pybind11_abseil.status --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.math_opt.core.python.solver --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.pdlp.python.pdlp --output .
+   COMMAND ${stubgen_EXECUTABLE} -p ortools.sat.python.cp_model_helper --output .
+diff --git a/ortools/python/setup.py.in b/ortools/python/setup.py.in
+index 0aeaa900ef..ae4fa07815 100644
+--- a/ortools/python/setup.py.in
++++ b/ortools/python/setup.py.in
+@@ -83,10 +83,6 @@ setup(
+             '*.pyi',
+             'py.typed'
+         ],
+-        'pybind11_abseil':[
+-            '$<TARGET_FILE_NAME:status_py_extension_stub>',
+-            '*.pyi'
+-        ],
+         '@PYTHON_PROJECT@.math_opt':['*.pyi'],
+         '@PYTHON_PROJECT@.math_opt.python':['*.pyi'],
+         '@PYTHON_PROJECT@.math_opt.core.python':[
+-- 
+2.51.0
+

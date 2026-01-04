@@ -1,0 +1,34 @@
+diff --git a/src/libs/ui/docsetsdialog.cpp b/src/libs/ui/docsetsdialog.cpp
+index 8c9fe63..5c73480 100644
+--- a/src/libs/ui/docsetsdialog.cpp
++++ b/src/libs/ui/docsetsdialog.cpp
+@@ -360,7 +360,7 @@ void DocsetsDialog::downloadCompleted()
+         QTemporaryFile *tmpFile = m_tmpFiles[docsetName];
+         if (!tmpFile) {
+             tmpFile = new QTemporaryFile(QStringLiteral("%1/%2.XXXXXX.tmp").arg(Core::Application::cacheLocation(), docsetName), this);
+-            tmpFile->open();
++            (void)tmpFile->open();
+             m_tmpFiles.insert(docsetName, tmpFile);
+         }
+ 
+@@ -403,7 +403,7 @@ void DocsetsDialog::downloadProgress(qint64 received, qint64 total)
+         QTemporaryFile *tmpFile = m_tmpFiles[docsetName];
+         if (!tmpFile) {
+             tmpFile = new QTemporaryFile(QStringLiteral("%1/%2.XXXXXX.tmp").arg(Core::Application::cacheLocation(), docsetName), this);
+-            tmpFile->open();
++            (void)tmpFile->open();
+             m_tmpFiles.insert(docsetName, tmpFile);
+         }
+ 
+diff --git a/src/libs/ui/qxtglobalshortcut/CMakeLists.txt b/src/libs/ui/qxtglobalshortcut/CMakeLists.txt
+index 476c2f5..f49da88 100644
+--- a/src/libs/ui/qxtglobalshortcut/CMakeLists.txt
++++ b/src/libs/ui/qxtglobalshortcut/CMakeLists.txt
+@@ -42,6 +42,7 @@ elseif(UNIX AND X11_FOUND)
+         find_package(Qt5 COMPONENTS X11Extras REQUIRED)
+         target_link_libraries(QxtGlobalShortcut Qt5::X11Extras)
+     else()
++        find_package(Qt6 REQUIRED COMPONENTS GuiPrivate)
+         target_link_libraries(QxtGlobalShortcut Qt${QT_VERSION_MAJOR}::GuiPrivate)
+     endif()
+ 

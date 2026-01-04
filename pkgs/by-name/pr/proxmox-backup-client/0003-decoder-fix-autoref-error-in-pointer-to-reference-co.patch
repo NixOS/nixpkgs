@@ -1,0 +1,26 @@
+From d9c0d413ec38ae11cdd61bdc6b4b76d1f05a7794 Mon Sep 17 00:00:00 2001
+From: Christoph Heiss <christoph@c8h4.io>
+Date: Thu, 4 Sep 2025 10:24:39 +0200
+Subject: [PATCH] decoder: fix autoref error in pointer to reference conversion
+
+Signed-off-by: Christoph Heiss <christoph@c8h4.io>
+---
+ src/decoder/mod.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/decoder/mod.rs b/src/decoder/mod.rs
+index eca51b6..b034d38 100644
+--- a/src/decoder/mod.rs
++++ b/src/decoder/mod.rs
+@@ -35,7 +35,7 @@ fn scratch_buffer() -> &'static mut [u8] {
+     unsafe {
+         let ptr: *mut MaybeUninit<[u8; 4096]> = &raw mut SCRATCH_BUFFER;
+         let ptr: &mut MaybeUninit<[u8; 4096]> = &mut *ptr;
+-        &mut (*ptr.as_mut_ptr())[..]
++        &mut *ptr.as_mut_ptr()
+     }
+ }
+ 
+-- 
+2.50.1
+

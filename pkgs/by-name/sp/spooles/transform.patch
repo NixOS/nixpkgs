@@ -1,0 +1,43 @@
+From c5d0574182d76af3bf286dce0bb147ae3f098916 Mon Sep 17 00:00:00 2001
+From: annalee <150648636+a-n-n-a-l-e-e@users.noreply.github.com>
+Date: Tue, 28 Nov 2023 12:57:18 +0000
+Subject: [PATCH] fix compiler error: use zero, not NULL, in calls to IVinit
+
+---
+ ETree/src/transform.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/ETree/src/transform.c b/ETree/src/transform.c
+index 1e36981..dbdfc70 100644
+--- a/ETree/src/transform.c
++++ b/ETree/src/transform.c
+@@ -291,7 +291,7 @@ etree2 = ETree_compress(etree, mapIV) ;
+    remap the nzeros[] vector
+    -------------------------
+ */
+-temp = IVinit(nfront, NULL) ;
++temp = IVinit(nfront, 0) ;
+ IVcopy(nfront, temp, nzeros) ;
+ IV_setSize(nzerosIV, nnew) ;
+ nzeros = IV_entries(nzerosIV) ;
+@@ -453,7 +453,7 @@ etree2 = ETree_compress(etree, mapIV) ;
+    remap the nzeros[] vector
+    -------------------------
+ */
+-temp = IVinit(nfront, NULL) ;
++temp = IVinit(nfront, 0) ;
+ IVcopy(nfront, temp, nzeros) ;
+ IV_setSize(nzerosIV, nnew) ;
+ nzeros = IV_entries(nzerosIV) ;
+@@ -614,7 +614,7 @@ etree2 = ETree_compress(etree, mapIV) ;
+    remap the nzeros[] vector
+    -------------------------
+ */
+-temp = IVinit(nfront, NULL) ;
++temp = IVinit(nfront, 0) ;
+ IVcopy(nfront, temp, nzeros) ;
+ IV_setSize(nzerosIV, nnew) ;
+ nzeros = IV_entries(nzerosIV) ;
+-- 
+2.42.0
+

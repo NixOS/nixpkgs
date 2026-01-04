@@ -1,0 +1,123 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?S=C3=B6ren=20Tempel?= <soeren+git@soeren-tempel.net>
+Date: Sat, 2 Mar 2024 01:25:52 +0100
+Subject: [PATCH 05/19] Fix configure.ac for Linux headers
+
+Patch-Source: https://github.com/gentoo/gentoo/blob/dce914f2bbf52360f45c90d877857df3c4c2a353/app-arch/xar/files/xar-1.8.0.0.452-linux.patch
+---
+ xar/configure.ac        | 19 +++++++++++++++++--
+ xar/include/config.h.in |  3 +++
+ xar/lib/util.c          | 15 +++++++++++++++
+ 3 files changed, 35 insertions(+), 2 deletions(-)
+
+diff --git a/xar/configure.ac b/xar/configure.ac
+index 3a36f42..26d41a5 100644
+--- a/xar/configure.ac
++++ b/xar/configure.ac
+@@ -183,7 +183,7 @@ AC_SUBST([enable_autogen])
+ 
+ AC_TRY_COMPILE([#include <sys/types.h> 
+ #include <sys/acl.h>], [acl_t a], [AC_DEFINE([HAVE_SYS_ACL_H],[1], [define if you have sys/acl.h and it has a working acl_t type])])
+-AC_CHECK_HEADERS(ext2fs/ext2_fs.h sys/statfs.h sys/xattr.h sys/param.h sys/extattr.h libutil.h)
++AC_CHECK_HEADERS(ext2fs/ext2_fs.h sys/statfs.h sys/vfs.h sys/xattr.h sys/param.h sys/extattr.h libutil.h)
+ AC_CHECK_FUNCS(lgetxattr)
+ AC_CHECK_FUNCS(lsetxattr)
+ AC_CHECK_FUNCS(getxattr)
+@@ -199,7 +199,22 @@ AC_CHECK_FUNCS(strmode)
+ 
+ AC_CHECK_MEMBERS([struct statfs.f_fstypename],,,[#include <sys/types.h>
+ #include <sys/param.h>
+-#include <sys/mount.h>])
++#include <sys/mount.h>
++#ifdef HAVE_SYS_VFS_H
++#include <sys/vfs.h>
++#endif])
++AC_CHECK_MEMBERS([struct statfs.f_iosize],,,[#include <sys/types.h>
++#include <sys/param.h>
++#include <sys/mount.h>
++#ifdef HAVE_SYS_VFS_H
++#include <sys/vfs.h>
++#endif])
++AC_CHECK_MEMBERS([struct statfs.f_bsize],,,[#include <sys/types.h>
++#include <sys/param.h>
++#include <sys/mount.h>
++#ifdef HAVE_SYS_VFS_H
++#include <sys/vfs.h>
++#endif])
+ AC_CHECK_MEMBERS([struct statvfs.f_fstypename],,,[#include <sys/statvfs.h>])
+ AC_CHECK_MEMBERS([struct stat.st_flags])
+ 
+diff --git a/xar/include/config.h.in b/xar/include/config.h.in
+index 2bb997b..16c72d3 100644
+--- a/xar/include/config.h.in
++++ b/xar/include/config.h.in
+@@ -1,4 +1,5 @@
+ #undef HAVE_SYS_STATFS_H
++#undef HAVE_SYS_VFS_H
+ #undef HAVE_SYS_XATTR_H
+ #undef HAVE_SYS_EXTATTR_H
+ #undef HAVE_SYS_PARAM_H
+@@ -15,6 +16,8 @@
+ #undef HAVE_STRUCT_STAT_ST_FLAGS
+ #undef HAVE_STRUCT_STATVFS_F_FSTYPENAME
+ #undef HAVE_STRUCT_STATFS_F_FSTYPENAME
++#undef HAVE_STRUCT_STATFS_F_IOSIZE
++#undef HAVE_STRUCT_STATFS_F_BSIZE
+ #undef HAVE_SYS_ACL_H
+ #undef HAVE_LIBUTIL_H
+ #undef HAVE_LIBPTHREAD
+diff --git a/xar/lib/util.c b/xar/lib/util.c
+index 0ea661a..1db2daa 100644
+--- a/xar/lib/util.c
++++ b/xar/lib/util.c
+@@ -35,11 +35,16 @@
+  * Christopher Ryan <ryanc@apple.com>
+ */
+ 
++#include "config.h"
++
+ #include <stdio.h>
+ #include <stdint.h>
+ #include <sys/types.h>
+ #include <sys/mount.h>
+ #include <sys/param.h>
++#ifdef HAVE_SYS_VFS_H
++# include <sys/vfs.h>
++#endif
+ #include <arpa/inet.h>
+ #include <string.h>
+ #include <unistd.h>
+@@ -583,6 +588,14 @@ char *xar_get_mtime(xar_t x, xar_file_t f) {
+ 	return tmp;
+ }
+ 
++#ifndef HAVE_STRUCT_STATFS_F_IOSIZE
++# ifdef HAVE_STRUCT_STATFS_F_BSIZE
++#  define f_iosize f_bsize
++# else
++#  error need a field to get optimal transfer block size
++# endif
++#endif
++
+ size_t xar_optimal_io_size_at_path(const char *path)
+ {
+ 	// Start at 1MiB
+@@ -599,6 +612,7 @@ size_t xar_optimal_io_size_at_path(const char *path)
+ 			fs_iosize = optimal_rsize;
+ 		}
+ 		
++#ifdef MNT_LOCAL
+ 		// If we're a remote filesystem, never let us go below the optimal size above of 1MiB
+ 		// NFS is horrible and lies that the optimal size is 512 bytes.
+ 		// Whereas SMB in my testing returns 7MiBs (far more practicle)
+@@ -611,6 +625,7 @@ size_t xar_optimal_io_size_at_path(const char *path)
+ 			}
+ 		}
+ 		else
++#endif
+ 		{
+ 			optimal_rsize = fs_iosize;
+ 		}
+-- 
+2.44.1
+

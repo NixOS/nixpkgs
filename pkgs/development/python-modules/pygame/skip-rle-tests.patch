@@ -1,0 +1,20 @@
+diff --git a/test/surface_test.py b/test/surface_test.py
+index b1147d27..c7ba2928 100644
+--- a/test/surface_test.py
++++ b/test/surface_test.py
+@@ -346,6 +346,7 @@ class SurfaceTypeTest(unittest.TestCase):
+         finally:
+             pygame.display.quit()
+ 
++    @unittest.skipIf(True, "https://github.com/libsdl-org/SDL/pull/14429")
+     def test_solarwolf_rle_usage_2(self):
+         """Test for RLE status after setting alpha"""
+ 
+@@ -377,6 +378,7 @@ class SurfaceTypeTest(unittest.TestCase):
+         finally:
+             pygame.display.quit()
+ 
++    @unittest.skipIf(True, "https://github.com/libsdl-org/SDL/issues/14424")
+     def test_set_alpha__set_colorkey_rle(self):
+         pygame.display.init()
+         try:

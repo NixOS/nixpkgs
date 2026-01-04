@@ -1,0 +1,18 @@
+Wrap the clang produced during the build
+
+--- a/tools/driver/CMakeLists.txt
++++ b/tools/driver/CMakeLists.txt
+@@ -59,6 +59,13 @@ endif()
+ 
+ add_dependencies(clang clang-resource-headers)
+ 
++# Nix: wrap the clang build.
++add_custom_command(
++  TARGET clang POST_BUILD
++  COMMAND nix-swift-make-clang-wrapper $<TARGET_FILE:clang>
++  VERBATIM
++)
++
+ if(NOT CLANG_LINKS_TO_CREATE)
+   set(CLANG_LINKS_TO_CREATE clang++ clang-cl clang-cpp)
+ endif()

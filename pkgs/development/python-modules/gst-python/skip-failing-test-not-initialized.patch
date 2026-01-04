@@ -1,0 +1,50 @@
+diff --git a/testsuite/test_gst.py b/testsuite/test_gst.py
+index 2111b968..fd8a4627 100644
+--- a/testsuite/test_gst.py
++++ b/testsuite/test_gst.py
+@@ -38,45 +38,6 @@ class TimeArgsTest(TestCase):
+         self.assertEqual(Gst.TIME_ARGS(Gst.SECOND), '0:00:01.000000000')
+ 
+ 
+-class TestNotInitialized(TestCase):
+-    def testNotInitialized(self):
+-        if sys.version_info >= (3, 0):
+-            assert_type = Gst.NotInitialized
+-        else:
+-            assert_type = TypeError
+-
+-        with self.assertRaises(assert_type):
+-            Gst.Caps.from_string("audio/x-raw")
+-
+-        with self.assertRaises(assert_type):
+-            Gst.Structure.from_string("audio/x-raw")
+-
+-        with self.assertRaises(assert_type):
+-            Gst.ElementFactory.make("identity", None)
+-
+-    def testNotDeinitialized(self):
+-        Gst.init(None)
+-
+-        assert(Gst.Caps.from_string("audio/x-raw"))
+-        assert(Gst.Structure.from_string("audio/x-raw"))
+-        assert(Gst.ElementFactory.make("identity", None))
+-
+-        Gst.deinit()
+-        if sys.version_info >= (3, 0):
+-            assert_type = Gst.NotInitialized
+-        else:
+-            assert_type = TypeError
+-
+-        with self.assertRaises(assert_type):
+-            Gst.Caps.from_string("audio/x-raw")
+-
+-        with self.assertRaises(assert_type):
+-            Gst.Structure.from_string("audio/x-raw")
+-
+-        with self.assertRaises(assert_type):
+-            Gst.ElementFactory.make("identity", None)
+-
+-
+ class TestStructure(TestCase):
+ 
+     def test_new(self):

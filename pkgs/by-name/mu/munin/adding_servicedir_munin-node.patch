@@ -1,0 +1,84 @@
+From 75a3ec48814e7b9a9b22259a04009076363be3f1 Mon Sep 17 00:00:00 2001
+From: Igor Kolar <igor.kolar@gmail.com>
+Date: Thu, 17 Oct 2013 00:48:23 +0200
+Subject: [PATCH 1/2] node: added --servicedir switch to munin-node
+
+This code is copied over from munin-node-config, that already does the same
+---
+ node/sbin/munin-node | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/node/sbin/munin-node b/node/sbin/munin-node
+index 7b2e180..0a93450 100755
+--- a/node/sbin/munin-node
++++ b/node/sbin/munin-node
+@@ -35,7 +35,7 @@ use Munin::Node::OS;
+ use Munin::Node::Service;
+ use Munin::Node::Server;
+ 
+-my $servicedir;
++my $servicedir = "$Munin::Common::Defaults::MUNIN_CONFDIR/plugins";
+ my $sconfdir = "$Munin::Common::Defaults::MUNIN_CONFDIR/plugin-conf.d";
+ my $conffile = "$Munin::Common::Defaults::MUNIN_CONFDIR/munin-node.conf";
+ my $DEBUG    = 0;
+@@ -101,6 +101,7 @@ sub parse_args
+ 
+     print_usage_and_exit() unless GetOptions(
+         "config=s"     => \$conffile,
++        "servicedir=s" => \$servicedir,
+         "debug!"       => \$DEBUG,
+         "pidebug!"     => \$PIDEBUG,
+         "paranoia!"    => \$paranoia,
+@@ -166,6 +167,10 @@ and returning the output they produce.
+ 
+ Use E<lt>fileE<gt> as configuration file. [@@CONFDIR@@/munin-node.conf]
+ 
++=item B<< --servicedir <dir> >>
++
++Override plugin directory [@@CONFDIR@@/plugins/]
++
+ =item B< --[no]paranoia >
+ 
+ Only run plugins owned by root. Check permissions as well. [--noparanoia]
+-- 
+1.8.4
+
+
+From b8e17cbe73ae4c71b93ff5687ba86db1d0c1f5bd Mon Sep 17 00:00:00 2001
+From: Steve Schnepp <steve.schnepp@pwkf.org>
+Date: Thu, 17 Oct 2013 11:52:10 +0200
+Subject: [PATCH 2/2] node: untaint the service-dir args
+
+---
+ node/sbin/munin-node | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/node/sbin/munin-node b/node/sbin/munin-node
+index 0a93450..909c8c4 100755
+--- a/node/sbin/munin-node
++++ b/node/sbin/munin-node
+@@ -99,9 +99,10 @@ sub parse_args
+ {
+     my @ORIG_ARGV  = @ARGV;
+ 
++    my $servicedir_cmdline;
+     print_usage_and_exit() unless GetOptions(
+         "config=s"     => \$conffile,
+-        "servicedir=s" => \$servicedir,
++        "servicedir=s" => \$servicedir_cmdline,
+         "debug!"       => \$DEBUG,
+         "pidebug!"     => \$PIDEBUG,
+         "paranoia!"    => \$paranoia,
+@@ -109,6 +110,9 @@ sub parse_args
+         "help"         => \&print_usage_and_exit,
+     );
+ 
++    # We untaint the args brutally, since the sysadm should know what he does
++    $servicedir = $1 if defined $servicedir_cmdline && $servicedir_cmdline =~ m/(.*)/;
++
+     # Reset ARGV (for HUPing)
+     @ARGV = @ORIG_ARGV;
+ 
+-- 
+1.8.4
+

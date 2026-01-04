@@ -1,0 +1,31 @@
+diff --git a/backend/ytliu0-loader.js b/backend/ytliu0-loader.js
+index 4862c17..25fe9e8 100644
+--- a/backend/ytliu0-loader.js
++++ b/backend/ytliu0-loader.js
+@@ -8,7 +8,11 @@ import GLib from 'gi://GLib'
+ // Code from gnome-shell 44 : extenstionUtils.js:installImporter
+ let custom_importer
+ const origSearchPath = imports.searchPath.slice()
+-imports.searchPath = [GLib.get_user_data_dir(), ...GLib.get_system_data_dirs()]
++imports.searchPath = [
++  GLib.get_user_data_dir(),
++  ...GLib.get_system_data_dirs(),
++  '@chinese_calendar_path@/.local/share'
++]
+ try {
+   // importing a "subdir" creates a new importer object that doesn't affect
+   // the global one
+diff --git a/backend/ytliu0.js b/backend/ytliu0.js
+index 94abd2c..df6241b 100644
+--- a/backend/ytliu0.js
++++ b/backend/ytliu0.js
+@@ -60,7 +60,8 @@ class LunarDateX {
+       const [ok, file] = this._holidayData.load_from_dirs(holiday_fn, [
+         GLib.get_user_config_dir(),
+         GLib.get_user_data_dir(),
+-        ...GLib.get_system_data_dirs()
++        ...GLib.get_system_data_dirs(),
++        '@chinese_calendar_path@/.config'
+       ], GLib.KeyFileFlags.KEEP_TRANSLATIONS)
+       if (this._notifyHoliday)
+         this._notifyHoliday()
