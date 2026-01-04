@@ -25,7 +25,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyvis,
   pyyaml,
   requests,
@@ -41,8 +40,6 @@ buildPythonPackage rec {
   pname = "llama-index-core";
   version = "0.14.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "run-llama";
