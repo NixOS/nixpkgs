@@ -61,6 +61,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20
     ];
     mainProgram = "cargo-codspeed";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
 })
