@@ -51,7 +51,7 @@ in
   autoconf,
   cargo,
   dump_syms,
-  makeWrapper,
+  makeBinaryWrapper,
   mimalloc,
   nodejs,
   perl,
@@ -368,7 +368,7 @@ buildStdenv.mkDerivation {
     cargo
     gnum4
     llvmPackagesBuildBuild.bintools
-    makeWrapper
+    makeBinaryWrapper
     nodejs
     perl
     python3
