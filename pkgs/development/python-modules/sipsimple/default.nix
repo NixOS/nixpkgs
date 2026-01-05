@@ -49,7 +49,11 @@ let
         owner = "wernerd";
         repo = "ZRTPCPP";
         inherit rev;
-        hash = "sha256-kJlGPVA+yfn7fuRjXU0p234VcZBAf1MU4gRKuPotfog=";
+        hash = "sha256-pGng1Y9N51nGBpiZbn2NTx4t2NGg4qkmbghTscJVhIA=";
+        postFetch = ''
+          # fix build with gcc15
+          sed -e '9i #include <cstdint>' -i $out/zrtp/EmojiBase32.cpp
+        '';
       };
     };
   };
