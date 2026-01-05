@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-PSw+yRAj6i2qld+10FEMWRxOaqzqu+4CYJcO0PAgG0g=";
+    hash = "sha256-6f1qm0n8kPPFGCVi+McsqlnMsV1qG1Um2BA/i+YT8Wg=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-XRiIngGFG8j3zQd6QMAFoZ64M7X4NkXCwYiUKA6oefA=";
+  cargoHash = "sha256-AWYxIPp+/pzTBjv1VjHumKuNfjU/ByspfONezEFE+FY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -62,6 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=python_environment::ty_environment_and_active_environment"
     "--skip=python_environment::ty_environment_is_only_environment"
     "--skip=python_environment::ty_environment_is_system_not_virtual"
+    "--skip=python_environment::ty_environment_and_discovered_venv"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

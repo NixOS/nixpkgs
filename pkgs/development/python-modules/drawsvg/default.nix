@@ -1,27 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pythonOlder,
-  numpy,
-  imageio,
   cairosvg,
+  fetchFromGitHub,
   imageio-ffmpeg,
+  imageio,
+  numpy,
   pwkit,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drawsvg";
   version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "cduck";
     repo = "drawsvg";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JC7u6bEB7RCJVLeYnNqACmddLI5F5PyaaBxaAZ+N/5s=";
   };
 
@@ -29,21 +26,21 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     all = [
-      numpy
-      imageio
       cairosvg
+      imageio
       imageio-ffmpeg
+      numpy
       pwkit
     ];
     raster = [
-      numpy
-      imageio
       cairosvg
+      imageio
       imageio-ffmpeg
+      numpy
     ];
     color = [
-      pwkit
       numpy
+      pwkit
     ];
   };
 
@@ -58,4 +55,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
