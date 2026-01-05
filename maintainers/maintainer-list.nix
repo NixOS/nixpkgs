@@ -9870,13 +9870,6 @@
     githubId = 6179496;
     name = "Grayson Head";
   };
-  grburst = {
-    email = "GRBurst@protonmail.com";
-    github = "GRBurst";
-    githubId = 4647221;
-    name = "GRBurst";
-    keys = [ { fingerprint = "7FC7 98AB 390E 1646 ED4D  8F1F 797F 6238 68CD 00C2"; } ];
-  };
   greaka = {
     email = "git@greaka.de";
     github = "greaka";

@@ -142,6 +142,10 @@ self: super: with self; {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  agentic-threat-hunting-framework =
+    callPackage ../development/python-modules/agentic-threat-hunting-framework
+      { };
+
   aggdraw = callPackage ../development/python-modules/aggdraw { };
 
   aggregate6 = callPackage ../development/python-modules/aggregate6 { };
