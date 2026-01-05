@@ -72,6 +72,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Key remapping daemon for Linux";
+    homepage = "https://github.com/rvaiya/keyd";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ alfarel ];
     platforms = lib.platforms.linux;
