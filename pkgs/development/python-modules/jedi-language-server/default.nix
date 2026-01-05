@@ -13,7 +13,7 @@
   jedi,
   lsprotocol,
   cattrs,
-  pygls_2,
+  pygls,
 
   # tests
   pytestCheckHook,
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     jedi
     lsprotocol
     cattrs
-    pygls_2
+    pygls
   ];
 
   nativeCheckInputs = [

@@ -13490,11 +13490,9 @@ self: super: with self; {
 
   pyglossary = callPackage ../development/python-modules/pyglossary { };
 
-  pygls = pygls_1;
+  pygls = callPackage ../development/python-modules/pygls { };
 
   pygls_1 = callPackage ../development/python-modules/pygls/1.nix { };
-
-  pygls_2 = callPackage ../development/python-modules/pygls/2.nix { };
 
   pygltflib = callPackage ../development/python-modules/pygltflib { };
 
