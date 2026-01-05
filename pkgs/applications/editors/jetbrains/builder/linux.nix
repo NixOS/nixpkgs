@@ -62,6 +62,7 @@ lib.makeOverridable mkDerivation (
       mainProgram = pname;
     };
 
+    # FIXME: Do not use meta attributes, see README (`TODO` section)
     desktopItem = makeDesktopItem {
       name = pname;
       exec = pname;

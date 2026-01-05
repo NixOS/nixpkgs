@@ -56,6 +56,15 @@ Any comments or other manual changes between these markers will be removed when 
  - Add it to `default.nix`
 
 ### TODO:
+ - remove the usage of `meta.` properties for building the Linux desktop files
+   (JetBrains already provides their own Desktop files, we can just use those probably?)
+ - drop the community IDEs
+ - Switch `mkJetbrainsProduct` to use `lib.extendMkDerivation`, see also:
+   - https://github.com/NixOS/nixpkgs/pull/475183#discussion_r2655305961
+   - https://github.com/NixOS/nixpkgs/pull/475183#discussion_r2655348886
+ - move PyCharm overrides to a common place outside of `default.nix`
+ - package `patchSharedLibs` from `default.nix` as a hook
+ - cleanup this TODO list, especially the following points, which have been here since 2023
  - replace `libxcrypt-legacy` with `libxcrypt` when supported
  - make `jetbrains-remote-dev.patch` cleaner
  - is extraLdPath needed for IDEA?

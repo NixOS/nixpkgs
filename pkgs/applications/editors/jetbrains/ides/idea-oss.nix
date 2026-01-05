@@ -57,6 +57,7 @@ mkJetBrainsProduct {
     ''--set M2 "${maven}/maven/bin"''
   ];
 
+  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
   meta = {
     homepage = "https://www.jetbrains.com/idea/";
     description = "Free Java, Kotlin, Groovy and Scala IDE from Jetbrains (built from source)";

@@ -50,6 +50,7 @@ mkJetBrainsProduct {
     musl
   ];
 
+  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
   meta = {
     homepage = "https://www.jetbrains.com/writerside/";
     description = "Documentation IDE from JetBrains";

@@ -55,6 +55,7 @@ mkJetBrainsProduct {
     '')
   ];
 
+  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
   meta = {
     homepage = "https://www.jetbrains.com/dataspell/";
     description = "Data science IDE from JetBrains";

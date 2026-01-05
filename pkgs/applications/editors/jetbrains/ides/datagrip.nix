@@ -45,6 +45,7 @@ mkJetBrainsProduct {
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
 
+  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
   meta = {
     homepage = "https://www.jetbrains.com/datagrip/";
     description = "Database IDE from JetBrains";

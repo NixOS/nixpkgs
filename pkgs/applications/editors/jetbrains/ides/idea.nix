@@ -60,6 +60,7 @@ mkJetBrainsProduct {
     musl
   ];
 
+  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
   meta = {
     homepage = "https://www.jetbrains.com/idea/";
     description = "Java, Kotlin, Groovy and Scala IDE from Jetbrains";

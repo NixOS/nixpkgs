@@ -50,6 +50,7 @@ in
   product = "PyCharm Open Source";
   productShort = "PyCharm";
 
+  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
   meta = {
     homepage = "https://www.jetbrains.com/pycharm/";
     description = "Free Python IDE from JetBrains (built from source)";

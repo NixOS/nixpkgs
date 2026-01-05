@@ -50,6 +50,7 @@ mkJetBrainsProduct {
     libgcc
   ];
 
+  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
   meta = {
     homepage = "https://www.jetbrains.com/remote-development/gateway/";
     description = "Remote development for JetBrains products";
