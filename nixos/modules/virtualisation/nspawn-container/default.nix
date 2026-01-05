@@ -146,7 +146,9 @@ in
     };
 
     virtualisation.systemd-nspawn = {
+
       package = lib.mkPackageOption pkgs "systemd" { };
+
       options = lib.mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -156,6 +158,7 @@ in
           See [systemd-nspawn docs](https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html) for a complete list.
         '';
       };
+
     };
   };
 
