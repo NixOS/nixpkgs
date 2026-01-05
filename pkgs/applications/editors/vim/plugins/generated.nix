@@ -7328,12 +7328,12 @@ final: prev: {
 
   kulala-nvim = buildVimPlugin {
     pname = "kulala.nvim";
-    version = "5.3.3-unstable-2025-12-16";
+    version = "5.3.3-unstable-2025-12-25";
     src = fetchFromGitHub {
       owner = "mistweaverco";
       repo = "kulala.nvim";
-      rev = "9fc4831a116fb32b0fd420ed483f5102a873446a";
-      hash = "sha256-A5yNW1XLLoSmsT8/7qB+SGguE7IMmcwv6tnhbF6nb2Y=";
+      rev = "cd3eaa83b8d60533837202dede73238334d71832";
+      hash = "sha256-xyhhvWLF+k+QG7GYOHEdmusZWsHlFg5O3np0a8pT2SU=";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/mistweaverco/kulala.nvim/";
@@ -12117,12 +12117,12 @@ final: prev: {
 
   nvim-treesitter-textobjects = buildVimPlugin {
     pname = "nvim-treesitter-textobjects";
-    version = "0-unstable-2025-10-31";
+    version = "0-unstable-2025-12-27";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter-textobjects";
-      rev = "5ca4aaa6efdcc59be46b95a3e876300cfead05ef";
-      hash = "sha256-lf+AwSu96iKO1vWWU2D7jWHGfjXkbX9R2CX3gMZaD4M=";
+      rev = "ecd03f5811eb5c66d2fa420b79121b866feecd82";
+      hash = "sha256-mMxCAkrGqTstEgaf/vwQMEF7D8swH3oyUJtaxuXzpcs=";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects/";
     meta.hydraPlatforms = [ ];

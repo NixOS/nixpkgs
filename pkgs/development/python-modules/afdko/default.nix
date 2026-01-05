@@ -1,8 +1,6 @@
 {
   lib,
   stdenv,
-  # Enables some expensive tests, useful for verifying an update
-  afdko,
   antlr4_13,
   booleanoperations,
   buildPythonPackage,
@@ -26,7 +24,7 @@
   ufoprocessor,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "afdko";
   version = "4.0.2";
   pyproject = true;
@@ -36,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
     repo = "afdko";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256:0955dvbydifhgx9gswbf5drsmmghry7iyf6jwz6qczhj86clswcm";
   };
 
@@ -144,14 +142,14 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    fullTestsuite = afdko.override { runAllTests = true; };
+    fullTestsuite = finalAttrs.finalPackage.override { runAllTests = true; };
   };
 
   meta = {
     description = "Adobe Font Development Kit for OpenType";
-    changelog = "https://github.com/adobe-type-tools/afdko/blob/${version}/NEWS.md";
+    changelog = "https://github.com/adobe-type-tools/afdko/blob/${finalAttrs.version}/NEWS.md";
     homepage = "https://adobe-type-tools.github.io/afdko";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})
