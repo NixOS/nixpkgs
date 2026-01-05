@@ -114,7 +114,7 @@ in
       type = types.attrsOf interfaceType;
       readOnly = true;
       description = ''
-        All network interfaces for the VM. Combines
+        All network interfaces for the container. Combines
         {option}`virtualisation.vlans` and {option}`virtualisation.interfaces`.
       '';
       default = vlansNumbered // cfg.interfaces;
