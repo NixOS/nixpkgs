@@ -8,7 +8,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-gitconfig";
   version = "0.9.0";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noirbizarre";
     repo = "pytest-gitconfig";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-z3W9AL74i47k/eYCbFMn3foVaD2h7lFrGzyOnbDwkyc=";
   };
 
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest gitconfig sandbox";
     homepage = "https://github.com/noirbizarre/pytest-gitconfig";
-    changelog = "https://github.com/noirbizarre/pytest-gitconfig/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/noirbizarre/pytest-gitconfig/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
