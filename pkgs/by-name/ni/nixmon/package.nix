@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     owner = "0xatrilla";
     repo = "nixtop";
     rev = "main"; # Using main branch - update to "v${version}" when tag is created
-    hash = "sha256-vgeUgD2SSnxWn2rrmnKwxLX4uYXT1+BoQVfyp1jP6U0="; # Hash from nixtop repo (update if repo is renamed to nixmon)
+    hash = "sha256-CHNwgeFt4MTCkBsiKkivOICLLEM48+R3zq1JDWvzqHk"; # Hash from nixtop repo (update if repo is renamed to nixmon)
     # Alternative: use fetchFromGitHub with a specific commit
     # rev = "abc123...";
     # hash = "sha256-...";
@@ -379,9 +379,9 @@ CSV_EOF
       - Mouse support for scrolling
       - Keyboard shortcuts for navigation
     '';
-    homepage = "https://github.com/0xatrilla/nixtop";
+    homepage = "https://github.com/yourusername/nixmon";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ _0xatrilla ];
     platforms = platforms.unix;
     mainProgram = "nixmon";
   };
