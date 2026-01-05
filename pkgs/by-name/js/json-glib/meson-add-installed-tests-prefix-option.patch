@@ -1,0 +1,27 @@
+diff --git a/json-glib/tests/meson.build b/json-glib/tests/meson.build
+index 1eb56c8..dca444e 100644
+--- a/json-glib/tests/meson.build
++++ b/json-glib/tests/meson.build
+@@ -21,8 +21,9 @@ test_data = [
+   'stream-load.json',
+ ]
+ 
+-installed_test_bindir = json_libexecdir / 'installed-tests' / json_api_name
+-installed_test_datadir = json_datadir / 'installed-tests' / json_api_name
++installed_test_prefix = get_option('installed_test_prefix')
++installed_test_bindir = installed_test_prefix / 'libexec' / 'installed-tests' / json_api_name
++installed_test_datadir = installed_test_prefix / 'share' / 'installed-tests' / json_api_name
+ 
+ install_data(test_data, install_dir: installed_test_bindir)
+ 
+diff --git a/meson_options.txt b/meson_options.txt
+index 5a96998..383aa6c 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -13,3 +13,6 @@ option('tests',
+ option('installed_tests',
+        type: 'boolean', value: true,
+        description: 'Enable installed tests')
++option('installed_test_prefix',
++       description: 'Prefix for installed tests',
++       type: 'string')

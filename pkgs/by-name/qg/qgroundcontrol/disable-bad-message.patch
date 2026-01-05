@@ -1,0 +1,29 @@
+diff --git a/src/QGCApplication.cc b/src/QGCApplication.cc
+index 7992ed00d..a9e0f0ba7 100644
+--- a/src/QGCApplication.cc
++++ b/src/QGCApplication.cc
+@@ -207,24 +207,6 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
+                     "sudo apt-get remove modemmanager</pre>").arg(qgcApp()->applicationName())));
+             return;
+         }
+-        // Determine if we have the correct permissions to access USB serial devices
+-        QFile permFile("/etc/group");
+-        if(permFile.open(QIODevice::ReadOnly)) {
+-            while(!permFile.atEnd()) {
+-                QString line = permFile.readLine();
+-                if (line.contains("dialout") && !line.contains(getenv("USER"))) {
+-                    permFile.close();
+-                    _exitWithError(QString(
+-                        tr("The current user does not have the correct permissions to access serial devices. "
+-                           "You should also remove modemmanager since it also interferes.<br/><br/>"
+-                           "If you are using Ubuntu, execute the following commands to fix these issues:<br/>"
+-                           "<pre>sudo usermod -a -G dialout $USER<br/>"
+-                           "sudo apt-get remove modemmanager</pre>")));
+-                    return;
+-                }
+-            }
+-            permFile.close();
+-        }
+ 
+         // Always set style to default, this way QT_QUICK_CONTROLS_STYLE environment variable doesn't cause random changes in ui
+         QQuickStyle::setStyle("Default");

@@ -1,0 +1,40 @@
+diff --git a/clang/lib/Driver/Compilation.cpp b/clang/lib/Driver/Compilation.cpp
+index 06f5e7e7e335..8407d664886a 100644
+--- a/lib/Driver/Compilation.cpp
++++ b/lib/Driver/Compilation.cpp
+@@ -340,6 +340,9 @@ private:
+ void Compilation::ExecuteJobs(const JobList &Jobs,
+                               FailingCommandList &FailingCommands,
+                               bool LogOnly) const {
++  // If >1 job, log as each job finishes so can see progress while building many offloads
++  const bool logJobs = Jobs.size() > 1;
++  auto start_time = std::chrono::steady_clock::now();
+   // According to UNIX standard, driver need to continue compiling all the
+   // inputs on the command line even one of them failed.
+   // In all but CLMode, execute all the jobs unless the necessary inputs for the
+@@ -364,11 +367,25 @@ void Compilation::ExecuteJobs(const JobList &Jobs,
+ 
+     JS.setJobState(Next, JobScheduler::JS_RUN);
+     auto Work = [&, Next]() {
++      auto job_start_time = std::chrono::steady_clock::now();
+       const Command *FailingCommand = nullptr;
+       if (int Res = ExecuteCommand(*Next, FailingCommand, LogOnly)) {
+         FailingCommands.push_back(std::make_pair(Res, FailingCommand));
+         JS.setJobState(Next, JobScheduler::JS_FAIL);
+       } else {
++        if (logJobs && Next) {
++          auto now = std::chrono::steady_clock::now();
++          auto job_duration = std::chrono::duration_cast<std::chrono::seconds>(now - job_start_time).count();
++          auto duration = std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count();
++          if (duration > 10 && job_duration > 0) {
++            if (Next->getOutputFilenames().empty())
++              if (Next->getExecutable()) llvm::errs() << "Job completed: " << Next->getExecutable() << "\n";
++              else (llvm::errs() << "Job completed: "), Next->Print(llvm::errs(), "\n", true);
++            else
++              llvm::errs() << "Job completed: " << Next->getOutputFilenames().front().c_str() << "\n";
++          }
++        }
++
+         JS.setJobState(Next, JobScheduler::JS_DONE);
+       }
+     };

@@ -1,0 +1,15 @@
+diff --git a/crates/polars-compute/src/lib.rs b/crates/polars-compute/src/lib.rs
+index ebe1ef753..6e1eee897 100644
+--- a/crates/polars-compute/src/lib.rs
++++ b/crates/polars-compute/src/lib.rs
+@@ -5,6 +5,10 @@
+     all(feature = "simd", target_arch = "x86_64"),
+     feature(stdarch_x86_avx512)
+ )]
++#![cfg_attr(
++    all(feature = "simd", target_arch = "x86_64"),
++    feature(avx512_target_feature)
++)]
+ 
+ use arrow::types::NativeType;
+ 

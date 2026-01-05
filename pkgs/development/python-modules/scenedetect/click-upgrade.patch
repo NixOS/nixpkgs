@@ -1,0 +1,13 @@
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -2,9 +2,9 @@
+ # PySceneDetect Requirements
+ #
+ av>=9.2
+ # click 8.3.0 is excluded as per https://scenedetect.com/issues/521
+-click~=8.0,<8.3.0
++click>=8.3.1
+ numpy
+ opencv-python
+ platformdirs
+ pytest>=7.0

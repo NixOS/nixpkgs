@@ -1,0 +1,36 @@
+diff --git a/packages/app-lib/build.rs b/packages/app-lib/build.rs
+index 251c4e84..eeacd02a 100644
+--- a/packages/app-lib/build.rs
++++ b/packages/app-lib/build.rs
+@@ -1,7 +1,7 @@
+ use std::ffi::OsString;
+ use std::path::PathBuf;
+ use std::process::{Command, exit};
+-use std::{env, fs};
++use std::env;
+ 
+ fn main() {
+     println!("cargo::rerun-if-changed=java/gradle");
+@@ -19,21 +19,11 @@ fn main() {
+         out_dir.join("java/libs").display()
+     );
+ 
+-    let gradle_path = fs::canonicalize(
+-        #[cfg(target_os = "windows")]
+-        "java\\gradlew.bat",
+-        #[cfg(not(target_os = "windows"))]
+-        "java/gradlew",
+-    )
+-    .unwrap();
+-
+     let mut build_dir_str = OsString::from("-Dorg.gradle.project.buildDir=");
+     build_dir_str.push(out_dir.join("java"));
+-    let exit_status = Command::new(gradle_path)
++    let exit_status = Command::new("@gradle@")
+         .arg(build_dir_str)
+         .arg("build")
+-        .arg("--no-daemon")
+-        .arg("--console=rich")
+         .current_dir(dunce::canonicalize("java").unwrap())
+         .status()
+         .expect("Failed to wait on Gradle build");

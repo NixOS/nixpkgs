@@ -1,0 +1,36 @@
+diff a/cmake/FindBrotliDec.cmake b/cmake/FindBrotliDec.cmake
+--- a/cmake/FindBrotliDec.cmake
++++ b/cmake/FindBrotliDec.cmake
+@@ -18,10 +18,10 @@ find_path(BROTLIDEC_INCLUDE_DIRS
+     HINTS ${PC_BROTLIDEC_INCLUDEDIR}
+ )
+ 
+-find_library(BROTLIDEC_LIBRARIES
+-    NAMES brotlidec
+-    HINTS ${PC_BROTLIDEC_LIBDIR}
+-)
++if(NOT BUILD_SHARED_LIBS)
++  set(_S "STATIC_")
++endif()
++set(BROTLIDEC_LIBRARIES ${PC_BROTLIDEC_${_S}LIBRARIES})
+ 
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(BrotliDec
+diff a/cmake/FindBrotliEnc.cmake b/cmake/FindBrotliEnc.cmake
+--- a/cmake/FindBrotliEnc.cmake
++++ b/cmake/FindBrotliEnc.cmake
+@@ -18,10 +18,10 @@ find_path(BROTLIENC_INCLUDE_DIRS
+     HINTS ${PC_BROTLIENC_INCLUDEDIR}
+ )
+ 
+-find_library(BROTLIENC_LIBRARIES
+-    NAMES brotlienc
+-    HINTS ${PC_BROTLIENC_LIBDIR}
+-)
++if(NOT BUILD_SHARED_LIBS)
++  set(_S "STATIC_")
++endif()
++set(BROTLIENC_LIBRARIES ${PC_BROTLIENC_${_S}LIBRARIES})
+ 
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(BrotliEnc

@@ -1,0 +1,14 @@
+diff --git a/configure.ac b/configure.ac
+index f4b270f..17e102f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,5 +1,9 @@
+ AC_INIT(DVDAuthor,0.7.2,dvdauthor-users@lists.sourceforge.net)
+ 
++AC_CONFIG_MACRO_DIRS([m4])
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
++
+ AC_CONFIG_HEADERS(src/config.h)
+ AC_CONFIG_AUX_DIR(autotools)
+ 

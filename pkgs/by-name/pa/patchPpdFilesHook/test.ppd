@@ -1,0 +1,22 @@
+*% This comment: might look like a command @keep@
+*% but it should be left untouched
+*SomeKey: do not replace this @keep@
+*APAutoSetupTool: do replace this @patch@
+*FoomaticRIPCommandLine: "patch also  @patch@
+in a multi-line command @patch@
+and another line @patch@
+*SomeKey: "stop patching on new non-command key @keep@
+and remember the key in the next line @keep@"
+*cupsFilter option: recognize keys with options @patch@
+*cupsFilter : handle strange spacing;@patch@
+*cupsFilter	: handle tabulator	@patch@
+*cupsFilter: patch common paths @pathpatch@
+*cupsFilter: patch quoted commands "@patch@"
+*cupsFilter: patch commands in subshell (@patch@)
+*cupsFilter: patch commands in subshell `@pathpatch@`
+*cupsFilter: keep uncommon paths /fancy/@pathkeep@
+*cupsFilter: keep entangled commands-@keep@
+*cupsFilter: keep entangled commands\@keep@
+*cupsFilter: keep entangled commands @keep@()
+*cupsFilter: keep entangled commands @pathkeep@-cmd
+*%cupsFilter: This comment should also be left as is @pathkeep@

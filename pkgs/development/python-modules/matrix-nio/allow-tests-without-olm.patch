@@ -1,0 +1,59 @@
+diff --git a/tests/async_client_test.py b/tests/async_client_test.py
+index b0f7a5a..2494fc6 100644
+--- a/tests/async_client_test.py
++++ b/tests/async_client_test.py
+@@ -140,7 +140,10 @@ from nio.api import (
+     ThreadInclusion,
+ )
+ from nio.client.async_client import connect_wrapper, on_request_chunk_sent
+-from nio.crypto import OlmDevice, Session, decrypt_attachment
++try:
++    from nio.crypto import OlmDevice, Session, decrypt_attachment
++except ImportError:
++    pass
+ from nio.responses import PublicRoom, PublicRoomsResponse
+ 
+ BASE_URL_V1 = f"https://example.org{MATRIX_API_PATH_V1}"
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 0c67ee0..6b77e02 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -10,11 +10,17 @@ from conftest_async import (  # noqa: F401
+     async_client_pair_same_user,
+     unauthed_async_client,
+ )
+-from olm import Account
++try:
++    from olm import Account
++except ImportError:
++    pass
+ 
+ from nio import Client, ClientConfig, HttpClient
+-from nio.crypto import Olm, OlmDevice
+-from nio.store import SqliteMemoryStore
++try:
++    from nio.crypto import Olm, OlmDevice
++    from nio.store import SqliteMemoryStore
++except ImportError:
++    pass
+ 
+ ALICE_ID = "@alice:example.org"
+ ALICE_DEVICE_ID = "JLAFKJWSCS"
+diff --git a/tests/helpers.py b/tests/helpers.py
+index 63445b6..05096d1 100644
+--- a/tests/helpers.py
++++ b/tests/helpers.py
+@@ -26,8 +26,11 @@ from hyperframe.frame import (
+     WindowUpdateFrame,
+ )
+ 
+-from nio.crypto import OlmAccount, OlmDevice
+-from nio.store import Ed25519Key
++try:
++    from nio.crypto import OlmAccount, OlmDevice
++    from nio.store import Ed25519Key
++except ImportError:
++    pass
+ 
+ SAMPLE_SETTINGS = {
+     SettingsFrame.HEADER_TABLE_SIZE: 4096,

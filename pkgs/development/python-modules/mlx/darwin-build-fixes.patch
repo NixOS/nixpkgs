@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ab8aea44..9e1b06f4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -100,9 +100,7 @@ elseif(MLX_BUILD_METAL)
+   endif()
+ 
+   # Throw an error if xcrun not found
+-  execute_process(
+-    COMMAND zsh "-c" "/usr/bin/xcrun -sdk macosx --show-sdk-version"
+-    OUTPUT_VARIABLE MACOS_SDK_VERSION COMMAND_ERROR_IS_FATAL ANY)
++  set(MACOS_SDK_VERSION @sdkVersion@)
+ 
+   if(${MACOS_SDK_VERSION} LESS 14.0)
+     message(

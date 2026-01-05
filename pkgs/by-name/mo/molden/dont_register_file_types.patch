@@ -1,0 +1,29 @@
+diff --git a/makefile b/makefile
+index 58a9e74..64615b6 100644
+--- a/makefile
++++ b/makefile
+@@ -32,8 +32,6 @@ os :=
+ ifeq ($(uname), Linux)
+  os := $(shell head -n 1 /etc/issue | cut -d" " -f1)
+  ifeq ($(os), Ubuntu)
+-    EXTEN = exten
+-    EXTENZ = exten2
+     LIBSG = -L/usr/X11R6/lib -lGLU -lGL -lX11 -lm
+  endif
+  ifeq ($(os), Debian)
+@@ -278,7 +276,7 @@ LIBSOGL = -lglut -lGLU -lGL -lXmu -lX11 -lm
+ #
+ #LIBSG = -L/usr/X11R6/lib -Wl,-framework -Wl,GLUT -Wl,-framework -Wl,OpenGL -Wl,-framework -Wl,Cocoa -lGLU -lGL -lXmu -lX11 -lm
+ 
+-all:	molden gmolden ambfor/ambfor ambfor/ambmd surf/surf $(EXTEN)
++all:	molden gmolden ambfor/ambfor ambfor/ambmd surf/surf
+ xwin.o:	xwin.c rots.h
+ xwingl.o:	xwin.c rots.h
+ 
+@@ -344,5 +342,5 @@ exten:
+ exten2:
+ 	./register_extension.sh /usr/local/bin
+ 
+-install:	$(EXTENZ)
++install:
+ 	sudo install -t /usr/local/bin -m 755 molden gmolden ambfor/ambfor ambfor/ambmd surf/surf
