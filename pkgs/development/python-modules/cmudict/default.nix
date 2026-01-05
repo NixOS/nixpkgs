@@ -7,7 +7,7 @@
   importlib-resources,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cmudict";
   version = "1.1.3";
   pyproject = true;
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cmudict" ];
 
   meta = {
-    changelog = "https://github.com/prosegrinder/python-cmudict/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/prosegrinder/python-cmudict/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "A versioned python wrapper package for The CMU Pronouncing Dictionary data files";
     homepage = "https://pypi.org/project/cmudict/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ sandarukasa ];
   };
-}
+})
