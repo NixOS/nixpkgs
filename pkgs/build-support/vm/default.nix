@@ -1341,10 +1341,10 @@ let
       name = "debian-11.11-bullseye-i386";
       fullName = "Debian 11.11 Bullseye (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bullseye/main/binary-i386/Packages.xz";
+        url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/bullseye/main/binary-i386/Packages.xz";
         hash = "sha256-kUg1VBUO6co/5bKloxncta49191oCeF05Hm399+UuDA=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20260105T082626Z";
       packages = commonDebianPackages;
     };
 
@@ -1352,10 +1352,10 @@ let
       name = "debian-11.11-bullseye-amd64";
       fullName = "Debian 11.11 Bullseye (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bullseye/main/binary-amd64/Packages.xz";
+        url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/bullseye/main/binary-amd64/Packages.xz";
         hash = "sha256-HDQFREKX6thkcRwY5kvOSBDbY7SDQKL52BGC2fI1rXE=";
       };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20260105T082626Z";
       packages = commonDebianPackages;
     };
 
@@ -1364,15 +1364,15 @@ let
       fullName = "Debian 12.12 Bookworm (i386)";
       packagesLists = [
         (fetchurl {
-          url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bookworm/main/binary-i386/Packages.xz";
+          url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/bookworm/main/binary-i386/Packages.xz";
           hash = "sha256-nIijsNoHUYkrL6eiwN4FCLHnJy/Bv/RMvnbMIHvieVI=";
         })
         (fetchurl {
-          url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bookworm-backports/main/binary-i386/Packages.xz";
-          hash = "sha256-9WXnIg1CgzTGaUXnCTs/n/EhJ11aNcKn7rV9FDAi+U8=";
+          url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/bookworm-backports/main/binary-i386/Packages.xz";
+          hash = "sha256-/ja7+DNIKc2ZUIXiocTjLbaD2EPsfeyZcd5ndEMapp4=";
         })
       ];
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20260105T082626Z";
       packages = commonDebianPackages;
     };
 
@@ -1381,15 +1381,15 @@ let
       fullName = "Debian 12.12 Bookworm (amd64)";
       packagesLists = [
         (fetchurl {
-          url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bookworm/main/binary-amd64/Packages.xz";
+          url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/bookworm/main/binary-amd64/Packages.xz";
           hash = "sha256-PfjQeu3tXmXZhH7foSD6WyFrvY4PfwSN/v5pBeShIBE=";
         })
         (fetchurl {
-          url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/bookworm-backports/main/binary-amd64/Packages.xz";
-          hash = "sha256-i897N1JzuixjtZcFW90X/UJLXfxQOIQoJV9SC/VHpUE=";
+          url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/bookworm-backports/main/binary-amd64/Packages.xz";
+          hash = "sha256-S3NSvw1kX2zxzMh+WYhY58VUR7iLrTEIuXwwSK6itIs=";
         })
       ];
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20260105T082626Z";
       packages = commonDebianPackages;
     };
 
@@ -1398,15 +1398,15 @@ let
       fullName = "Debian 13.2 Trixie (i386)";
       packagesLists = [
         (fetchurl {
-          url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/trixie/main/binary-i386/Packages.xz";
+          url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/trixie/main/binary-i386/Packages.xz";
           hash = "sha256-9zozvFZoWiv3wNe9rb+kPwSOgc5G5f4zmNpdoet5A78=";
         })
         (fetchurl {
-          url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/trixie-backports/main/binary-i386/Packages.xz";
-          hash = "sha256-JdBVmdbD5LQhHbqIHnPeJiGnhrZbJoiYPWlh73A2/wA=";
+          url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/trixie-backports/main/binary-i386/Packages.xz";
+          hash = "sha256-hEBAQ73Jnv8zp9YvNXWLEObyrSlQNBNBj/XoofJL7eI=";
         })
       ];
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20260105T082626Z";
       packages = commonDebianPackages;
     };
 
@@ -1415,15 +1415,15 @@ let
       fullName = "Debian 13.2 Trixie (amd64)";
       packagesLists = [
         (fetchurl {
-          url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/trixie/main/binary-amd64/Packages.xz";
+          url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/trixie/main/binary-amd64/Packages.xz";
           hash = "sha256-g7f+tKljUXAC4gxJfzSC8+j0GbiwRZjonv25tYuvxtU=";
         })
         (fetchurl {
-          url = "https://snapshot.debian.org/archive/debian/20251217T203845Z/dists/trixie-backports/main/binary-amd64/Packages.xz";
-          hash = "sha256-J7BcablKTswyfKmCIoWGlE32puSDFgcKQGNmhbvl+CY=";
+          url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/trixie-backports/main/binary-amd64/Packages.xz";
+          hash = "sha256-9OoR36FsyK7MQMLHLFMRJ9O11WKq9JCfGwnprpztxNw=";
         })
       ];
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20251217T203845Z";
+      urlPrefix = "https://snapshot.debian.org/archive/debian/20260105T082626Z";
       packages = commonDebianPackages;
     };
   };
