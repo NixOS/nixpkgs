@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
   meta = {
     changelog = "https://github.com/AthennaMind/opnsense-exporter/releases/tag/v${finalAttrs.version}";
-    homepage = "https://githbub.com/AthennaMind/opnsense-exporter";
+    homepage = "https://github.com/AthennaMind/opnsense-exporter";
     description = "Prometheus exporter for opnsense firewall appliances";
     license = lib.licenses.mit;
     mainProgram = "opnsense-exporter";
