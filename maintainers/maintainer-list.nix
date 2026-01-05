@@ -10796,6 +10796,12 @@
     githubId = 15371828;
     name = "Hugo Lageneste";
   };
+  hugom = {
+    email = "hugo.mcnally@gmail.com";
+    github = "HU90m";
+    githubId = 45573837;
+    name = "Hugo McNally";
+  };
   hugoreeves = {
     email = "hugo@hugoreeves.com";
     github = "HugoReeves";
